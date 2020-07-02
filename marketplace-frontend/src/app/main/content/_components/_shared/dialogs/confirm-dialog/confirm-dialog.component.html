@@ -3,7 +3,8 @@
   {{ data.description }}
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="undefined">Nein</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-  <button mat-button [mat-dialog-close]="true">Ja</button>
+  <button class="primary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="true">Ja</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Nein</button>
+
 </mat-dialog-actions>

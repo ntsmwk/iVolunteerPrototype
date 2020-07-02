@@ -3,15 +3,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
-
+import { User } from "app/main/content/_model/user";
 import { MatchingConfigurationService } from "app/main/content/_service/configuration/matching-configuration.service";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import {
   ClassConfiguration,
   MatchingConfiguration,
 } from "app/main/content/_model/meta/configurations";
-import { ClassBrowseSubDialogData } from "../../class-configurator/browse-sub-dialog/browse-sub-dialog.component";
-import { User } from "app/main/content/_model/user";
+import { ClassBrowseSubDialogData } from "../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
 
 export interface NewMatchingDialogData {
   producerClassConfiguration: ClassConfiguration;

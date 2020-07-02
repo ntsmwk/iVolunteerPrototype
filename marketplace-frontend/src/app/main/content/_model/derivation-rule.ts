@@ -1,32 +1,64 @@
 import { ClassDefinition } from "./meta/class";
-import { ClassProperty } from "./meta/property";
+import { ClassProperty, PropertyDefinition } from "./meta/property";
 
 export class DerivationRule {
   id: string;
   tenantId: string;
   marketplaceId: string;
   name: string;
-  attributeSourceRules: AttributeSourceRuleEntry[];
-  classSourceRules: ClassSourceRuleEntry[];
-  target: ClassDefinition;
+  container: string;
+  generalConditions: GeneralCondition[];
+  conditions: ClassCondition[];
+  classActions: ClassAction[];
 }
 
-export class AttributeSourceRuleEntry {
+export class GeneralCondition{
+  propertyDefinition: PropertyDefinition<any>;
+  comparisonOperatorType: ComparisonOperatorType;
+  value: any;
+}
+
+export class AttributeCondition {
+
   classDefinition: ClassDefinition;
   classProperty: ClassProperty<any>;
-  aggregationOperatorType: AttributeAggregationOperatorType;
-  mappingOperatorType: MappingOperatorType;
+  comparisonOperatorType: ComparisonOperatorType;
   value: any;
+
+  constructor(classDefinition: ClassDefinition) {
+    this.classDefinition = classDefinition;
+  }
 }
 
-export class ClassSourceRuleEntry {
+export class ClassCondition {
   classDefinition: ClassDefinition;
-  aggregationOperatorType: ClassAggregationOperatorType;
-  mappingOperatorType: MappingOperatorType;
+  attributeConditions: AttributeCondition[] = [];
+  aggregationOperatorType: AggregationOperatorType;
   value: any;
 }
 
-export enum MappingOperatorType {
+/*export class AttributeTarget{
+  classDefinition: ClassDefinition;
+  classProperty: ClassProperty<any>;
+  value: any;
+
+  constructor(classDefinition: ClassDefinition){
+    this.classDefinition = classDefinition;
+  }
+}*/
+
+export class ClassAction {
+  actionType: ActionType;
+  classDefinition: ClassDefinition;
+  attributes: AttributeCondition[] = [];
+
+  constructor(classDefinition: ClassDefinition){
+    //this.classDefinition = classDefinition;
+    this.actionType = ActionType.NEW;
+  }
+}
+
+export enum ComparisonOperatorType {
   EQ = "=",
   LT = "<",
   LE = "<=",
@@ -35,12 +67,14 @@ export enum MappingOperatorType {
   NE = "!=",
 }
 
-export enum AttributeAggregationOperatorType {
-  SUM = "Summe",
+export enum AggregationOperatorType {
+  COUNT = "Anzahl",
+  EXISTS = "Existiert", 
+  NOT_EXISTS = "Existiert nicht",
   MIN = "Min",
-  MAX = "Max",
+  MAX = "Max"
 }
 
-export enum ClassAggregationOperatorType {
-  COUNT = "Anzahl",
+export enum ActionType {
+  NEW, UPDATE
 }

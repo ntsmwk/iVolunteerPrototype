@@ -34,8 +34,6 @@ import { ClassConfiguration } from "../../../../_model/meta/configurations";
 import { TopMenuResponse } from "./top-menu-bar/top-menu-bar.component";
 import { ClassOptionsOverlayContentData } from "./options-overlay/options-overlay-content/options-overlay-content.component";
 import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory/dialog-factory.component";
-
-import { EnumDefinition } from "app/main/content/_model/meta/enum";
 import { User, UserRole } from "app/main/content/_model/user";
 
 declare var require: any;

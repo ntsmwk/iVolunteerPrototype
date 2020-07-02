@@ -44,9 +44,11 @@
                 <div></div>
 
                 <div>
-                    <button class="ml-24" style="width: 130px" mat-raised-button (click)="newAction('property')">Neues
+                    <button class="secondary-button-dark-small ml-24" mat-stroked-button type="button"
+                        (click)="newAction('property')">Neues
                         Property</button>
-                    <button class="ml-8" style="width: 130px" mat-raised-button (click)="newAction('enum')">Neues
+                    <button class="secondary-button-dark-small ml-8" mat-stroked-button type="button"
+                        (click)="newAction('enum')">Neues
                         Enum</button>
                 </div>
             </div>
@@ -76,11 +78,11 @@
                     <mat-header-cell *matHeaderCellDef>Aktionen</mat-header-cell>
                     <mat-cell *matCellDef="let property">
 
-                        <mat-icon class="iconButton" (click)="viewPropertyAction(property)" style="cursor: pointer"
+                        <!-- <mat-icon class="iconButton" (click)="viewPropertyAction(property)" style="cursor: pointer"
                             matTooltip="View Property {{property.name}}" matTooltipPosition="above"
                             aria-label="View Property">remove_red_eye</mat-icon>
 
-                        <div>&nbsp;</div>
+                        <div>&nbsp;</div> -->
 
                         <mat-icon class="iconButton" (click)="editAction(property)" style="cursor: pointer"
                             matTooltip="{{property.name}} bearbeiten" matTooltipPosition="above"

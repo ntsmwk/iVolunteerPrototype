@@ -58,9 +58,14 @@
     overflow-x: hidden; 
 
     .property-entry {
-      cursor: pointer
+      cursor: pointer;
+      .property-entry-label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        width: 195px;      
+      }
     }
-
     .property-entry:hover {
       background-color: rgb(62, 125, 219);
       color: white;

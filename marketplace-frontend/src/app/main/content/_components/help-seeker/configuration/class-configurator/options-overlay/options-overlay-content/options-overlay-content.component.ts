@@ -57,6 +57,10 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     this.resultData.emit(this.inputData);
   }
 
+  onCancel() {
+    this.resultData.emit(undefined);
+  }
+
   changeIconClicked() {
     this.dialogFactory
       .openChangeIconDialog(

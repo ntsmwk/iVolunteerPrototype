@@ -1,10 +1,12 @@
+@import "@fuse/scss/core";
+
 .question-container-open {
     padding: 8px;
     border: 2px solid black;
     border-radius: 5px;
 }
 .question-container-closed {
-    padding: 8px;
+    // padding: 8px;
     border: 2px solid white;
     border-radius: 5px;
 }
@@ -25,25 +27,49 @@
 }
 
 .list-item-container {
-    // padding: 12px;
     width: 100%;
-    background: #afcbe6;
     line-height: 2;
     color: grey;
 
-    .list-item-label {
+    .list-item-row {
+        background: #afcbe6;
+        width: 100%;
+    }
+
+    .list-item-value {
         color: black,
     }
 }
 
-.list-item-container:hover {
-    background: rgb(62, 125, 219); 
-    color: white;
+.list-item-label-container {
+    cursor: pointer;
+    
+    .list-item-label-row {
+        background: white;
+        width: 100%
+    }
+    
+    .list-item-label-value {
+        color: grey;
+    }
+}
 
-    .list-item-label {
+.list-item-container:hover {
+    .list-item-row {
+        background: rgb(62, 125, 219); 
         color: white;
     }
+    .list-item-value {
+        color: white;
+    }
+}
 
+.list-item-row-padding {
+    background: white;
+}
+
+.subheader-item {
+    padding: 12px 0 0;
 }
 
 :host ::ng-deep .mat-list-item {
@@ -52,4 +78,16 @@
     .mat-list-item-content {
         padding: 0 4px;
     }
+}
+
+:host ::ng-deep .mat-subheader {
+    height: 28px;
+    margin-top: 0;;
+    font-size: 16px;
+}   
+
+:host ::ng-deep .mat-subheader:first-child {
+    height: 28px;
+    margin-top: 0;
+    font-size: 16px;
 }

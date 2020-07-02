@@ -1,0 +1,23 @@
+<form *ngIf="attributeTarget" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
+(change)="onChange($event)" [formGroup]="ruleTargetAttributeForm">
+  <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
+    <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 225px">
+      <mat-label>Attribut</mat-label>
+      <mat-select formControlName="classPropertyId" [value]="attributeTarget?.classProperty?.id">
+        <mat-option *ngFor="let cp of classProperties" [value]="cp?.id" (onSelectionChange)="onPropertyChange($event)">
+          {{cp.name}} </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 150px">
+      <input *ngIf="attributeTarget?.classProperty?.type != 'ENUM'" matInput placeholder="value"
+        formControlName="value" (change)="onChangeValue($event)"/>
+      <mat-select *ngIf="attributeTarget?.classProperty?.type == 'ENUM'" placeholder="Wert"
+        formControlName="value" [value]="attributeTarget.value">
+        <mat-option *ngFor="let enumVal of findEnumValues()" [value]="enumVal" (onSelectionChange)="onChangeValue($event)">
+          {{ enumVal }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>
+<!--(change)="onChange($event)"-->

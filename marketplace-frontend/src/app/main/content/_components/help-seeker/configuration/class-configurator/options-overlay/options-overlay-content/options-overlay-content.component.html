@@ -57,29 +57,11 @@
                                     <img width="15" height="15" [src]="getImagePathPropertyType(entry.type)">
                                 </div>
 
-                                <div class="pl-8">
+                                <div class="pl-8 property-entry-label">
                                     {{ entry.name }}
                                 </div>
                             </div>
-
                         </div>
-                        <!-- 
-                        <div *ngFor="let enum of inputData.classDefinition.enums; let i = index"
-                            [style]="getPropertyEntryStyle(i)" class="property-entry">
-
-                            <div fxLayout="row" fxLayoutAlign="start center">
-                                <div style="width: 15px; height: 15px;" class="ml-8">
-                                    <img width="15" height="15" [src]="getImagePathPropertyType('ENUM')">
-                                </div>
-
-                                <div class="pl-8">
-                                    {{ enum.name }}
-                                </div>
-                            </div>
-
-                        </div> -->
-
-
                     </div>
                 </div>
 
@@ -95,16 +77,6 @@
                                 <div>Hinzu</div>
                             </div>
                         </button>
-
-                        <!-- <div style="padding-top: 2px"></div>
-
-                        <button class="overlay-button" mat-stroked-button type="button" color="accent"
-                            (click)="addEnumClicked()">
-                            <div fxLayout="row" fxLayoutAlign="start center">
-                                <mat-icon>add</mat-icon>
-                                <div>Enum</div>
-                            </div>
-                        </button> -->
 
                         <div style="padding-top: 2px"></div>
 
@@ -183,6 +155,8 @@
 
 
     <div style="position: absolute; bottom: 8px; left: 8px">
-        <button mat-stroked-button color="accent" class="confirm-button" (click)="onSubmit()">Speichern</button>
+        <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">Speichern</button>
+        <button class="secondary-button-dark ml-8" mat-stroked-button type="button"
+            (click)="onCancel()">Schließen</button>
     </div>
 </div>

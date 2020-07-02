@@ -15,22 +15,18 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
 
 @SpringBootApplication
 public class MarketplaceApplication {
 
-	@Autowired
-	private ClassConfigurationRepository configuratorRepository;
-	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private RelationshipRepository relationshipRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	private DerivationRuleRepository derivationRuleRepository;
+	@Autowired private ClassConfigurationRepository configuratorRepository;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private DerivationRuleRepository derivationRuleRepository;
+	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MarketplaceApplication.class, args);
@@ -46,7 +42,7 @@ public class MarketplaceApplication {
 	public void onExit() {
 		FinalizationService finalizationService = new FinalizationService();
 		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
-				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
+				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository, containerRuleEntryRepository);
 	}
 
 }

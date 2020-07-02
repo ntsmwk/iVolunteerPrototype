@@ -29,7 +29,7 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
             <mat-cell *matCellDef="let entry">
               <div fxLayout="column" fxLayoutAlign="start start">
-                <div>{{ entry.name }}</div>
+                <div class="name-label">{{ entry.name }}</div>
               </div>
             </mat-cell>
           </ng-container>
@@ -68,7 +68,7 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
             <mat-cell *matCellDef="let entry">
               <div fxLayout="column" fxLayoutAlign="start start">
-                <div>{{ entry.name }}</div>
+                <div class="name-label">{{ entry.name }}</div>
               </div>
             </mat-cell>
           </ng-container>
@@ -101,15 +101,21 @@
 </mat-dialog-content>
 
 <mat-dialog-actions *ngIf="loaded">
-  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
-  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-  <button mat-button (click)="onSubmit()">Bestätigen</button>
 
-  <button *ngIf="tabIndex === 0" mat-button (click)="createNewClicked('property')">
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">OK</button>
+
+  <button *ngIf="tabIndex === 0" class="primary-button-light" mat-stroked-button type="button"
+    (click)="createNewClicked('property')">
     Neues Property
   </button>
 
-  <button *ngIf="tabIndex === 1" mat-button (click)="createNewClicked('enum')">
+  <button *ngIf="tabIndex === 1" class="primary-button-light" mat-stroked-button type="button"
+    (click)="createNewClicked('enum')">
     Neues Enum
   </button>
+
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
+
+
 </mat-dialog-actions>

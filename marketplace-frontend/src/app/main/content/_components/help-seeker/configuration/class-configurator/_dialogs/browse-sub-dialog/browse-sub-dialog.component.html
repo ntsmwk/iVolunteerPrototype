@@ -1,0 +1,34 @@
+<div class="browse-dialog-content pt-8">
+
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-12">
+    <h2 *ngIf="data.sourceReference === 'PRODUCER'">Konfiguration für Werkunternehmen wählen</h2>
+    <h2 *ngIf="data.sourceReference === 'CONSUMER'">Konfiguration für Werkbesteller wählen</h2>
+    <h2 *ngIf="data.sourceReference === undefined">{{data.title}}</h2>
+
+    <div></div>
+    <div matTooltip="Zurück" (click)="handleBackClick()" class="back-button">
+      <mat-icon>keyboard_return</mat-icon>
+    </div>
+  </div>
+
+  <table class="browse-table" cellspacing=0 cellpadding=3 fusePerfectScrollbar>
+    <col width="325px" />
+    <col width="125px" />
+
+    <tr style="background-color: rgb(62, 125, 219); color: white;">
+      <th style="text-align: start" class="table-header-cell">Name</th>
+      <th style="text-align: start" class="table-header-cell">Geändert</th>
+
+    </tr>
+    <tr *ngFor="let entry of datasource.filteredData" class="table-row" (click)="handleRowClick(entry)">
+      <td style="overflow: hidden; " class="name-cell">{{entry.name}}</td>
+      <td style="overflow: hidden; font-size: 12px">{{entry.date | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
+    </tr>
+  </table>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
+  </mat-form-field>
+
+
+</div>

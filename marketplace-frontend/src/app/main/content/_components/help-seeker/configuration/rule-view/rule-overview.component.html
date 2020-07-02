@@ -35,12 +35,12 @@
         <mat-header-cell *matHeaderCellDef>Vorbedingungen</mat-header-cell>
         <mat-cell *matCellDef="let rule">
           <span
-            *ngFor="let source of rule.attributeSourceRules; let last = last"
+            *ngFor="let source of rule.conditions; let last = last"
           >
             {{ source.classDefinition.name }}<span *ngIf="!last">, </span>
           </span>
           <span> &nbsp; | &nbsp; </span>
-          <span *ngFor="let source of rule.classSourceRules; let last = last">
+          <span *ngFor="let source of rule.conditions; let last = last">
             {{ source.classDefinition.name }}<span *ngIf="!last">, </span>
           </span>
         </mat-cell>
@@ -50,7 +50,7 @@
         <mat-header-cell *matHeaderCellDef
           >Abgeleiteter Eintrag
         </mat-header-cell>
-        <mat-cell *matCellDef="let rule">{{ rule.target.name }}</mat-cell>
+        <mat-cell *matCellDef="let rule">{{ rule.classAction.classdefinition.name }}</mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row

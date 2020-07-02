@@ -9,10 +9,9 @@ import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
-  MappingOperatorType,
-  AttributeSourceRuleEntry,
-  ClassSourceRuleEntry,
-  ClassAggregationOperatorType,
+  AttributeCondition,
+  ClassCondition,
+  AggregationOperatorType,
 } from "app/main/content/_model/derivation-rule";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
@@ -26,18 +25,17 @@ import { ClassPropertyService } from "app/main/content/_service/meta/core/proper
   styleUrls: ["../rule-configurator.component.scss"],
 })
 export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
-  @Input("classSourceRuleEntry") classSourceRuleEntry: ClassSourceRuleEntry;
-  @Output("classSourceRuleEntry") classSourceRuleEntryChange: EventEmitter<
-    ClassSourceRuleEntry
-  > = new EventEmitter<ClassSourceRuleEntry>();
+  @Input("classCondition") classCondition: ClassCondition;
+  @Output("classCondition") classConditionChange: EventEmitter<
+    ClassCondition
+  > = new EventEmitter<ClassCondition>();
 
   helpseeker: User;
   marketplace: Marketplace;
   role: UserRole;
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
-  classProperties: ClassProperty<any>[] = [];
-  comparisonOperators: any;
+  attributes: AttributeCondition[] = [];
   aggregationOperators: any;
 
   classDefinitionCache: ClassDefinition[] = [];
@@ -53,7 +51,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     this.rulePreconditionForm = formBuilder.group({
       classDefinitionId: new FormControl(undefined),
       aggregationOperatorType: new FormControl(undefined),
-      mappingOperatorType: new FormControl(undefined),
       value: new FormControl(undefined),
     });
   }
@@ -61,19 +58,21 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   ngOnInit() {
     this.rulePreconditionForm.setValue({
       classDefinitionId:
-        (this.classSourceRuleEntry.classDefinition
-          ? this.classSourceRuleEntry.classDefinition.id
+        (this.classCondition.classDefinition
+          ? this.classCondition.classDefinition.id
           : "") || "",
-      aggregationOperatorType:
-        this.classSourceRuleEntry.aggregationOperatorType ||
-        ClassAggregationOperatorType.COUNT,
-      mappingOperatorType:
-        this.classSourceRuleEntry.mappingOperatorType || MappingOperatorType.EQ,
-      value: this.classSourceRuleEntry.value || "",
+      aggregationOperatorType: null,
+      //this.classCondition.aggregationOperatorType
+      /**  ||
+        AggregationOperatorType.COUNT, */ value:
+        this.classCondition.value || "",
     });
 
-    this.comparisonOperators = Object.keys(MappingOperatorType);
-    this.aggregationOperators = Object.keys(ClassAggregationOperatorType);
+    this.classCondition.attributeConditions = this.classCondition
+      .attributeConditions
+      ? this.classCondition.attributeConditions
+      : new Array();
+    this.aggregationOperators = Object.keys(AggregationOperatorType);
 
     this.loginService
       .getLoggedIn()
@@ -95,66 +94,48 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
                 this.classDefinitions = definitions;
-                this.loadClassProperties(null);
               });
           });
       });
   }
 
   onClassChange($event) {
-    if (!this.classSourceRuleEntry.classDefinition) {
-      this.classSourceRuleEntry.classDefinition = new ClassDefinition();
+    if (!this.classCondition.classDefinition) {
+      this.classCondition.classDefinition = new ClassDefinition();
     }
-    this.classSourceRuleEntry.classDefinition.id = $event.source.value;
-    this.classSourceRuleEntry.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
+    this.classCondition.classDefinition.id = $event.source.value;
+    this.classCondition.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
       (t) => t.role === UserRole.HELP_SEEKER
     ).tenantId;
-
-    this.loadClassProperties($event);
   }
 
-  private loadClassProperties($event) {
-    if (
-      this.classSourceRuleEntry &&
-      this.classSourceRuleEntry.classDefinition &&
-      this.classSourceRuleEntry.classDefinition.id
-    ) {
-      this.classPropertyService
-        .getAllClassPropertiesFromClass(
-          this.marketplace,
-          this.classSourceRuleEntry.classDefinition.id
-        )
-        .toPromise()
-        .then((props: ClassProperty<any>[]) => {
-          this.classProperties = props;
-          this.onChange($event);
-        });
+  onOperatorChange(aggregationOperatorType, $event) {
+    if ($event.isUserInput) {
+      // ignore on deselection of the previous option
+      this.classCondition.aggregationOperatorType = aggregationOperatorType;
     }
   }
 
   onChange($event) {
-    if (this.classDefinitions.length > 0 && this.classProperties.length > 0) {
-      this.classSourceRuleEntry.classDefinition = this.classDefinitions.find(
+    if (this.classDefinitions.length > 0) {
+      this.classCondition.classDefinition = this.classDefinitions.find(
         (cd) => cd.id === this.rulePreconditionForm.value.classDefinitionId
       );
-      this.classSourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
-      this.classSourceRuleEntry.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
-      this.classSourceRuleEntry.value = this.rulePreconditionForm.value.value;
-      this.classSourceRuleEntryChange.emit(this.classSourceRuleEntry);
     }
+    this.classCondition.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
+    this.classCondition.value = this.rulePreconditionForm.value.value;
+    this.classConditionChange.emit(this.classCondition);
   }
 
-  private retrieveMappingOperatorValueOf(op) {
-    let x: MappingOperatorType =
-      MappingOperatorType[op as keyof typeof MappingOperatorType];
-    return x;
+  addAttributeCondition() {
+    this.classCondition.attributeConditions.push(
+      new AttributeCondition(this.classCondition.classDefinition)
+    );
   }
 
   private retrieveAggregationOperatorValueOf(op) {
-    let x: ClassAggregationOperatorType =
-      ClassAggregationOperatorType[
-        op as keyof typeof ClassAggregationOperatorType
-      ];
+    let x: AggregationOperatorType =
+      AggregationOperatorType[op as keyof typeof AggregationOperatorType];
     return x;
   }
 }

@@ -70,7 +70,7 @@ export class ClassOptionsOverlayControlComponent implements OnInit, OnChanges {
     this.overlayClosed.emit(event);
   }
 
-  closeOverlay(event: ClassOptionsOverlayContentData) {
+  closeOverlay() {
     this.displayOverlay = false;
     this.overlayClosed.emit(undefined);
   }

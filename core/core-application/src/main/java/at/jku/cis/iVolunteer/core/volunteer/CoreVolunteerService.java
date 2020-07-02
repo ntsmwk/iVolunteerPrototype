@@ -65,6 +65,7 @@ public class CoreVolunteerService {
 		volunteer.setFirstname(coreVolunteer.getFirstname());
 		volunteer.setLastname(coreVolunteer.getLastname());
 		volunteer.setMiddlename(coreVolunteer.getMiddlename());
+		volunteer.setBirthday(coreVolunteer.getBirthday());
 		volunteer.setPosition(coreVolunteer.getPosition());
 		volunteer.setNickname(coreVolunteer.getNickname());
 		if (coreVolunteer.getImage() != null) {

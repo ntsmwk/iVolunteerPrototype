@@ -18,6 +18,10 @@ import { MatTabsModule, MatSelectModule } from "@angular/material";
 import { FuseClassRulePreconditionConfiguratorComponent } from "./class-rule-configurator-precondition/class-rule-configurator-precondition.component";
 import { FuseAttributeRulePreconditionConfiguratorComponent } from "./attribute-rule-configurator-precondition.1/attribute-rule-configurator-precondition.component";
 import { HeaderModule } from "app/main/content/_components/_shared/header/header.module";
+import { GeneralPreconditionConfiguratorComponent } from './general-precondition-configurator/general-precondition-configurator.component';
+import { TargetRuleConfiguratorComponent } from './target-rule-configurator/target-rule-configurator.component';
+import { TargetAttributeRuleConfiguratorComponent } from './target-attribute-rule-configurator/target-attribute-rule-configurator.component';
+import { TestRuleConfigurationComponent } from './test-rule-configuration/test-rule-configuration.component';
 
 const routes = [
   { path: "", component: FuseRuleConfiguratorComponent },
@@ -29,6 +33,10 @@ const routes = [
     FuseRuleConfiguratorComponent,
     FuseAttributeRulePreconditionConfiguratorComponent,
     FuseClassRulePreconditionConfiguratorComponent,
+    GeneralPreconditionConfiguratorComponent,
+    TargetRuleConfiguratorComponent,
+    TargetAttributeRuleConfiguratorComponent,
+    TestRuleConfigurationComponent,
   ],
   imports: [
     ReactiveFormsModule,
