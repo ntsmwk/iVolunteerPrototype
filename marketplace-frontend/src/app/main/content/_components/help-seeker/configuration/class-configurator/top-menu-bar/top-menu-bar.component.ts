@@ -251,6 +251,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   // }
 
   createEditorClicked(event: any, item: SubMenuItem) {
+    this.menuOptionClickedEvent.emit({ id: 'editor_create_instance' });
 
   }
 

@@ -966,6 +966,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
           this.openGraph(undefined, [], []);
         }
         break;
+      } case 'editor_create_instance': {
+        this.showInstanceForm();
+        break;
       } case 'cancelled': {
         break;
       }

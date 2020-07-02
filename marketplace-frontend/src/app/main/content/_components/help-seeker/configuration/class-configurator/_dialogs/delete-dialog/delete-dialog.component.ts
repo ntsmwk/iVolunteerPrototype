@@ -75,13 +75,13 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
     } else {
       this.currentSortType = 'az'
     }
+
     if (sortKey === 'date') {
       this.datasource.data = this.allClassConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf())
     }
     if (sortKey === 'name') {
       this.datasource.data = this.allClassConfigurations.sort((a, b) => b.name.trim().localeCompare(a.name.trim()));
     }
-
     if (this.currentSortType === 'za') {
       this.datasource.data.reverse();
     }
