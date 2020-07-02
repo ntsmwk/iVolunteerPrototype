@@ -7,16 +7,12 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import {
-  PropertyOrEnumCreationDialogComponent,
-  PropertyOrEnumCreationDialogData
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
 import { Relationship, RelationshipType } from 'app/main/content/_model/meta/relationship';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
 import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
+import { PropertyOrEnumCreationDialogComponent, PropertyOrEnumCreationDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;

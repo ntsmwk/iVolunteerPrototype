@@ -1,81 +1,29 @@
-import { Directive } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import {
-  TextFieldDialogComponent,
-  TextFieldDialogData,
-} from '../text-field-dialog/text-field-dialog.component';
+import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dialog/text-field-dialog.component';
+import { Directive } from '@angular/core';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { PropertyItem } from 'app/main/content/_model/meta/property';
-import {
-  SortDialogComponent,
-  SortDialogData,
-} from '../sort-dialog/sort-dialog.component';
-
+import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import {
-  NewClassConfigurationDialogComponent,
-  NewClassConfigurationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/new-dialog/new-dialog.component';
-import {
-  OpenClassConfigurationDialogComponent,
-  OpenClassConfigurationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/open-dialog/open-dialog.component';
-import {
-  ClassConfiguration,
-  MatchingConfiguration,
-} from 'app/main/content/_model/meta/configurations';
+import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/new-dialog/new-dialog.component';
+import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/open-dialog/open-dialog.component';
+import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
-import {
-  ConfirmClassConfigurationSaveDialogComponent,
-  ConfirmClassConfigurationSaveDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
-import {
-  SaveClassConfigurationAsDialogComponent,
-  SaveClassConfigurationAsDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/save-as-dialog/save-as-dialog.component';
-import {
-  DeleteClassConfigurationDialogComponent,
-  DeleteClassConfigurationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/delete-dialog/delete-dialog.component';
-import {
-  NewMatchingDialogComponent,
-  NewMatchingDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
-import {
-  OpenMatchingDialogComponent,
-  OpenMatchingDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
-import {
-  DeleteMatchingDialogComponent,
-  DeleteMatchingDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
-import {
-  AddPropertyDialogComponent,
-  AddPropertyDialogData,
-} from 'app/main/content/_components/_shared/dialogs/add-property-dialog/add-property-dialog.component';
-import {
-  RemoveDialogComponent,
-  RemoveDialogData,
-} from 'app/main/content/_components/_shared/dialogs/remove-dialog/remove-dialog.component';
-import { isNullOrUndefined } from 'util';
-import {
-  ChangeIconDialogComponent,
-  ChangeIconDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
-import {
-  ClassInstanceFormPreviewDialogComponent,
-  ClassInstanceFormPreviewDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component';
-import {
-  ClassInstanceFormPreviewExportDialogComponent,
-  ClassInstanceFormPreviewExportDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/confirm-save-dialog/confirm-save-dialog.component';
+import { SaveClassConfigurationAsDialogComponent, SaveClassConfigurationAsDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/save-as-dialog/save-as-dialog.component';
+import { DeleteClassConfigurationDialogComponent, DeleteClassConfigurationDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/delete-dialog/delete-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from '../../../help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from '../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import { ChangeIconDialogComponent, ChangeIconDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import {
-  PropertyOrEnumCreationDialogComponent,
-  PropertyOrEnumCreationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
+import { PropertyOrEnumCreationDialogComponent, PropertyOrEnumCreationDialogData } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component';
+import { NewMatchingDialogComponent, NewMatchingDialogData } from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
+import { OpenMatchingDialogComponent, OpenMatchingDialogData } from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
+import { DeleteMatchingDialogComponent, DeleteMatchingDialogData } from '../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
+import { AddPropertyDialogComponent, AddPropertyDialogData } from '../add-property-dialog/add-property-dialog.component';
+import { RemoveDialogComponent, RemoveDialogData } from '../remove-dialog/remove-dialog.component';
+import { isNullOrUndefined } from 'util';
 
 @Directive({
   selector: "app-dialog-factory",

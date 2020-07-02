@@ -7,7 +7,7 @@ import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
-import { ClassBrowseSubDialogData } from '../../class-configurator/browse-sub-dialog/browse-sub-dialog.component';
+import { ClassBrowseSubDialogData } from '../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component';
 
 export interface NewMatchingDialogData {
   producerClassConfiguration: ClassConfiguration;

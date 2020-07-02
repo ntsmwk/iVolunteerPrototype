@@ -2,13 +2,13 @@ import { Component, ElementRef, ViewChild, Output, EventEmitter, Input, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { NewClassConfigurationDialogData } from '../new-dialog/new-dialog.component';
 import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { DeleteClassConfigurationDialogData } from '../delete-dialog/delete-dialog.component';
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
-import { OpenClassConfigurationDialogData } from '../open-dialog/open-dialog.component';
+import { NewClassConfigurationDialogData } from '../_dialogs/new-dialog/new-dialog.component';
+import { OpenClassConfigurationDialogData } from '../_dialogs/open-dialog/open-dialog.component';
+import { DeleteClassConfigurationDialogData } from '../_dialogs/delete-dialog/delete-dialog.component';
 
 export interface RootMenuItem {
   id: number;

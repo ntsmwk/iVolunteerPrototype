@@ -4,7 +4,7 @@ import {
   MatCommonModule, MatDialogModule, MatIconModule, MatButtonModule
 } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { BuilderContainerModule } from '../../property-enum-configurator/builder/builder-container/builder-container.module';
+import { BuilderContainerModule } from '../../../property-enum-configurator/builder/builder-container/builder-container.module';
 
 
 @NgModule({

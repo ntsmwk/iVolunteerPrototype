@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ɵConsole } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { LoginService } from 'app/main/content/_service/login.service';
@@ -6,8 +6,6 @@ import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CUtils } from '../utils-and-constants';
-import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';

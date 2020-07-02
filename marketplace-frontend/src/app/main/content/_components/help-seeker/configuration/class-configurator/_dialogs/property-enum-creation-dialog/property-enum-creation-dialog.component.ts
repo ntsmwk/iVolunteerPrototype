@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Marketplace } from '../../../../../_model/marketplace';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { isNullOrUndefined } from 'util';
 import { EnumDefinition } from 'app/main/content/_model/meta/enum';
+import { Marketplace } from 'app/main/content/_model/marketplace';
 
 export interface PropertyOrEnumCreationDialogData {
   marketplace: Marketplace;
