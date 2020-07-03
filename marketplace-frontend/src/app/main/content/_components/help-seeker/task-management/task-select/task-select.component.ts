@@ -5,7 +5,6 @@ import {
   ClassDefinition,
   ClassArchetype,
 } from "app/main/content/_model/meta/class";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Tenant } from "app/main/content/_model/tenant";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -17,6 +16,7 @@ import { isNullOrUndefined } from "util";
 import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import { ClassDefinitionDTO } from "app/main/content/_model/meta/class";
+import { User, UserRole } from "app/main/content/_model/user";
 
 @Component({
   templateUrl: "./task-select.component.html",
@@ -26,7 +26,7 @@ export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<ClassDefinitionDTO>();
   displayedColumns = ["name", "configuration"];
-  helpseeker: Helpseeker;
+  helpseeker: User;
   tenant: Tenant;
 
   constructor(
@@ -38,15 +38,19 @@ export class FuseTaskSelectComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private classConfigurationService: ClassConfigurationService,
     private tenantService: TenantService
-  ) { }
+  ) {}
 
   async ngOnInit() {
-    this.helpseeker = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
     this.tenant = <Tenant>(
-      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
+      await this.tenantService
+        .findById(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
     );
 
     this.marketplace = <Marketplace>(
@@ -61,7 +65,9 @@ export class FuseTaskSelectComponent implements OnInit {
           .getByArchetype(
             this.marketplace,
             ClassArchetype.TASK,
-            this.helpseeker.tenantId
+            this.helpseeker.subscribedTenants.find(
+              (t) => t.role === UserRole.HELP_SEEKER
+            ).tenantId
           )
           .toPromise()
       );

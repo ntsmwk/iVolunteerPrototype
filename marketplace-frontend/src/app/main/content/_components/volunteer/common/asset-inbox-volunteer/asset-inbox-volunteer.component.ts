@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { Volunteer } from "app/main/content/_model/volunteer";
 import { ClassInstanceDTO } from "app/main/content/_model/meta/class";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
@@ -8,6 +7,7 @@ import { MarketplaceService } from "app/main/content/_service/core-marketplace.s
 import { LoginService } from "app/main/content/_service/login.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { isNullOrUndefined } from "util";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "asset-inbox-volunteer",
@@ -17,7 +17,7 @@ import { isNullOrUndefined } from "util";
 export class AssetInboxVolunteerComponent implements OnInit {
   isLoaded: boolean;
   marketplace: Marketplace;
-  volunteer: Volunteer;
+  volunteer: User;
   classInstanceDTOs: ClassInstanceDTO[];
 
   submitPressed: boolean;
@@ -55,7 +55,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
         this.loginService
           .getLoggedIn()
           .toPromise()
-          .then((volunteer: Volunteer) => {
+          .then((volunteer: User) => {
             this.volunteer = volunteer;
           }),
       ]).then(() => {
@@ -69,7 +69,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
       .getClassInstancesInUserInbox(
         this.marketplace,
         this.volunteer.id,
-        this.volunteer.subscribedTenants
+        this.volunteer.subscribedTenants.map((t) => t.tenantId)
       )
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {

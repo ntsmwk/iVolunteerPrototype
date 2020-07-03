@@ -10,27 +10,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.FlexProd;
+import at.jku.cis.iVolunteer.model.user.User;
 
 @RestController
 @RequestMapping("/flexprod")
 public class CoreFlexProdController {
 
-	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	@GetMapping("/{coreFlexProdId}")
-	public CoreFlexProd getCorehelpSeeker(@PathVariable("coreFlexProdId") String coreFlexProdId) {
-		return coreFlexProdRepository.findOne(coreFlexProdId);
+	public CoreUser getCorehelpSeeker(@PathVariable("coreFlexProdId") String coreFlexProdId) {
+		return coreUserRepository.findOne(coreFlexProdId);
 	}
 
 	@GetMapping("/{coreFlexProdId}/marketplace")
 	public Marketplace getRegisteredMarketplaces(@PathVariable("coreFlexProdId") String coreFlexProdId) {
-		CoreFlexProd flexProdUser = coreFlexProdRepository.findOne(coreFlexProdId);
+		CoreUser flexProdUser = coreUserRepository.findOne(coreFlexProdId);
 		if (flexProdUser.getRegisteredMarketplaces().isEmpty()) {
 			return null;
 		}
@@ -40,19 +44,19 @@ public class CoreFlexProdController {
 	@PostMapping("/{coreFlexProdId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreFlexProdId") String coreFlexProdId,
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
-		CoreFlexProd coreFlexProdUser = coreFlexProdRepository.findOne(coreFlexProdId);
+		CoreUser coreFlexProdUser = coreUserRepository.findOne(coreFlexProdId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
 		if (coreFlexProdUser == null || marketplace == null) {
 			throw new NotFoundException();
 		}
 
 		coreFlexProdUser.getRegisteredMarketplaces().add(marketplace);
-		coreFlexProdUser = coreFlexProdRepository.save(coreFlexProdUser);
+		coreFlexProdUser = coreUserRepository.save(coreFlexProdUser);
 
-		FlexProd flexProdUser = new FlexProd();
+		User flexProdUser = new User();
 		flexProdUser.setId(coreFlexProdUser.getId());
 		flexProdUser.setUsername(flexProdUser.getUsername());
-		coreMarketplaceRestClient.registerFlexProdUser(marketplace.getUrl(), authorization, flexProdUser);
+		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, flexProdUser);
 	}
 
 }

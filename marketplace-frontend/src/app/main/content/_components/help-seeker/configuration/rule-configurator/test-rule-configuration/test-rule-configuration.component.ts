@@ -1,18 +1,24 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { Helpseeker } from "app/main/content/_model/helpseeker";
+import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
+import { User } from "app/main/content/_model/user";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatTableDataSource } from "@angular/material/table";
 import { Tenant } from "app/main/content/_model/tenant";
-import { RuleExecution, RuleStatus } from 'app/main/content/_model/derivation-rule-execution';
-import { DerivationRule, ClassCondition } from 'app/main/content/_model/derivation-rule';
-import { DerivationRuleService } from 'app/main/content/_service/derivation-rule.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import {
+  RuleExecution,
+  RuleStatus,
+} from "app/main/content/_model/derivation-rule-execution";
+import {
+  DerivationRule,
+  ClassCondition,
+} from "app/main/content/_model/derivation-rule";
+import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
+import { LoginService } from "app/main/content/_service/login.service";
+import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 
 @Component({
-  selector: 'test-rule-configuration',
-  templateUrl: './test-rule-configuration.component.html',
-  styleUrls: ['./test-rule-configuration.component.scss']
+  selector: "test-rule-configuration",
+  templateUrl: "./test-rule-configuration.component.html",
+  styleUrls: ["./test-rule-configuration.component.scss"],
 })
 export class TestRuleConfigurationComponent implements OnInit {
   @Input("derivationRule") derivationRule: DerivationRule;
@@ -21,22 +27,17 @@ export class TestRuleConfigurationComponent implements OnInit {
   classConditions: ClassCondition[];
   ruleExecutions: RuleExecution[];
   displayedColumns = ["Name", "Status"];
-  helpseeker: Helpseeker;
+  helpseeker: User;
   tenant: Tenant;
 
-  constructor(   
-    
+  constructor(
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private derivationRuleService: DerivationRuleService,
-
-  ) {
-  }
+    private derivationRuleService: DerivationRuleService
+  ) {}
 
   async ngOnInit() {
-    this.helpseeker = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
     this.marketplace = <Marketplace>(
       await this.helpSeekerService
@@ -47,23 +48,21 @@ export class TestRuleConfigurationComponent implements OnInit {
     this.testRule();
   }
 
-  private testRule(){
-    this.derivationRule.container = "simulate execution " + this.derivationRule.name;
+  private testRule() {
+    this.derivationRule.container =
+      "simulate execution " + this.derivationRule.name;
     this.derivationRuleService
       .test(this.marketplace, this.derivationRule)
       .toPromise()
-    //  .then(() => this.derivationRuleService.getTestResults(this.marketplace, this.derivationRule)
-    //  .toPromise()
+      //  .then(() => this.derivationRuleService.getTestResults(this.marketplace, this.derivationRule)
+      //  .toPromise()
       .then((ruleExecutions: RuleExecution[]) => {
         this.dataSource.data = ruleExecutions;
       });
   }
 
   private retrieveStatusValueOf(status) {
-    let x: RuleStatus =
-      RuleStatus[status as keyof typeof RuleStatus];
+    let x: RuleStatus = RuleStatus[status as keyof typeof RuleStatus];
     return x;
   }
-
 }
-

@@ -1,8 +1,8 @@
-package at.jku.cis.iVolunteer.core.security;
+package at.jku.cis.iVolunteer.model.user;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public enum ParticipantRole implements GrantedAuthority {
+public enum UserRole implements GrantedAuthority {
 	HELP_SEEKER, VOLUNTEER, FLEXPROD, RECRUITER, ADMIN, NONE;
 
 	@Override

@@ -8,42 +8,42 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.user.FlexProd;
-import at.jku.cis.iVolunteer.model.user.HelpSeeker;
-import at.jku.cis.iVolunteer.model.user.Recruiter;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
 public class CoreMarketplaceRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
 
-	private static final String MARKETPLACE_REGISTER_VOLUNTEER = "{0}/volunteer";
-	private static final String MARKETPLACE_REGISTER_HELP_SEEKER = "{0}/helpseeker";
-	private static final String MARKETPLACE_REGISTER_RECRUITER = "{0}/recruiter";
+	private String preUrl;
 
-	private static final String MARKETPLACE_REGISTER_FLEXPROD = "{0}/flexprod";
+	@Autowired
+	private RestTemplate restTemplate;
 
-	@Autowired private RestTemplate restTemplate;
+	public User registerUser(String marketplaceURL, String authorization, User user) {
+		UserRole role = user.getSubscribedTenants().stream().map(t -> t.getRole()).findFirst()
+				.orElse(UserRole.VOLUNTEER);
 
-	public Volunteer registerVolunteer(String marketplaceURL, String authorization, Volunteer volunteer) {
-		String url = format(MARKETPLACE_REGISTER_VOLUNTEER, marketplaceURL, volunteer);
-		return restTemplate.postForObject(url, buildEntity(volunteer, authorization), Volunteer.class);
-	}
+		switch (role) {
+			case VOLUNTEER:
+				preUrl = "{0}/volunteer";
+				break;
+			case HELP_SEEKER:
+				preUrl = "{0}/helpseeker";
+				break;
+			case RECRUITER:
+				preUrl = "{0}/recruiter";
+				break;
+			case FLEXPROD:
+				preUrl = "{0}/flexprod";
+				break;
+			default:
+				break;
+		}
 
-	public HelpSeeker registerHelpSeeker(String marketplaceURL, String authorization, HelpSeeker helpSeeker) {
-		String url = format(MARKETPLACE_REGISTER_HELP_SEEKER, marketplaceURL, helpSeeker);
-		return restTemplate.postForObject(url, buildEntity(helpSeeker, authorization), HelpSeeker.class);
-	}
-
-	public Recruiter registerRecruiter(String marketplaceURL, String authorization, Recruiter recruiter) {
-		String url = format(MARKETPLACE_REGISTER_RECRUITER, marketplaceURL, recruiter);
-		return restTemplate.postForObject(url, buildEntity(recruiter, authorization), Recruiter.class);
-	}
-
-	public FlexProd registerFlexProdUser(String marketplaceURL, String authorization, FlexProd flexProdUser) {
-		String url = format(MARKETPLACE_REGISTER_FLEXPROD, marketplaceURL, flexProdUser);
-		return restTemplate.postForObject(url, buildEntity(flexProdUser, authorization), FlexProd.class);
+		String url = format(preUrl, marketplaceURL, user);
+		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
 	}
 
 	private HttpEntity<?> buildEntity(Object body, String authorization) {

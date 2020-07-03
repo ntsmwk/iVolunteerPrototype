@@ -1,21 +1,22 @@
-import {Injectable} from '@angular/core';
-import {CanActivate} from '@angular/router';
-import {LoginService} from '../_service/login.service';
-import { ParticipantRole } from '../_model/participant';
+import { Injectable } from "@angular/core";
+import { CanActivate } from "@angular/router";
+import { LoginService } from "../_service/login.service";
+import { UserRole } from "../_model/user";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class FlexProdOrHelpseekerGuard implements CanActivate {
-
-  constructor(private loginService: LoginService) {
-  }
+  constructor(private loginService: LoginService) {}
 
   canActivate(): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      this.loginService.getLoggedInParticipantRole()
+    return new Promise<boolean>((resolve) => {
+      this.loginService
+        .getLoggedInUserRole()
         .toPromise()
-        .then((role: ParticipantRole) => resolve(role == "FLEXPROD" || role == "HELP_SEEKER"));
+        .then((role: UserRole) =>
+          resolve(role == UserRole.FLEXPROD || role == UserRole.HELP_SEEKER)
+        );
     });
   }
 }

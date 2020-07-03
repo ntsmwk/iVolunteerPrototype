@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { StoredChartService } from "../../../_service/stored-chart.service";
 import { LoginService } from "../../../_service/login.service";
-import { Participant } from "../../../_model/participant";
+import { User } from "../../../_model/user";
 import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { Marketplace } from "../../../_model/marketplace";
 import { StoredChart } from "../../../_model/stored-chart";
@@ -12,7 +12,6 @@ import { ClassInstanceService } from "../../../_service/meta/core/class/class-in
 import { MatPaginator, MatSort } from "@angular/material";
 import { TenantService } from "../../../_service/core-tenant.service";
 import { VolunteerService } from "../../../_service/volunteer.service";
-import { Volunteer } from "../../../_model/volunteer";
 
 @Component({
   selector: "recruit-view",
@@ -40,7 +39,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     "verificationStatus",
   ];
   marketplace: Marketplace;
-  participant: Participant;
+  participant: User;
   duringVerify: boolean;
   verifyStage: number;
   charts: StoredChart[];
@@ -67,7 +66,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   private tenantName: string = "FF Eidenberg";
   private tenantId: string[] = [];
 
-  private volunteer: Volunteer;
+  private volunteer: User;
 
   verify1 = false;
   verify2 = false;
@@ -89,7 +88,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       this.loginService
         .getLoggedIn()
         .toPromise()
-        .then((participant: Participant) => {
+        .then((participant: User) => {
           this.participant = participant;
         }),
     ]).then(() => {
@@ -108,7 +107,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
         this.volunteerService
           .findByName(this.marketplace, "mweixlbaumer")
           .toPromise()
-          .then((volunteer: Volunteer) => {
+          .then((volunteer: User) => {
             this.volunteer = volunteer;
 
             this.classInstanceService

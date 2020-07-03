@@ -4,16 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
 
 @RestController
 public class InitializationController {
 
-	@Autowired private UserMappingRepository userMappingRepository;
-	@Autowired private VolunteerRepository volunteerRepository;	
+	@Autowired
+	private UserMappingRepository userMappingRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@PutMapping("/init/usermapping")
 	public void addFireBrigadeUserMapping() {
@@ -23,7 +25,7 @@ public class InitializationController {
 			userMappingRepository.deleteAll();
 		}
 
-		Volunteer volunteer = volunteerRepository.findByUsername("mweixlbaumer");
+		User volunteer = userRepository.findByUsername("mweixlbaumer");
 		if (volunteer != null) {
 			UserMapping mapping = new UserMapping();
 			mapping.setiVolunteerUserId(volunteer.getId());

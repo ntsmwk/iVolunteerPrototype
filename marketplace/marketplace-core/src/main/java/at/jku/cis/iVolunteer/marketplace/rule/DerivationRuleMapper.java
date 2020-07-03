@@ -16,9 +16,9 @@ import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
 
 @Component
 public class DerivationRuleMapper implements AbstractMapper<DerivationRule, DerivationRuleDTO> {
-	
-	@Autowired private RuleEntryMapper ruleEntryMapper;
 
+	@Autowired
+	private RuleEntryMapper ruleEntryMapper;
 
 	@Override
 	public DerivationRuleDTO toTarget(DerivationRule source) {
@@ -51,37 +51,25 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 	}
 
 	@Override
-	public DerivationRule toSource(DerivationRuleDTO target) {		
+	public DerivationRule toSource(DerivationRuleDTO target) {
 		DerivationRule derivationRule = new DerivationRule();
 		derivationRule.setId(target.getId());
 		derivationRule.setMarketplaceId(target.getMarketplaceId());
 		derivationRule.setName(target.getName());
 		derivationRule.setTenantId(target.getTenantId());
 		derivationRule.setContainer(target.getContainer());
-		derivationRule.setGeneralConditions(
-				target
-					.getGeneralConditions()
-					.stream()
-					.map(e -> ruleEntryMapper.toSource(e))
-					.collect(Collectors.toList()));
+		derivationRule.setGeneralConditions(target.getGeneralConditions().stream().map(e -> ruleEntryMapper.toSource(e))
+				.collect(Collectors.toList()));
 		if (target.getConditions().size() > 0) {
 			MultipleConditions multipleCondition = new MultipleConditions(LogicalOperatorType.AND);
 			multipleCondition.setConditions(
-					target
-						.getConditions()
-						.stream()
-						.map(e -> ruleEntryMapper.toSource(e))
-						.collect(Collectors.toList()));
+					target.getConditions().stream().map(e -> ruleEntryMapper.toSource(e)).collect(Collectors.toList()));
 			derivationRule.addCondition(multipleCondition);
-		} 
-		derivationRule.setActions(
-				target
-				   .getClassActions()
-				   .stream() 
-				   .map(e -> ruleEntryMapper.toSource((ClassActionDTO)e))
-				   .collect(Collectors.toList()));	  
+		}
+		derivationRule.setActions(target.getClassActions().stream()
+				.map(e -> ruleEntryMapper.toSource((ClassActionDTO) e)).collect(Collectors.toList()));
 		derivationRule.setTimestamp(target.getTimestamp());
-		return derivationRule;		 
+		return derivationRule;
 	}
 
 	@Override

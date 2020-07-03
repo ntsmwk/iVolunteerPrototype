@@ -3,10 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "../../../../../_model/participant";
+import { User, UserRole } from "../../../../../_model/user";
 import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
@@ -21,7 +18,6 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
-import { Helpseeker } from "../../../../../_model/helpseeker";
 
 @Component({
   selector: "class-rule-precondition",
@@ -34,9 +30,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     ClassCondition
   > = new EventEmitter<ClassCondition>();
 
-  helpseeker: Helpseeker;
+  helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   attributes: AttributeCondition[] = [];
@@ -72,7 +68,8 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         this.classCondition.value || "",
     });
 
-    this.classCondition.attributeConditions = this.classCondition.attributeConditions
+    this.classCondition.attributeConditions = this.classCondition
+      .attributeConditions
       ? this.classCondition.attributeConditions
       : new Array();
     this.aggregationOperators = Object.keys(AggregationOperatorType);
@@ -80,7 +77,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     this.loginService
       .getLoggedIn()
       .toPromise()
-      .then((helpseeker: Helpseeker) => {
+      .then((helpseeker: User) => {
         this.helpseeker = helpseeker;
         this.helpSeekerService
           .findRegisteredMarketplaces(helpseeker.id)
@@ -90,7 +87,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
             this.classDefinitionService
               .getAllClassDefinitionsWithoutHeadAndEnums(
                 marketplace,
-                this.helpseeker.tenantId
+                this.helpseeker.subscribedTenants.find(
+                  (t) => t.role === UserRole.HELP_SEEKER
+                ).tenantId
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
@@ -105,7 +104,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.classCondition.classDefinition = new ClassDefinition();
     }
     this.classCondition.classDefinition.id = $event.source.value;
-    this.classCondition.classDefinition.tenantId = this.helpseeker.tenantId;
+    this.classCondition.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
+      (t) => t.role === UserRole.HELP_SEEKER
+    ).tenantId;
   }
 
   onOperatorChange(aggregationOperatorType, $event) {

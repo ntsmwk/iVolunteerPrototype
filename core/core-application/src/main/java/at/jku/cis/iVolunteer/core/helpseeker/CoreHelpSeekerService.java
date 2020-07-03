@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.core.helpseeker;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,21 +8,30 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.HelpSeeker;
+import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
 public class CoreHelpSeekerService {
 
-	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	public void registerMarketplace(String coreHelpSeekerId, String marketplaceId, String tenantId,
 			String authorization) {
-		CoreHelpSeeker coreHelpSeeker = coreHelpSeekerRepository.findOne(coreHelpSeekerId);
+		CoreUser coreHelpSeeker = coreUserRepository.findOne(coreHelpSeekerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
 		if (coreHelpSeeker == null || marketplace == null) {
 			throw new NotFoundException();
@@ -30,11 +40,10 @@ public class CoreHelpSeekerService {
 		sendRegistrationToMarketplace(authorization, coreHelpSeeker, marketplace);
 	}
 
-	private void sendRegistrationToMarketplace(String authorization, CoreHelpSeeker coreHelpSeeker,
-			Marketplace marketplace) {
-		HelpSeeker helpSeeker = new HelpSeeker();
+	private void sendRegistrationToMarketplace(String authorization, CoreUser coreHelpSeeker, Marketplace marketplace) {
+		User helpSeeker = new User();
 		helpSeeker.setId(coreHelpSeeker.getId());
-		helpSeeker.setTenantId(coreHelpSeeker.getTenantId());
+		helpSeeker.setSubscribedTenants(coreHelpSeeker.getSubscribedTenants());
 		helpSeeker.setUsername(coreHelpSeeker.getUsername());
 		helpSeeker.setFirstname(coreHelpSeeker.getFirstname());
 		helpSeeker.setMiddlename(coreHelpSeeker.getMiddlename());
@@ -42,19 +51,20 @@ public class CoreHelpSeekerService {
 		helpSeeker.setLastname(coreHelpSeeker.getLastname());
 		helpSeeker.setNickname(coreHelpSeeker.getNickname());
 		helpSeeker.setImage(coreHelpSeeker.getImage());
-		
-		coreMarketplaceRestClient.registerHelpSeeker(marketplace.getUrl(), authorization, helpSeeker);
+
+		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, helpSeeker);
 	}
 
-	private CoreHelpSeeker updateCoreHelpSeeker(String tenantId, CoreHelpSeeker coreHelpSeeker,
-			Marketplace marketplace) {
+	private CoreUser updateCoreHelpSeeker(String tenantId, CoreUser coreHelpSeeker, Marketplace marketplace) {
 		coreHelpSeeker.getRegisteredMarketplaces().add(marketplace);
-		coreHelpSeeker.setTenantId(tenantId);
-		coreHelpSeeker = coreHelpSeekerRepository.save(coreHelpSeeker);
+		coreHelpSeeker.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(tenantId, UserRole.HELP_SEEKER)));
+
+		coreHelpSeeker = coreUserRepository.save(coreHelpSeeker);
 		return coreHelpSeeker;
 	}
 
-	public List<CoreHelpSeeker> getAllCoreHelpSeekers(String tenantId) {
-		return this.coreHelpSeekerRepository.findByTenantId(tenantId);
+	public List<CoreUser> getAllCoreHelpSeekers(String tenantId) {
+		return coreUserService.getCoreUsersByRoleAndSubscribedTenants(UserRole.HELP_SEEKER, tenantId);
 	}
 }

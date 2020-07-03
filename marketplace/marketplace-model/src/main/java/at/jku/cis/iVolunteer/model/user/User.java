@@ -1,13 +1,17 @@
 package at.jku.cis.iVolunteer.model.user;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 
-public abstract class User {
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 
-	@Id private String id;
+public class User {
+	@Id
+	private String id;
 	private String username;
 	private String password;
 
@@ -19,15 +23,17 @@ public abstract class User {
 	private String position;
 
 	private Date birthday;
-	
+
 	private List<String> locations;
 	private String about;
 	private String address;
 	private List<String> phoneNumbers;
 	private List<String> websites;
 	private List<String> emails;
-	
+
 	private byte[] image;
+
+	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
 
 	public String getId() {
 		return id;
@@ -168,5 +174,25 @@ public abstract class User {
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	public List<TenantUserSubscription> getSubscribedTenants() {
+		return this.subscribedTenants;
+	}
+
+	public void setSubscribedTenants(List<TenantUserSubscription> subscribedTenants) {
+		this.subscribedTenants = subscribedTenants;
+	}
+
+	public void addSubscribedTenant(String tenantId, UserRole role) {
+		if (!this.subscribedTenants.stream().map(t -> t.getTenantId()).collect(Collectors.toList())
+				.contains(tenantId)) {
+			this.subscribedTenants.add(new TenantUserSubscription(tenantId, role));
+		}
+	}
+
+	public List<TenantUserSubscription> removeSubscribedTenant(String tenantId) {
+		this.subscribedTenants.removeIf(s -> s.getTenantId() == tenantId);
+		return this.subscribedTenants;
 	}
 }

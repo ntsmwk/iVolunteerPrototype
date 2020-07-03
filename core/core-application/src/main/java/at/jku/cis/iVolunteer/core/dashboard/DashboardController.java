@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.core.dashboard.Dashboard;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
@@ -22,15 +22,18 @@ import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 @RestController
 public class DashboardController {
 
-	@Autowired private CoreLoginService loginService;
-	@Autowired private CoreVolunteerRepository volunteerRepository;
+	@Autowired
+	private CoreLoginService loginService;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
 
-	@Autowired private DashboardRepository dashboardRepository;
+	@Autowired
+	private DashboardRepository dashboardRepository;
 
 	@GetMapping(path = "/dashboard")
 	public List<Dashboard> find(@RequestParam(name = "participantId", required = false) String participantId) {
 		if (!StringUtils.isEmpty(participantId)) {
-			return dashboardRepository.findByUser(volunteerRepository.findOne(participantId));
+			return dashboardRepository.findByUser(coreUserRepository.findOne(participantId));
 		}
 		return dashboardRepository.findAll();
 	}
@@ -47,7 +50,7 @@ public class DashboardController {
 	@PostMapping(path = "/dashboard")
 	public Dashboard create(@RequestBody Dashboard dashboard) {
 		dashboard.setId(null);
-		dashboard.setUser(loginService.getLoggedInParticipant());
+		dashboard.setUser(loginService.getLoggedInUser());
 		return dashboardRepository.insert(dashboard);
 	}
 

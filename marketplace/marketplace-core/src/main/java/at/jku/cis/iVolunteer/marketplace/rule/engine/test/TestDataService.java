@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +28,7 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepositor
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleEngineMapper;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances.RolesAmbulanceService;
-import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
+import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -62,37 +58,48 @@ import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
-import at.jku.cis.iVolunteer.model.user.HelpSeeker;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class TestDataService {
-	
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
-	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
-	@Autowired private RuleService ruleService;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private ClassPropertyService classPropertyService;
-	@Autowired private ClassInstanceService classInstanceService;
-	@Autowired private RuleEngineMapper ruleEngineMapper;
-	
-	@Autowired private CoreTenantRestClient coreTenantRestClient;
-	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private TestDataClasses testDataClasses;
-	@Autowired private TestDataInstances testDataInstances;
-	
+
+	@Autowired
+	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private RelationshipRepository relationshipRepository;
+	@Autowired
+	private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+	@Autowired
+	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private MarketplaceService marketplaceService;
+	@Autowired
+	private ContainerRuleEntryRepository containerRuleEntryRepository;
+	@Autowired
+	private RuleService ruleService;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private ClassPropertyService classPropertyService;
+	@Autowired
+	private ClassInstanceService classInstanceService;
+	@Autowired
+	private RuleEngineMapper ruleEngineMapper;
+
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private TestDataClasses testDataClasses;
+	@Autowired
+	private TestDataInstances testDataInstances;
+
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
 	private static final String RKWILHERING = "RK Wilhering";
-	
-	
-	
-	
-	
+
 }

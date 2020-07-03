@@ -3,17 +3,12 @@ import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "../../../../../_model/participant";
+
 import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
-import {
-  AttributeCondition,
-} from "app/main/content/_model/derivation-rule";
+import { AttributeCondition } from "app/main/content/_model/derivation-rule";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
@@ -23,24 +18,24 @@ import {
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
-import { Helpseeker } from "../../../../../_model/helpseeker";
+import { User, UserRole } from "app/main/content/_model/user";
 
 @Component({
-  selector: 'target-attribute-rule-configurator',
-  templateUrl: './target-attribute-rule-configurator.component.html',
-  styleUrls: ['./target-attribute-rule-configurator.component.scss']
+  selector: "target-attribute-rule-configurator",
+  templateUrl: "./target-attribute-rule-configurator.component.html",
+  styleUrls: ["./target-attribute-rule-configurator.component.scss"],
 })
 export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   @Input("attributeTarget")
   attributeTarget: AttributeCondition;
   @Output("attributeTarget")
-  attributeTargetChange: EventEmitter<
+  attributeTargetChange: EventEmitter<AttributeCondition> = new EventEmitter<
     AttributeCondition
-  > = new EventEmitter<AttributeCondition>();
+  >();
 
-  helpseeker: Helpseeker;
+  helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   ruleTargetAttributeForm: FormGroup;
   classProperties: ClassProperty<any>[] = [];
 
@@ -77,7 +72,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     this.loginService
       .getLoggedIn()
       .toPromise()
-      .then((helpseeker: Helpseeker) => {
+      .then((helpseeker: User) => {
         this.helpseeker = helpseeker;
         this.helpSeekerService
           .findRegisteredMarketplaces(helpseeker.id)
@@ -99,10 +94,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   private loadClassProperties($event) {
-    if (
-      this.attributeTarget &&
-      this.attributeTarget.classDefinition 
-    ) {
+    if (this.attributeTarget && this.attributeTarget.classDefinition) {
       this.classPropertyService
         .getAllClassPropertiesFromClass(
           this.marketplace,
@@ -112,7 +104,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
         .then((props: ClassProperty<any>[]) => {
           this.classProperties = props;
           this.enumValues = [];
-         // this.onChange($event);
+          // this.onChange($event);
         });
     }
   }
@@ -125,9 +117,10 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       this.classDefinitionService
         .getEnumValuesFromEnumHeadClassDefinition(
           this.marketplace,
-          this.attributeTarget.classProperty.allowedValues[0]
-            .enumClassId,
-          this.helpseeker.tenantId
+          this.attributeTarget.classProperty.allowedValues[0].enumClassId,
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
         .then((list: any[]) => {
@@ -144,10 +137,8 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
           (cp) => cp.id === this.ruleTargetAttributeForm.value.classPropertyId
         ) || new ClassProperty();
       this.attributeTargetChange.emit(this.attributeTarget);
-     }
+    }
   }
-
-
 
   onChangeValue($event) {
     if (this.classProperties.length > 0) {
@@ -159,5 +150,4 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       this.attributeTargetChange.emit(this.attributeTarget);
     }
   }
-
 }

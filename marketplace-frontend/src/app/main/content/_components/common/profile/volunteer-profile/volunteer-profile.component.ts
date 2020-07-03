@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Participant } from "app/main/content/_model/participant";
+import { User } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { fuseAnimations } from "@fuse/animations";
 import { ImageService } from "app/main/content/_service/image.service";
@@ -18,7 +18,7 @@ import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.s
   animations: fuseAnimations,
 })
 export class VolunteerProfileComponent implements OnInit {
-  volunteer: Participant;
+  volunteer: User;
 
   profileForm: FormGroup;
   profileFormErrors: any;
@@ -52,9 +52,7 @@ export class VolunteerProfileComponent implements OnInit {
   }
 
   async reload() {
-    this.volunteer = <Participant>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();
     console.error(this.volunteer);
     this.profileForm.setValue({
       firstName: this.volunteer.firstname,

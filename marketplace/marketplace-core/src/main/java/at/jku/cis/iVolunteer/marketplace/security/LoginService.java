@@ -4,56 +4,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import at.jku.cis.iVolunteer.marketplace.user.RecruiterRepository;
-import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.user.HelpSeeker;
-import at.jku.cis.iVolunteer.model.user.ParticipantRole;
-import at.jku.cis.iVolunteer.model.user.Recruiter;
+import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.User;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class LoginService {
 
-	@Autowired private HelpSeekerRepository helpSeekerRepository;
-	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private RecruiterRepository recruiterRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-	public User getLoggedInParticipant() {
+	public User getLoggedInUser() {
 		Authentication authentication = determineAuthentication();
 		return findByUsername((String) authentication.getPrincipal());
 	}
 
-	public ParticipantRole getLoggedInParticipantRole() {
-		User participant = getLoggedInParticipant();
-		if (participant instanceof HelpSeeker) {
-			return ParticipantRole.HELP_SEEKER;
+	public UserRole getLoggedInUserRole(Tenant tenant) {
+		User user = getLoggedInUser();
+
+		if (user == null) {
+			return UserRole.NONE;
 		}
-		if (participant instanceof Volunteer) {
-			return ParticipantRole.VOLUNTEER;
-		}
-		if(participant instanceof Recruiter) {
-			return ParticipantRole.RECRUITER;
-		}
-		return null;
+
+		return user.getSubscribedTenants().stream().map(c -> c.getRole()).findFirst().orElse(UserRole.VOLUNTEER);
 	}
 
 	private User findByUsername(String username) {
-		User user = helpSeekerRepository.findByUsername(username);
-		if (user != null) {
-			return user;
-		} 
-		user = volunteerRepository.findByUsername(username);
-		if(user != null) {
-			return user;
-		}
-		user = recruiterRepository.findByUsername(username);
-		if(user != null) {
-			return user;
-		}
-		return null;
+		return userRepository.findByUsername(username);
 	}
 
 	private Authentication determineAuthentication() {

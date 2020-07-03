@@ -1,10 +1,9 @@
 import { Injectable, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { GlobalInfo } from "../_model/global-info";
-import { Participant, ParticipantRole } from "../_model/participant";
+import { User, UserRole } from "../_model/user";
 import { TenantService } from "./core-tenant.service";
 import { Tenant } from "../_model/tenant";
-import { Volunteer } from "../_model/volunteer";
 import { MarketplaceService } from "./core-marketplace.service";
 import { LoginService } from "./login.service";
 import { Marketplace } from "../_model/marketplace";

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
-import { Volunteer } from "app/main/content/_model/volunteer";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { ClassInstanceDTO } from "app/main/content/_model/meta/class";
 import { Tenant } from "app/main/content/_model/tenant";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "fuse-tasks",
@@ -12,7 +12,7 @@ import { Tenant } from "app/main/content/_model/tenant";
   animations: fuseAnimations,
 })
 export class TasksComponent implements OnInit {
-  volunteer: Volunteer;
+  volunteer: User;
   marketplace: Marketplace;
 
   @Input() classInstanceDTOs: ClassInstanceDTO[];

@@ -1,4 +1,4 @@
-export class Participant {
+export class User {
   id: string;
   username: string;
   password: string;
@@ -18,17 +18,19 @@ export class Participant {
   websites: string[] = [];
   emails: string[] = [];
 
+  subscribedTenants: TenantUserSubscription[];
+
   image;
 }
 
-export type ParticipantRole =
-  | "VOLUNTEER"
-  | "HELP_SEEKER"
-  | "ADMIN"
-  | "RECRUITER"
-  | "FLEXPROD";
-
-export class UserImagePath {
-  userId: string;
-  imagePath: string;
+export enum UserRole {
+  VOLUNTEER = "VOLUNTEER",
+  HELP_SEEKER = "HELP_SEEKER",
+  ADMIN = "ADMIN",
+  RECRUITER = "RECRUITER",
+  FLEXPROD = "FLEXPROD",
+}
+export class TenantUserSubscription {
+  tenantId: string;
+  role: UserRole;
 }

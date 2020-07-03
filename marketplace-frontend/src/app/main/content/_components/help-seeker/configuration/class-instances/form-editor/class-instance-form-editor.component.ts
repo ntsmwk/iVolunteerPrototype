@@ -1,41 +1,40 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { QuestionService } from 'app/main/content/_service/question.service';
-import { QuestionControlService } from 'app/main/content/_service/question-control.service';
-import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { QuestionService } from "app/main/content/_service/question.service";
+import { QuestionControlService } from "app/main/content/_service/question-control.service";
+import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   FormConfiguration,
   FormEntryReturnEventData,
   FormEntry,
-} from 'app/main/content/_model/meta/form';
-import { ClassInstance } from 'app/main/content/_model/meta/class';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
-import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { AbstractControl, FormGroup, FormControl } from '@angular/forms';
+} from "app/main/content/_model/meta/form";
+import { ClassInstance } from "app/main/content/_model/meta/class";
+import { Router, ActivatedRoute } from "@angular/router";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
+import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
+import { ObjectIdService } from "app/main/content/_service/objectid.service.";
+import { AbstractControl, FormGroup, FormControl } from "@angular/forms";
 import {
   PropertyInstance,
   PropertyType,
-} from 'app/main/content/_model/meta/property';
-import { isNullOrUndefined } from 'util';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { Volunteer } from 'app/main/content/_model/volunteer';
+} from "app/main/content/_model/meta/property";
+import { isNullOrUndefined } from "util";
+import { LoginService } from "app/main/content/_service/login.service";
+import { User, UserRole } from "app/main/content/_model/user";
 
 @Component({
   selector: "app-class-instance-form-editor",
-  templateUrl: './class-instance-form-editor.component.html',
-  styleUrls: ['./class-instance-form-editor.component.scss'],
+  templateUrl: "./class-instance-form-editor.component.html",
+  styleUrls: ["./class-instance-form-editor.component.scss"],
   providers: [QuestionService, QuestionControlService],
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
   marketplace: Marketplace;
-  helpseeker: Helpseeker;
+  helpseeker: User;
 
   formConfigurations: FormConfiguration[];
   currentFormConfiguration: FormConfiguration;
-  selectedVolunteers: Volunteer[];
+  selectedVolunteers: User[];
 
   returnedClassInstances: ClassInstance[];
 
@@ -50,7 +49,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   expectedNumberOfResults: number;
   results: FormEntryReturnEventData[];
 
-  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
+  @ViewChild("contentDiv", { static: false }) contentDiv: ElementRef;
   resultClassInstance: ClassInstance;
 
   constructor(
@@ -63,7 +62,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
     private objectIdService: ObjectIdService
-  ) { }
+  ) {}
 
   ngOnInit() {
     let marketplaceId: string;
@@ -75,7 +74,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     Promise.all([
       this.route.params.subscribe((params) => {
-        marketplaceId = params['marketplaceId'];
+        marketplaceId = params["marketplaceId"];
       }),
       this.route.queryParams.subscribe((queryParams) => {
         let i = 0;
@@ -108,7 +107,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             this.loginService
               .getLoggedIn()
               .toPromise()
-              .then((helpseeker: Helpseeker) => {
+              .then((helpseeker: User) => {
                 this.helpseeker = helpseeker;
               }),
           ]).then(() => {
@@ -158,10 +157,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let pathPrefix: string;
 
     Object.keys(evt.formGroup.controls).forEach((c) => {
-      if (c.endsWith('unableToContinue')) {
+      if (c.endsWith("unableToContinue")) {
         unableToContinueControlKey = c;
         unableToContinueControl = evt.formGroup.controls[c] as FormControl;
-        pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
+        pathPrefix = c.replace(/\.[^.]*unableToContinue/, "");
       }
     });
 
@@ -189,12 +188,18 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       });
   }
 
-  private getFormEntry(pathString: string, currentPath: string, currentFormEntry: FormEntry): FormEntry {
+  private getFormEntry(
+    pathString: string,
+    currentPath: string,
+    currentFormEntry: FormEntry
+  ): FormEntry {
     if (currentPath === pathString) {
       return currentFormEntry;
     }
 
-    currentFormEntry = currentFormEntry.subEntries.find((e) => pathString.startsWith(e.id));
+    currentFormEntry = currentFormEntry.subEntries.find((e) =>
+      pathString.startsWith(e.id)
+    );
     return this.getFormEntry(pathString, currentFormEntry.id, currentFormEntry);
   }
 
@@ -227,15 +232,31 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const classInstances: ClassInstance[] = [];
 
     if (isNullOrUndefined(this.selectedVolunteers)) {
-      const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
-      classInstance.tenantId = this.helpseeker.tenantId;
-      classInstance.issuerId = this.helpseeker.tenantId;
+      const classInstance = this.createClassInstance(
+        this.currentFormConfiguration.formEntry,
+        this.currentFormConfiguration.id,
+        allControls
+      );
+      classInstance.tenantId = this.helpseeker.subscribedTenants.find(
+        (t) => t.role === UserRole.HELP_SEEKER
+      ).tenantId;
+      classInstance.issuerId = this.helpseeker.subscribedTenants.find(
+        (t) => t.role === UserRole.HELP_SEEKER
+      ).tenantId;
       classInstances.push(classInstance);
     } else {
       for (const volunteer of this.selectedVolunteers) {
-        const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
-        classInstance.tenantId = this.helpseeker.tenantId;
-        classInstance.issuerId = this.helpseeker.tenantId;
+        const classInstance = this.createClassInstance(
+          this.currentFormConfiguration.formEntry,
+          this.currentFormConfiguration.id,
+          allControls
+        );
+        classInstance.tenantId = this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId;
+        classInstance.issuerId = this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId;
         classInstance.userId = volunteer.id;
         classInstances.push(classInstance);
       }
@@ -264,15 +285,21 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return allControls;
   }
 
-  private createClassInstance(parentEntry: FormEntry, currentPath: string, controls: { id: string; control: AbstractControl }[]) {
+  private createClassInstance(
+    parentEntry: FormEntry,
+    currentPath: string,
+    controls: { id: string; control: AbstractControl }[]
+  ) {
     const propertyInstances: PropertyInstance<any>[] = [];
     for (const classProperty of parentEntry.classProperties) {
       // skip "unableToContinue" Properties
-      if (classProperty.id.endsWith('unableToContinue')) {
+      if (classProperty.id.endsWith("unableToContinue")) {
         continue;
       }
 
-      const control = controls.find((c) => c.id === currentPath + '.' + classProperty.id);
+      const control = controls.find(
+        (c) => c.id === currentPath + "." + classProperty.id
+      );
 
       let value: any;
       if (classProperty.type === PropertyType.FLOAT_NUMBER) {
@@ -282,7 +309,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       } else {
         value = control.control.value;
       }
-      const l = propertyInstances.push(new PropertyInstance(classProperty, [value]));
+      const l = propertyInstances.push(
+        new PropertyInstance(classProperty, [value])
+      );
 
       // if (classProperty.type === PropertyType.ENUM) {
       //   let i = propertyInstances[l - 1].allowedValues.findIndex(a => a.id === value.id);
@@ -296,17 +325,23 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       // }
 
       console.log(propertyInstances[l - 1]);
-
     }
 
-    const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
+    const classInstance = new ClassInstance(
+      parentEntry.classDefinitions[0],
+      propertyInstances
+    );
     classInstance.childClassInstances = [];
     classInstance.id = this.objectIdService.getNewObjectId();
     classInstance.marketplaceId = this.marketplace.id;
 
     if (!isNullOrUndefined(parentEntry.subEntries)) {
       for (const subEntry of parentEntry.subEntries) {
-        const subClassInstance = this.createClassInstance(subEntry, subEntry.id, controls);
+        const subClassInstance = this.createClassInstance(
+          subEntry,
+          subEntry.id,
+          controls
+        );
         classInstance.childClassInstances.push(subClassInstance);
       }
     }

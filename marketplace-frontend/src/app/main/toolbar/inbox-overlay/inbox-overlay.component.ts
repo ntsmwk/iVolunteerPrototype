@@ -12,11 +12,7 @@ import { ClassInstanceService } from "app/main/content/_service/meta/core/class/
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { LoginService } from "app/main/content/_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "app/main/content/_model/participant";
-import { Volunteer } from "app/main/content/_model/volunteer";
+import { User, UserRole } from "app/main/content/_model/user";
 import { isNullOrUndefined } from "util";
 import {
   ClassInstance,
@@ -24,7 +20,6 @@ import {
   ClassInstanceDTO,
 } from "app/main/content/_model/meta/class";
 import { Router } from "@angular/router";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 
 @Component({
   selector: "inbox-overlay",
@@ -47,8 +42,8 @@ export class InboxOverlayComponent implements OnInit {
   @Output() closeOverlay: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   marketplace: Marketplace;
-  participant;
-  participantRole: ParticipantRole;
+  user;
+  userRole: UserRole;
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
@@ -64,33 +59,33 @@ export class InboxOverlayComponent implements OnInit {
         }
 
         this.loginService
-          .getLoggedInParticipantRole()
+          .getLoggedInUserRole()
           .toPromise()
-          .then((role: ParticipantRole) => {
-            this.participantRole = role;
-            if (this.participantRole === "VOLUNTEER") {
+          .then((role: UserRole) => {
+            this.userRole = role;
+            if (this.userRole === UserRole.VOLUNTEER) {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
-                .then((volunteer: Volunteer) => {
-                  this.participant = volunteer;
+                .then((volunteer: User) => {
+                  this.user = volunteer;
                 });
-            } else if (this.participantRole === "HELP_SEEKER") {
+            } else if (this.userRole === UserRole.HELP_SEEKER) {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
-                .then((helpseeker: Helpseeker) => {
-                  this.participant = helpseeker;
+                .then((helpseeker: User) => {
+                  this.user = helpseeker;
                 });
             }
 
-            if (this.participantRole === "VOLUNTEER") {
-              this.participant.subscribedTenants.forEach((tenantId) => {
+            if (this.userRole === UserRole.VOLUNTEER) {
+              this.user.subscribedTenants.forEach((tenantId) => {
                 this.classInstanceService
                   .getClassInstancesInUserInbox(
                     this.marketplace,
-                    this.participant.id,
-                    this.participant.subscribedTenants
+                    this.user.id,
+                    this.user.subscribedTenants
                   )
                   .toPromise()
                   .then((ret: ClassInstanceDTO[]) => {
@@ -98,12 +93,12 @@ export class InboxOverlayComponent implements OnInit {
                     this.isLoaded = true;
                   });
               });
-            } else if (this.participantRole === "HELP_SEEKER") {
+            } else if (this.userRole === UserRole.HELP_SEEKER) {
               this.classInstanceService
                 .getClassInstancesInIssuerInbox(
                   this.marketplace,
-                  this.participant.id,
-                  this.participant.tenantId
+                  this.user.id,
+                  this.user.tenantId
                 )
                 .toPromise()
                 .then((ret: ClassInstanceDTO[]) => {
@@ -179,7 +174,7 @@ export class InboxOverlayComponent implements OnInit {
   showInboxClicked() {
     this.closeOverlay.emit(true);
     this.router.navigate(["/main/volunteer/asset-inbox"], {
-      state: { marketplace: this.marketplace, participant: this.participant },
+      state: { marketplace: this.marketplace, participant: this.user },
     });
   }
 }

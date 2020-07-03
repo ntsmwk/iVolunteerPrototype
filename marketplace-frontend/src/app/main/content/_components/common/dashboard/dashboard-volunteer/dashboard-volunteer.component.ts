@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
 import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
-import { LoginService } from "../../../../_service/login.service";
 import { isNullOrUndefined } from "util";
 import { Marketplace } from "../../../../_model/marketplace";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
@@ -15,7 +14,6 @@ import {
   MatIconRegistry,
 } from "@angular/material";
 import { TenantService } from "../../../../_service/core-tenant.service";
-import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Tenant } from "app/main/content/_model/tenant";
@@ -27,6 +25,7 @@ import { DialogFactoryDirective } from "app/main/content/_components/_shared/dia
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { GlobalService } from "app/main/content/_service/global.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { User } from "app/main/content/_model/user";
 HC_venn(Highcharts);
 
 @Component({
@@ -36,7 +35,7 @@ HC_venn(Highcharts);
   providers: [DialogFactoryDirective],
 })
 export class DashboardVolunteerComponent implements OnInit {
-  volunteer: Volunteer;
+  volunteer: User;
   marketplace: Marketplace;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -136,7 +135,7 @@ export class DashboardVolunteerComponent implements OnInit {
       await this.globalService.getGlobalInfo().toPromise()
     );
 
-    this.volunteer = <Volunteer>globalInfo.participant;
+    this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
 
@@ -154,7 +153,7 @@ export class DashboardVolunteerComponent implements OnInit {
             this.marketplace,
             "TASK",
             this.volunteer.id,
-            this.volunteer.subscribedTenants
+            this.volunteer.subscribedTenants.map((s) => s.tenantId)
           )
           .toPromise()
       );
