@@ -5,6 +5,8 @@ import { LoginService } from "../../content/_service/login.service";
 import { isNullOrUndefined } from "util";
 
 import { ImageService } from "app/main/content/_service/image.service";
+import { GlobalService } from "app/main/content/_service/global.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "fuse-user-menu",
@@ -15,8 +17,8 @@ export class FuseUserMenuComponent implements OnInit {
   user: User;
 
   constructor(
-    private loginService: LoginService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private loginService: LoginService
   ) {}
 
   async ngOnInit() {
@@ -29,7 +31,11 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   getImage() {
-    return this.imageService.getImgSourceFromBytes(this.user.image);
+    if (isNullOrUndefined(this.user.image)) {
+      return "/assets/images/avatars/profile.jpg";
+    } else {
+      return this.imageService.getImgSourceFromBytes(this.user.image);
+    }
   }
 
   getUserNameString() {
