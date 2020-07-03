@@ -13,7 +13,7 @@
 
 <mat-dialog-content>
   <div *ngIf="loaded">
-    <mat-table #propertyTable class="property-table" [dataSource]="datasource" matSort>
+    <mat-table #propertyTable class="property-table" [dataSource]="datasource" matSort fusePerfectScrollbar>
       <ng-container matColumnDef="checkbox">
         <!-- <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
