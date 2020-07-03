@@ -121,17 +121,11 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   }
 
   onSaveClick() {
-    console.log(this.checkFormInvalid);
     if (this.checkFormInvalid()) {
-      console.log('invalid');
       return;
-    }
-    console.log('save');
-    const formValues = this.getFormValues();
+    } const formValues = this.getFormValues();
     this.classConfigurationService.saveClassConfigurationMeta(this.data.marketplace, this.data.classConfiguration.id, formValues.name, formValues.description).toPromise().then((ret: ClassConfiguration) => {
       this.data.classConfiguration = ret;
-      console.log('finished');
-      console.log(ret);
       this.dialogRef.close(this.data);
     });
   }
