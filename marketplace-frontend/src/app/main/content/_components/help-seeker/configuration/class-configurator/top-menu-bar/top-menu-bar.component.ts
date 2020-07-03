@@ -89,12 +89,13 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   @ViewChild('menubarContainer', { static: true }) menubarContainer: ElementRef;
   @ViewChild('submenuContainer', { static: true }) submenuContainer: ElementRef;
+  @ViewChild('titlebarTextContainer', { static: true }) titleBarTextContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
   @Input() eventResponse: TopMenuResponse;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
 
-  configurationName: string;
+  currentClassConfiguration: ClassConfiguration;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -128,6 +129,11 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.menubarContainer.nativeElement.style.height = '35px';
     this.menubarContainer.nativeElement.style.background = 'white';
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
+
+
+    this.titleBarTextContainer.nativeElement.style.maxWidth
+      // clientwidth of titlebar - margin left/right - icon left
+      = (this.menubarContainer.nativeElement.clientWidth - 50 - 15) + 'px';
 
     const outer = this;
 
@@ -163,9 +169,13 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   newClicked(event: any, item: SubMenuItem) {
+    this.performNew();
+  }
+
+  private performNew() {
     this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
-        this.configurationName = ret.classConfiguration.name;
+        this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
@@ -174,9 +184,15 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   openClicked(event: any, item: SubMenuItem) {
+    this.performOpen();
+
+    console.log(this.menubarContainer.nativeElement.clientWidth);
+  }
+
+  private performOpen() {
     this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: OpenClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
-        this.configurationName = ret.classConfiguration.name;
+        this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
@@ -196,8 +212,6 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
       .openSaveConfirmationDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
       .then((ret) => {
         if (!isNullOrUndefined(ret)) {
-          //return
-
           this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
         } else {
           this.menuOptionClickedEvent.emit({ id: 'cancelled' });
