@@ -20,7 +20,6 @@ public class LoginService {
 		return findByUsername((String) authentication.getPrincipal());
 	}
 
-	// TODO Philipp
 	public UserRole getLoggedInUserRole(Tenant tenant) {
 		User user = getLoggedInUser();
 
@@ -29,7 +28,6 @@ public class LoginService {
 		}
 
 		return user.getSubscribedTenants().stream().map(c -> c.getRole()).findFirst().orElse(UserRole.VOLUNTEER);
-
 	}
 
 	private User findByUsername(String username) {

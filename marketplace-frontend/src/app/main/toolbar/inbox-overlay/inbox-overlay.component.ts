@@ -42,14 +42,12 @@ export class InboxOverlayComponent implements OnInit {
   @Output() closeOverlay: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   marketplace: Marketplace;
-  participant;
-  participantRole: UserRole;
+  user;
+  userRole: UserRole;
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
   displayedColumns = ["archetype", "label"];
-
-  // TODO Philipp
 
   ngOnInit() {
     this.marketplaceService
@@ -64,30 +62,30 @@ export class InboxOverlayComponent implements OnInit {
           .getLoggedInUserRole()
           .toPromise()
           .then((role: UserRole) => {
-            this.participantRole = role;
-            if (this.participantRole === UserRole.VOLUNTEER) {
+            this.userRole = role;
+            if (this.userRole === UserRole.VOLUNTEER) {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
                 .then((volunteer: User) => {
-                  this.participant = volunteer;
+                  this.user = volunteer;
                 });
-            } else if (this.participantRole === UserRole.HELP_SEEKER) {
+            } else if (this.userRole === UserRole.HELP_SEEKER) {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
                 .then((helpseeker: User) => {
-                  this.participant = helpseeker;
+                  this.user = helpseeker;
                 });
             }
 
-            if (this.participantRole === UserRole.VOLUNTEER) {
-              this.participant.subscribedTenants.forEach((tenantId) => {
+            if (this.userRole === UserRole.VOLUNTEER) {
+              this.user.subscribedTenants.forEach((tenantId) => {
                 this.classInstanceService
                   .getClassInstancesInUserInbox(
                     this.marketplace,
-                    this.participant.id,
-                    this.participant.subscribedTenants
+                    this.user.id,
+                    this.user.subscribedTenants
                   )
                   .toPromise()
                   .then((ret: ClassInstanceDTO[]) => {
@@ -95,12 +93,12 @@ export class InboxOverlayComponent implements OnInit {
                     this.isLoaded = true;
                   });
               });
-            } else if (this.participantRole === UserRole.HELP_SEEKER) {
+            } else if (this.userRole === UserRole.HELP_SEEKER) {
               this.classInstanceService
                 .getClassInstancesInIssuerInbox(
                   this.marketplace,
-                  this.participant.id,
-                  this.participant.tenantId
+                  this.user.id,
+                  this.user.tenantId
                 )
                 .toPromise()
                 .then((ret: ClassInstanceDTO[]) => {
@@ -176,7 +174,7 @@ export class InboxOverlayComponent implements OnInit {
   showInboxClicked() {
     this.closeOverlay.emit(true);
     this.router.navigate(["/main/volunteer/asset-inbox"], {
-      state: { marketplace: this.marketplace, participant: this.participant },
+      state: { marketplace: this.marketplace, participant: this.user },
     });
   }
 }

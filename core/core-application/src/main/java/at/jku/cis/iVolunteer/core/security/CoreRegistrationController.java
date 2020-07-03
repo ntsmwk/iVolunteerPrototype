@@ -16,7 +16,6 @@ public class CoreRegistrationController {
 	@Autowired
 	private CoreRegistrationService coreRegistrationService;
 
-	// TODO Philipp
 	@PostMapping("/volunteer")
 	public void registerUser(@RequestBody CoreUser user) {
 		coreRegistrationService.registerUser(user);
