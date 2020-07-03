@@ -50,6 +50,11 @@ export class ClassConfigurationService {
     return this.http.put(`${marketplace.url}/class-configuration/save`, classConfiguration);
   }
 
+
+  saveClassConfigurationMeta(marketplace: Marketplace, id: string, name: string, description: string) {
+    return this.http.put(`${marketplace.url}/class-configuration/${id}/save-meta/`, [name, description]);
+  }
+
   deleteClassConfiguration(marketplace: Marketplace, id: string) {
     return this.http.delete(`${marketplace.url}/class-configuration/${id}/delete`);
   }

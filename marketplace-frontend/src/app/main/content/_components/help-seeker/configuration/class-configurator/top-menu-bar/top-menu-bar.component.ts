@@ -183,10 +183,23 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     });
   }
 
+  editClicked() {
+    this.performEdit();
+  }
+
+  private performEdit() {
+    this.dialogFactory.openNewClassConfigurationDialog(this.marketplace, this.currentClassConfiguration).then((ret: NewClassConfigurationDialogData) => {
+      if (!isNullOrUndefined(ret)) {
+        this.currentClassConfiguration = ret.classConfiguration;
+        this.menuOptionClickedEvent.emit({ id: 'editor_meta_edit', payload: { name: ret.classConfiguration.name, description: ret.classConfiguration.description } });
+      } else {
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+      }
+    });
+  }
+
   openClicked(event: any, item: SubMenuItem) {
     this.performOpen();
-
-    console.log(this.menubarContainer.nativeElement.clientWidth);
   }
 
   private performOpen() {

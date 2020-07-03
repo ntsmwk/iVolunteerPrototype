@@ -57,7 +57,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     private router: Router,
     private objectIdService: ObjectIdService,
     private dialogFactory: DialogFactoryDirective
-  ) {}
+  ) { }
 
   @Input() marketplace: Marketplace;
   @Input() helpseeker: User;
@@ -1011,7 +1011,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (
       !this.quickEditMode &&
       classDefinition.properties.length !==
-        existingClassDefinition.properties.length
+      existingClassDefinition.properties.length
     ) {
       this.redrawContent(cell);
     }
@@ -1193,6 +1193,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.showInstanceForm();
         break;
       }
+      case 'editor_meta_edit': {
+        this.currentClassConfiguration.name = event.payload.name;
+        this.currentClassConfiguration.description = event.payload.description;
+      }
       case "cancelled": {
         break;
       }
@@ -1347,7 +1351,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(rootCell)) {
       this.dialogFactory
         .openPreviewExportDialog(this.marketplace, [rootCell.id])
-        .then(() => {});
+        .then(() => { });
     }
   }
 
