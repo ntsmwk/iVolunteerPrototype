@@ -34,6 +34,7 @@ import { ClassConfiguration } from "../../../../_model/meta/configurations";
 import { TopMenuResponse } from "./top-menu-bar/top-menu-bar.component";
 import { ClassOptionsOverlayContentData } from "./options-overlay/options-overlay-content/options-overlay-content.component";
 import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory/dialog-factory.component";
+import { isNull } from "@angular/compiler/src/output/output_ast";
 import { User, UserRole } from "app/main/content/_model/user";
 
 declare var require: any;
@@ -1179,6 +1180,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       case "editor_delete": {
         if (
           !isNullOrUndefined(event.payload.idsToDelete) &&
+          !isNullOrUndefined(this.currentClassConfiguration) &&
           event.payload.idsToDelete.find(
             (id: string) => id === this.currentClassConfiguration.id
           )
@@ -1207,8 +1209,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.hiddenEdges = [];
 
     this.clearEditor();
-
-    this.loadServerContent();
+    if (!isNullOrUndefined(classConfiguration)) {
+      this.loadServerContent();
+    }
     // this.collapseGraph();
   }
 

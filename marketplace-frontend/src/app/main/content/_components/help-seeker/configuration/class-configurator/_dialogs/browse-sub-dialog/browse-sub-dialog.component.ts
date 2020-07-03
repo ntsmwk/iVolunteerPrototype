@@ -27,19 +27,10 @@ export class BrowseClassSubDialogComponent implements OnInit {
 
   constructor(
   ) {
-
   }
 
   ngOnInit() {
-
     this.datasource.data = this.data.entries;
-
-    // DEBUG
-    // this.data.entries.push(...this.data.entries);
-    // this.data.entries.push(...this.data.entries);
-    // this.data.entries.push(...this.data.entries);
-    // this.data.entries.push(...this.data.entries);
-
   }
 
   handleRowClick(entry: any) {

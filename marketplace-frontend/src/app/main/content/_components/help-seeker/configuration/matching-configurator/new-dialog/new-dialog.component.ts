@@ -134,6 +134,10 @@ export class NewMatchingDialogComponent implements OnInit {
     this.browseMode = true;
   }
 
+  handleBrowseBackClick() {
+    this.browseMode = false;
+  }
+
   handleReturnFromBrowse(event: {
     cancelled: boolean;
     entryId: string;

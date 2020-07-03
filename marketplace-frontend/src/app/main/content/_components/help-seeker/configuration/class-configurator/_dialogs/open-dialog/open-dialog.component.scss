@@ -1,3 +1,5 @@
+@import "../dialog-styles.scss";
+
 .mat-dialog-title {
   margin: 0;
 
@@ -9,78 +11,16 @@
 }
 
 mat-dialog-content {
-
-
   height: calc(100% - 52px - 20px );
   overflow: hidden;
-
-  .browse-table {
-    overflow-x: hidden;
+  
+  .browse-dialog-content .browse-table {
     overflow-y: hidden;
-
-    display: block;
-      
-    border-style: solid; 
-    border-color: rgb(62, 125, 219); 
-    border-width: 1px; 
-    border-radius: 2px;
-    
-    table-layout: fixed; 
-    width: 450px;
-    max-height: 225px;
-
-    background-color: rgb(230, 228, 228);
-
-    .table-row {
-        min-height: 0px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        cursor: pointer;
-
-        .name-cell {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis; max-width: 325px      
-      }
-    }
-
-    .table-row:hover {
-        background-color: rgb(62, 125, 219);
-
-        
-            color: white;
-        
-    }
-
-    .table-header-cell {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      z-index: 2;
-
-      background-color: rgb(62, 125, 219);
-
-    }
   }
+}
 
   .browse-button {
-    width: 200px; 
-    background: rgb(230, 228, 228); 
     margin: 0 auto;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    cursor: pointer;
-    border-radius: 2px;
-
-    .browse-button-text {
-      text-align: center;
-    }
-
   }
 
-  .browse-button:hover {
-    background-color: rgb(62, 125, 219);
-    color: white;
-  }
   
-}

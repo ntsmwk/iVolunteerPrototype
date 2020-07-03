@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { BrowseClassSubDialogModule } from '../browse-sub-dialog/browse-sub-dialog.module';
+import { FuseSharedModule } from '@fuse/shared.module';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { BrowseClassSubDialogModule } from '../browse-sub-dialog/browse-sub-dial
     MatIconModule,
 
     BrowseClassSubDialogModule,
+
   ],
   declarations: [OpenClassConfigurationDialogComponent],
   exports: [OpenClassConfigurationDialogComponent]

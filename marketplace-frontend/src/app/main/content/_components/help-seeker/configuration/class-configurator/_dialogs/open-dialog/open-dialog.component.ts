@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
-
+import { User } from "app/main/content/_model/user";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
 import { Relationship } from "app/main/content/_model/meta/relationship";
@@ -11,7 +11,6 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
 import { ClassBrowseSubDialogData } from "../browse-sub-dialog/browse-sub-dialog.component";
-import { User } from "app/main/content/_model/user";
 
 export interface OpenClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
@@ -61,10 +60,10 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
               (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
             );
 
-            if (this.recentClassConfigurations.length > 5) {
+            if (this.recentClassConfigurations.length > 6) {
               this.recentClassConfigurations = this.recentClassConfigurations.slice(
                 0,
-                5
+                6
               );
             }
             this.loaded = true;
@@ -120,6 +119,10 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     }
 
     this.browseMode = true;
+  }
+
+  handleBrowseBackClick() {
+    this.browseMode = false;
   }
 
   handleReturnFromBrowse(event: { cancelled: boolean; entryId: string }) {
