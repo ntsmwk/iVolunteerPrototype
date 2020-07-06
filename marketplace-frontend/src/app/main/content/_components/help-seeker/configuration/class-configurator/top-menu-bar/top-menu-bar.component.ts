@@ -171,10 +171,11 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   // menu functions
 
   newClicked() {
-    if (this.currentClassConfiguration != null) {
-      this.saveClicked();
+    if (!isNullOrUndefined(this.currentClassConfiguration)) {
+      this.saveClicked('performNew');
+    } else {
+      this.performNew();
     }
-    this.performNew();
   }
 
   private performNew() {
@@ -220,8 +221,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  saveClicked() {
-    this.menuOptionClickedEvent.emit({ id: 'editor_save' });
+  saveClicked(followingAction: string) {
+    this.menuOptionClickedEvent.emit({ id: 'editor_save', followingAction: followingAction });
   }
 
   private performSave(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
@@ -230,10 +231,16 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.dialogFactory
       .openSaveConfirmationDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
       .then((ret) => {
-        if (!isNullOrUndefined(ret)) {
-          this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
-        } else {
+
+        if (isNullOrUndefined(ret)) {
           this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+          return;
+        }
+
+        this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
+
+        if (!isNullOrUndefined(actionAfter)) {
+          this[actionAfter]();
         }
       });
   }
@@ -263,11 +270,11 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
     this.eventResponse = new TopMenuResponse();
     if (eventResponseAction === 'save') {
-      if (isNullOrUndefined(eventClassConfiguration)) {
-
-      } else {
+      if (!isNullOrUndefined(eventClassConfiguration)) {
         this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships, eventFollowingAction);
       }
+
+
     }
   }
 
