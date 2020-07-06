@@ -91,8 +91,8 @@ public class InitializationService {
 		// addConfiguratorSlots();
 
 		addiVolunteerAPIClassDefinition();
-		 testDataClasses.createClassConfigurations();
-		testDataInstances.createUserData();
+		// testDataClasses.createClassConfigurations();
+		// testDataInstances.createUserData();
 		// addTestClassInstances();
 	}
 
