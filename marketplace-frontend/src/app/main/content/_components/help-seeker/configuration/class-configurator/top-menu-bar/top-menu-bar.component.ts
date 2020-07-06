@@ -179,7 +179,6 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   private performNew() {
-
     this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.currentClassConfiguration = ret.classConfiguration;
@@ -191,6 +190,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   editClicked() {
+
     this.performEdit();
   }
 
@@ -206,7 +206,11 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   openClicked() {
-    this.performOpen();
+    if (!isNullOrUndefined(this.currentClassConfiguration)) {
+      this.saveClicked('performOpen');
+    } else {
+      this.performOpen();
+    }
   }
 
   private performOpen() {
@@ -234,10 +238,9 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
         if (isNullOrUndefined(ret)) {
           this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-          return;
+        } else {
+          this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
         }
-
-        this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
 
         if (!isNullOrUndefined(actionAfter)) {
           this[actionAfter]();
@@ -256,7 +259,16 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   createEditorClicked() {
+    if (!isNullOrUndefined(this.currentClassConfiguration)) {
+      this.saveClicked('performCreate');
+    } else {
+      this.performCreate();
+    }
+  }
+
+  performCreate() {
     this.menuOptionClickedEvent.emit({ id: 'editor_create_instance' });
+
   }
 
   ngOnChanges() {
@@ -273,9 +285,12 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
       if (!isNullOrUndefined(eventClassConfiguration)) {
         this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships, eventFollowingAction);
       }
-
-
-    }
+    } 
+    // else if (eventResponseAction === 'cancelled') {
+    //   if (!isNullOrUndefined(eventFollowingAction)) {
+    //     this[eventFollowingAction]();
+    //   }
+    // }
   }
 
 }

@@ -932,6 +932,8 @@ export class ClassConfiguratorComponent implements OnInit,
                 break;
             }
             case 'cancelled': {
+                this.eventResponse.action = 'cancelled';
+                this.eventResponse.followingAction = event.followingAction;
                 break;
             }
         }
@@ -1030,14 +1032,15 @@ export class ClassConfiguratorComponent implements OnInit,
    * ******DEBUGGING******
    */
     showInstanceForm() {
-        const rootCell = this.graph.getSelectionCell() as MyMxCell;
+        const selectionCell = this.graph.getSelectionCell() as MyMxCell;
+        console.log(selectionCell);
 
         // if (!isNullOrUndefined(rootCell) && rootCell.root) {
-        if (!isNullOrUndefined(rootCell) && !isNullOrUndefined(rootCell.edges.find((e: MyMxCell) => e.cellType === MyMxCellType.AGGREGATION))) {
+        if (!isNullOrUndefined(selectionCell) && !isNullOrUndefined(selectionCell.edges.find((e: MyMxCell) => e.cellType === MyMxCellType.AGGREGATION))) {
             this.router.navigate([`main/configurator/instance-editor/${
                 this.marketplace.id
                 }`], {
-                    queryParams: [rootCell.id]
+                    queryParams: [selectionCell.id]
                 });
         } else {
             // const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: MyMxCell) => c.classArchetype === ClassArchetype.ROOT);
@@ -1045,7 +1048,7 @@ export class ClassConfiguratorComponent implements OnInit,
             this.router.navigate([`main/configurator/instance-editor/${
                 this.marketplace.id
                 }`], {
-                    queryParams: [rootCell.id]
+                    queryParams: [selectionCell.id]
                 });
         }
     }
