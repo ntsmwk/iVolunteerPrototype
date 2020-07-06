@@ -1,55 +1,33 @@
-import { Injectable, OnInit } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { GlobalInfo } from "../_model/global-info";
-import { User, UserRole } from "../_model/user";
-import { TenantService } from "./core-tenant.service";
-import { Tenant } from "../_model/tenant";
-import { MarketplaceService } from "./core-marketplace.service";
-import { LoginService } from "./login.service";
-import { Marketplace } from "../_model/marketplace";
-import { VolunteerService } from "./volunteer.service";
-import { CoreVolunteerService } from "./core-volunteer.service";
-import { CoreHelpSeekerService } from "./core-helpseeker.service";
-import { timeInterval } from "rxjs/operators";
+
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class GlobalService {
-  globalInfo: GlobalInfo;
+  constructor(private httpClient: HttpClient) {}
 
-  constructor(
-    private httpClient: HttpClient,
-    private loginService: LoginService,
-    private tenantService: TenantService,
-    private coreHelpseekerService: CoreHelpSeekerService,
-    private coreVolunteerService: CoreVolunteerService,
-    private marketplaceService: MarketplaceService
-  ) {}
+  getGlobalInfo(): Observable<any> {
+    let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
 
-  getGlobalInfo() {
-    // TODO make only once
-    return this.httpClient.get(`/core/global`);
-    // setTimeout(() => {
-    //   while (this.globalInfo == null) {
-    //     console.error("globalinfo == null");
-    //     this.initializeGlobalInfo();
-
-    //     console.error("await");
-    //     console.error(this.globalInfo);
-    //   }
-    // }, 2000);
-    // return new Promise(() => this.globalInfo);
+    if (globalInfo) {
+      return new Observable((subscriber) => {
+        subscriber.next(globalInfo);
+        subscriber.complete();
+      });
+    } else {
+      this.initializeGlobalInfo();
+      return this.httpClient.get(`/core/global`);
+    }
   }
 
   private initializeGlobalInfo() {
-    console.error("initialize");
-    this.globalInfo = new GlobalInfo();
     this.httpClient
       .get(`/core/global`)
       .toPromise()
-      .then((gi: GlobalInfo) => (this.globalInfo = gi));
-  }
-
-  clearGlobalInfo() {
-    this.globalInfo = undefined;
+      .then((globalInfo: GlobalInfo) => {
+        localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
+      });
   }
 }
