@@ -1022,13 +1022,15 @@ export class ClassConfiguratorComponent implements OnInit,
    */
 
     showInstanceForm() {
-        if (!isNullOrUndefined(this.currentSelectedCell)) {
-            this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`],
-                {
-                    queryParams: [this.currentSelectedCell.id]
-                }
-                );
+        if (isNullOrUndefined(this.currentSelectedCell) || this.currentSelectedCell.cellType === MyMxCellType.CLASS) {
+            this.currentSelectedCell = this.rootCell;
         }
+
+        this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`],
+            {
+                queryParams: [this.currentSelectedCell.id]
+            }
+        );
     }
 
     showExportDialog() {
