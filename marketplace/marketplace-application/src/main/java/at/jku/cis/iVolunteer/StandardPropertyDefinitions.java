@@ -29,165 +29,16 @@ public class StandardPropertyDefinitions {
 
 	@Autowired public PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired public CoreTenantRestClient coreTenantRestClient;
-	// =========================================
-	// ========== Text Properties ==============
-	// =========================================
 
 	public StandardPropertyDefinitions() {
 
 	}
-
-//	public List<PropertyDefinition<Object>> getAllMulti() {
-//		List<PropertyDefinition<Object>> props = new LinkedList<>();
-//		
-//		MultiProperty mp = new TestMultiProperty();
-////		List<Property> allProps = propertyRepository.findAll();
-//		List<Property> multiProps = new LinkedList<>();
-//		
-////		multiProps.add(allProps.get(0));
-////		props.getLast().setId(new ObjectId().toString());
-//		
-//		multiProps.add(new PostcodeProperty());
-//		multiProps.add(new LatitudeProperty());
-//		multiProps.add(new LongitudeProperty());
-//		MultiProperty mp11 = new TestMultiProperty();
-//		mp11.setId("nested1");
-//		
-//		MultiProperty mp111 = new TestMultiProperty();
-//		mp111.setProperties(new ArrayList<>(multiProps));
-//		mp111.setId("nested2");
-//		
-//		
-//		mp11.setProperties(new ArrayList<>(multiProps));
-//		mp11.getProperties().add(mp111);
-//		
-//		
-//		multiProps.add(mp11);
-//		
-//		
-//		
-//		mp.setProperties(new ArrayList<>(multiProps));
-//		
-//		props.add(mp);
-//		
-//		props.add(new MapProperty());
-//		
-//		List<Property> ret = new ArrayList<>(props);
-//		return ret;
-//	}
-
-//	public List<PropertyDefinition<?>> getAllSybos() {
-//		List<PropertyDefinition<?>> list = new LinkedList<>();
-//		
-//		list.add(new DurationTimeProperty());
-//		list.add(new AreaOfExpertiseProperty());
-//		list.add(new PlanningTypeProperty());
-//		list.add(new DurationHoursProperty());
-//		list.add(new PointsProperty());
-//		list.add(new DepartmentProperty());
-//		list.add(new StreetProperty());
-//		list.add(new HouseNumberProperty());
-//		list.add(new DoorNumberProperty());
-//		list.add(new CityProperty());
-//		list.add(new AddressProperty());
-//		list.add(new CommentsProperty());
-//		list.add(new VehicleSelectionProperty());
-//		list.add(new EventTypeProperty());
-//		list.add(new PublicEventProperty());
-//		list.add(new PaidProperty());
-//		list.add(new PrerequisitesProperty());
-//		list.add(new ActivityGroupProperty());
-//		list.add(new RegisterDateProperty());
-//		list.add(new EducationClassProperty());
-//		list.add(new GradeProperty());
-//		
-//		return new ArrayList<>(list);
-//	}
-
-//	public List<Property> getTestMultiWithRules() {
-//		List<Property> list = new LinkedList<>();
-//		
-//		list.add(new TestMultiWithRules());
-//		
-//		return new ArrayList<>(list);
-//
-//	}
-
-//	public List<PropertyDefinition<Object>> getAllFlexProdProperties() {
-//		List<PropertyDefinition<?>> list = new LinkedList<>();
-//
-//		list.add(new MaxGluehtemperaturProperty());
-//		list.add(new VerfuegbaresSchutzgasProperty());
-//		list.add(new BauartProperty());
-//		list.add(new TemperaturhomogenitaetProperty());
-//		list.add(new KaltgewalztesMaterialZulaessigProperty());
-//		list.add(new WarmgewalztesMaterialZulaessigProperty());
-//
-//		list.add(new BundEntfettenProperty());
-//
-//		list.add(new InnendurchmesserProperty());
-//		list.add(new AussendurchmesserProperty());
-//		list.add(new HoeheProperty());
-//
-//		list.add(new GluehzeitProperty());
-//		list.add(new DurchmesserProperty());
-//		list.add(new DurchsatzProperty());
-//		
-//		list.add(new ChargierhilfeProperty());
-//		list.add(new WalzartProperty());
-//
-//		list.add(new MoeglicheInnendurchmesserProperty());
-//		list.add(new MaxAussendurchmesserProperty());
-//		list.add(new MaxChargierhoeheProperty());
-//
-//		list.add(new CQI9Property());
-//		list.add(new TUSProperty());
-//
-//		list.add(new LetzteWartungProperty());
-//		list.add(new WartungsintervallProperty());
-//
-//		list.add(new BandbreiteProperty());
-//		list.add(new BandstaerkeProperty());
-//
-//		list.add(new WarmgewalztProperty());
-//		list.add(new KaltgewalztProperty());
-//
-//		list.add(new StreckgrenzeProperty());
-//		list.add(new ZugfestigkeitProperty());
-//		list.add(new DehnungProperty());
-//
-//		list.add(new GefuegeProperty());
-//
-//		list.add(new MaterialBereitgestelltProperty());
-//		list.add(new LieferortProperty());
-//		list.add(new VerpackungProperty());
-//		list.add(new TransportartProperty());
-//		list.add(new MengeProperty());
-//		list.add(new LieferdatumProperty());
-//		list.add(new IncotermsProperty());
-//
-//		list.add(new ZahlungsbedingungenProperty());
-//
-//		return new ArrayList(list);
-//	}
-
-	public List<PropertyDefinition<Object>> getAll(String tenantId) {
-		List<PropertyDefinition<Object>> properties = this.getAllHeader(tenantId);
-		List<PropertyDefinition<Object>> sps = this.getAllSingle(tenantId);
-//		List<PropertyDefinition<Object>> mps = this.getAllMulti();
-//		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
-//		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
-//		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
-
-//		sps.addAll(mps);
-//		sps.addAll(sbs);
-//		sps.addAll(tmwr);
-//		sps.addAll(flexProd);
-//		sps.addAll(drahtofen);
-
-		properties.addAll(sps);
+	
+	public List<PropertyDefinition<Object>> getAlliVolunteer(String tenantId) {
+		List<PropertyDefinition<Object>> properties = getAllHeader(tenantId);
+		properties.addAll(getAllGeneric(tenantId));
+		
 		return properties;
-
 	}
 
 	public List<PropertyDefinition<Object>> getAllHeader(String tenantId) {
@@ -208,17 +59,11 @@ public class StandardPropertyDefinitions {
 
 	}
 
-	public List<PropertyDefinition<Object>> getAllSingle(String tenantId) {
+	public List<PropertyDefinition<Object>> getAllGeneric(String tenantId) {
 		List<PropertyDefinition<?>> props = new LinkedList<>();
 
-		NameProperty np = new NameProperty(tenantId);
-		np.inst(tenantId);
-		props.add(np);
-
-		DescriptionProperty dp = new DescriptionProperty(tenantId);
-		np.inst(tenantId);
-		props.add(dp);
-
+		props.add(new NameProperty(tenantId));
+		props.add(new DescriptionProperty(tenantId));
 		props.add(new WorkflowKeyProperty(tenantId));
 		props.add(new ContentProperty(tenantId));
 		props.add(new PriorityProperty(tenantId));
@@ -244,45 +89,115 @@ public class StandardPropertyDefinitions {
 		props.add(new LongitudeProperty(tenantId));
 		props.add(new VolunteerAgeProperty(tenantId));
 
-		RequiredCompetencesProperty cp1 = new RequiredCompetencesProperty(tenantId);
-		OptionalCompetencesProperty cp2 = new OptionalCompetencesProperty(tenantId);
-		AquireableCompetencesProperty cp3 = new AquireableCompetencesProperty(tenantId);
-
-		cp1.setAllowedValues(addCompetenceLegalValues());
-		props.add(cp1);
-		cp2.setAllowedValues(addCompetenceLegalValues());
-		props.add(cp2);
-		cp3.setAllowedValues(addCompetenceLegalValues());
-		props.add(cp3);
-
-//		props.add(new TaetigkeitsArtProperty(tenantId));
-
 		return new ArrayList(props);
 
 	}
 
-	public List<String> addCompetenceLegalValues() {
+	public List<PropertyDefinition<Object>> getAllFlexProdProperties(String tenantId) {
+		List<PropertyDefinition<?>> list = new LinkedList<>();
 
-		List<String> legalValues = new LinkedList<>();
+		list.add(new MaxGluehtemperaturProperty(tenantId));
+		list.add(new VerfuegbaresSchutzgasProperty(tenantId));
+		list.add(new BauartProperty(tenantId));
+		list.add(new TemperaturhomogenitaetProperty(tenantId));
+		list.add(new KaltgewalztesMaterialZulaessigProperty(tenantId));
+		list.add(new WarmgewalztesMaterialZulaessigProperty(tenantId));
 
-		// @MWE fix for CompetenceClassDefinitions
-//		for (Competence c : competenceRepository.findAll()) {
-//			legalValues.add(c.getName());
-//		}
+		list.add(new BundEntfettenProperty(tenantId));
 
-		return legalValues;
+		list.add(new InnendurchmesserProperty(tenantId));
+		list.add(new AussendurchmesserProperty(tenantId));
+		list.add(new HoeheProperty(tenantId));
+
+		list.add(new GluehzeitProperty(tenantId));
+		list.add(new DurchmesserProperty(tenantId));
+		list.add(new DurchsatzProperty(tenantId));
+		
+		list.add(new ChargierhilfeProperty(tenantId));
+		list.add(new WalzartProperty(tenantId));
+
+		list.add(new MoeglicheInnendurchmesserProperty(tenantId));
+		list.add(new MaxAussendurchmesserProperty(tenantId));
+		list.add(new MaxChargierhoeheProperty(tenantId));
+
+		list.add(new CQI9Property(tenantId));
+		list.add(new TUSProperty(tenantId));
+
+		list.add(new LetzteWartungProperty(tenantId));
+		list.add(new WartungsintervallProperty(tenantId));
+
+		list.add(new BandbreiteProperty(tenantId));
+		list.add(new BandstaerkeProperty(tenantId));
+
+		list.add(new WarmgewalztProperty(tenantId));
+		list.add(new KaltgewalztProperty(tenantId));
+
+		list.add(new StreckgrenzeProperty(tenantId));
+		list.add(new ZugfestigkeitProperty(tenantId));
+		list.add(new DehnungProperty(tenantId));
+
+		list.add(new GefuegeProperty(tenantId));
+
+		list.add(new MaterialBereitgestelltProperty(tenantId));
+		list.add(new LieferortProperty(tenantId));
+		list.add(new VerpackungProperty(tenantId));
+		list.add(new TransportartProperty(tenantId));
+		list.add(new MengeProperty(tenantId));
+		list.add(new LieferdatumProperty(tenantId));
+		list.add(new IncotermsProperty(tenantId));
+
+		list.add(new ZahlungsbedingungenProperty(tenantId));
+
+		list.add(new TitelProperty(tenantId));
+		list.add(new ProdukttypProperty(tenantId));
+		list.add(new MengeProperty(tenantId));
+		list.add(new MinimaleMengeProperty(tenantId));
+		list.add(new LieferdatumProperty(tenantId));
+		list.add(new WerkstoffBereitgestelltProperty(tenantId));
+		list.add(new BeschreibungZusatzinfoProperty(tenantId));
+		
+		list.add(new DurchmesserInnenProperty(tenantId));
+		list.add(new DurchmesserAussenProperty(tenantId));
+		list.add(new HoeheProperty(tenantId));
+		
+		list.add(new WerkstoffProperty(tenantId));
+		list.add(new WerkstoffFreitextProperty(tenantId));
+		list.add(new ZugfestigkeitProperty(tenantId));
+		
+		list.add(new SchutzgasProperty(tenantId));
+		list.add(new GluehreiseProperty(tenantId));
+		list.add(new TemperaturhomogenitaetProperty(tenantId));
+		
+		list.add(new OberflaechenqualitaetProperty(tenantId));
+		list.add(new ZusaetzlicheProduktinformationenProperty(tenantId));
+		
+		list.add(new IncotermsProperty(tenantId));
+		list.add(new LieferortProperty(tenantId));
+		list.add(new AbholortProperty(tenantId));
+		list.add(new VerpackungsvorgabenProperty(tenantId));
+		
+		list.add(new BandDickeProperty(tenantId));
+		list.add(new BandBreiteProperty(tenantId));
+		
+		list.add(new DurchmesserKronenstockProperty(tenantId));
+		list.add(new MaximaldurchmesserBundProperty(tenantId));
+		
+		list.add(new DurchmesserDornProperty(tenantId));
+		list.add(new InnendurchmesserOfenProperty(tenantId));
+		
+		list.add(new OfenHoeheProperty(tenantId));
+		list.add(new MaxGluehtemperaturProperty(tenantId));
+		list.add(new TemperaturhomogenitaetProperty(tenantId));
+		list.add(new ErforderlicheTemperaturhomogenitaetProperty(tenantId));
+		list.add(new AufheizrateProperty(tenantId));
+		list.add(new AbkuehlrateProperty(tenantId));
+		list.add(new MaxAnteilH2Property(tenantId));
+		list.add(new KapazitaetProperty(tenantId));
+		list.add(new GluehprogrammVerfuegbarProperty(tenantId));
+		
+		
+		return new ArrayList(list);
 	}
-
-//	public Map<String, Property> getAllSingleMap() {
-//		Map<String, Property> props = new HashMap<>();
-//		
-//		List<Property> list = getAllSingle();
-//		for (Property p : list) {
-//			props.put(p.getId(), p);
-//		}
-//			
-//		return new HashMap<>(props);
-//	}
 
 	/**
 	 * 
@@ -424,6 +339,10 @@ public class StandardPropertyDefinitions {
 	 * Standard Properties
 	 *
 	 */
+	
+	// =========================================
+	// ========== Text Properties ==============
+	// =========================================
 	public static class NameProperty extends TextPropertyDefinition {
 
 		NameProperty(String tenantId) {
@@ -666,12 +585,12 @@ public class StandardPropertyDefinitions {
 			this.setAllowedValues(defaultValues);
 		}
 	}
-	
+
 	public static class VolunteerAgeProperty extends LongPropertyDefinition {
 		public VolunteerAgeProperty(String tenantId) {
 			inst(tenantId);
 		}
-		
+
 		public void inst(String tenantId) {
 			this.setName("Alter");
 			this.setTenantId(tenantId);
@@ -806,223 +725,60 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	// =========================================
-	// ========= Competence Properties =========
-	// =========================================
-	public static class RequiredCompetencesProperty extends TextPropertyDefinition {
-		public RequiredCompetencesProperty(String tenantId) {
-			inst(tenantId);
-		}
-
-		public void inst(String tenantId) {
-			this.setName("Required Competences");
-			this.setMultiple(true);
-			this.setTenantId(tenantId);
-		}
-
-	}
-
-	public static class OptionalCompetencesProperty extends TextPropertyDefinition {
-		public OptionalCompetencesProperty(String tenantId) {
-			inst(tenantId);
-		}
-
-		public void inst(String tenantId) {
-			this.setName("Optional Competences");
-			this.setMultiple(true);
-			this.setTenantId(tenantId);
-		}
-	}
-
-	public static class AquireableCompetencesProperty extends TextPropertyDefinition {
-		public AquireableCompetencesProperty(String tenantId) {
-			inst(tenantId);
-		}
-
-		public void inst(String tenantId) {
-			this.setName("Aquirable Competences");
-			this.setMultiple(true);
-			this.setTenantId(tenantId);
-		}
-	}
-
-//	public static class TaetigkeitsArtProperty extends EnumPropertyDefinition {
-//		public TaetigkeitsArtProperty(String tenantId) {
-//			inst(tenantId);
-//		}
-//
-//		public void inst(String tenantId) {
-//			this.setName("Tätigkeitsart");
-//			this.setTenantId(tenantId);
-//			this.setMultiple(false);
-//			this.setAllowedValues(new ArrayList<EnumEntry>());
-//			this.getAllowedValues().add(new EnumEntry(0, "Einsatz", false));
-//			this.getAllowedValues().add(new EnumEntry(1, "Technischer", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Brand", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Verkehrsunfall", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Tauch", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Personen", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Höhenrettung", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Vorbereitung", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Nachbereitung", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(0, "Ausbildung", false));
-//			this.getAllowedValues().add(new EnumEntry(1, "Grundausbildung", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Truppmann", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Truppführer", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Erweiterte Grundausbildung", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Funk", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Erste Hilfe", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Fach- und Sonderausbildung", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Nachrichtendienst", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Geräte- und Fahrzeugkunde", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Atem- und Körperschutz", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Technischer FW-Einsatz", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Gefährliche Stoffe", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Vorbeugender Brandschutz", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Verwaltungsdienst", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Führungsausbildung", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Gruppen-Kommandant", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Zugs-Kommandant", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Einsatzleiter", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Kommandant", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Höhere FW-Ausbildung", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Bewerter-Lehrgang", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Fachweiterbildung", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Chlorgas / Erdgas", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Stapler / Kranschein", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "IT", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Sanitäter", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Überprüfung Mannschaft", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz\nUnterweisung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Stapler\nUnterweisung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Kran\nUnterweisung", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Vorbereitung", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Nachbereitung", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(0, "Bewerbe", false));
-//			this.getAllowedValues().add(new EnumEntry(1, "FLA", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "WLA", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "FULA", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "FJLA", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "STRMLA", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(0, "Leistungsprüfungen", false));
-//			this.getAllowedValues().add(new EnumEntry(1, "THL", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "SPRENGLP", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(0, "Veranstaltung", false));
-//			this.getAllowedValues().add(new EnumEntry(1, "Intern", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Ausflug", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Mitgliederversammlung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Jugendlager", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Extern\n(Öffentlichkeitsarbeit)", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Fest / Ball", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Tag der offenen Tür", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Kirchenausrückung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Landesfeuerwertag", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Friedenslicht", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(0, "Verwaltung", false));
-//			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeug", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Bewegungsfahrt", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Geräte", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Prüfung/Inspektion", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Gebäude", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Wartung Haustechnik", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Reinigung", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "IT", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "EDV", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Sybos", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Sitzungen", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Besprechung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "JourFix", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(1, "Öffentlichkeits-\nArbeit", false));
-//			this.getAllowedValues().add(new EnumEntry(2, "Homepage / Social Media", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Presse", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Repräsentation\nbei Veranstaltungen", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Mitglieder-Werbung", true));
-//			this.getAllowedValues().add(new EnumEntry(2, "Haussammlung", true));
-//
-//			this.getAllowedValues().add(new EnumEntry(0, "Projekt", false));
-//			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeuganschaffung", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "FW Hausbau", true));
-//			this.getAllowedValues().add(new EnumEntry(1, "Landesbewerb", true));
-//
-//		}
-//	}
-
 	// -----------------------------------------
 	// --------------FlexProd Properties
 	// -----------------------------------------
 
-	public static class MaxGluehtemperaturProperty extends LongPropertyDefinition {
-		public MaxGluehtemperaturProperty(String tenantId) {
-			this.setName("Max. Glühtemperatur");
-			this.setTenantId(tenantId);
-		}
-	}
-
 	public static class VerfuegbaresSchutzgasProperty extends TextPropertyDefinition {
 		public VerfuegbaresSchutzgasProperty(String tenantId) {
-			this.setName("Verfügbares Schutzgas");
 			this.setTenantId(tenantId);
+			this.setId("verfuegbaresschutzgas");
+			this.setName("Verfügbares Schutzgas");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("H2");
+			this.getAllowedValues().add("N2");
+			this.getAllowedValues().add("75% N2");
 		}
 	}
 
 	public static class BauartProperty extends TextPropertyDefinition {
-		public BauartProperty() {
+		public BauartProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("bauart");
 			this.setName("Bauart");
-			this.setTenantId(tenantId);
-		}
-	}
-
-	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
-		public TemperaturhomogenitaetProperty() {
-			this.setName("Temperaturhomogenität");
-			this.setTenantId(tenantId);
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("Band");
+			this.getAllowedValues().add("Draht");
 		}
 	}
 
 	public static class KaltgewalztesMaterialZulaessigProperty extends BooleanPropertyDefinition {
-		public KaltgewalztesMaterialZulaessigProperty() {
-			this.setName("Kaltgewalztes Material zulässig");
+		public KaltgewalztesMaterialZulaessigProperty(String tenantId) {
 			this.setTenantId(tenantId);
+			this.setId("kaltgewalztesmaterialzulaessig");
+			this.setName("Kaltgewalztes Material zulässig");
 		}
 	}
 
 	public static class WarmgewalztesMaterialZulaessigProperty extends BooleanPropertyDefinition {
-		public WarmgewalztesMaterialZulaessigProperty() {
-			this.setName("Warmgewalztes Material zulässig");
+		public WarmgewalztesMaterialZulaessigProperty(String tenantId) {
 			this.setTenantId(tenantId);
+			this.setId("warmgewalztesmaterialzulaessig");
+			this.setName("Warmgewalztes Material zulässig");
 		}
 	}
 
 	public static class BundEntfettenProperty extends BooleanPropertyDefinition {
-		public BundEntfettenProperty() {
-			this.setName("Bund Entfetten");
+		public BundEntfettenProperty(String tenantId) {
 			this.setTenantId(tenantId);
+			this.setId("bundentfetten");
+			this.setName("Bund Entfetten");
 		}
 	}
 
 	public static class ChargierhilfeProperty extends TextPropertyDefinition {
-		public ChargierhilfeProperty() {
+		public ChargierhilfeProperty(String tenantId) {
+			this.setTenantId(tenantId);
 			this.setId("chargierhilfe");
 			this.setName("Chargierhilfe");
 			this.setAllowedValues(new LinkedList<String>());
@@ -1035,433 +791,561 @@ public class StandardPropertyDefinitions {
 	}
 
 	public static class InnendurchmesserProperty extends LongPropertyDefinition {
-		public InnendurchmesserProperty() {
-			this.setName("Innendurchmesser");
+		public InnendurchmesserProperty(String tenantId) {
 			this.setTenantId(tenantId);
+			this.setId("innendurchmesser");
+			this.setName("Innendurchmesser");
 		}
-
-		public static class AussendurchmesserProperty extends LongPropertyDefinition {
-			public AussendurchmesserProperty() {
-				this.setName("Außendurchmesser");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class HoeheProperty extends LongPropertyDefinition {
-			public HoeheProperty() {
-				this.setName("Höhe");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class GluehzeitProperty extends LongPropertyDefinition {
-			public GluehzeitProperty() {
-				this.setName("Glühzeit");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class DurchsatzProperty extends LongPropertyDefinition {
-			public DurchsatzProperty() {
-				this.setName("Durchsatz");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class MoeglicheInnendurchmesserProperty extends LongPropertyDefinition {
-			public MoeglicheInnendurchmesserProperty() {
-				this.setName("Mögliche Innendurchmesser");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class MaxAussendurchmesserProperty extends LongPropertyDefinition {
-			public MaxAussendurchmesserProperty() {
-				this.setName("Max. Außendurchmesser");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class MaxChargierhoeheProperty extends LongPropertyDefinition {
-			public MaxChargierhoeheProperty() {
-				this.setName("Max. Chargierhöhe");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class CQI9Property extends BooleanPropertyDefinition {
-			public CQI9Property() {
-				this.setName("CQI-9");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class TUSProperty extends BooleanPropertyDefinition {
-			public TUSProperty() {
-				this.setId("tus");
-				this.setName("TUS");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class LetzteWartungProperty extends DatePropertyDefinition {
-			public LetzteWartungProperty() {
-				this.setName("Letzte Wartung");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class WartungsintervallProperty extends DatePropertyDefinition {
-			public WartungsintervallProperty() {
-				this.setName("Wartungsintervall");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class BandbreiteProperty extends LongPropertyDefinition {
-			public BandbreiteProperty() {
-				this.setName("Bandbreite");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class BandstaerkeProperty extends BooleanPropertyDefinition {
-			public BandstaerkeProperty() {
-				this.setName("Bandstärke");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class WarmgewalztProperty extends BooleanPropertyDefinition {
-			public WarmgewalztProperty() {
-				this.setName("Warmgewalzt");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class KaltgewalztProperty extends BooleanPropertyDefinition {
-			public KaltgewalztProperty() {
-				this.setName("Kaltgewalzt");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class StreckgrenzeProperty extends LongPropertyDefinition {
-			public StreckgrenzeProperty() {
-				this.setName("Streckgrenze");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class ZugfestigkeitProperty extends LongPropertyDefinition {
-			public ZugfestigkeitProperty() {
-				this.setName("Zugfestigkeit");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class DehnungProperty extends LongPropertyDefinition {
-			public DehnungProperty() {
-				this.setName("Dehnung");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class GefuegeProperty extends TextPropertyDefinition {
-			public GefuegeProperty() {
-				this.setName("Gefüge");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class MaterialBereitgestelltProperty extends BooleanPropertyDefinition {
-			public MaterialBereitgestelltProperty() {
-				this.setName("Material bereitgestellt?");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class LieferortProperty extends TextPropertyDefinition {
-			public LieferortProperty() {
-				this.setName("Lieferort");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class VerpackungProperty extends TextPropertyDefinition {
-			public VerpackungProperty() {
-				this.setName("Verpackung");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class TransportartProperty extends TextPropertyDefinition {
-			public TransportartProperty() {
-				this.setName("Transportart");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class MengeProperty extends LongPropertyDefinition {
-			public MengeProperty() {
-				this.setName("Menge");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class LieferdatumProperty extends DatePropertyDefinition {
-			public LieferdatumProperty() {
-				this.setName("Lieferdatum");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class IncotermsProperty extends TextPropertyDefinition {
-			public IncotermsProperty() {
-				this.setName("Inco-Terms");
-				this.setTenantId(tenantId);
-			}
-		}
-
-		public static class ZahlungsbedingungenProperty extends LongTextPropertyDefinition {
-			public ZahlungsbedingungenProperty() {
-				this.setName("Zahlungsbedingungen");
-				this.setTenantId(tenantId);
-			}
-		}
-		///////////////////////////////
-
-//	public static class TestMultiWithRules extends MultiProperty {
-//		public TestMultiWithRules() {
-//			this.setId("multi_with_rules");
-//			this.setName("Multiple Property With Rules");
-//			
-//			this.setProperties(new ArrayList<>());
-//			this.getProperties().add(new NameProperty());
-//			this.getProperties().add(new DescriptionProperty());
-//			this.getProperties().add(new LongitudeProperty());
-//			this.getProperties().add(new LatitudeProperty());
-//			
-//			this.setRules(new ArrayList<>());
-//			this.getRules().add(new MultiPropertyRule(MultiPropertyRuleKind.REQUIRED_OTHER, this.getProperties().get(0).getId(), this.getProperties().get(1).getId()));
-//			this.getRules().add(new MultiPropertyRule(MultiPropertyRuleKind.MAX_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
-//			this.getRules().add(new MultiPropertyRule(MultiPropertyRuleKind.MIN_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
-//		
-//		}
-//	}
-
-		// -----------------------------------------
-		// --------------MAP PROPERTY
-		// -----------------------------------------
-
-//	
-//	public static class MapProperty extends MultiProperty {
-//	
-//		public MapProperty() {
-//			this.setId("map");
-//			this.setType(PropertyType.MAP);
-//			this.setName("Map Property");
-//			this.setProperties(new ArrayList<>());
-//			
-//			setTestValues();
-//		}
-//		
-//		public void setViewPort(double latitude, double longitude) {
-//			if (this.getProperties().size() <= 0) {
-//				this.getProperties().add(new MapEntryProperty(latitude, longitude));
-//			} else {
-//				this.getProperties().set(0, new MapEntryProperty(latitude, longitude));
-//			}
-//		}
-//		
-//		public void setMarker(double latitude, double longitude) {
-//			if (this.getProperties().size() <= 0) {
-//				this.getProperties().add(new MapEntryProperty(latitude, longitude));
-//			}
-//			this.getProperties().add(new MapEntryProperty(latitude, longitude));
-//
-//		}
-//		
-//		public void setArea(double[] latitude, double[] longitude) {
-//			if (this.getProperties().size() <= 0) {
-//				this.getProperties().add(new MapEntryProperty(latitude[0], longitude[0]));
-//			}
-//			
-//			this.getProperties().add(new MapEntryProperty(latitude, longitude));
-//		}
-//		
-//		private void setTestValues() {
-//			
-//			this.setViewPort(0, 0);
-//			this.setMarker(10, 10);
-//			this.setMarker(0, 0);
-//			this.setMarker(40, 33);
-//						
-//			this.setArea(new double[]{10, 12, 13}, new double[]{11, 13, 15});	
-//		}
-//	}
-//	
-//	
-//	public static class MapEntryProperty extends MultiProperty {
-//		
-//		public MapEntryProperty() {
-//			this.setId(new ObjectId().toHexString());
-//			this.setType(PropertyType.MULTI);
-//			this.setName("Map Entry");
-//			this.setProperties(new ArrayList<>());
-//			
-//			this.getProperties().add(new LatitudeProperty());
-//			this.getProperties().add(new LongitudeProperty());	
-//		}
-//		
-//		public MapEntryProperty(double latitude, double longitude) {
-//			this.setId(new ObjectId().toHexString());
-//
-//			this.setType(PropertyType.MULTI);
-//			this.setName("Map Entry");
-//			this.setProperties(new ArrayList<>());
-//			
-//			LatitudeProperty lat = new LatitudeProperty(latitude);
-//			this.getProperties().add(lat);
-//			
-//			LongitudeProperty lng = new LongitudeProperty(longitude);
-//			this.getProperties().add(lng);
-//		}
-//		
-//		public MapEntryProperty (double[] latitude, double[] longitude) {
-//			this.setId(new ObjectId().toHexString());
-//
-//			this.setType(PropertyType.MULTI);
-//			this.setName("Map Area");
-//			this.setProperties(new ArrayList<>());
-//			
-//			LatitudeProperty lat = new LatitudeProperty(latitude);
-//			this.getProperties().add(lat);
-//			
-//			LongitudeProperty lng = new LongitudeProperty(longitude);
-//			this.getProperties().add(lng);
-//		}
-//	}
-//	
-//
-//	
-//	public static class GraphProperty extends MultiProperty {
-//		public GraphProperty() {
-//			this.setId("graph");
-//			this.setName("Graph");
-//			this.setType(PropertyType.GRAPH);
-//			
-//			this.setProperties(new ArrayList<>());
-//			
-//		}
-//		
-//		public void addNode(String name) {
-//			this.getProperties().add(new GraphPropertyEntry(name));
-//		}
-//		
-//		public void addNode(GraphPropertyEntry entry) {
-//			this.getProperties().add(entry);
-//		}
-//		
-//		public void addEdge(String idFrom, String idTo) {
-//			GraphPropertyEntry from = (GraphPropertyEntry) this.getProperties().stream().filter(p -> p.getId().equals(idFrom)).findFirst().get();
-//			GraphPropertyEntry to = (GraphPropertyEntry) this.getProperties().stream().filter(p -> p.getId().equals(idTo)).findFirst().get();
-//			
-//			from.addEdge(idTo, to.getName());
-//		}
-//		
-//		public String print() {
-//			
-//			StringBuilder sb = new StringBuilder();
-//			
-//			for (Property p : this.getProperties()) {
-//				sb.append(((GraphPropertyEntry)p).print());
-//			}
-//			
-//			return sb.toString();
-//		}
-//	}
-//	
-//	public static class GraphPropertyEntry extends SingleProperty<String> {
-//		public GraphPropertyEntry(String name) {
-//			this.setId(name);
-//			this.setName(name);
-//			this.setKind(PropertyType.TEXT);
-//			
-//			this.setValues(new ArrayList<ListEntry<String>>());	
-//		}
-//		
-//		
-//		
-//		public void addEdge(String nodeId, String nodeLabel) {
-//			this.getValues().add(new ListEntry<String>(nodeId, nodeLabel));
-//		}
-//		
-//		public String print() {
-//			
-//			StringBuilder sb = new StringBuilder();
-//			sb.append(this.getName());
-//			sb.append(": ");
-//			
-//			for (ListEntry<String> entry : this.getValues()) {
-//				sb.append(entry.value);
-//				sb.append(" -> ");
-//			}
-//			sb.append("/\n");
-//			
-//			return sb.toString();
-//		}
-//	}
-//	
-//	//Testgraph
-//	
-//	/** Graph:
-//	 * 0---1
-//	 * |  /| \  
-//	 * | / |  2
-//	 * |/  | /
-//	 * 4---3	
-//	 * 
-//	 */
-//	
-//	public static void main(String[] args) {
-//		GraphProperty graph = new GraphProperty();
-//		
-//		GraphPropertyEntry n0 = new GraphPropertyEntry("0");
-//		GraphPropertyEntry n1 = new GraphPropertyEntry("1");
-//		GraphPropertyEntry n2 = new GraphPropertyEntry("2");
-//		GraphPropertyEntry n3 = new GraphPropertyEntry("3");
-//		GraphPropertyEntry n4 = new GraphPropertyEntry("4");
-//
-//		n0.addEdge(n1.getId(), n1.getName());
-//		n0.addEdge(n4.getId(), n4.getName());
-//		
-//		n1.addEdge(n0.getId(), n0.getName());
-//		n1.addEdge(n4.getId(), n4.getName());
-//		n1.addEdge(n2.getId(), n2.getName());
-//		n1.addEdge(n3.getId(), n3.getName());
-//		
-//		n2.addEdge(n1.getId(), n1.getName());
-//		n2.addEdge(n3.getId(), n3.getName());
-//		
-//		n3.addEdge(n1.getId(), n1.getName());
-//		n3.addEdge(n4.getId(), n4.getName());
-//		n3.addEdge(n2.getId(), n2.getName());
-//		
-//		n4.addEdge(n3.getId(), n3.getName());
-//		n4.addEdge(n0.getId(), n0.getName());
-//		n4.addEdge(n1.getId(), n1.getName());
-//		
-//		graph.addNode(n0);
-//		graph.addNode(n1);
-//		graph.addNode(n2);
-//		graph.addNode(n3);
-//		graph.addNode(n4);
-//		
-//		System.out.println("Adj. List: ");
-//		System.out.println(graph.print());
-//		
-//	}
-//	
 	}
+
+	public static class AussendurchmesserProperty extends LongPropertyDefinition {
+		public AussendurchmesserProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("aussendurchmesser");
+			this.setName("Außendurchmesser");
+		}
+	}
+
+	public static class GluehzeitProperty extends LongPropertyDefinition {
+		public GluehzeitProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("gluehzeit");
+			this.setName("Glühzeit");
+		}
+	}
+
+	public static class DurchsatzProperty extends LongPropertyDefinition {
+		public DurchsatzProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("durchsatz");
+			this.setName("Durchsatz");
+		}
+	}
+
+	public static class MoeglicheInnendurchmesserProperty extends LongPropertyDefinition {
+		public MoeglicheInnendurchmesserProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("moeglicheinnendurchmesser");
+			this.setName("Mögliche Innendurchmesser");
+			this.setMultiple(true);
+		}
+	}
+
+	public static class MaxAussendurchmesserProperty extends LongPropertyDefinition {
+		public MaxAussendurchmesserProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("maxaussendurchmesser");
+			this.setName("Max. Außendurchmesser");
+		}
+	}
+
+	public static class MaxChargierhoeheProperty extends LongPropertyDefinition {
+		public MaxChargierhoeheProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("maxchargierhoehe");
+			this.setName("Max. Chargierhöhe");
+		}
+	}
+
+	public static class CQI9Property extends BooleanPropertyDefinition {
+		public CQI9Property(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("cqi9");
+			this.setName("CQI-9");
+		}
+	}
+
+	public static class TUSProperty extends BooleanPropertyDefinition {
+		public TUSProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("tus");
+			this.setName("TUS");
+		}
+	}
+
+	public static class LetzteWartungProperty extends DatePropertyDefinition {
+		public LetzteWartungProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("letztewartung");
+			this.setName("Letzte Wartung");
+		}
+	}
+
+	public static class WartungsintervallProperty extends DatePropertyDefinition {
+		public WartungsintervallProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("wartungsintervall");
+			this.setName("Wartungsintervall");
+		}
+	}
+
+	public static class BandbreiteProperty extends LongPropertyDefinition {
+		public BandbreiteProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("bandbreite");
+			this.setName("Bandbreite");
+		}
+	}
+
+	public static class BandstaerkeProperty extends BooleanPropertyDefinition {
+		public BandstaerkeProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("bandstaerke");
+			this.setName("Bandstärke");
+		}
+	}
+
+	public static class WarmgewalztProperty extends BooleanPropertyDefinition {
+		public WarmgewalztProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("warmgewalzt");
+			this.setName("Warmgewalzt");
+		}
+	}
+
+	public static class KaltgewalztProperty extends BooleanPropertyDefinition {
+		public KaltgewalztProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("kaltgewalzt");
+			this.setName("Kaltgewalzt");
+		}
+	}
+
+	public static class WalzartProperty extends TextPropertyDefinition {
+		public WalzartProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("walzart");
+			this.setName("Walzart");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("Warmgewalzt");
+			this.getAllowedValues().add("Kaltgewalzt");
+		}
+	}
+
+	public static class StreckgrenzeProperty extends LongPropertyDefinition {
+		public StreckgrenzeProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("streckgrenze");
+			this.setName("Streckgrenze");
+		}
+	}
+
+	public static class DehnungProperty extends LongPropertyDefinition {
+		public DehnungProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("dehnung");
+			this.setName("Dehnung");
+		}
+	}
+
+	public static class GefuegeProperty extends TextPropertyDefinition {
+		public GefuegeProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("gefuege");
+			this.setName("Gefüge");
+		}
+	}
+
+	public static class MaterialBereitgestelltProperty extends BooleanPropertyDefinition {
+		public MaterialBereitgestelltProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("materialbereitgestellt");
+			this.setName("Material bereitgestellt?");
+		}
+	}
+
+	public static class VerpackungProperty extends TextPropertyDefinition {
+		public VerpackungProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("verpackung");
+			this.setName("Verpackung");
+		}
+	}
+
+	public static class TransportartProperty extends TextPropertyDefinition {
+		public TransportartProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("transportart");
+			this.setName("Transportart");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("LKW");
+			this.getAllowedValues().add("Zug");
+			this.getAllowedValues().add("Schiff");
+			this.getAllowedValues().add("Sonstiges");
+		}
+	}
+
+	public static class ZahlungsbedingungenProperty extends LongTextPropertyDefinition {
+		public ZahlungsbedingungenProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("zahlungsbedingungen");
+			this.setName("Zahlungsbedingungen");
+		}
+	}
+
+	public static class TitelProperty extends TextPropertyDefinition {
+		TitelProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("titel");
+			this.setName("Titel");
+		}
+	}
+
+	public static class ProdukttypProperty extends TextPropertyDefinition {
+		ProdukttypProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("produkttyp");
+			this.setName("Produkttyp");
+
+			this.setAllowedValues(new ArrayList<String>());
+			this.getAllowedValues().add("Band");
+			this.getAllowedValues().add("Draht");
+			this.getAllowedValues().add("Band & Draht");
+		}
+	}
+
+	public static class MengeProperty extends DoublePropertyDefinition {
+		MengeProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("menge");
+			this.setName("Menge");
+			this.setUnit("t");
+		}
+	}
+
+	public static class MinimaleMengeProperty extends DoublePropertyDefinition {
+		MinimaleMengeProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("minimale_menge");
+			this.setName("minimale Menge");
+			this.setUnit("t");
+		}
+	}
+
+	public static class LieferdatumProperty extends DatePropertyDefinition {
+		LieferdatumProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("lieferdatum");
+			this.setName("Lieferdatum (spätestens)");
+		}
+	}
+
+	public static class WerkstoffBereitgestelltProperty extends TextPropertyDefinition {
+		WerkstoffBereitgestelltProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("werkstoff_bereitgestellt");
+			this.setName("Werkstoff bereitgestellt");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("Ja");
+			this.getAllowedValues().add("Nein");
+		}
+	}
+
+	public static class BeschreibungZusatzinfoProperty extends LongTextPropertyDefinition {
+		BeschreibungZusatzinfoProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("allgemeine_beschreibung");
+			this.setName("allgemeine Beschreibung / Zusatzinformationen");
+		}
+	}
+
+	public static class DurchmesserInnenProperty extends LongPropertyDefinition {
+		public DurchmesserInnenProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("durchmesser_innen");
+			this.setName("Durchmesser (innen)");
+			this.setUnit("mm");
+		}
+	}
+
+	public static class DurchmesserAussenProperty extends LongPropertyDefinition {
+		public DurchmesserAussenProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("durchmesser_aussen");
+			this.setName("Durchmesser (außen)");
+			this.setUnit("mm");
+		}
+	}
+
+	public static class HoeheProperty extends LongPropertyDefinition {
+		public HoeheProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("hoehe");
+			this.setName("Höhe");
+			this.setUnit("mm");
+		}
+	}
+
+	public static class WerkstoffProperty extends TextPropertyDefinition {
+		public WerkstoffProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("werkstoff");
+			this.setName("Werkstoff");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("Eintrag 1");
+			this.getAllowedValues().add("Eintrag 2");
+			this.getAllowedValues().add("Eintrag 3");
+			this.getAllowedValues().add("...");
+			this.getAllowedValues().add("Freitext");
+		}
+	}
+
+	public static class DurchmesserProperty extends LongPropertyDefinition {
+		public DurchmesserProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("durchmesser");
+			this.setName("Durchmesser");
+			this.setUnit("mm");
+		}
+	}
+
+	public static class WerkstoffFreitextProperty extends LongTextPropertyDefinition {
+		public WerkstoffFreitextProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("werkstoff_freitext");
+			this.setName("Werkstoff (Freitext)");
+		}
+	}
+
+	public static class ZugfestigkeitProperty extends LongPropertyDefinition {
+		public ZugfestigkeitProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("zugfestigkeit");
+			this.setName("Zugfestigkeit");
+			this.setUnit("N/mm²");
+		}
+	}
+
+	public static class SchutzgasProperty extends TextPropertyDefinition {
+		public SchutzgasProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("schutzgas");
+			this.setName("Schutzgas");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("H2 0%, N2 100%");
+			this.getAllowedValues().add("H2 10%, N2 90%");
+			this.getAllowedValues().add("H2 20%, N2 80%");
+			this.getAllowedValues().add("H2 30%, N2 70%");
+			this.getAllowedValues().add("H2 40%, N2 60%");
+			this.getAllowedValues().add("H2 50%, N2 50%");
+			this.getAllowedValues().add("H2 60%, N2 40%");
+			this.getAllowedValues().add("H2 70%, N2 30%");
+			this.getAllowedValues().add("H2 80%, N2 20%");
+			this.getAllowedValues().add("H2 90%, N2 10%");
+			this.getAllowedValues().add("H2 100%, N2 0%");
+		}
+	}
+
+	public static class GluehreiseProperty extends TextPropertyDefinition {
+		public GluehreiseProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("gluehreise");
+			this.setName("Glühprogramm / -reise");
+		}
+	}
+
+	public static class ErforderlicheTemperaturhomogenitaetProperty extends LongPropertyDefinition {
+		public ErforderlicheTemperaturhomogenitaetProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("erforderliche_temperaturhomogenitaet");
+			this.setName("erforderliche Temperaturhomogenität");
+			this.setUnit("°C (+/-)");
+		}
+	}
+
+	public static class OberflaechenqualitaetProperty extends TextPropertyDefinition {
+		public OberflaechenqualitaetProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("oberflaechenqualitaet");
+			this.setName("Oberflächenqualität");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("blank");
+			this.getAllowedValues().add("schwarz");
+		}
+	}
+
+	public static class ZusaetzlicheProduktinformationenProperty extends LongTextPropertyDefinition {
+		public ZusaetzlicheProduktinformationenProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("zusaetzliche_produktinformationen");
+			this.setName("Zusätzliche Produkt- und Bearbeitungsinformationen");
+		}
+	}
+
+	public static class IncotermsProperty extends TextPropertyDefinition {
+		public IncotermsProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("incoterms");
+			this.setName("Incoterms");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("EXW");
+			this.getAllowedValues().add("DAP");
+		}
+	}
+
+	public static class LieferortProperty extends TextPropertyDefinition {
+		public LieferortProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("lieferort");
+			this.setName("Lieferort");
+		}
+	}
+
+	public static class AbholortProperty extends TextPropertyDefinition {
+		public AbholortProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("abholort");
+			this.setName("Abholort");
+		}
+	}
+
+	public static class VerpackungsvorgabenProperty extends LongTextPropertyDefinition {
+		public VerpackungsvorgabenProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("verpackungsvorgaben");
+			this.setName("Verpackungsvorgaben");
+		}
+	}
+
+	public static class BandDickeProperty extends LongPropertyDefinition {
+		public BandDickeProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("banddicke");
+			this.setName("Banddicke");
+			this.setUnit("mm");
+		}
+	}
+
+	public static class BandBreiteProperty extends LongPropertyDefinition {
+		public BandBreiteProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("bandbreite");
+			this.setName("Bandbreite");
+			this.setUnit("mm");
+			;
+		}
+	}
+
+	public static class DurchmesserKronenstockProperty extends LongPropertyDefinition {
+		public DurchmesserKronenstockProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("durchmesser_kronenstock");
+			this.setName("Durchmesser Kronenstock");
+			this.setUnit("mm");
+			;
+		}
+	}
+
+	public static class MaximaldurchmesserBundProperty extends LongPropertyDefinition {
+		public MaximaldurchmesserBundProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("maximaldurchmesser_bund");
+			this.setName("Maximaldurchmesser Bund");
+			this.setUnit("mm");
+			;
+		}
+	}
+
+	public static class DurchmesserDornProperty extends LongPropertyDefinition {
+		public DurchmesserDornProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("durchmesser_dorn");
+			this.setName("Durchmesser Dorn");
+			this.setUnit("mm");
+			;
+		}
+	}
+
+	public static class InnendurchmesserOfenProperty extends LongPropertyDefinition {
+		public InnendurchmesserOfenProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("innendurchmesser_ofen");
+			this.setName("Innendurchmesser Ofen");
+			this.setUnit("mm");
+			;
+		}
+	}
+
+	public static class OfenHoeheProperty extends LongPropertyDefinition {
+		public OfenHoeheProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("ofenhoehe");
+			this.setName("Ofenhöhe");
+			this.setUnit("mm");
+			;
+		}
+	}
+
+	public static class MaxGluehtemperaturProperty extends LongPropertyDefinition {
+		public MaxGluehtemperaturProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("max_gluehtemperatur");
+			this.setName("Max. Glühtemperatur");
+			this.setUnit("°C");
+			;
+		}
+	}
+
+	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
+		public TemperaturhomogenitaetProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("temperaturhomogenitaet");
+			this.setName("Temperaturhomogenität");
+			this.setUnit("°C");
+			;
+		}
+	}
+
+	public static class AufheizrateProperty extends DoublePropertyDefinition {
+		public AufheizrateProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("aufheizrate");
+			this.setName("Aufheizrate");
+		}
+	}
+
+	public static class AbkuehlrateProperty extends DoublePropertyDefinition {
+		public AbkuehlrateProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("abkuehlrate");
+			this.setName("Abkühlrate");
+		}
+	}
+
+	public static class GluehprogrammVerfuegbarProperty extends BooleanPropertyDefinition {
+		public GluehprogrammVerfuegbarProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("gluehprogramm_verfuegbar");
+			this.setName("Glühprogramm /-reise verfügbar?");
+		}
+	}
+
+	public static class MaxAnteilH2Property extends LongPropertyDefinition {
+		public MaxAnteilH2Property(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("max_anteil_h2");
+			this.setName("Maximaler Anteil H2");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add(10L);
+			this.getAllowedValues().add(20L);
+			this.getAllowedValues().add(30L);
+			this.getAllowedValues().add(40L);
+			this.getAllowedValues().add(50L);
+			this.getAllowedValues().add(60L);
+			this.getAllowedValues().add(70L);
+			this.getAllowedValues().add(80L);
+			this.getAllowedValues().add(90L);
+			this.getAllowedValues().add(100L);
+			this.setUnit("%");
+		}
+	}
+
+	public static class KapazitaetProperty extends TextPropertyDefinition {
+		public KapazitaetProperty(String tenantId) {
+			this.setTenantId(tenantId);
+			this.setId("kapazitaet");
+			this.setName("Kapazität");
+		}
+	}
+
 }

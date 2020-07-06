@@ -684,8 +684,10 @@ export class ClassConfiguratorComponent implements OnInit,
                         if (cell.isCollapsed()) {
                             this.setAllCellsInvisibleRec(cell);
                         }
-                    } else { // this.graph.foldCells(false, false, [edge.target]);
-                        if (!cell.isCollapsed()) { // this.setAllCellsVisibleRec(cell);
+                    } else {
+                        // this.graph.foldCells(false, false, [edge.target]);
+                        if (!cell.isCollapsed()) {
+                            // this.setAllCellsVisibleRec(cell);
                             this.setNextCellVisible(cell);
                         }
                     }
@@ -955,7 +957,8 @@ export class ClassConfiguratorComponent implements OnInit,
         // this.collapseGraph();
     }
 
-    updateModel() { // store current connections in relationships
+    updateModel() {
+        // store current connections in relationships
         const allCells = this.graph.getModel().getChildren(this.graph.getDefaultParent());
 
         for (const cd of this.classDefinitions) {

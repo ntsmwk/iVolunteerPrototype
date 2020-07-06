@@ -22,6 +22,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
@@ -40,30 +41,20 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 @Service
 public class InitializationService {
 
-	@Autowired
-	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
-	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private RelationshipRepository relationshipRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
+	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
-	@Autowired
-	public StandardPropertyDefinitions standardPropertyDefinitions;
+	@Autowired private ClassConfigurationController classConfigurationController;
 
-	@Autowired
-	private ClassConfigurationController classConfigurationController;
-
-	@Autowired
-	private TestDataClasses testDataClasses;
-	@Autowired
-	private TestDataInstances testDataInstances;
+	@Autowired private TestDataClasses testDataClasses;
+	@Autowired private TestDataInstances testDataInstances;
 
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
@@ -78,7 +69,7 @@ public class InitializationService {
 
 		// if(environment.acceptsProfiles("dev")) {}
 
-		addStandardPropertyDefinitions();
+		addiVolunteerAPIClassDefinition();
 		// addTestConfigClasses();
 		// addConfigurators();
 		// addConfiguratorSlots();
@@ -95,37 +86,77 @@ public class InitializationService {
 		testDataInstances.createUserData();
 		// addTestClassInstances();
 	}
+	
+	private List<Tenant> getTenants(){
+		List<Tenant> tenants = new ArrayList<>();
+		
+		tenants = coreTenantRestClient.getAllTenants();
+		
+		System.out.println(tenants.size());
+		
+		for (Tenant t : tenants) {
+			System.out.println(t.getId() + "   " + t.getName());
+		}
+		return tenants;
+	}
 
-	public void addStandardPropertyDefinitions() {
-		List<String> tenants = new ArrayList<>();
-		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
-
-		tenants.forEach(tenantId -> {
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {
+	public void addiVolunteerPropertyDefinitions() {
+		List<Tenant> tenants = getTenants();
+		tenants.forEach(tenant -> {
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
 		});
 	}
+	
+	public void addFlexProdPropertyDefinitions() {
+		List<Tenant> tenants = getTenants();
+		tenants.forEach(tenant -> {
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllFlexProdProperties(tenant.getId())) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					propertyDefinitionRepository.save(pd);
+				}
+			}
+		});
+	}
+	
+	public void addGenericPropertyDefintions() {
+		List<Tenant> tenants = getTenants();
+		tenants.forEach(tenant -> {
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllGeneric(tenant.getId())) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					propertyDefinitionRepository.save(pd);
+				}
+			}
+		});
+	}
+	
+	public void addHeaderPropertyDefintions() {
+		List<Tenant> tenants = getTenants();
+		tenants.forEach(tenant -> {
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllHeader(tenant.getId())) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					propertyDefinitionRepository.save(pd);
+				}
+			}
+		});
+	}
+	
 
 	private void addiVolunteerAPIClassDefinition() {
-		List<String> tenants = new ArrayList<>();
-		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+		List<Tenant> tenants = this.getTenants();
 
-		tenants.forEach(tenantId -> {
-			addPropertyDefinitions(tenantId);
+		tenants.forEach(tenant -> {
+			addPropertyDefinitions(tenant.getId());
 
-			ClassDefinition cdPersonRole = classDefinitionRepository.findByNameAndTenantId("PersonRole", tenantId);
+			ClassDefinition cdPersonRole = classDefinitionRepository.findByNameAndTenantId("PersonRole", tenant.getId());
 			if (cdPersonRole == null) {
-				createiVolunteerAPIPersonRoleClassDefinition(tenantId);
-				createiVolunteerAPIPersonBadgeClassDefinition(tenantId);
-				createiVolunteerAPIPersonCertificateClassDefinition(tenantId);
-				createiVolunteerAPIPersonTaskClassDefinition(tenantId);
+				createiVolunteerAPIPersonRoleClassDefinition(tenant.getId());
+				createiVolunteerAPIPersonBadgeClassDefinition(tenant.getId());
+				createiVolunteerAPIPersonCertificateClassDefinition(tenant.getId());
+				createiVolunteerAPIPersonTaskClassDefinition(tenant.getId());
 			}
 		});
 	}
