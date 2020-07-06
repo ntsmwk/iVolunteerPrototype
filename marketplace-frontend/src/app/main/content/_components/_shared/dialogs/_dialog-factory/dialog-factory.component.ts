@@ -80,7 +80,7 @@ import { User } from "app/main/content/_model/user";
   selector: "app-dialog-factory",
 })
 export class DialogFactoryDirective {
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) { }
 
   /**
    * EDIT TEMPLATE DESCRIPTION DIALOG
@@ -212,13 +212,13 @@ export class DialogFactoryDirective {
    *  Class-Configurator Dialogs
    */
 
-  openNewClassConfigurationDialog(marketplace: Marketplace) {
+  openNewClassConfigurationDialog(marketplace: Marketplace, currentClassConfiguration?: ClassConfiguration) {
     const dialogRef = this.dialog.open(NewClassConfigurationDialogComponent, {
       width: "500px",
       minWidth: "500px",
       height: "400px",
       minHeight: "400px",
-      data: { marketplace: marketplace },
+      data: { marketplace: marketplace, classConfiguration: currentClassConfiguration },
       disableClose: true,
     });
 

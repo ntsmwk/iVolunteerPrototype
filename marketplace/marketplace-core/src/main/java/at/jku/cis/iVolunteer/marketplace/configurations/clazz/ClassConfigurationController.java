@@ -129,6 +129,18 @@ public class ClassConfigurationController {
 		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
 		return classConfiguration;
 	}
+	
+	@PutMapping("class-configuration/{id}/save-meta")
+	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
+		
+		if (params.length != 2) {return null;}
+		
+		classConfiguration.setName(params[0]);
+		classConfiguration.setDescription(params[1]);
+		
+		return classConfigurationRepository.save(classConfiguration);
+	}
 
 	@DeleteMapping("class-configuration/{id}/delete")
 	void deleteClassConfiguration(@PathVariable("id") String id) {

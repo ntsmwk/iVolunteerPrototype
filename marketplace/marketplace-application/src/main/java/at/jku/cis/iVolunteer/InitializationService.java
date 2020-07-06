@@ -92,7 +92,7 @@ public class InitializationService {
 
 		addiVolunteerAPIClassDefinition();
 		// testDataClasses.createClassConfigurations();
-		// testDataInstances.createUserData();
+		testDataInstances.createUserData();
 		// addTestClassInstances();
 	}
 
