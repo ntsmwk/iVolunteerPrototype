@@ -285,12 +285,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
       if (!isNullOrUndefined(eventClassConfiguration)) {
         this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships, eventFollowingAction);
       }
-    } 
-    // else if (eventResponseAction === 'cancelled') {
-    //   if (!isNullOrUndefined(eventFollowingAction)) {
-    //     this[eventFollowingAction]();
-    //   }
-    // }
+    }
   }
 
 }

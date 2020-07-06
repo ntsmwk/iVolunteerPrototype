@@ -46,6 +46,7 @@ export class ClassConfiguratorComponent implements OnInit,
     currentClassConfiguration: ClassConfiguration;
 
     modelUpdated: boolean;
+    currentSelectedCell: MyMxCell;
 
     popupMenu: EditorPopupMenu;
 
@@ -592,6 +593,7 @@ export class ClassConfiguratorComponent implements OnInit,
    */
     handleMXGraphLeftClickEvent(event: mxgraph.mxEventObject) {
         const cell: MyMxCell = event.getProperty('cell');
+        this.currentSelectedCell = cell;
 
         if (!isNullOrUndefined(cell)) {
             const parent = cell.getParent();
@@ -932,8 +934,6 @@ export class ClassConfiguratorComponent implements OnInit,
                 break;
             }
             case 'cancelled': {
-                this.eventResponse.action = 'cancelled';
-                this.eventResponse.followingAction = event.followingAction;
                 break;
             }
         }
@@ -1017,6 +1017,27 @@ export class ClassConfiguratorComponent implements OnInit,
         this.rightSidebarContainer.nativeElement.style.width = '35px';
     }
 
+    /** 
+   * ******INSTANTIATION******
+   */
+
+    showInstanceForm() {
+        if (!isNullOrUndefined(this.currentSelectedCell)) {
+            this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`],
+                {
+                    queryParams: [this.currentSelectedCell.id]
+                }
+                );
+        }
+    }
+
+    showExportDialog() {
+        const rootCell = this.graph.getSelectionCell() as MyMxCell;
+        if (!isNullOrUndefined(rootCell)) {
+            this.dialogFactory.openPreviewExportDialog(this.marketplace, [rootCell.id]).then(() => { });
+        }
+    }
+
     /**
    * ******KEY LISTENER/HANDLER******
    */
@@ -1028,38 +1049,12 @@ export class ClassConfiguratorComponent implements OnInit,
         }
     }
 
+
+
     /**
    * ******DEBUGGING******
    */
-    showInstanceForm() {
-        const selectionCell = this.graph.getSelectionCell() as MyMxCell;
-        console.log(selectionCell);
 
-        // if (!isNullOrUndefined(rootCell) && rootCell.root) {
-        if (!isNullOrUndefined(selectionCell) && !isNullOrUndefined(selectionCell.edges.find((e: MyMxCell) => e.cellType === MyMxCellType.AGGREGATION))) {
-            this.router.navigate([`main/configurator/instance-editor/${
-                this.marketplace.id
-                }`], {
-                    queryParams: [selectionCell.id]
-                });
-        } else {
-            // const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: MyMxCell) => c.classArchetype === ClassArchetype.ROOT);
-            // if (!isNullOrUndefined(rootCell) && !rootCell.root) {
-            this.router.navigate([`main/configurator/instance-editor/${
-                this.marketplace.id
-                }`], {
-                    queryParams: [selectionCell.id]
-                });
-        }
-    }
-
-    showExportDialog() {
-        const rootCell = this.graph.getSelectionCell() as MyMxCell;
-
-        if (!isNullOrUndefined(rootCell)) {
-            this.dialogFactory.openPreviewExportDialog(this.marketplace, [rootCell.id]).then(() => { });
-        }
-    }
 
     showZoomLevel() {
         const scale = this.graph.view.getScale();
