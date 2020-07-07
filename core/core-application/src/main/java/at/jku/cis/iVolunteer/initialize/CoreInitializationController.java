@@ -83,6 +83,10 @@ public class CoreInitializationController {
 	public void registerUsers() {
 		
 	}
+	
+	/**
+	 * Marketplace Registration
+	 */
 
 	@PutMapping("/init/register-volunteers")
 	public void registerVolunteers() {
@@ -108,4 +112,39 @@ public class CoreInitializationController {
 	public void registerFlexProdUsers() {
 		
 	}
+	
+	/**
+	 * Tenant Subscription
+	 */
+	
+	@PutMapping("/init/tenant/subscribe/all")
+	public void subscribeAllToTenant() {
+		
+	}
+	
+	@PutMapping("/init/tenant/subscribe/helpseekers")
+	public void subscribeHelpseekersToTenant() {
+		
+	}
+	
+	@PutMapping("/init/tenant/subscribe/volunteers")
+	public void subscribeVolunteersToTenant() {
+		
+	}
+	
+	@PutMapping("/init/tenant/unsubscribe/all")
+	public void unsubscribeAllFromTenant() {
+		
+	}
+	
+	@PutMapping("/init/tenant/unsubscribe/helpseekers")
+	public void unsubscribeHelpseekersFromTenant() {
+		
+	}
+	
+	@PutMapping("/init/tenant/unsubscribe/volunteers")
+	public void unsubscribeVolunteersFromTenant() {
+		
+	}
+	
 }

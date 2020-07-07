@@ -46,6 +46,9 @@ public class InitializationService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
+	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
+	
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
@@ -80,7 +83,9 @@ public class InitializationService {
 		// addConfigurators();
 
 		// addConfiguratorSlots();
-
+		addiVolunteerPropertyDefinitions();
+		addClassConfigurations();
+		
 		addiVolunteerAPIClassDefinition();
 		// testDataClasses.createClassConfigurations();
 		testDataInstances.createUserData();
@@ -88,15 +93,9 @@ public class InitializationService {
 	}
 	
 	private List<Tenant> getTenants(){
-		List<Tenant> tenants = new ArrayList<>();
-		
+		List<Tenant> tenants = new ArrayList<>();		
 		tenants = coreTenantRestClient.getAllTenants();
-		
-		System.out.println(tenants.size());
-		
-		for (Tenant t : tenants) {
-			System.out.println(t.getId() + "   " + t.getName());
-		}
+
 		return tenants;
 	}
 
@@ -145,7 +144,7 @@ public class InitializationService {
 	}
 	
 
-	private void addiVolunteerAPIClassDefinition() {
+	public void addiVolunteerAPIClassDefinition() {
 		List<Tenant> tenants = this.getTenants();
 
 		tenants.forEach(tenant -> {
@@ -323,180 +322,203 @@ public class InitializationService {
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType4", PropertyType.TEXT, tenantId));
 	}
 
-	private void addConfiguratorSlots() {
+	public void addClassConfigurations() {
 
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-
-		this.createClassConfiguration(tenantId, "slot1");
-		this.createClassConfiguration(tenantId, "slot2");
-		this.createClassConfiguration(tenantId, "slot3");
-		this.createClassConfiguration(tenantId, "slot4");
-		this.createClassConfiguration(tenantId, "slot5");
-
+		
+		for (int i = 1; i <= 5; i++) {
+//			this.createClassConfiguration(tenantId, "slot"+i);
+			this.classConfigurationController.createNewClassConfiguration(new String[]{tenantId, "slot"+i, ""});
+		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void createClassConfiguration(String tenantId, String slotName) {
-
-		List<ClassDefinition> classDefinitions = new ArrayList<>();
-		List<Relationship> relationships = new ArrayList<>();
-
-		List<PropertyDefinition<Object>> properties = this.propertyDefinitionRepository.findByTenantId(tenantId);
-
-		ClassDefinition fwPassEintrag = new ClassDefinition();
-		fwPassEintrag.setId(new ObjectId().toHexString());
-		fwPassEintrag.setTenantId(tenantId);
-		fwPassEintrag.setName("Freiwilligenpass-\nEintrag");
-		fwPassEintrag.setRoot(true);
-		fwPassEintrag.setClassArchetype(ClassArchetype.ROOT);
-		fwPassEintrag.setWriteProtected(true);
-		fwPassEintrag.setCollector(true);
-		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
-
-		PropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("id")).findFirst().get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(idProperty));
-
-		PropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("name")).findFirst().get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(nameProperty));
-
-		PropertyDefinition evidenzProperty = properties.stream().filter(p -> p.getName().equals("evidenz")).findFirst()
-				.get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
-
-		classDefinitions.add(fwPassEintrag);
-
-		ClassDefinition task = new ClassDefinition();
-		task.setId(new ObjectId().toHexString());
-		task.setTenantId(tenantId);
-		task.setName("Tätigkeit");
-		task.setClassArchetype(ClassArchetype.TASK);
-		task.setWriteProtected(true);
-		task.setProperties(new ArrayList<>());
-
-		PropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date"))
-				.findFirst().get();
-		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateFromProperty));
-
-		PropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date")).findFirst()
-				.get();
-		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
-
-		classDefinitions.add(task);
-
-		Inheritance r1 = new Inheritance();
-		r1.setRelationshipType(RelationshipType.INHERITANCE);
-		r1.setTarget(task.getId());
-		r1.setSource(fwPassEintrag.getId());
-
-		relationships.add(r1);
-
-		ClassDefinition competence = new ClassDefinition();
-		competence.setId(new ObjectId().toHexString());
-		competence.setTenantId(tenantId);
-		competence.setName("Kompetenz");
-		competence.setClassArchetype(ClassArchetype.COMPETENCE);
-		competence.setWriteProtected(true);
-		competence.setProperties(new ArrayList<>());
-
-		classDefinitions.add(competence);
-
-		Inheritance r2 = new Inheritance();
-		r2.setRelationshipType(RelationshipType.INHERITANCE);
-		r2.setTarget(competence.getId());
-		r2.setSource(fwPassEintrag.getId());
-
-		relationships.add(r2);
-
-		ClassDefinition achievement = new ClassDefinition();
-		achievement.setId(new ObjectId().toHexString());
-		achievement.setTenantId(tenantId);
-		achievement.setName("Verdienst");
-		achievement.setClassArchetype(ClassArchetype.ACHIEVEMENT);
-		achievement.setWriteProtected(true);
-		achievement.setProperties(new ArrayList<>());
-
-		classDefinitions.add(achievement);
-
-		Inheritance r3 = new Inheritance();
-		r3.setRelationshipType(RelationshipType.INHERITANCE);
-		r3.setTarget(achievement.getId());
-		r3.setSource(fwPassEintrag.getId());
-
-		relationships.add(r3);
-
-		ClassDefinition function = new ClassDefinition();
-		function.setId(new ObjectId().toHexString());
-		function.setTenantId(tenantId);
-		function.setName("Funktion");
-		function.setClassArchetype(ClassArchetype.FUNCTION);
-		function.setWriteProtected(true);
-		function.setProperties(new ArrayList<>());
-
-		classDefinitions.add(function);
-
-		Inheritance r4 = new Inheritance();
-		r4.setRelationshipType(RelationshipType.INHERITANCE);
-		r4.setTarget(function.getId());
-		r4.setSource(fwPassEintrag.getId());
-
-		relationships.add(r4);
-
-		///////////////// Philipp Zeug//////////////////////////
-		ClassDefinition myTask = new ClassDefinition();
-		myTask.setId(new ObjectId().toHexString());
-		myTask.setTenantId(tenantId);
-		myTask.setName("myTask");
-		myTask.setClassArchetype(ClassArchetype.TASK);
-		myTask.setProperties(new ArrayList<>());
-
-		PropertyDefinition tt1 = properties.stream().filter(p -> p.getName().equals("taskType1")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt1));
-
-		PropertyDefinition tt2 = properties.stream().filter(p -> p.getName().equals("taskType2")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt2));
-
-		PropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("taskType3")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
-
-		PropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
-
-		PropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("rank")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(rank));
-
-		PropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("duration")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(duration));
-
-		classDefinitions.add(myTask);
-
-		Inheritance r5 = new Inheritance();
-		r5.setRelationshipType(RelationshipType.INHERITANCE);
-		r5.setTarget(myTask.getId());
-		r5.setSource(task.getId());
-
-		relationships.add(r5);
-
-		ClassConfiguration configurator = new ClassConfiguration();
-		configurator.setTimestamp(new Date());
-		configurator.setId(slotName);
-		configurator.setName(slotName);
-		configurator.setClassDefinitionIds(new ArrayList<>());
-		configurator.setRelationshipIds(new ArrayList<>());
-
-		for (ClassDefinition cd : classDefinitions) {
-			cd.setConfigurationId(configurator.getId());
-			this.classDefinitionRepository.save(cd);
-			configurator.getClassDefinitionIds().add(cd.getId());
-		}
-
-		for (Relationship r : relationships) {
-			this.relationshipRepository.save(r);
-			configurator.getRelationshipIds().add(r.getId());
-		}
-
-		// this.classConfigurationRepository.save(configurator);
-		this.classConfigurationController.saveClassConfiguration(configurator);
+//	@SuppressWarnings({ "rawtypes", "unchecked" })
+//	private void createClassConfiguration(String tenantId, String slotName) {
+//
+//		List<ClassDefinition> classDefinitions = new ArrayList<>();
+//		List<Relationship> relationships = new ArrayList<>();
+//
+//		List<PropertyDefinition<Object>> properties = this.propertyDefinitionRepository.findByTenantId(tenantId);
+//
+//		ClassDefinition fwPassEintrag = new ClassDefinition();
+//		fwPassEintrag.setId(new ObjectId().toHexString());
+//		fwPassEintrag.setTenantId(tenantId);
+//		fwPassEintrag.setName("Freiwilligenpass-\nEintrag");
+//		fwPassEintrag.setRoot(true);
+//		fwPassEintrag.setClassArchetype(ClassArchetype.ROOT);
+//		fwPassEintrag.setWriteProtected(true);
+//		fwPassEintrag.setCollector(true);
+//		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
+//
+//		PropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("id")).findFirst().get();
+//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(idProperty));
+//
+//		PropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("name")).findFirst().get();
+//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(nameProperty));
+//
+//		PropertyDefinition evidenzProperty = properties.stream().filter(p -> p.getName().equals("evidenz")).findFirst()
+//				.get();
+//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
+//
+//		classDefinitions.add(fwPassEintrag);
+//
+//		ClassDefinition task = new ClassDefinition();
+//		task.setId(new ObjectId().toHexString());
+//		task.setTenantId(tenantId);
+//		task.setName("Tätigkeit");
+//		task.setClassArchetype(ClassArchetype.TASK);
+//		task.setWriteProtected(true);
+//		task.setProperties(new ArrayList<>());
+//
+//		PropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date"))
+//				.findFirst().get();
+//		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateFromProperty));
+//
+//		PropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date")).findFirst()
+//				.get();
+//		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
+//
+//		classDefinitions.add(task);
+//
+//		Inheritance r1 = new Inheritance();
+//		r1.setRelationshipType(RelationshipType.INHERITANCE);
+//		r1.setTarget(task.getId());
+//		r1.setSource(fwPassEintrag.getId());
+//
+//		relationships.add(r1);
+//
+//		ClassDefinition competence = new ClassDefinition();
+//		competence.setId(new ObjectId().toHexString());
+//		competence.setTenantId(tenantId);
+//		competence.setName("Kompetenz");
+//		competence.setClassArchetype(ClassArchetype.COMPETENCE);
+//		competence.setWriteProtected(true);
+//		competence.setProperties(new ArrayList<>());
+//
+//		classDefinitions.add(competence);
+//
+//		Inheritance r2 = new Inheritance();
+//		r2.setRelationshipType(RelationshipType.INHERITANCE);
+//		r2.setTarget(competence.getId());
+//		r2.setSource(fwPassEintrag.getId());
+//
+//		relationships.add(r2);
+//
+//		ClassDefinition achievement = new ClassDefinition();
+//		achievement.setId(new ObjectId().toHexString());
+//		achievement.setTenantId(tenantId);
+//		achievement.setName("Verdienst");
+//		achievement.setClassArchetype(ClassArchetype.ACHIEVEMENT);
+//		achievement.setWriteProtected(true);
+//		achievement.setProperties(new ArrayList<>());
+//
+//		classDefinitions.add(achievement);
+//
+//		Inheritance r3 = new Inheritance();
+//		r3.setRelationshipType(RelationshipType.INHERITANCE);
+//		r3.setTarget(achievement.getId());
+//		r3.setSource(fwPassEintrag.getId());
+//
+//		relationships.add(r3);
+//
+//		ClassDefinition function = new ClassDefinition();
+//		function.setId(new ObjectId().toHexString());
+//		function.setTenantId(tenantId);
+//		function.setName("Funktion");
+//		function.setClassArchetype(ClassArchetype.FUNCTION);
+//		function.setWriteProtected(true);
+//		function.setProperties(new ArrayList<>());
+//
+//		classDefinitions.add(function);
+//
+//		Inheritance r4 = new Inheritance();
+//		r4.setRelationshipType(RelationshipType.INHERITANCE);
+//		r4.setTarget(function.getId());
+//		r4.setSource(fwPassEintrag.getId());
+//
+//		relationships.add(r4);
+//
+//		///////////////// Philipp Zeug//////////////////////////
+//		ClassDefinition myTask = new ClassDefinition();
+//		myTask.setId(new ObjectId().toHexString());
+//		myTask.setTenantId(tenantId);
+//		myTask.setName("myTask");
+//		myTask.setClassArchetype(ClassArchetype.TASK);
+//		myTask.setProperties(new ArrayList<>());
+//
+//		PropertyDefinition tt1 = properties.stream().filter(p -> p.getName().equals("taskType1")).findFirst().get();
+//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt1));
+//
+//		PropertyDefinition tt2 = properties.stream().filter(p -> p.getName().equals("taskType2")).findFirst().get();
+//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt2));
+//
+//		PropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("taskType3")).findFirst().get();
+//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
+//
+//		PropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
+//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
+//
+//		PropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("rank")).findFirst().get();
+//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(rank));
+//
+//		PropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("duration")).findFirst().get();
+//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(duration));
+//
+//		classDefinitions.add(myTask);
+//
+//		Inheritance r5 = new Inheritance();
+//		r5.setRelationshipType(RelationshipType.INHERITANCE);
+//		r5.setTarget(myTask.getId());
+//		r5.setSource(task.getId());
+//
+//		relationships.add(r5);
+//
+//		ClassConfiguration configurator = new ClassConfiguration();
+//		configurator.setTimestamp(new Date());
+//		configurator.setId(slotName);
+//		configurator.setName(slotName);
+//		configurator.setClassDefinitionIds(new ArrayList<>());
+//		configurator.setRelationshipIds(new ArrayList<>());
+//
+//		for (ClassDefinition cd : classDefinitions) {
+//			cd.setConfigurationId(configurator.getId());
+//			this.classDefinitionRepository.save(cd);
+//			configurator.getClassDefinitionIds().add(cd.getId());
+//		}
+//
+//		for (Relationship r : relationships) {
+//			this.relationshipRepository.save(r);
+//			configurator.getRelationshipIds().add(r.getId());
+//		}
+//
+//		this.classConfigurationController.saveClassConfiguration(configurator);
+//	}
+	
+	public void addRuleTestConfiguration() {
+		 testDataClasses.createClassConfigurations();
 	}
+	
+	public void addRuleTestUserData() {
+		testDataInstances.createUserData();
+	}
+	
+	public void deleteClassDefinitions() {
+		classDefinitionRepository.deleteAll();
+	}
+	
+	public void deleteRelationships() {
+		relationshipRepository.deleteAll();
+	}
+	
+	public void deleteClassConfigurations() {
+		classConfigurationRepository.deleteAll();
+	}
+	
+	public void deleteMatchingConfigurations() {
+		matchingConfigurationRepository.deleteAll();
+	}
+	
+	
 
 	/*
 	 * private void addTestRuleEngine() { /****** load rules into database

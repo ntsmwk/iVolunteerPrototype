@@ -10,10 +10,10 @@ import { User } from "../_model/user";
   providedIn: "root",
 })
 export class LocalRepositoryService {
-  private apiUrl = "http://localhost:3000/repository";
-  //private apiUrl = "http://140.78.92.57:3000/repository";
+  // private apiUrl = "http://localhost:3000/repository";
+  private apiUrl = "http://140.78.92.57:3000/repository";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   async isConnected(volunteer: User) {
     let isConnected;

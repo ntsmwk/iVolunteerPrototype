@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.user.User;
@@ -17,34 +18,35 @@ public class InitializationController {
 	@Autowired private UserRepository userRepository;
 	
 	@Autowired private InitializationService initializationService;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	
 	/**
 	 * Properties
 	 */
 	
-	@PutMapping("/init/add-properties/all")
+	@PutMapping("/init/add-properties/iVolunteer")
 	public void addAllProperties() {
-		
+		this.initializationService.addiVolunteerPropertyDefinitions();
 	}
 	
 	@DeleteMapping("/init/delete-properties")
 	public void deleteProperties() {
-		
+		propertyDefinitionRepository.deleteAll();
 	}
 	
 	@PutMapping("/init/add-properties/header")
 	public void addHeaderProperties() {
-		
+		initializationService.addHeaderPropertyDefintions();
 	}	
 	
 	@PutMapping("/init/add-properties/generic")
 	public void addGenericProperties() {
-		
+		initializationService.addGenericPropertyDefintions();
 	}
 	
 	@PutMapping("/init/add-properties/flexprod")
 	public void addFlexProdProperties() {
-		
+		initializationService.addFlexProdPropertyDefinitions();
 	}
 	
 	/**
@@ -96,7 +98,7 @@ public class InitializationController {
 	}
 	
 	/**
-	 * Mapping
+	 * Matching
 	 */
 	
 	
@@ -104,6 +106,13 @@ public class InitializationController {
 	/**
 	 * Users
 	 */
+	
+	
+	@DeleteMapping("/init/delete-marketplace-users")
+	public void deleteClassInstanceUsers() {
+		
+	}
+	
 	
 	@PutMapping("/init/usermapping")
 	public void addFireBrigadeUserMapping() {
