@@ -5,7 +5,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.admin.CoreAdminController;
+import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerService;
+import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterController;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 
 @RestController
 public class CoreInitializationController {
@@ -14,6 +18,11 @@ public class CoreInitializationController {
 	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
 	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
 	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
+	
+	@Autowired private CoreHelpSeekerService coreHelpSeekerService;
+	@Autowired private CoreVolunteerService coreVolunteerService;
+	@Autowired private CoreAdminController coreAdminController;
+	@Autowired private CoreRecruiterController coreRecruiterController;
 	
 	/**
 	 * Marketplace / Tenants
@@ -84,76 +93,107 @@ public class CoreInitializationController {
 	}
 	
 	/**
-	 * User Registration - tenant
-	 */
-	
-	@PutMapping("/init/register-users")
-	public void registerUsers() {
-		registerVolunteers();
-		registerHelpSeekers();
-		registerAdmins();
-		registerRecruiters();
-//		registerFlexProdUsers();
-	}
-	
-	@PutMapping("/init/register-volunteers")
-	public void registerVolunteers() {
-		coreVolunteerInitializationService.registerVolunteers();
-	}
-	
-	@PutMapping("init/register-helpseekers")
-	public void registerHelpSeekers() {
-		coreHelpSeekerInitializationService.registerDefaultHelpSeekers();
-	}
-	
-	@PutMapping("/init/register-admins") 
-	public void registerAdmins() {
-		
-	}
-	
-	@PutMapping("/init/register-recruiters") 
-	public void registerRecruiters() {
-		
-	}
-	
-	@PutMapping("/init/register-flexprods") 
-	public void registerFlexProdUsers() {
-		
-	}
-	
-	/**
 	 * Tenant Subscription
 	 */
 	
 	@PutMapping("/init/tenant/subscribe/all")
 	public void subscribeAllToTenant() {
-		
+		subscribeHelpseekersToTenant();
+		subscribeVolunteersToTenant();
+		subscribeAdminsToTenant();
+		subscribeRecruitersToTenant();
 	}
 	
 	@PutMapping("/init/tenant/subscribe/helpseekers")
 	public void subscribeHelpseekersToTenant() {
-		
+		coreHelpSeekerInitializationService.subscribeDefaultHelpseekersToTenants();
 	}
 	
 	@PutMapping("/init/tenant/subscribe/volunteers")
 	public void subscribeVolunteersToTenant() {
+		coreVolunteerInitializationService.subscribeVolunteersToAllTenants();
+	}
+	
+	@PutMapping("/init/tenant/subscribe/admins")
+	public void subscribeAdminsToTenant() {
 		
+		//TODO
+	}
+	
+	@PutMapping("/init/tenant/subscribe/recruiters")
+	public void subscribeRecruitersToTenant() {
+		
+		//TODO
 	}
 	
 	@PutMapping("/init/tenant/unsubscribe/all")
 	public void unsubscribeAllFromTenant() {
-		
+		//TODO
 	}
 	
 	@PutMapping("/init/tenant/unsubscribe/helpseekers")
 	public void unsubscribeHelpseekersFromTenant() {
-		
+		//TODO
 	}
+	
 	
 	@PutMapping("/init/tenant/unsubscribe/volunteers")
 	public void unsubscribeVolunteersFromTenant() {
+		//TODO
+	}
+	
+	
+	/**
+	 * Marketplace registration
+	 */
+	
+	@PutMapping("/init/marketplace/register/all")
+	public void registerAllToMarketplace() {
+		registerHelpseekersToMarketplace();
+		registerVolunteersToMarketplace();
+		registerAdminsToMarketplace();
+		registerRecruitersToMarketplace();
 		
 	}
+	
+	@PutMapping("/init/marketplace/register/helpseekers")
+	public void registerHelpseekersToMarketplace() {
+		coreHelpSeekerInitializationService.registerDefaultHelpSeekers();
+	}
+	
+	@PutMapping("/init/marketplace/register/volunteers")
+	public void registerVolunteersToMarketplace() {
+		coreVolunteerInitializationService.registerVolunteers();	
+	}
+	
+	@PutMapping("/init/marketplace/register/admins")
+	public void registerAdminsToMarketplace() {
+		
+		//TODO
+	}
+	
+	@PutMapping("/init/marketplace/register/recruiters")
+	public void registerRecruitersToMarketplace() {
+		
+		//TODO
+	}
+	
+	@PutMapping("/init/marketplace/unregister/all")
+	public void unregisterAllFromMarketplace() {
+		//TODO
+	}
+	
+	@PutMapping("/init/marketplace/unregister/helpseekers")
+	public void unregisterHelpseekersFromMarketplace() {
+		//TODO
+	}
+	
+	
+	@PutMapping("/init/marketplace/unregister/volunteers")
+	public void unregistereVolunteersFromMarketplace() {
+		//TODO
+	}
+	
 	
 	@PutMapping("init/wipe-core") 
 	public void wipeCore() {

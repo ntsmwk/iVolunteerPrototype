@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +23,11 @@ import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -33,11 +38,14 @@ public class CoreVolunteerInitializationService {
 	private static final String MWEISSENBEK = "mweissenbek";
 	private static final String MWEIXLBAUMER = "mweixlbaumer";
 
-	private static final String FF_EIDENBERG = "FF Eidenberg";
-	private static final String MV_SCHWERTBERG = "MV Schwertberg";
-	private static final String RK_WILHERING = "RK Wilhering";
+	private static final String TENANT_FF = "FF Eidenberg";
+	private static final String TENANT_MV = "MV Schwertberg";
+	private static final String TENANT_RK = "RK Wilhering";
 
 	private static final String RAW_PASSWORD = "passme";
+
+	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
+			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
@@ -54,23 +62,23 @@ public class CoreVolunteerInitializationService {
 
 	public void initVolunteers() {
 
-		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
-		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "",
+		createVolunteer(USERNAMES[0], RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
+		createVolunteer(USERNAMES[1], RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "",
 				"img/pstarzer.jpg");
-		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", LocalDate.of(1994, 1, 23), "", "");
-		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "",
+		createVolunteer(USERNAMES[2], RAW_PASSWORD, "Markus", "Weißenbek", LocalDate.of(1994, 1, 23), "", "");
+		createVolunteer(USERNAMES[3], RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "",
 				"img/weixlbaumer_small.png");
 
-		createVolunteer("AKop", "passme", "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
-		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
-		createVolunteer("WSch", "passme", "Wieland", "Schwinger", LocalDate.of(1976, 6, 9), "", "");
-		createVolunteer("BProe", "passme", "Birgit", "Pröll", LocalDate.of(1976, 10, 5), "", "");
-		createVolunteer("KKof", "passme", "Katharina", "Kofler", LocalDate.of(1998, 5, 8), "Kati", "");
-		createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
-		createVolunteer("KBauer", "passme", "Kerstin", "Bauer", LocalDate.of(1960, 2, 17), "", "");
-		createVolunteer("EWagner", "passme", "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
-		createVolunteer("WHaube", "passme", "Werner", "Haube", LocalDate.of(1970, 8, 8), "", "");
-		createVolunteer("MJachs", "passme", "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");
+		createVolunteer(USERNAMES[4], "passme", "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
+		createVolunteer(USERNAMES[5], "passme", "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
+		createVolunteer(USERNAMES[6], "passme", "Wieland", "Schwinger", LocalDate.of(1976, 6, 9), "", "");
+		createVolunteer(USERNAMES[7], "passme", "Birgit", "Pröll", LocalDate.of(1976, 10, 5), "", "");
+		createVolunteer(USERNAMES[8], "passme", "Katharina", "Kofler", LocalDate.of(1998, 5, 8), "Kati", "");
+		createVolunteer(USERNAMES[9], "passme", "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
+		createVolunteer(USERNAMES[10], "passme", "Kerstin", "Bauer", LocalDate.of(1960, 2, 17), "", "");
+		createVolunteer(USERNAMES[11], "passme", "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
+		createVolunteer(USERNAMES[12], "passme", "Werner", "Haube", LocalDate.of(1970, 8, 8), "", "");
+		createVolunteer(USERNAMES[13], "passme", "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");
 	}
 
 	private CoreUser createVolunteer(String username, String password, String firstName, String lastName,
@@ -115,7 +123,22 @@ public class CoreVolunteerInitializationService {
 		}
 	}
 
-	public void registerVolunteers() {
+	protected void subscribeVolunteersToAllTenants() {
+		List<CoreUser> volunteers = new ArrayList<>();
+		coreUserRepository.findAll(Arrays.asList(USERNAMES)).forEach(volunteers::add);
+
+		List<Tenant> tenants = coreTenantRepository.findAll();
+
+		for (CoreUser user : volunteers) {
+			for (Tenant tenant : tenants) {
+				user.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenant.getId(), UserRole.VOLUNTEER)));
+			}
+		}
+		coreUserRepository.save(volunteers);
+	}
+	
+
+	protected void registerVolunteers() {
 		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
 				.collect(Collectors.toList());
 		this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER)

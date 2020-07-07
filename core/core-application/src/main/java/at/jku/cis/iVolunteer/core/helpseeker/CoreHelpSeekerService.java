@@ -41,16 +41,16 @@ public class CoreHelpSeekerService {
 	}
 
 	private void sendRegistrationToMarketplace(String authorization, CoreUser coreHelpSeeker, Marketplace marketplace) {
-		User helpSeeker = new User();
-		helpSeeker.setId(coreHelpSeeker.getId());
-		helpSeeker.setSubscribedTenants(coreHelpSeeker.getSubscribedTenants());
-		helpSeeker.setUsername(coreHelpSeeker.getUsername());
-		helpSeeker.setFirstname(coreHelpSeeker.getFirstname());
-		helpSeeker.setMiddlename(coreHelpSeeker.getMiddlename());
-		helpSeeker.setPosition(coreHelpSeeker.getPosition());
-		helpSeeker.setLastname(coreHelpSeeker.getLastname());
-		helpSeeker.setNickname(coreHelpSeeker.getNickname());
-		helpSeeker.setImage(coreHelpSeeker.getImage());
+		User helpSeeker = new User(coreHelpSeeker);
+//		helpSeeker.setId(coreHelpSeeker.getId());
+//		helpSeeker.setSubscribedTenants(coreHelpSeeker.getSubscribedTenants());
+//		helpSeeker.setUsername(coreHelpSeeker.getUsername());
+//		helpSeeker.setFirstname(coreHelpSeeker.getFirstname());
+//		helpSeeker.setMiddlename(coreHelpSeeker.getMiddlename());
+//		helpSeeker.setPosition(coreHelpSeeker.getPosition());
+//		helpSeeker.setLastname(coreHelpSeeker.getLastname());
+//		helpSeeker.setNickname(coreHelpSeeker.getNickname());
+//		helpSeeker.setImage(coreHelpSeeker.getImage());
 
 		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, helpSeeker);
 	}

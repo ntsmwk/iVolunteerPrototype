@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.annotation.Id;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 public class User {
 	@Id
@@ -34,7 +35,29 @@ public class User {
 	private byte[] image;
 
 	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
+	
+	public User() {}
 
+	public User(CoreUser coreUser) {
+		this.id = coreUser.getId();
+		this.username = coreUser.getUsername();
+		this.password = coreUser.getPassword();
+		this.firstname = coreUser.getFirstname();
+		this.middlename = coreUser.getMiddlename();
+		this.lastname = coreUser.getLastname();
+		this.nickname = coreUser.getNickname();
+		this.position = coreUser.getPosition();
+		this.birthday = coreUser.getBirthday();
+		this.locations = coreUser.getLocations();
+		this.about = coreUser.getAbout();
+		this.address = coreUser.getAddress();
+		this.phoneNumbers = coreUser.getPhoneNumbers();
+		this.websites = coreUser.getWebsites();
+		this.emails = coreUser.getEmails();
+		this.image = coreUser.getImage();
+		this.subscribedTenants = coreUser.getSubscribedTenants();
+	}
+	
 	public String getId() {
 		return id;
 	}

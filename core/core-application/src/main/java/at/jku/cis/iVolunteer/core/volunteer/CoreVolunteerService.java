@@ -58,19 +58,19 @@ public class CoreVolunteerService {
 	}
 
 	private void registerOrUpdateVolunteer(String authorization, CoreUser coreVolunteer, Marketplace marketplace) {
-		User volunteer = new User();
-		volunteer.setId(coreVolunteer.getId());
-		volunteer.setSubscribedTenants(coreVolunteer.getSubscribedTenants());
-		volunteer.setUsername(coreVolunteer.getUsername());
-		volunteer.setFirstname(coreVolunteer.getFirstname());
-		volunteer.setLastname(coreVolunteer.getLastname());
-		volunteer.setMiddlename(coreVolunteer.getMiddlename());
-		volunteer.setBirthday(coreVolunteer.getBirthday());
-		volunteer.setPosition(coreVolunteer.getPosition());
-		volunteer.setNickname(coreVolunteer.getNickname());
-		if (coreVolunteer.getImage() != null) {
-			volunteer.setImage(coreVolunteer.getImage());
-		}
+		User volunteer = new User(coreVolunteer);
+//		volunteer.setId(coreVolunteer.getId());
+//		volunteer.setSubscribedTenants(coreVolunteer.getSubscribedTenants());
+//		volunteer.setUsername(coreVolunteer.getUsername());
+//		volunteer.setFirstname(coreVolunteer.getFirstname());
+//		volunteer.setLastname(coreVolunteer.getLastname());
+//		volunteer.setMiddlename(coreVolunteer.getMiddlename());
+//		volunteer.setBirthday(coreVolunteer.getBirthday());
+//		volunteer.setPosition(coreVolunteer.getPosition());
+//		volunteer.setNickname(coreVolunteer.getNickname());
+//		if (coreVolunteer.getImage() != null) {
+//			volunteer.setImage(coreVolunteer.getImage());
+//		}
 		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, volunteer);
 	}
 

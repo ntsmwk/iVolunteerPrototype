@@ -51,22 +51,16 @@ public class CoreHelpSeekerInitializationService {
 	private CoreUserService coreUserService;
 
 	public void initHelpSeekers() {
-		String tenantIdFF = coreTenantRepository.findByName(FFEIDENBERG).getId();
-		String tenantIdRK = coreTenantRepository.findByName(RKWILHERING).getId();
-		String tenantIdMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG).getId();
-
-		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD, "M", "Mustermann", "", "HelpSeeker", USER_FF, tenantIdFF);
-
-		CoreUser helpseeker = createHelpSeeker(USER_FF, "passme", "Wolfgang", "Kronsteiner", "", "Feuerwehr Kommandant",
-				USER_FF, tenantIdFF);
-		helpseeker = createHelpSeeker("OERK", "passme", "Sandra", "Horvatis", "Rotes Kreuz", "Freiwilligenmanagement",
-				"OERK", tenantIdRK);
-		helpseeker = createHelpSeeker(USER_MV, "passme", "Johannes", "Schönböck", "", "Musikverein Obmann", USER_MV,
-				tenantIdMV);
+		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD, "M", "Mustermann", "", "HelpSeeker");
+		createHelpSeeker(USER_FF, "passme", "Wolfgang", "Kronsteiner", "", "Feuerwehr Kommandant");
+		createHelpSeeker("OERK", "passme", "Sandra", "Horvatis", "Rotes Kreuz", "Freiwilligenmanagement");
+		createHelpSeeker(USER_MV, "passme", "Johannes", "Schönböck", "", "Musikverein Obmann");
+		//TODO temp
+		subscribeDefaultHelpseekersToTenants();
 	}
 
 	private CoreUser createHelpSeeker(String username, String password, String firstName, String lastName,
-			String nickName, String position, String id, String tenantId) {
+			String nickName, String position) {
 		CoreUser helpSeeker = coreUserRepository.findByUsername(username);
 		if (helpSeeker == null) {
 			helpSeeker = new CoreUser();
@@ -77,11 +71,28 @@ public class CoreHelpSeekerInitializationService {
 			helpSeeker.setLastname(lastName);
 			helpSeeker.setNickname(nickName);
 			helpSeeker.setPosition(position);
-			helpSeeker.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription(tenantId, UserRole.HELP_SEEKER)));
+			
 			helpSeeker = coreUserRepository.insert(helpSeeker);
 		}
 		return helpSeeker;
+	}
+	
+	public void subscribeDefaultHelpseekersToTenants() {
+		String tenantIdFF = coreTenantRepository.findByName(FFEIDENBERG).getId();
+		CoreUser ffUser = coreUserRepository.findOne(USER_FF);
+		String tenantIdRK = coreTenantRepository.findByName(RKWILHERING).getId();
+		CoreUser rkUser = coreUserRepository.findOne(USER_RK);
+		String tenantIdMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG).getId();
+		CoreUser mvUser = coreUserRepository.findOne(USER_MV);
+
+		ffUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdFF, UserRole.HELP_SEEKER)));
+		rkUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdRK, UserRole.HELP_SEEKER)));
+		mvUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdMV, UserRole.HELP_SEEKER)));
+		
+		coreUserRepository.save(ffUser);
+		coreUserRepository.save(rkUser);
+		coreUserRepository.save(mvUser);
+
 	}
 
 	public void registerDefaultHelpSeekers() {
