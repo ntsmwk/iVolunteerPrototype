@@ -21,7 +21,7 @@ public class CoreTenantInitializationService {
 	private static final String MV_SCHWERTBERG = "MV Schwertberg";
 	private static final String RK_WILHERING = "RK Wilhering";
 
-	@Autowired private TenantRepository coreTenantRepository;
+	@Autowired protected TenantRepository coreTenantRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
 
 	public void initTenants() {

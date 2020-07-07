@@ -54,7 +54,7 @@ public class APIInitializationService {
 	}
 	
 	public void addiVolunteerAPIClassDefinition() {
-		List<Tenant> tenants = this.getTenants();
+		List<Tenant> tenants = getTenants();
 
 		tenants.forEach(tenant -> {
 			addPropertyDefinitions(tenant.getId());

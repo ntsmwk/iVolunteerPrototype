@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.user.User;
@@ -16,9 +16,11 @@ public class InitializationController {
 
 	@Autowired private UserMappingRepository userMappingRepository;
 	@Autowired private UserRepository userRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
 	
 	@Autowired private InitializationService initializationService;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private APIInitializationService apiInitializationService;
+	
 	
 	/**
 	 * Properties
@@ -26,12 +28,12 @@ public class InitializationController {
 	
 	@PutMapping("/init/add-properties/iVolunteer")
 	public void addAllProperties() {
-		this.initializationService.addiVolunteerPropertyDefinitions();
+		initializationService.addiVolunteerPropertyDefinitions();
 	}
 	
 	@DeleteMapping("/init/delete-properties")
 	public void deleteProperties() {
-		propertyDefinitionRepository.deleteAll();
+		initializationService.propertyDefinitionRepository.deleteAll();
 	}
 	
 	@PutMapping("/init/add-properties/header")
@@ -55,33 +57,34 @@ public class InitializationController {
 	
 	@PutMapping("/init/add-api-classdefinitions")
 	public void addAPIClassDefinitions() {
-		
+		apiInitializationService.addiVolunteerAPIClassDefinition();
 	}
 	
 	@PutMapping("/init/add-configurator-test-configurations") 
 	public void addClassConfigurations() {
-		
+		initializationService.addClassConfigurations();
 	}
 	
 	@DeleteMapping("/init/delete-class-definitions")
 	public void deleteClassDefinitions() {
-		
+		initializationService.classDefinitionRepository.deleteAll();
 	}
 	
 	@DeleteMapping("/init/delete-relationships")
 	public void deleteRelationships() {
-		
+		initializationService.relationshipRepository.deleteAll();
 	}
 	
 	@DeleteMapping("/init/delete-class-configurations")
 	public void deleteClassConfigurations() {
-		
+		initializationService.classConfigurationRepository.deleteAll();
 	}
 	
 	@DeleteMapping("/init/delete-class-instances")
 	public void deleteClassInstances() {
-		
+		classInstanceRepository.deleteAll();
 	}
+
 	
 	/**
 	 * Rules
@@ -89,12 +92,12 @@ public class InitializationController {
 
 	@PutMapping("/init/add-rule-test-configuration") 
 	public void addRuleTestConfiguration() {
-		
+		initializationService.testDataClasses.createClassConfigurations();
 	}
 	
 	@PutMapping("/init/add-rule-user-data")
 	public void addRuleUserData() {
-		
+		initializationService.testDataInstances.createUserData();
 	}
 	
 	/**
@@ -109,9 +112,11 @@ public class InitializationController {
 	
 	
 	@DeleteMapping("/init/delete-marketplace-users")
-	public void deleteClassInstanceUsers() {
-		
+	public void deleteMarketplaceUsers() {
+		userRepository.deleteAll();
 	}
+	
+	
 	
 	
 	@PutMapping("/init/usermapping")
@@ -131,4 +136,17 @@ public class InitializationController {
 		}
 	}
 
+	
+	@DeleteMapping("/init/wipe-marketplace")
+	public void wipeMarketplace() {
+		deleteClassConfigurations();
+		deleteClassDefinitions();
+		deleteRelationships();
+		deleteClassInstances();
+		deleteProperties();
+		deleteMarketplaceUsers();
+		
+	}
+	
+	
 }

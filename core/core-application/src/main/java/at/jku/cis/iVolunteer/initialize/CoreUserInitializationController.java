@@ -26,7 +26,7 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
-public class CoreVolunteerInitializationService {
+public class CoreUserInitializationController {
 
 	private static final String PSTARZER = "pstarzer";
 	private static final String BROISER = "broiser";
@@ -53,14 +53,10 @@ public class CoreVolunteerInitializationService {
 	private CoreUserService coreUserService;
 
 	public void initVolunteers() {
-
 		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
-		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "",
-				"img/pstarzer.jpg");
+		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "", "img/pstarzer.jpg");
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", LocalDate.of(1994, 1, 23), "", "");
-		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "",
-				"img/weixlbaumer_small.png");
-
+		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "", "img/weixlbaumer_small.png");
 		createVolunteer("AKop", "passme", "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
 		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
 		createVolunteer("WSch", "passme", "Wieland", "Schwinger", LocalDate.of(1976, 6, 9), "", "");
@@ -86,6 +82,7 @@ public class CoreVolunteerInitializationService {
 			Date date = Date.from(birthDate.atStartOfDay(defaultZoneId).toInstant());
 			volunteer.setBirthday(date);
 			volunteer.setNickname(nickName);
+			
 
 			setImage(fileName, volunteer);
 

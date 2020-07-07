@@ -21,21 +21,14 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private CoreUserRepository coreUserRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired protected CoreUserRepository coreUserRepository;
 
-	@Autowired
-	private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired
-	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired
-	private CoreTenantInitializationService coreTenantInitializationService;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private Environment environment;
+	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
+	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private Environment environment;
 
 	public void init() {
 		createMarketplace();
@@ -50,7 +43,7 @@ public class CoreInitializationService {
 
 	}
 
-	private void createMarketplace() {
+	protected void createMarketplace() {
 		Marketplace marketplace = this.marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace == null) {
 			marketplace = new Marketplace();
@@ -64,6 +57,10 @@ public class CoreInitializationService {
 		}
 	}
 
+	protected void createStandardRecruiter() {
+		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
+	}
+	
 	private void createRecruiter(String username, String password, String firstName, String lastName, String position) {
 		CoreUser recruiter = coreUserRepository.findByUsername(username);
 		if (recruiter == null) {
@@ -78,6 +75,10 @@ public class CoreInitializationService {
 			recruiter = coreUserRepository.insert(recruiter);
 		}
 	}
+	
+	protected void createStandardAdminUser() {
+		createAdminUser(ADMIN, RAW_PASSWORD);
+	}
 
 	private CoreUser createAdminUser(String username, String password) {
 		CoreUser fpUser = coreUserRepository.findByUsername(username);
@@ -91,11 +92,13 @@ public class CoreInitializationService {
 		}
 		return fpUser;
 	}
+	
+	protected void createStandardFlexProdUser() {
+		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
+	}
 
 	private CoreUser createFlexProdUser(String username, String password) {
-
 		CoreUser fpUser = coreUserRepository.findByUsername(username);
-
 		if (fpUser == null) {
 			fpUser = new CoreUser();
 			fpUser.setUsername(username);
