@@ -53,7 +53,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
           .then((classConfigurations: ClassConfiguration[]) => {
             this.data.tenantId = helpseeker.subscribedTenants.find(
               (t) => t.role === UserRole.HELP_SEEKER
-            ).tenant.id;
+            ).tenantId;
             this.allClassConfigurations = classConfigurations;
 
             this.dialogForm = new FormGroup({

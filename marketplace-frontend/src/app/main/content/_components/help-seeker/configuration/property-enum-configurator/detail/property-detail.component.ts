@@ -90,7 +90,7 @@ export class PropertyDetailComponent implements OnInit {
               propId,
               this.helpseeker.subscribedTenants.find(
                 (t) => t.role === UserRole.HELP_SEEKER
-              ).tenant.id
+              ).tenantId
             )
             .toPromise()
             .then((propertyDefintion: PropertyDefinition<any>) => {

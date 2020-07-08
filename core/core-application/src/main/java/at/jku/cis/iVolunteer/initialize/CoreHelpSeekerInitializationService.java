@@ -78,11 +78,11 @@ public class CoreHelpSeekerInitializationService {
 	}
 
 	public void subscribeDefaultHelpseekersToTenants() {
-		Tenant tenantFF = coreTenantRepository.findByName(FFEIDENBERG);
+		String tenantIdFF = coreTenantRepository.findByName(FFEIDENBERG).getId();
 		CoreUser ffUser = coreUserRepository.findOne(USER_FF);
-		Tenant tenantRK = coreTenantRepository.findByName(RKWILHERING);
+		String tenantIdRK = coreTenantRepository.findByName(RKWILHERING).getId();
 		CoreUser rkUser = coreUserRepository.findOne(USER_RK);
-		Tenant tenantMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG);
+		String tenantIdMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG).getId();
 		CoreUser mvUser = coreUserRepository.findOne(USER_MV);
 
 		// TODO: needs change later on, works for now, since there is only one
@@ -90,11 +90,11 @@ public class CoreHelpSeekerInitializationService {
 		Marketplace mp = ffUser.getRegisteredMarketplaces().stream().findFirst().orElse(null);
 
 		ffUser.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription(mp, tenantFF, UserRole.HELP_SEEKER)));
+				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdFF, UserRole.HELP_SEEKER)));
 		rkUser.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription(mp, tenantRK, UserRole.HELP_SEEKER)));
+				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdRK, UserRole.HELP_SEEKER)));
 		mvUser.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription(mp, tenantMV, UserRole.HELP_SEEKER)));
+				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdMV, UserRole.HELP_SEEKER)));
 
 		coreUserRepository.save(ffUser);
 		coreUserRepository.save(rkUser);
@@ -123,7 +123,7 @@ public class CoreHelpSeekerInitializationService {
 
 	private void registerHelpSeeker(CoreUser helpSeeker, String tenantId) {
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-		
+
 		if (mp != null) {
 			try {
 				coreHelpSeekerService.registerMarketplace(helpSeeker.getId(), mp.getId(), tenantId, "");

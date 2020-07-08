@@ -34,12 +34,11 @@ public class CoreHelpSeekerService {
 			String authorization) {
 		CoreUser coreHelpSeeker = coreUserRepository.findOne(coreHelpSeekerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
-		Tenant tenant = tenantRepository.findOne(tenantId);
 
-		if (coreHelpSeeker == null || marketplace == null || tenant == null) {
+		if (coreHelpSeeker == null || marketplace == null) {
 			throw new NotFoundException();
 		}
-		coreHelpSeeker = updateCoreHelpSeeker(tenant, coreHelpSeeker, marketplace);
+		coreHelpSeeker = updateCoreHelpSeeker(tenantId, coreHelpSeeker, marketplace);
 		sendRegistrationToMarketplace(authorization, coreHelpSeeker, marketplace);
 	}
 
@@ -58,10 +57,10 @@ public class CoreHelpSeekerService {
 		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, helpSeeker);
 	}
 
-	private CoreUser updateCoreHelpSeeker(Tenant tenant, CoreUser coreHelpSeeker, Marketplace marketplace) {
+	private CoreUser updateCoreHelpSeeker(String tenantId, CoreUser coreHelpSeeker, Marketplace marketplace) {
 		coreHelpSeeker.getRegisteredMarketplaces().add(marketplace);
-		coreHelpSeeker.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription(marketplace, tenant, UserRole.HELP_SEEKER)));
+		coreHelpSeeker.setSubscribedTenants(Collections
+				.singletonList(new TenantUserSubscription(marketplace.getId(), tenantId, UserRole.HELP_SEEKER)));
 
 		coreHelpSeeker = coreUserRepository.save(coreHelpSeeker);
 		return coreHelpSeeker;

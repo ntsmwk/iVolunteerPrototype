@@ -94,7 +94,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
                 marketplace,
                 this.helpseeker.subscribedTenants.find(
                   (t) => t.role === UserRole.HELP_SEEKER
-                ).tenant.id
+                ).tenantId
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
@@ -116,7 +116,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.classCondition.classDefinition = classDefinition;
       this.classCondition.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
-      ).tenant.id;
+      ).tenantId;
       this.classConditionChange.emit(this.classCondition);
     }
   }

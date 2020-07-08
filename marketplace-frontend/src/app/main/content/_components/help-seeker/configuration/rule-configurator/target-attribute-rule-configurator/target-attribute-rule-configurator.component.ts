@@ -120,7 +120,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
           this.attributeTarget.classProperty.allowedValues[0].enumClassId,
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenant.id
+          ).tenantId
         )
         .toPromise()
         .then((list: any[]) => {

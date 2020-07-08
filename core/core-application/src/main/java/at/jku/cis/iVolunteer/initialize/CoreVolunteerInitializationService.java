@@ -133,8 +133,8 @@ public class CoreVolunteerInitializationService {
 
 		for (CoreUser user : volunteers) {
 			for (Tenant tenant : tenants) {
-				user.setSubscribedTenants(
-						Collections.singletonList(new TenantUserSubscription(mp, tenant, UserRole.VOLUNTEER)));
+				user.setSubscribedTenants(Collections
+						.singletonList(new TenantUserSubscription(mp.getId(), tenant.getId(), UserRole.VOLUNTEER)));
 			}
 		}
 		coreUserRepository.save(volunteers);
@@ -149,7 +149,7 @@ public class CoreVolunteerInitializationService {
 
 	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-		
+
 		if (mp != null) {
 			try {
 				coreVolunteerService.subscribeTenant(volunteer.getId(), mp.getId(), tenantIds, "");

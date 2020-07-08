@@ -97,7 +97,7 @@ export class PropertyEnumListComponent implements OnInit {
                     marketplace,
                     this.helpseeker.subscribedTenants.find(
                       (t) => t.role === UserRole.HELP_SEEKER
-                    ).tenant.id
+                    ).tenantId
                   )
                   .toPromise()
                   .then((propertyDefinitions: PropertyDefinition<any>[]) => {
@@ -108,7 +108,7 @@ export class PropertyEnumListComponent implements OnInit {
                     marketplace,
                     this.helpseeker.subscribedTenants.find(
                       (t) => t.role === UserRole.HELP_SEEKER
-                    ).tenant.id
+                    ).tenantId
                   )
                   .toPromise()
                   .then((enumDefinitions: EnumDefinition[]) => {

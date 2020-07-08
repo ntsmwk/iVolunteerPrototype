@@ -46,7 +46,7 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
         .findAllByTenantId(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenant.id
+          ).tenantId
         )
         .toPromise()
         .then((volunteers: User[]) => {

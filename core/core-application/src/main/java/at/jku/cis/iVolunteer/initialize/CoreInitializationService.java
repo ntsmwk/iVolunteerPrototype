@@ -23,18 +23,27 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired protected CoreUserRepository coreUserRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	protected CoreUserRepository coreUserRepository;
 
-	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
-	
-	@Autowired private CoreRecruiterController coreRecruiterController;
-	@Autowired private CoreAdminController coreAdminController;
-	
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private Environment environment;
+	@Autowired
+	private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired
+	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
+	@Autowired
+	private CoreTenantInitializationService coreTenantInitializationService;
+
+	@Autowired
+	private CoreRecruiterController coreRecruiterController;
+	@Autowired
+	private CoreAdminController coreAdminController;
+
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private Environment environment;
 
 	public void init() {
 		createMarketplace();
@@ -79,14 +88,15 @@ public class CoreInitializationService {
 			recruiter = coreUserRepository.insert(recruiter);
 		}
 	}
-	
+
 	protected void subscribedRecruitersToTenant() {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
+		// TODO needs proper init
 		recruiter.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.RECRUITER)));
+				Collections.singletonList(new TenantUserSubscription(null, null, UserRole.RECRUITER)));
 		coreUserRepository.save(recruiter);
 	}
-	
+
 	protected void registerRecruitersToMarketplace() {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
@@ -95,7 +105,6 @@ public class CoreInitializationService {
 		}
 	}
 
-	
 	protected void createStandardAdminUser() {
 		createAdminUser(ADMIN, RAW_PASSWORD);
 	}
@@ -110,22 +119,22 @@ public class CoreInitializationService {
 		}
 		return fpUser;
 	}
-		
+
 	protected void subscribeAdminsToTenant() {
 		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
-		admin.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.ADMIN)));
+		// TODO needs proper init
+		admin.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(null, null, UserRole.ADMIN)));
 		coreUserRepository.save(admin);
 	}
-	
+
 	protected void registerAdminsToMarketplace() {
 		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace != null) {
-			//TODO - no function
+			// TODO - no function
 		}
 	}
-	
+
 	protected void createStandardFlexProdUser() {
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 	}

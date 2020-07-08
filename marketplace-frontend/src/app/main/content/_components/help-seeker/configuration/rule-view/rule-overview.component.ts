@@ -61,7 +61,7 @@ export class FuseRuleOverviewComponent implements OnInit {
         .findById(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenant.id
+          ).tenantId
         )
         .toPromise()
     );
@@ -71,7 +71,7 @@ export class FuseRuleOverviewComponent implements OnInit {
         this.marketplace,
         this.helpseeker.subscribedTenants.find(
           (t) => t.role === UserRole.HELP_SEEKER
-        ).tenant.id
+        ).tenantId
       )
       .toPromise()
       .then((rules: DerivationRule[]) => (this.dataSource.data = rules));

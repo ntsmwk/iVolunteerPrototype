@@ -864,7 +864,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       ")";
     addedClass.tenantId = this.helpseeker.subscribedTenants.find(
       (t) => t.role === UserRole.HELP_SEEKER
-    ).tenant.id;
+    ).tenantId;
     addedClass.properties = [];
 
     const addedRelationship = new Relationship();

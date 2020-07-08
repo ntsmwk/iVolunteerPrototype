@@ -24,7 +24,8 @@ public class TenantService {
 	public List<Tenant> getTenantsByUser(String userId) {
 		CoreUser user = userRepository.findOne(userId);
 		if (user != null) {
-			return user.getSubscribedTenants().stream().map(t -> t.getTenant()).collect(Collectors.toList());
+			return user.getSubscribedTenants().stream().map(t -> t.getTenantId())
+					.map(tId -> tenantRepository.findOne(tId)).collect(Collectors.toList());
 		}
 		return new ArrayList<>();
 	}

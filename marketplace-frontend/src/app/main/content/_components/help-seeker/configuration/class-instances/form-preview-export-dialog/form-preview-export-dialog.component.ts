@@ -277,7 +277,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       '"tenantId": "' +
       this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
-      ).tenant.id;
+      ).tenantId;
     '", ' + this.addClassToJSON(this.currentFormConfiguration.formEntry) + "}";
 
     this.exportFile([json]);
