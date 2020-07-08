@@ -97,7 +97,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
                 marketplace,
                 this.helpseeker.subscribedTenants.find(
                   (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
+                ).tenant.id
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
@@ -109,9 +109,11 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   }
 
   onPropertyChange(classProperty: ClassProperty<any>, $event) {
-    if ($event.isUserInput && 
-        (!this.attributeCondition.classProperty ||
-         (this.attributeCondition.classProperty.id != classProperty.id))) {
+    if (
+      $event.isUserInput &&
+      (!this.attributeCondition.classProperty ||
+        this.attributeCondition.classProperty.id != classProperty.id)
+    ) {
       this.initAttributeCondition();
       this.attributeCondition.classProperty = classProperty;
       this.attributeConditionChange.emit(this.attributeCondition);
@@ -120,7 +122,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     // this.rulePreconditionForm.value.classPropertyId = $event.source.value;
   }
 
-  private initAttributeCondition(){
+  private initAttributeCondition() {
     this.attributeCondition.classProperty = new ClassProperty();
     this.attributeCondition.comparisonOperatorType = ComparisonOperatorType.EQ;
     this.attributeCondition.value = undefined;
@@ -154,7 +156,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
           this.attributeCondition.classProperty.allowedValues[0].enumClassId,
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenant.id
         )
         .toPromise()
         .then((list: any[]) => {
@@ -178,7 +180,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
   onChange($event) {
     console.log("change values in attribute, yay!");
-    if (this.classProperties.length > 0 ) {
+    if (this.classProperties.length > 0) {
       this.attributeCondition.classProperty =
         this.classProperties.find(
           (cp) => cp.id === this.rulePreconditionForm.value.classPropertyId

@@ -42,7 +42,7 @@ public class CoreUserService {
     public List<CoreUser> getCoreUsersByRoleAndSubscribedTenants(UserRole role, String tenantId) {
         return getCoreUsersByRole(role)
                 .stream().filter(u -> u.getSubscribedTenants().size() > 0).filter(u -> u.getSubscribedTenants().stream()
-                        .map(t -> t.getTenantId()).collect(Collectors.toList()).contains(tenantId))
+                        .map(t -> t.getTenant().getId()).collect(Collectors.toList()).contains(tenantId))
                 .collect(Collectors.toList());
 
     }

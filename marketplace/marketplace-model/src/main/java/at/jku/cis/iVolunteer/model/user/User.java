@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.data.annotation.Id;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 public class User {
 	@Id
@@ -35,8 +37,9 @@ public class User {
 	private byte[] image;
 
 	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
-	
-	public User() {}
+
+	public User() {
+	}
 
 	public User(CoreUser coreUser) {
 		this.id = coreUser.getId();
@@ -57,7 +60,7 @@ public class User {
 		this.image = coreUser.getImage();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -207,15 +210,14 @@ public class User {
 		this.subscribedTenants = subscribedTenants;
 	}
 
-	public void addSubscribedTenant(String tenantId, UserRole role) {
-		if (!this.subscribedTenants.stream().map(t -> t.getTenantId()).collect(Collectors.toList())
-				.contains(tenantId)) {
-			this.subscribedTenants.add(new TenantUserSubscription(tenantId, role));
+	public void addSubscribedTenant(Marketplace marketplace, Tenant tenant, UserRole role) {
+		if (!this.subscribedTenants.stream().map(t -> t.getTenant()).collect(Collectors.toList()).contains(tenant)) {
+			this.subscribedTenants.add(new TenantUserSubscription(marketplace, tenant, role));
 		}
 	}
 
-	public List<TenantUserSubscription> removeSubscribedTenant(String tenantId) {
-		this.subscribedTenants.removeIf(s -> s.getTenantId() == tenantId);
+	public List<TenantUserSubscription> removeSubscribedTenant(Tenant tenant) {
+		this.subscribedTenants.removeIf(s -> s.getTenant() == tenant);
 		return this.subscribedTenants;
 	}
 }

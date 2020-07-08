@@ -21,14 +21,21 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired protected CoreUserRepository coreUserRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	protected CoreUserRepository coreUserRepository;
 
-	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private Environment environment;
+	@Autowired
+	private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired
+	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
+	@Autowired
+	private CoreTenantInitializationService coreTenantInitializationService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private Environment environment;
 
 	public void init() {
 		createMarketplace();
@@ -60,7 +67,7 @@ public class CoreInitializationService {
 	protected void createStandardRecruiter() {
 		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
 	}
-	
+
 	private void createRecruiter(String username, String password, String firstName, String lastName, String position) {
 		CoreUser recruiter = coreUserRepository.findByUsername(username);
 		if (recruiter == null) {
@@ -70,12 +77,13 @@ public class CoreInitializationService {
 			recruiter.setFirstname(firstName);
 			recruiter.setLastname(lastName);
 			recruiter.setPosition(position);
+			// TODO: needs proper registration
 			recruiter.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.RECRUITER)));
+					Collections.singletonList(new TenantUserSubscription(null, null, UserRole.RECRUITER)));
 			recruiter = coreUserRepository.insert(recruiter);
 		}
 	}
-	
+
 	protected void createStandardAdminUser() {
 		createAdminUser(ADMIN, RAW_PASSWORD);
 	}
@@ -86,13 +94,14 @@ public class CoreInitializationService {
 			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
+			// TODO: needs proper registration
 			fpUser.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.ADMIN)));
+					Collections.singletonList(new TenantUserSubscription(null, null, UserRole.ADMIN)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 		return fpUser;
 	}
-	
+
 	protected void createStandardFlexProdUser() {
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 	}
@@ -103,8 +112,9 @@ public class CoreInitializationService {
 			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
+			// TODO: needs proper registration
 			fpUser.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.FLEXPROD)));
+					Collections.singletonList(new TenantUserSubscription(null, null, UserRole.FLEXPROD)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 

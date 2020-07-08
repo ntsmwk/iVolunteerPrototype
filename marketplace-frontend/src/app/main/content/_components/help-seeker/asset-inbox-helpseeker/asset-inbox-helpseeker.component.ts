@@ -60,7 +60,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
         this.helpseeker.id,
         this.helpseeker.subscribedTenants.find(
           (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
+        ).tenant.id
       )
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {

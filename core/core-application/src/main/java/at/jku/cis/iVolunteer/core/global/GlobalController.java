@@ -31,6 +31,7 @@ public class GlobalController {
 		if (registeredMarketplaces.size() > 0) {
 			globalInfo.setMarketplace(registeredMarketplaces.get(0));
 		}
+
 		globalInfo.setTenants(this.tenantService.getTenantsByUser(coreUser.getId()));
 
 		return globalInfo;

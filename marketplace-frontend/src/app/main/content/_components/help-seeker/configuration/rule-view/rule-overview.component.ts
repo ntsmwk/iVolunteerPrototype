@@ -6,7 +6,11 @@ import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.serv
 import { LoginService } from "../../../../_service/login.service";
 import { fuseAnimations } from "@fuse/animations";
 import { isNullOrUndefined } from "util";
-import { DerivationRule, ComparisonOperatorType, AggregationOperatorType } from "../../../../_model/derivation-rule";
+import {
+  DerivationRule,
+  ComparisonOperatorType,
+  AggregationOperatorType,
+} from "../../../../_model/derivation-rule";
 import { DerivationRuleService } from "../../../../_service/derivation-rule.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { HelpSeekerGuard } from "app/main/content/_guard/help-seeker.guard";
@@ -57,15 +61,18 @@ export class FuseRuleOverviewComponent implements OnInit {
         .findById(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenant.id
         )
         .toPromise()
     );
 
     this.derivationRuleService
-      .findAll(this.marketplace, this.helpseeker.subscribedTenants.find(
-        (t) => t.role === UserRole.HELP_SEEKER
-      ).tenantId)
+      .findAll(
+        this.marketplace,
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenant.id
+      )
       .toPromise()
       .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
   }

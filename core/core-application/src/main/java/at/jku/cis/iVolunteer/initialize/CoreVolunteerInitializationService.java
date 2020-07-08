@@ -102,10 +102,10 @@ public class CoreVolunteerInitializationService {
 
 			volunteer = coreUserRepository.insert(volunteer);
 
-//			List<String> tenantIds = new ArrayList<String>();
-//			tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
-//			tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
-//			tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
+			// List<String> tenantIds = new ArrayList<String>();
+			// tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
+			// tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
+			// tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
 			// registerVolunteer(volunteer, tenantIds);
 		}
 		return volunteer;
@@ -128,15 +128,17 @@ public class CoreVolunteerInitializationService {
 		coreUserRepository.findAll(Arrays.asList(USERNAMES)).forEach(volunteers::add);
 
 		List<Tenant> tenants = coreTenantRepository.findAll();
+		// TODO
+		Marketplace mp = marketplaceRepository.findAll().stream().findFirst().orElse(null);
 
 		for (CoreUser user : volunteers) {
 			for (Tenant tenant : tenants) {
-				user.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenant.getId(), UserRole.VOLUNTEER)));
+				user.setSubscribedTenants(
+						Collections.singletonList(new TenantUserSubscription(mp, tenant, UserRole.VOLUNTEER)));
 			}
 		}
 		coreUserRepository.save(volunteers);
 	}
-	
 
 	protected void registerVolunteers() {
 		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())

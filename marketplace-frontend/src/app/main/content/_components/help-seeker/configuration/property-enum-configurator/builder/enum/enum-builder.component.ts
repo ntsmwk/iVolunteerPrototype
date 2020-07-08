@@ -93,7 +93,7 @@ export class EnumBuilderComponent implements OnInit {
           this.multipleToggled,
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenant.id
         )
         .toPromise()
         .then((enumDefinition: EnumDefinition) => {
