@@ -46,15 +46,15 @@ public class CoreInitializationService {
 	private Environment environment;
 
 	public void init() {
-		createMarketplace();
-
-		coreTenantInitializationService.initTenants();
-		coreVolunteerInitializationService.initVolunteers();
-		coreHelpSeekerInitializationService.initHelpSeekers();
-
-		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
-		createAdminUser(ADMIN, RAW_PASSWORD);
-		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
+//		createMarketplace();
+//
+//		coreTenantInitializationService.initTenants();
+//		coreVolunteerInitializationService.initVolunteers();
+//		coreHelpSeekerInitializationService.initHelpSeekers();
+//
+//		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
+//		createAdminUser(ADMIN, RAW_PASSWORD);
+//		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
 
 	}
 
@@ -85,23 +85,24 @@ public class CoreInitializationService {
 			recruiter.setFirstname(firstName);
 			recruiter.setLastname(lastName);
 			recruiter.setPosition(position);
-			recruiter = coreUserRepository.insert(recruiter);
+			recruiter = coreUserRepository.save(recruiter);
 		}
 	}
 
 	protected void subscribedRecruitersToTenant() {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
-//		recruiter.setSubscribedTenants(
-//				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
-//		coreUserRepository.save(recruiter);
+		recruiter.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
+		coreUserRepository.save(recruiter);
 	}
 
 	protected void registerRecruitersToMarketplace() {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace != null) {
-			coreRecruiterController.registerMarketpace(recruiter.getId(), marketplace.getId(), "");
+//			TODO
+//			coreRecruiterController.registerMarketpace(recruiter.getId(), marketplace.getId(), "");
 		}
 	}
 
@@ -110,22 +111,22 @@ public class CoreInitializationService {
 	}
 
 	private CoreUser createAdminUser(String username, String password) {
-		CoreUser fpUser = coreUserRepository.findByUsername(username);
-		if (fpUser == null) {
-			fpUser = new CoreUser();
-			fpUser.setUsername(username);
-			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
-			fpUser = coreUserRepository.insert(fpUser);
+		CoreUser admin = coreUserRepository.findByUsername(username);
+		if (admin == null) {
+			admin = new CoreUser();
+			admin.setUsername(username);
+			admin.setPassword(bCryptPasswordEncoder.encode(password));
+			admin = coreUserRepository.save(admin);
 		}
-		return fpUser;
+		return admin;
 	}
 
 	protected void subscribeAdminsToTenant() {
 		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
-//		admin.setSubscribedTenants(
-//				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
-//		coreUserRepository.save(admin);
+		admin.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
+		coreUserRepository.save(admin);
 	}
 
 	protected void registerAdminsToMarketplace() {

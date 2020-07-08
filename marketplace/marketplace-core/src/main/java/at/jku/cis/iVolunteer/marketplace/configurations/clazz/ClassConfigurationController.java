@@ -92,8 +92,6 @@ public class ClassConfigurationController {
 
 	@PostMapping("class-configuration/new")
 	public ClassConfiguration createNewClassConfiguration(@RequestBody String[] params) {
-		System.out.println(params.length);
-		System.out.println(params[0] + " " + params[1] + " " + params[2]);
 		if (params.length != 3) {
 			return null;
 		}

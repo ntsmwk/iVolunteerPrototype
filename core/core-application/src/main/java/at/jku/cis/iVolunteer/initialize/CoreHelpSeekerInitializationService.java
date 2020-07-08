@@ -56,7 +56,7 @@ public class CoreHelpSeekerInitializationService {
 		createHelpSeeker("OERK", "passme", "Sandra", "Horvatis", "Rotes Kreuz", "Freiwilligenmanagement");
 		createHelpSeeker(USER_MV, "passme", "Johannes", "Schönböck", "", "Musikverein Obmann");
 		// TODO temp
-		subscribeDefaultHelpseekersToTenants();
+		// subscribeDefaultHelpseekersToTenants();
 	}
 
 	private CoreUser createHelpSeeker(String username, String password, String firstName, String lastName,
