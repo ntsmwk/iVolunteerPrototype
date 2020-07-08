@@ -56,7 +56,7 @@ public class CoreHelpSeekerInitializationService {
 		createHelpSeeker("OERK", "passme", "Sandra", "Horvatis", "Rotes Kreuz", "Freiwilligenmanagement");
 		createHelpSeeker(USER_MV, "passme", "Johannes", "Schönböck", "", "Musikverein Obmann");
 		// TODO temp
-		subscribeDefaultHelpseekersToTenants();
+//		subscribeDefaultHelpseekersToTenants();
 	}
 
 	private CoreUser createHelpSeeker(String username, String password, String firstName, String lastName,
@@ -87,7 +87,7 @@ public class CoreHelpSeekerInitializationService {
 
 		// TODO: needs change later on, works for now, since there is only one
 		// marketplace
-		Marketplace mp = ffUser.getRegisteredMarketplaces().stream().findFirst().orElse(null);
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
 
 		ffUser.setSubscribedTenants(
 				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdFF, UserRole.HELP_SEEKER)));

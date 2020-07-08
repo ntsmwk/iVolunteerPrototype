@@ -124,38 +124,34 @@ public class CoreVolunteerInitializationService {
 	}
 
 	protected void subscribeVolunteersToAllTenants() {
-		List<CoreUser> volunteers = new ArrayList<>();
-		coreUserRepository.findAll(Arrays.asList(USERNAMES)).forEach(volunteers::add);
-
+		ArrayList<CoreUser> volunteers = new ArrayList<>();
+		coreUserRepository.findByUsernameIn(Arrays.asList(USERNAMES)).forEach(volunteers::add);	
+		
 		List<Tenant> tenants = coreTenantRepository.findAll();
 		// TODO
-		Marketplace mp = marketplaceRepository.findAll().stream().findFirst().orElse(null);
-
-		for (CoreUser user : volunteers) {
-			for (Tenant tenant : tenants) {
-				user.setSubscribedTenants(Collections
-						.singletonList(new TenantUserSubscription(mp.getId(), tenant.getId(), UserRole.VOLUNTEER)));
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+		
+		for (int i = 0; i < volunteers.size(); i++) {
+			CoreUser volunteer = volunteers.get(i);
+			volunteer.setSubscribedTenants(new ArrayList<TenantUserSubscription>());
+			for (Tenant t : tenants) {
+				volunteer.addSubscribedTenant(mp.getId(), t.getId(), UserRole.VOLUNTEER);
 			}
 		}
+
 		coreUserRepository.save(volunteers);
 	}
 
 	protected void registerVolunteers() {
-		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
-				.collect(Collectors.toList());
 		this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER)
-				.forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
+				.forEach(volunteer -> registerVolunteer(volunteer, volunteer.getSubscribedTenants().stream().map(st -> st.getTenantId()).collect(Collectors.toList())));
 	}
 
 	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
 
 		if (mp != null) {
-			try {
-				coreVolunteerService.subscribeTenant(volunteer.getId(), mp.getId(), tenantIds, "");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
 		}
 	}
 }

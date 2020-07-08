@@ -66,7 +66,7 @@ public class CoreVolunteerService {
 		return coreUserRepository.save(coreVolunteer);
 	}
 
-	private void registerOrUpdateVolunteer(String authorization, CoreUser coreVolunteer, Marketplace marketplace) {
+	public void registerOrUpdateVolunteer(String authorization, CoreUser coreVolunteer, Marketplace marketplace) {
 		User volunteer = new User(coreVolunteer);
 		// volunteer.setId(coreVolunteer.getId());
 		// volunteer.setSubscribedTenants(coreVolunteer.getSubscribedTenants());

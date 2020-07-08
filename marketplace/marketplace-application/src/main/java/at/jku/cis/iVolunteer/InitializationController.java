@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,12 +23,13 @@ public class InitializationController {
 	
 	@PutMapping("/init/add-test-data")
 	public void addTestData() {
+		addFireBrigadeUserMapping();
 		addAllProperties();
 		addClassConfigurations();
 		addAPIClassDefinitions();
-		addRuleTestConfiguration();
-		addRuleUserData();
-		addFireBrigadeUserMapping();
+// TODO exception classcast
+//		addRuleTestConfiguration();
+//		addRuleUserData();
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class InitializationController {
 		initializationService.addiVolunteerPropertyDefinitions();
 	}
 	
-	@DeleteMapping("/init/delete-properties")
+	@PutMapping("/init/delete-properties")
 	public void deleteProperties() {
 		initializationService.propertyDefinitionRepository.deleteAll();
 	}
@@ -62,6 +62,15 @@ public class InitializationController {
 	}
 	
 	/**
+	 * Enum-Definitions
+	 */
+	
+	@PutMapping("/init/delete-enumdefinitions")
+	public void deleteEnumDefinitions() {
+		initializationService.enumDefinitionRepository.deleteAll();
+	}
+	
+	/**
 	 * Class-Definitions and Configurations
 	 */
 	
@@ -75,22 +84,22 @@ public class InitializationController {
 		initializationService.addClassConfigurations();
 	}
 	
-	@DeleteMapping("/init/delete-class-definitions")
+	@PutMapping("/init/delete-class-definitions")
 	public void deleteClassDefinitions() {
 		initializationService.classDefinitionRepository.deleteAll();
 	}
 	
-	@DeleteMapping("/init/delete-relationships")
+	@PutMapping("/init/delete-relationships")
 	public void deleteRelationships() {
 		initializationService.relationshipRepository.deleteAll();
 	}
 	
-	@DeleteMapping("/init/delete-class-configurations")
+	@PutMapping("/init/delete-class-configurations")
 	public void deleteClassConfigurations() {
 		initializationService.classConfigurationRepository.deleteAll();
 	}
 	
-	@DeleteMapping("/init/delete-class-instances")
+	@PutMapping("/init/delete-class-instances")
 	public void deleteClassInstances() {
 		classInstanceRepository.deleteAll();
 	}
@@ -114,6 +123,10 @@ public class InitializationController {
 	 * Matching
 	 */
 	
+	@PutMapping("/init/delete-matching-collector-configurations")
+	public void deleteMatchingCollectorConfigurations() {
+		initializationService.matchingCollectorConfigurationRepository.deleteAll();
+	}
 	
 	
 	/**
@@ -121,7 +134,7 @@ public class InitializationController {
 	 */
 	
 	
-	@DeleteMapping("/init/delete-marketplace-users")
+	@PutMapping("/init/delete-marketplace-users")
 	public void deleteMarketplaceUsers() {
 		userRepository.deleteAll();
 	}
@@ -145,6 +158,11 @@ public class InitializationController {
 			userMappingRepository.save(mapping);
 		}
 	}
+	
+	@PutMapping("/init/usermapping/delete")
+	public void deleteUserMappings() {
+		userMappingRepository.deleteAll();
+	}
 
 	
 	@PutMapping("/init/wipe-marketplace")
@@ -155,7 +173,9 @@ public class InitializationController {
 		deleteClassInstances();
 		deleteProperties();
 		deleteMarketplaceUsers();
-		
+		deleteMatchingCollectorConfigurations();
+		deleteEnumDefinitions();
+		deleteUserMappings();
 		
 	}
 	
