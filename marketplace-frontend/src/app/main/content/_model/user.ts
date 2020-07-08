@@ -34,7 +34,7 @@ export enum UserRole {
   FLEXPROD = "FLEXPROD",
 }
 export class TenantUserSubscription {
-  marketplace: Marketplace;
-  tenant: Tenant;
+  marketplaceId: string;
+  tenantId: string;
   role: UserRole;
 }

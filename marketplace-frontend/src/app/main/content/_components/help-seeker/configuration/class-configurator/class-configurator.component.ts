@@ -655,7 +655,7 @@ export class ClassConfiguratorComponent implements OnInit,
         } else {
             addedClass.classArchetype = parentClassArchetype;
         } addedClass.name = "Neue Klasse\n(" + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ")";
-        addedClass.tenantId = this.helpseeker.subscribedTenants.find((t) => t.role === UserRole.HELP_SEEKER).tenant.id;
+        addedClass.tenantId = this.helpseeker.subscribedTenants.find((t) => t.role === UserRole.HELP_SEEKER).tenantId;
         addedClass.properties = [];
 
         const addedRelationship = new Relationship();

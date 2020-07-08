@@ -210,14 +210,16 @@ public class User {
 		this.subscribedTenants = subscribedTenants;
 	}
 
-	public void addSubscribedTenant(Marketplace marketplace, Tenant tenant, UserRole role) {
-		if (!this.subscribedTenants.stream().map(t -> t.getTenant()).collect(Collectors.toList()).contains(tenant)) {
-			this.subscribedTenants.add(new TenantUserSubscription(marketplace, tenant, role));
+	public void addSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
+		if (!this.subscribedTenants.stream().filter(t -> t.getMarketplaceId() == marketplaceId)
+				.map(t -> t.getTenantId()).collect(Collectors.toList()).contains(tenantId)) {
+			this.subscribedTenants.add(new TenantUserSubscription(marketplaceId, tenantId, role));
 		}
+
 	}
 
-	public List<TenantUserSubscription> removeSubscribedTenant(Tenant tenant) {
-		this.subscribedTenants.removeIf(s -> s.getTenant() == tenant);
+	public List<TenantUserSubscription> removeSubscribedTenant(String marketplaceId, String tenantId) {
+		this.subscribedTenants.removeIf(s -> s.getTenantId() == tenantId && s.getMarketplaceId() == marketplaceId);
 		return this.subscribedTenants;
 	}
 }

@@ -239,10 +239,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       );
       classInstance.tenantId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
-      ).tenant.id;
+      ).tenantId;
       classInstance.issuerId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
-      ).tenant.id;
+      ).tenantId;
       classInstances.push(classInstance);
     } else {
       for (const volunteer of this.selectedVolunteers) {
@@ -253,10 +253,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         );
         classInstance.tenantId = this.helpseeker.subscribedTenants.find(
           (t) => t.role === UserRole.HELP_SEEKER
-        ).tenant.id;
+        ).tenantId;
         classInstance.issuerId = this.helpseeker.subscribedTenants.find(
           (t) => t.role === UserRole.HELP_SEEKER
-        ).tenant.id;
+        ).tenantId;
         classInstance.userId = volunteer.id;
         classInstances.push(classInstance);
       }

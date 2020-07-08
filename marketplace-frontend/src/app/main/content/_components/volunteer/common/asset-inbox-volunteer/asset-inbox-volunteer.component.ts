@@ -69,7 +69,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
       .getClassInstancesInUserInbox(
         this.marketplace,
         this.volunteer.id,
-        this.volunteer.subscribedTenants.map((t) => t.tenant.id)
+        this.volunteer.subscribedTenants.map((t) => t.tenantId)
       )
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {

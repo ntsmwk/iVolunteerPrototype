@@ -1,37 +1,35 @@
 package at.jku.cis.iVolunteer.model;
 
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 public class TenantUserSubscription {
-    private Marketplace marketplace;
-    private Tenant tenant;
+    private String marketplaceId;
+    private String tenantId;
     private UserRole role;
 
     public TenantUserSubscription() {
     }
 
-    public TenantUserSubscription(Marketplace marketplace, Tenant tenant, UserRole role) {
-        this.marketplace = marketplace;
-        this.tenant = tenant;
+    public TenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
+        this.marketplaceId = marketplaceId;
+        this.tenantId = tenantId;
         this.role = role;
     }
 
-    public Marketplace getMarketplace() {
-        return this.marketplace;
+    public String getMarketplaceId() {
+        return this.marketplaceId;
     }
 
-    public void setMarketplace(Marketplace marketplace) {
-        this.marketplace = marketplace;
+    public void setMarketplaceId(String marketplaceId) {
+        this.marketplaceId = marketplaceId;
     }
 
-    public Tenant getTenant() {
-        return this.tenant;
+    public String getTenantId() {
+        return this.tenantId;
     }
 
-    public void setTenant(Tenant tenant) {
-        this.tenant = tenant;
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     public UserRole getRole() {

@@ -59,7 +59,7 @@ public class CoreVolunteerService {
 
 		List<TenantUserSubscription> newSubscriptions = new ArrayList<>();
 		tenants.forEach(t -> {
-			newSubscriptions.add(new TenantUserSubscription(marketplace, t, UserRole.VOLUNTEER));
+			newSubscriptions.add(new TenantUserSubscription(marketplace.getId(), t.getId(), UserRole.VOLUNTEER));
 		});
 		coreVolunteer.getSubscribedTenants().addAll(newSubscriptions);
 
@@ -86,11 +86,10 @@ public class CoreVolunteerService {
 	public void unsubscribeTenant(String coreVolunteerId, String marketplaceId, String tenantId, String authorization) {
 		CoreUser coreVolunteer = coreUserRepository.findOne(coreVolunteerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
-		Tenant tenant = tenantRepository.findOne(tenantId);
-		if (coreVolunteer == null || marketplace == null || tenant == null) {
+		if (coreVolunteer == null || marketplace == null) {
 			throw new NotFoundException();
 		}
-		coreVolunteer.removeSubscribedTenant(tenant);
+		coreVolunteer.removeSubscribedTenant(marketplaceId, tenantId);
 		coreUserRepository.save(coreVolunteer);
 
 		// TODO MWE remove tenant from MP db..

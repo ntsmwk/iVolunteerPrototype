@@ -75,7 +75,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           this.marketplace,
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenant.id
+          ).tenantId
         )
         .toPromise()
     );
@@ -85,7 +85,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
         .findById(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenant.id
+          ).tenantId
         )
         .toPromise()
     );
@@ -154,7 +154,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.derivationRule.name = this.ruleForm.value.name;
     this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
       (t) => t.role === UserRole.HELP_SEEKER
-    ).tenant.id;
+    ).tenantId;
     this.derivationRule.container =
       "simulate execution " + this.derivationRule.name;
   }
@@ -169,7 +169,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       this.derivationRule.name = this.ruleForm.value.name;
       this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
-      ).tenant.id;
+      ).tenantId;
       this.derivationRule.container = "Test-Frontend";
 
       this.derivationRuleService

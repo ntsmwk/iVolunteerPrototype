@@ -42,7 +42,7 @@ export class OpenEnumDefinitionDialogComponent implements OnInit {
         this.data.marketplace,
         this.data.helpseeker.subscribedTenants.find(
           (t) => t.role === UserRole.HELP_SEEKER
-        ).tenant.id
+        ).tenantId
       )
       .toPromise()
       .then((enumDefinitions: EnumDefinition[]) => {
