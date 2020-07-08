@@ -45,7 +45,7 @@ export class TenantOverviewComponent implements OnInit {
   isSubscribed(tenant: Tenant) {
     return (
       this.volunteer.subscribedTenants.findIndex(
-        (t) => t.tenantId === tenant.id
+        (t) => t.tenant.id === tenant.id
       ) >= 0
     );
   }

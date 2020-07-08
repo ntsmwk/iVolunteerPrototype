@@ -1,3 +1,6 @@
+import { Marketplace } from "./marketplace";
+import { Tenant } from "./tenant";
+
 export class User {
   id: string;
   username: string;
@@ -31,6 +34,7 @@ export enum UserRole {
   FLEXPROD = "FLEXPROD",
 }
 export class TenantUserSubscription {
-  tenantId: string;
+  marketplace: Marketplace;
+  tenant: Tenant;
   role: UserRole;
 }

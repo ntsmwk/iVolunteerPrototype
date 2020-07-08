@@ -92,7 +92,7 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
                 marketplace,
                 this.helpseeker.subscribedTenants.find(
                   (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
+                ).tenant.id
               )
               .toPromise()
               .then((genProperties: PropertyDefinition<any>[]) => {
@@ -108,15 +108,15 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     }
     this.generalCondition.propertyDefinition.id = $event.source.value;
     this.rulePreconditionForm.value.propertyDefinitionId = $event.source.value;
-    this.generalConditionChange.emit();  
+    this.generalConditionChange.emit();
   }
 
   onOperatorChange(comparisonOperatorType, $event) {
     if ($event.isUserInput) {
       // ignore on deselection of the previous option
       this.generalCondition.comparisonOperatorType = comparisonOperatorType;
-    }  
-    this.generalConditionChange.emit(comparisonOperatorType);  
+    }
+    this.generalConditionChange.emit(comparisonOperatorType);
   }
 
   onChange($event) {

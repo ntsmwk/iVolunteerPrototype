@@ -48,7 +48,7 @@ export class FuseTaskSelectComponent implements OnInit {
         .findById(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenant.id
         )
         .toPromise()
     );
@@ -67,7 +67,7 @@ export class FuseTaskSelectComponent implements OnInit {
             ClassArchetype.TASK,
             this.helpseeker.subscribedTenants.find(
               (t) => t.role === UserRole.HELP_SEEKER
-            ).tenantId
+            ).tenant.id
           )
           .toPromise()
       );

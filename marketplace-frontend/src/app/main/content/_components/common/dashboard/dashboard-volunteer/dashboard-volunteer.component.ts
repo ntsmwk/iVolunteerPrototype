@@ -153,7 +153,9 @@ export class DashboardVolunteerComponent implements OnInit {
             this.marketplace,
             "TASK",
             this.volunteer.id,
-            this.volunteer.subscribedTenants.map((s) => s.tenantId)
+            this.volunteer.subscribedTenants
+              .map((s) => s.tenant)
+              .map((t) => t.id)
           )
           .toPromise()
       );

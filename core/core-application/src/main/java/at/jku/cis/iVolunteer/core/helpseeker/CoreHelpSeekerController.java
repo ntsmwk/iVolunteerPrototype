@@ -33,10 +33,8 @@ public class CoreHelpSeekerController {
 
 	@GetMapping("/all")
 	public List<CoreUser> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId) {
-		if (tenantId == null) {
-			return this.coreUserService.getCoreUsersByRole(UserRole.HELP_SEEKER);
-		}
-		return this.coreHelpSeekerService.getAllCoreHelpSeekers(tenantId);
+		return coreUserService.getCoreUsersByRoleAndSubscribedTenants(UserRole.HELP_SEEKER, tenantId);
+
 	}
 
 	@PutMapping("/find-by-ids")

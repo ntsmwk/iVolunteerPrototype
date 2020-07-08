@@ -64,7 +64,7 @@ export class ImportComponent implements OnInit {
         .findById(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenant.id
         )
         .toPromise()
     );
@@ -75,7 +75,7 @@ export class ImportComponent implements OnInit {
           this.marketplace,
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenant.id
         )
         .toPromise()
     );
@@ -85,7 +85,7 @@ export class ImportComponent implements OnInit {
         .findAllByTenantId(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenant.id
         )
         .toPromise()
     );

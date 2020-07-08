@@ -66,7 +66,7 @@ public class CoreInitializationService {
 	protected void createStandardRecruiter() {
 		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
 	}
-	
+
 	private void createRecruiter(String username, String password, String firstName, String lastName, String position) {
 		CoreUser recruiter = coreUserRepository.findByUsername(username);
 		if (recruiter == null) {
@@ -136,8 +136,9 @@ public class CoreInitializationService {
 			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
+			// TODO: needs proper registration
 			fpUser.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.FLEXPROD)));
+					Collections.singletonList(new TenantUserSubscription(null, null, UserRole.FLEXPROD)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 

@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  SimpleChanges,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
@@ -61,9 +68,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         (this.classCondition.classDefinition
           ? this.classCondition.classDefinition.id
           : "") || "",
-      aggregationOperatorType: this.classCondition.aggregationOperatorType 
-         || "" ,
-       value: this.classCondition.value || "",
+      aggregationOperatorType:
+        this.classCondition.aggregationOperatorType || "",
+      value: this.classCondition.value || "",
     });
 
     this.classCondition.attributeConditions = this.classCondition
@@ -87,7 +94,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
                 marketplace,
                 this.helpseeker.subscribedTenants.find(
                   (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
+                ).tenant.id
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
@@ -102,14 +109,14 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   }*/
 
   onClassChange(classDefinition: ClassDefinition, $event) {
-    if ($event.isUserInput){
+    if ($event.isUserInput) {
       if (!this.classCondition.classDefinition) {
         this.classCondition.classDefinition = new ClassDefinition();
       }
       this.classCondition.classDefinition = classDefinition;
       this.classCondition.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
-      ).tenantId;
+      ).tenant.id;
       this.classConditionChange.emit(this.classCondition);
     }
   }

@@ -86,7 +86,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
         this.marketplace,
         this.helpseeker.subscribedTenants.find(
           (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
+        ).tenant.id
       )
       .toPromise()
       .then((ret: PropertyDefinition<any>[]) => {
@@ -101,7 +101,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
         this.entryId,
         this.helpseeker.subscribedTenants.find(
           (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
+        ).tenant.id
       )
       .toPromise()
       .then((ret: PropertyDefinition<any>) => {
@@ -269,7 +269,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
     const property: PropertyDefinition<any> = new PropertyDefinition<any>();
     property.tenantId = this.helpseeker.subscribedTenants.find(
       (t) => t.role === UserRole.HELP_SEEKER
-    ).tenantId;
+    ).tenant.id;
     property.custom = true;
 
     if (isNullOrUndefined(this.propertyDefinition)) {

@@ -55,7 +55,7 @@ public class CoreHelpSeekerInitializationService {
 		createHelpSeeker(USER_FF, "passme", "Wolfgang", "Kronsteiner", "", "Feuerwehr Kommandant");
 		createHelpSeeker("OERK", "passme", "Sandra", "Horvatis", "Rotes Kreuz", "Freiwilligenmanagement");
 		createHelpSeeker(USER_MV, "passme", "Johannes", "Schönböck", "", "Musikverein Obmann");
-		//TODO temp
+		// TODO temp
 		subscribeDefaultHelpseekersToTenants();
 	}
 
@@ -71,24 +71,31 @@ public class CoreHelpSeekerInitializationService {
 			helpSeeker.setLastname(lastName);
 			helpSeeker.setNickname(nickName);
 			helpSeeker.setPosition(position);
-			
+
 			helpSeeker = coreUserRepository.insert(helpSeeker);
 		}
 		return helpSeeker;
 	}
-	
+
 	public void subscribeDefaultHelpseekersToTenants() {
-		String tenantIdFF = coreTenantRepository.findByName(FFEIDENBERG).getId();
+		Tenant tenantFF = coreTenantRepository.findByName(FFEIDENBERG);
 		CoreUser ffUser = coreUserRepository.findOne(USER_FF);
-		String tenantIdRK = coreTenantRepository.findByName(RKWILHERING).getId();
+		Tenant tenantRK = coreTenantRepository.findByName(RKWILHERING);
 		CoreUser rkUser = coreUserRepository.findOne(USER_RK);
-		String tenantIdMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG).getId();
+		Tenant tenantMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG);
 		CoreUser mvUser = coreUserRepository.findOne(USER_MV);
 
-		ffUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdFF, UserRole.HELP_SEEKER)));
-		rkUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdRK, UserRole.HELP_SEEKER)));
-		mvUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdMV, UserRole.HELP_SEEKER)));
-		
+		// TODO: needs change later on, works for now, since there is only one
+		// marketplace
+		Marketplace mp = ffUser.getRegisteredMarketplaces().stream().findFirst().orElse(null);
+
+		ffUser.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(mp, tenantFF, UserRole.HELP_SEEKER)));
+		rkUser.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(mp, tenantRK, UserRole.HELP_SEEKER)));
+		mvUser.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(mp, tenantMV, UserRole.HELP_SEEKER)));
+
 		coreUserRepository.save(ffUser);
 		coreUserRepository.save(rkUser);
 		coreUserRepository.save(mvUser);
