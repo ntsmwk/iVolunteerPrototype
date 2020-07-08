@@ -146,8 +146,8 @@ public class CoreVolunteerInitializationService {
 	}
 
 	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
-		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
-				.findFirst().orElse(null);
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+		
 		if (mp != null) {
 			try {
 				coreVolunteerService.subscribeTenant(volunteer.getId(), mp.getId(), tenantIds, "");

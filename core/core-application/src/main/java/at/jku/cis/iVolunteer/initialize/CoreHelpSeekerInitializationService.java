@@ -115,8 +115,8 @@ public class CoreHelpSeekerInitializationService {
 	}
 
 	private void registerHelpSeeker(CoreUser helpSeeker, String tenantId) {
-		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
-				.findFirst().orElse(null);
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+		
 		if (mp != null) {
 			try {
 				coreHelpSeekerService.registerMarketplace(helpSeeker.getId(), mp.getId(), tenantId, "");

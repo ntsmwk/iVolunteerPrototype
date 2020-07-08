@@ -19,10 +19,13 @@ public class CoreInitializationController {
 	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
 	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
 	
-	@Autowired private CoreHelpSeekerService coreHelpSeekerService;
-	@Autowired private CoreVolunteerService coreVolunteerService;
-	@Autowired private CoreAdminController coreAdminController;
-	@Autowired private CoreRecruiterController coreRecruiterController;
+	
+	@PutMapping("/init/stage-one")
+	public void createMarketplaceTenantsAndUsers() {
+		createMarketplace();
+		createTenants();
+		createUsers();
+	}
 	
 	/**
 	 * Marketplace / Tenants
@@ -104,6 +107,13 @@ public class CoreInitializationController {
 		subscribeRecruitersToTenant();
 	}
 	
+	@PutMapping("/init/tenant/subscribe/all-except-volunteers")
+	public void subscribeAllToTenantExceptVolunteers() {
+		subscribeHelpseekersToTenant();
+		subscribeAdminsToTenant();
+		subscribeRecruitersToTenant();
+	}
+	
 	@PutMapping("/init/tenant/subscribe/helpseekers")
 	public void subscribeHelpseekersToTenant() {
 		coreHelpSeekerInitializationService.subscribeDefaultHelpseekersToTenants();
@@ -116,19 +126,16 @@ public class CoreInitializationController {
 	
 	@PutMapping("/init/tenant/subscribe/admins")
 	public void subscribeAdminsToTenant() {
-		
-		//TODO
+		coreInitializationService.subscribeAdminsToTenant();
 	}
 	
 	@PutMapping("/init/tenant/subscribe/recruiters")
 	public void subscribeRecruitersToTenant() {
-		
-		//TODO
+		coreInitializationService.subscribedRecruitersToTenant();
 	}
 	
 	@PutMapping("/init/tenant/unsubscribe/all")
 	public void unsubscribeAllFromTenant() {
-		//TODO
 	}
 	
 	@PutMapping("/init/tenant/unsubscribe/helpseekers")
@@ -168,14 +175,12 @@ public class CoreInitializationController {
 	
 	@PutMapping("/init/marketplace/register/admins")
 	public void registerAdminsToMarketplace() {
-		
-		//TODO
+		coreInitializationService.registerAdminsToMarketplace();
 	}
 	
 	@PutMapping("/init/marketplace/register/recruiters")
 	public void registerRecruitersToMarketplace() {
-		
-		//TODO
+		coreInitializationService.registerRecruitersToMarketplace();
 	}
 	
 	@PutMapping("/init/marketplace/unregister/all")
@@ -197,6 +202,8 @@ public class CoreInitializationController {
 	
 	@PutMapping("init/wipe-core") 
 	public void wipeCore() {
+		coreInitializationService.coreUserRepository.deleteAll();
+		coreTenantInitializationService.coreTenantRepository.deleteAll();
 		
 	}
 	

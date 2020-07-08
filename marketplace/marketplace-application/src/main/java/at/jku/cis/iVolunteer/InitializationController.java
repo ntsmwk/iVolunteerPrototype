@@ -22,6 +22,16 @@ public class InitializationController {
 	@Autowired private APIInitializationService apiInitializationService;
 	
 	
+	@PutMapping("/init/add-test-data")
+	public void addTestData() {
+		addAllProperties();
+		addClassConfigurations();
+		addAPIClassDefinitions();
+		addRuleTestConfiguration();
+		addRuleUserData();
+		addFireBrigadeUserMapping();
+	}
+	
 	/**
 	 * Properties
 	 */

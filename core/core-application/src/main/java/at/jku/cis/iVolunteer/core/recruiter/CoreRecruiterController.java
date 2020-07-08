@@ -53,13 +53,13 @@ public class CoreRecruiterController {
 		coreRecruiter.getRegisteredMarketplaces().add(marketplace);
 		coreRecruiter = coreUserRepository.save(coreRecruiter);
 
-		User recruiter = new User();
-		recruiter.setId(coreRecruiter.getId());
-		recruiter.setPosition(coreRecruiter.getPosition());
-		recruiter.setUsername(coreRecruiter.getUsername());
-		recruiter.setFirstname(coreRecruiter.getFirstname());
-		recruiter.setLastname(coreRecruiter.getLastname());
-		recruiter.setMiddlename(coreRecruiter.getMiddlename());
+		User recruiter = new User(coreRecruiter);
+//		recruiter.setId(coreRecruiter.getId());
+//		recruiter.setPosition(coreRecruiter.getPosition());
+//		recruiter.setUsername(coreRecruiter.getUsername());
+//		recruiter.setFirstname(coreRecruiter.getFirstname());
+//		recruiter.setLastname(coreRecruiter.getLastname());
+//		recruiter.setMiddlename(coreRecruiter.getMiddlename());
 
 		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, recruiter);
 	}
