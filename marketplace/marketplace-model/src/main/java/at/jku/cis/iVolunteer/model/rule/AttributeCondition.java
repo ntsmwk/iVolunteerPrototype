@@ -1,14 +1,26 @@
 package at.jku.cis.iVolunteer.model.rule;
 
 import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
+import at.jku.cis.iVolunteer.model.rule.operator.OperatorType;
 
-public class AttributeCondition extends Condition {
+public class AttributeCondition {
 	
 	private String classPropertyId;
 	private Object value;
+	private ComparisonOperatorType operatorType;
+	
+
+	public ComparisonOperatorType getOperatorType() {
+		return operatorType;
+	}
+	
+	public void setOperatorType(ComparisonOperatorType operatorType) {
+		this.operatorType = operatorType;
+	}
+
 	
 	public AttributeCondition(String classPropertyId, Object value, ComparisonOperatorType operator) {
-		super(operator);
+		this.operatorType = operator;
 		this.classPropertyId = classPropertyId;
 		this.value = value;
 	}
@@ -17,8 +29,12 @@ public class AttributeCondition extends Condition {
 		this(classPropertyId, value, null);
 	}
 	
+	public void setOperator(ComparisonOperatorType operator) {
+		this.operatorType = operator;
+	}
+	
 	public AttributeCondition() {
-		super(null);
+		
 	}
 
 	public String getClassPropertyId() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
@@ -26,7 +26,7 @@ import { ClassPropertyService } from "app/main/content/_service/meta/core/proper
 })
 export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   @Input("classCondition") classCondition: ClassCondition;
-  @Output("classCondition") classConditionChange: EventEmitter<
+  @Output("classConditionChange") classConditionChange: EventEmitter<
     ClassCondition
   > = new EventEmitter<ClassCondition>();
 
@@ -61,11 +61,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         (this.classCondition.classDefinition
           ? this.classCondition.classDefinition.id
           : "") || "",
-      aggregationOperatorType: null,
-      //this.classCondition.aggregationOperatorType
-      /**  ||
-        AggregationOperatorType.COUNT, */ value:
-        this.classCondition.value || "",
+      aggregationOperatorType: this.classCondition.aggregationOperatorType 
+         || "" ,
+       value: this.classCondition.value || "",
     });
 
     this.classCondition.attributeConditions = this.classCondition
@@ -99,20 +97,29 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       });
   }
 
-  onClassChange($event) {
-    if (!this.classCondition.classDefinition) {
-      this.classCondition.classDefinition = new ClassDefinition();
+  /*ngOnChanges(changes: SimpleChanges) {
+    console.log('in child changes with: ', changes);
+  }*/
+
+  onClassChange(classDefinition: ClassDefinition, $event) {
+    if ($event.isUserInput){
+      if (!this.classCondition.classDefinition) {
+        this.classCondition.classDefinition = new ClassDefinition();
+      }
+      this.classCondition.classDefinition = classDefinition;
+      this.classCondition.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
+        (t) => t.role === UserRole.HELP_SEEKER
+      ).tenantId;
+      this.classConditionChange.emit(this.classCondition);
     }
-    this.classCondition.classDefinition.id = $event.source.value;
-    this.classCondition.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
-      (t) => t.role === UserRole.HELP_SEEKER
-    ).tenantId;
   }
 
-  onOperatorChange(aggregationOperatorType, $event) {
+  onOperatorChange(aggregationOperatorType: AggregationOperatorType, $event) {
     if ($event.isUserInput) {
       // ignore on deselection of the previous option
       this.classCondition.aggregationOperatorType = aggregationOperatorType;
+      this.rulePreconditionForm.value.aggregationoperator = aggregationOperatorType;
+      this.classConditionChange.emit(this.classCondition);
     }
   }
 
@@ -122,15 +129,14 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         (cd) => cd.id === this.rulePreconditionForm.value.classDefinitionId
       );
     }
-    this.classCondition.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
     this.classCondition.value = this.rulePreconditionForm.value.value;
-    this.classConditionChange.emit(this.classCondition);
   }
 
   addAttributeCondition() {
     this.classCondition.attributeConditions.push(
       new AttributeCondition(this.classCondition.classDefinition)
     );
+    this.classConditionChange.emit(this.classCondition);
   }
 
   private retrieveAggregationOperatorValueOf(op) {

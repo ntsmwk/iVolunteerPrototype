@@ -6,7 +6,7 @@ import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.serv
 import { LoginService } from "../../../../_service/login.service";
 import { fuseAnimations } from "@fuse/animations";
 import { isNullOrUndefined } from "util";
-import { DerivationRule } from "../../../../_model/derivation-rule";
+import { DerivationRule, ComparisonOperatorType, AggregationOperatorType } from "../../../../_model/derivation-rule";
 import { DerivationRuleService } from "../../../../_service/derivation-rule.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { HelpSeekerGuard } from "app/main/content/_guard/help-seeker.guard";
@@ -22,7 +22,7 @@ import { User, UserRole } from "app/main/content/_model/user";
 export class FuseRuleOverviewComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<DerivationRule>();
-  displayedColumns = ["name", "sources", "target"];
+  displayedColumns = ["name", "sourcesGeneral", "sourcesClasses", "target"];
   helpseeker: User;
   tenant: Tenant;
 
@@ -39,6 +39,7 @@ export class FuseRuleOverviewComponent implements OnInit {
   }
 
   onRowSelect(derivationRule: DerivationRule) {
+    console.log("row selected: " + derivationRule.id);
     this.router.navigate(["/main/rule/" + derivationRule.id]);
   }
 
@@ -61,13 +62,27 @@ export class FuseRuleOverviewComponent implements OnInit {
         .toPromise()
     );
 
-    //this.derivationRuleService XXX To do
-    //  .findAll(this.marketplace, this.helpseeker.tenantId)
-    //  .toPromise()
-    //  .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
+    this.derivationRuleService
+      .findAll(this.marketplace, this.helpseeker.subscribedTenants.find(
+        (t) => t.role === UserRole.HELP_SEEKER
+      ).tenantId)
+      .toPromise()
+      .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
   }
 
   addDerivationRule() {
     this.router.navigate(["/main/rule"]);
+  }
+
+  private retrieveComparisonOperatorValueOf(op) {
+    let x: ComparisonOperatorType =
+      ComparisonOperatorType[op as keyof typeof ComparisonOperatorType];
+    return x;
+  }
+
+  private retrieveAggregationOperatorValueOf(op) {
+    let x: AggregationOperatorType =
+      AggregationOperatorType[op as keyof typeof AggregationOperatorType];
+    return x;
   }
 }

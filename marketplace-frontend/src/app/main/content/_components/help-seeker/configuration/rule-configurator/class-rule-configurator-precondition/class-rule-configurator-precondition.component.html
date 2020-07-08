@@ -5,7 +5,7 @@
             <mat-label>Benötigter Freiwillenpasseintrag</mat-label>
             <mat-select formControlName="classDefinitionId" [value]="classCondition.classDefinition?.id">
                 <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
-                    (onSelectionChange)="onClassChange($event)"> {{cd.name}} </mat-option>
+                    (onSelectionChange)="onClassChange(cd, $event)"> {{cd.name}} </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field style="width: 115px">

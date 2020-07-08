@@ -34,7 +34,7 @@ var output = console.log;
 export class GeneralPreconditionConfiguratorComponent implements OnInit {
   @Input("generalCondition")
   generalCondition: GeneralCondition;
-  @Output("GeneralCondition")
+  @Output("generalConditionChange")
   generalConditionChange: EventEmitter<GeneralCondition> = new EventEmitter<
     GeneralCondition
   >();
@@ -108,14 +108,15 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     }
     this.generalCondition.propertyDefinition.id = $event.source.value;
     this.rulePreconditionForm.value.propertyDefinitionId = $event.source.value;
-    this.onChange($event);
+    this.generalConditionChange.emit();  
   }
 
   onOperatorChange(comparisonOperatorType, $event) {
     if ($event.isUserInput) {
       // ignore on deselection of the previous option
       this.generalCondition.comparisonOperatorType = comparisonOperatorType;
-    }
+    }  
+    this.generalConditionChange.emit(comparisonOperatorType);  
   }
 
   onChange($event) {

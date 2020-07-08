@@ -32,6 +32,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   derivationRule: DerivationRule;
 
   testConditions = false;
+  showSuccessMsg = false;
+  deactivateSubmit = false;
   ruleExecutions: RuleExecution[];
 
   classDefinitions: ClassDefinition[] = [];
@@ -40,6 +42,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private formBuilder: FormBuilder,
@@ -62,9 +65,10 @@ export class FuseRuleConfiguratorComponent implements OnInit {
         .toPromise()
     );
 
-    this.route.params.subscribe((params) =>
-      this.loadDerivationRule(this.marketplace, params["ruleId"])
-    );
+    this.route.params.subscribe((params) => {
+      this.loadDerivationRule(this.marketplace, params["ruleId"]);
+    });
+
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
         .getAllClassDefinitionsWithoutHeadAndEnums(
@@ -90,12 +94,9 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
     if (ruleId) {
       this.derivationRuleService
-        .findByIdAndTenantId(
+        .findById(
           marketplace,
-          ruleId,
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ruleId
         )
         .toPromise()
         .then((rule: DerivationRule) => {
@@ -105,6 +106,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             name: this.derivationRule.name,
           });
         });
+        this.deactivateSubmit = true;
     } else {
       // init derivation rule
       this.derivationRule = new DerivationRule();
@@ -115,7 +117,39 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     }
   }
 
-  test() {
+  private loadDerivationRuleByName(marketplace: Marketplace, tenantId: string, container: string, ruleName: string){
+    this.derivationRuleService
+        .findByContainerAndName(marketplace, tenantId, container, ruleName)
+        .toPromise()
+        .then((rule: DerivationRule) => {
+          this.derivationRule = rule;
+          this.router.navigate(["/main/rule/" + this.derivationRule.id]);
+          this.ruleForm.setValue({
+            id: this.derivationRule.id,
+            name: this.derivationRule.name,
+          });
+        });
+  }
+
+  private initDerivationRule(){
+    this.derivationRule = new DerivationRule();
+      this.derivationRule.generalConditions = new Array();
+      this.derivationRule.classActions = new Array();
+      this.derivationRule.classActions.push(
+        new ClassAction(null)
+      );
+      this.derivationRule.conditions = new Array();
+  }
+
+  onChangeClassCondition(classCondition: ClassCondition){
+    this.deactivateSubmit = false;
+  }
+
+  onChangeClassAction(classAction: ClassAction){
+    // XXX still to do
+  }
+
+  test(){
     this.testConditions = true;
     this.derivationRule.name = this.ruleForm.value.name;
     this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
@@ -126,6 +160,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   save() {
+    console.log(this.ruleForm.value.name);
+    console.log(this.derivationRule.classActions[0].classDefinition);
     if (
       this.ruleForm.value.name &&
       this.derivationRule.classActions[0].classDefinition
@@ -139,12 +175,20 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       this.derivationRuleService
         .save(this.marketplace, this.derivationRule)
         .toPromise()
-        .then(() =>
-          this.loadDerivationRule(this.marketplace, this.derivationRule.id)
+        .then(() => {
+            this.showSuccessMsg = true;
+              if (this.derivationRule.id){
+                this.loadDerivationRule(this.marketplace, this.derivationRule.id);
+              } else {
+                this.loadDerivationRuleByName(this.marketplace, 
+                                              this.derivationRule.tenantId, 
+                                              this.derivationRule.container,
+                                              this.derivationRule.name);
+              }
+           }
         );
     }
-    this.ruleForm.reset;
-    this.ruleForm.value.name = "";
+    this.ruleForm.reset();
     this.testConditions = false;
   }
 
@@ -152,19 +196,28 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     window.history.back();
   }
 
-  onChange($event) {
-    this.testConditions = false;
+  onChange($event){
+    console.log("on change rule-configurator!!!");
+    this.testConditions = false; 
+    this.deactivateSubmit = false;
   }
 
   onChangeName() {
-    this.derivationRule.name = this.ruleForm.value.name;
+      this.derivationRule.name = this.ruleForm.value.name;
+      this.deactivateSubmit = false;
   }
 
   addGeneralCondition() {
-    this.derivationRule.generalConditions.push(new GeneralCondition());
+    this.derivationRule.generalConditions.push(
+      new GeneralCondition()
+    );
+    this.deactivateSubmit = false;
   }
 
   addClassCondition() {
-    this.derivationRule.conditions.push(new ClassCondition());
+    this.derivationRule.conditions.push(
+      new ClassCondition()
+      );
+    this.deactivateSubmit = false;
   }
 }

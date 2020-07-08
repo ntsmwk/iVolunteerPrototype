@@ -13,7 +13,7 @@ import {
   ClassAction,
 } from "app/main/content/_model/derivation-rule";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { ClassDefinition } from "app/main/content/_model/meta/class";
+import { ClassDefinition, ClassArchetype } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
@@ -26,7 +26,7 @@ import { User, UserRole } from "app/main/content/_model/user";
 })
 export class TargetRuleConfiguratorComponent implements OnInit {
   @Input("classAction") classAction: ClassAction;
-  @Output("classAction") classActionChange: EventEmitter<
+  @Output("classActionChange") classActionChange: EventEmitter<
     ClassAction
   > = new EventEmitter<ClassAction>();
 
@@ -36,6 +36,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
   ruleActionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
+  initialized: boolean = false;
 
   classDefinitionCache: ClassDefinition[] = [];
 
@@ -83,6 +84,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
               });
           });
       });
+      this.initialized = true;
   }
 
   addTargetAttribute() {
@@ -93,13 +95,37 @@ export class TargetRuleConfiguratorComponent implements OnInit {
 
   onTargetChange(classDefinition, $event) {
     if ($event.isUserInput) {
-      if (this.classDefinitions.length > 0) {
+      if (this.classDefinitions.length > 0 && 
+          (!this.classAction.classDefinition || 
+          (this.classAction.classDefinition &&
+           this.classAction.classDefinition.id != classDefinition.id))) {
         this.classAction.classDefinition = this.classDefinitions.find(
           (cd) => cd.id === this.ruleActionForm.value.classDefinitionId
         );
+        this.classAction.classDefinition = classDefinition;
+        this.classAction.attributes = new Array();
+        this.classActionChange.emit(this.classAction);
       }
-      this.classAction.classDefinition = classDefinition;
-      this.classActionChange.emit(this.classAction);
     }
+  }
+
+  private retrieveClassType(classArchetype: ClassArchetype){
+    switch(classArchetype) { 
+      case ClassArchetype.COMPETENCE: { 
+         return "Kompetenz"; 
+      } 
+      case ClassArchetype.ACHIEVEMENT: { 
+         return "Verdienst"
+      } 
+      case ClassArchetype.FUNCTION: { 
+        return "Funktion"
+     } 
+     case ClassArchetype.TASK: { 
+        return "Tätigkeit"
+    } 
+      default: { 
+         return ""; 
+      } 
+   } 
   }
 }

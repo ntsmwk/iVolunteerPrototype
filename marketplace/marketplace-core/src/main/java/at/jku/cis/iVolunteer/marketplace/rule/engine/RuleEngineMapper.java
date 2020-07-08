@@ -82,11 +82,11 @@ public class RuleEngineMapper {
 	private String lhs(DerivationRule derivationRule) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("when\r\n");
-		stringBuilder.append(newPattern("v", "Volunteer"));
+		stringBuilder.append(newPattern("v", "User"));
 		stringBuilder.append(newPattern("t", "Tenant"));
 		stringBuilder.append(newPattern("re", "RuleExecution"));
 		//
-		stringBuilder.append(newPattern("vs", "VolunteerService", true));
+		stringBuilder.append(newPattern("vs", "UserService", true));
 
 		for (int i = 0; i < derivationRule.getGeneralConditions().size(); i++) {
 			GeneralCondition genCond = derivationRule.getGeneralConditions().get(i);

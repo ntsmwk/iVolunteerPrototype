@@ -126,7 +126,7 @@ public class StandardPropertyDefinitions {
 		list.add(new LetzteWartungProperty(tenantId));
 		list.add(new WartungsintervallProperty(tenantId));
 
-		list.add(new BandbreiteProperty(tenantId));
+		list.add(new BandBreiteProperty(tenantId));
 		list.add(new BandstaerkeProperty(tenantId));
 
 		list.add(new WarmgewalztProperty(tenantId));
@@ -177,7 +177,6 @@ public class StandardPropertyDefinitions {
 		list.add(new VerpackungsvorgabenProperty(tenantId));
 		
 		list.add(new BandDickeProperty(tenantId));
-		list.add(new BandBreiteProperty(tenantId));
 		
 		list.add(new DurchmesserKronenstockProperty(tenantId));
 		list.add(new MaximaldurchmesserBundProperty(tenantId));
@@ -876,14 +875,6 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 			this.setId("wartungsintervall");
 			this.setName("Wartungsintervall");
-		}
-	}
-
-	public static class BandbreiteProperty extends LongPropertyDefinition {
-		public BandbreiteProperty(String tenantId) {
-			this.setTenantId(tenantId);
-			this.setId("bandbreite");
-			this.setName("Bandbreite");
 		}
 	}
 

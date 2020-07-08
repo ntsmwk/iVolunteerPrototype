@@ -33,7 +33,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   implements OnInit {
   @Input("attributeCondition")
   attributeCondition: AttributeCondition;
-  @Output("attributeCondition")
+  @Output("attributeConditionChange")
   attributeConditionChange: EventEmitter<AttributeCondition> = new EventEmitter<
     AttributeCondition
   >();
@@ -108,13 +108,23 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       });
   }
 
-  onPropertyChange($event) {
-    if (!this.attributeCondition.classProperty) {
-      this.attributeCondition.classProperty = new ClassProperty();
+  onPropertyChange(classProperty: ClassProperty<any>, $event) {
+    if ($event.isUserInput && 
+        (!this.attributeCondition.classProperty ||
+         (this.attributeCondition.classProperty.id != classProperty.id))) {
+      this.initAttributeCondition();
+      this.attributeCondition.classProperty = classProperty;
+      this.attributeConditionChange.emit(this.attributeCondition);
     }
-    this.attributeCondition.classProperty.id = $event.source.value;
-    this.rulePreconditionForm.value.classPropertyId = $event.source.value;
-    this.onChange($event);
+    // this.attributeCondition.classProperty.id = $event.source.value;
+    // this.rulePreconditionForm.value.classPropertyId = $event.source.value;
+  }
+
+  private initAttributeCondition(){
+    this.attributeCondition.classProperty = new ClassProperty();
+    this.attributeCondition.comparisonOperatorType = ComparisonOperatorType.EQ;
+    this.attributeCondition.value = undefined;
+    this.rulePreconditionForm.reset();
   }
 
   private loadClassProperties($event) {
@@ -168,7 +178,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
   onChange($event) {
     console.log("change values in attribute, yay!");
-    if (this.classProperties.length > 0) {
+    if (this.classProperties.length > 0 ) {
       this.attributeCondition.classProperty =
         this.classProperties.find(
           (cp) => cp.id === this.rulePreconditionForm.value.classPropertyId

@@ -147,6 +147,7 @@ public class TestDataClasses {
 
 		createGeneralClasses(classConfigFF);
 		createGeneralCompetences(classConfigFF);
+		createProperties(classConfigFF);
 
 		this.classConfigurationController.saveClassConfiguration(classConfigFF);
 
@@ -161,6 +162,7 @@ public class TestDataClasses {
 
 		createGeneralClasses(classConfigRK);
 		createGeneralCompetences(classConfigRK);
+		createProperties(classConfigRK);
 
 		createClassCertificatesRK(classConfigRK);
 		createClassTasksRK(classConfigRK);
@@ -234,6 +236,17 @@ public class TestDataClasses {
 		createRandomCompetences(classConfig);
 	}
 
+	public void createProperties(ClassConfiguration classConfig) {
+		if (propertyDefinitionRepository.getByNameAndTenantId("Alter", classConfig.getTenantId()).size() == 0) {
+			PropertyDefinition<Object> pdAlter = new PropertyDefinition<Object>();
+			pdAlter.setTenantId(classConfig.getTenantId());
+			pdAlter.setMarketplaceId(classConfig.getMarketplaceId());
+			pdAlter.setType(PropertyType.WHOLE_NUMBER);
+			pdAlter.setName("Alter");
+			propertyDefinitionRepository.save(pdAlter);
+		}
+	}
+	
 	protected void deleteInstances(User volunteer, String tenantId, String className) {
 		// System.out.println("Volunteer: " + volunteer + " tenant: " + tenantId + "
 		// className " + className);
@@ -453,6 +466,7 @@ public class TestDataClasses {
 	protected ClassDefinition createDrivingCompetence(String tenantId) {
 		CompetenceClassDefinition compClass = (CompetenceClassDefinition) classDefinitionRepository
 				.findByNameAndTenantId("Kompetenz", tenantId);
+
 		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
 		c1.setName(COMPETENCE_DRIVING);
 		c1.setClassArchetype(ClassArchetype.COMPETENCE);

@@ -27,10 +27,20 @@ public class DerivationRuleController {
 	public List<DerivationRuleDTO> getRules(@PathVariable String tenantId) {
 		return derivationRuleService.getRules(tenantId);
 	}
+	
+	@GetMapping("/{ruleId}")
+	public DerivationRuleDTO getRule(@PathVariable String ruleId) {
+		System.out.println(" get rule by id");
+		return derivationRuleService.getRule(ruleId);
+	}
 
-	@GetMapping("/{ruleId}/tenant/{tenantId}")
-	public DerivationRuleDTO getRule(@PathVariable String ruleId, @PathVariable String tenantId) {
-		return derivationRuleService.getRule(ruleId, tenantId);
+	@GetMapping("/tenant/{tenantId}/container/{container}/rule/{ruleName}")
+	public DerivationRuleDTO getRule(@PathVariable String tenantId, @PathVariable String container, @PathVariable String ruleName) {
+		System.out.println("getRule - tenantId: " + tenantId + ", container: " + container + ", ruleName: " + ruleName);
+		DerivationRuleDTO dto = derivationRuleService.getRuleByContainerAndName(tenantId, container, ruleName);
+		System.out.println(" -------------------------------------------------------------------");
+		System.out.println(" ruleId: " + dto.getId());
+		return dto;
 	}
 
 	@PostMapping
@@ -45,6 +55,7 @@ public class DerivationRuleController {
 
 	@PutMapping("/{ruleId}")
 	public void updateRule(@PathVariable String ruleId, @RequestBody DerivationRuleDTO derivationRule) {
+		System.out.println("update rule???????");
 		derivationRuleService.updateRule(ruleId, derivationRule);
 	}
 	
