@@ -147,7 +147,7 @@ public class InitializationController {
 	}
 
 	
-	@DeleteMapping("/init/wipe-marketplace")
+	@PutMapping("/init/wipe-marketplace")
 	public void wipeMarketplace() {
 		deleteClassConfigurations();
 		deleteClassDefinitions();
@@ -155,6 +155,7 @@ public class InitializationController {
 		deleteClassInstances();
 		deleteProperties();
 		deleteMarketplaceUsers();
+		
 		
 	}
 	

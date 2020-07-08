@@ -82,9 +82,10 @@ public class CoreInitializationService {
 	
 	protected void subscribedRecruitersToTenant() {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
-		recruiter.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.RECRUITER)));
-		coreUserRepository.save(recruiter);
+		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
+//		recruiter.setSubscribedTenants(
+//				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
+//		coreUserRepository.save(recruiter);
 	}
 	
 	protected void registerRecruitersToMarketplace() {
@@ -113,9 +114,10 @@ public class CoreInitializationService {
 		
 	protected void subscribeAdminsToTenant() {
 		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
-		admin.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.ADMIN)));
-		coreUserRepository.save(admin);
+		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
+//		admin.setSubscribedTenants(
+//				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
+//		coreUserRepository.save(admin);
 	}
 	
 	protected void registerAdminsToMarketplace() {
