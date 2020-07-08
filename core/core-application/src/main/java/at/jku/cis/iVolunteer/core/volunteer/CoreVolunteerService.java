@@ -53,8 +53,8 @@ public class CoreVolunteerService {
 	}
 
 	private CoreUser updateCoreVolunteer(CoreUser coreVolunteer, Marketplace marketplace, List<Tenant> tenants) {
-		if (!coreVolunteer.getRegisteredMarketplaces().contains(marketplace)) {
-			coreVolunteer.getRegisteredMarketplaces().add(marketplace);
+		if (!coreVolunteer.getRegisteredMarketplaceIds().contains(marketplace.getId())) {
+			coreVolunteer.getRegisteredMarketplaceIds().add(marketplace.getId());
 		}
 
 		List<TenantUserSubscription> newSubscriptions = new ArrayList<>();

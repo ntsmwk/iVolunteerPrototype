@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -18,6 +19,8 @@ public class GlobalController {
 	private CoreLoginService loginService;
 	@Autowired
 	private TenantService tenantService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
 
 	@GetMapping("/global")
 	public GlobalInfo getGlobalInfo() {
@@ -27,9 +30,10 @@ public class GlobalController {
 		globalInfo.setUserRole(loginService.getLoggedInUserRole());
 
 		CoreUser coreUser = (CoreUser) globalInfo.getUser();
-		List<Marketplace> registeredMarketplaces = coreUser.getRegisteredMarketplaces();
-		if (registeredMarketplaces.size() > 0) {
-			globalInfo.setMarketplace(registeredMarketplaces.get(0));
+
+		List<String> registeredMarketplaceIds = coreUser.getRegisteredMarketplaceIds();
+		if (registeredMarketplaceIds.size() > 0) {
+			globalInfo.setMarketplace(this.marketplaceRepository.findOne(registeredMarketplaceIds.get(0)));
 		}
 
 		globalInfo.setTenants(this.tenantService.getTenantsByUser(coreUser.getId()));

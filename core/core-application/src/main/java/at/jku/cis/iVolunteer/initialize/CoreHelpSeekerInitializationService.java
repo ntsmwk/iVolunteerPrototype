@@ -87,7 +87,8 @@ public class CoreHelpSeekerInitializationService {
 
 		// TODO: needs change later on, works for now, since there is only one
 		// marketplace
-		Marketplace mp = ffUser.getRegisteredMarketplaces().stream().findFirst().orElse(null);
+		Marketplace mp = this.marketplaceRepository
+				.findOne(ffUser.getRegisteredMarketplaceIds().stream().findFirst().orElse(null));
 
 		ffUser.setSubscribedTenants(
 				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdFF, UserRole.HELP_SEEKER)));

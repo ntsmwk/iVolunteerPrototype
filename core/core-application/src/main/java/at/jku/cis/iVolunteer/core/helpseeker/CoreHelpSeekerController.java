@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -26,6 +27,8 @@ public class CoreHelpSeekerController {
 
 	@Autowired
 	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
 	@Autowired
 	private CoreHelpSeekerService coreHelpSeekerService;
 	@Autowired
@@ -55,10 +58,10 @@ public class CoreHelpSeekerController {
 	@GetMapping("/{coreHelpSeekerId}/marketplace")
 	public Marketplace getRegisteredMarketplaces(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
 		CoreUser helpSeeker = coreUserRepository.findOne(coreHelpSeekerId);
-		if (helpSeeker.getRegisteredMarketplaces().isEmpty()) {
+		if (helpSeeker.getRegisteredMarketplaceIds().isEmpty()) {
 			return null;
 		}
-		return helpSeeker.getRegisteredMarketplaces().get(0);
+		return this.marketplaceRepository.findOne(helpSeeker.getRegisteredMarketplaceIds().get(0));
 	}
 
 	@PostMapping("/{coreHelpSeekerId}/register/{marketplaceId}/tenant/{tenantId}")

@@ -98,7 +98,8 @@ public class CoreVolunteerInitializationService {
 			setImage(fileName, volunteer);
 
 			// TODO
-			volunteer.setRegisteredMarketplaces(marketplaceRepository.findAll());
+			volunteer.setRegisteredMarketplaceIds(
+					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
 			volunteer = coreUserRepository.insert(volunteer);
 

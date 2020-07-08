@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { GlobalInfo } from "../_model/global-info";
 
 import { Observable } from "rxjs";
+import { User } from "../_model/user";
 
 @Injectable({ providedIn: "root" })
 export class GlobalService {

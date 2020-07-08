@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.core.volunteer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -27,6 +29,8 @@ public class CoreVolunteerController {
 	private CoreUserRepository coreUserRepository;
 	@Autowired
 	private CoreVolunteerService coreVolunteerService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
 	@Autowired
 	private CoreUserService coreUserService;
 
@@ -48,7 +52,12 @@ public class CoreVolunteerController {
 	@GetMapping("/{volunteerId}/marketplaces")
 	public List<Marketplace> getRegisteredMarketplaces(@PathVariable("volunteerId") String volunteerId) {
 		CoreUser volunteer = coreUserRepository.findOne(volunteerId);
-		return volunteer.getRegisteredMarketplaces();
+
+		List<Marketplace> marketplaces = new ArrayList<>();
+		volunteer.getRegisteredMarketplaceIds().forEach(id -> {
+			marketplaces.add(this.marketplaceRepository.findOne(id));
+		});
+		return marketplaces;
 	}
 
 	@PutMapping("/{volunteerId}")

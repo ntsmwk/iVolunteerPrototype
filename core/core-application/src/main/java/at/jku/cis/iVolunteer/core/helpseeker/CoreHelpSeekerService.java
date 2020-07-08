@@ -58,7 +58,7 @@ public class CoreHelpSeekerService {
 	}
 
 	private CoreUser updateCoreHelpSeeker(String tenantId, CoreUser coreHelpSeeker, Marketplace marketplace) {
-		coreHelpSeeker.getRegisteredMarketplaces().add(marketplace);
+		coreHelpSeeker.getRegisteredMarketplaceIds().add(marketplace.getId());
 		coreHelpSeeker.setSubscribedTenants(Collections
 				.singletonList(new TenantUserSubscription(marketplace.getId(), tenantId, UserRole.HELP_SEEKER)));
 

@@ -1,5 +1,8 @@
 package at.jku.cis.iVolunteer.core.recruiter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +38,11 @@ public class CoreRecruiterController {
 	@GetMapping("/{coreRecruiterId}/marketplace")
 	public Marketplace getRegisteredMarketplaces(@PathVariable("coreRecruiterId") String coreRecruiterId) {
 		CoreUser coreRecruiter = coreUserRepository.findOne(coreRecruiterId);
-		if (coreRecruiter.getRegisteredMarketplaces().isEmpty()) {
+		if (coreRecruiter.getRegisteredMarketplaceIds().isEmpty()) {
 			return null;
 		}
-		return coreRecruiter.getRegisteredMarketplaces().get(0);
+
+		return this.marketplaceRepository.findOne(coreRecruiter.getRegisteredMarketplaceIds().get(0));
 	}
 
 	@PostMapping("/{coreRecruiterId}/register/{marketplaceId}")
@@ -50,16 +54,16 @@ public class CoreRecruiterController {
 			throw new NotFoundException();
 		}
 
-		coreRecruiter.getRegisteredMarketplaces().add(marketplace);
+		coreRecruiter.getRegisteredMarketplaceIds().add(marketplace.getId());
 		coreRecruiter = coreUserRepository.save(coreRecruiter);
 
 		User recruiter = new User(coreRecruiter);
-//		recruiter.setId(coreRecruiter.getId());
-//		recruiter.setPosition(coreRecruiter.getPosition());
-//		recruiter.setUsername(coreRecruiter.getUsername());
-//		recruiter.setFirstname(coreRecruiter.getFirstname());
-//		recruiter.setLastname(coreRecruiter.getLastname());
-//		recruiter.setMiddlename(coreRecruiter.getMiddlename());
+		// recruiter.setId(coreRecruiter.getId());
+		// recruiter.setPosition(coreRecruiter.getPosition());
+		// recruiter.setUsername(coreRecruiter.getUsername());
+		// recruiter.setFirstname(coreRecruiter.getFirstname());
+		// recruiter.setLastname(coreRecruiter.getLastname());
+		// recruiter.setMiddlename(coreRecruiter.getMiddlename());
 
 		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, recruiter);
 	}
