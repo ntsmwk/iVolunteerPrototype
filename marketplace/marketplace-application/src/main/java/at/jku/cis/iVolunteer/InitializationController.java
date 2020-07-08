@@ -32,6 +32,15 @@ public class InitializationController {
 //		addRuleUserData();
 	}
 	
+	@PutMapping("/init/add-rule-test-data")
+	public void addRuleTestData() {
+		addFireBrigadeUserMapping();
+		addAllProperties();
+		addAPIClassDefinitions();
+		addRuleTestConfiguration();
+		addRuleUserData();
+	}
+	
 	/**
 	 * Properties
 	 */
