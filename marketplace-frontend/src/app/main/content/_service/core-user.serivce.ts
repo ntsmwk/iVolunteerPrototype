@@ -5,7 +5,7 @@ import {
   HttpClient
 } from "@angular/common/http";
 import {
-  User
+  User, UserRole
 } from "../_model/user";
 
 @Injectable({ providedIn: "root", }) export class CoreUserService {
@@ -16,26 +16,39 @@ import {
   }
 
   findAllByTenantId(tenantId: string) {
-    return this.http.get(`/core/volunteer/all / ${tenantId}`);
+    return this.http.get(`/core/user/all/tenant/${tenantId}`);
   }
 
-  findById(volunteerId: string) {
-    return this.http.get(`/core/volunteer / ${volunteerId}`);
+  findAllByRole(role: UserRole) {
+    return this.http.get(`/core/user/all/role/${role}`);
   }
 
-  findRegisteredMarketplaces(volunteerId: string) {
-    return this.http.get(`/core/volunteer / ${volunteerId}/marketplaces`);
+  findAllByRoleAndTenantId(tenantId: string, role: UserRole) {
+    return this.http.get(`/core/user/all/role/${role}/tenant/${tenantId}`);
   }
 
-  updateVolunteer(volunteer: User) {
-    return this.http.put(`/core/volunteer / ${volunteer.id}`, volunteer);
+  findById(userId: string) {
+    return this.http.get(`/core/user/${userId}`);
   }
 
-  subscribeTenant(volunteerId: string, marketplaceId: string, tenantId: string) {
-    return this.http.post(`/core/volunteer / ${volunteerId}/subscribe/${marketplaceId}/tenant/${tenantId}`, {});
+  findRegisteredMarketplaces(userId: string) {
+    return this.http.get(`/core/user/${userId}/marketplaces`);
   }
 
-  unsubscribeTenant(volunteerId: string, marketplaceId: string, tenantId: string) {
-    return this.http.post(`/core/volunteer / ${volunteerId}/unsubscribe/${marketplaceId}/tenant/${tenantId}`, {});
+  createUser(user: User) {
+    return this.http.put(`/core/user/new`, user);
+
+  }
+
+  updateUser(user: User) {
+    return this.http.put(`/core/user/update`, user);
+  }
+
+  subscribeUserToTenant(volunteerId: string, marketplaceId: string, tenantId: string) {
+    return this.http.post(`/core/user/${volunteerId}/subscribe/${marketplaceId}/${tenantId}`, {});
+  }
+
+  unsubscribeUserFromTenant(volunteerId: string, marketplaceId: string, tenantId: string) {
+    return this.http.post(`/core/volunteer / ${volunteerId}/unsubscribe/${marketplaceId}/${tenantId}`, {});
   }
 }
