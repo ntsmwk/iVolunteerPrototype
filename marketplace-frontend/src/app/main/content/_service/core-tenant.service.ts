@@ -7,7 +7,7 @@ import { ImageService } from "./image.service";
   providedIn: "root",
 })
 export class TenantService {
-  constructor(private http: HttpClient, private imageService: ImageService) {}
+  constructor(private http: HttpClient, private imageService: ImageService) { }
 
   findAll() {
     return this.http.get(`/core/tenant`);

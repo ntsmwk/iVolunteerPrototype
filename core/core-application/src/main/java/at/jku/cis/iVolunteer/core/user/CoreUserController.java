@@ -32,12 +32,13 @@ public class CoreUserController {
 	@Autowired
 	private CoreUserService coreUserService;
 
+	
 
-	@GetMapping("/all")
-	public List<CoreUser> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId) {
-		return coreUserService.getCoreUsersByRoleAndSubscribedTenants(UserRole.HELP_SEEKER, tenantId);
-
-	}
+//	@GetMapping("/all")
+//	public List<CoreUser> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId @RequestParam(value="")) {
+//		return coreUserService.getCoreUsersByRoleAndSubscribedTenants(UserRole.HELP_SEEKER, tenantId);
+//
+//	}
 
 	@PutMapping("/find-by-ids")
 	public List<CoreUser> getAllCoreVolunteers(@RequestBody List<String> coreHelpseekerIds) {
@@ -68,7 +69,7 @@ public class CoreUserController {
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@RequestHeader("Authorization") String authorization) {
 
-		coreHelpSeekerService.registerMarketplace(coreHelpSeekerId, marketplaceId, tenantId, authorization);
+//		coreHelpSeekerService.registerMarketplace(coreHelpSeekerId, marketplaceId, tenantId, authorization);
 
 	}
 

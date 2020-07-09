@@ -1,39 +1,38 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
-import { ClassInstanceDTO, ClassArchetype } from "../../../_model/meta/class";
-import { SelectionModel } from "@angular/cdk/collections";
-import { Marketplace } from "../../../_model/marketplace";
 
-import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
-import { CoreVolunteerService } from "../../../_service/core-volunteer.service";
-import { CoreUserImagePathService } from "../../../_service/core-user-imagepath.service";
-import { isNullOrUndefined } from "util";
-import { User } from "app/main/content/_model/user";
+import { isNullOrUndefined } from 'util';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { ClassInstanceDTO, ClassArchetype } from 'app/main/content/_model/meta/class';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { User } from 'app/main/content/_model/user';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
 
 @Component({
   selector: "app-asset-inbox",
-  templateUrl: "./asset-inbox.component.html",
-  styleUrls: ["./asset-inbox.component.scss"],
+  templateUrl: './asset-inbox.component.html',
+  styleUrls: ['./asset-inbox.component.scss'],
 })
 export class AssetInboxComponent implements OnInit {
-  output = "";
+  output = '';
   submitPressed: boolean;
 
   datasource = new MatTableDataSource<ClassInstanceDTO>();
   displayedColumns;
   displayedColumnsVolunteer = [
-    "checkboxes",
-    "label",
-    "archetype",
-    "issuer",
-    "date",
+    'checkboxes',
+    'label',
+    'archetype',
+    'issuer',
+    'date',
   ];
   displayedColumnsHelpseeker = [
-    "checkboxes",
-    "label",
-    "archetype",
-    "user",
-    "date",
+    'checkboxes',
+    'label',
+    'archetype',
+    'user',
+    'date',
   ];
 
   selection = new SelectionModel<ClassInstanceDTO>(true, []);
@@ -50,8 +49,7 @@ export class AssetInboxComponent implements OnInit {
   constructor(
     private helpseekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
-    private userImagePathService: CoreUserImagePathService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (!isNullOrUndefined(this.classInstanceDTOs)) {
@@ -81,7 +79,7 @@ export class AssetInboxComponent implements OnInit {
       this.classInstanceDTOs = [];
     }
 
-    if (this.inboxOwner === "volunteer") {
+    if (this.inboxOwner === 'volunteer') {
       this.displayedColumns = this.displayedColumnsVolunteer;
     } else {
       this.displayedColumns = this.displayedColumnsHelpseeker;
@@ -107,7 +105,7 @@ export class AssetInboxComponent implements OnInit {
     console.log(this.selection);
     if (
       !this.selection.isEmpty() ||
-      this.inboxOwner === "helpseeker-dashboard"
+      this.inboxOwner === 'helpseeker-dashboard'
     ) {
       this.submit.emit(this.selection.selected);
     }
@@ -115,21 +113,21 @@ export class AssetInboxComponent implements OnInit {
 
   getDateString(dateNumber: number) {
     const date = new Date(dateNumber);
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
   }
 
   getNameForEntry(personId: string, type: string) {
     let person: User;
-    if (type === "issuer") {
+    if (type === 'issuer') {
       person = this.issuers.find((i) => i.id === personId);
     } else {
       person = this.volunteers.find((i) => i.id === personId);
     }
     if (isNullOrUndefined(person)) {
-      return "";
+      return '';
     }
 
-    return person.firstname + " " + person.lastname;
+    return person.firstname + ' ' + person.lastname;
   }
 
   getIssuerPositionForEntry(personId: string) {
@@ -139,15 +137,15 @@ export class AssetInboxComponent implements OnInit {
       isNullOrUndefined(helpseeker) ||
       isNullOrUndefined(helpseeker.position)
     ) {
-      return "";
+      return '';
     } else {
-      return "(" + helpseeker.position + ")";
+      return '(' + helpseeker.position + ')';
     }
   }
 
   findNameProperty(entry: ClassInstanceDTO) {
     if (isNullOrUndefined(entry.name)) {
-      return "";
+      return '';
     } else {
       return entry.name;
     }
@@ -155,7 +153,7 @@ export class AssetInboxComponent implements OnInit {
 
   getImagePathById(id: string) {
     if (isNullOrUndefined(this.userImagePaths)) {
-      return "/assets/images/avatars/profile.jpg";
+      return '/assets/images/avatars/profile.jpg';
     }
 
     const ret = this.userImagePaths.find((userImagePath) => {
@@ -163,7 +161,7 @@ export class AssetInboxComponent implements OnInit {
     });
 
     if (isNullOrUndefined(ret)) {
-      return "/assets/images/avatars/profile.jpg";
+      return '/assets/images/avatars/profile.jpg';
     } else {
       return ret.imagePath;
     }
@@ -172,15 +170,15 @@ export class AssetInboxComponent implements OnInit {
   getArchetypeIcon(entry: ClassInstanceDTO) {
     if (isNullOrUndefined(entry.imagePath)) {
       if (entry.classArchetype === ClassArchetype.COMPETENCE) {
-        return "/assets/competence.jpg";
+        return '/assets/competence.jpg';
       } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
-        return "/assets/icons/award.svg";
+        return '/assets/icons/award.svg';
       } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
-        return "/assets/TODO";
+        return '/assets/TODO';
       } else if (entry.classArchetype === ClassArchetype.TASK) {
-        return "/assets/cog.png";
+        return '/assets/cog.png';
       } else {
-        return "/assets/NONE";
+        return '/assets/NONE';
       }
     } else {
       return entry.imagePath;
@@ -189,15 +187,15 @@ export class AssetInboxComponent implements OnInit {
 
   getArchetypeName(entry: ClassInstanceDTO) {
     if (entry.classArchetype === ClassArchetype.COMPETENCE) {
-      return "Kompetenz";
+      return 'Kompetenz';
     } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
-      return "Verdienst";
+      return 'Verdienst';
     } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
-      return "Funktion";
+      return 'Funktion';
     } else if (entry.classArchetype === ClassArchetype.TASK) {
-      return "Tätigkeit";
+      return 'Tätigkeit';
     } else {
-      return "";
+      return '';
     }
   }
 
