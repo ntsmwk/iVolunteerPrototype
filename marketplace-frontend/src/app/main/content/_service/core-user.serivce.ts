@@ -31,24 +31,31 @@ import {
     return this.http.get(`/core/user/${userId}`);
   }
 
+  findByIds(userIds: string[]) {
+    return this.http.put(`/core/user/find-by-ids`, userIds);
+  }
+
   findRegisteredMarketplaces(userId: string) {
     return this.http.get(`/core/user/${userId}/marketplaces`);
   }
 
+  registerMarketplace(helpseekerId: string, marketplaceId: string) {
+    return this.http.post(`/core/user/${helpseekerId}/register/${marketplaceId}`, {});
+  }
+
   createUser(user: User) {
     return this.http.put(`/core/user/new`, user);
-
   }
 
   updateUser(user: User) {
     return this.http.put(`/core/user/update`, user);
   }
 
-  subscribeUserToTenant(volunteerId: string, marketplaceId: string, tenantId: string) {
-    return this.http.post(`/core/user/${volunteerId}/subscribe/${marketplaceId}/${tenantId}`, {});
+  subscribeUserToTenant(userId: string, marketplaceId: string, tenantId: string, role: UserRole) {
+    return this.http.post(`/core/user/${userId}/subscribe/${marketplaceId}/${tenantId}/${role}`, {});
   }
 
-  unsubscribeUserFromTenant(volunteerId: string, marketplaceId: string, tenantId: string) {
-    return this.http.post(`/core/volunteer / ${volunteerId}/unsubscribe/${marketplaceId}/${tenantId}`, {});
+  unsubscribeUserFromTenant(userId: string, marketplaceId: string, tenantId: string, role: UserRole) {
+    return this.http.post(`/core/volunteer/${userId}/unsubscribe/${marketplaceId}/${tenantId}/${role}`, {});
   }
 }
