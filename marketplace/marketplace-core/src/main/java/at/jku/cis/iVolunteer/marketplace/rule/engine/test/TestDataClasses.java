@@ -432,22 +432,22 @@ public class TestDataClasses {
 //	 AK: erzeugt einen Kreis im Editor - führt zu Problemen - ist auch derzeit nicht möglich
 		
 		// competence driving needs evidence of certificate (driving license)
-//		Association a1 = new Association(compClassDrivingCar.getId(), certClassDrivingLicense.getId(),
-//				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a1.setId(new ObjectId().toHexString());
-//		this.relationships.add(a1);
-//		Association a2 = new Association(compClassDrivingTruck.getId(), certClassDrivingLicense.getId(),
-//				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a2.setId(new ObjectId().toHexString());
-//		this.relationships.add(a2);
-//		Association a3 = new Association(compClassDrivingBus.getId(), certClassDrivingLicense.getId(),
-//				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a3.setId(new ObjectId().toHexString());
-//		this.relationships.add(a3);
-//		Association a4 = new Association(compClassDrivingMotorcycle.getId(), certClassDrivingLicense.getId(),
-//				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a4.setId(new ObjectId().toHexString());
-//		this.relationships.add(a4);
+		Association a1 = new Association(compClassDrivingCar.getId(), certClassDrivingLicense.getId(),
+				AssociationCardinality.ONE, AssociationCardinality.ONE);
+		a1.setId(new ObjectId().toHexString());
+		this.relationships.add(a1);
+		Association a2 = new Association(compClassDrivingTruck.getId(), certClassDrivingLicense.getId(),
+				AssociationCardinality.ONE, AssociationCardinality.ONE);
+		a2.setId(new ObjectId().toHexString());
+		this.relationships.add(a2);
+		Association a3 = new Association(compClassDrivingBus.getId(), certClassDrivingLicense.getId(),
+				AssociationCardinality.ONE, AssociationCardinality.ONE);
+		a3.setId(new ObjectId().toHexString());
+		this.relationships.add(a3);
+		Association a4 = new Association(compClassDrivingMotorcycle.getId(), certClassDrivingLicense.getId(),
+				AssociationCardinality.ONE, AssociationCardinality.ONE);
+		a4.setId(new ObjectId().toHexString());
+		this.relationships.add(a4);
 		
 		
 

@@ -15,6 +15,10 @@ public class CoreUserService {
 
     @Autowired
     private CoreUserRepository coreUserRepository;
+    
+    public List<CoreUser> getAllUsers(UserRole role) {
+    	return coreUserRepository.findAll();
+    }
 
     public List<CoreUser> getCoreUsersByRole(UserRole role) {
         List<CoreUser> allUsers = this.coreUserRepository.findAll();
