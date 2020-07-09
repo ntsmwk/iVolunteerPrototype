@@ -55,6 +55,9 @@ public class StandardPropertyDefinitions {
 		props.add(new RankProperty(tenantId));
 		props.add(new DurationProperty(tenantId));
 
+		//...
+		
+		props.add(new OrtProperty(tenantId));
 		return new ArrayList(props);
 
 	}
@@ -329,6 +332,19 @@ public class StandardPropertyDefinitions {
 		@PostConstruct
 		public void inst(String tenantId) {
 			this.setName("duration");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class OrtProperty extends TextPropertyDefinition {
+
+		OrtProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("ort");
 			this.setTenantId(tenantId);
 		}
 	}

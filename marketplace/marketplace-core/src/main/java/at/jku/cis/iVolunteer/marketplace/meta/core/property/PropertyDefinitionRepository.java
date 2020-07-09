@@ -8,7 +8,9 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 @Repository
 public interface PropertyDefinitionRepository extends HasTenantRepository<PropertyDefinition<Object>, String> {
 
-	List<PropertyDefinition<Object>> getByNameAndTenantId(String name, String tenantId);
+	PropertyDefinition<Object> getByNameAndTenantId(String name, String tenantId);
+	
+	List<PropertyDefinition<Object>> getByNameAndTenantId(List<String> names, String tenantId);
 
 	PropertyDefinition<Object> getByIdAndTenantId(String id, String tenantId);
 	

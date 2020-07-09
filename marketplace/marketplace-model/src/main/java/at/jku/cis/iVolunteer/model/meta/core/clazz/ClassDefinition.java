@@ -37,7 +37,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public ClassDefinition() {
 	}
-
+	
 	public String getId() {
 		return id;
 	}

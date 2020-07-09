@@ -27,7 +27,7 @@ public class GeneralConditionMapper {
 	
 	public GeneralConditionDTO toTarget(GeneralCondition source, String tenantId) {
 		PropertyDefinition<Object> propertyDefinition = (PropertyDefinition<Object>) propertyDefinitionRepository
-				                       .getByNameAndTenantId(source.getAttributeName(), tenantId).get(0);
+				                       .getByNameAndTenantId(source.getAttributeName(), tenantId);
 		GeneralConditionDTO dto = new GeneralConditionDTO(propertyDefinition, 
 				                                          source.getValue(),  
 				                                          (ComparisonOperatorType) source.getOperatorType());

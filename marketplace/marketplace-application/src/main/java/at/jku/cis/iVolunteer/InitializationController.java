@@ -27,16 +27,10 @@ public class InitializationController {
 		addAllProperties();
 		addClassConfigurations();
 		addAPIClassDefinitions();
-// TODO exception classcast
-		addRuleTestConfiguration();
-		addRuleUserData();
 	}
 	
 	@PutMapping("/init/add-rule-test-data")
 	public void addRuleTestData() {
-		addFireBrigadeUserMapping();
-		addAllProperties();
-		addAPIClassDefinitions();
 		addRuleTestConfiguration();
 		addRuleUserData();
 	}

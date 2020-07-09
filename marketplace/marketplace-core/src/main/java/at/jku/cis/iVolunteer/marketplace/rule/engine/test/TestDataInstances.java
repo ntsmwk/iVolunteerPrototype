@@ -4,10 +4,12 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -16,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
@@ -29,6 +33,7 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepositor
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances.RolesAmbulanceService;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -47,6 +52,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
 import at.jku.cis.iVolunteer.model.user.User;
 
@@ -55,8 +61,12 @@ public class TestDataInstances {
 
 	@Autowired
 	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired
 	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	
 	@Autowired
 	private MarketplaceService marketplaceService;
 	@Autowired
@@ -68,6 +78,9 @@ public class TestDataInstances {
 	private CoreTenantRestClient coreTenantRestClient;
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ClassConfigurationRepository classConfigurationRepository;
 
 	@Autowired
 	private TestDataClasses testDataClasses;
@@ -129,210 +142,244 @@ public class TestDataInstances {
 
 	private void createDataKBauer() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		ClassConfiguration classConfig = classConfigurationRepository.findByNameAndTenantId("Test-Rule-Engine RK", tenantId);		
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(classConfig.getClassDefinitionIds()).forEach(classDefinitions::add);;
+		
 		User volunteer = userRepository.findByUsername("KBauer");
 
 		if (volunteer == null)
 			return;
-
-		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		
+//		ClassDefinition certClass = classDefinitionRepository.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		ClassDefinition certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+	
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		
 
-		generateTaskAusfahrt(tenantId, volunteer, 999, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskAusfahrt(tenantId, volunteer, 100, RolesAmbulanceService.EINSATZLENKER, "Wels");
-		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 80, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 100, RolesAmbulanceService.EINSATZLENKER, "Wels", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 
-		generateTaskEinsatz(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Wels");
-		generateTaskEinsatz(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns");
+		generateTaskEinsatz(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Wels", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns", classConfig);
 
-		generateTaskDienst(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Linz");
-		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskDienst(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 	}
 
 	private void createDataEWagner() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		ClassConfiguration classConfig = classConfigurationRepository.findByNameAndTenantId("Test-Rule-Engine RK", tenantId);
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(classConfig.getClassDefinitionIds()).forEach(classDefinitions::add);;
 		User volunteer = userRepository.findByUsername("EWagner");
 
 		if (volunteer == null)
 			return;
 
-		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		ClassDefinition certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
 
-		generateTaskAusfahrt(tenantId, volunteer, 90, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskAusfahrt(tenantId, volunteer, 100, RolesAmbulanceService.EINSATZLENKER, "Wels");
-		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 90, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 100, RolesAmbulanceService.EINSATZLENKER, "Wels", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 
-		generateTaskEinsatz(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Wels");
-		generateTaskEinsatz(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns");
-		generateTaskDienst(tenantId, volunteer, 100, RolesAmbulanceService.DISPONENT, "Linz");
-		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskEinsatz(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Wels", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns", classConfig);
+		generateTaskDienst(tenantId, volunteer, 100, RolesAmbulanceService.DISPONENT, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 	}
 
 	private void createDataWHaube() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		ClassConfiguration classConfig = classConfigurationRepository.findByNameAndTenantId("Test-Rule-Engine RK", tenantId);
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(classConfig.getClassDefinitionIds()).forEach(classDefinitions::add);
 		User volunteer = userRepository.findByUsername("WHaube");
 
 		if (volunteer == null)
 			return;
-
-		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		
+		ClassDefinition certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
 
-		generateTaskAusfahrt(tenantId, volunteer, 1000, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskAusfahrt(tenantId, volunteer, 20, RolesAmbulanceService.EINSATZLENKER, "Wels");
-		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 1000, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 20, RolesAmbulanceService.EINSATZLENKER, "Wels", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 
-		generateTaskEinsatz(tenantId, volunteer, 75, RolesAmbulanceService.DISPONENT, "Wels");
-		generateTaskEinsatz(tenantId, volunteer, 57, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns");
+		generateTaskEinsatz(tenantId, volunteer, 75, RolesAmbulanceService.DISPONENT, "Wels", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 57, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns", classConfig);
 
-		generateTaskDienst(tenantId, volunteer, 500, RolesAmbulanceService.DISPONENT, "Linz");
-		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskDienst(tenantId, volunteer, 500, RolesAmbulanceService.DISPONENT, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 	}
 
 	private void createDataMJachs() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		ClassConfiguration classConfig = classConfigurationRepository.findByNameAndTenantId("Test-Rule-Engine RK", tenantId);
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(classConfig.getClassDefinitionIds()).forEach(classDefinitions::add);
 		User volunteer = userRepository.findByUsername("MJachs");
 
 		if (volunteer == null)
 			return;
 
-		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		ClassDefinition certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-		certClass = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		certClass = classDefinitions.stream().filter(cd -> cd.getName().equals(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE)).findFirst().get();
 		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
 
-		generateTaskAusfahrt(tenantId, volunteer, 2046, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskAusfahrt(tenantId, volunteer, 646, RolesAmbulanceService.EINSATZLENKER, "Wels");
-		generateTaskAusfahrt(tenantId, volunteer, 446, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 200, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 60, RolesAmbulanceService.EINSATZLENKER, "Wels", classConfig);
+		generateTaskAusfahrt(tenantId, volunteer, 40, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 
-		generateTaskEinsatz(tenantId, volunteer, 150, RolesAmbulanceService.DISPONENT, "Wels");
-		generateTaskEinsatz(tenantId, volunteer, 56, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskEinsatz(tenantId, volunteer, 23, RolesAmbulanceService.SANITÄTER, "Enns");
+		generateTaskEinsatz(tenantId, volunteer, 150, RolesAmbulanceService.DISPONENT, "Wels", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 56, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskEinsatz(tenantId, volunteer, 23, RolesAmbulanceService.SANITÄTER, "Enns", classConfig);
 
-		generateTaskDienst(tenantId, volunteer, 200, RolesAmbulanceService.DISPONENT, "Linz");
-		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+		generateTaskDienst(tenantId, volunteer, 200, RolesAmbulanceService.DISPONENT, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz", classConfig);
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz", classConfig);
 	}
 
-	public void generateTaskAusfahrt(String tenantId, User volunteer, int num, RolesAmbulanceService role, String ort) {
+	public void generateTaskAusfahrt(String tenantId, User volunteer, int num, RolesAmbulanceService role, String ort, ClassConfiguration classConfig) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(volunteer.getBirthday());
 		int fromYear = cal.get(Calendar.YEAR) + 20;
 
 		for (int i = 0; i < num; i++) {
 			LocalDateTime randomDateTime = createRandomDateTime(fromYear, 2019);
-			TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository
-					.findByNameAndTenantId("Ausfahrt", tenantId);
-			TaskClassInstance ti = (TaskClassInstance) classInstanceService.newClassInstance(volunteer, taskDef.getId(),
-					tenantId);
-			ti.setIssuerId(tenantId);
+			
+			List<ClassDefinition> classDefinitions = new ArrayList<>();
+			classDefinitionRepository.findAll(classConfig.getClassDefinitionIds()).forEach(classDefinitions::add);
+			ClassDefinition taskDef = classDefinitions.stream().filter(cd -> cd.getName().equals("Ausfahrt")).findFirst().get();
+			
+			ClassProperty<Object> cpStartingDate = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("Starting Date", tenantId));
+			cpStartingDate.setDefaultValues(Collections.singletonList(randomDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+			taskDef.getProperties().add(cpStartingDate);
 
-			ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Starting Date",
-					tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), randomDateTime);
+			ClassProperty<Object> cpEndDate = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("End Date", tenantId));
+			cpEndDate.setDefaultValues(Collections.singletonList(randomDateTime.plusHours(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+			taskDef.getProperties().add(cpEndDate);
 
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "End Date", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), randomDateTime.plusHours(1));
+			ClassProperty<Object> cpRole = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("role", tenantId));
+			cpRole.setDefaultValues(Collections.singletonList(role.description));
+			taskDef.getProperties().add(cpRole);
 
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), role.getDescription());
-
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Ort", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), ort);
+			ClassProperty<Object> cpOrt = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("ort", tenantId));
+			cpOrt.setDefaultValues(Collections.singletonList(ort));
+			taskDef.getProperties().add(cpOrt);
+			
+			
+			taskDef.setConfigurationId(null);
+			ClassInstance ci = classDefinitionToInstanceMapper.toTarget(taskDef);
+			ci.setIssuerId(tenantId);
+			ci.setUserId(volunteer.getId());
+			
+			classInstanceService.newClassInstance(ci);
+			
+//			ClassInstance ti = classInstanceService.newClassInstance(volunteer, taskDef.getId(),tenantId);
 		}
 	}
 
-	public void generateTaskEinsatz(String tenantId, User volunteer, int num, RolesAmbulanceService role, String ort) {
+	public void generateTaskEinsatz(String tenantId, User volunteer, int num, RolesAmbulanceService role, String ort, ClassConfiguration classConfig) {
 		for (int i = 0; i < num; i++) {
 			LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
-			TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository
-					.findByNameAndTenantId("Einsatz", tenantId);
-			TaskClassInstance ti = (TaskClassInstance) (TaskClassInstance) classInstanceService
-					.newClassInstance(volunteer, taskDef.getId(), tenantId);
-			ti.setIssuerId(tenantId);
+			List<ClassDefinition> classDefinitions = new ArrayList<>();
+			classDefinitionRepository.findAll(classConfig.getClassDefinitionIds()).forEach(classDefinitions::add);
+			ClassDefinition taskDef = classDefinitions.stream().filter(cd -> cd.getName().equals("Einsatz")).findFirst().get();			
 
-			ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Starting Date",
-					tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), randomDateTime.format(dateFormatter));
+			ClassProperty<Object> cpStartDate = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("Starting Date", tenantId));
+			cpStartDate.setDefaultValues(Collections.singletonList(randomDateTime.format(dateFormatter)));
+			taskDef.getProperties().add(cpStartDate);
 
 			randomDateTime.plusHours(1);
 			randomDateTime.plusMinutes(30);
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "End Date", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), randomDateTime.format(dateFormatter));
+			
+			ClassProperty<Object> cpEndDate = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("End Date", tenantId));
+			cpEndDate.setDefaultValues(Collections.singletonList(randomDateTime.format(dateFormatter)));
+			taskDef.getProperties().add(cpEndDate);
+			
+			ClassProperty<Object> cpRole = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("role", tenantId));
+			cpRole.setDefaultValues(Collections.singletonList(role.getDescription()));
+			taskDef.getProperties().add(cpRole);
+			
+			ClassProperty<Object> cpOrt = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("ort", tenantId));
+			cpOrt.setDefaultValues(Collections.singletonList(ort));
+			taskDef.getProperties().add(cpOrt);
+			
 
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), role.getDescription());
+			ClassInstance ci = classDefinitionToInstanceMapper.toTarget(taskDef);
+			ci.setIssuerId(tenantId);
+			ci.setUserId(volunteer.getId());
 
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Ort", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), ort);
+			classInstanceService.newClassInstance(ci);
 		}
 	}
 
-	public void generateTaskDienst(String tenantId, User volunteer, int num, RolesAmbulanceService role, String ort) {
+	public void generateTaskDienst(String tenantId, User volunteer, int num, RolesAmbulanceService role, String ort, ClassConfiguration classConfig) {
 		for (int i = 0; i < num; i++) {
 			LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
-			TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository
-					.findByNameAndTenantId("Dienst", tenantId);
-			TaskClassInstance ti = (TaskClassInstance) (TaskClassInstance) classInstanceService
-					.newClassInstance(volunteer, taskDef.getId(), tenantId);
-			ti.setIssuerId(tenantId);
+			List<ClassDefinition> classDefinitions = new ArrayList<>();
+			classDefinitionRepository.findAll(classConfig.getClassDefinitionIds()).forEach(classDefinitions::add);
+			ClassDefinition taskDef = classDefinitions.stream().filter(cd -> cd.getName().equals("Dienst")).findFirst().get();	
+			
+	
+			ClassProperty<Object> cpStartDate = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("Starting Date", tenantId));
+			cpStartDate.setDefaultValues(Collections.singletonList(randomDateTime.format(dateFormatter)));
+			taskDef.getProperties().add(cpStartDate);
 
-			ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Starting Date",
-					tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), randomDateTime.format(dateFormatter));
+			randomDateTime.plusHours(1);
+			randomDateTime.plusMinutes(30);
+			
+			ClassProperty<Object> cpEndDate = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("End Date", tenantId));
+			cpEndDate.setDefaultValues(Collections.singletonList(randomDateTime.format(dateFormatter)));
+			taskDef.getProperties().add(cpEndDate);
+			
+			ClassProperty<Object> cpRole = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("role", tenantId));
+			cpRole.setDefaultValues(Collections.singletonList(role.getDescription()));
+			taskDef.getProperties().add(cpRole);
+			
+			ClassProperty<Object> cpOrt = propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.getByNameAndTenantId("ort", tenantId));
+			cpOrt.setDefaultValues(Collections.singletonList(ort));
+			taskDef.getProperties().add(cpOrt);
+			
+			ClassInstance ci = classDefinitionToInstanceMapper.toTarget(taskDef);
+			ci.setIssuerId(tenantId);
+			ci.setUserId(volunteer.getId());
 
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "End Date", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), randomDateTime.plusHours(12).format(dateFormatter));
-
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), role.getDescription());
-
-			cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Ort", tenantId);
-			classInstanceService.setProperty(ti, cp.getId(), ort);
+			classInstanceService.newClassInstance(ci);
 		}
 	}
 }

@@ -11,6 +11,8 @@ import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 public interface ClassConfigurationRepository extends HasTenantRepository<ClassConfiguration, String> {
 
 	public List<ClassConfiguration> findByName(String name);
+	
+	public ClassConfiguration findByNameAndTenantId(String name, String tenantId);
 
 	@Query(value = "{}")
 	public List<ClassConfiguration> findAllWithSort(Sort sort);

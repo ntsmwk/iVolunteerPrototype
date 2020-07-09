@@ -182,7 +182,7 @@ public class APIInitializationService {
 		addPersonTaskProperties(propertyDefinitions, tenantId);
 
 		propertyDefinitions.forEach(pd -> {
-			if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), tenantId).size() == 0) {
+			if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), tenantId) == null) {
 				propertyDefinitionRepository.save(pd);
 			}
 		});

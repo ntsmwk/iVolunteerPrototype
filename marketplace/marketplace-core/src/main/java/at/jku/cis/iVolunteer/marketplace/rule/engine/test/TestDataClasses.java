@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
@@ -145,7 +146,7 @@ public class TestDataClasses {
 		String slotName = "Test-Rule-Engine";
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 		
-		//Create ClassConfigurator
+		//Create ClassConfiguration with all the "header classes"
 		ClassConfiguration classConfigFF = classConfigurationController.createNewClassConfiguration(new String[] {tenantId, slotName + " FF", ""});
 		
 		//add ClassDefinitions and Relationships created by the function above to our lists of classDefinitions and relationships
@@ -158,8 +159,8 @@ public class TestDataClasses {
 		createProperties(classConfigFF);
 		
 		//Debug print
-		this.classDefinitions.forEach(cd -> System.out.println(cd.getId() + " " + cd.getName()));
-		this.relationships.forEach(cd -> System.out.println(cd.getId() + " " + cd.getRelationshipType()));
+//		this.classDefinitions.forEach(cd -> System.out.println(cd.getId() + " " + cd.getName()));
+//		this.relationships.forEach(cd -> System.out.println(cd.getId() + " " + cd.getRelationshipType()));
 
 		//Save our relationships and classDefintions in the DB
 		classDefinitionRepository.save(this.classDefinitions);
@@ -169,7 +170,7 @@ public class TestDataClasses {
 		classConfigFF.setClassDefinitionIds(this.classDefinitions.stream().map(cd -> cd.getId()).collect(Collectors.toList()));
 		classConfigFF.setRelationshipIds(this.relationships.stream().map(r -> r.getId()).collect(Collectors.toList()));
 
-		//save configurator
+		//save classConfiguration
 		this.classConfigurationController.saveClassConfiguration(classConfigFF);
 
 		//...Repeat the same for RK
@@ -182,17 +183,21 @@ public class TestDataClasses {
 		classDefinitionRepository.findAll(classConfigRK.getClassDefinitionIds()).forEach(this.classDefinitions::add);
 		relationshipRepository.findAll(classConfigRK.getRelationshipIds()).forEach(this.relationships::add);
 
-//		createGeneralClasses(classConfigRK);
-//		createGeneralCompetences(classConfigRK);
-//		createProperties(classConfigRK);
-//
-//		createClassCertificatesRK(classConfigRK);
-//		createClassTasksRK(classConfigRK);
-//		createClassRolesRK(classConfigRK);
-//		createClassVerdiensteRK(classConfigRK);
+		createGeneralClasses(classConfigRK.getTenantId());
+		createGeneralCompetences(classConfigRK.getTenantId());
+		createProperties(classConfigRK);
+
+		createClassCertificatesRK(classConfigRK.getTenantId());
+		createClassTasksRK(classConfigRK.getTenantId());
+		createClassRolesRK(classConfigRK.getTenantId());
+		createClassVerdiensteRK(classConfigRK.getTenantId());
 		
-		this.classDefinitions.forEach(cd -> System.out.println(cd.getId() + " " + cd.getName()));
-		this.relationships.forEach(cd -> System.out.println(cd.getId() + " " + cd.getRelationshipType()));
+//		this.classDefinitions.forEach(cd -> {
+//			System.out.println(cd.getId() + " " + cd.getName());
+//			cd.getProperties().forEach(p -> System.out.println("--" + p.getId() + " " + p.getName()));
+//			
+//		});
+//		this.relationships.forEach(cd -> System.out.println(cd.getId() + " " + cd.getRelationshipType() + " " + cd.getSource() + " " + cd.getTarget()));
 
 //
 		classDefinitionRepository.save(this.classDefinitions);
@@ -276,7 +281,7 @@ public class TestDataClasses {
 	}
 
 	public void createProperties(ClassConfiguration classConfig) {
-		if (propertyDefinitionRepository.getByNameAndTenantId("Alter", classConfig.getTenantId()).size() == 0) {
+		if (propertyDefinitionRepository.getByNameAndTenantId("Alter", classConfig.getTenantId()) == null) {
 			PropertyDefinition<Object> pdAlter = new PropertyDefinition<Object>();
 			pdAlter.setTenantId(classConfig.getTenantId());
 			pdAlter.setMarketplaceId(classConfig.getMarketplaceId());
@@ -306,45 +311,44 @@ public class TestDataClasses {
 	}
 
 	public PropertyDefinition<Object> obtainProperty(String name, PropertyType type, String tenantId) {
-		List<PropertyDefinition<Object>> pdList = propertyDefinitionRepository.getByNameAndTenantId(name, tenantId);
-		PropertyDefinition<Object> pd;
-		if (pdList.size() == 0) {
+		 
+		PropertyDefinition<Object> pd = propertyDefinitionRepository.getByNameAndTenantId(name, tenantId);
+		if (pd == null) {
 			pd = new PropertyDefinition<Object>(name, type, tenantId);
 			propertyDefinitionRepository.save(pd);
-		} else
-			pd = pdList.get(0);
+		}
 
 		return pd;
 	}
 
-	private ClassDefinition obtainClassFreiwilligenpassEintrag(String tenantId) {
-
-		ClassDefinition fwPassEintrag = classDefinitionRepository.findByNameAndTenantId(ROOT_FREIWILLIGENPASS_EINTRAG,
-				tenantId);
-		if (fwPassEintrag == null) {
-			fwPassEintrag = new ClassDefinition();
-			// fwPassEintrag.setId(new ObjectId().toHexString());
-			fwPassEintrag.setTenantId(tenantId);
-			fwPassEintrag.setName("Freiwilligenpass-\nEintrag");
-			fwPassEintrag.setRoot(true);
-			fwPassEintrag.setClassArchetype(ClassArchetype.ROOT);
-			fwPassEintrag.setWriteProtected(true);
-			fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
-			// properties
-			PropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
-			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-			pd = obtainProperty("id", PropertyType.TEXT, tenantId);
-			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-			pd = obtainProperty("name", PropertyType.TEXT, tenantId);
-			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-			pd = obtainProperty("evidenz", PropertyType.TEXT, tenantId);
-			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-			classDefinitionRepository.save(fwPassEintrag);
-		}
-
-		fwPassEintrag = classDefinitionRepository.findByNameAndTenantId(ROOT_FREIWILLIGENPASS_EINTRAG, tenantId);
-		return fwPassEintrag;
-	}
+//	private ClassDefinition obtainClassFreiwilligenpassEintrag(String tenantId) {
+//
+//		ClassDefinition fwPassEintrag = classDefinitionRepository.findByNameAndTenantId(ROOT_FREIWILLIGENPASS_EINTRAG,
+//				tenantId);
+//		if (fwPassEintrag == null) {
+//			fwPassEintrag = new ClassDefinition();
+//			// fwPassEintrag.setId(new ObjectId().toHexString());
+//			fwPassEintrag.setTenantId(tenantId);
+//			fwPassEintrag.setName("Freiwilligenpass-\nEintrag");
+//			fwPassEintrag.setRoot(true);
+//			fwPassEintrag.setClassArchetype(ClassArchetype.ROOT);
+//			fwPassEintrag.setWriteProtected(true);
+//			fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
+//			// properties
+//			PropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
+//			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
+//			pd = obtainProperty("id", PropertyType.TEXT, tenantId);
+//			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
+//			pd = obtainProperty("name", PropertyType.TEXT, tenantId);
+//			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
+//			pd = obtainProperty("evidenz", PropertyType.TEXT, tenantId);
+//			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
+//			classDefinitionRepository.save(fwPassEintrag);
+//		}
+//
+//		fwPassEintrag = classDefinitionRepository.findByNameAndTenantId(ROOT_FREIWILLIGENPASS_EINTRAG, tenantId);
+//		return fwPassEintrag;
+//	}
 
 	public void createDrivingSkills(String tenantId) {
 //		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
@@ -372,19 +376,19 @@ public class TestDataClasses {
 		// grouping and hierarchy in certificate "driving license"
 		Inheritance i1 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseCar.getId(),
 				certClassDrivingLicense.getId());
-		i1.setId("drivingCarLicense");
+		i1.setId(new ObjectId().toHexString());
 		this.relationships.add(i1);
 		Inheritance i2 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseTruck.getId(),
 				certClassDrivingLicense.getId());
-		i2.setId("drivingTruckLicense");
+		i2.setId(new ObjectId().toHexString());
 		this.relationships.add(i2);
 		Inheritance i3 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseBus.getId(),
 				certClassDrivingLicense.getId());
-		i3.setId("drivingBusLicense");
+		i3.setId(new ObjectId().toHexString());
 		this.relationships.add(i3);
 		Inheritance i4 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseMotorcycle.getId(),
 				certClassDrivingLicense.getId());
-		i4.setId("drivingMotorcycleLicense");
+		i4.setId(new ObjectId().toHexString());
 		this.relationships.add(i4);
 
 		ClassDefinition compClass = this.classDefinitions.stream().filter(cd -> cd.getName().equals("Kompetenz")).findFirst().get();
@@ -410,19 +414,19 @@ public class TestDataClasses {
 		// grouping and hierarchy in competence "driving"
 		Inheritance i5 = new Inheritance(compClassDriving.getId(), compClassDrivingCar.getId(),
 				compClassDriving.getId());
-		i5.setId("drivingCar");
+		i5.setId(new ObjectId().toHexString());
 		this.relationships.add(i5);
 		Inheritance i6 = new Inheritance(compClassDriving.getId(), compClassDrivingTruck.getId(),
 				compClassDriving.getId());
-		i6.setId("drivingTruck");
+		i6.setId(new ObjectId().toHexString());
 		this.relationships.add(i6);
 		Inheritance i7 = new Inheritance(compClassDriving.getId(), compClassDrivingBus.getId(),
 				compClassDriving.getId());
-		i7.setId("drivingBus");
+		i7.setId(new ObjectId().toHexString());
 		this.relationships.add(i7);
 		Inheritance i8 = new Inheritance(compClassDriving.getId(), compClassDrivingMotorcycle.getId(),
 				compClassDriving.getId());
-		i8.setId("drivingMotorcycle");
+		i8.setId(new ObjectId().toHexString());
 		this.relationships.add(i8);
 		
 //	 AK: erzeugt einen Kreis im Editor - führt zu Problemen - ist auch derzeit nicht möglich
@@ -430,19 +434,19 @@ public class TestDataClasses {
 		// competence driving needs evidence of certificate (driving license)
 //		Association a1 = new Association(compClassDrivingCar.getId(), certClassDrivingLicense.getId(),
 //				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a1.setId("evidenceByDriverLicenseB");
+//		a1.setId(new ObjectId().toHexString());
 //		this.relationships.add(a1);
 //		Association a2 = new Association(compClassDrivingTruck.getId(), certClassDrivingLicense.getId(),
 //				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a2.setId("evidenceByDriverLicenseC");
+//		a2.setId(new ObjectId().toHexString());
 //		this.relationships.add(a2);
 //		Association a3 = new Association(compClassDrivingBus.getId(), certClassDrivingLicense.getId(),
 //				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a3.setId("evidenceByDriverLicenseD");
+//		a3.setId(new ObjectId().toHexString());
 //		this.relationships.add(a3);
 //		Association a4 = new Association(compClassDrivingMotorcycle.getId(), certClassDrivingLicense.getId(),
 //				AssociationCardinality.ONE, AssociationCardinality.ONE);
-//		a4.setId("evidenceByDriverLicenseA");
+//		a4.setId(new ObjectId().toHexString());
 //		this.relationships.add(a4);
 		
 		
@@ -567,6 +571,7 @@ public class TestDataClasses {
 			c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdLevel));
 //			classDefinitionRepository.save(c1);
 			Inheritance i = new Inheritance();
+			i.setId(new ObjectId().toHexString());
 			i.setSource(compClass.getId());
 			i.setTarget(c1.getId());
 			
@@ -771,286 +776,320 @@ public class TestDataClasses {
 		volClass = classDefinitionRepository.findByNameAndTenantId("Volunteer RK", tenantId);
 	}
 
-	public void createClassCertificatesRK(ClassConfiguration classConfig) {
-		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
-		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
-		AchievementClassDefinition certClassRoot = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId("Zertifikat", classConfig.getTenantId());
+	public void createClassCertificatesRK(String tenantId) {
+//		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+//		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+//		
+		
+		ClassDefinition certClassRoot = this.classDefinitions.stream().filter(cd -> cd.getName().equals("Zertifikat")).findFirst().get();
+		
 		// Training certificates
-		AchievementClassDefinition certClassTraining = (AchievementClassDefinition) obtainClass(
-				classConfig.getTenantId(), "Ausbildung", certClassRoot);
-		classDefinitions.add(certClassRoot);
+		ClassDefinition certClassTraining = obtainClass(tenantId, "Ausbildung", certClassRoot);
+		this.classDefinitions.add(certClassRoot);
 		// Certificate SEF-MODUL 1
-		AchievementClassDefinition certClassSEF1 = (AchievementClassDefinition) obtainClass(classConfig.getTenantId(),
-				CERTIFICATE_SEF_MODUL1, certClassTraining);
-		ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(certClassSEF1.getId(), "Description",
-				classConfig.getTenantId());
+
+		ClassDefinition certClassSEF1 =  obtainClass(tenantId, CERTIFICATE_SEF_MODUL1, certClassTraining);
+		
+// AK: keine Solche classProperty vorhanden muss erst erzeugt / von der DB geholt werden werden - wie du eh vorher schon gemacht hast
+
+//		ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(certClassSEF1.getId(), "Description", tenantId);
+//		cp.setDefaultValues(Arrays.asList("SEF – Perfektionstraining für neue Einsatzlenker/innen (SEF-MODUL 1)"));
+//		classPropertyService.updateClassProperty(certClassSEF1.getId(), cp.getId(), cp);
+		
+		ClassProperty<Object> cp = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("Description", PropertyType.TEXT, tenantId));
 		cp.setDefaultValues(Arrays.asList("SEF – Perfektionstraining für neue Einsatzlenker/innen (SEF-MODUL 1)"));
-		classPropertyService.updateClassProperty(certClassSEF1.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassSEF1);
+		certClassSEF1.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassSEF1.getProperties().add(cp);
+		
+		this.classDefinitions.add(certClassSEF1);
 		//
-		AchievementClassDefinition certClassSEF2 = (AchievementClassDefinition) obtainClass(classConfig.getTenantId(),
-				CERTIFICATE_SEF_MODUL2, certClassTraining);
-		cp = classPropertyService.getClassPropertyByName(certClassSEF2.getId(), "Description",
-				classConfig.getTenantId());
-		cp.setDefaultValues(
-				Arrays.asList("SEF – Theorie- & Praxistraining für erfahrene Einsatzlenker/innen (SEF-MODUL 2)"));
-		classPropertyService.updateClassProperty(certClassSEF2.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassSEF1);
+		ClassDefinition certClassSEF2 = obtainClass(tenantId, CERTIFICATE_SEF_MODUL2, certClassTraining);
+//		cp = classPropertyService.getClassPropertyByName(certClassSEF2.getId(), "Description", tenantId);
+		cp.setDefaultValues(Arrays.asList("SEF – Theorie- & Praxistraining für erfahrene Einsatzlenker/innen (SEF-MODUL 2)"));
+//		classPropertyService.updateClassProperty(certClassSEF2.getId(), cp.getId(), cp);
+		certClassSEF2.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassSEF2.getProperties().add(cp);
+		this.classDefinitions.add(certClassSEF2);
 		//
-		AchievementClassDefinition certClassSEFPraxistrainer = (AchievementClassDefinition) obtainClass(
-				classConfig.getTenantId(), CERTIFICATE_SEF_AUSFORTBILDUNG, certClassTraining);
-		cp = classPropertyService.getClassPropertyByName(certClassSEFPraxistrainer.getId(), "Description",
-				classConfig.getTenantId());
+		ClassDefinition certClassSEFPraxistrainer = obtainClass(tenantId, CERTIFICATE_SEF_AUSFORTBILDUNG, certClassTraining);
+//		cp = classPropertyService.getClassPropertyByName(certClassSEFPraxistrainer.getId(), "Description", tenantId);
 		cp.setDefaultValues(Arrays.asList("SEF – Aus- und Fortbildung für SEF-Praxistrainer/innen"));
-		classPropertyService.updateClassProperty(certClassSEFPraxistrainer.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassSEFPraxistrainer);
+		certClassSEFPraxistrainer.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassSEFPraxistrainer.getProperties().add(cp);
+		this.classDefinitions.add(certClassSEFPraxistrainer);
 		//
-		AchievementClassDefinition certClassSEFWorkshop = (AchievementClassDefinition) obtainClass(
-				classConfig.getTenantId(), CERTIFICATE_SEF_WORKSHOP, certClassTraining);
-		cp = classPropertyService.getClassPropertyByName(certClassSEFWorkshop.getId(), "Description",
-				classConfig.getTenantId());
+		ClassDefinition certClassSEFWorkshop = obtainClass(tenantId, CERTIFICATE_SEF_WORKSHOP, certClassTraining);
+//		cp = classPropertyService.getClassPropertyByName(certClassSEFWorkshop.getId(), "Description", tenantId);
 		cp.setDefaultValues(Arrays.asList("SEF Workshop"));
-		classPropertyService.updateClassProperty(certClassSEFWorkshop.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassSEFWorkshop);
+		certClassSEFWorkshop.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassSEFWorkshop.getProperties().add(cp);
+		this.classDefinitions.add(certClassSEFWorkshop);
 		//
-		AchievementClassDefinition certClassSEFNotarzt = (AchievementClassDefinition) obtainClass(
-				classConfig.getTenantId(), CERTIFICATE_SEF_TRAINING_NOTARZT, certClassTraining);
-		cp = classPropertyService.getClassPropertyByName(certClassSEFNotarzt.getId(), "Description",
-				classConfig.getTenantId());
+		ClassDefinition certClassSEFNotarzt = obtainClass(tenantId, CERTIFICATE_SEF_TRAINING_NOTARZT, certClassTraining);
+//		cp = classPropertyService.getClassPropertyByName(certClassSEFNotarzt.getId(), "Description", tenantId);
 		cp.setDefaultValues(Arrays.asList("SEF – Theorie- und Praxistraining für Notarztdienste"));
-		classPropertyService.updateClassProperty(certClassSEFNotarzt.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassSEFNotarzt);
+		certClassSEFNotarzt.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassSEFNotarzt.getProperties().add(cp);
+		this.classDefinitions.add(certClassSEFNotarzt);
 		//
-		AchievementClassDefinition certClassSEFLadegut = (AchievementClassDefinition) obtainClass(
-				classConfig.getTenantId(), CERTIFICATE_SEF_LADEGUTSICHERUNG, certClassTraining);
-		cp = classPropertyService.getClassPropertyByName(certClassSEFLadegut.getId(), "Description",
-				classConfig.getTenantId());
+		ClassDefinition certClassSEFLadegut = obtainClass(tenantId, CERTIFICATE_SEF_LADEGUTSICHERUNG, certClassTraining);
+//		cp = classPropertyService.getClassPropertyByName(certClassSEFLadegut.getId(), "Description",tenantId);
 		cp.setDefaultValues(Arrays.asList("SEF – Ladegutsicherung für Rotkreuz LKW-Lenker/innen"));
-		classPropertyService.updateClassProperty(certClassSEFLadegut.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassSEFLadegut);
+		certClassSEFLadegut.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassSEFLadegut.getProperties().add(cp);
+		this.classDefinitions.add(certClassSEFLadegut);
 		//
-		AchievementClassDefinition certClassTheorietrainer = (AchievementClassDefinition) obtainClass(
-				classConfig.getTenantId(), CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, certClassTraining);
-		cp = classPropertyService.getClassPropertyByName(certClassTheorietrainer.getId(), "Description",
-				classConfig.getTenantId());
+		ClassDefinition certClassTheorietrainer = obtainClass(tenantId, CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, certClassTraining);
+//		cp = classPropertyService.getClassPropertyByName(certClassTheorietrainer.getId(), "Description", tenantId);
 		cp.setDefaultValues(Arrays.asList("SEF – Theorietrainerausbildung"));
-		classPropertyService.updateClassProperty(certClassTheorietrainer.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassSEFLadegut);
+		certClassTheorietrainer.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassTheorietrainer.getProperties().add(cp);
+		this.classDefinitions.add(certClassTheorietrainer);
 
 		Inheritance i1 = new Inheritance();
+		i1.setId(new ObjectId().toHexString());
 		i1.setSource(certClassRoot.getId());
 		i1.setTarget(certClassSEF1.getId());
-		relationships.add(i1);
+		this.relationships.add(i1);
 		Inheritance i2 = new Inheritance();
+		i2.setId(new ObjectId().toHexString());
 		i2.setSource(certClassRoot.getId());
 		i2.setTarget(certClassSEF2.getId());
-		relationships.add(i2);
+		this.relationships.add(i2);
 		Inheritance i3 = new Inheritance();
+		i3.setId(new ObjectId().toHexString());
 		i3.setSource(certClassRoot.getId());
 		i3.setTarget(certClassSEFPraxistrainer.getId());
-		relationships.add(i3);
+		this.relationships.add(i3);
 		Inheritance i4 = new Inheritance();
+		i4.setId(new ObjectId().toHexString());
 		i4.setSource(certClassRoot.getId());
 		i4.setTarget(certClassSEFWorkshop.getId());
-		relationships.add(i4);
+		this.relationships.add(i4);
 		Inheritance i5 = new Inheritance();
+		i5.setId(new ObjectId().toHexString());
 		i5.setSource(certClassRoot.getId());
 		i5.setTarget(certClassSEFNotarzt.getId());
-		relationships.add(i5);
+		this.relationships.add(i5);
 		Inheritance i6 = new Inheritance();
+		i6.setId(new ObjectId().toHexString());
 		i6.setSource(certClassRoot.getId());
 		i6.setTarget(certClassSEFLadegut.getId());
-		relationships.add(i6);
+		this.relationships.add(i6);
 		Inheritance i7 = new Inheritance();
+		i7.setId(new ObjectId().toHexString());
 		i7.setSource(certClassRoot.getId());
 		i7.setTarget(certClassTheorietrainer.getId());
-		relationships.add(i7);
+		this.relationships.add(i7);
 
-		for (ClassDefinition cd : classDefinitions) {
-			cd.setConfigurationId(classConfig.getId());
-			classDefinitionRepository.save(cd);
-			classConfig.getClassDefinitionIds().add(cd.getId());
-		}
-		for (Relationship r : relationships) {
-			relationshipRepository.save(r);
-			classConfig.getRelationshipIds().add(r.getId());
-		}
+//		for (ClassDefinition cd : classDefinitions) {
+//			classDefinitionRepository.save(cd);
+//		}
+//		for (Relationship r : relationships) {
+//			relationshipRepository.save(r);
+//		}
 	}
 
-	public void createClassTasksRK(ClassConfiguration classConfig) {
-		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
-		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
-		String tenantId = classConfig.getTenantId();
+	public void createClassTasksRK(String tenantId) {
+//		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+//		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+//		String tenantId = classConfig.getTenantId();
 		// Task
-		TaskClassDefinition taskClassRoot = (TaskClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId("Tätigkeit", tenantId);
+		ClassDefinition taskClassRoot = this.classDefinitions.stream().filter(cd -> cd.getName().equals("Tätigkeit")).findFirst().get();
 
-		TaskClassDefinition taskClassEinsatz = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_EINSATZ,
-				taskClassRoot);
-		ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskClassEinsatz.getId(), "Description",
-				tenantId);
+		ClassDefinition taskClassEinsatz = obtainClass(tenantId, TASK_RK_EINSATZ,taskClassRoot);
+		ClassProperty<Object> cp = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("Description", PropertyType.LONG_TEXT, tenantId));	
 		cp.setDefaultValues(Arrays.asList("Rettungseinsatz"));
-		classPropertyService.updateClassProperty(taskClassEinsatz.getId(), cp.getId(), cp);
-
-		cp = classPropertyService.getClassPropertyByName(taskClassEinsatz.getId(), "Description", tenantId);
-		cp.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
+		taskClassEinsatz.setProperties(new ArrayList<ClassProperty<Object>>());
+		taskClassEinsatz.getProperties().add(cp);
+		
+		//AK: Verstehe ich nicht  - Rollen "Einsatzleiter" sollen in die Description Property?; sollte es dafür nicht eine eigene Property geben (zB Roles)
+		//AK: Wenn "AllowedValues" gesetzt wurden, müssen "DefaultValues" Teilmenge der "AllowedValues" sein.
+		//AK: Ich hab das jetzt mal so intepretiert, dass dass in eine eigene Property gehört (nicht description) - weil du unten auch "role" verwendet hast
+		
+//		cp = classPropertyService.getClassPropertyByName(taskClassEinsatz.getId(), "Roles", tenantId);
+		ClassProperty<Object> cpRoles = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("role", PropertyType.TEXT, tenantId));	
+		cpRoles.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
 				TestDataInstances.RolesAmbulanceService.SANITÄTER,
 				TestDataInstances.RolesAmbulanceService.AUSZUBILDENDER));
-		classPropertyService.updateClassProperty(taskClassEinsatz.getId(), cp.getId(), cp);
-		classDefinitions.add(taskClassEinsatz);
+		taskClassEinsatz.getProperties().add(cpRoles);
+		this.classDefinitions.add(taskClassEinsatz);
 		//
-		TaskClassDefinition taskClassAusfahrt = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_AUSFAHRT,
-				taskClassRoot);
-		cp = classPropertyService.getClassPropertyByName(taskClassAusfahrt.getId(), "Description", tenantId);
+		
+		ClassDefinition taskClassAusfahrt = obtainClass(tenantId, TASK_RK_AUSFAHRT,taskClassRoot);
+		
+		cp.setDefaultValues(new ArrayList<Object>());
 		cp.setDefaultValues(Arrays.asList("Sanitätseinsatz"));
-		classPropertyService.updateClassProperty(taskClassAusfahrt.getId(), cp.getId(), cp);
-		cp = classPropertyService.getClassPropertyByName(taskClassAusfahrt.getId(), "role", tenantId);
-		cp.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
+		
+		//AK: Hier würdest du das gerade erzeugte ClassProperty wieder überschreiben, ohne es vorher in der ClassDefinition to speichern
+//		cp = classPropertyService.getClassPropertyByName(taskClassAusfahrt.getId(), "role", tenantId);
+		cpRoles.setAllowedValues(new ArrayList<Object>());
+		cpRoles.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
 				TestDataInstances.RolesAmbulanceService.SANITÄTER,
 				TestDataInstances.RolesAmbulanceService.AUSZUBILDENDER));
-		classPropertyService.updateClassProperty(taskClassAusfahrt.getId(), cp.getId(), cp);
-		classDefinitions.add(taskClassAusfahrt);
+		taskClassAusfahrt.setProperties(new ArrayList<>());
+		taskClassAusfahrt.getProperties().add(cp);
+		taskClassAusfahrt.getProperties().add(cpRoles);
+		
+		this.classDefinitions.add(taskClassAusfahrt);
 		//
-		TaskClassDefinition taskClassDienst = (TaskClassDefinition) obtainClass(tenantId, "Dienst", taskClassRoot);
-		cp = classPropertyService.getClassPropertyByName(taskClassDienst.getId(), "Description", tenantId);
+		
+		ClassDefinition taskClassDienst = obtainClass(tenantId, "Dienst", taskClassRoot);
+		cp.setDefaultValues(new ArrayList<Object>());
 		cp.setDefaultValues(Arrays.asList("Dienst"));
-		classPropertyService.updateClassProperty(taskClassDienst.getId(), cp.getId(), cp);
-		cp = classPropertyService.getClassPropertyByName(taskClassDienst.getId(), "role", tenantId);
-		cp.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.DISPONENT,
+		cpRoles.setAllowedValues(new ArrayList<Object>());
+		cpRoles.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.DISPONENT,
 				TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
 				TestDataInstances.RolesAmbulanceService.SANITÄTER,
 				TestDataInstances.RolesAmbulanceService.AUSZUBILDENDER));
-		classPropertyService.updateClassProperty(taskClassDienst.getId(), cp.getId(), cp);
-		classDefinitions.add(taskClassDienst);
+		taskClassDienst.setProperties(new ArrayList<ClassProperty<Object>>());
+		taskClassDienst.getProperties().add(cp);
+		taskClassDienst.getProperties().add(cpRoles);
+		this.classDefinitions.add(taskClassDienst);
 
 		Inheritance i1 = new Inheritance();
+		i1.setId(new ObjectId().toHexString());
 		i1.setSource(taskClassRoot.getId());
 		i1.setTarget(taskClassEinsatz.getId());
-		relationships.add(i1);
+		this.relationships.add(i1);
 		Inheritance i2 = new Inheritance();
+		i2.setId(new ObjectId().toHexString());
 		i2.setSource(taskClassRoot.getId());
 		i2.setTarget(taskClassAusfahrt.getId());
-		relationships.add(i2);
+		this.relationships.add(i2);
 		Inheritance i3 = new Inheritance();
+		i3.setId(new ObjectId().toHexString());
 		i3.setSource(taskClassRoot.getId());
 		i3.setTarget(taskClassDienst.getId());
-		relationships.add(i3);
+		this.relationships.add(i3);
 
-		for (ClassDefinition cd : classDefinitions) {
-			cd.setConfigurationId(classConfig.getId());
-			classDefinitionRepository.save(cd);
-			classConfig.getClassDefinitionIds().add(cd.getId());
-		}
-		for (Relationship r : relationships) {
-			relationshipRepository.save(r);
-			classConfig.getRelationshipIds().add(r.getId());
-		}
+//		for (ClassDefinition cd : classDefinitions) {
+//			cd.setConfigurationId(classConfig.getId());
+//			classDefinitionRepository.save(cd);
+//			classConfig.getClassDefinitionIds().add(cd.getId());
+//		}
+//		for (Relationship r : relationships) {
+//			relationshipRepository.save(r);
+//			classConfig.getRelationshipIds().add(r.getId());
+//		}
 	}
 
-	public void createClassRolesRK(ClassConfiguration classConfig) {
-		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
-		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
-		String tenantId = classConfig.getTenantId();
-		FunctionClassDefinition functionClassRoot = (FunctionClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId("Funktion", tenantId);
+	public void createClassRolesRK(String tenantId) {
+//		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+//		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+//		String tenantId = classConfig.getTenantId();
+		
+		ClassDefinition functionClassRoot = this.classDefinitions.stream().filter(cd -> cd.getName().equals("Funktion")).findFirst().get();
+		
 		// Function
-		FunctionClassDefinition functionClassAmbulanceService = (FunctionClassDefinition) obtainClass(tenantId,
-				"Funktion durch Ausbildung", functionClassRoot);
+		// AK: hier ist alles korrekt definiert :)
+		ClassDefinition functionClassAmbulanceService = obtainClass(tenantId, "Funktion durch Ausbildung", functionClassRoot);
 		PropertyDefinition<Object> pdDescription = obtainProperty("Description", PropertyType.TEXT, tenantId);
-		functionClassAmbulanceService.getProperties()
-				.add(propertyDefinitionToClassPropertyMapper.toTarget(pdDescription));
-		classDefinitions.add(functionClassAmbulanceService);
+		functionClassAmbulanceService.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdDescription));
+		this.classDefinitions.add(functionClassAmbulanceService);
 		//
-		FunctionClassDefinition functionClassRettungssanitäter = (FunctionClassDefinition) obtainClass(tenantId,
-				"Rettungssanitäter", functionClassAmbulanceService);
-		classDefinitions.add(functionClassRettungssanitäter);
+		ClassDefinition functionClassRettungssanitäter = obtainClass(tenantId, "Rettungssanitäter", functionClassAmbulanceService);
+		this.classDefinitions.add(functionClassRettungssanitäter);
 		//
-		FunctionClassDefinition functionClassNotfallsanitäter = (FunctionClassDefinition) obtainClass(tenantId,
-				"Notfallsanitäter", functionClassAmbulanceService);
-		classDefinitions.add(functionClassNotfallsanitäter);
+		ClassDefinition functionClassNotfallsanitäter = obtainClass(tenantId, "Notfallsanitäter", functionClassAmbulanceService);
+		this.classDefinitions.add(functionClassNotfallsanitäter);
 
 		Inheritance i1 = new Inheritance();
+		i1.setId(new ObjectId().toHexString());
 		i1.setSource(functionClassRoot.getId());
 		i1.setTarget(functionClassAmbulanceService.getId());
-		relationships.add(i1);
+		this.relationships.add(i1);
 		Inheritance i2 = new Inheritance();
-		i1.setSource(functionClassAmbulanceService.getId());
-		i1.setTarget(functionClassRettungssanitäter.getId());
-		relationships.add(i2);
+		i2.setId(new ObjectId().toHexString());
+		//AK: i2 statt i1: i1.setSource(functionClassAmbulanceService.getId());
+		i2.setSource(functionClassAmbulanceService.getId());
+		i2.setTarget(functionClassRettungssanitäter.getId());
+		this.relationships.add(i2);
 		Inheritance i3 = new Inheritance();
-		i1.setSource(functionClassAmbulanceService.getId());
-		i1.setTarget(functionClassNotfallsanitäter.getId());
-		relationships.add(i3);
+		i3.setId(new ObjectId().toHexString());
+		i3.setSource(functionClassAmbulanceService.getId());
+		i3.setTarget(functionClassNotfallsanitäter.getId());
+		this.relationships.add(i3);
 
-		for (ClassDefinition cd : classDefinitions) {
-			cd.setConfigurationId(classConfig.getId());
-			classDefinitionRepository.save(cd);
-			classConfig.getClassDefinitionIds().add(cd.getId());
-		}
-		for (Relationship r : relationships) {
-			relationshipRepository.save(r);
-			classConfig.getRelationshipIds().add(r.getId());
-		}
+//		for (ClassDefinition cd : classDefinitions) {
+//			cd.setConfigurationId(classConfig.getId());
+//			classDefinitionRepository.save(cd);
+//			classConfig.getClassDefinitionIds().add(cd.getId());
+//		}
+//		for (Relationship r : relationships) {
+//			relationshipRepository.save(r);
+//			classConfig.getRelationshipIds().add(r.getId());
+//		}
 	}
 
-	public void createClassVerdiensteRK(ClassConfiguration classConfig) {
-		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
-		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
-		String tenantId = classConfig.getTenantId();
-		AchievementClassDefinition certClassRoot = (AchievementClassDefinition) classDefinitionRepository
-				.findByNameAndTenantId("Verdienst", tenantId);
+	public void createClassVerdiensteRK(String tenantId) {
+//		ArrayList<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+//		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+//		String tenantId = classConfig.getTenantId();
+		
+		ClassDefinition certClassRoot = this.classDefinitions.stream().filter(cd -> cd.getName().equals("Verdienst")).findFirst().get();
 		// Fahrtenspange
-		AchievementClassDefinition certClassFahrtenspangeBronze = (AchievementClassDefinition) obtainClass(tenantId,
-				"Fahrtenspange Bronze", certClassRoot);
-		ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(certClassFahrtenspangeBronze.getId(),
-				"Description", tenantId);
+		ClassDefinition certClassFahrtenspangeBronze = obtainClass(tenantId, "Fahrtenspange Bronze", certClassRoot);
+		ClassProperty<Object> cp = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("Description", PropertyType.LONG_TEXT, tenantId));	
 		cp.setDefaultValues(Arrays.asList("Fahrtenspange für über 1000 Fahrten mit dem RK"));
-		classPropertyService.updateClassProperty(certClassFahrtenspangeBronze.getId(), cp.getId(), cp);
-		cp = classPropertyService.getClassPropertyByName(certClassFahrtenspangeBronze.getId(), "issuedOn", tenantId);
-		classPropertyService.updateClassProperty(certClassFahrtenspangeBronze.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassFahrtenspangeBronze);
+		
+		ClassProperty<Object> cpIssuedOn = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("issuedOn", PropertyType.DATE, tenantId));	
+		certClassFahrtenspangeBronze.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassFahrtenspangeBronze.getProperties().add(cp);
+		certClassFahrtenspangeBronze.getProperties().add(cpIssuedOn);
+		
+		this.classDefinitions.add(certClassFahrtenspangeBronze);
 		//
-		AchievementClassDefinition certClassFahrtenspangeSilber = (AchievementClassDefinition) obtainClass(tenantId,
-				"Fahrtenspange Silber", certClassRoot);
-		cp = classPropertyService.getClassPropertyByName(certClassFahrtenspangeSilber.getId(), "Description", tenantId);
+		ClassDefinition certClassFahrtenspangeSilber = obtainClass(tenantId, "Fahrtenspange Silber", certClassRoot);
+		cp = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("Description", PropertyType.LONG_TEXT, tenantId));	
 		cp.setDefaultValues(Arrays.asList("Fahrtenspange für über 2500 Fahrten mit dem RK"));
-		classPropertyService.updateClassProperty(certClassFahrtenspangeSilber.getId(), cp.getId(), cp);
-		cp = classPropertyService.getClassPropertyByName(certClassFahrtenspangeSilber.getId(), "issuedOn", tenantId);
-		classPropertyService.updateClassProperty(certClassFahrtenspangeSilber.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassFahrtenspangeSilber);
+		
+		cpIssuedOn = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("issuedOn", PropertyType.DATE, tenantId));	
+
+		certClassFahrtenspangeSilber.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassFahrtenspangeSilber.getProperties().add(cp);
+		certClassFahrtenspangeSilber.getProperties().add(cpIssuedOn);
+		
+		this.classDefinitions.add(certClassFahrtenspangeSilber);
 		//
-		AchievementClassDefinition certClassFahrtenspangeGold = (AchievementClassDefinition) obtainClass(tenantId,
-				"Fahrtenspange Gold", certClassRoot);
-		cp = classPropertyService.getClassPropertyByName(certClassFahrtenspangeGold.getId(), "Description", tenantId);
+		ClassDefinition certClassFahrtenspangeGold = obtainClass(tenantId, "Fahrtenspange Gold", certClassRoot);
+		cp = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("Description", PropertyType.LONG_TEXT, tenantId));	
+		
 		cp.setDefaultValues(Arrays.asList("Fahrtenspange für über 5000 Fahrten mit dem RK"));
-		classPropertyService.updateClassProperty(certClassFahrtenspangeGold.getId(), cp.getId(), cp);
-		cp = classPropertyService.getClassPropertyByName(certClassFahrtenspangeGold.getId(), "issuedOn", tenantId);
-		classPropertyService.updateClassProperty(certClassFahrtenspangeGold.getId(), cp.getId(), cp);
-		classDefinitions.add(certClassFahrtenspangeGold);
+
+		cpIssuedOn = propertyDefinitionToClassPropertyMapper.toTarget(obtainProperty("issuedOn", PropertyType.DATE, tenantId));	
+
+		certClassFahrtenspangeGold.setProperties(new ArrayList<ClassProperty<Object>>());
+		certClassFahrtenspangeGold.getProperties().add(cp);
+		certClassFahrtenspangeGold.getProperties().add(cpIssuedOn);
+
+		this.classDefinitions.add(certClassFahrtenspangeGold);
 
 		Inheritance i1 = new Inheritance();
+		i1.setId(new ObjectId().toHexString());
 		i1.setSource(certClassRoot.getId());
 		i1.setTarget(certClassFahrtenspangeBronze.getId());
-		relationships.add(i1);
+		this.relationships.add(i1);
 		Inheritance i2 = new Inheritance();
+		i2.setId(new ObjectId().toHexString());
 		i2.setSource(certClassRoot.getId());
 		i2.setTarget(certClassFahrtenspangeSilber.getId());
-		relationships.add(i2);
+		this.relationships.add(i2);
 		Inheritance i3 = new Inheritance();
+		i3.setId(new ObjectId().toHexString());
 		i3.setSource(certClassRoot.getId());
 		i3.setTarget(certClassFahrtenspangeGold.getId());
-		relationships.add(i3);
+		this.relationships.add(i3);
 
-		for (ClassDefinition cd : classDefinitions) {
-			cd.setConfigurationId(classConfig.getId());
-			classDefinitionRepository.save(cd);
-			classConfig.getClassDefinitionIds().add(cd.getId());
-		}
-		for (Relationship r : relationships) {
-			relationshipRepository.save(r);
-			classConfig.getRelationshipIds().add(r.getId());
-		}
+//		for (ClassDefinition cd : classDefinitions) {
+//			cd.setConfigurationId(classConfig.getId());
+//			classDefinitionRepository.save(cd);
+//			classConfig.getClassDefinitionIds().add(cd.getId());
+//		}
+//		for (Relationship r : relationships) {
+//			relationshipRepository.save(r);
+//			classConfig.getRelationshipIds().add(r.getId());
+//		}
 	}
 
 }

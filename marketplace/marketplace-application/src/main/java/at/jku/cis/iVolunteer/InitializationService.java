@@ -104,7 +104,7 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()) == null) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
@@ -115,7 +115,7 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllFlexProdProperties(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()) == null) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
@@ -126,7 +126,7 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllGeneric(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()) == null) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
@@ -137,7 +137,7 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllHeader(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()) == null) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}

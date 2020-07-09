@@ -74,7 +74,7 @@ public class DerivationRuleService {
 	public List<PropertyDefinition<Object>> getGeneralProperties(String tenantId){
 		List<PropertyDefinition<Object>> properties = new ArrayList<PropertyDefinition<Object>>();
 		
-		PropertyDefinition<Object> pd = (PropertyDefinition<Object>) propertyDefinitionRepository.getByNameAndTenantId("Alter", tenantId).get(0);
+		PropertyDefinition<Object> pd = (PropertyDefinition<Object>) propertyDefinitionRepository.getByNameAndTenantId("Alter", tenantId);
 		properties.add(pd);
 		
 		return properties;

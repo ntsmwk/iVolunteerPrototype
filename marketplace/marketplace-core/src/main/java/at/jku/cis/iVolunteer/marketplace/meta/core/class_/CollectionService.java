@@ -156,6 +156,7 @@ public class CollectionService {
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+
 			if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
 				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(),
 						PATH_DELIMITER));
