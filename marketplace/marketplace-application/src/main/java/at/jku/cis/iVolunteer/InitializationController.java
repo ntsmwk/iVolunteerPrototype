@@ -28,8 +28,8 @@ public class InitializationController {
 		addClassConfigurations();
 		addAPIClassDefinitions();
 // TODO exception classcast
-//		addRuleTestConfiguration();
-//		addRuleUserData();
+		addRuleTestConfiguration();
+		addRuleUserData();
 	}
 	
 	@PutMapping("/init/add-rule-test-data")
