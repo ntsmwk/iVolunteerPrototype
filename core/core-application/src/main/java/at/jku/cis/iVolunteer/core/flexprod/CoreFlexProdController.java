@@ -35,11 +35,11 @@ public class CoreFlexProdController {
 	@GetMapping("/{coreFlexProdId}/marketplace")
 	public Marketplace getRegisteredMarketplaces(@PathVariable("coreFlexProdId") String coreFlexProdId) {
 		CoreUser flexProdUser = coreUserRepository.findOne(coreFlexProdId);
-		if (flexProdUser.getRegisteredMarketplaces().isEmpty()) {
+		if (flexProdUser.getRegisteredMarketplaceIds().isEmpty()) {
 			return null;
 		}
 
-		return this.marketplaceRepository.findOne(flexProdUser.getRegisteredMarketplaces().get(0));
+		return this.marketplaceRepository.findOne(flexProdUser.getRegisteredMarketplaceIds().get(0));
 	}
 
 	@PostMapping("/{coreFlexProdId}/register/{marketplaceId}")
@@ -51,7 +51,7 @@ public class CoreFlexProdController {
 			throw new NotFoundException();
 		}
 
-		coreFlexProdUser.getRegisteredMarketplaces().add(marketplaceId);
+		coreFlexProdUser.getRegisteredMarketplaceIds().add(marketplaceId);
 		coreFlexProdUser = coreUserRepository.save(coreFlexProdUser);
 
 		User flexProdUser = new User();

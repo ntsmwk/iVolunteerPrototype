@@ -85,10 +85,9 @@ public class CoreHelpSeekerInitializationService {
 		String tenantIdMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG).getId();
 		CoreUser mvUser = coreUserRepository.findOne(USER_MV);
 
-		// TODO: needs change later on, works for now, since there is only one
-		// marketplace
-		Marketplace mp = this.marketplaceRepository
-				.findOne(ffUser.getRegisteredMarketplaceIds().stream().findFirst().orElse(null));
+		// TODO: needs change later on, works for now,
+		// since there is only one marketplace
+		Marketplace mp = this.marketplaceRepository.findByName("Marketplace 1");
 
 		ffUser.setSubscribedTenants(
 				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdFF, UserRole.HELP_SEEKER)));
