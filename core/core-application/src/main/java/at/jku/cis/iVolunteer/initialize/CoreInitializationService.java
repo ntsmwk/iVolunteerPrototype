@@ -101,7 +101,7 @@ public class CoreInitializationService {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace != null) {
-//			TODO
+//			TODO register init
 //			coreRecruiterController.registerMarketpace(recruiter.getId(), marketplace.getId(), "");
 		}
 	}

@@ -74,8 +74,14 @@ public class UserController {
     	return userRepository.save(user);
     }
     
-    @PutMapping("/user/subscribe/{marketplaceId}/{tenantId}/{userId}")
-    private User subscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId) {
+    @PutMapping("/user/subscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
+    private User subscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") String userRole) {
+    	//TODO AK
+    	return null;
+    }
+    
+    @PutMapping("/user/unsubscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
+    private User unsubscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") String userRole) {
     	//TODO AK
     	return null;
     }

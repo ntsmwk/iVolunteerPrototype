@@ -140,13 +140,13 @@ public class CoreInitializationController {
 	
 	@PutMapping("/init/tenant/unsubscribe/helpseekers")
 	public void unsubscribeHelpseekersFromTenant() {
-		//TODO
+		//TODO init
 	}
 	
 	
 	@PutMapping("/init/tenant/unsubscribe/volunteers")
 	public void unsubscribeVolunteersFromTenant() {
-		//TODO
+		//TODO init
 	}
 	
 	
@@ -185,18 +185,18 @@ public class CoreInitializationController {
 	
 	@PutMapping("/init/marketplace/unregister/all")
 	public void unregisterAllFromMarketplace() {
-		//TODO
+		//TODO init
 	}
 	
 	@PutMapping("/init/marketplace/unregister/helpseekers")
 	public void unregisterHelpseekersFromMarketplace() {
-		//TODO
+		//TODO init
 	}
 	
 	
 	@PutMapping("/init/marketplace/unregister/volunteers")
 	public void unregistereVolunteersFromMarketplace() {
-		//TODO
+		//TODO init
 	}
 	
 	

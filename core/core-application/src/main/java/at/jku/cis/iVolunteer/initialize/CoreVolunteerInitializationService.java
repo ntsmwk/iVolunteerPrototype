@@ -97,7 +97,6 @@ public class CoreVolunteerInitializationService {
 
 			setImage(fileName, volunteer);
 
-			// TODO
 			volunteer.setRegisteredMarketplaceIds(
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
@@ -129,7 +128,7 @@ public class CoreVolunteerInitializationService {
 		coreUserRepository.findByUsernameIn(Arrays.asList(USERNAMES)).forEach(volunteers::add);	
 		
 		List<Tenant> tenants = coreTenantRepository.findAll();
-		// TODO
+
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
 		
 		for (int i = 0; i < volunteers.size(); i++) {

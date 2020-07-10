@@ -45,6 +45,16 @@ public class CoreMarketplaceRestClient {
 		String url = format(preUrl, marketplaceURL, user);
 		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
 	}
+	
+	public User subscribeUserToTenant(String marketplaceUrl, String marketplaceId, String tenantId, String userId, String authorization, UserRole role) {
+		//TODO AK
+		return null;
+	}
+	
+	public User unsubscribeUserFromTenant(String marketplaceUrl, String marketplacId, String tenantId, String userId, String Authorization, UserRole role) {
+		//TODO AK
+		return null;
+	}
 
 	private HttpEntity<?> buildEntity(Object body, String authorization) {
 		return new HttpEntity<>(body, buildAuthorizationHeader(authorization));
