@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
+import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -28,6 +29,7 @@ public class CoreUserService {
 
     @Autowired private CoreUserRepository coreUserRepository;
     @Autowired private MarketplaceRepository marketplaceRepository;
+    @Autowired private TenantRepository tenantRepository;
     @Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	List<CoreUser> findAll() {
@@ -120,6 +122,13 @@ public class CoreUserService {
 
 	CoreUser subscribeUserToTenant(String userId, String marketplaceId,  String tenantId, UserRole role) {
 		//TODO AK
+		CoreUser user = coreUserRepository.findOne(userId);
+		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
+		
+		if (marketplace == null || user == null || !tenantRepository.exists(tenantId)) {
+			return null;
+		}
+		
 		return null;
 	}
 

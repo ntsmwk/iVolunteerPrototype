@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +30,19 @@ public class UserController {
     public User findById(@PathVariable("id") String id) {
         return userRepository.findOne(id);
     }
+    
+    @GetMapping("/user/{id}")
+    private User findUserById(@PathVariable("id") String id) {
+    	return userRepository.findOne(id);
+    }
 
     @GetMapping("/volunteer/username/{username}")
     public User findByUsername(@PathVariable("username") String username) {
+        return userRepository.findByUsername(username);
+    }
+    
+    @GetMapping("/user/username/{username}")
+    private User findUserByUsername(@PathVariable("username") String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -56,6 +67,17 @@ public class UserController {
             throw new BadRequestException("HelpSeeker already registed");
         }
         return userRepository.insert(helpSeeker);
+    }
+    
+    @PostMapping("/user/new")
+    public User registerUserToMarketplace(@RequestBody User user) {
+    	return userRepository.save(user);
+    }
+    
+    @PutMapping("/user/subscribe/{marketplaceId}/{tenantId}/{userId}")
+    private User subscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId) {
+    	//TODO AK
+    	return null;
     }
 
     @GetMapping("/recruiter/{id}")
