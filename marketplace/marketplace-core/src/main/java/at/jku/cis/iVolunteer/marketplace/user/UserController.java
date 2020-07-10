@@ -69,18 +69,18 @@ public class UserController {
         return userRepository.insert(helpSeeker);
     }
     
-    @PostMapping("/user/new")
+    @PostMapping("/user/register")
     public User registerUserToMarketplace(@RequestBody User user) {
     	return userRepository.save(user);
     }
     
-    @PutMapping("/user/subscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
+    @PostMapping("/user/subscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
     private User subscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") String userRole) {
     	//TODO AK
     	return null;
     }
     
-    @PutMapping("/user/unsubscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
+    @PostMapping("/user/unsubscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
     private User unsubscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") String userRole) {
     	//TODO AK
     	return null;
