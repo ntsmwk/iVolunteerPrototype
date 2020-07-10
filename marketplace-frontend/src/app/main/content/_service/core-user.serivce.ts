@@ -41,12 +41,12 @@ import { User, UserRole } from '../_model/user';
     return this.http.post(`/core/user/${userId}/register/${marketplaceId}`, {});
   }
 
-  createUser(user: User) {
-    return this.http.post(`/core/user/new`, user);
+  createUser(user: User, updateMarketplaces: boolean) {
+    return this.http.post(`/core/user/new?updateMarketplaces=${updateMarketplaces}`, user);
   }
 
-  updateUser(user: User) {
-    return this.http.put(`/core/user/update`, user);
+  updateUser(user: User, updateMarketplaces: boolean) {
+    return this.http.put(`/core/user/update?updateMarketplaces=${updateMarketplaces}`, user);
   }
 
   subscribeUserToTenant(userId: string, marketplaceId: string, tenantId: string, role: UserRole) {

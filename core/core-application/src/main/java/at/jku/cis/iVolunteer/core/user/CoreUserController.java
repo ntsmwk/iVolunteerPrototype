@@ -66,32 +66,37 @@ public class CoreUserController {
 	private List<Marketplace> findRegisteredMarketplaces(@PathVariable("userId") String userId) {
 		return coreUserService.findRegisteredMarketplaces(userId);
 	}
-	
+
 	@PostMapping("/user/{userId}/register/{marketplaceId")
-	private CoreUser registerToMarketplace(@PathVariable("userId") String userId, @PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
+	private CoreUser registerToMarketplace(@PathVariable("userId") String userId,
+			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
 		return coreUserService.registerToMarketplace(userId, marketplaceId, authorization);
 	}
-	
+
 	@PostMapping("/user/new")
-	private CoreUser addNewUser(@RequestBody CoreUser user) {
-		return coreUserService.addNewUser(user);
+	private CoreUser addNewUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization, @RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
+		return coreUserService.addNewUser(user, authorization, updateMarketplaces);
 	}
 
 	@PutMapping("/user/update")
-	private CoreUser updateUser(@RequestBody CoreUser user) {
-		return coreUserService.updateUser(user);
+	private CoreUser updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization, @RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces ) {
+		return coreUserService.updateUser(user, authorization, updateMarketplaces);
 	}
 
-	
 	@PutMapping("/user/{userId}/subscribe/{marketplaceId}/{tenantId}/{role}")
-	private CoreUser subscribeUserToTenant(@PathVariable("userId") String userId, @PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
-		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role);
+	private CoreUser subscribeUserToTenant(@PathVariable("userId") String userId,
+			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
+			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
+		
+		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role, authorization);
 	}
 
 	@PutMapping("/user/{userId}/unsubscribe/{marketplaceId}/{tenantId}/{role}")
-	private CoreUser unsubscribeUserFromTenant(@PathVariable("userId") String userId, @PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
-		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role);
+	private CoreUser unsubscribeUserFromTenant(@PathVariable("userId") String userId,
+			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
+			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
+		
+		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role, authorization);
 	}
-
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
@@ -28,9 +29,9 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 public class CoreUserService {
 
     @Autowired private CoreUserRepository coreUserRepository;
-    @Autowired private MarketplaceRepository marketplaceRepository;
     @Autowired private TenantRepository tenantRepository;
     @Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+    @Autowired private MarketplaceService marketplaceService;
 
 	List<CoreUser> findAll() {
 		return coreUserRepository.findAll();
@@ -89,14 +90,13 @@ public class CoreUserService {
 			return null;
 		}
 		
-		List<Marketplace> marketplaces = new ArrayList<>();
-		marketplaceRepository.findAll(user.getRegisteredMarketplaceIds()).forEach(marketplaces::add);;
+		List<Marketplace> marketplaces = marketplaceService.findAll(user.getRegisteredMarketplaceIds());
 		return marketplaces;
 	}
 
 	CoreUser registerToMarketplace(String userId, String marketplaceId, String authorization) {
 		CoreUser coreUser = coreUserRepository.findOne(userId);
-		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
+		Marketplace marketplace = marketplaceService.findById(marketplaceId);
 
 		if (coreUser == null || marketplace == null) {
 			throw new NotFoundException();
@@ -106,35 +106,65 @@ public class CoreUserService {
 		coreUser = coreUserRepository.save(coreUser);
 		
 		User marketplaceUser = new User(coreUser);
-		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, marketplaceUser);
+		coreMarketplaceRestClient.registerOrUpdateMarketplaceUser(marketplace.getUrl(), authorization, marketplaceUser);
 		
 		return coreUser;
 	}
 	
 
-	CoreUser addNewUser(CoreUser user) {
-		return this.coreUserRepository.save(user);
+	CoreUser addNewUser(CoreUser user, String authorization, boolean updateMarketplaces) {
+		return this.updateUser(user, authorization, updateMarketplaces);
 	}
 	
-	CoreUser updateUser(CoreUser user) {
-		return this.coreUserRepository.save(user);
+	CoreUser updateUser(CoreUser user, String authorization, boolean updateMarketplaces) {
+		user = this.coreUserRepository.save(user);
+
+		if (updateMarketplaces) {
+			this.updateMarketplaces(user, authorization);
+		}
+		
+		return user;
+	}
+	
+	private void updateMarketplaces(CoreUser user, String authorization) {
+		List<Marketplace> marketplaces = this.findRegisteredMarketplaces(user.getId());
+		
+		for (Marketplace marketplace : marketplaces) {
+			coreMarketplaceRestClient.registerOrUpdateMarketplaceUser(marketplace.getUrl(), authorization, user);
+		}
+		
 	}
 
-	CoreUser subscribeUserToTenant(String userId, String marketplaceId,  String tenantId, UserRole role) {
-		//TODO AK
+	CoreUser subscribeUserToTenant(String userId, String marketplaceId, String tenantId, UserRole role, String authorization) {
 		CoreUser user = coreUserRepository.findOne(userId);
-		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
+		Marketplace marketplace = marketplaceService.findById(marketplaceId);
 		
 		if (marketplace == null || user == null || !tenantRepository.exists(tenantId)) {
 			return null;
 		}
 		
-		return null;
+		user.addSubscribedTenant(marketplaceId, tenantId, role);
+		user = coreUserRepository.save(user);
+
+		coreMarketplaceRestClient.subscribeUserToTenant(marketplace.getUrl(), marketplaceId, tenantId, userId, authorization, role);
+		
+		return user;
 	}
 
-	CoreUser unsubscribeUserFromTenant(String userId, String marketplaceId, String tenantId, UserRole role) {
-		//TODO AK
-		return null;
+	CoreUser unsubscribeUserFromTenant(String userId, String marketplaceId, String tenantId, UserRole role, String authorization) {
+		CoreUser user = coreUserRepository.findOne(userId);
+		Marketplace marketplace = marketplaceService.findById(marketplaceId);
+		
+		if (marketplace == null || user == null || !tenantRepository.exists(tenantId)) {
+			return null;
+		}
+		
+		user.removeSubscribedTenant(marketplaceId, tenantId, role);
+		user = coreUserRepository.save(user);
+		
+		coreMarketplaceRestClient.unsubscribeUserFromTenant(marketplace.getUrl(), marketplaceId, tenantId, userId, authorization, role);
+		
+		return user;
 	}
     
     

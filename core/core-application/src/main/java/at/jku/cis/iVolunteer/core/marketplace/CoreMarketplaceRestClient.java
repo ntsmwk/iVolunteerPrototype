@@ -46,7 +46,7 @@ public class CoreMarketplaceRestClient {
 		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
 	}
 	
-	public User registerUserToMarketplace(String marketplaceURL, String authorization, User user) {
+	public User registerOrUpdateMarketplaceUser(String marketplaceURL, String authorization, User user) {
 		String preUrl = "{0}/user/register";
 		String url = format(preUrl, marketplaceURL, user);
 		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
