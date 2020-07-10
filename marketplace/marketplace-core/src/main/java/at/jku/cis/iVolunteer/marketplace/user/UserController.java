@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 import javax.ws.rs.BadRequestException;
 
@@ -75,15 +77,38 @@ public class UserController {
     }
     
     @PostMapping("/user/subscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
-    private User subscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") String userRole) {
-    	//TODO AK
-    	return null;
+    private User subscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
+    	User user = userRepository.findOne(userId);
+    	
+    	if (user == null) {
+    		return null;
+    	}
+    	
+		user.addSubscribedTenant(marketplaceId, tenantId, role);
+		user = userRepository.save(user);
+    	
+    	return user;
     }
     
+    private TenantUserSubscription findTenantUserSubscription(User user, String marketplaceId, String tenantId, UserRole role) {
+    	return user.getSubscribedTenants().stream().filter(st -> st.getMarketplaceId().equals(marketplaceId) && st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().get();
+    }
+    
+    
+    
     @PostMapping("/user/unsubscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
-    private User unsubscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") String userRole) {
-    	//TODO AK
-    	return null;
+    private User unsubscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
+    	User user = userRepository.findOne(userId);
+    	
+    	if (user == null) {
+    		return null;
+    	}
+    	
+    	
+    	user.removeSubscribedTenant(marketplaceId, tenantId, role);
+    	user = userRepository.save(user);
+    	
+    	return user;
     }
 
     @GetMapping("/recruiter/{id}")

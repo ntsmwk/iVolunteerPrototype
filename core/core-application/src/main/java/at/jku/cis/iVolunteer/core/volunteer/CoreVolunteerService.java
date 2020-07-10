@@ -89,7 +89,7 @@ public class CoreVolunteerService {
 		if (coreVolunteer == null || marketplace == null) {
 			throw new NotFoundException();
 		}
-		coreVolunteer.removeSubscribedTenant(marketplaceId, tenantId);
+		coreVolunteer.removeSubscribedTenant(marketplaceId, tenantId, UserRole.VOLUNTEER);
 		coreUserRepository.save(coreVolunteer);
 
 		// TODO MWE remove tenant from MP db..

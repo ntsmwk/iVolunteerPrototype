@@ -210,16 +210,22 @@ public class User {
 		this.subscribedTenants = subscribedTenants;
 	}
 
-	public void addSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
-		if (!this.subscribedTenants.stream().filter(t -> t.getMarketplaceId() == marketplaceId)
-				.map(t -> t.getTenantId()).collect(Collectors.toList()).contains(tenantId)) {
+	public List<TenantUserSubscription> addSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
+		TenantUserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
+		if (tenantUserSubscription == null) {
 			this.subscribedTenants.add(new TenantUserSubscription(marketplaceId, tenantId, role));
 		}
-
+		return this.subscribedTenants;
 	}
+	
+	  private TenantUserSubscription findTenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
+    	return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId) && st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().get();
+    }
+	
+	
 
-	public List<TenantUserSubscription> removeSubscribedTenant(String marketplaceId, String tenantId) {
-		this.subscribedTenants.removeIf(s -> s.getTenantId() == tenantId && s.getMarketplaceId() == marketplaceId);
+	public List<TenantUserSubscription> removeSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
+		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId) && s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));
 		return this.subscribedTenants;
 	}
 }
