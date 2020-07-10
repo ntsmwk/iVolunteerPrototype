@@ -22,55 +22,76 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @RestController
-@RequestMapping("/user")
 public class CoreUserController {
 
-	@Autowired
-	private CoreUserRepository coreUserRepository;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreUserService coreUserService;
+	@Autowired private CoreUserService coreUserService;
+
+	@GetMapping("/user/all")
+	private List<CoreUser> findAll() {
+		return coreUserService.findAll();
+	}
+
+	@GetMapping("/user/all/tenant/{tenantId}")
+	private List<CoreUser> getAllByTenantId(@PathVariable("tenantId") String tenantId) {
+		return coreUserService.getAllByTenantId(tenantId);
+	}
+
+	@GetMapping("/user/all/rote/{role}")
+	private List<CoreUser> getAllByUserRole(@PathVariable("role") UserRole userRole) {
+		return coreUserService.getAllByUserRole(userRole);
+	}
+
+	@GetMapping("/all/rote/{role}/tenant/{tenantId}")
+	private List<CoreUser> getAllByTenantIdAndUserRole(@PathVariable("role") UserRole userRole,
+			@PathVariable("tenantId") String tenantId) {
+		return coreUserService.getAllByTenantIdAndUserRole(userRole, tenantId);
+	}
+
+	@GetMapping("/user/{userId}")
+	private CoreUser getByUserId(@PathVariable("userId") String userId) {
+		return coreUserService.getByUserId(userId);
+	}
+
+	@GetMapping("/user/name/{username}")
+	private CoreUser getByUserName(@PathVariable("username") String username) {
+		return coreUserService.getByUserName(username);
+	}
+
+	@GetMapping("/find-by-ids")
+	private List<CoreUser> getByUserId(@RequestBody List<String> userIds) {
+		return coreUserService.getByUserId(userIds);
+	}
+
+	@GetMapping("/user/{userId}/marketplaces")
+	private List<Marketplace> findRegisteredMarketplaces(@PathVariable("userId") String userId) {
+		return coreUserService.findRegisteredMarketplaces(userId);
+	}
+	
+	@PostMapping("/user/{userId}/register/{marketplaceId")
+	private CoreUser registerToMarketplace(@PathVariable("userId") String userId, @PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
+		return coreUserService.registerToMarketplace(userId, marketplaceId, authorization);
+	}
+	
+	@PostMapping("/user/new")
+	private CoreUser addNewUser(@RequestBody CoreUser user) {
+		return coreUserService.addNewUser(user);
+	}
+
+	@PutMapping("/user/update")
+	private CoreUser updateUser(@RequestBody CoreUser user) {
+		return coreUserService.updateUser(user);
+	}
 
 	
-
-//	@GetMapping("/all")
-//	public List<CoreUser> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId @RequestParam(value="")) {
-//		return coreUserService.getCoreUsersByRoleAndSubscribedTenants(UserRole.HELP_SEEKER, tenantId);
-//
-//	}
-
-	@PutMapping("/find-by-ids")
-	public List<CoreUser> getAllCoreVolunteers(@RequestBody List<String> coreHelpseekerIds) {
-		List<CoreUser> coreHelpseekers = new ArrayList<>();
-
-		this.coreUserService.getCoreUsersByRoleAndId(UserRole.HELP_SEEKER, coreHelpseekerIds)
-				.forEach(coreHelpseekers::add);
-
-		return coreHelpseekers;
+	@PutMapping("/user/{userId}/subscribe/{marketplaceId}/{tenantId}/{role}")
+	private CoreUser subscribeUserToTenant(@PathVariable("userId") String userId, @PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
+		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role);
 	}
 
-	@GetMapping("/{coreHelpSeekerId}")
-	public CoreUser getCorehelpSeeker(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
-		return coreUserRepository.findOne(coreHelpSeekerId);
+	@PutMapping("/user/{userId}/unsubscribe/{marketplaceId}/{tenantId}/{role}")
+	private CoreUser unsubscribeUserFromTenant(@PathVariable("userId") String userId, @PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
+		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role);
 	}
 
-	@GetMapping("/{coreHelpSeekerId}/marketplace")
-	public Marketplace getRegisteredMarketplaces(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
-		CoreUser helpSeeker = coreUserRepository.findOne(coreHelpSeekerId);
-		if (helpSeeker.getRegisteredMarketplaceIds().isEmpty()) {
-			return null;
-		}
-		return this.marketplaceRepository.findOne(helpSeeker.getRegisteredMarketplaceIds().get(0));
-	}
-
-	@PostMapping("/{coreHelpSeekerId}/register/{marketplaceId}/tenant/{tenantId}")
-	public void registerMarketpace(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId,
-			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
-			@RequestHeader("Authorization") String authorization) {
-
-//		coreHelpSeekerService.registerMarketplace(coreHelpSeekerId, marketplaceId, tenantId, authorization);
-
-	}
 
 }

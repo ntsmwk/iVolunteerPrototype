@@ -1,6 +1,3 @@
-import { Marketplace } from "./marketplace";
-import { Tenant } from "./tenant";
-
 export class User {
   id: string;
   username: string;
@@ -28,11 +25,11 @@ export class User {
 }
 
 export enum UserRole {
-  VOLUNTEER = "VOLUNTEER",
-  HELP_SEEKER = "HELP_SEEKER",
-  ADMIN = "ADMIN",
-  RECRUITER = "RECRUITER",
-  FLEXPROD = "FLEXPROD",
+  VOLUNTEER = 'VOLUNTEER',
+  HELP_SEEKER = 'HELP_SEEKER',
+  ADMIN = 'ADMIN',
+  RECRUITER = 'RECRUITER',
+  FLEXPROD = 'FLEXPROD',
 }
 export class TenantUserSubscription {
   marketplaceId: string;
