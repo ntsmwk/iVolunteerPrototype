@@ -69,16 +69,16 @@ public class CoreVolunteerInitializationService {
 		createVolunteer(USERNAMES[3], RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "",
 				"img/weixlbaumer_small.png");
 
-		createVolunteer(USERNAMES[4], "passme", "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
-		createVolunteer(USERNAMES[5], "passme", "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
-		createVolunteer(USERNAMES[6], "passme", "Wieland", "Schwinger", LocalDate.of(1976, 6, 9), "", "");
-		createVolunteer(USERNAMES[7], "passme", "Birgit", "Pröll", LocalDate.of(1976, 10, 5), "", "");
-		createVolunteer(USERNAMES[8], "passme", "Katharina", "Kofler", LocalDate.of(1998, 5, 8), "Kati", "");
-		createVolunteer(USERNAMES[9], "passme", "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
-		createVolunteer(USERNAMES[10], "passme", "Kerstin", "Bauer", LocalDate.of(1960, 2, 17), "", "");
-		createVolunteer(USERNAMES[11], "passme", "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
-		createVolunteer(USERNAMES[12], "passme", "Werner", "Haube", LocalDate.of(1970, 8, 8), "", "");
-		createVolunteer(USERNAMES[13], "passme", "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");
+		createVolunteer(USERNAMES[4], RAW_PASSWORD, "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
+		createVolunteer(USERNAMES[5], RAW_PASSWORD, "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
+		createVolunteer(USERNAMES[6], RAW_PASSWORD, "Wieland", "Schwinger", LocalDate.of(1976, 6, 9), "", "");
+		createVolunteer(USERNAMES[7], RAW_PASSWORD, "Birgit", "Pröll", LocalDate.of(1976, 10, 5), "", "");
+		createVolunteer(USERNAMES[8], RAW_PASSWORD, "Katharina", "Kofler", LocalDate.of(1998, 5, 8), "Kati", "");
+		createVolunteer(USERNAMES[9], RAW_PASSWORD, "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
+		createVolunteer(USERNAMES[10], RAW_PASSWORD, "Kerstin", "Bauer", LocalDate.of(1960, 2, 17), "", "");
+		createVolunteer(USERNAMES[11], RAW_PASSWORD, "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
+		createVolunteer(USERNAMES[12], RAW_PASSWORD, "Werner", "Haube", LocalDate.of(1970, 8, 8), "", "");
+		createVolunteer(USERNAMES[13], RAW_PASSWORD, "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");
 	}
 
 	private CoreUser createVolunteer(String username, String password, String firstName, String lastName,
@@ -101,6 +101,8 @@ public class CoreVolunteerInitializationService {
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
 			volunteer = coreUserRepository.insert(volunteer);
+			
+			coreUserService.addNewUser(volunteer, "", false);
 
 			// List<String> tenantIds = new ArrayList<String>();
 			// tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
@@ -137,21 +139,22 @@ public class CoreVolunteerInitializationService {
 			for (Tenant t : tenants) {
 				volunteer.addSubscribedTenant(mp.getId(), t.getId(), UserRole.VOLUNTEER);
 			}
+			coreUserService.updateUser(volunteer, "", false);
 		}
 
-		coreUserRepository.save(volunteers);
 	}
 
 	protected void registerVolunteers() {
-		this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER)
-				.forEach(volunteer -> registerVolunteer(volunteer, volunteer.getSubscribedTenants().stream().map(st -> st.getTenantId()).collect(Collectors.toList())));
-	}
-
-	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-
-		if (mp != null) {
-			coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
-		}
+		
+		this.coreUserService.getAllByUserRole(UserRole.VOLUNTEER).forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
 	}
+
+//	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
+//		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+//
+//		if (mp != null) {
+//			coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
+//		}
+//	}
 }

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { CoreUserService } from './core-user.serivce';
+import { UserRole } from '../_model/user';
 
 @Injectable({
   providedIn: "root",
@@ -11,12 +12,12 @@ export class CoreHelpSeekerService {
 
   findAll() {
     // return this.http.get(`/core/helpseeker/all`);
-    return this.userService.findAll();
+    return this.userService.findAllByRole(UserRole.HELP_SEEKER);
   }
 
   findAllByTenantId(tenantId: string) {
     // return this.http.get(`/core/helpseeker/all?tId=${tenantId}`);
-    return this.userService.findAllByTenantId(tenantId);
+    return this.userService.findAllByRoleAndTenantId(tenantId, UserRole.HELP_SEEKER);
   }
 
   findById(helpSeekerId: string) {

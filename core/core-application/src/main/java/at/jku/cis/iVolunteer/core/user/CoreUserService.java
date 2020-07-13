@@ -33,11 +33,11 @@ public class CoreUserService {
     @Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
     @Autowired private MarketplaceService marketplaceService;
 
-	List<CoreUser> findAll() {
+	public List<CoreUser> findAll() {
 		return coreUserRepository.findAll();
 	}
 
-	List<CoreUser> getAllByTenantId(String tenantId) {
+	public List<CoreUser> getAllByTenantId(String tenantId) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
 		for (CoreUser user : allUsers) {
@@ -48,7 +48,7 @@ public class CoreUserService {
 		return returnUsers;
 	}
 
-	List<CoreUser> getAllByUserRole(UserRole userRole) {
+	public List<CoreUser> getAllByUserRole(UserRole userRole) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
 		for (CoreUser user : allUsers) {
@@ -59,7 +59,7 @@ public class CoreUserService {
 		return returnUsers;
 	}
 
-	List<CoreUser> getAllByTenantIdAndUserRole(UserRole userRole, String tenantId) {
+	public List<CoreUser> getAllByTenantIdAndUserRole(UserRole userRole, String tenantId) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
 		for (CoreUser user : allUsers) {
@@ -70,31 +70,39 @@ public class CoreUserService {
 		return returnUsers;
 	}
 
-	CoreUser getByUserId(String userId) {
+	public CoreUser getByUserId(String userId) {
 		return coreUserRepository.findOne(userId);
 	}
 
-	CoreUser getByUserName(String username) {
+	public CoreUser getByUserName(String username) {
 		return coreUserRepository.findByUsername(username);
 	}
 
-	List<CoreUser> getByUserId(List<String> userIds) {
+	public List<CoreUser> getByUserId(List<String> userIds) {
 		List<CoreUser> users = new ArrayList<>();
 		coreUserRepository.findAll(userIds).forEach(users::add);
 		return users;
 	}
 
-	List<Marketplace> findRegisteredMarketplaces(String userId) {
+	public List<Marketplace> findRegisteredMarketplaces(String userId) {
 		CoreUser user = coreUserRepository.findOne(userId);
 		if (user == null) {
 			return null;
 		}
-		System.out.println("user not null");
 		List<Marketplace> marketplaces = marketplaceService.findAll(user.getRegisteredMarketplaceIds());
 		return marketplaces;
 	}
+	
+	public Marketplace getOnlyFirstMarketplace(String userId) {
+		CoreUser user = coreUserRepository.findOne(userId);
+		if (user.getRegisteredMarketplaceIds().isEmpty()) {
+			return null;
+		}
+		return this.findRegisteredMarketplaces(userId).get(0);
+	}
+	
 
-	CoreUser registerToMarketplace(String userId, String marketplaceId, String authorization) {
+	public CoreUser registerToMarketplace(String userId, String marketplaceId, String authorization) {
 		CoreUser coreUser = coreUserRepository.findOne(userId);
 		Marketplace marketplace = marketplaceService.findById(marketplaceId);
 
@@ -112,11 +120,11 @@ public class CoreUserService {
 	}
 	
 
-	CoreUser addNewUser(CoreUser user, String authorization, boolean updateMarketplaces) {
+	public CoreUser addNewUser(CoreUser user, String authorization, boolean updateMarketplaces) {
 		return this.updateUser(user, authorization, updateMarketplaces);
 	}
 	
-	CoreUser updateUser(CoreUser user, String authorization, boolean updateMarketplaces) {
+	public CoreUser updateUser(CoreUser user, String authorization, boolean updateMarketplaces) {
 		user = this.coreUserRepository.save(user);
 
 		if (updateMarketplaces) {
@@ -135,7 +143,7 @@ public class CoreUserService {
 		
 	}
 
-	CoreUser subscribeUserToTenant(String userId, String marketplaceId, String tenantId, UserRole role, String authorization) {
+	public CoreUser subscribeUserToTenant(String userId, String marketplaceId, String tenantId, UserRole role, String authorization, boolean updateMarketplace) {
 		CoreUser user = coreUserRepository.findOne(userId);
 		Marketplace marketplace = marketplaceService.findById(marketplaceId);
 		
@@ -146,12 +154,14 @@ public class CoreUserService {
 		user.addSubscribedTenant(marketplaceId, tenantId, role);
 		user = coreUserRepository.save(user);
 
-		coreMarketplaceRestClient.subscribeUserToTenant(marketplace.getUrl(), marketplaceId, tenantId, userId, authorization, role);
-		
+		if (updateMarketplace) {
+			coreMarketplaceRestClient.subscribeUserToTenant(marketplace.getUrl(), marketplaceId, tenantId, userId, authorization, role);
+		}
+			
 		return user;
 	}
 
-	CoreUser unsubscribeUserFromTenant(String userId, String marketplaceId, String tenantId, UserRole role, String authorization) {
+	public CoreUser unsubscribeUserFromTenant(String userId, String marketplaceId, String tenantId, UserRole role, String authorization, boolean updateMarketplace) {
 		CoreUser user = coreUserRepository.findOne(userId);
 		Marketplace marketplace = marketplaceService.findById(marketplaceId);
 		
@@ -162,8 +172,10 @@ public class CoreUserService {
 		user.removeSubscribedTenant(marketplaceId, tenantId, role);
 		user = coreUserRepository.save(user);
 		
-		coreMarketplaceRestClient.unsubscribeUserFromTenant(marketplace.getUrl(), marketplaceId, tenantId, userId, authorization, role);
-		
+		if (updateMarketplace) {
+			coreMarketplaceRestClient.unsubscribeUserFromTenant(marketplace.getUrl(), marketplaceId, tenantId, userId, authorization, role);
+		}
+			
 		return user;
 	}
     

@@ -47,13 +47,6 @@ public class UserController {
         return userRepository.findByUsername(username);
     }
 
-    @GetMapping("/volunteer/{id}/competencies")
-    public List<CompetenceClassDefinition> findCompetencies(@PathVariable("id") String id) {
-
-        // TODO implement ...
-        return Collections.emptyList();
-    }
-
     @PostMapping("/volunteer")
     public User registerVolunteer(@RequestBody User volunteer) {
         if (userRepository.findOne(volunteer.getId()) == null) {

@@ -65,6 +65,7 @@ public class CoreUserController {
 	@GetMapping("/user/{userId}/marketplaces")
 	private List<Marketplace> findRegisteredMarketplaces(@PathVariable("userId") String userId) {
 		return coreUserService.findRegisteredMarketplaces(userId);
+//		return coreUserService.getOnlyFirstMarketplace(userId);
 	}
 
 	@PostMapping("/user/{userId}/register/{marketplaceId")
@@ -88,7 +89,7 @@ public class CoreUserController {
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
 		
-		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role, authorization);
+		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role, authorization, true);
 	}
 
 	@PutMapping("/user/{userId}/unsubscribe/{marketplaceId}/{tenantId}/{role}")
@@ -96,7 +97,7 @@ public class CoreUserController {
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
 		
-		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role, authorization);
+		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role, authorization, true);
 	}
 
 }

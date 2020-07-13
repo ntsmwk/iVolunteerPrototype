@@ -34,8 +34,12 @@ public class TenantService {
 		return tenantRepository.findAll();
 	}
 
-	public String getTenantByName(String tenantName) {
+	public String getTenantIdByName(String tenantName) {
 		return tenantRepository.findByName(tenantName).getId();
+	}
+	
+	public Tenant getTenantByName(String tenantName) {
+		return tenantRepository.findByName(tenantName);
 	}
 
 	public Tenant getTenantById(String tenantId) {
