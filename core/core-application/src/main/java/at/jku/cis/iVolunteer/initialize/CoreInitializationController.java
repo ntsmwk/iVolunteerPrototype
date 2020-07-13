@@ -5,11 +5,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.core.admin.CoreAdminController;
-import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerService;
-import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterController;
-import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 
 @RestController
 public class CoreInitializationController {

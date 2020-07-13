@@ -16,6 +16,8 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { HelpSeekerGuard } from "app/main/content/_guard/help-seeker.guard";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalService } from 'app/main/content/_service/global.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 @Component({
   selector: "fuse-rule-overview",
@@ -35,8 +37,9 @@ export class FuseRuleOverviewComponent implements OnInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private derivationRuleService: DerivationRuleService,
-    private tenantService: TenantService
-  ) {}
+    private tenantService: TenantService,
+    private globalService: GlobalService,
+  ) { }
 
   async ngOnInit() {
     this.loadAllDerivationRules();
@@ -48,13 +51,19 @@ export class FuseRuleOverviewComponent implements OnInit {
   }
 
   private async loadAllDerivationRules() {
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
-    this.marketplace = <Marketplace>(
-      await this.helpSeekerService
-        .findRegisteredMarketplaces(this.helpseeker.id)
-        .toPromise()
-    );
+    const globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo().toPromise();
+    this.helpseeker = globalInfo.user;
+    this.marketplace = globalInfo.marketplace;
+
+
+    //   this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
+
+    // this.marketplace = <Marketplace>(
+    //   await this.helpSeekerService
+    //     .findRegisteredMarketplaces(this.helpseeker.id)
+    //     .toPromise()
+    // );
 
     this.tenant = <Tenant>(
       await this.tenantService

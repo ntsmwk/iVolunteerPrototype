@@ -43,17 +43,6 @@ export class ConfiguratorComponent implements OnInit {
           }
 
         });
-
-        // this.helpSeekerService
-        //   .findRegisteredMarketplaces(helpseeker.id)
-        //   .toPromise()
-        //   .then((marketplace: Marketplace) => {
-        //     console.log(marketplace);
-        //     if (!isNullOrUndefined(marketplace)) {
-        //       this.marketplace = marketplace;
-        //       this.isLoaded = true;
-        //     }
-        //   });
       });
   }
 

@@ -10,13 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
-import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -36,14 +32,15 @@ public class CoreUserController {
 		return coreUserService.getAllByTenantId(tenantId);
 	}
 
-	@GetMapping("/user/all/rote/{role}")
+	@GetMapping("/user/all/role/{role}")
 	private List<CoreUser> getAllByUserRole(@PathVariable("role") UserRole userRole) {
 		return coreUserService.getAllByUserRole(userRole);
 	}
 
-	@GetMapping("/all/rote/{role}/tenant/{tenantId}")
+	@GetMapping("/user/all/role/{role}/tenant/{tenantId}")
 	private List<CoreUser> getAllByTenantIdAndUserRole(@PathVariable("role") UserRole userRole,
 			@PathVariable("tenantId") String tenantId) {
+		
 		return coreUserService.getAllByTenantIdAndUserRole(userRole, tenantId);
 	}
 

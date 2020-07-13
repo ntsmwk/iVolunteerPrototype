@@ -17,6 +17,8 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalService } from 'app/main/content/_service/global.service';
 
 @Component({
   templateUrl: "./rule-configurator.component.html",
@@ -48,7 +50,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private derivationRuleService: DerivationRuleService,
     private classDefinitionService: ClassDefinitionService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    private globalService: GlobalService,
   ) {
     this.ruleForm = formBuilder.group({
       id: new FormControl(undefined),
@@ -57,13 +60,10 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
+    const globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo().toPromise();
 
-    this.marketplace = <Marketplace>(
-      await this.helpSeekerService
-        .findRegisteredMarketplaces(this.helpseeker.id)
-        .toPromise()
-    );
+    this.helpseeker = globalInfo.user;
+    this.marketplace = globalInfo.marketplace;
 
     this.route.params.subscribe((params) => {
       this.loadDerivationRule(this.marketplace, params["ruleId"]);

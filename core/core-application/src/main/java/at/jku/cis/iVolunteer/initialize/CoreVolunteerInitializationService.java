@@ -22,7 +22,6 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -49,8 +48,6 @@ public class CoreVolunteerInitializationService {
 
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreVolunteerService coreVolunteerService;
 	@Autowired
 	private CoreUserRepository coreUserRepository;
 	@Autowired

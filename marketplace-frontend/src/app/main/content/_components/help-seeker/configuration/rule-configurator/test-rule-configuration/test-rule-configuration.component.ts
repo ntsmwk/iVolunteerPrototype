@@ -14,6 +14,8 @@ import {
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
 import { LoginService } from "app/main/content/_service/login.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
+import { GlobalService } from 'app/main/content/_service/global.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 @Component({
   selector: "test-rule-configuration",
@@ -33,19 +35,28 @@ export class TestRuleConfigurationComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private derivationRuleService: DerivationRuleService
-  ) {}
+    private derivationRuleService: DerivationRuleService,
+    private globalService: GlobalService,
+  ) { }
 
   async ngOnInit() {
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
-    this.marketplace = <Marketplace>(
-      await this.helpSeekerService
-        .findRegisteredMarketplaces(this.helpseeker.id)
-        .toPromise()
-    );
+    this.globalService.getGlobalInfo().toPromise().then((ret: GlobalInfo) => {
+      this.helpseeker = ret.user;
+      this.marketplace = ret.marketplace;
+      this.testRule();
+    });
 
-    this.testRule();
+
+    // this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
+
+    // this.marketplace = <Marketplace>(
+    //   await this.helpSeekerService
+    //     .findRegisteredMarketplaces(this.helpseeker.id)
+    //     .toPromise()
+    // );
+    // this.testRule();
+
   }
 
   private testRule() {

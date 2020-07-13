@@ -63,10 +63,11 @@ public class CoreUserService {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
 		for (CoreUser user : allUsers) {
-			if (user.getSubscribedTenants().stream().filter(st -> st.getTenantId().equals(tenantId) && st.getRole().equals(userRole)).findFirst().isPresent()) {
+			if (user.getSubscribedTenants().stream().filter(st -> st.getTenantId().equals(tenantId) && st.getRole().equals(userRole)).findFirst().isPresent()) {				
 				returnUsers.add(user);
 			}
 		}
+				
 		return returnUsers;
 	}
 

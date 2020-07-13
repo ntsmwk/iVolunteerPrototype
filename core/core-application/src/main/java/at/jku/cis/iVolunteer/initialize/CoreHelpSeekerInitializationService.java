@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
@@ -44,8 +43,6 @@ public class CoreHelpSeekerInitializationService {
 	private TenantRepository coreTenantRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private CoreHelpSeekerService coreHelpSeekerService;
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
 	@Autowired

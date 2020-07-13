@@ -23,6 +23,8 @@ import {
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
+import { GlobalService } from 'app/main/content/_service/global.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 @Component({
   selector: "attribute-rule-precondition",
@@ -59,7 +61,8 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
+    private globalService: GlobalService
   ) {
     this.rulePreconditionForm = formBuilder.group({
       classPropertyId: new FormControl(undefined),
@@ -82,30 +85,43 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
-            this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
-                marketplace,
-                this.helpseeker.subscribedTenants.find(
-                  (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
-              )
-              .toPromise()
-              .then((definitions: ClassDefinition[]) => {
-                this.classDefinitions = definitions;
-                this.loadClassProperties(null);
-              });
-          });
-      });
+    this.globalService.getGlobalInfo().toPromise().then((ret: GlobalInfo) => {
+      this.helpseeker = ret.user;
+      this.marketplace = ret.marketplace;
+      this.classDefinitionService
+        .getAllClassDefinitionsWithoutHeadAndEnums(this.marketplace, this.helpseeker.subscribedTenants.find((t) => t.role === UserRole.HELP_SEEKER).tenantId)
+        .toPromise()
+        .then((definitions: ClassDefinition[]) => {
+          this.classDefinitions = definitions;
+          this.loadClassProperties(null);
+        });
+
+    });
+
+    // this.loginService
+    //   .getLoggedIn()
+    //   .toPromise()
+    //   .then((helpseeker: User) => {
+    //     this.helpseeker = helpseeker;
+    //     this.helpSeekerService
+    //       .findRegisteredMarketplaces(helpseeker.id)
+    //       .toPromise()
+    //       .then((marketplace: Marketplace) => {
+    //         this.marketplace = marketplace;
+    //         this.classDefinitionService
+    //           .getAllClassDefinitionsWithoutHeadAndEnums(
+    //             marketplace,
+    //             this.helpseeker.subscribedTenants.find(
+    //               (t) => t.role === UserRole.HELP_SEEKER
+    //             ).tenantId
+    //           )
+    //           .toPromise()
+    //           .then((definitions: ClassDefinition[]) => {
+    //             this.classDefinitions = definitions;
+    //             this.loadClassProperties(null);
+    //           });
+    //       });
+    //   });
   }
 
   onPropertyChange(classProperty: ClassProperty<any>, $event) {

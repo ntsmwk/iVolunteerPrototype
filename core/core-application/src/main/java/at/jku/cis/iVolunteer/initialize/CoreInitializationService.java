@@ -7,9 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.core.admin.CoreAdminController;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterController;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -27,19 +25,6 @@ public class CoreInitializationService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
 	protected CoreUserRepository coreUserRepository;
-
-	@Autowired
-	private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired
-	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired
-	private CoreTenantInitializationService coreTenantInitializationService;
-
-	@Autowired
-	private CoreRecruiterController coreRecruiterController;
-	@Autowired
-	private CoreAdminController coreAdminController;
-
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
 	@Autowired

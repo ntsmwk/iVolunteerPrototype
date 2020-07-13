@@ -23,6 +23,8 @@ import { ClassPropertyService } from "app/main/content/_service/meta/core/proper
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
 import { User, UserRole } from "../../../../../_model/user";
 import { ThrowStmt } from "@angular/compiler";
+import { GlobalService } from 'app/main/content/_service/global.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 var output = console.log;
 
@@ -54,7 +56,8 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
     private helpSeekerService: CoreHelpSeekerService,
-    private derivationRuleService: DerivationRuleService
+    private derivationRuleService: DerivationRuleService,
+    private globalService: GlobalService,
   ) {
     this.rulePreconditionForm = formBuilder.group({
       propertyDefinitionId: new FormControl(undefined),
@@ -77,29 +80,42 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
 
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(this.helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
-            this.derivationRuleService
-              .getGeneralProperties(
-                marketplace,
-                this.helpseeker.subscribedTenants.find(
-                  (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
-              )
-              .toPromise()
-              .then((genProperties: PropertyDefinition<any>[]) => {
-                this.generalAttributes = genProperties;
-              });
-          });
-      });
+    this.globalService.getGlobalInfo().toPromise().then((ret: GlobalInfo) => {
+      this.helpseeker = ret.user;
+      this.marketplace = ret.marketplace;
+      this.derivationRuleService.getGeneralProperties(this.marketplace, this.helpseeker.subscribedTenants
+        .find((t) => t.role === UserRole.HELP_SEEKER).tenantId
+      )
+        .toPromise()
+        .then((genProperties: PropertyDefinition<any>[]) => {
+          this.generalAttributes = genProperties;
+        });
+
+    });
+
+    // this.loginService
+    //   .getLoggedIn()
+    //   .toPromise()
+    //   .then((helpseeker: User) => {
+    //     this.helpseeker = helpseeker;
+    //     this.helpSeekerService
+    //       .findRegisteredMarketplaces(this.helpseeker.id)
+    //       .toPromise()
+    //       .then((marketplace: Marketplace) => {
+    //         this.marketplace = marketplace;
+    //         this.derivationRuleService
+    //           .getGeneralProperties(
+    //             marketplace,
+    //             this.helpseeker.subscribedTenants.find(
+    //               (t) => t.role === UserRole.HELP_SEEKER
+    //             ).tenantId
+    //           )
+    //           .toPromise()
+    //           .then((genProperties: PropertyDefinition<any>[]) => {
+    //             this.generalAttributes = genProperties;
+    //           });
+    //       });
+    //   });
   }
 
   onPropertyChange($event) {
