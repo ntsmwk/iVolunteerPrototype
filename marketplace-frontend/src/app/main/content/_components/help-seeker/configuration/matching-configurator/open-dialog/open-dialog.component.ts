@@ -16,7 +16,7 @@ export interface OpenMatchingDialogData {
 @Component({
   selector: "open-matching-dialog",
   templateUrl: "./open-dialog.component.html",
-  styleUrls: ["./open-dialog.component.scss"],
+  styleUrls: ["./open-dialog.component.scss"]
 })
 export class OpenMatchingDialogComponent implements OnInit {
   constructor(
@@ -84,9 +84,9 @@ export class OpenMatchingDialogComponent implements OnInit {
       this.browseDialogData.entries.push({
         id: matchingConfiguration.id,
         name: matchingConfiguration.name,
-        producer: matchingConfiguration.producerClassConfigurationName,
-        consumer: matchingConfiguration.consumerClassConfigurationName,
-        date: matchingConfiguration.timestamp,
+        producer: matchingConfiguration.leftClassConfigurationName,
+        consumer: matchingConfiguration.rightClassConfigurationName,
+        date: matchingConfiguration.timestamp
       });
     }
 
@@ -98,7 +98,7 @@ export class OpenMatchingDialogComponent implements OnInit {
 
     if (!event.cancelled) {
       this.data.matchingConfiguration = this.allMatchingConfigurations.find(
-        (c) => c.id === event.entryId
+        c => c.id === event.entryId
       );
       this.dialogRef.close(this.data);
     }
