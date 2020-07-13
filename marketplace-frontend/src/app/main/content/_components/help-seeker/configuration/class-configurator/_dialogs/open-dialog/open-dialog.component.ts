@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
-import { User } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
 import { Relationship } from "app/main/content/_model/meta/relationship";
@@ -11,6 +11,8 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
 import { ClassBrowseSubDialogData } from "../browse-sub-dialog/browse-sub-dialog.component";
+import { GlobalService } from 'app/main/content/_service/global.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export interface OpenClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
@@ -31,8 +33,9 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
-    private loginService: LoginService
-  ) {}
+    private loginService: LoginService,
+    private globalService: GlobalService,
+  ) { }
 
   selected: string;
   allClassConfigurations: ClassConfiguration[];
@@ -43,32 +46,34 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   browseDialogData: ClassBrowseSubDialogData;
 
   ngOnInit() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: User) => {
-        this.classConfigurationService
-          .getAllClassConfigurations(this.data.marketplace)
-          .toPromise()
-          .then((classConfigurations: ClassConfiguration[]) => {
-            this.allClassConfigurations = classConfigurations.filter((c) => {
-              return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
-            });
 
-            this.recentClassConfigurations = this.allClassConfigurations;
-            this.recentClassConfigurations = this.recentClassConfigurations.sort(
-              (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
-            );
+    this.globalService.getGlobalInfo().toPromise().then((globalInfo: GlobalInfo) => {
+      const tenantId = globalInfo.user.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId;
 
-            if (this.recentClassConfigurations.length > 6) {
-              this.recentClassConfigurations = this.recentClassConfigurations.slice(
-                0,
-                6
-              );
-            }
-            this.loaded = true;
+
+
+      this.classConfigurationService
+        .getClassConfigurationsByTenantId(this.data.marketplace, tenantId)
+        .toPromise()
+        .then((classConfigurations: ClassConfiguration[]) => {
+          this.allClassConfigurations = classConfigurations.filter((c) => {
+            return c.tenantId === tenantId;
           });
-      });
+
+          this.recentClassConfigurations = this.allClassConfigurations;
+          this.recentClassConfigurations = this.recentClassConfigurations.sort(
+            (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+          );
+
+          if (this.recentClassConfigurations.length > 6) {
+            this.recentClassConfigurations = this.recentClassConfigurations.slice(
+              0,
+              6
+            );
+          }
+          this.loaded = true;
+        });
+    });
   }
 
   handleRowClick(c: ClassConfiguration) {

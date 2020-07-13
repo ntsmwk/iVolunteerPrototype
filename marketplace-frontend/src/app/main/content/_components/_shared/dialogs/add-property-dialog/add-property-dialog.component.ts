@@ -52,7 +52,7 @@ export class AddPropertyDialogComponent implements OnInit {
     private classPropertyService: ClassPropertyService,
     private enumDefinitionService: EnumDefinitionService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   propertyDatasource = new MatTableDataSource<PropertyItem>();
   enumDataSource = new MatTableDataSource<EnumDefinition>();
@@ -77,6 +77,9 @@ export class AddPropertyDialogComponent implements OnInit {
 
   ngOnInit() {
     this.tabIndex = 0;
+    console.log(this.data.marketplace);
+    console.log(this.data.classDefinition);
+
 
     Promise.all([
       this.propertyDefinitionService
@@ -89,6 +92,7 @@ export class AddPropertyDialogComponent implements OnInit {
           this.propertyDatasource.data = ret;
           this.allPropertyDefinitions = ret;
 
+          console.log(this.allPropertyDefinitions);
           this.initialProperties = ret.filter((p) =>
             this.data.classDefinition.properties.find((q) => q.id === p.id)
           );

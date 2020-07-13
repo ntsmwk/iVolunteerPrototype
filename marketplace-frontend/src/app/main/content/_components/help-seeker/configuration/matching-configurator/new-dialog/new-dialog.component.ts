@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
-import { User } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
 import { MatchingConfigurationService } from "app/main/content/_service/configuration/matching-configuration.service";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import {
@@ -31,7 +31,7 @@ export class NewMatchingDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private matchingConfigurationService: MatchingConfigurationService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   allClassConfigurations: ClassConfiguration[];
   recentClassConfigurations: ClassConfiguration[];
@@ -49,7 +49,7 @@ export class NewMatchingDialogComponent implements OnInit {
       .toPromise()
       .then((helpseeker: User) => {
         this.classConfigurationService
-          .getAllClassConfigurationsSortedDesc(this.data.marketplace)
+          .getClassConfigurationsByTenantId(this.data.marketplace, helpseeker.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId)
           .toPromise()
           .then((classConfigurations: ClassConfiguration[]) => {
             this.recentClassConfigurations = classConfigurations;
@@ -93,7 +93,7 @@ export class NewMatchingDialogComponent implements OnInit {
       !isNullOrUndefined(this.data.producerClassConfiguration) &&
       !isNullOrUndefined(this.data.consumerClassConfiguration) &&
       this.data.consumerClassConfiguration !==
-        this.data.producerClassConfiguration &&
+      this.data.producerClassConfiguration &&
       !isNullOrUndefined(this.data.label)
     ) {
       this.matchingConfigurationService

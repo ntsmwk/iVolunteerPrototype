@@ -24,14 +24,19 @@ export class ClassConfigurationService {
     return this.http.get(`${marketplace.url}/class-configuration/by-name/${name}`);
   }
 
-  getAllClassConfigurationsSortedAsc(marketplace: Marketplace) {
-    return this.http.get(`${marketplace.url}/class-configuration/all?sorted=asc`);
-  }
-
-  getAllClassConfigurationsSortedDesc(marketplace: Marketplace) {
-    return this.http.get(`${marketplace.url}/class-configuration/all?sorted=desc`);
+  getClassConfigurationsByTenantId(marketplace: Marketplace, tenantId: string) {
+    return this.http.get(`${marketplace.url}/class-configuration/all/tenant/${tenantId}`);
 
   }
+
+  // getAllClassConfigurationsSortedAsc(marketplace: Marketplace) {
+  //   return this.http.get(`${marketplace.url}/class-configuration/all?sorted=asc`);
+  // }
+
+  // getAllClassConfigurationsSortedDesc(marketplace: Marketplace) {
+  //   return this.http.get(`${marketplace.url}/class-configuration/all?sorted=desc`);
+
+  // }
 
   createNewEmptyClassConfiguration(marketplace: Marketplace, name: string, description: string) {
     return this.http.post(`${marketplace.url}/class-configuration/new-empty`, [name, description]);
