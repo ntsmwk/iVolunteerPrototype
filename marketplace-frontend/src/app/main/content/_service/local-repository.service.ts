@@ -10,32 +10,10 @@ import { User } from "../_model/user";
   providedIn: "root",
 })
 export class LocalRepositoryService {
-  // private apiUrl = "http://localhost:3000/repository";
-  private apiUrl = "http://140.78.92.57:3000/repository";
+  private apiUrl = "http://localhost:3000/repository";
+  // private apiUrl = "http://140.78.92.57:3000/repository";
 
   constructor(private http: HttpClient) {}
-
-  async isConnected(volunteer: User) {
-    let isConnected;
-
-    let localRepos = <LocalRepository[]>await this.http
-      .get(this.apiUrl)
-      .toPromise()
-      .catch(() => (isConnected = false));
-
-    if (localRepos) {
-      isConnected = true;
-      if (localRepos.findIndex((l) => l.id === volunteer.id) === -1) {
-        let newRepo = new LocalRepository(volunteer.id, volunteer.username);
-        this.http
-          .post(this.apiUrl, newRepo)
-          .toPromise()
-          .catch((e) => console.log(e));
-      }
-    }
-
-    return isConnected;
-  }
 
   findByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
@@ -53,11 +31,17 @@ export class LocalRepositoryService {
         .get(this.apiUrl)
         .toPromise()
         .then((localRepositorys: LocalRepository[]) => {
-          successFunction(
-            localRepositorys.find((localRepository: LocalRepository) => {
-              return localRepository.id === volunteer.id;
-            })
-          );
+          if (localRepositorys.findIndex((l) => l.id === volunteer.id) === -1) {
+            let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+            this.http.post(this.apiUrl, newRepo).toPromise();
+            successFunction(newRepo);
+          } else {
+            successFunction(
+              localRepositorys.find((localRepository: LocalRepository) => {
+                return localRepository.id === volunteer.id;
+              })
+            );
+          }
         })
         .catch((error: any) => failureFunction(error));
     });
@@ -230,4 +214,26 @@ export class LocalRepositoryService {
 
     return observable;
   }
+
+  // async isConnected(volunteer: User) {
+  //   let isConnected;
+
+  //   let localRepos = <LocalRepository[]>await this.http
+  //     .get(this.apiUrl)
+  //     .toPromise()
+  //     .catch(() => (isConnected = false));
+
+  //   if (localRepos) {
+  //     isConnected = true;
+  //     if (localRepos.findIndex((l) => l.id === volunteer.id) === -1) {
+  //       let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+  //       this.http
+  //         .post(this.apiUrl, newRepo)
+  //         .toPromise()
+  //         .catch((e) => console.log(e));
+  //     }
+  //   }
+
+  //   return isConnected;
+  // }
 }

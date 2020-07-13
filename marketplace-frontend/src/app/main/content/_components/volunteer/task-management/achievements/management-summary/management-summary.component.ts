@@ -63,7 +63,7 @@ export class ManagementSummaryComponent implements OnInit {
   engagementYear: number;
 
   isLocalRepositoryConnected: boolean;
-  timeout: boolean = false;
+  isLoaded: boolean = false;
 
   percentageFilteredOut: number = 0;
 
@@ -77,11 +77,6 @@ export class ManagementSummaryComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    let t = timer(3000);
-    t.subscribe(() => {
-      this.timeout = true;
-    });
-
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
@@ -92,11 +87,12 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
 
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-      this.volunteer
-    );
+    // TODO: Philipp
+    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
+    //   this.volunteer
+    // );
 
-    if (this.isLocalRepositoryConnected) {
+    try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
           .findClassInstancesByVolunteer(this.volunteer)
@@ -111,7 +107,10 @@ export class ManagementSummaryComponent implements OnInit {
           .mapClassInstancesToDTOs(this.marketplace, localClassInstances)
           .toPromise()
       );
-    } else {
+      this.isLocalRepositoryConnected = true;
+    } catch (e) {
+      this.isLocalRepositoryConnected = false;
+
       if (!isNullOrUndefined(this.marketplace)) {
         this.classInstanceDTOs = <ClassInstanceDTO[]>(
           await this.classInstanceService
@@ -163,6 +162,8 @@ export class ManagementSummaryComponent implements OnInit {
     this.generateComparisonChartData(this.comparisonYear);
     this.generateEngagementYearData(this.engagementYear);
     this.generateEngagementTotalData();
+
+    this.isLoaded = true;
   }
 
   generateComparisonChartData(comparisonYear) {

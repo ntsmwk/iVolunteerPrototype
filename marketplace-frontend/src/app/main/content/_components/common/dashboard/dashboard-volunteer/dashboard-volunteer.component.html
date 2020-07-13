@@ -332,6 +332,10 @@
     </div>
   </div>
 
+  <div *ngIf="!isLoaded" class="center-spinner-wrapper">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <mat-paginator
     *ngIf="isLocalRepositoryConnected"
     [pageSize]="12"
@@ -342,14 +346,14 @@
 
   <div style="padding-top: 20px;"></div>
 
-  <p *ngIf="timeout && !isLocalRepositoryConnected" class="alert alert-info">
+  <p *ngIf="isLoaded && !isLocalRepositoryConnected" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Verbindung zu deinem
     lokalen Freiwilligenpass!
   </p>
 
   <p
     *ngIf="
-      timeout &&
+      isLoaded &&
       selectedTenants.length === 0 &&
       isLocalRepositoryConnected &&
       subscribedTenants != 0
@@ -362,7 +366,7 @@
 
   <p
     *ngIf="
-      timeout &&
+      isLoaded &&
       filteredClassInstanceDTOs.length === 0 &&
       selectedTenants.length > 0 &&
       isLocalRepositoryConnected

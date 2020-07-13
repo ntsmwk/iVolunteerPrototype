@@ -41,7 +41,7 @@ export class DashboardVolunteerComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  isLoaded: boolean;
+  isLoaded: boolean = false;
 
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
   private displayedColumnsRepository: string[] = [
@@ -70,8 +70,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   nrMpUnionLr: number = 0;
 
-  isLocalRepositoryConnected: boolean;
-  timeout: boolean = false;
+  isLocalRepositoryConnected: boolean = true;
 
   vennData = [];
   chartOptions: Highcharts.Options = {
@@ -126,11 +125,6 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let t = timer(3000);
-    t.subscribe(() => {
-      this.timeout = true;
-    });
-
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
@@ -142,10 +136,11 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-      this.volunteer
-    );
-    if (this.isLocalRepositoryConnected) {
+    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
+    //   this.volunteer
+    // );
+
+    try {
       let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
@@ -204,7 +199,11 @@ export class DashboardVolunteerComponent implements OnInit {
       this.dataSource.data = this.filteredClassInstanceDTOs;
 
       this.generateSharedTenantsMap();
+      this.isLocalRepositoryConnected = true;
+    } catch (e) {
+      this.isLocalRepositoryConnected = false;
     }
+    this.isLoaded = true;
   }
 
   setVolunteerImage() {

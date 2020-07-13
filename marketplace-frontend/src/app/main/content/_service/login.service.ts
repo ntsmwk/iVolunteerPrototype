@@ -54,7 +54,6 @@ export class LoginService {
 
   getGlobalInfo() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
-
     if (globalInfo) {
       return new Observable((subscriber) => {
         subscriber.next(globalInfo);
