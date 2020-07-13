@@ -64,8 +64,7 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
 
   getImage(userId: string) {
     let user = this.volunteers.find((v) => v.id === userId);
-
-    if (isNullOrUndefined(user)) {
+    if (isNullOrUndefined(user.image)) {
       return "/assets/images/avatars/profile.jpg";
     } else {
       return this.imageService.getImgSourceFromBytes(user.image);

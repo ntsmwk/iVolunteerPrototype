@@ -10,6 +10,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Router, Route, ActivatedRoute } from "@angular/router";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { User } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "app-property-build-form",
@@ -57,14 +58,12 @@ export class PropertyBuildFormComponent implements OnInit {
       }),
     ]);
 
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
-    // console.log(this.helpseeker);
-
-    this.marketplace = <
-      Marketplace // await this.helpseekerService
-    >//   .findRegisteredMarketplaces(this.helpseeker.id)
-    //   .toPromise()
-    await this.marketplaceService.findById(this.marketplaceId).toPromise();
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    globalInfo.user;
+    this.helpseeker = globalInfo.user;
+    this.marketplace = globalInfo.marketplace;
 
     this.loaded = true;
   }

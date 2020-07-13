@@ -16,6 +16,7 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 export interface PropertyEnumEntry {
   id: string;
@@ -78,50 +79,41 @@ export class PropertyEnumListComponent implements OnInit {
     ]);
   }
 
-  loadAllProperties() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
+  async loadAllProperties() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
 
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            if (!isNullOrUndefined(marketplace)) {
-              this.marketplace = marketplace;
-              Promise.all([
-                this.propertyDefinitionService
-                  .getAllPropertyDefinitons(
-                    marketplace,
-                    this.helpseeker.subscribedTenants.find(
-                      (t) => t.role === UserRole.HELP_SEEKER
-                    ).tenantId
-                  )
-                  .toPromise()
-                  .then((propertyDefinitions: PropertyDefinition<any>[]) => {
-                    this.propertyDefinitions = propertyDefinitions;
-                  }),
-                this.enumDefinitionService
-                  .getAllEnumDefinitionsForTenant(
-                    marketplace,
-                    this.helpseeker.subscribedTenants.find(
-                      (t) => t.role === UserRole.HELP_SEEKER
-                    ).tenantId
-                  )
-                  .toPromise()
-                  .then((enumDefinitions: EnumDefinition[]) => {
-                    this.enumDefinitions = enumDefinitions;
-                  }),
-              ]).then(() => {
-                this.updatePropertyAndEnumEntryList();
-                this.applyFiltersFromParams();
-                this.isLoaded = true;
-              });
-            }
-          });
-      });
+    Promise.all([
+      this.propertyDefinitionService
+        .getAllPropertyDefinitons(
+          this.marketplace,
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
+        .then((propertyDefinitions: PropertyDefinition<any>[]) => {
+          this.propertyDefinitions = propertyDefinitions;
+        }),
+      this.enumDefinitionService
+        .getAllEnumDefinitionsForTenant(
+          this.marketplace,
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
+        .then((enumDefinitions: EnumDefinition[]) => {
+          this.enumDefinitions = enumDefinitions;
+        }),
+    ]).then(() => {
+      this.updatePropertyAndEnumEntryList();
+      this.applyFiltersFromParams();
+      this.isLoaded = true;
+    });
   }
 
   private updatePropertyAndEnumEntryList() {

@@ -14,7 +14,6 @@ import { MatTabChangeEvent } from "@angular/material";
 import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { GlobalService } from "app/main/content/_service/global.service";
 import { User } from "app/main/content/_model/user";
 
 @Component({
@@ -41,8 +40,7 @@ export class AchievementsComponent implements OnInit {
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private localRepositoryService: LocalRepositoryService,
-    private globalService: GlobalService
+    private localRepositoryService: LocalRepositoryService
   ) {}
 
   async ngOnInit() {
@@ -52,7 +50,7 @@ export class AchievementsComponent implements OnInit {
     });
 
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
 
     this.volunteer = globalInfo.user;

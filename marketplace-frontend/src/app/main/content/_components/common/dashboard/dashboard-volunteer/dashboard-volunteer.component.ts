@@ -23,9 +23,9 @@ import * as Highcharts from "highcharts";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { DialogFactoryDirective } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { GlobalService } from "app/main/content/_service/global.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { User } from "app/main/content/_model/user";
+import { LoginService } from "app/main/content/_service/login.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -101,7 +101,7 @@ export class DashboardVolunteerComponent implements OnInit {
     private router: Router,
     private iconRegistry: MatIconRegistry,
     private dialogFactory: DialogFactoryDirective,
-    private globalService: GlobalService
+    private loginService: LoginService
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -132,9 +132,8 @@ export class DashboardVolunteerComponent implements OnInit {
     });
 
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
-
     this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;

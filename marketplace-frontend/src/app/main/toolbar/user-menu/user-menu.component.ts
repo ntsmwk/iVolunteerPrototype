@@ -5,8 +5,6 @@ import { LoginService } from "../../content/_service/login.service";
 import { isNullOrUndefined } from "util";
 
 import { ImageService } from "app/main/content/_service/image.service";
-import { GlobalService } from "app/main/content/_service/global.service";
-import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "fuse-user-menu",

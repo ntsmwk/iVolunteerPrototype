@@ -21,6 +21,7 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "target-rule-configurator",
@@ -56,7 +57,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.ruleActionForm.setValue({
       classDefinitionId:
         (this.classAction.classDefinition
@@ -64,29 +65,24 @@ export class TargetRuleConfiguratorComponent implements OnInit {
           : "") || "",
     });
 
-    this.loginService
-      .getLoggedIn()
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+
+    this.classDefinitionService
+      .getAllClassDefinitionsWithoutHeadAndEnums(
+        this.marketplace,
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId
+      )
       .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
-            this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
-                marketplace,
-                this.helpseeker.subscribedTenants.find(
-                  (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
-              )
-              .toPromise()
-              .then((definitions: ClassDefinition[]) => {
-                this.classDefinitions = definitions;
-              });
-          });
+      .then((definitions: ClassDefinition[]) => {
+        this.classDefinitions = definitions;
       });
+
     this.initialized = true;
   }
 

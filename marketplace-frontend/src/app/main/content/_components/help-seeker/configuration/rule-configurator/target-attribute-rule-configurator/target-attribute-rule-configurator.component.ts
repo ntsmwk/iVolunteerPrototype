@@ -19,6 +19,7 @@ import {
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "target-attribute-rule-configurator",
@@ -60,7 +61,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.ruleTargetAttributeForm.setValue({
       classPropertyId:
         (this.attributeTarget.classProperty
@@ -69,19 +70,13 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       value: this.attributeTarget.value || "",
     });
 
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
-            this.loadClassProperties(null);
-          });
-      });
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+
+    this.loadClassProperties(null);
   }
 
   onPropertyChange($event) {

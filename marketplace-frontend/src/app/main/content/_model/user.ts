@@ -1,6 +1,3 @@
-import { Marketplace } from "./marketplace";
-import { Tenant } from "./tenant";
-
 export class User {
   id: string;
   username: string;
@@ -21,7 +18,7 @@ export class User {
   websites: string[] = [];
   emails: string[] = [];
 
-  getRegisteredMarketplaces: string[];
+  registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
   image;

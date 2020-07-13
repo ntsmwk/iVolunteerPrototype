@@ -17,6 +17,7 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   templateUrl: "./rule-configurator.component.html",
@@ -57,13 +58,11 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
-
-    this.marketplace = <Marketplace>(
-      await this.helpSeekerService
-        .findRegisteredMarketplaces(this.helpseeker.id)
-        .toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
     );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
 
     this.route.params.subscribe((params) => {
       this.loadDerivationRule(this.marketplace, params["ruleId"]);

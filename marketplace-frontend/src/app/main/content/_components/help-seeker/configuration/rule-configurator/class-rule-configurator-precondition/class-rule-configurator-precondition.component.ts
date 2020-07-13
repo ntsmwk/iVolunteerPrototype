@@ -25,6 +25,7 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "class-rule-precondition",
@@ -62,7 +63,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.rulePreconditionForm.setValue({
       classDefinitionId:
         (this.classCondition.classDefinition
@@ -79,28 +80,22 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       : new Array();
     this.aggregationOperators = Object.keys(AggregationOperatorType);
 
-    this.loginService
-      .getLoggedIn()
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+
+    this.classDefinitionService
+      .getAllClassDefinitionsWithoutHeadAndEnums(
+        this.marketplace,
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId
+      )
       .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
-            this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
-                marketplace,
-                this.helpseeker.subscribedTenants.find(
-                  (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
-              )
-              .toPromise()
-              .then((definitions: ClassDefinition[]) => {
-                this.classDefinitions = definitions;
-              });
-          });
+      .then((definitions: ClassDefinition[]) => {
+        this.classDefinitions = definitions;
       });
   }
 

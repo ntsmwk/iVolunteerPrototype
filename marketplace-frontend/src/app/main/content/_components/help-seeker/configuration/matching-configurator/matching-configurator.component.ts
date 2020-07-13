@@ -34,6 +34,7 @@ import { MatchingCollectorConfigurationService } from "../../../../_service/conf
 import { ObjectIdService } from "../../../../_service/objectid.service.";
 import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { MyMxCell, MyMxCellType } from "../myMxCell";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 declare var require: any;
 
@@ -95,38 +96,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   confirmDelete: boolean;
   deleteMode: boolean;
 
-  ngOnInit() {
+  async ngOnInit() {
     this.confirmDelete = true;
 
-    let service: CoreHelpSeekerService | CoreFlexProdService;
-    // get marketplace
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((participant: User) => {
-        this.loginService
-          .getLoggedInUserRole()
-          .toPromise()
-          .then((role: UserRole) => {
-            if (role === UserRole.FLEXPROD) {
-              service = this.flexProdService;
-            } else if (role === UserRole.HELP_SEEKER) {
-              service = this.helpSeekerService;
-            }
-
-            service
-              .findRegisteredMarketplaces(participant.id)
-              .toPromise()
-              .then((marketplace: Marketplace) => {
-                if (!isNullOrUndefined(marketplace)) {
-                  this.marketplace = marketplace;
-                }
-              })
-              .then(() => {
-                // this.loadClassesAndRelationships('slot1', 'slot2');
-              });
-          });
-      });
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
   }
 
   loadClassesAndRelationships(
