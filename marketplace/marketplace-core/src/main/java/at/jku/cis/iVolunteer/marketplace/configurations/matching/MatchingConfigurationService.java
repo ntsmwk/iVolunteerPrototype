@@ -29,14 +29,13 @@ public class MatchingConfigurationService {
 
 	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
 		if (matchingConfiguration.getId() == null) {
-			matchingConfiguration
-					.setId(createHashFromClassConfigurationIds(matchingConfiguration.getLeftClassConfigurationId(),
-							matchingConfiguration.getRightClassConfigurationId()));
+			String leftClassConfigurationId = matchingConfiguration.getLeftClassConfigurationId();
+			String rightClassConfigurationId = matchingConfiguration.getRightClassConfigurationId();
+			String hash = createHashFromClassConfigurationIds(leftClassConfigurationId, rightClassConfigurationId);
+			matchingConfiguration.setId(hash);
 
-			ClassConfiguration leftConfiguration = configuratorRepository
-					.findOne(matchingConfiguration.getLeftClassConfigurationId());
-			ClassConfiguration rightConfiguration = configuratorRepository
-					.findOne(matchingConfiguration.getRightClassConfigurationId());
+			ClassConfiguration leftConfiguration = configuratorRepository.findOne(leftClassConfigurationId);
+			ClassConfiguration rightConfiguration = configuratorRepository.findOne(rightClassConfigurationId);
 
 			matchingConfiguration.setLeftClassConfigurationName(leftConfiguration.getName());
 			matchingConfiguration.setRightClassConfigurationName(rightConfiguration.getName());

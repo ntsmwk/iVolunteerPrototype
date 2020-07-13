@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 
 @RestController
@@ -21,17 +20,17 @@ public class MatchingConfigurationController {
 	@Autowired private MatchingConfigurationService matchingConfigurationService;
 
 	@GetMapping("matching-configuration/all")
-	List<MatchingConfiguration> getAllMatchingConfigurations() {
+	public List<MatchingConfiguration> getAllMatchingConfigurations() {
 		return matchingConfigurationRepository.findAll();
 	}
 
 	@GetMapping("matching-configuration/{id}")
-	MatchingConfiguration getAllMatchingConfigurationsById(@PathVariable("id") String id) {
+	public MatchingConfiguration getAllMatchingConfigurationsById(@PathVariable("id") String id) {
 		return matchingConfigurationRepository.findOne(id);
 	}
 
 	@GetMapping("matching-configuration/by-class-configurators/{producerClassConfigurationId}/{consumerClassConfigurationId}")
-	MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(
+	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(
 			@PathVariable("producerClassConfigurationId") String producerClassConfigurationId,
 			@PathVariable("consumerClassConfigurationId") String consumerClassConfigurationId) {
 		return matchingConfigurationService.getMatchingConfiguratorByClassConfigurationIds(producerClassConfigurationId,
@@ -39,7 +38,7 @@ public class MatchingConfigurationController {
 	}
 
 	@GetMapping("matching-configuration/by-class-configurators/{classConfigurationId1}/{classConfigurationId2}/unordered")
-	MatchingConfiguration getMatchingConfiguratorByClassConfigurationIdsUnordered(
+	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIdsUnordered(
 			@PathVariable("classConfigurationId1") String classConfigurationId1,
 			@PathVariable("classConfigurationId2") String classConfigurationId2) {
 		return matchingConfigurationService
@@ -52,12 +51,12 @@ public class MatchingConfigurationController {
 	}
 
 	@DeleteMapping("matching-configuration/{id}/delete")
-	private void deleteMatchingConfiguration(@PathVariable("id") String id) {
+	public void deleteMatchingConfiguration(@PathVariable("id") String id) {
 		matchingConfigurationRepository.delete(id);
 	}
 
 	@PutMapping("matching-configuration/delete-multiple")
-	private List<MatchingConfiguration> deleteMultipleMatchingConfigurations(@RequestBody() List<String> ids) {
+	public List<MatchingConfiguration> deleteMultipleMatchingConfigurations(@RequestBody() List<String> ids) {
 //		List<MatchingConfiguration> matchingConfigurations = new ArrayList<>();
 //		this.matchingConfigurationRepository.findAll(ids).forEach(matchingConfigurations::add);;
 //		this.matchingConfigurationRepository.delete(matchingConfigurations);
