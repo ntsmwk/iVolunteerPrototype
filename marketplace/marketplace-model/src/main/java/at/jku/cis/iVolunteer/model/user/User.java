@@ -219,7 +219,8 @@ public class User {
 	}
 	
 	  private TenantUserSubscription findTenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
-    	return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId) && st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().get();
+    	return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId) && st.getTenantId().equals(tenantId) && st.getRole().equals(role))
+    			.findFirst().map(f -> f).orElse(null);
     }
 	
 	

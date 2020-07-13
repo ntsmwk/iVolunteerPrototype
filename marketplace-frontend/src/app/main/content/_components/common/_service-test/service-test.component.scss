@@ -1,0 +1,14 @@
+@import "src/@fuse/scss/fuse";
+
+mat-row {
+  cursor: default;
+}
+mat-row:hover {
+  opacity: 0.75;
+}
+
+.details {
+  margin: 25px 0px;
+  width: 500px;
+  font-size: 20px;
+}

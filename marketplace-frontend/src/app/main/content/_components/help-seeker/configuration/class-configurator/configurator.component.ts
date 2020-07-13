@@ -22,7 +22,7 @@ export class ConfiguratorComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService
-  ) {}
+  ) { }
 
   ngOnInit() {
     // get marketplace
@@ -35,6 +35,7 @@ export class ConfiguratorComponent implements OnInit {
           .findRegisteredMarketplaces(helpseeker.id)
           .toPromise()
           .then((marketplace: Marketplace) => {
+            console.log(marketplace);
             if (!isNullOrUndefined(marketplace)) {
               this.marketplace = marketplace;
               this.isLoaded = true;

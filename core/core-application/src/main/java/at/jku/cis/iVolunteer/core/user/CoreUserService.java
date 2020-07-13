@@ -89,7 +89,7 @@ public class CoreUserService {
 		if (user == null) {
 			return null;
 		}
-		
+		System.out.println("user not null");
 		List<Marketplace> marketplaces = marketplaceService.findAll(user.getRegisteredMarketplaceIds());
 		return marketplaces;
 	}
