@@ -22,11 +22,11 @@ export class MatchingCollectorEntry {
 export class MatchingOperatorRelationship {
   id: string;
 
-  producerPath: string;
-  producerType: MatchingEntityType;
+  leftMatchingEntityPath: string;
+  leftMatchingEntityType: MatchingEntityType;
 
-  consumerPath: string;
-  consumerType: MatchingEntityType;
+  rightMatchingEntityPath: string;
+  rightMatchingEntityType: MatchingEntityType;
 
   matchingOperatorType: MatchingOperatorType;
 

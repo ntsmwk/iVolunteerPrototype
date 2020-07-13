@@ -12,11 +12,11 @@ public class MatchingConfiguration {
 	String name;
 	Date timestamp;
 
-	String producerClassConfigurationId;
-	String producerClassConfigurationName;
+	String leftClassConfigurationId;
+	String leftClassConfigurationName;
 
-	String consumerClassConfigurationId;
-	String consumerClassConfigurationName;
+	String rightClassConfigurationId;
+	String rightClassConfigurationName;
 
 	List<MatchingOperatorRelationship> relationships;
 

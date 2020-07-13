@@ -4,22 +4,22 @@ import org.springframework.data.annotation.Id;
 
 public class MatchingOperatorRelationship {
 
-	@Id String id;
+	@Id private String id;
 
-	String producerPath;
-	MatchingEntityType producerType;
+	private String leftMatchingEntityPath;
+	private MatchingEntityType leftMatchingEntityType;
 
-	String consumerPath;
-	MatchingEntityType consumerType;
+	private String rightMatchingEntityPath;
+	private MatchingEntityType rightMatchingEntityType;
 
-	MatchingOperatorType matchingOperatorType;
+	private MatchingOperatorType matchingOperatorType;
 
-	float weighting;
-	boolean necessary;
-	float fuzzyness;
+	private float weighting;
+	private boolean necessary;
+	private float fuzzyness;
 
-	int coordX;
-	int coordY;
+	private int coordX;
+	private int coordY;
 
 	public String getId() {
 		return id;
@@ -27,38 +27,6 @@ public class MatchingOperatorRelationship {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getProducerPath() {
-		return producerPath;
-	}
-
-	public void setProducerPath(String producerPath) {
-		this.producerPath = producerPath;
-	}
-
-	public MatchingEntityType getProducerType() {
-		return producerType;
-	}
-
-	public void setProducerType(MatchingEntityType producerType) {
-		this.producerType = producerType;
-	}
-
-	public String getConsumerPath() {
-		return consumerPath;
-	}
-
-	public void setConsumerPath(String consumerPath) {
-		this.consumerPath = consumerPath;
-	}
-
-	public MatchingEntityType getConsumerType() {
-		return consumerType;
-	}
-
-	public void setConsumerType(MatchingEntityType consumerType) {
-		this.consumerType = consumerType;
 	}
 
 	public MatchingOperatorType getMatchingOperatorType() {
@@ -107,6 +75,38 @@ public class MatchingOperatorRelationship {
 
 	public void setCoordY(int coordY) {
 		this.coordY = coordY;
+	}
+
+	public String getLeftMatchingEntityPath() {
+		return leftMatchingEntityPath;
+	}
+
+	public void setLeftMatchingEntityPath(String leftMatchingEntityPath) {
+		this.leftMatchingEntityPath = leftMatchingEntityPath;
+	}
+
+	public MatchingEntityType getLeftMatchingEntityType() {
+		return leftMatchingEntityType;
+	}
+
+	public void setLeftMatchingEntityType(MatchingEntityType leftMatchingEntityType) {
+		this.leftMatchingEntityType = leftMatchingEntityType;
+	}
+
+	public String getRightMatchingEntityPath() {
+		return rightMatchingEntityPath;
+	}
+
+	public void setRightMatchingEntityPath(String rightMatchingEntityPath) {
+		this.rightMatchingEntityPath = rightMatchingEntityPath;
+	}
+
+	public MatchingEntityType getRightMatchingEntityType() {
+		return rightMatchingEntityType;
+	}
+
+	public void setRightMatchingEntityType(MatchingEntityType rightMatchingEntityType) {
+		this.rightMatchingEntityType = rightMatchingEntityType;
 	}
 
 }
