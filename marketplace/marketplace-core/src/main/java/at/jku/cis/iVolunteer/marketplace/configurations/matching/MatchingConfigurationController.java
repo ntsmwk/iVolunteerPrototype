@@ -57,19 +57,19 @@ public class MatchingConfigurationController {
 	MatchingConfiguration saveMatchingConfiguration(@RequestBody MatchingConfiguration matchingConfiguration) {
 		if (matchingConfiguration.getId() == null) {
 			matchingConfiguration
-					.setId(createHashFromClassConfigurationIds(matchingConfiguration.getProducerClassConfigurationId(),
-							matchingConfiguration.getConsumerClassConfigurationId()));
+					.setId(createHashFromClassConfigurationIds(matchingConfiguration.getLeftClassConfigurationId(),
+							matchingConfiguration.getRightClassConfigurationId()));
 
-			ClassConfiguration producer = configuratorRepository
-					.findOne(matchingConfiguration.getProducerClassConfigurationId());
-			ClassConfiguration consumer = configuratorRepository
-					.findOne(matchingConfiguration.getConsumerClassConfigurationId());
+			ClassConfiguration leftConfiguration = configuratorRepository
+					.findOne(matchingConfiguration.getLeftClassConfigurationId());
+			ClassConfiguration rightConfiguration = configuratorRepository
+					.findOne(matchingConfiguration.getRightClassConfigurationId());
 
-			matchingConfiguration.setProducerClassConfigurationName(producer.getName());
-			matchingConfiguration.setConsumerClassConfigurationName(consumer.getName());
+			matchingConfiguration.setLeftClassConfigurationName(leftConfiguration.getName());
+			matchingConfiguration.setRightClassConfigurationName(rightConfiguration.getName());
 
 			if (matchingConfiguration.getName() == null) {
-				matchingConfiguration.setName(producer.getName() + " --> " + consumer.getName());
+				matchingConfiguration.setName(leftConfiguration.getName() + " --> " + rightConfiguration.getName());
 			}
 
 		}
