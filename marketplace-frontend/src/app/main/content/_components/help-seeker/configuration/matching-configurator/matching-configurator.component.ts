@@ -5,7 +5,7 @@ import {
   ElementRef,
   AfterContentInit,
   Renderer2,
-  HostListener,
+  HostListener
 } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Marketplace } from "app/main/content/_model/marketplace";
@@ -22,13 +22,13 @@ import {
   MatchingOperatorRelationship,
   MatchingCollector,
   MatchingCollectorEntry,
-  MatchingProducerConsumerType,
+  MatchingEntityType
 } from "../../../../_model/matching";
 import { MatchingConfigurationService } from "../../../../_service/configuration/matching-configuration.service";
 import {
   ClassConfiguration,
   MatchingConfiguration,
-  MatchingCollectorConfiguration,
+  MatchingCollectorConfiguration
 } from "../../../../_model/meta/configurations";
 import { MatchingCollectorConfigurationService } from "../../../../_service/configuration/matching-collector-configuration.service";
 import { ObjectIdService } from "../../../../_service/objectid.service.";
@@ -49,7 +49,7 @@ const mx: typeof mxgraph = require("mxgraph")({
   selector: "app-matching-configurator",
   templateUrl: "./matching-configurator.component.html",
   styleUrls: ["./matching-configurator.component.scss"],
-  providers: [DialogFactoryDirective],
+  providers: [DialogFactoryDirective]
 })
 export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   constructor(
@@ -76,11 +76,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   graph: mxgraph.mxGraph;
 
-  producerClassConfiguration: ClassConfiguration;
-  consumerClassConfigurator: ClassConfiguration;
+  leftClassConfigurator: ClassConfiguration;
+  rightClassConfiguration: ClassConfiguration;
 
-  producerMatchingCollectorConfiguration: MatchingCollectorConfiguration;
-  consumerMatchingCollectorConfiguration: MatchingCollectorConfiguration;
+  leftMatchingCollectorConfiguration: MatchingCollectorConfiguration;
+  rightMatchingCollectorConfiguration: MatchingCollectorConfiguration;
 
   matchingOperatorPalettes = CConstants.matchingOperatorPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
@@ -106,8 +106,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   loadClassesAndRelationships(
-    producerClassConfigurationId: string,
-    consumerClassConfigurationId: string
+    leftClassConfigurationId: string,
+    rightClassConfigurationId: string
   ) {
     this.clearEditor();
     this.matchingConfiguration = undefined;
@@ -116,29 +116,29 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.matchingCollectorConfigurationService
         .getSavedMatchingCollectorConfiguration(
           this.marketplace,
-          producerClassConfigurationId
+          leftClassConfigurationId
         )
         .toPromise()
         .then((configuration: MatchingCollectorConfiguration) => {
-          this.producerMatchingCollectorConfiguration = configuration;
-          this.insertClassDefinitionsProducerFromCollector();
+          this.leftMatchingCollectorConfiguration = configuration;
+          this.insertClassDefinitionsLeftFromCollector();
         }),
       this.matchingCollectorConfigurationService
         .getSavedMatchingCollectorConfiguration(
           this.marketplace,
-          consumerClassConfigurationId
+          rightClassConfigurationId
         )
         .toPromise()
         .then((configuration: MatchingCollectorConfiguration) => {
-          this.consumerMatchingCollectorConfiguration = configuration;
-          this.insertClassDefinitionsConsumerFromCollector();
-        }),
+          this.rightMatchingCollectorConfiguration = configuration;
+          this.insertClassDefinitionsRightFromCollector();
+        })
     ]).then(() => {
       this.matchingConfigurationService
         .getMatchingConfigurationByClassConfigurationIds(
           this.marketplace,
-          producerClassConfigurationId,
-          consumerClassConfigurationId
+          leftClassConfigurationId,
+          rightClassConfigurationId
         )
         .toPromise()
         .then((matchingConfiguration: MatchingConfiguration) => {
@@ -147,8 +147,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             this.insertMatchingOperatorsAndRelationships();
           } else {
             this.matchingConfiguration = new MatchingConfiguration();
-            this.matchingConfiguration.consumerClassConfigurationId = consumerClassConfigurationId;
-            this.matchingConfiguration.producerClassConfigurationId = producerClassConfigurationId;
+            this.matchingConfiguration.rightClassConfigurationId = rightClassConfigurationId;
+            this.matchingConfiguration.leftClassConfigurationId = leftClassConfigurationId;
             this.matchingConfiguration.relationships = [];
           }
         });
@@ -180,7 +180,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     const outer = this;
 
-    this.graph.isCellSelectable = function (cell) {
+    this.graph.isCellSelectable = function(cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
 
@@ -191,7 +191,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       );
     };
 
-    this.graph.getCursorForCell = function (cell: MyMxCell) {
+    this.graph.getCursorForCell = function(cell: MyMxCell) {
       if (
         cell.cellType === MyMxCellType.MATCHING_OPERATOR &&
         outer.deleteMode
@@ -203,7 +203,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     const modelGetStyle = this.graph.model.getStyle;
-    this.graph.model.getStyle = function (cell) {
+    this.graph.model.getStyle = function(cell) {
       if (cell != null) {
         let style = modelGetStyle.apply(this, arguments);
 
@@ -215,7 +215,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       return null;
     };
 
-    this.graph.getEdgeValidationError = function (
+    this.graph.getEdgeValidationError = function(
       edge: MyMxCell,
       source: MyMxCell,
       target: MyMxCell
@@ -274,19 +274,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.setPanning(true);
       this.graph.useScrollbarsForPanning = true;
 
-      this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
+      this.graph.addListener(mx.mxEvent.CLICK, function(sender, evt) {
         // Handle Click
         outer.handleClickEvent(evt);
       });
 
-      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender, evt) {
+      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function(sender, evt) {
         // Handle Double Click
         outer.handleDoubleClickEvent(evt);
       });
 
       this.graph
         .getSelectionModel()
-        .addListener(mx.mxEvent.CHANGE, function (sender, evt) {
+        .addListener(mx.mxEvent.CHANGE, function(sender, evt) {
           // Handle Select
         });
     }
@@ -306,10 +306,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private insertClassDefinitionsProducerFromCollector() {
+  private insertClassDefinitionsLeftFromCollector() {
     const title = this.graph.insertVertex(
       this.graph.getDefaultParent(),
-      "producer_header",
+      "left_header",
       "Werkunternehmen",
       20,
       20,
@@ -321,7 +321,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     let y = title.geometry.y + title.geometry.height + 20;
 
-    for (const c of this.producerMatchingCollectorConfiguration.collectors) {
+    for (const c of this.leftMatchingCollectorConfiguration.collectors) {
       const cell = this.insertClassDefinitionCollectorIntoGraph(
         c,
         new mx.mxGeometry(120, y, 200, 0)
@@ -330,13 +330,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private insertClassDefinitionsConsumerFromCollector() {
+  private insertClassDefinitionsRightFromCollector() {
     const x = this.graphContainer.nativeElement.offsetWidth - 220;
     let y = 20;
 
     const title = this.graph.insertVertex(
       this.graph.getDefaultParent(),
-      "consumer_header",
+      "right_header",
       "Werkbesteller",
       x - 200,
       y,
@@ -349,7 +349,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     y = title.geometry.y + title.geometry.height + 20;
 
     console.log("======");
-    for (const c of this.consumerMatchingCollectorConfiguration.collectors) {
+    for (const c of this.rightMatchingCollectorConfiguration.collectors) {
       const cell = this.insertClassDefinitionCollectorIntoGraph(
         c,
         new mx.mxGeometry(x - 100, y, 200, 0)
@@ -489,21 +489,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     for (const entry of this.matchingConfiguration.relationships) {
       const operatorCell = this.insertMatchingOperator(entry);
 
-      let producerCell: MyMxCell;
-      if (!isNullOrUndefined(entry.producerPath)) {
-        producerCell = this.graph
+      let leftCell: MyMxCell;
+      if (!isNullOrUndefined(entry.leftMatchingEntityPath)) {
+        leftCell = this.graph
           .getModel()
-          .getCell(entry.producerPath) as MyMxCell;
+          .getCell(entry.leftMatchingEntityPath) as MyMxCell;
       }
-      let consumerCell: MyMxCell;
-      if (!isNullOrUndefined(entry.consumerPath)) {
-        consumerCell = this.graph
+      let rightCell: MyMxCell;
+      if (!isNullOrUndefined(entry.rightMatchingEntityPath)) {
+        rightCell = this.graph
           .getModel()
-          .getCell(entry.consumerPath) as MyMxCell;
+          .getCell(entry.rightMatchingEntityPath) as MyMxCell;
       }
 
-      this.insertRelationship(producerCell, operatorCell);
-      this.insertRelationship(operatorCell, consumerCell);
+      this.insertRelationship(leftCell, operatorCell);
+      this.insertRelationship(operatorCell, rightCell);
     }
   }
 
@@ -548,7 +548,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private getPathForMatchingOperatorType(matchingOperatorType: String) {
     const paletteItem = CConstants.matchingOperatorPalettes.find(
-      (ret) => ret.id === matchingOperatorType
+      ret => ret.id === matchingOperatorType
     );
 
     return paletteItem.imgPath;
@@ -611,8 +611,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         break;
       case "editor_new":
         this.performNew(
-          event.payload.producerClassConfiguration,
-          event.payload.consumerClassConfiguration,
+          event.payload.leftClassConfiguration,
+          event.payload.rightClassConfiguration,
           event.payload.label
         );
         break;
@@ -629,15 +629,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     for (const operatorCell of matchingOperatorCells) {
       const relationship = this.matchingConfiguration.relationships.find(
-        (r) => r.id === operatorCell.id
+        r => r.id === operatorCell.id
       );
 
       relationship.matchingOperatorType = (operatorCell as MyMxCell).matchingOperatorType;
       relationship.coordX = operatorCell.geometry.x;
       relationship.coordY = operatorCell.geometry.y;
 
-      let producerSet = false;
-      let consumerSet = false;
+      let leftSet = false;
+      let rightSet = false;
 
       for (const edge of operatorCell.edges) {
         if (
@@ -645,23 +645,23 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           !isNullOrUndefined(edge.target)
         ) {
           if (edge.target.id === operatorCell.id) {
-            relationship.producerPath = edge.source.id;
-            relationship.producerType =
+            relationship.leftMatchingEntityPath = edge.source.id;
+            relationship.leftMatchingEntityType =
               (edge.source as MyMxCell).cellType === MyMxCellType.PROPERTY
-                ? MatchingProducerConsumerType.PROPERTY
-                : MatchingProducerConsumerType.CLASS;
-            producerSet = true;
+                ? MatchingEntityType.PROPERTY
+                : MatchingEntityType.CLASS;
+            leftSet = true;
           } else if (edge.source.id === operatorCell.id) {
-            relationship.consumerPath = edge.target.id;
-            relationship.consumerType =
+            relationship.rightMatchingEntityPath = edge.target.id;
+            relationship.rightMatchingEntityType =
               (edge.target as MyMxCell).cellType === MyMxCellType.PROPERTY
-                ? MatchingProducerConsumerType.PROPERTY
-                : MatchingProducerConsumerType.CLASS;
-            consumerSet = true;
+                ? MatchingEntityType.PROPERTY
+                : MatchingEntityType.CLASS;
+            rightSet = true;
           }
         }
 
-        if (producerSet && consumerSet) {
+        if (leftSet && rightSet) {
           break;
         }
       }
@@ -680,21 +680,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   performOpen(matchingConfiguration: MatchingConfiguration) {
     this.loadClassesAndRelationships(
-      matchingConfiguration.producerClassConfigurationId,
-      matchingConfiguration.consumerClassConfigurationId
+      matchingConfiguration.leftClassConfigurationId,
+      matchingConfiguration.rightClassConfigurationId
     );
   }
 
   performNew(
-    producerClassConfiguration: ClassConfiguration,
-    consumerClassConfiguration: ClassConfiguration,
+    leftClassConfiguration: ClassConfiguration,
+    rightClassConfiguration: ClassConfiguration,
     name?: string
   ) {
     const matchingConfiguration = new MatchingConfiguration();
-    matchingConfiguration.consumerClassConfigurationId =
-      consumerClassConfiguration.id;
-    matchingConfiguration.producerClassConfigurationId =
-      producerClassConfiguration.id;
+    matchingConfiguration.rightClassConfigurationId =
+      rightClassConfiguration.id;
+    matchingConfiguration.leftClassConfigurationId = leftClassConfiguration.id;
     matchingConfiguration.name = name;
     matchingConfiguration.relationships = [];
 
@@ -706,8 +705,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       });
 
     this.loadClassesAndRelationships(
-      producerClassConfiguration.id,
-      consumerClassConfiguration.id
+      leftClassConfiguration.id,
+      rightClassConfiguration.id
     );
   }
 
@@ -719,17 +718,17 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const outer = this;
     let positionEvent: MouseEvent;
 
-    const onDragstart = function (evt) {
+    const onDragstart = function(evt) {
       evt.dataTransfer.setData("text", item.id);
       evt.dataTransfer.effect = "move";
       evt.dataTransfer.effectAllowed = "move";
     };
 
-    const onDragOver = function (evt) {
+    const onDragOver = function(evt) {
       positionEvent = evt;
     };
 
-    const onDragend = function (evt) {
+    const onDragend = function(evt) {
       evt.dataTransfer.getData("text");
       try {
         addObjectToGraph(evt, item);
@@ -792,7 +791,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       }
     };
 
-    const onMouseUp = function (evt) {
+    const onMouseUp = function(evt) {
       removeEventListeners(outer);
     };
 
@@ -858,14 +857,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   deleteOperators(cells: MyMxCell[]) {
     const cellsToRemove: MyMxCell[] = cells.filter(
-      (c) => c.cellType === MyMxCellType.MATCHING_OPERATOR
+      c => c.cellType === MyMxCellType.MATCHING_OPERATOR
     );
 
     try {
       this.graph.getModel().beginUpdate();
       this.graph.removeCells(cellsToRemove, true);
       this.matchingConfiguration.relationships = this.matchingConfiguration.relationships.filter(
-        (r) => cellsToRemove.findIndex((c) => r.id === c.id) < 0
+        r => cellsToRemove.findIndex(c => r.id === c.id) < 0
       );
     } finally {
       this.graph.getModel().endUpdate();
@@ -894,7 +893,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   handleOverlayOpened(event: mxgraph.mxEventObject, cell: MyMxCell) {
     this.overlayRelationship = this.matchingConfiguration.relationships.find(
-      (r) => r.id === cell.id
+      r => r.id === cell.id
     );
     this.overlayEvent = event.properties.event;
     this.displayOverlay = true;
@@ -910,7 +909,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (!isNullOrUndefined(event)) {
       const index = this.matchingConfiguration.relationships.findIndex(
-        (r) => r.id === event.id
+        r => r.id === event.id
       );
       this.matchingConfiguration.relationships[index] = event;
 
