@@ -30,7 +30,7 @@
       <tr>
         <td>
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
-            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="producerItemSelected($event, c)">
+            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="leftItemSelected($event, c)">
               <td style="padding-left: 50px; padding-right: 50px;">
                 {{ c.name }}
               </td>
@@ -42,7 +42,7 @@
 
         <td width="200px">
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
-            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="consumerItemSelected($event, c)">
+            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="rightItemSelected($event, c)">
               <td style="padding-left: 50px; padding-right: 50px;">
                 {{ c.name }}
               </td>
@@ -52,21 +52,20 @@
       </tr>
 
       <tr>
-        <td width="200px" *ngIf="data.producerClassConfiguration">
+        <td width="200px" *ngIf="data.leftClassConfiguration">
           Gewählt:
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="selected">
-              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('PRODUCER')"
-                matTooltip="Durchsuchen">
-                {{ data.producerClassConfiguration.name }}
+              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('LEFT')" matTooltip="Durchsuchen">
+                {{ data.leftClassConfiguration.name }}
               </td>
             </tr>
           </table>
         </td>
-        <td width="200px" *ngIf="!data.producerClassConfiguration">
+        <td width="200px" *ngIf="!data.leftClassConfiguration">
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="findbutton">
-              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('PRODUCER')">
+              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('LEFT')">
                 Durchsuchen
               </td>
             </tr>
@@ -74,21 +73,20 @@
         </td>
 
         <td style="padding-left: 50px;"></td>
-        <td *ngIf="data.consumerClassConfiguration" width="200px">
+        <td *ngIf="data.rightClassConfiguration" width="200px">
           Gewählt
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="selected">
-              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('CONSUMER')"
-                matTooltip="Durchsuchen">
-                {{ data.consumerClassConfiguration.name }}
+              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('RIGHT')" matTooltip="Durchsuchen">
+                {{ data.rightClassConfiguration.name }}
               </td>
             </tr>
           </table>
         </td>
-        <td *ngIf="!data.consumerClassConfiguration" width="200px">
+        <td *ngIf="!data.rightClassConfiguration" width="200px">
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="findbutton">
-              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('CONSUMER')">
+              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('RIGHT')">
                 Durchsuchen
               </td>
             </tr>
@@ -100,14 +98,14 @@
     </table>
 
     <div *ngIf="showErrors" style="color: red;">
-      <div *ngIf="!data.producerClassConfiguration">
+      <div *ngIf="!data.leftClassConfiguration">
         Konfiguration für das Werkunternehmen wählen
       </div>
-      <div *ngIf="!data.consumerClassConfiguration">
+      <div *ngIf="!data.rightClassConfiguration">
         Konfiguration für den Werkbesteller wählen
       </div>
       <div *ngIf="
-          data.consumerClassConfiguration === data.producerClassConfiguration
+          data.rightClassConfiguration === data.leftClassConfiguration
         ">
         Zwei verschiedene Konfigurationen wählen
       </div>
@@ -118,8 +116,7 @@
   </div>
 
   <div *ngIf="browseMode">
-    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
-      (subDialogReturn)="handleReturnFromBrowse($event)">
+    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode" (subDialogReturn)="handleReturnFromBrowse($event)">
     </browse-class-sub-dialog>
   </div>
 </mat-dialog-content>
@@ -127,11 +124,9 @@
   <button class="primary-button-dark" mat-stroked-button type="button" [disabled]="browseMode" (click)="onOKClick()">
     OK
   </button>
-  <button class="secondary-button-dark" mat-stroked-button type="button"
-    [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Abbrechen</button>
 
-  <button *ngIf="browseMode" class="secondary-button-light" mat-stroked-button type="button"
-    (click)="handleBrowseBackClick()">
+  <button *ngIf="browseMode" class="secondary-button-light" mat-stroked-button type="button" (click)="handleBrowseBackClick()">
     Zurück
   </button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->

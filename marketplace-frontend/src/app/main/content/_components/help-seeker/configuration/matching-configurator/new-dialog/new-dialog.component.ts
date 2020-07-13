@@ -8,13 +8,13 @@ import { MatchingConfigurationService } from "app/main/content/_service/configur
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import {
   ClassConfiguration,
-  MatchingConfiguration,
+  MatchingConfiguration
 } from "app/main/content/_model/meta/configurations";
 import { ClassBrowseSubDialogData } from "../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
 
 export interface NewMatchingDialogData {
-  producerClassConfiguration: ClassConfiguration;
-  consumerClassConfiguration: ClassConfiguration;
+  leftClassConfiguration: ClassConfiguration;
+  rightClassConfiguration: ClassConfiguration;
   label: string;
   marketplace: Marketplace;
 }
@@ -22,7 +22,7 @@ export interface NewMatchingDialogData {
 @Component({
   selector: "new-matching-dialog",
   templateUrl: "./new-dialog.component.html",
-  styleUrls: ["./new-dialog.component.scss"],
+  styleUrls: ["./new-dialog.component.scss"]
 })
 export class NewMatchingDialogComponent implements OnInit {
   constructor(
@@ -75,12 +75,12 @@ export class NewMatchingDialogComponent implements OnInit {
       });
   }
 
-  producerItemSelected(event: any, c: ClassConfiguration) {
-    this.data.producerClassConfiguration = c;
+  leftItemSelected(event: any, c: ClassConfiguration) {
+    this.data.leftClassConfiguration = c;
   }
 
-  consumerItemSelected(event: any, c: ClassConfiguration) {
-    this.data.consumerClassConfiguration = c;
+  rightItemSelected(event: any, c: ClassConfiguration) {
+    this.data.rightClassConfiguration = c;
   }
 
   onNoClick(): void {
@@ -90,17 +90,16 @@ export class NewMatchingDialogComponent implements OnInit {
   onOKClick() {
     this.showDuplicateError = false;
     if (
-      !isNullOrUndefined(this.data.producerClassConfiguration) &&
-      !isNullOrUndefined(this.data.consumerClassConfiguration) &&
-      this.data.consumerClassConfiguration !==
-        this.data.producerClassConfiguration &&
+      !isNullOrUndefined(this.data.leftClassConfiguration) &&
+      !isNullOrUndefined(this.data.rightClassConfiguration) &&
+      this.data.rightClassConfiguration !== this.data.leftClassConfiguration &&
       !isNullOrUndefined(this.data.label)
     ) {
       this.matchingConfigurationService
         .getMatchingConfigurationByUnorderedClassConfigurationIds(
           this.data.marketplace,
-          this.data.producerClassConfiguration.id,
-          this.data.consumerClassConfiguration.id
+          this.data.leftClassConfiguration.id,
+          this.data.rightClassConfiguration.id
         )
         .toPromise()
         .then((ret: MatchingConfiguration) => {
@@ -116,7 +115,7 @@ export class NewMatchingDialogComponent implements OnInit {
     }
   }
 
-  handleBrowseClick(sourceReference: "PRODUCER" | "CONSUMER") {
+  handleBrowseClick(sourceReference: "LEFT" | "RIGHT") {
     this.browseDialogData = new ClassBrowseSubDialogData();
     this.browseDialogData.title = "Durchsuchen";
     this.browseDialogData.marketplace = this.data.marketplace;
@@ -127,7 +126,7 @@ export class NewMatchingDialogComponent implements OnInit {
       this.browseDialogData.entries.push({
         id: classConfiguration.id,
         name: classConfiguration.name,
-        date: new Date(classConfiguration.timestamp),
+        date: new Date(classConfiguration.timestamp)
       });
     }
 
@@ -141,20 +140,20 @@ export class NewMatchingDialogComponent implements OnInit {
   handleReturnFromBrowse(event: {
     cancelled: boolean;
     entryId: string;
-    sourceReference: "PRODUCER" | "CONSUMER";
+    sourceReference: "LEFT" | "RIGHT";
   }) {
     console.log("clicked browse");
     console.log(event);
 
     if (!event.cancelled) {
       const classConfiguration = this.allClassConfigurations.find(
-        (c) => c.id === event.entryId
+        c => c.id === event.entryId
       );
 
-      if (event.sourceReference === "PRODUCER") {
-        this.data.producerClassConfiguration = classConfiguration;
-      } else if (event.sourceReference === "CONSUMER") {
-        this.data.consumerClassConfiguration = classConfiguration;
+      if (event.sourceReference === "LEFT") {
+        this.data.leftClassConfiguration = classConfiguration;
+      } else if (event.sourceReference === "RIGHT") {
+        this.data.rightClassConfiguration = classConfiguration;
       }
     }
 

@@ -84,8 +84,8 @@ export class OpenMatchingDialogComponent implements OnInit {
       this.browseDialogData.entries.push({
         id: matchingConfiguration.id,
         name: matchingConfiguration.name,
-        producer: matchingConfiguration.leftClassConfigurationName,
-        consumer: matchingConfiguration.rightClassConfigurationName,
+        leftMatchingEntity: matchingConfiguration.leftClassConfigurationName,
+        rightMatchingEntity: matchingConfiguration.rightClassConfigurationName,
         date: matchingConfiguration.timestamp
       });
     }
