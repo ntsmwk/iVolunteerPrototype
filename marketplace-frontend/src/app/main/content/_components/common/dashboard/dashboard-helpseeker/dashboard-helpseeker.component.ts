@@ -3,9 +3,8 @@ import { Subscription } from "rxjs";
 import { fuseAnimations } from "@fuse/animations";
 import { isNullOrUndefined } from "util";
 import { Router } from "@angular/router";
-import { Participant } from "../../../../_model/participant";
+import { User } from "../../../../_model/user";
 import { LoginService } from "../../../../_service/login.service";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -20,7 +19,7 @@ import { GlobalService } from "app/main/content/_service/global.service";
   animations: fuseAnimations,
 })
 export class DashboardHelpSeekerComponent implements OnInit {
-  participant: Participant;
+  user: User;
   tenant: Tenant;
 
   constructor(
@@ -37,7 +36,7 @@ export class DashboardHelpSeekerComponent implements OnInit {
       await this.globalService.getGlobalInfo().toPromise()
     );
 
-    this.participant = globalInfo.participant;
+    this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
   }
 

@@ -3,10 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "../../../../../_model/participant";
+import { User, UserRole } from "../../../../../_model/user";
 import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
@@ -26,7 +23,6 @@ import {
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
-import { Helpseeker } from "../../../../../_model/helpseeker";
 
 @Component({
   selector: "attribute-rule-precondition",
@@ -37,14 +33,14 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   implements OnInit {
   @Input("attributeCondition")
   attributeCondition: AttributeCondition;
-  @Output("attributeCondition")
-  attributeConditionChange: EventEmitter<
+  @Output("attributeConditionChange")
+  attributeConditionChange: EventEmitter<AttributeCondition> = new EventEmitter<
     AttributeCondition
-  > = new EventEmitter<AttributeCondition>();
+  >();
 
-  helpseeker: Helpseeker;
+  helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
@@ -89,7 +85,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     this.loginService
       .getLoggedIn()
       .toPromise()
-      .then((helpseeker: Helpseeker) => {
+      .then((helpseeker: User) => {
         this.helpseeker = helpseeker;
         this.helpSeekerService
           .findRegisteredMarketplaces(helpseeker.id)
@@ -99,7 +95,9 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
             this.classDefinitionService
               .getAllClassDefinitionsWithoutHeadAndEnums(
                 marketplace,
-                this.helpseeker.tenantId
+                this.helpseeker.subscribedTenants.find(
+                  (t) => t.role === UserRole.HELP_SEEKER
+                ).tenantId
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
@@ -110,20 +108,29 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       });
   }
 
-  onPropertyChange($event) {
-    if (!this.attributeCondition.classProperty) {
-      this.attributeCondition.classProperty = new ClassProperty();
+  onPropertyChange(classProperty: ClassProperty<any>, $event) {
+    if (
+      $event.isUserInput &&
+      (!this.attributeCondition.classProperty ||
+        this.attributeCondition.classProperty.id != classProperty.id)
+    ) {
+      this.initAttributeCondition();
+      this.attributeCondition.classProperty = classProperty;
+      this.attributeConditionChange.emit(this.attributeCondition);
     }
-    this.attributeCondition.classProperty.id = $event.source.value;
-    this.rulePreconditionForm.value.classPropertyId = $event.source.value;
-    this.onChange($event);
+    // this.attributeCondition.classProperty.id = $event.source.value;
+    // this.rulePreconditionForm.value.classPropertyId = $event.source.value;
+  }
+
+  private initAttributeCondition() {
+    this.attributeCondition.classProperty = new ClassProperty();
+    this.attributeCondition.comparisonOperatorType = ComparisonOperatorType.EQ;
+    this.attributeCondition.value = undefined;
+    this.rulePreconditionForm.reset();
   }
 
   private loadClassProperties($event) {
-    if (
-      this.attributeCondition &&
-      this.attributeCondition.classDefinition 
-    ) {
+    if (this.attributeCondition && this.attributeCondition.classDefinition) {
       this.classPropertyService
         .getAllClassPropertiesFromClass(
           this.marketplace,
@@ -146,9 +153,10 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       this.classDefinitionService
         .getEnumValuesFromEnumHeadClassDefinition(
           this.marketplace,
-          this.attributeCondition.classProperty.allowedValues[0]
-            .enumClassId,
-          this.helpseeker.tenantId
+          this.attributeCondition.classProperty.allowedValues[0].enumClassId,
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
         .then((list: any[]) => {
@@ -158,16 +166,16 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     return this.enumValues;
   }
 
-  onOperatorChange(op, $event){
+  onOperatorChange(op, $event) {
     console.log("on operator change begin ....");
-    if ($event.isUserInput) {    // ignore on deselection of the previous option
+    if ($event.isUserInput) {
+      // ignore on deselection of the previous option
       console.log("Selection changed to " + op);
       console.log("operator changed to " + op);
       this.attributeCondition.comparisonOperatorType = op;
       console.log("op neu: " + this.attributeCondition.comparisonOperatorType);
     }
     console.log("on operator change end ....");
-    
   }
 
   onChange($event) {
@@ -191,5 +199,4 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       ComparisonOperatorType[op as keyof typeof ComparisonOperatorType];
     return x;
   }
-
 }

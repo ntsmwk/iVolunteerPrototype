@@ -3,6 +3,7 @@ import { QuestionBase, SingleSelectionEnumQuestion } from 'app/main/content/_mod
 import { isNullOrUndefined } from 'util';
 import { FormGroup } from '@angular/forms';
 import { EnumEntry } from 'app/main/content/_model/meta/enum';
+import { MatTableDataSource } from '@angular/material';
 
 
 declare var $: JQueryStatic;
@@ -20,6 +21,7 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
 
   listOptions: EnumEntry[];
   showList: boolean;
+  datasource: MatTableDataSource<EnumEntry> = new MatTableDataSource();
 
   constructor(private renderer: Renderer2) { }
 
@@ -31,7 +33,7 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.listOptions = [];
     this.listOptions.push(...this.question.options);
-
+    this.datasource.data = this.listOptions;
   }
 
   ngAfterViewInit() {
@@ -54,7 +56,6 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
   }
 
   onSelectOption(option: EnumEntry) {
-    console.log(option);
     this.question.value = option;
     this.onHideList();
   }
@@ -86,7 +87,7 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    // this.propertyDatasource.filter = filterValue.trim().toLowerCase();
+    this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
   // getMultipleValues(question: MultipleSelectionEnumQuestion) {

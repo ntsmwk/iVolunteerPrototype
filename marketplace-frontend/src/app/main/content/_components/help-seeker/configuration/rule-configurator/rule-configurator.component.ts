@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Marketplace } from "app/main/content/_model/marketplace";
+import { UserRole, User } from "app/main/content/_model/user";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import {
   DerivationRule,
   GeneralCondition,
   ClassCondition,
-  ClassAction
+  ClassAction,
 } from "app/main/content/_model/derivation-rule";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -16,7 +16,7 @@ import { DerivationRuleService } from "app/main/content/_service/derivation-rule
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { RuleExecution } from 'app/main/content/_model/derivation-rule-execution';
+import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
 
 @Component({
   templateUrl: "./rule-configurator.component.html",
@@ -24,13 +24,16 @@ import { RuleExecution } from 'app/main/content/_model/derivation-rule-execution
   providers: [],
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
-  helpseeker: Helpseeker;
+  helpseeker: User;
   marketplace: Marketplace;
+  role: UserRole;
   ruleForm: FormGroup;
 
   derivationRule: DerivationRule;
 
   testConditions = false;
+  showSuccessMsg = false;
+  deactivateSubmit = false;
   ruleExecutions: RuleExecution[];
 
   classDefinitions: ClassDefinition[] = [];
@@ -39,6 +42,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private formBuilder: FormBuilder,
@@ -48,14 +52,12 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   ) {
     this.ruleForm = formBuilder.group({
       id: new FormControl(undefined),
-      name: new FormControl(undefined)
+      name: new FormControl(undefined),
     });
   }
 
   async ngOnInit() {
-    this.helpseeker = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
     this.marketplace = <Marketplace>(
       await this.helpSeekerService
@@ -63,69 +65,131 @@ export class FuseRuleConfiguratorComponent implements OnInit {
         .toPromise()
     );
 
-    this.route.params.subscribe((params) =>
-      this.loadDerivationRule(this.marketplace, params["ruleId"])
-    );
+    this.route.params.subscribe((params) => {
+      this.loadDerivationRule(this.marketplace, params["ruleId"]);
+    });
+
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
         .getAllClassDefinitionsWithoutHeadAndEnums(
           this.marketplace,
-          this.helpseeker.tenantId
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
     );
 
     this.tenant = <Tenant>(
-      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
+      await this.tenantService
+        .findById(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
     );
   }
 
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
     if (ruleId) {
       this.derivationRuleService
-        .findByIdAndTenantId(marketplace, ruleId, this.helpseeker.tenantId)
+        .findById(marketplace, ruleId)
         .toPromise()
         .then((rule: DerivationRule) => {
           this.derivationRule = rule;
           this.ruleForm.setValue({
             id: this.derivationRule.id,
-            name: this.derivationRule.name
+            name: this.derivationRule.name,
           });
         });
-    } else { // init derivation rule
+      this.deactivateSubmit = true;
+    } else {
+      // init derivation rule
       this.derivationRule = new DerivationRule();
       this.derivationRule.generalConditions = new Array();
       this.derivationRule.classActions = new Array();
-      this.derivationRule.classActions.push(
-        new ClassAction(null)
-      );
+      this.derivationRule.classActions.push(new ClassAction(null));
       this.derivationRule.conditions = new Array();
     }
   }
 
-  test(){
+  private loadDerivationRuleByName(
+    marketplace: Marketplace,
+    tenantId: string,
+    container: string,
+    ruleName: string
+  ) {
+    this.derivationRuleService
+      .findByContainerAndName(marketplace, tenantId, container, ruleName)
+      .toPromise()
+      .then((rule: DerivationRule) => {
+        this.derivationRule = rule;
+        this.router.navigate(["/main/rule/" + this.derivationRule.id]);
+        this.ruleForm.setValue({
+          id: this.derivationRule.id,
+          name: this.derivationRule.name,
+        });
+      });
+  }
+
+  private initDerivationRule() {
+    this.derivationRule = new DerivationRule();
+    this.derivationRule.generalConditions = new Array();
+    this.derivationRule.classActions = new Array();
+    this.derivationRule.classActions.push(new ClassAction(null));
+    this.derivationRule.conditions = new Array();
+  }
+
+  onChangeClassCondition(classCondition: ClassCondition) {
+    this.deactivateSubmit = false;
+  }
+
+  onChangeClassAction(classAction: ClassAction) {
+    // XXX still to do
+  }
+
+  test() {
     this.testConditions = true;
     this.derivationRule.name = this.ruleForm.value.name;
-    this.derivationRule.tenantId = this.helpseeker.tenantId;
-    this.derivationRule.container = "simulate execution " + this.derivationRule.name;
+    this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
+      (t) => t.role === UserRole.HELP_SEEKER
+    ).tenantId;
+    this.derivationRule.container =
+      "simulate execution " + this.derivationRule.name;
   }
 
   save() {
-    if (this.ruleForm.value.name &&
-      this.derivationRule.classActions[0].classDefinition){
+    console.log(this.ruleForm.value.name);
+    console.log(this.derivationRule.classActions[0].classDefinition);
+    if (
+      this.ruleForm.value.name &&
+      this.derivationRule.classActions[0].classDefinition
+    ) {
       this.derivationRule.name = this.ruleForm.value.name;
-      this.derivationRule.tenantId = this.helpseeker.tenantId;
+      this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
+        (t) => t.role === UserRole.HELP_SEEKER
+      ).tenantId;
       this.derivationRule.container = "Test-Frontend";
 
       this.derivationRuleService
         .save(this.marketplace, this.derivationRule)
         .toPromise()
-        .then(() =>
-          this.loadDerivationRule(this.marketplace, this.derivationRule.id)
-        );
+        .then(() => {
+          this.showSuccessMsg = true;
+          if (this.derivationRule.id) {
+            this.loadDerivationRule(this.marketplace, this.derivationRule.id);
+          } else {
+            this.loadDerivationRuleByName(
+              this.marketplace,
+              this.derivationRule.tenantId,
+              this.derivationRule.container,
+              this.derivationRule.name
+            );
+          }
+        });
     }
-    this.ruleForm.reset;
-    this.ruleForm.value.name = "";
+    this.ruleForm.reset();
     this.testConditions = false;
   }
 
@@ -133,23 +197,24 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     window.history.back();
   }
 
-  onChange($event){
-   this.testConditions = false; 
+  onChange($event) {
+    console.log("on change rule-configurator!!!");
+    this.testConditions = false;
+    this.deactivateSubmit = false;
   }
 
   onChangeName() {
-      this.derivationRule.name = this.ruleForm.value.name;
+    this.derivationRule.name = this.ruleForm.value.name;
+    this.deactivateSubmit = false;
   }
 
   addGeneralCondition() {
-    this.derivationRule.generalConditions.push(
-      new GeneralCondition()
-    );
+    this.derivationRule.generalConditions.push(new GeneralCondition());
+    this.deactivateSubmit = false;
   }
 
   addClassCondition() {
-    this.derivationRule.conditions.push(
-      new ClassCondition()
-      );
+    this.derivationRule.conditions.push(new ClassCondition());
+    this.deactivateSubmit = false;
   }
 }

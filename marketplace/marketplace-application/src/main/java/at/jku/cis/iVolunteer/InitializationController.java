@@ -4,17 +4,147 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
 
 @RestController
 public class InitializationController {
 
 	@Autowired private UserMappingRepository userMappingRepository;
-	@Autowired private VolunteerRepository volunteerRepository;	
+	@Autowired private UserRepository userRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	
+	@Autowired private InitializationService initializationService;
+	@Autowired private APIInitializationService apiInitializationService;
+	
+	
+	@PutMapping("/init/add-test-data")
+	public void addTestData() {
+		addFireBrigadeUserMapping();
+		addAllProperties();
+		addClassConfigurations();
+		addAPIClassDefinitions();
+	}
+	
+	@PutMapping("/init/add-rule-test-data")
+	public void addRuleTestData() {
+		addRuleTestConfiguration();
+		addRuleUserData();
+	}
+	
+	/**
+	 * Properties
+	 */
+	
+	@PutMapping("/init/add-properties/iVolunteer")
+	public void addAllProperties() {
+		initializationService.addiVolunteerPropertyDefinitions();
+	}
+	
+	@PutMapping("/init/delete-properties")
+	public void deleteProperties() {
+		initializationService.propertyDefinitionRepository.deleteAll();
+	}
+	
+	@PutMapping("/init/add-properties/header")
+	public void addHeaderProperties() {
+		initializationService.addHeaderPropertyDefintions();
+	}	
+	
+	@PutMapping("/init/add-properties/generic")
+	public void addGenericProperties() {
+		initializationService.addGenericPropertyDefintions();
+	}
+	
+	@PutMapping("/init/add-properties/flexprod")
+	public void addFlexProdProperties() {
+		initializationService.addFlexProdPropertyDefinitions();
+	}
+	
+	/**
+	 * Enum-Definitions
+	 */
+	
+	@PutMapping("/init/delete-enumdefinitions")
+	public void deleteEnumDefinitions() {
+		initializationService.enumDefinitionRepository.deleteAll();
+	}
+	
+	/**
+	 * Class-Definitions and Configurations
+	 */
+	
+	@PutMapping("/init/add-api-classdefinitions")
+	public void addAPIClassDefinitions() {
+		apiInitializationService.addiVolunteerAPIClassDefinition();
+	}
+	
+	@PutMapping("/init/add-configurator-test-configurations") 
+	public void addClassConfigurations() {
+		initializationService.addClassConfigurations();
+	}
+	
+	@PutMapping("/init/delete-class-definitions")
+	public void deleteClassDefinitions() {
+		initializationService.classDefinitionRepository.deleteAll();
+	}
+	
+	@PutMapping("/init/delete-relationships")
+	public void deleteRelationships() {
+		initializationService.relationshipRepository.deleteAll();
+	}
+	
+	@PutMapping("/init/delete-class-configurations")
+	public void deleteClassConfigurations() {
+		initializationService.classConfigurationRepository.deleteAll();
+	}
+	
+	@PutMapping("/init/delete-class-instances")
+	public void deleteClassInstances() {
+		classInstanceRepository.deleteAll();
+	}
 
+	
+	/**
+	 * Rules
+	 */
+
+	@PutMapping("/init/add-rule-test-configuration") 
+	public void addRuleTestConfiguration() {
+		initializationService.testDataClasses.createClassConfigurations();
+	}
+	
+	@PutMapping("/init/add-rule-user-data")
+	public void addRuleUserData() {
+		initializationService.testDataInstances.createUserData();
+	}
+	
+	/**
+	 * Matching
+	 */
+	
+	@PutMapping("/init/delete-matching-collector-configurations")
+	public void deleteMatchingCollectorConfigurations() {
+		initializationService.matchingCollectorConfigurationRepository.deleteAll();
+	}
+	
+	
+	/**
+	 * Users
+	 */
+	
+	
+	@PutMapping("/init/delete-marketplace-users")
+	public void deleteMarketplaceUsers() {
+		userRepository.deleteAll();
+	}
+	
+	
+	
+	
 	@PutMapping("/init/usermapping")
 	public void addFireBrigadeUserMapping() {
 		UserMapping userMapping = userMappingRepository.findByExternalUserId("5dc2a215399af");
@@ -23,7 +153,7 @@ public class InitializationController {
 			userMappingRepository.deleteAll();
 		}
 
-		Volunteer volunteer = volunteerRepository.findByUsername("mweixlbaumer");
+		User volunteer = userRepository.findByUsername("mweixlbaumer");
 		if (volunteer != null) {
 			UserMapping mapping = new UserMapping();
 			mapping.setiVolunteerUserId(volunteer.getId());
@@ -31,5 +161,26 @@ public class InitializationController {
 			userMappingRepository.save(mapping);
 		}
 	}
+	
+	@PutMapping("/init/usermapping/delete")
+	public void deleteUserMappings() {
+		userMappingRepository.deleteAll();
+	}
 
+	
+	@PutMapping("/init/wipe-marketplace")
+	public void wipeMarketplace() {
+		deleteClassConfigurations();
+		deleteClassDefinitions();
+		deleteRelationships();
+		deleteClassInstances();
+		deleteProperties();
+		deleteMarketplaceUsers();
+		deleteMatchingCollectorConfigurations();
+		deleteEnumDefinitions();
+		deleteUserMappings();
+		
+	}
+	
+	
 }

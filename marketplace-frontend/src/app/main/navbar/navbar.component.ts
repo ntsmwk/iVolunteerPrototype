@@ -19,7 +19,7 @@ import { FuseSidebarComponent } from "@fuse/components/sidebar/sidebar.component
 import { navigation_helpseeker } from "../../navigation/navigation_helpseeker";
 import { navigation_flexprod } from "../../navigation/navigation_flexprod";
 import { LoginService } from "../content/_service/login.service";
-import { ParticipantRole, Participant } from "../content/_model/participant";
+import { UserRole, User } from "../content/_model/user";
 import { MessageService } from "../content/_service/message.service";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { navigation_admin } from "app/navigation/navigation_admin";
@@ -56,23 +56,23 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
   ) {
     // Navigation data
     this.loginService
-      .getLoggedInParticipantRole()
+      .getLoggedInUserRole()
       .toPromise()
-      .then((role: ParticipantRole) => {
+      .then((role: UserRole) => {
         switch (role) {
-          case "HELP_SEEKER":
+          case UserRole.HELP_SEEKER:
             this.navigation = navigation_helpseeker;
             break;
-          case "VOLUNTEER":
+          case UserRole.VOLUNTEER:
             this.navigation = navigation_volunteer;
             break;
-          case "FLEXPROD":
+          case UserRole.FLEXPROD:
             this.navigation = navigation_flexprod;
             break;
-          case "RECRUITER":
+          case UserRole.RECRUITER:
             this.navigation = navigation_recruiter;
             break;
-          case "ADMIN":
+          case UserRole.ADMIN:
             this.navigation = navigation_admin;
             break;
         }

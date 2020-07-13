@@ -20,6 +20,10 @@ export class DerivationRuleService {
     return this.http.get(`${marketplace.url}/rule/${id}`);
   }
 
+  findByContainerAndName(marketplace: Marketplace, tenantId: string, container: string, ruleName: string){
+    return this.http.get(`${marketplace.url}/rule/tenant/${tenantId}/container/${container}/rule/${ruleName}`);
+  }
+
   findAll(marketplace: Marketplace, tenantId: string) {
     return this.http.get(`${marketplace.url}/rule/tenant/${tenantId}`);
   }

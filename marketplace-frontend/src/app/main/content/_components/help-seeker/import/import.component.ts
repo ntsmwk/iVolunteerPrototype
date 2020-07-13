@@ -7,16 +7,9 @@ import {
   Validators,
 } from "@angular/forms";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import {
-  ClassDefinition,
-  ClassInstance,
-} from "app/main/content/_model/meta/class";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
+import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import {
-  ParticipantRole,
-  Participant,
-} from "app/main/content/_model/participant";
+import { UserRole, User } from "app/main/content/_model/user";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
@@ -30,10 +23,10 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 })
 export class ImportComponent implements OnInit {
   classDefinitions: ClassDefinition[] = [];
-  volunteers: Participant[] = [];
-  helpseeker: Helpseeker;
+  volunteers: User[] = [];
+  helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   importForm: FormGroup;
 
   inputMissingError: boolean = false;
@@ -58,9 +51,7 @@ export class ImportComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.helpseeker = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
     this.marketplace = <Marketplace>(
       await this.helpSeekerService
@@ -69,21 +60,33 @@ export class ImportComponent implements OnInit {
     );
 
     this.tenant = <Tenant>(
-      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
+      await this.tenantService
+        .findById(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
     );
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
         .getAllClassDefinitionsWithoutRootAndEnums(
           this.marketplace,
-          this.helpseeker.tenantId
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
     );
 
-    this.volunteers = <Participant[]>(
+    this.volunteers = <User[]>(
       await this.volunteerService
-        .findAllByTenantId(this.helpseeker.tenantId)
+        .findAllByTenantId(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
         .toPromise()
     );
   }

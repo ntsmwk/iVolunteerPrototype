@@ -1,18 +1,18 @@
 package at.jku.cis.iVolunteer.model.core.tenant;
 
-import at.jku.cis.iVolunteer.model.user.ParticipantRole;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 public class SubscriptionRule {
 
-	private ParticipantRole role;
+	private UserRole role;
 	private SubscriptionOption subscriptionOption;
 	boolean active;
 
-	public ParticipantRole getRole() {
+	public UserRole getRole() {
 		return role;
 	}
 
-	public void setRole(ParticipantRole role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
 

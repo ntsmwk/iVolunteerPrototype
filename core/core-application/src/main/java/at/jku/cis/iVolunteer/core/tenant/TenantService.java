@@ -8,22 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 
 @Service
 public class TenantService {
 
-	@Autowired private TenantRepository tenantRepository;
-	@Autowired private CoreVolunteerRepository volunteerRepository;
+	@Autowired
+	private TenantRepository tenantRepository;
+	@Autowired
+	private CoreUserRepository userRepository;
 
-	public List<Tenant> getTenantsByVolunteer(String volunteerId) {
-		CoreVolunteer volunteer = volunteerRepository.findOne(volunteerId);
-		if (volunteer != null) {
-			return volunteer.getSubscribedTenants().stream().map(tId -> tenantRepository.findOne(tId))
-					.collect(Collectors.toList());
+	public List<Tenant> getTenantsByUser(String userId) {
+		CoreUser user = userRepository.findOne(userId);
+		if (user != null) {
+			return user.getSubscribedTenants().stream().map(t -> t.getTenantId())
+					.map(tId -> tenantRepository.findOne(tId)).collect(Collectors.toList());
 		}
 		return new ArrayList<>();
 	}

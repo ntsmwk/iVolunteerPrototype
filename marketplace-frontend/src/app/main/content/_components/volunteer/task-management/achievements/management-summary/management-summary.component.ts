@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { Volunteer } from "app/main/content/_model/volunteer";
 import {
   ClassInstanceDTO,
   ClassInstance,
@@ -17,6 +16,7 @@ import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { GlobalService } from "app/main/content/_service/global.service";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "fuse-management-summary",
@@ -46,7 +46,7 @@ export class ManagementSummaryComponent implements OnInit {
   legendPosition = "below";
   tooltipDisabled = false;
 
-  volunteer: Volunteer;
+  volunteer: User;
   marketplace: any = [];
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
@@ -88,7 +88,7 @@ export class ManagementSummaryComponent implements OnInit {
       await this.globalService.getGlobalInfo().toPromise()
     );
 
-    this.volunteer = <Volunteer>globalInfo.participant;
+    this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
 
     this.comparisonYear = 2019;
@@ -121,7 +121,7 @@ export class ManagementSummaryComponent implements OnInit {
               this.marketplace,
               "TASK",
               this.volunteer.id,
-              this.volunteer.subscribedTenants
+              this.volunteer.subscribedTenants.map((s) => s.tenantId)
             )
             .toPromise()
         );

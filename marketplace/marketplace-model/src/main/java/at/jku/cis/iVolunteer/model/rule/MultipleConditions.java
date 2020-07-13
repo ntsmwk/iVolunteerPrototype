@@ -34,4 +34,5 @@ public class MultipleConditions extends Condition {
     public void setConditions(List<Condition> conditions) {
     	this.conditions = conditions;
     }
+
 }

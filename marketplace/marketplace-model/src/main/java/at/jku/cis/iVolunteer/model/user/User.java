@@ -1,13 +1,20 @@
 package at.jku.cis.iVolunteer.model.user;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 
-public abstract class User {
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
-	@Id private String id;
+public class User {
+	@Id
+	private String id;
 	private String username;
 	private String password;
 
@@ -19,15 +26,40 @@ public abstract class User {
 	private String position;
 
 	private Date birthday;
-	
+
 	private List<String> locations;
 	private String about;
 	private String address;
 	private List<String> phoneNumbers;
 	private List<String> websites;
 	private List<String> emails;
-	
+
 	private byte[] image;
+
+	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
+
+	public User() {
+	}
+
+	public User(CoreUser coreUser) {
+		this.id = coreUser.getId();
+		this.username = coreUser.getUsername();
+		this.password = coreUser.getPassword();
+		this.firstname = coreUser.getFirstname();
+		this.middlename = coreUser.getMiddlename();
+		this.lastname = coreUser.getLastname();
+		this.nickname = coreUser.getNickname();
+		this.position = coreUser.getPosition();
+		this.birthday = coreUser.getBirthday();
+		this.locations = coreUser.getLocations();
+		this.about = coreUser.getAbout();
+		this.address = coreUser.getAddress();
+		this.phoneNumbers = coreUser.getPhoneNumbers();
+		this.websites = coreUser.getWebsites();
+		this.emails = coreUser.getEmails();
+		this.image = coreUser.getImage();
+		this.subscribedTenants = coreUser.getSubscribedTenants();
+	}
 
 	public String getId() {
 		return id;
@@ -168,5 +200,26 @@ public abstract class User {
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	public List<TenantUserSubscription> getSubscribedTenants() {
+		return this.subscribedTenants;
+	}
+
+	public void setSubscribedTenants(List<TenantUserSubscription> subscribedTenants) {
+		this.subscribedTenants = subscribedTenants;
+	}
+
+	public void addSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
+		if (!this.subscribedTenants.stream().filter(t -> t.getMarketplaceId() == marketplaceId)
+				.map(t -> t.getTenantId()).collect(Collectors.toList()).contains(tenantId)) {
+			this.subscribedTenants.add(new TenantUserSubscription(marketplaceId, tenantId, role));
+		}
+
+	}
+
+	public List<TenantUserSubscription> removeSubscribedTenant(String marketplaceId, String tenantId) {
+		this.subscribedTenants.removeIf(s -> s.getTenantId() == tenantId && s.getMarketplaceId() == marketplaceId);
+		return this.subscribedTenants;
 	}
 }

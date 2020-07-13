@@ -7,10 +7,9 @@ import { MatCommonModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
-import { PropertyOrEnumCreationDialogModule } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.module';
-import {
-  PropertyOrEnumCreationDialogComponent
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
+import { PropertyOrEnumCreationDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.module';
+import { PropertyOrEnumCreationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component';
+import { FuseSharedModule } from '@fuse/shared.module';
 
 @NgModule({
   imports: [
@@ -29,6 +28,8 @@ import {
     MatProgressSpinnerModule,
 
     PropertyOrEnumCreationDialogModule,
+
+    FuseSharedModule,
 
   ],
   declarations: [AddPropertyDialogComponent],

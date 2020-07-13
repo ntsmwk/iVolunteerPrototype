@@ -51,7 +51,7 @@ public class ClassConfigurationController {
 	}
 
 	@GetMapping("class-configuration/all/sort")
-	List<ClassConfiguration> getAllClassConfigurationsWithSort(
+	public List<ClassConfiguration> getAllClassConfigurationsWithSort(
 			@RequestParam(value = "sorted", required = false) String sortType) {
 
 //		if (sortType.equalsIgnoreCase("asc")) {
@@ -67,17 +67,17 @@ public class ClassConfigurationController {
 	}
 
 	@GetMapping("class-configuration/{id}")
-	ClassConfiguration getClassConfigurationById(@PathVariable("id") String id) {
+	public ClassConfiguration getClassConfigurationById(@PathVariable("id") String id) {
 		return classConfigurationRepository.findOne(id);
 	}
 
 	@GetMapping("class-configuration/by-name/{name}")
-	List<ClassConfiguration> getClassConfigurationByName(@PathVariable("name") String name) {
+	public List<ClassConfiguration> getClassConfigurationByName(@PathVariable("name") String name) {
 		return classConfigurationRepository.findByName(name);
 	}
 
 	@PostMapping("class-configuration/new-empty")
-	ClassConfiguration createNewEmptyClassConfiguration(@RequestBody String[] params) {
+	public ClassConfiguration createNewEmptyClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 2) {
 			return null;
 		}
@@ -91,7 +91,7 @@ public class ClassConfigurationController {
 	}
 
 	@PostMapping("class-configuration/new")
-	ClassConfiguration createNewClassConfiguration(@RequestBody String[] params) {
+	public ClassConfiguration createNewClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 3) {
 			return null;
 		}
@@ -129,9 +129,21 @@ public class ClassConfigurationController {
 		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
 		return classConfiguration;
 	}
+	
+	@PutMapping("class-configuration/{id}/save-meta")
+	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
+		
+		if (params.length != 2) {return null;}
+		
+		classConfiguration.setName(params[0]);
+		classConfiguration.setDescription(params[1]);
+		
+		return classConfigurationRepository.save(classConfiguration);
+	}
 
 	@DeleteMapping("class-configuration/{id}/delete")
-	void deleteClassConfiguration(@PathVariable("id") String id) {
+	public void deleteClassConfiguration(@PathVariable("id") String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
 
 		classConfiguration.getClassDefinitionIds().forEach(classDefinitionRepository::delete);
@@ -141,7 +153,7 @@ public class ClassConfigurationController {
 	}
 
 	@PutMapping("class-configuration/delete-multiple")
-	List<ClassConfiguration> deleteMultipleClassConfigurations(@RequestBody List<String> ids) {
+	public List<ClassConfiguration> deleteMultipleClassConfigurations(@RequestBody List<String> ids) {
 		ids.forEach(this::deleteClassConfiguration);
 		return this.classConfigurationRepository.findAll();
 	}

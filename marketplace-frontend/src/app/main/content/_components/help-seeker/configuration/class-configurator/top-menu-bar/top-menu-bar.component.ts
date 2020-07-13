@@ -2,13 +2,13 @@ import { Component, ElementRef, ViewChild, Output, EventEmitter, Input, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { NewClassConfigurationDialogData } from '../new-dialog/new-dialog.component';
 import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { DeleteClassConfigurationDialogData } from '../delete-dialog/delete-dialog.component';
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
-import { OpenClassConfigurationDialogData } from '../open-dialog/open-dialog.component';
+import { NewClassConfigurationDialogData } from '../_dialogs/new-dialog/new-dialog.component';
+import { OpenClassConfigurationDialogData } from '../_dialogs/open-dialog/open-dialog.component';
+import { DeleteClassConfigurationDialogData } from '../_dialogs/delete-dialog/delete-dialog.component';
 
 export interface RootMenuItem {
   id: number;
@@ -26,6 +26,7 @@ export interface SubMenuItem {
 
 export class TopMenuResponse {
   action: string;
+  followingAction: string;
   classConfiguration: ClassConfiguration;
   classDefintions: ClassDefinition[];
   relationships: Relationship[];
@@ -89,15 +90,15 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   @ViewChild('menubarContainer', { static: true }) menubarContainer: ElementRef;
   @ViewChild('submenuContainer', { static: true }) submenuContainer: ElementRef;
+  @ViewChild('titlebarTextContainer', { static: true }) titleBarTextContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
   @Input() eventResponse: TopMenuResponse;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
 
-  configurationName: string;
+  currentClassConfiguration: ClassConfiguration;
 
-  constructor(private router: Router,
-    private route: ActivatedRoute,
+  constructor(
     private dialogFactory: DialogFactoryDirective
   ) {
 
@@ -128,6 +129,11 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.menubarContainer.nativeElement.style.height = '35px';
     this.menubarContainer.nativeElement.style.background = 'white';
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
+
+
+    this.titleBarTextContainer.nativeElement.style.maxWidth
+      // clientwidth of titlebar - margin left/right - icon left
+      = (this.menubarContainer.nativeElement.clientWidth - 50 - 15) + 'px';
 
     const outer = this;
 
@@ -162,10 +168,20 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  newClicked(event: any, item: SubMenuItem) {
+  // menu functions
+
+  newClicked() {
+    if (!isNullOrUndefined(this.currentClassConfiguration)) {
+      this.saveClicked('performNew');
+    } else {
+      this.performNew();
+    }
+  }
+
+  private performNew() {
     this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
-        this.configurationName = ret.classConfiguration.name;
+        this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
@@ -173,10 +189,34 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  openClicked(event: any, item: SubMenuItem) {
+  editClicked() {
+
+    this.performEdit();
+  }
+
+  private performEdit() {
+    this.dialogFactory.openNewClassConfigurationDialog(this.marketplace, this.currentClassConfiguration).then((ret: NewClassConfigurationDialogData) => {
+      if (!isNullOrUndefined(ret)) {
+        this.currentClassConfiguration = ret.classConfiguration;
+        this.menuOptionClickedEvent.emit({ id: 'editor_meta_edit', payload: { name: ret.classConfiguration.name, description: ret.classConfiguration.description } });
+      } else {
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+      }
+    });
+  }
+
+  openClicked() {
+    if (!isNullOrUndefined(this.currentClassConfiguration)) {
+      this.saveClicked('performOpen');
+    } else {
+      this.performOpen();
+    }
+  }
+
+  private performOpen() {
     this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: OpenClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
-        this.configurationName = ret.classConfiguration.name;
+        this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
@@ -185,27 +225,30 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  saveClicked(event: any, item: SubMenuItem) {
-    this.menuOptionClickedEvent.emit({ id: 'editor_save' });
+  saveClicked(followingAction: string) {
+    this.menuOptionClickedEvent.emit({ id: 'editor_save', followingAction: followingAction });
   }
 
   private performSave(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
-    relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[]) {
+    relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[], actionAfter: string) {
 
     this.dialogFactory
       .openSaveConfirmationDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
       .then((ret) => {
-        if (!isNullOrUndefined(ret)) {
-          //return
 
-          this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
-        } else {
+        if (isNullOrUndefined(ret)) {
           this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+        } else {
+          this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
+        }
+
+        if (!isNullOrUndefined(actionAfter)) {
+          this[actionAfter]();
         }
       });
   }
 
-  deleteClicked(event: any, item: SubMenuItem) {
+  deleteClicked() {
     this.dialogFactory.openDeleteClassConfiguratorDialog(this.marketplace).then((ret: DeleteClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
@@ -213,49 +256,24 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
     });
-
-
   }
 
-  // private performSaveAs(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
-  //   relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[]) {
+  createEditorClicked() {
+    if (!isNullOrUndefined(this.currentClassConfiguration)) {
+      this.saveClicked('performCreate');
+    } else {
+      this.performCreate();
+    }
+  }
 
-  //   console.log("perform save as");
-  //   this.dialogFactory
-  //     .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
-  //     .then((ret) => {
-  //       if (!isNullOrUndefined(ret)) {
-  //         //return
-  //         console.log(ret);
-  //       } else {
-  //         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-  //       }
-  //     });
-  // }
-
-  // saveAsClicked(event: any, item: SubMenuItem) {
-  //   this.menuOptionClickedEvent.emit({ id: 'editor_save_as' });
-
-  //   // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
-  //   // setTimeout(() => {
-  //   //   this.dialogFactory
-  //   //   .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
-  //   //   .then((ret: any) => {
-  //   //     if (!isNullOrUndefined(ret)) {
-  //   //       this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
-  //   //     } else {
-  //   //       this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-  //   //     }
-  //   //   });
-  //   // });
-  // }
-
-  createEditorClicked(event: any, item: SubMenuItem) {
+  performCreate() {
+    this.menuOptionClickedEvent.emit({ id: 'editor_create_instance' });
 
   }
 
   ngOnChanges() {
     const eventResponseAction = this.eventResponse.action;
+    const eventFollowingAction = this.eventResponse.followingAction;
     const eventClassConfiguration = this.eventResponse.classConfiguration;
     const eventClassDefinitions = this.eventResponse.classDefintions;
     const eventRelationships = this.eventResponse.relationships;
@@ -263,16 +281,10 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     const eventDeletedRelationships = this.eventResponse.deletedRelationships;
 
     this.eventResponse = new TopMenuResponse();
-    if (eventResponseAction === 'saveAsClicked') {
-      // this[eventResponseAction](eventResponseAction, undefined);
-    } else if (eventResponseAction === 'save') {
-      if (isNullOrUndefined(eventClassConfiguration)) {
-
-      } else {
-        this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
+    if (eventResponseAction === 'save') {
+      if (!isNullOrUndefined(eventClassConfiguration)) {
+        this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships, eventFollowingAction);
       }
-    } else if (eventResponseAction === 'saveAs') {
-      // this.performSaveAs(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
     }
   }
 

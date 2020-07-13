@@ -31,6 +31,31 @@ div#menubarContainer {
         font-size: 22px
       }
     }
+
+    .title-bar-text-container {
+      margin: 0 25px;
+      cursor: pointer;
+
+      .title-bar-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        display: inline-block;
+      }
+      
+      .title-bar-text-icon {
+        display: none; 
+      }
+    }
+
+    .title-bar-text-container:hover {
+      .title-bar-text {
+        text-decoration: underline;
+      }
+      .title-bar-text-icon {
+        display: block;
+      }
+    }
   }
 }
 
@@ -41,9 +66,6 @@ div#submenuContainer {
   div.menuitem:hover {
     background-color: rgb(62, 125, 219);
     color: white;
-    // border-top: solid 2px black;
-    // border-bottom: solid 2px black;
-
   }
 
   div.menuitem {
@@ -51,7 +73,5 @@ div#submenuContainer {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 5px;
-    // border-top: solid 2px white;
-    // border-bottom: solid 2px white;
   }
 }

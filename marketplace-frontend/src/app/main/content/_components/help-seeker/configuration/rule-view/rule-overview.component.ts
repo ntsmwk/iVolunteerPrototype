@@ -6,12 +6,16 @@ import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.serv
 import { LoginService } from "../../../../_service/login.service";
 import { fuseAnimations } from "@fuse/animations";
 import { isNullOrUndefined } from "util";
-import { DerivationRule } from "../../../../_model/derivation-rule";
+import {
+  DerivationRule,
+  ComparisonOperatorType,
+  AggregationOperatorType,
+} from "../../../../_model/derivation-rule";
 import { DerivationRuleService } from "../../../../_service/derivation-rule.service";
-import { Helpseeker } from "../../../../_model/helpseeker";
 import { Tenant } from "app/main/content/_model/tenant";
 import { HelpSeekerGuard } from "app/main/content/_guard/help-seeker.guard";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { User, UserRole } from "app/main/content/_model/user";
 
 @Component({
   selector: "fuse-rule-overview",
@@ -22,8 +26,8 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 export class FuseRuleOverviewComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<DerivationRule>();
-  displayedColumns = ["name", "sources", "target"];
-  helpseeker: Helpseeker;
+  displayedColumns = ["name", "sourcesGeneral", "sourcesClasses", "target"];
+  helpseeker: User;
   tenant: Tenant;
 
   constructor(
@@ -39,13 +43,12 @@ export class FuseRuleOverviewComponent implements OnInit {
   }
 
   onRowSelect(derivationRule: DerivationRule) {
+    console.log("row selected: " + derivationRule.id);
     this.router.navigate(["/main/rule/" + derivationRule.id]);
   }
 
   private async loadAllDerivationRules() {
-    this.helpseeker = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
     this.marketplace = <Marketplace>(
       await this.helpSeekerService
@@ -54,16 +57,39 @@ export class FuseRuleOverviewComponent implements OnInit {
     );
 
     this.tenant = <Tenant>(
-      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
+      await this.tenantService
+        .findById(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
     );
 
-    //this.derivationRuleService XXX To do
-    //  .findAll(this.marketplace, this.helpseeker.tenantId)
-    //  .toPromise()
-    //  .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
+    this.derivationRuleService
+      .findAll(
+        this.marketplace,
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId
+      )
+      .toPromise()
+      .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
   }
 
   addDerivationRule() {
     this.router.navigate(["/main/rule"]);
+  }
+
+  private retrieveComparisonOperatorValueOf(op) {
+    let x: ComparisonOperatorType =
+      ComparisonOperatorType[op as keyof typeof ComparisonOperatorType];
+    return x;
+  }
+
+  private retrieveAggregationOperatorValueOf(op) {
+    let x: AggregationOperatorType =
+      AggregationOperatorType[op as keyof typeof AggregationOperatorType];
+    return x;
   }
 }

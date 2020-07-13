@@ -3,11 +3,11 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { ImageService } from "app/main/content/_service/image.service";
 import { LoginService } from "app/main/content/_service/login.service";
-import { Volunteer } from "app/main/content/_model/volunteer";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { timeout, timeInterval } from "rxjs/operators";
 import { GlobalService } from "app/main/content/_service/global.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "tenant-overview",
@@ -16,7 +16,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 })
 export class TenantOverviewComponent implements OnInit {
   tenants: Tenant[] = [];
-  volunteer: Volunteer;
+  volunteer: User;
 
   constructor(
     private loginService: LoginService,
@@ -34,7 +34,7 @@ export class TenantOverviewComponent implements OnInit {
     let globalInfo = <GlobalInfo>(
       await this.globalService.getGlobalInfo().toPromise()
     );
-    this.volunteer = <Volunteer>globalInfo.participant;
+    this.volunteer = globalInfo.user;
     this.tenants = <Tenant[]>await this.tenantService.findAll().toPromise();
   }
 
@@ -44,7 +44,9 @@ export class TenantOverviewComponent implements OnInit {
 
   isSubscribed(tenant: Tenant) {
     return (
-      this.volunteer.subscribedTenants.findIndex((t) => t === tenant.id) >= 0
+      this.volunteer.subscribedTenants.findIndex(
+        (t) => t.tenantId === tenant.id
+      ) >= 0
     );
   }
 

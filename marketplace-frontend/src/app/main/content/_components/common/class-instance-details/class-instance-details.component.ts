@@ -3,10 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { ClassInstance } from "app/main/content/_model/meta/class";
 import { LoginService } from "app/main/content/_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "app/main/content/_model/participant";
+import { User, UserRole } from "app/main/content/_model/user";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   MatTableDataSource,
@@ -20,7 +17,8 @@ import { PropertyInstance } from "app/main/content/_model/meta/property";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { GlobalService } from "app/main/content/_service/global.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
-import { Volunteer } from "app/main/content/_model/volunteer";
+import { globalEval } from "jquery";
+import { VolunteerService } from "app/main/content/_service/volunteer.service";
 
 @Component({
   selector: "app-class-instance-details",
@@ -32,10 +30,11 @@ export class ClassInstanceDetailsComponent implements OnInit {
 
   id: string = null;
   classInstance: ClassInstance;
-  participant: Participant;
-  role: ParticipantRole;
+  user: User;
+  role: UserRole;
   marketplace: Marketplace;
   tenant: Tenant;
+  volunteer: User;
 
   isDialog: boolean = false;
   isLocal: boolean = false;
@@ -46,10 +45,10 @@ export class ClassInstanceDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private classInstanceService: ClassInstanceService,
-    private loginService: LoginService,
     private tenantService: TenantService,
     private globalService: GlobalService,
     private localRepositoryService: LocalRepositoryService,
+    private volunteerService: VolunteerService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.route.params.subscribe((params) => {
@@ -66,8 +65,8 @@ export class ClassInstanceDetailsComponent implements OnInit {
     let globalInfo = <GlobalInfo>(
       await this.globalService.getGlobalInfo().toPromise()
     );
-
-    this.participant = globalInfo.participant;
+    this.user = globalInfo.user;
+    this.role = globalInfo.userRole;
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
 
@@ -78,18 +77,22 @@ export class ClassInstanceDetailsComponent implements OnInit {
     );
 
     if (this.classInstance === null) {
-      let role = <ParticipantRole>(
-        await this.loginService.getLoggedInParticipantRole().toPromise()
-      );
-
-      if (role === "VOLUNTEER") {
+      if (this.role === UserRole.VOLUNTEER) {
         this.classInstance = <ClassInstance>(
           await this.localRepositoryService
-            .getSingleClassInstance(<Volunteer>this.participant, this.id)
+            .getSingleClassInstance(this.user, this.id)
             .toPromise()
         );
         this.isLocal = true;
       }
+    }
+
+    if (this.role === UserRole.HELP_SEEKER) {
+      this.volunteer = <User>(
+        await this.volunteerService
+          .findById(this.marketplace, this.classInstance.userId)
+          .toPromise()
+      );
     }
 
     this.tableDataSource.data = this.classInstance.properties;
@@ -97,10 +100,12 @@ export class ClassInstanceDetailsComponent implements OnInit {
     this.tenantService.initHeader(this.tenant);
   }
 
-  getName() {
+  getClassInstanceName() {
     return this.classInstance.properties.find((p) => p.name === "name")
       .values[0];
   }
+
+  getVolunteerName(userId: string) {}
 
   sortData(sort: Sort) {
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {

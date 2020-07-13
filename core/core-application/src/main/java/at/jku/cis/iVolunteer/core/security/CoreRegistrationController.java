@@ -6,18 +6,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 @RestController
 @RequestMapping("/register")
 
 public class CoreRegistrationController {
 
-	@Autowired private CoreRegistrationService coreRegistrationService;
+	@Autowired
+	private CoreRegistrationService coreRegistrationService;
 
 	@PostMapping("/volunteer")
-	public void registerVolunteer(@RequestBody CoreVolunteer user) {
-		coreRegistrationService.registerVolunteer(user);
+	public void registerUser(@RequestBody CoreUser user) {
+		coreRegistrationService.registerUser(user);
 	}
 
 }

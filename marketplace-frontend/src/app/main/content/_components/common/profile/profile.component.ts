@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
-import { ParticipantRole } from "app/main/content/_model/participant";
+import { UserRole } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { Router } from "@angular/router";
 
@@ -8,16 +8,16 @@ import { Router } from "@angular/router";
   selector: "profile",
   templateUrl: "profile.component.html",
   styleUrls: ["profile.component.scss"],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class ProfileComponent implements OnInit {
-  public role: ParticipantRole;
+  public role: UserRole;
 
   constructor(private loginService: LoginService, private router: Router) {}
 
   async ngOnInit() {
-    this.role = <ParticipantRole>(
-      await this.loginService.getLoggedInParticipantRole().toPromise()
+    this.role = <UserRole>(
+      await this.loginService.getLoggedInUserRole().toPromise()
     );
   }
 }

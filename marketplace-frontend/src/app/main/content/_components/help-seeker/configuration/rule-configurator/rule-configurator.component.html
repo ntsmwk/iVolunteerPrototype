@@ -106,6 +106,7 @@
       <div *ngFor="let entry of derivationRule.classActions">
         <target-rule-configurator
           [(classAction)]="entry"
+          (classActionChange)="onChangeClassAction($event)"
         ></target-rule-configurator>
       </div>
     </div>
@@ -157,8 +158,9 @@
     <div style="font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
     <div *ngFor="let entry of derivationRule.conditions">
-      <class-rule-precondition
+      <class-rule-precondition 
         [(classCondition)]="entry"
+        (classConditionChange)="onChangeClassCondition($event)"
       ></class-rule-precondition>
     </div>
   </div>
@@ -187,8 +189,14 @@
     <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">
       <button mat-raised-button type="button" color="secondary" (click)="test()">Regelbedingungen testen</button>
       <div style="padding-right: 5px;"></div>
-      <button mat-raised-button type="submit" color="primary">Speichern</button>
+      <button mat-raised-button type="submit" [disabled]="deactivateSubmit" color="primary">Speichern</button>
       <div style="padding-right: 5px;"></div>
+    </div>
+    <div class="row"  *ngIf="showSuccessMsg">
+      <div class="col-xs-12">
+        <p class="alert alert-success">
+            <strong>Regel erfolgreich gespeichert!</strong> </p>
+      </div>
     </div>
   </form>
   <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;"></div>
@@ -202,3 +210,4 @@
   </div>
 </div>
 <!--(change)="onChange($event)"-->
+<!-- (classConditionChange)="onChangeClassCondition($event)"-->

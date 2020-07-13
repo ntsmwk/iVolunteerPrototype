@@ -3,13 +3,12 @@ package at.jku.cis.iVolunteer.marketplace.rule;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
+import at.jku.cis.iVolunteer.marketplace.rule.mapper.DerivationRuleMapper;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
@@ -29,14 +28,25 @@ public class DerivationRuleService {
 		return derivationRuleMapper.toTargets(all);
 	}
 	
-	public DerivationRuleDTO getRule(String id, String tenantId) {
-		return derivationRuleMapper.toTarget(derivationRuleRepository.getByIdAndTenantId(id, tenantId));
+	public DerivationRuleDTO getRule(String id) {
+		return derivationRuleMapper.toTarget(derivationRuleRepository.findOne(id));
+	}
+	
+	public DerivationRuleDTO getRuleByContainerAndName(String tenantId, String container, String ruleName) {
+		return derivationRuleMapper.toTarget(derivationRuleRepository.getByTenantIdAndContainerAndName(tenantId, container, ruleName));
 	}
 
 	public void createRule(DerivationRuleDTO derivationRuleDTO) {
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		
-		derivationRuleRepository.save(derivationRule);
+		DerivationRule derivationRuleDB = derivationRuleRepository.
+				getByTenantIdAndContainerAndName(derivationRule.getTenantId(), 
+						                         derivationRule.getContainer(),
+						                         derivationRule.getName());
+		if (derivationRuleDB != null) { // replace old rule to ensure container + name is unique for tenant
+			derivationRuleDTO.setId(derivationRuleDB.getId());
+			updateRule(derivationRuleDB.getId(), derivationRuleDTO);
+		} else 
+			derivationRuleRepository.save(derivationRule);
 		ruleService.addRule(derivationRule);
 		
 		ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
@@ -52,7 +62,6 @@ public class DerivationRuleService {
 		ruleService.addRule(derivationRule);
 		// only for test --> execute rule 
 		List<RuleExecution> ruleExecution = ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
-		
 		// remove container rule again
 		ruleService.deleteRule(derivationRule.getTenantId(), derivationRule.getContainer(), derivationRule.getName());
 		return ruleExecution;

@@ -1,81 +1,80 @@
-import { Directive } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from "@angular/material";
 import {
   TextFieldDialogComponent,
   TextFieldDialogData,
-} from '../text-field-dialog/text-field-dialog.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { PropertyItem } from 'app/main/content/_model/meta/property';
+} from "../text-field-dialog/text-field-dialog.component";
+import { Directive } from "@angular/core";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { PropertyItem } from "app/main/content/_model/meta/property";
 import {
   SortDialogComponent,
   SortDialogData,
-} from '../sort-dialog/sort-dialog.component';
-
-import { Marketplace } from 'app/main/content/_model/marketplace';
+} from "../sort-dialog/sort-dialog.component";
+import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   NewClassConfigurationDialogComponent,
   NewClassConfigurationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/new-dialog/new-dialog.component';
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/new-dialog/new-dialog.component";
 import {
   OpenClassConfigurationDialogComponent,
   OpenClassConfigurationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/open-dialog/open-dialog.component';
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/open-dialog/open-dialog.component";
 import {
   ClassConfiguration,
   MatchingConfiguration,
-} from 'app/main/content/_model/meta/configurations';
-import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { Relationship } from 'app/main/content/_model/meta/relationship';
+} from "app/main/content/_model/meta/configurations";
+import { ClassDefinition } from "app/main/content/_model/meta/class";
+import { Relationship } from "app/main/content/_model/meta/relationship";
 import {
   ConfirmClassConfigurationSaveDialogComponent,
   ConfirmClassConfigurationSaveDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/confirm-save-dialog/confirm-save-dialog.component";
 import {
   SaveClassConfigurationAsDialogComponent,
   SaveClassConfigurationAsDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/save-as-dialog/save-as-dialog.component';
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/save-as-dialog/save-as-dialog.component";
 import {
   DeleteClassConfigurationDialogComponent,
   DeleteClassConfigurationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/delete-dialog/delete-dialog.component';
-import {
-  NewMatchingDialogComponent,
-  NewMatchingDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
-import {
-  OpenMatchingDialogComponent,
-  OpenMatchingDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
-import {
-  DeleteMatchingDialogComponent,
-  DeleteMatchingDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
-import {
-  AddPropertyDialogComponent,
-  AddPropertyDialogData,
-} from 'app/main/content/_components/_shared/dialogs/add-property-dialog/add-property-dialog.component';
-import {
-  RemoveDialogComponent,
-  RemoveDialogData,
-} from 'app/main/content/_components/_shared/dialogs/remove-dialog/remove-dialog.component';
-import { isNullOrUndefined } from 'util';
-import {
-  ChangeIconDialogComponent,
-  ChangeIconDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/delete-dialog/delete-dialog.component";
 import {
   ClassInstanceFormPreviewDialogComponent,
   ClassInstanceFormPreviewDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component';
+} from "../../../help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
 import {
   ClassInstanceFormPreviewExportDialogComponent,
   ClassInstanceFormPreviewExportDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
-import { Helpseeker } from 'app/main/content/_model/helpseeker';
+} from "../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component";
+import {
+  ChangeIconDialogComponent,
+  ChangeIconDialogData,
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component";
 import {
   PropertyOrEnumCreationDialogComponent,
   PropertyOrEnumCreationDialogData,
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component";
+import {
+  NewMatchingDialogComponent,
+  NewMatchingDialogData,
+} from "../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component";
+import {
+  OpenMatchingDialogComponent,
+  OpenMatchingDialogData,
+} from "../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component";
+import {
+  DeleteMatchingDialogComponent,
+  DeleteMatchingDialogData,
+} from "../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component";
+import {
+  AddPropertyDialogComponent,
+  AddPropertyDialogData,
+} from "../add-property-dialog/add-property-dialog.component";
+import {
+  RemoveDialogComponent,
+  RemoveDialogData,
+} from "../remove-dialog/remove-dialog.component";
+import { isNullOrUndefined } from "util";
+import { User } from "app/main/content/_model/user";
 
 @Directive({
   selector: "app-dialog-factory",
@@ -93,12 +92,12 @@ export class DialogFactoryDirective {
 
   newTaskTemplateDialog() {
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
-      width: '500px',
+      width: "500px",
       data: {
-        label: 'New Template',
+        label: "New Template",
         fields: [
-          { description: 'Name', hintText: 'Name', value: null },
-          { description: 'Description', hintText: 'Description', value: null },
+          { description: "Name", hintText: "Name", value: null },
+          { description: "Description", hintText: "Description", value: null },
         ],
       },
     });
@@ -127,7 +126,7 @@ export class DialogFactoryDirective {
 
   confirmationDialog(title: string, description: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '500px',
+      width: "500px",
       data: { title: title, description: description },
     });
 
@@ -152,9 +151,9 @@ export class DialogFactoryDirective {
 
   changePropertyOrderDialog(properties: PropertyItem[]) {
     const dialogRef = this.dialog.open(SortDialogComponent, {
-      width: '500px',
+      width: "500px",
       // height: '80%',
-      data: { list: properties, label: 'Change Property Order' },
+      data: { list: properties, label: "Change Property Order" },
     });
 
     let ret: any;
@@ -181,7 +180,7 @@ export class DialogFactoryDirective {
     value: string
   ) {
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
-      width: '500px',
+      width: "500px",
       data: {
         label: label,
         fields: [
@@ -213,13 +212,13 @@ export class DialogFactoryDirective {
    *  Class-Configurator Dialogs
    */
 
-  openNewClassConfigurationDialog(marketplace: Marketplace) {
+  openNewClassConfigurationDialog(marketplace: Marketplace, currentClassConfiguration?: ClassConfiguration) {
     const dialogRef = this.dialog.open(NewClassConfigurationDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
-      data: { marketplace: marketplace },
+      width: "500px",
+      minWidth: "500px",
+      height: "400px",
+      minHeight: "400px",
+      data: { marketplace: marketplace, classConfiguration: currentClassConfiguration },
       disableClose: true,
     });
 
@@ -241,10 +240,10 @@ export class DialogFactoryDirective {
 
   openConfiguratorDialog(marketplace: Marketplace) {
     const dialogRef = this.dialog.open(OpenClassConfigurationDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      width: "500px",
+      minWidth: "500px",
+      height: "400px",
+      minHeight: "400px",
       data: { marketplace: marketplace, configurator: undefined },
       disableClose: true,
     });
@@ -276,7 +275,7 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(
       ConfirmClassConfigurationSaveDialogComponent,
       {
-        width: '500px',
+        width: "500px",
         data: {
           classConfiguration: classConfiguration,
           classDefinitions: classDefinitions,
@@ -318,10 +317,10 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(
       SaveClassConfigurationAsDialogComponent,
       {
-        width: '500px',
-        minWidth: '500px',
-        height: '400px',
-        minHeight: '400px',
+        width: "500px",
+        minWidth: "500px",
+        height: "400px",
+        minHeight: "400px",
         data: {
           classConfiguration: classConfiguration,
           classDefinitions: classDefinitions,
@@ -356,10 +355,10 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(
       DeleteClassConfigurationDialogComponent,
       {
-        width: '500px',
-        minWidth: '500px',
-        height: '400px',
-        minHeight: '400px',
+        width: "500px",
+        minWidth: "500px",
+        height: "400px",
+        minHeight: "400px",
         data: { marketplace: marketplace, configurator: undefined },
         disableClose: true,
       }
@@ -390,10 +389,10 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(
       ClassInstanceFormPreviewDialogComponent,
       {
-        width: '90vw',
-        minWidth: '90vw',
-        height: '90vh',
-        minHeight: '90vh',
+        width: "90vw",
+        minWidth: "90vw",
+        height: "90vh",
+        minHeight: "90vh",
         data: {
           marketplace: marketplace,
           classDefinitions: classDefinitions,
@@ -427,10 +426,10 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(
       ClassInstanceFormPreviewExportDialogComponent,
       {
-        width: '90vw',
-        minWidth: '90vw',
-        height: '90vh',
-        minHeight: '90vh',
+        width: "90vw",
+        minWidth: "90vw",
+        height: "90vh",
+        minHeight: "90vh",
         data: {
           marketplace: marketplace,
           classConfigurationIds: classConfigurationIds,
@@ -457,10 +456,10 @@ export class DialogFactoryDirective {
 
   openChangeIconDialog(marketplace: Marketplace, currentImagePath: string) {
     const dialogRef = this.dialog.open(ChangeIconDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      width: "500px",
+      minWidth: "500px",
+      height: "400px",
+      minHeight: "400px",
       data: { marketplace: marketplace, imagePath: currentImagePath },
       disableClose: true,
     });
@@ -483,12 +482,12 @@ export class DialogFactoryDirective {
       });
   }
 
-  openPropertyCreationDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+  openPropertyCreationDialog(marketplace: Marketplace, helpseeker: User) {
     const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
-      width: '90vw',
-      minWidth: '90vw',
-      height: '90vh',
-      minHeight: '90vh',
+      width: "90vw",
+      minWidth: "90vw",
+      height: "90vh",
+      minHeight: "90vh",
       data: { marketplace: marketplace, helpseeker: helpseeker },
       disableClose: true,
     });
@@ -514,10 +513,10 @@ export class DialogFactoryDirective {
    */
   openNewMatchingDialog(marketplace: Marketplace) {
     const dialogRef = this.dialog.open(NewMatchingDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      width: "500px",
+      minWidth: "500px",
+      height: "400px",
+      minHeight: "400px",
       data: { marketplace: marketplace },
       disableClose: true,
     });
@@ -541,10 +540,10 @@ export class DialogFactoryDirective {
 
   openOpenMatchingDialog(marketplace: Marketplace) {
     const dialogRef = this.dialog.open(OpenMatchingDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      width: "500px",
+      minWidth: "500px",
+      height: "400px",
+      minHeight: "400px",
       data: { marketplace: marketplace },
       disableClose: true,
     });
@@ -570,10 +569,10 @@ export class DialogFactoryDirective {
 
   openDeleteMatchingDialog(marketplace: Marketplace) {
     const dialogRef = this.dialog.open(DeleteMatchingDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      width: "500px",
+      minWidth: "500px",
+      height: "400px",
+      minHeight: "400px",
       data: { marketplace: marketplace },
       disableClose: true,
     });
@@ -599,16 +598,16 @@ export class DialogFactoryDirective {
 
   openAddPropertyDialog(
     marketplace: Marketplace,
-    helpseeker: Helpseeker,
+    helpseeker: User,
     classDefinition: ClassDefinition,
     allClassDefinitions: ClassDefinition[],
     allRelationships: Relationship[]
   ) {
     const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '418px',
-      minHeight: '418px',
+      width: "500px",
+      minWidth: "500px",
+      height: "418px",
+      minHeight: "418px",
       data: {
         marketplace: marketplace,
         helpseeker: helpseeker,
@@ -637,10 +636,10 @@ export class DialogFactoryDirective {
 
   openRemoveDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
     const dialogRef = this.dialog.open(RemoveDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      width: "500px",
+      minWidth: "500px",
+      height: "400px",
+      minHeight: "400px",
       data: { marketplace: marketplace, classDefinition: classDefinition },
     });
 

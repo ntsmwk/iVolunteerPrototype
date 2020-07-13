@@ -129,5 +129,10 @@
   </button>
   <button class="secondary-button-dark" mat-stroked-button type="button"
     [mat-dialog-close]="undefined">Abbrechen</button>
+
+  <button *ngIf="browseMode" class="secondary-button-light" mat-stroked-button type="button"
+    (click)="handleBrowseBackClick()">
+    Zurück
+  </button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>

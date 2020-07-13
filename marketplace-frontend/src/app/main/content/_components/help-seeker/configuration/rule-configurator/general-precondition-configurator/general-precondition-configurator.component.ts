@@ -3,17 +3,13 @@ import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "../../../../../_model/participant";
 import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
   ComparisonOperatorType,
-  GeneralCondition
+  GeneralCondition,
 } from "app/main/content/_model/derivation-rule";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
@@ -25,9 +21,8 @@ import {
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
-import { Helpseeker } from "../../../../../_model/helpseeker";
-import { ThrowStmt } from '@angular/compiler';
-
+import { User, UserRole } from "../../../../../_model/user";
+import { ThrowStmt } from "@angular/compiler";
 
 var output = console.log;
 
@@ -36,18 +31,17 @@ var output = console.log;
   templateUrl: "./general-precondition-configurator.component.html",
   styleUrls: ["../rule-configurator.component.scss"],
 })
-export class GeneralPreconditionConfiguratorComponent
-  implements OnInit {
+export class GeneralPreconditionConfiguratorComponent implements OnInit {
   @Input("generalCondition")
   generalCondition: GeneralCondition;
-  @Output("GeneralCondition")
-  generalConditionChange: EventEmitter<
+  @Output("generalConditionChange")
+  generalConditionChange: EventEmitter<GeneralCondition> = new EventEmitter<
     GeneralCondition
-  > = new EventEmitter<GeneralCondition>();
+  >();
 
-  helpseeker: Helpseeker;
+  helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   rulePreconditionForm: FormGroup;
   comparisonOperators: any;
   generalAttributes: PropertyDefinition<any>[];
@@ -60,7 +54,7 @@ export class GeneralPreconditionConfiguratorComponent
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
     private helpSeekerService: CoreHelpSeekerService,
-    private derivationRuleService: DerivationRuleService,
+    private derivationRuleService: DerivationRuleService
   ) {
     this.rulePreconditionForm = formBuilder.group({
       propertyDefinitionId: new FormControl(undefined),
@@ -75,8 +69,9 @@ export class GeneralPreconditionConfiguratorComponent
         (this.generalCondition.propertyDefinition
           ? this.generalCondition.propertyDefinition.id
           : "") || "",
-      comparisonOperatorType: this.generalCondition.comparisonOperatorType ||
-       ComparisonOperatorType.GE,
+      comparisonOperatorType:
+        this.generalCondition.comparisonOperatorType ||
+        ComparisonOperatorType.GE,
       value: this.generalCondition.value || "",
     });
 
@@ -85,7 +80,7 @@ export class GeneralPreconditionConfiguratorComponent
     this.loginService
       .getLoggedIn()
       .toPromise()
-      .then((helpseeker: Helpseeker) => {
+      .then((helpseeker: User) => {
         this.helpseeker = helpseeker;
         this.helpSeekerService
           .findRegisteredMarketplaces(this.helpseeker.id)
@@ -93,8 +88,12 @@ export class GeneralPreconditionConfiguratorComponent
           .then((marketplace: Marketplace) => {
             this.marketplace = marketplace;
             this.derivationRuleService
-              .getGeneralProperties(marketplace,
-                  this.helpseeker.tenantId)
+              .getGeneralProperties(
+                marketplace,
+                this.helpseeker.subscribedTenants.find(
+                  (t) => t.role === UserRole.HELP_SEEKER
+                ).tenantId
+              )
               .toPromise()
               .then((genProperties: PropertyDefinition<any>[]) => {
                 this.generalAttributes = genProperties;
@@ -109,13 +108,15 @@ export class GeneralPreconditionConfiguratorComponent
     }
     this.generalCondition.propertyDefinition.id = $event.source.value;
     this.rulePreconditionForm.value.propertyDefinitionId = $event.source.value;
-    this.onChange($event);
+    this.generalConditionChange.emit();
   }
 
-  onOperatorChange(comparisonOperatorType, $event){
-    if ($event.isUserInput) {    // ignore on deselection of the previous option
+  onOperatorChange(comparisonOperatorType, $event) {
+    if ($event.isUserInput) {
+      // ignore on deselection of the previous option
       this.generalCondition.comparisonOperatorType = comparisonOperatorType;
-    }    
+    }
+    this.generalConditionChange.emit(comparisonOperatorType);
   }
 
   onChange($event) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Marketplace } from "../../../../_model/marketplace";
-import { Participant } from "../../../../_model/participant";
+import { User } from "../../../../_model/user";
 import { isNullOrUndefined } from "util";
 import { ClassInstanceDTO } from "../../../../_model/meta/class";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
@@ -19,7 +19,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
 
   isLoaded: boolean;
   marketplace: Marketplace;
-  participant: Participant;
+  participant: User;
   classInstanceDTOs: ClassInstanceDTO[];
 
   constructor(
@@ -56,7 +56,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
         this.loginService
           .getLoggedIn()
           .toPromise()
-          .then((participant: Participant) => {
+          .then((participant: User) => {
             this.participant = participant;
           }),
       ]).then(() => {});

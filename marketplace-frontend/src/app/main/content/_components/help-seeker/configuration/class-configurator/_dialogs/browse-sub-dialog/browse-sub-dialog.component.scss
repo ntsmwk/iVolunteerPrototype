@@ -1,0 +1,17 @@
+@import "../dialog-styles.scss";
+
+.browse-dialog-content {
+    .browse-table {
+        .table-header-cell {
+            .table-header-label {
+                cursor: pointer;
+            }
+            .table-header-label:hover {
+                text-decoration: underline;
+                width: max-content;
+            }
+        
+        }
+
+    }
+}

@@ -22,8 +22,8 @@
   <div #enumListContainer class="list-container">
     <mat-action-list #enumList>
 
-      <div *ngFor="let opt of listOptions">
-        <mat-list-item (click)="onSelectOption(opt)" *ngIf="opt.selectable">
+      <div *ngFor="let opt of datasource.filteredData">
+        <mat-list-item (click)=" onSelectOption(opt)" *ngIf="opt.selectable">
           <div class="list-item-container" fxLayout="row">
             <div class="list-item-row-padding" [ngStyle]="{'width': calculateSpaces(opt.level)}"></div>
             <div class="list-item-row" [ngStyle]="{'margin-left': calculateIndent(opt.level)}" fxLayout="row"

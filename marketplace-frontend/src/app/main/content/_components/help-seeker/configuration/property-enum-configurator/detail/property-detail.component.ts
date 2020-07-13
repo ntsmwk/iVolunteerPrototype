@@ -1,13 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ParticipantRole } from "app/main/content/_model/participant";
+import { UserRole, User } from "app/main/content/_model/user";
 import {
   PropertyDefinition,
   PropertyParentTemplate,
   PropertyParentSubTemplate,
 } from "app/main/content/_model/meta/property";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { LoginService } from "app/main/content/_service/login.service";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { PropertyDefinitionService } from "app/main/content/_service/meta/core/property/property-definition.service";
@@ -18,8 +17,8 @@ import { PropertyDefinitionService } from "app/main/content/_service/meta/core/p
   styleUrls: ["./property-detail.component.scss"],
 })
 export class PropertyDetailComponent implements OnInit {
-  role: ParticipantRole;
-  helpseeker: Helpseeker;
+  role: UserRole;
+  helpseeker: User;
   marketplace: Marketplace;
   propertyDefintion: PropertyDefinition<any>;
 
@@ -41,13 +40,13 @@ export class PropertyDetailComponent implements OnInit {
   ngOnInit() {
     Promise.all([
       this.loginService
-        .getLoggedInParticipantRole()
+        .getLoggedInUserRole()
         .toPromise()
-        .then((role: ParticipantRole) => (this.role = role)),
+        .then((role: UserRole) => (this.role = role)),
       this.loginService
         .getLoggedIn()
         .toPromise()
-        .then((helpseeker: Helpseeker) => (this.helpseeker = helpseeker)),
+        .then((helpseeker: User) => (this.helpseeker = helpseeker)),
     ]).then(() => {
       let parameters;
       let queryParameters;
@@ -89,7 +88,9 @@ export class PropertyDetailComponent implements OnInit {
             .getPropertyDefinitionById(
               marketplace,
               propId,
-              this.helpseeker.tenantId
+              this.helpseeker.subscribedTenants.find(
+                (t) => t.role === UserRole.HELP_SEEKER
+              ).tenantId
             )
             .toPromise()
             .then((propertyDefintion: PropertyDefinition<any>) => {

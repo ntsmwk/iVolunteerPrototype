@@ -1,31 +1,29 @@
 package at.jku.cis.iVolunteer.model.rule;
 
+import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.OperatorType;
 
-public class GeneralCondition extends Condition {
-	
-	public enum Attribute {
-		
-		AGE("Alter");
-			
-		private String attrName;
-			
-		Attribute(String attrName) {
-			this.attrName = attrName;
-		}
-			
-		public String getName() {
-			return attrName;
-		}
-	}
+public class GeneralCondition  {
 	
 	private String attributeName;
 	private Object value;
+	private ComparisonOperatorType operatorType;
 	
-	public GeneralCondition(String attributeName, Object value, OperatorType operator) {
-		super(operator);
+	public GeneralCondition() {
+	}
+	
+	public GeneralCondition(String attributeName, Object value, ComparisonOperatorType operator) {
+		this.operatorType = operator;
 		this.attributeName = attributeName;
 		this.value = value;
+	}
+	
+	public ComparisonOperatorType getOperatorType() {
+		return operatorType;
+	}
+	
+	public void setOperatorType(ComparisonOperatorType operatorType) {
+		this.operatorType = operatorType;
 	}
 	
 	public String getAttributeName() {

@@ -11,17 +11,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 
 @RestController
 @RequestMapping("/tenant")
 public class TenantController {
 
-	@Autowired private TenantService tenantService;
+	@Autowired
+	private TenantService tenantService;
 
 	@GetMapping
 	public List<Tenant> getAllTenants() {
-//		TODO MWE tenant restrictions - public...
+		// TODO MWE tenant restrictions - public...
 		return tenantService.getAllTenants();
 	}
 
@@ -37,7 +39,7 @@ public class TenantController {
 
 	@GetMapping("/volunteer/{volunteerId}")
 	public List<Tenant> getTenantsByVolunteer(@PathVariable String volunteerId) {
-		return tenantService.getTenantsByVolunteer(volunteerId);
+		return tenantService.getTenantsByUser(volunteerId);
 	}
 
 	@GetMapping("/marketplace/{marketplaceId}")

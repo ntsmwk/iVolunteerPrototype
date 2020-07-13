@@ -4,8 +4,7 @@ import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service
 import { LoginService } from "../../../_service/login.service";
 import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { TenantService } from "../../../_service/core-tenant.service";
-import { Volunteer } from "../../../_model/volunteer";
-import { Participant } from "../../../_model/participant";
+import { User } from "../../../_model/user";
 import { Marketplace } from "../../../_model/marketplace";
 import { Tenant } from "../../../_model/tenant";
 import { ImageService } from "../../../_service/image.service";
@@ -15,7 +14,7 @@ import { ImageService } from "../../../_service/image.service";
   templateUrl: "organisation-filter.component.html",
 })
 export class OrganisationFilterComponent implements OnInit {
-  volunteer: Volunteer;
+  volunteer: User;
   marketplace: Marketplace;
   tenants: Tenant[];
   selectedTenants: Tenant[] = [];
@@ -30,12 +29,10 @@ export class OrganisationFilterComponent implements OnInit {
     private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private imageService: ImageService
-  ) { }
+  ) {}
 
   async ngOnInit() {
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();
     this.tenants = <Tenant[]>(
       await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
     );

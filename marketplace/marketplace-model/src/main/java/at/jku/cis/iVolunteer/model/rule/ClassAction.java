@@ -6,11 +6,10 @@ import java.util.List;
 public class ClassAction extends Action {
 
 	private String classDefinitionId;
-	private List<AttributeCondition> attributes;
+	private List<AttributeCondition> attributes = new ArrayList<AttributeCondition>();
 	
 	public ClassAction(ActionType type) {
 		super(type);
-		attributes = new ArrayList<AttributeCondition>();
 	}
 	
 	public ClassAction(String classDefinitionId, ActionType type) {
@@ -19,7 +18,6 @@ public class ClassAction extends Action {
 	}
 
 	public ClassAction() {
-		attributes = new ArrayList<AttributeCondition>();
 	}
 
 	public String getClassDefinitionId() {

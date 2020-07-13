@@ -4,7 +4,7 @@
     <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 225px">
       <mat-label>Attribut</mat-label>
       <mat-select formControlName="classPropertyId" [value]="attributeCondition?.classProperty?.id">
-        <mat-option *ngFor="let cp of classProperties" [value]="cp?.id" (onSelectionChange)="onPropertyChange($event)">
+        <mat-option *ngFor="let cp of classProperties" [value]="cp?.id" (onSelectionChange)="onPropertyChange(cp, $event)">
           {{cp.name}} </mat-option>
       </mat-select>
     </mat-form-field>

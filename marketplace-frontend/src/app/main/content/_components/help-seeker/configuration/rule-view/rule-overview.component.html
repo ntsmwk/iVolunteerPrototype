@@ -26,32 +26,52 @@
       [dataSource]="dataSource"
       *ngIf="dataSource.data.length != 0"
     >
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let rule">{{ rule.id }}</mat-cell>
+    </ng-container>
+
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Regelname</mat-header-cell>
         <mat-cell *matCellDef="let rule">{{ rule.name }}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="sources">
-        <mat-header-cell *matHeaderCellDef>Vorbedingungen</mat-header-cell>
+      <ng-container matColumnDef="sourcesGeneral">
+        <mat-header-cell *matHeaderCellDef>Vorbedingungen Allgemein</mat-header-cell>
         <mat-cell *matCellDef="let rule">
           <span
-            *ngFor="let source of rule.conditions; let last = last"
+            *ngFor="let source of rule.generalConditions; let last = last"
           >
-            {{ source.classDefinition.name }}<span *ngIf="!last">, </span>
+            {{ source.propertyDefinition.name}}  
+            {{ retrieveComparisonOperatorValueOf(source.comparisonOperatorType)}} 
+            {{source.value}}<span *ngIf="!last">, &nbsp; </span>
           </span>
-          <span> &nbsp; | &nbsp; </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sourcesClasses">
+        <mat-header-cell *matHeaderCellDef>Vorbedingungen Klasse</mat-header-cell>
+        <mat-cell *matCellDef="let rule">
           <span *ngFor="let source of rule.conditions; let last = last">
-            {{ source.classDefinition.name }}<span *ngIf="!last">, </span>
+            {{ source.classDefinition.name }} 
+            {{retrieveAggregationOperatorValueOf(source.aggregationOperatorType)}} 
+            {{source.value}} <span *ngIf="!last">, &nbsp; </span>
           </span>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="target">
         <mat-header-cell *matHeaderCellDef
-          >Abgeleiteter Eintrag
+          >Neuer Eintrag
         </mat-header-cell>
-        <mat-cell *matCellDef="let rule">{{ rule.classAction.classdefinition.name }}</mat-cell>
+        <mat-cell *matCellDef="let rule">
+          <span *ngFor="let action of rule.classActions">
+          {{ action.classDefinition.name }}
+        </span></mat-cell>
       </ng-container>
+
+
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row
         *matRowDef="let row; columns: displayedColumns"
@@ -68,3 +88,10 @@
     </div>
   </div>
 </div>
+<!--
+<span *ngIf="rule.conditions.length > 0"> &nbsp; | &nbsp; </span>
+          <span *ngFor="let source of rule.conditions; let last = last">
+            {{ source.classDefinition.name }} 
+            {{retrieveAggregationOperatorValueOf(source.aggregationOperatorType)}} 
+            {{source.value}} <span *ngIf="!last">, &nbsp; &nbsp; ,</span>
+          </span>-->

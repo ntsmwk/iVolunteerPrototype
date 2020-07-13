@@ -30,7 +30,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	private String imagePath;
 	
 	boolean root;
-	
+	boolean instantiable = true;
 	
 	private boolean visible;
 	private int tabId;
@@ -150,6 +150,14 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
+	}
+	
+	public boolean isInstantiable() {
+		return instantiable;
+	}
+
+	public void setInstantiable(boolean instantiable) {
+		this.instantiable = instantiable;
 	}
 
 	@Override

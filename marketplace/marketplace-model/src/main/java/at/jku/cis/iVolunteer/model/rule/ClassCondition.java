@@ -4,27 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
+import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.OperatorType;
 
 public class ClassCondition extends Condition {
 	
 	private String classDefinitionId;
 	private Object value;
-	private List<AttributeCondition> attributeConditions;
+	private List<AttributeCondition> attributeConditions = new ArrayList<AttributeCondition>();
+	private AggregationOperatorType operatorType;
 	
 	public ClassCondition(String classDefinitionId, Object value, AggregationOperatorType aggregationOperator) {
-		this(aggregationOperator);
+		this.operatorType = aggregationOperator;
 		this.classDefinitionId = classDefinitionId;
 		this.value = value;
 	}
-	
-	public ClassCondition(OperatorType operatorType) {
-		super(operatorType);
-		attributeConditions = new ArrayList<AttributeCondition>();
-	}
 
 	public ClassCondition() {
-		attributeConditions = new ArrayList<AttributeCondition>();
+		
+	}
+	
+	public AggregationOperatorType getOperatorType() {
+		return operatorType;
+	}
+	
+	public void setOperatorType(AggregationOperatorType operatorType) {
+		this.operatorType = operatorType;
 	}
 
 	public String getClassDefinitionId() {

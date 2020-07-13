@@ -1,0 +1,57 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon *ngIf="!showEditDialog">add</mat-icon>
+        <mat-icon *ngIf="showEditDialog">edit</mat-icon>
+      </td>
+      <td>
+        <h1 *ngIf="!showEditDialog">Neue Klassen-Konfiguration</h1>
+        <h1 *ngIf="showEditDialog">Klassen-Konfiguration ändern</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<mat-dialog-content *ngIf="loaded">
+  <form [formGroup]="dialogForm">
+    <mat-label>Name Konfiguration</mat-label>
+    <mat-form-field style="width: 100%;" appearance="outline" #label>
+      <input matInput name="label" class="form-control" formControlName="label" required />
+    </mat-form-field>
+    <div class="mat-error" *ngIf="
+        dialogForm.controls['label'].invalid &&
+        dialogForm.controls['label'].touched
+      ">
+      {{ displayErrorMessage("label") }}
+    </div>
+
+    <mat-label>Beschreibung</mat-label>
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
+        matAutosizeMaxRows="3"></textarea>
+    </mat-form-field>
+
+    <!-- <div class="pt-20 pb-16">
+        <mat-divider></mat-divider>
+      </div>
+  
+      <mat-label>Bezeichnung Wurzelknoten*</mat-label>
+      <mat-form-field style="width: 100%" appearance="outline" #rootLabel>
+        <input matInput name="rootLabel" formControlName="rootLabel" required />
+      </mat-form-field> -->
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button *ngIf="!showEditDialog" class="primary-button-dark" mat-stroked-button type="button"
+    (click)="onCreateClick()">
+    Neu Erstellen
+  </button>
+  <button *ngIf="showEditDialog" class="primary-button-dark" mat-stroked-button type="button" (click)="onSaveClick()">
+    Speichern
+  </button>
+  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">
+    Abbrechen
+  </button>
+</mat-dialog-actions>

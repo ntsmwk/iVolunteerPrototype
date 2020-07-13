@@ -5,7 +5,8 @@
             <mat-label>Neuer Freiwillenpasseintrag</mat-label>
             <mat-select formControlName="classDefinitionId" [value]="classAction.classDefinition?.id">
                 <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
-                    (onSelectionChange)="onTargetChange(cd, $event)"> {{cd.name}} </mat-option>
+                    (onSelectionChange)="onTargetChange(cd, $event)">
+               {{retrieveClassType(cd.classArchetype)}} &ngsp; {{cd.name}} </mat-option>
             </mat-select>
         </mat-form-field>
     </div>
@@ -24,6 +25,4 @@
           Attribut setzen        
         </button>
       </div>
-</form> 
-<!--(change)="onChange($event)"-->
-<!--(onSelectionChange)="onOperatorChange(op)"-->
+</form>

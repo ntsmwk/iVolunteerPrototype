@@ -1,37 +1,28 @@
 import { Component, OnInit } from "@angular/core";
 
-import { Participant, UserImagePath } from "../../content/_model/participant";
+import { User } from "../../content/_model/user";
 import { LoginService } from "../../content/_service/login.service";
-import { CoreUserImagePathService } from "app/main/content/_service/core-user-imagepath.service";
 import { isNullOrUndefined } from "util";
-import { Router } from "@angular/router";
+
+import { ImageService } from "app/main/content/_service/image.service";
+import { GlobalService } from "app/main/content/_service/global.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "fuse-user-menu",
   templateUrl: "./user-menu.component.html",
-  styleUrls: ["./user-menu.component.scss"]
+  styleUrls: ["./user-menu.component.scss"],
 })
 export class FuseUserMenuComponent implements OnInit {
-  participant: Participant;
-  participantImagepath: UserImagePath;
+  user: User;
 
   constructor(
-    private loginService: LoginService,
-    private userImagePathService: CoreUserImagePathService,
-    private router: Router
+    private imageService: ImageService,
+    private loginService: LoginService
   ) {}
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((participant: Participant) => (this.participant = participant))
-      .catch(e => console.warn(e))
-      .then(() => {
-        if (this.participant != null) {
-          this.fetchUserImagePaths();
-        }
-      });
+  async ngOnInit() {
+    this.user = <User>await this.loginService.getLoggedIn().toPromise();
   }
 
   logout() {
@@ -39,43 +30,24 @@ export class FuseUserMenuComponent implements OnInit {
     window.location.reload(true);
   }
 
-  fetchUserImagePaths() {
-    const users: Participant[] = [];
-    if (this.participant) {
-      users.push(this.participant);
-      this.userImagePathService
-        .getImagePathsById(users.map(u => u.id))
-        .toPromise()
-        .then((ret: UserImagePath[]) => {
-          if (!isNullOrUndefined(ret) && ret.length <= 1) {
-            this.participantImagepath = ret[0];
-          }
-        });
-    }
-  }
-
-  getImagePath() {
-    if (isNullOrUndefined(this.participantImagepath)) {
+  getImage() {
+    if (isNullOrUndefined(this.user.image)) {
       return "/assets/images/avatars/profile.jpg";
     } else {
-      return this.participantImagepath.imagePath;
+      return this.imageService.getImgSourceFromBytes(this.user.image);
     }
   }
 
   getUserNameString() {
     let ret = "";
-    if (
-      this.participant &&
-      this.participant.firstname &&
-      this.participant.lastname
-    ) {
-      ret += this.participant.firstname + " " + this.participant.lastname;
+    if (this.user && this.user.firstname && this.user.lastname) {
+      ret += this.user.firstname + " " + this.user.lastname;
     } else {
-      ret += this.participant.username;
+      ret += this.user.username;
     }
 
-    if (!isNullOrUndefined(this.participant.position)) {
-      ret += " (" + this.participant.position + ")";
+    if (!isNullOrUndefined(this.user.position)) {
+      ret += " (" + this.user.position + ")";
     }
     return ret;
   }

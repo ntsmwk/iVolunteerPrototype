@@ -9,8 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { BrowseClassSubDialogModule } from '../../class-configurator/browse-sub-dialog/browse-sub-dialog.module';
 import { MatTooltipModule } from '@angular/material';
+import { BrowseClassSubDialogModule } from '../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.module';
 
 @NgModule({
   imports: [

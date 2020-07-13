@@ -7,6 +7,7 @@ import { MatCommonModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule } from '@angular/material';
+import { FuseSharedModule } from '@fuse/shared.module';
 
 @NgModule({
   imports: [
@@ -22,6 +23,8 @@ import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerMo
     MatInputModule,
 
     MatProgressSpinnerModule,
+
+    FuseSharedModule,
 
   ],
   declarations: [RemoveDialogComponent],

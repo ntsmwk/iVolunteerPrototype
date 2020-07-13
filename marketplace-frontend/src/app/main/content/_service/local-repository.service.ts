@@ -1,21 +1,21 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Volunteer } from "../_model/volunteer";
 import { LocalRepository } from "../_model/local-repository";
 import { isNullOrUndefined } from "util";
 import { ClassInstance } from "../_model/meta/class";
+import { User } from "../_model/user";
 
 @Injectable({
   providedIn: "root",
 })
 export class LocalRepositoryService {
-  private apiUrl = "http://localhost:3000/repository";
-  //private apiUrl = "http://140.78.92.57:3000/repository";
+  // private apiUrl = "http://localhost:3000/repository";
+  private apiUrl = "http://140.78.92.57:3000/repository";
 
   constructor(private http: HttpClient) {}
 
-  async isConnected(volunteer: Volunteer) {
+  async isConnected(volunteer: User) {
     let isConnected;
 
     let localRepos = <LocalRepository[]>await this.http
@@ -37,7 +37,7 @@ export class LocalRepositoryService {
     return isConnected;
   }
 
-  findByVolunteer(volunteer: Volunteer) {
+  findByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
       const successFunction = (localRepository: LocalRepository) => {
         subscriber.next(localRepository);
@@ -64,7 +64,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  findClassInstancesByVolunteer(volunteer: Volunteer) {
+  findClassInstancesByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -92,7 +92,7 @@ export class LocalRepositoryService {
   }
 
   synchronizeSingleClassInstance(
-    volunteer: Volunteer,
+    volunteer: User,
     classInstance: ClassInstance
   ) {
     const observable = new Observable((subscriber) => {
@@ -121,7 +121,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  getSingleClassInstance(volunteer: Volunteer, classInstanceId: string) {
+  getSingleClassInstance(volunteer: User, classInstanceId: string) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -143,10 +143,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  synchronizeClassInstances(
-    volunteer: Volunteer,
-    classInstances: ClassInstance[]
-  ) {
+  synchronizeClassInstances(volunteer: User, classInstances: ClassInstance[]) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -176,7 +173,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  removeSingleClassInstance(volunteer: Volunteer, classInstanceId: string) {
+  removeSingleClassInstance(volunteer: User, classInstanceId: string) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -206,7 +203,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  removeClassInstances(volunteer: Volunteer, classInstanceIds: string[]) {
+  removeClassInstances(volunteer: User, classInstanceIds: string[]) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);

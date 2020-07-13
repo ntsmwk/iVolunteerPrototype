@@ -5,7 +5,7 @@ import {
   ClassInstance,
   ClassDefinition,
 } from "app/main/content/_model/meta/class";
-import { Participant } from "app/main/content/_model/participant";
+import { User } from "app/main/content/_model/user";
 
 @Injectable({
   providedIn: "root",
@@ -93,7 +93,7 @@ export class ClassInstanceService {
   createClassInstanceByClassDefinitionId(
     marketplace: Marketplace,
     classDefinitionId: ClassDefinition,
-    volunteerId: Participant,
+    volunteerId: User,
     tenantId: string,
     properties
   ) {

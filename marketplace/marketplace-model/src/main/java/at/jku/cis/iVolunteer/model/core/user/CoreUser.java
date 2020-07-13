@@ -6,22 +6,19 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.User;
 
 @Document
-public abstract class CoreUser extends User {
-
+public class CoreUser extends User {
 	@DBRef
 	private List<CoreUser> follower = new ArrayList<>();
-	@DBRef
-	private List<Marketplace> registeredMarketplaces = new ArrayList<>();
+	private List<String> registeredMarketplaceIds = new ArrayList<>();
 
-	public List<Marketplace> getRegisteredMarketplaces() {
-		return registeredMarketplaces;
+	public List<String> getRegisteredMarketplaceIds() {
+		return registeredMarketplaceIds;
 	}
 
-	public void setRegisteredMarketplaces(List<Marketplace> registeredMarketplaces) {
-		this.registeredMarketplaces = registeredMarketplaces;
+	public void setRegisteredMarketplaceIds(List<String> registeredMarketplaceIds) {
+		this.registeredMarketplaceIds = registeredMarketplaceIds;
 	}
 }

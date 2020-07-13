@@ -3,14 +3,13 @@ import { fuseAnimations } from "@fuse/animations";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { ClassInstanceDTO } from "app/main/content/_model/meta/class";
 import { MatTableDataSource, MatPaginator, MatSort } from "@angular/material";
-import { Participant } from "app/main/content/_model/participant";
+import { User } from "app/main/content/_model/user";
 import { Router } from "@angular/router";
 import { LoginService } from "app/main/content/_service/login.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { GlobalService } from "app/main/content/_service/global.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
@@ -38,7 +37,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     "verified",
   ];
 
-  private participant: Helpseeker;
+  private participant: User;
 
   private tenant: Tenant;
 
@@ -58,7 +57,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
       await this.globalService.getGlobalInfo().toPromise()
     );
 
-    this.participant = <Helpseeker>globalInfo.participant;
+    this.participant = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
 

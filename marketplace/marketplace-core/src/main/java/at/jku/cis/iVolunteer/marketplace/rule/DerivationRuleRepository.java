@@ -13,5 +13,6 @@ public interface DerivationRuleRepository extends HasTenantRepository<Derivation
 	
 	DerivationRule getByIdAndTenantId(String id, String tenantId);
 
+	DerivationRule getByTenantIdAndContainerAndName(String tenantId, String container, String name);
 	
 }

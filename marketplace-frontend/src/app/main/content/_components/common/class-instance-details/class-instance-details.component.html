@@ -20,7 +20,28 @@
   ></customizable-header>
 
   <div *ngIf="classInstance != null">
-    <h1 style="margin-left: 5px;">Asset: {{ getName() }}</h1>
+    <table class="details">
+      <tbody>
+        <tr>
+          <td>Asset:</td>
+          <td class="alignRight">{{ getClassInstanceName() }}</td>
+        </tr>
+        <tr *ngIf="role === 'HELP_SEEKER' && volunteer != null">
+          <td>Volunteer:</td>
+          <td class="alignRight">
+            {{ volunteer.firstname }} {{ volunteer.lastname }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- <h1 style="margin-left: 5px;">Asset: {{ getClassInstanceName() }}</h1>
+    <h1
+      *ngIf="role === 'HELP_SEEKER' && volunteer != null"
+      style="margin-left: 5px;"
+    >
+      Volunteer: {{ volunteer.firstname }} {{ volunteer.lastname }}
+    </h1> -->
 
     <mat-table
       matSort
