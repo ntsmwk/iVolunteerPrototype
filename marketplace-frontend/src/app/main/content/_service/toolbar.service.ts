@@ -20,8 +20,8 @@
 //       return this.http.get(`${marketplace.url}/matching/operator-relationship/${id}`);
 //     }
 
-//     getMatchingOperatorRelationshipByConfiguratorIds(marketplace: Marketplace, producerConfiguratorId: string, consumerConfiguratorId: string) {
-//       return this.http.get(`${marketplace.url}/matching/operator-relationship/by-configurators/${producerConfiguratorId}/${consumerConfiguratorId}`);
+//     getMatchingOperatorRelationshipByConfiguratorIds(marketplace: Marketplace, leftConfiguratorId: string, rightConfiguratorId: string) {
+//       return this.http.get(`${marketplace.url}/matching/operator-relationship/by-configurators/${leftConfiguratorId}/${rightConfiguratorId}`);
 //     }
 
 //     saveMatchingOperatorRelationshipStorage(marketplace: Marketplace, matchingOperatorRelationshipStorage: MatchingOperatorRelationshipStorage) {

@@ -17,8 +17,7 @@
       <tr>
         <td style="vertical-align: top; width: 100%">
           <h2>Zuletzt verwendet</h2>
-          <table cellspacing=0 cellpadding=3
-            style="border-style: solid; border-color: rgb(62, 125, 219); border-width: 1px; table-layout: fixed; width: 100%">
+          <table cellspacing=0 cellpadding=3 style="border-style: solid; border-color: rgb(62, 125, 219); border-width: 1px; table-layout: fixed; width: 100%">
             <col width="50%" />
             <col width="25%" />
             <col width="25%" />
@@ -29,8 +28,8 @@
             </tr>
             <tr *ngFor="let c of recentMatchingConfigurations" class="entry" (click)="itemSelected($event, c)">
               <td style="overflow: hidden">{{c.name}}</td>
-              <td style="overflow: hidden">{{c.producerClassConfigurationName}}</td>
-              <td style="overflow: hidden">{{c.consumerClassConfigurationName}}</td>
+              <td style="overflow: hidden">{{c.leftClassConfigurationName}}</td>
+              <td style="overflow: hidden">{{c.rightClassConfigurationName}}</td>
             </tr>
           </table>
         </td>
@@ -50,14 +49,12 @@
   </div>
 
   <div *ngIf="browseMode">
-    <browse-matching-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
-      (subDialogReturn)="handleReturnFromBrowse($event)">
+    <browse-matching-sub-dialog [data]="browseDialogData" [browseMode]="browseMode" (subDialogReturn)="handleReturnFromBrowse($event)">
     </browse-matching-sub-dialog>
   </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button class="secondary-button-dark" mat-stroked-button type="button"
-    [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>
