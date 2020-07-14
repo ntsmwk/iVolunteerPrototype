@@ -40,6 +40,11 @@ public class CoreUserService {
 	public List<CoreUser> getAllByTenantId(String tenantId) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
+		
+		if (allUsers == null) {
+			return returnUsers;
+		}
+		
 		for (CoreUser user : allUsers) {
 			if (user.getSubscribedTenants().stream().filter(st -> st.getTenantId().equals(tenantId)).findFirst().isPresent()) {
 				returnUsers.add(user);
@@ -51,6 +56,11 @@ public class CoreUserService {
 	public List<CoreUser> getAllByUserRole(UserRole userRole) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
+
+		if (allUsers == null) {
+			return returnUsers;
+		}
+		
 		for (CoreUser user : allUsers) {
 			if (user.getSubscribedTenants().stream().filter(st -> st.getRole().equals(userRole)).findFirst().isPresent()) {
 				returnUsers.add(user);
@@ -62,6 +72,10 @@ public class CoreUserService {
 	public List<CoreUser> getAllByTenantIdAndUserRole(UserRole userRole, String tenantId) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
+
+		if (allUsers == null) {
+			return returnUsers;
+		}
 		for (CoreUser user : allUsers) {
 			if (user.getSubscribedTenants().stream().filter(st -> st.getTenantId().equals(tenantId) && st.getRole().equals(userRole)).findFirst().isPresent()) {				
 				returnUsers.add(user);

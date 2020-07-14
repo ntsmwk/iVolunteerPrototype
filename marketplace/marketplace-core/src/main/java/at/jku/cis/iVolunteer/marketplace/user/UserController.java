@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.user;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -29,20 +31,53 @@ public class UserController {
 
     @GetMapping("/user/all/role/{role}")
     private List<User> findAllByRole(@PathVariable("role") UserRole role) {
-    	//TODO implement
-    	return null;
+		List<User> returnUsers = new ArrayList<>();
+		List<User> allUsers = userRepository.findAll();
+		
+		if (allUsers == null) {
+			return returnUsers;
+		}
+		
+		for (User user : allUsers) {
+			if (user.getSubscribedTenants().stream().filter(st -> st.getRole().equals(role)).findFirst().isPresent()) {
+				returnUsers.add(user);
+			}
+		}
+		return returnUsers;
     }
 
     @GetMapping("/user/all/tenant/{tenantId}")
-    private List<User> findAllByTenantId(@PathVariable("role") UserRole role) {
-    	//TODO implement
-    	return null;
+    private List<User> findAllByTenantId(@PathVariable("tenantId") String tenantId) {
+    	List<User> returnUsers = new ArrayList<>();
+		List<User> allUsers = userRepository.findAll();
+		
+		if (allUsers == null) {
+			return returnUsers;
+		}
+		
+		for (User user : allUsers) {
+			if (user.getSubscribedTenants().stream().filter(st -> st.getTenantId().equals(tenantId)).findFirst().isPresent()) {
+				returnUsers.add(user);
+			}
+		}
+		return returnUsers;
     }
 
     @GetMapping("/user/all/tenant/{tenantId}/role/{role}")
     private List<User> findAllByRoleAndTenantId(@PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
-    	//TODO implement
-    	return null;
+    	List<User> returnUsers = new ArrayList<>();
+		List<User> allUsers = userRepository.findAll();
+		
+		if (allUsers == null) {
+			return returnUsers;
+		}
+		
+		for (User user : allUsers) {
+			if (user.getSubscribedTenants().stream().filter(st -> st.getRole().equals(role) && st.getTenantId().equals(tenantId)).findFirst().isPresent()) {
+				returnUsers.add(user);
+			}
+		}
+		return returnUsers;
     }
     
     @GetMapping("/user/username/{username}")
