@@ -1,12 +1,12 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
 
-public enum MatchingProducerConsumerType {
+public enum MatchingEntityType {
 	PROPERTY("PROPERTY"), CLASS("CLASS");
 
 	private final String type;
 
-	private MatchingProducerConsumerType(String type) {
+	private MatchingEntityType(String type) {
 		this.type = type;
 	}
 	
@@ -14,8 +14,8 @@ public enum MatchingProducerConsumerType {
 		return this.type;
 	}
 	
-	public static MatchingProducerConsumerType getFromMatchingProducerConsumerType(String type) {
-		for(MatchingProducerConsumerType t : MatchingProducerConsumerType.values()){
+	public static MatchingEntityType getFromMatchingEntityType(String type) {
+		for(MatchingEntityType t : MatchingEntityType.values()){
             if(t.getType().equals(type)){
                 return t;
             }

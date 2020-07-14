@@ -10,7 +10,6 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ImageService } from "app/main/content/_service/image.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { GlobalService } from "app/main/content/_service/global.service";
 
 @Component({
   selector: "dashboard-helpseeker",
@@ -27,13 +26,12 @@ export class DashboardHelpSeekerComponent implements OnInit {
     private router: Router,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
-    private imageService: ImageService,
-    private globalService: GlobalService
+    private imageService: ImageService
   ) {}
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
 
     this.user = globalInfo.user;

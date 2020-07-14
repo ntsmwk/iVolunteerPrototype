@@ -10,6 +10,7 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { MessageService } from "../../content/_service/message.service";
 import { ArrayService } from "../../content/_service/array.service";
 import { Subscription } from "rxjs";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "fuse-marketplace-selection",
@@ -17,6 +18,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./marketplace-selection.component.scss"],
 })
 export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
+  private user: User;
   private role: UserRole;
   public marketplaces: Marketplace[];
 

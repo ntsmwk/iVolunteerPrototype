@@ -17,6 +17,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
@@ -61,10 +62,10 @@ public class CoreVolunteerInitializationService {
 
 		createVolunteer(USERNAMES[0], RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
 		createVolunteer(USERNAMES[1], RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "",
-				"img/pstarzer.jpg");
+				"/img/pstarzer.jpg");
 		createVolunteer(USERNAMES[2], RAW_PASSWORD, "Markus", "Weißenbek", LocalDate.of(1994, 1, 23), "", "");
 		createVolunteer(USERNAMES[3], RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "",
-				"img/weixlbaumer_small.png");
+				"/img/weixlbaumer_small.png");
 
 		createVolunteer(USERNAMES[4], RAW_PASSWORD, "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
 		createVolunteer(USERNAMES[5], RAW_PASSWORD, "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
@@ -112,10 +113,10 @@ public class CoreVolunteerInitializationService {
 
 	private void setImage(String fileName, CoreUser volunteer) {
 		if (fileName != null && !fileName.equals("")) {
+			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
-				Resource resource = new ClassPathResource(fileName);
-				File file = resource.getFile();
-				volunteer.setImage(Files.readAllBytes(file.toPath()));
+				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
+				volunteer.setImage(binaryData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -124,12 +125,12 @@ public class CoreVolunteerInitializationService {
 
 	protected void subscribeVolunteersToAllTenants() {
 		ArrayList<CoreUser> volunteers = new ArrayList<>();
-		coreUserRepository.findByUsernameIn(Arrays.asList(USERNAMES)).forEach(volunteers::add);	
-		
+		coreUserRepository.findByUsernameIn(Arrays.asList(USERNAMES)).forEach(volunteers::add);
+
 		List<Tenant> tenants = coreTenantRepository.findAll();
 
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-		
+
 		for (int i = 0; i < volunteers.size(); i++) {
 			CoreUser volunteer = volunteers.get(i);
 			volunteer.setSubscribedTenants(new ArrayList<TenantUserSubscription>());

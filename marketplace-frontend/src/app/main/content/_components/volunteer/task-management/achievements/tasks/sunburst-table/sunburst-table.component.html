@@ -1,25 +1,14 @@
 <div fxLayout="row" fxLayoutAlign="space-between start">
   <div class="sunburstParent" id="sunburstChart"></div>
 
-  <div
-    *ngIf="tableDataSource"
-    class="tasksTable"
-    fxLayout="column"
-    fxLayoutAlign="none"
-  >
-    <mat-table
-      class="mat-elevation-z8"
-      [dataSource]="tableDataSource"
-      matSort
-    >
+  <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
+    <mat-table class="mat-elevation-z8" [dataSource]="tableDataSource" matSort>
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Tätigkeit
         </mat-header-cell>
-        <mat-cell *matCellDef="let element"
-        [matTooltip]="element.name.length > 25 ? 
-        element.name : null"
-        >
+        <mat-cell *matCellDef="let element" [matTooltip]="element.name.length > 25 ? 
+        element.name : null">
           {{ element.name | truncate: [25] }}
         </mat-cell>
       </ng-container>
@@ -67,11 +56,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row
-        (click)="openDialog(row)"
-        *matRowDef="let element; let row; columns: displayedColumns"
-        [ngStyle]="getStyle(element.taskType1)"
-      ></mat-row>
+      <mat-row (click)="openDialog(row)" *matRowDef="let element; let row; columns: displayedColumns" [ngStyle]="getStyle(element.taskType1)"></mat-row>
     </mat-table>
     <mat-paginator [pageSize]="16" showFirstLastButtons></mat-paginator>
   </div>

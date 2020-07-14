@@ -18,7 +18,7 @@ export class User {
   websites: string[] = [];
   emails: string[] = [];
 
-  getRegisteredMarketplaces: string[];
+  registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
   image;

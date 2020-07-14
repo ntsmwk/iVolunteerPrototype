@@ -15,7 +15,6 @@ import { StoredChart } from "app/main/content/_model/stored-chart";
 import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { GlobalService } from "app/main/content/_service/global.service";
 import { User } from "app/main/content/_model/user";
 
 @Component({
@@ -51,7 +50,7 @@ export class ManagementSummaryComponent implements OnInit {
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
   uniqueYears: any[] = [];
-  tenantMap: Map<String, Tenant>;
+  tenantMap: Map<String, Tenant> = new Map<String, Tenant>();
 
   durationTotal: any[] = [];
   numberTotal: any[] = [];
@@ -64,7 +63,7 @@ export class ManagementSummaryComponent implements OnInit {
   engagementYear: number;
 
   isLocalRepositoryConnected: boolean;
-  timeout: boolean = false;
+  isLoaded: boolean = false;
 
   percentageFilteredOut: number = 0;
 
@@ -74,18 +73,12 @@ export class ManagementSummaryComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
     private tenantService: TenantService,
-    private localRepositoryService: LocalRepositoryService,
-    private globalService: GlobalService
+    private localRepositoryService: LocalRepositoryService
   ) {}
 
   async ngOnInit() {
-    let t = timer(3000);
-    t.subscribe(() => {
-      this.timeout = true;
-    });
-
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
 
     this.volunteer = globalInfo.user;
@@ -94,11 +87,12 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
 
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-      this.volunteer
-    );
+    // TODO: Philipp
+    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
+    //   this.volunteer
+    // );
 
-    if (this.isLocalRepositoryConnected) {
+    try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
           .findClassInstancesByVolunteer(this.volunteer)
@@ -113,7 +107,10 @@ export class ManagementSummaryComponent implements OnInit {
           .mapClassInstancesToDTOs(this.marketplace, localClassInstances)
           .toPromise()
       );
-    } else {
+      this.isLocalRepositoryConnected = true;
+    } catch (e) {
+      this.isLocalRepositoryConnected = false;
+
       if (!isNullOrUndefined(this.marketplace)) {
         this.classInstanceDTOs = <ClassInstanceDTO[]>(
           await this.classInstanceService
@@ -155,7 +152,6 @@ export class ManagementSummaryComponent implements OnInit {
     let uniqueTenants = [
       ...new Set(this.classInstanceDTOs.map((item) => item.tenantId)),
     ];
-    this.tenantMap = new Map<String, Tenant>();
     for (let tenantId of uniqueTenants) {
       let tenant = <Tenant>(
         await this.tenantService.findById(tenantId).toPromise()
@@ -166,6 +162,8 @@ export class ManagementSummaryComponent implements OnInit {
     this.generateComparisonChartData(this.comparisonYear);
     this.generateEngagementYearData(this.engagementYear);
     this.generateEngagementTotalData();
+
+    this.isLoaded = true;
   }
 
   generateComparisonChartData(comparisonYear) {

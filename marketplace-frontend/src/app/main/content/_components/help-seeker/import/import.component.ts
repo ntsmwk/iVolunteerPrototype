@@ -15,8 +15,7 @@ import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.s
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { GlobalService } from 'app/main/content/_service/global.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "import",
@@ -45,7 +44,6 @@ export class ImportComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private classDefinitionService: ClassDefinitionService,
     private tenantService: TenantService,
-    private globalService: GlobalService,
   ) {
     this.importForm = formBuilder.group({
       volunteer: new FormControl(undefined, Validators.required),
@@ -54,20 +52,12 @@ export class ImportComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo().toPromise();
-    this.helpseeker = globalInfo.user;
-    this.marketplace = globalInfo.marketplace;
-
-
-    this.tenant = <Tenant>(
-      await this.tenantService
-        .findById(
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
-        )
-        .toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
     );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+    this.tenant = globalInfo.tenants[0]; // Philipp: not that nice...
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService

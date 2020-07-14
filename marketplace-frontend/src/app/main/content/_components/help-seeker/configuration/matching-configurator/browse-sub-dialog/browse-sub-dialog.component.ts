@@ -1,32 +1,36 @@
-import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
-import { Marketplace } from 'app/main/content/_model/marketplace';
+import { OnInit, Component, Input, Output, EventEmitter } from "@angular/core";
+import { Marketplace } from "app/main/content/_model/marketplace";
 
 export class MatchingBrowseSubDialogData {
   title: string;
 
-  entries: { id: string, name: string, producer: string, consumer: string, date: Date }[];
+  entries: {
+    id: string;
+    name: string;
+    leftMatchingEntity: string;
+    rightMatchingEntity: string;
+    date: Date;
+  }[];
 
   marketplace: Marketplace;
 }
 
 @Component({
-  selector: 'browse-matching-sub-dialog',
-  templateUrl: './browse-sub-dialog.component.html',
-  styleUrls: ['./browse-sub-dialog.component.scss']
+  selector: "browse-matching-sub-dialog",
+  templateUrl: "./browse-sub-dialog.component.html",
+  styleUrls: ["./browse-sub-dialog.component.scss"]
 })
 export class BrowseMatchingSubDialogComponent implements OnInit {
-
   @Input() data: MatchingBrowseSubDialogData;
   @Input() browseMode: boolean;
-  @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string }> = new EventEmitter<{ cancelled: boolean, entryId: string }>();
+  @Output() subDialogReturn: EventEmitter<{
+    cancelled: boolean;
+    entryId: string;
+  }> = new EventEmitter<{ cancelled: boolean; entryId: string }>();
 
-  constructor(
-  ) {
-
-  }
+  constructor() {}
 
   ngOnInit() {
-
     // DEBUG
     // this.data.entries.push(...this.data.entries);
     // this.data.entries.push(...this.data.entries);
@@ -40,6 +44,4 @@ export class BrowseMatchingSubDialogComponent implements OnInit {
   handleBackClick() {
     this.subDialogReturn.emit({ cancelled: true, entryId: undefined });
   }
-
-
 }

@@ -16,8 +16,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { HelpSeekerGuard } from "app/main/content/_guard/help-seeker.guard";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { User, UserRole } from "app/main/content/_model/user";
-import { GlobalService } from 'app/main/content/_service/global.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "fuse-rule-overview",
@@ -38,7 +37,6 @@ export class FuseRuleOverviewComponent implements OnInit {
     private helpSeekerService: CoreHelpSeekerService,
     private derivationRuleService: DerivationRuleService,
     private tenantService: TenantService,
-    private globalService: GlobalService,
   ) { }
 
   async ngOnInit() {
@@ -51,37 +49,15 @@ export class FuseRuleOverviewComponent implements OnInit {
   }
 
   private async loadAllDerivationRules() {
-
-    const globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo().toPromise();
-    this.helpseeker = globalInfo.user;
-    this.marketplace = globalInfo.marketplace;
-
-
-    //   this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
-
-    // this.marketplace = <Marketplace>(
-    //   await this.helpSeekerService
-    //     .findRegisteredMarketplaces(this.helpseeker.id)
-    //     .toPromise()
-    // );
-
-    this.tenant = <Tenant>(
-      await this.tenantService
-        .findById(
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
-        )
-        .toPromise()
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
     );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
 
     this.derivationRuleService
-      .findAll(
-        this.marketplace,
-        this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
-      )
+      .findAll(this.marketplace, this.tenant.id)
       .toPromise()
       .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
   }

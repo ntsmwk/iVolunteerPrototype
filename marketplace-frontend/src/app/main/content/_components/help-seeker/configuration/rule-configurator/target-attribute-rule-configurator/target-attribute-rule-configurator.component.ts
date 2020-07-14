@@ -19,8 +19,7 @@ import {
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
 import { User, UserRole } from "app/main/content/_model/user";
-import { GlobalService } from 'app/main/content/_service/global.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "target-attribute-rule-configurator",
@@ -55,7 +54,6 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
     private helpSeekerService: CoreHelpSeekerService,
-    private globalService: GlobalService,
   ) {
     this.ruleTargetAttributeForm = formBuilder.group({
       classPropertyId: new FormControl(undefined),
@@ -63,7 +61,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.ruleTargetAttributeForm.setValue({
       classPropertyId:
         (this.attributeTarget.classProperty
@@ -72,26 +70,13 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       value: this.attributeTarget.value || "",
     });
 
-    this.globalService.getGlobalInfo().toPromise().then((ret: GlobalInfo) => {
-      this.helpseeker = ret.user;
-      this.marketplace = ret.marketplace;
-      this.loadClassProperties(null);
-    })
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
 
-
-    // this.loginService
-    //   .getLoggedIn()
-    //   .toPromise()
-    //   .then((helpseeker: User) => {
-    //     this.helpseeker = helpseeker;
-    //     this.helpSeekerService
-    //       .findRegisteredMarketplaces(helpseeker.id)
-    //       .toPromise()
-    //       .then((marketplace: Marketplace) => {
-    //         this.marketplace = marketplace;
-    //         this.loadClassProperties(null);
-    //       });
-    //   });
+    this.loadClassProperties(null);
   }
 
   onPropertyChange($event) {

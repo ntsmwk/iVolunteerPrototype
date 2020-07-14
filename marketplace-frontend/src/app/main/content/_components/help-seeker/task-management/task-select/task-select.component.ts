@@ -17,6 +17,7 @@ import { ClassConfiguration } from "app/main/content/_model/meta/configurations"
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import { ClassDefinitionDTO } from "app/main/content/_model/meta/class";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   templateUrl: "./task-select.component.html",
@@ -41,23 +42,12 @@ export class FuseTaskSelectComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
-
-    this.tenant = <Tenant>(
-      await this.tenantService
-        .findById(
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
-        )
-        .toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
     );
-
-    this.marketplace = <Marketplace>(
-      await this.coreHelpSeekerService
-        .findRegisteredMarketplaces(this.helpseeker.id)
-        .toPromise()
-    );
+    this.helpseeker = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
+    this.marketplace = globalInfo.marketplace;
 
     if (!isNullOrUndefined(this.marketplace)) {
       let tasks = <ClassDefinitionDTO[]>(

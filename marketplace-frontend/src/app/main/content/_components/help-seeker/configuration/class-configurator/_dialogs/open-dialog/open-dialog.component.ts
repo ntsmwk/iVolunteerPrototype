@@ -11,7 +11,6 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
 import { ClassBrowseSubDialogData } from "../browse-sub-dialog/browse-sub-dialog.component";
-import { GlobalService } from 'app/main/content/_service/global.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export interface OpenClassConfigurationDialogData {
@@ -34,7 +33,6 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
     private loginService: LoginService,
-    private globalService: GlobalService,
   ) { }
 
   selected: string;
@@ -47,7 +45,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
 
   ngOnInit() {
 
-    this.globalService.getGlobalInfo().toPromise().then((globalInfo: GlobalInfo) => {
+    this.loginService.getGlobalInfo().toPromise().then((globalInfo: GlobalInfo) => {
       const tenantId = globalInfo.user.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId;
 
 

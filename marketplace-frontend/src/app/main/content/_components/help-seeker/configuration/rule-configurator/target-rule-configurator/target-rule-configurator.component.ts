@@ -21,8 +21,7 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { User, UserRole } from "app/main/content/_model/user";
-import { GlobalService } from 'app/main/content/_service/global.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "target-rule-configurator",
@@ -52,14 +51,13 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
     private helpSeekerService: CoreHelpSeekerService,
-    private globalService: GlobalService,
   ) {
     this.ruleActionForm = formBuilder.group({
       classDefinitionId: new FormControl(undefined),
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.ruleActionForm.setValue({
       classDefinitionId:
         (this.classAction.classDefinition
@@ -67,44 +65,25 @@ export class TargetRuleConfiguratorComponent implements OnInit {
           : "") || "",
     });
 
-    this.globalService.getGlobalInfo().toPromise().then((ret: GlobalInfo) => {
-      this.helpseeker = ret.user;
-      this.marketplace = ret.marketplace;
-      this.classDefinitionService
-        .getAllClassDefinitionsWithoutHeadAndEnums(this.marketplace, this.helpseeker.subscribedTenants
-          .find((t) => t.role === UserRole.HELP_SEEKER).tenantId
-        )
-        .toPromise()
-        .then((definitions: ClassDefinition[]) => {
-          this.classDefinitions = definitions;
-          this.initialized = true;
-        });
-    });
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
 
-    // this.loginService
-    //   .getLoggedIn()
-    //   .toPromise()
-    //   .then((helpseeker: User) => {
-    //     this.helpseeker = helpseeker;
-    //     this.helpSeekerService
-    //       .findRegisteredMarketplaces(helpseeker.id)
-    //       .toPromise()
-    //       .then((marketplace: Marketplace) => {
-    //         this.marketplace = marketplace;
-    //         this.classDefinitionService
-    //           .getAllClassDefinitionsWithoutHeadAndEnums(
-    //             marketplace,
-    //             this.helpseeker.subscribedTenants.find(
-    //               (t) => t.role === UserRole.HELP_SEEKER
-    //             ).tenantId
-    //           )
-    //           .toPromise()
-    //           .then((definitions: ClassDefinition[]) => {
-    //             this.classDefinitions = definitions;
-    //           });
-    //       });
-    //   });
-    // this.initialized = true;
+    this.classDefinitionService
+      .getAllClassDefinitionsWithoutHeadAndEnums(
+        this.marketplace,
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId
+      )
+      .toPromise()
+      .then((definitions: ClassDefinition[]) => {
+        this.classDefinitions = definitions;
+      });
+
+    this.initialized = true;
   }
 
   addTargetAttribute() {

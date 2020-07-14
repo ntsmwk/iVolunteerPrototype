@@ -26,6 +26,7 @@ import {
   MatCheckboxModule,
   MatTooltipModule,
   MatDialogModule,
+  MatProgressSpinnerModule,
 } from "@angular/material";
 import {
   FuseConfirmDialogModule,
@@ -94,6 +95,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
     MatTableModule,
     MatTooltipModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     FuseTruncatePipeModule,
     FuseSharedModule,
     FuseConfirmDialogModule,
@@ -113,4 +115,4 @@ const routes = [{ path: "", component: AchievementsComponent }];
   ],
   entryComponents: [ClassInstanceDetailsComponent],
 })
-export class AchievementsModule { }
+export class AchievementsModule {}

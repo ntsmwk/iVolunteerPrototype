@@ -14,7 +14,6 @@ import { MatTabChangeEvent } from "@angular/material";
 import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { GlobalService } from "app/main/content/_service/global.service";
 import { User } from "app/main/content/_model/user";
 
 @Component({
@@ -33,7 +32,7 @@ export class AchievementsComponent implements OnInit {
   subscribedTenants: Tenant[] = [];
 
   isLocalRepositoryConnected: boolean;
-  timeout: boolean = false;
+  isLoaded: boolean = false;
 
   percentageFilteredOut: number = 0;
 
@@ -41,29 +40,24 @@ export class AchievementsComponent implements OnInit {
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private localRepositoryService: LocalRepositoryService,
-    private globalService: GlobalService
+    private localRepositoryService: LocalRepositoryService
   ) {}
 
   async ngOnInit() {
-    let t = timer(3000);
-    t.subscribe(() => {
-      this.timeout = true;
-    });
-
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
 
     this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
 
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-      this.volunteer
-    );
+    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
+    //   this.volunteer
+    // );
 
-    if (this.isLocalRepositoryConnected) {
+    // if (this.isLocalRepositoryConnected) {
+    try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
           .findClassInstancesByVolunteer(this.volunteer)
@@ -78,7 +72,10 @@ export class AchievementsComponent implements OnInit {
           .mapClassInstancesToDTOs(this.marketplace, localClassInstances)
           .toPromise()
       );
-    } else {
+      this.isLocalRepositoryConnected = true;
+    } catch (e) {
+      this.isLocalRepositoryConnected = false;
+
       if (!isNullOrUndefined(this.marketplace)) {
         this.classInstanceDTOs = <ClassInstanceDTO[]>(
           await this.classInstanceService
@@ -110,6 +107,7 @@ export class AchievementsComponent implements OnInit {
     this.percentageFilteredOut = (1 - after / before) * 100;
 
     this.tenantSelectionChanged(this.selectedTenants);
+    this.isLoaded = true;
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {

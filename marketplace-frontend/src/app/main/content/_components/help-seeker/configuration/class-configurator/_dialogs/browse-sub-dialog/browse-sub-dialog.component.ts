@@ -1,49 +1,65 @@
-import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { MatTableDataSource } from '@angular/material';
-import { isNullOrUndefined } from 'util';
+import { OnInit, Component, Input, Output, EventEmitter } from "@angular/core";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { MatTableDataSource } from "@angular/material";
+import { isNullOrUndefined } from "util";
 
 export class ClassBrowseSubDialogData {
   title: string;
-  entries: { id: string, name: string, date: Date }[];
-  sourceReference: 'PRODUCER' | 'CONSUMER';
+  entries: { id: string; name: string; date: Date }[];
+  sourceReference: "LEFT" | "RIGHT";
   marketplace: Marketplace;
 }
 
 @Component({
-  selector: 'browse-class-sub-dialog',
-  templateUrl: './browse-sub-dialog.component.html',
-  styleUrls: ['./browse-sub-dialog.component.scss']
+  selector: "browse-class-sub-dialog",
+  templateUrl: "./browse-sub-dialog.component.html",
+  styleUrls: ["./browse-sub-dialog.component.scss"]
 })
 export class BrowseClassSubDialogComponent implements OnInit {
-
   @Input() data: ClassBrowseSubDialogData;
   @Input() browseMode: boolean;
-  @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string, sourceReference: 'PRODUCER' | 'CONSUMER' }>
-    = new EventEmitter<{ cancelled: boolean, entryId: string, sourceReference: 'PRODUCER' | 'CONSUMER' }>();
+  @Output() subDialogReturn: EventEmitter<{
+    cancelled: boolean;
+    entryId: string;
+    sourceReference: "LEFT" | "RIGHT";
+  }> = new EventEmitter<{
+    cancelled: boolean;
+    entryId: string;
+    sourceReference: "LEFT" | "RIGHT";
+  }>();
 
-  datasource: MatTableDataSource<{ id: string, name: string, date: Date }> = new MatTableDataSource();
+  datasource: MatTableDataSource<{
+    id: string;
+    name: string;
+    date: Date;
+  }> = new MatTableDataSource();
 
-  currentSortKey: 'name' | 'date';
-  currentSortType: 'az' | 'za' = 'az';
+  currentSortKey: "name" | "date";
+  currentSortType: "az" | "za" = "az";
 
   currentFilter: string;
 
-  constructor(
-  ) {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.datasource.data = this.data.entries;
-    this.sortClicked('date');
+    this.sortClicked("date");
   }
 
   handleRowClick(entry: any) {
-    this.subDialogReturn.emit({ cancelled: false, entryId: entry.id, sourceReference: this.data.sourceReference });
+    this.subDialogReturn.emit({
+      cancelled: false,
+      entryId: entry.id,
+      sourceReference: this.data.sourceReference
+    });
   }
 
   handleBackClick() {
-    this.subDialogReturn.emit({ cancelled: true, entryId: undefined, sourceReference: this.data.sourceReference });
+    this.subDialogReturn.emit({
+      cancelled: true,
+      entryId: undefined,
+      sourceReference: this.data.sourceReference
+    });
   }
 
   applyFilter(event: Event) {
@@ -51,20 +67,24 @@ export class BrowseClassSubDialogComponent implements OnInit {
     this.datasource.filter = this.currentFilter.trim().toLowerCase();
   }
 
-  sortClicked(sortKey: 'name' | 'date') {
+  sortClicked(sortKey: "name" | "date") {
     if (this.currentSortKey === sortKey) {
       this.switchSortType();
     } else {
-      this.currentSortType = 'az'
+      this.currentSortType = "az";
     }
-    if (sortKey === 'date') {
-      this.datasource.data = this.data.entries.sort((a, b) => b.date.valueOf() - a.date.valueOf())
+    if (sortKey === "date") {
+      this.datasource.data = this.data.entries.sort(
+        (a, b) => b.date.valueOf() - a.date.valueOf()
+      );
     }
-    if (sortKey === 'name') {
-      this.datasource.data = this.data.entries.sort((a, b) => b.name.trim().localeCompare(a.name.trim()));
+    if (sortKey === "name") {
+      this.datasource.data = this.data.entries.sort((a, b) =>
+        b.name.trim().localeCompare(a.name.trim())
+      );
     }
 
-    if (this.currentSortType === 'za') {
+    if (this.currentSortType === "za") {
       this.datasource.data.reverse();
     }
     this.currentSortKey = sortKey;
@@ -75,10 +95,8 @@ export class BrowseClassSubDialogComponent implements OnInit {
   }
 
   switchSortType() {
-    this.currentSortType === 'az' ? this.currentSortType = 'za' : this.currentSortType = 'az';
+    this.currentSortType === "az"
+      ? (this.currentSortType = "za")
+      : (this.currentSortType = "az");
   }
-
-
-
-
 }

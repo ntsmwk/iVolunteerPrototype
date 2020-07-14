@@ -10,7 +10,6 @@ import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { GlobalService } from "app/main/content/_service/global.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
@@ -46,15 +45,14 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private classInstanceService: ClassInstanceService,
-    private tenantService: TenantService,
-    private globalService: GlobalService
+    private tenantService: TenantService
   ) {}
 
   ngOnInit() {}
 
   async ngAfterViewInit() {
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
 
     this.participant = globalInfo.user;
