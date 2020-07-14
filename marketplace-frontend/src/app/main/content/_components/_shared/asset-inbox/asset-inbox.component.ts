@@ -5,9 +5,9 @@ import { MatTableDataSource } from '@angular/material';
 import { ClassInstanceDTO, ClassArchetype } from 'app/main/content/_model/meta/class';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { User } from 'app/main/content/_model/user';
-import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
-import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { User, UserRole } from 'app/main/content/_model/user';
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+
 
 @Component({
   selector: "app-asset-inbox",
@@ -47,8 +47,7 @@ export class AssetInboxComponent implements OnInit {
   userImagePaths: any[];
 
   constructor(
-    private helpseekerService: CoreHelpSeekerService,
-    private volunteerService: CoreVolunteerService,
+    private userService: CoreUserService,
   ) { }
 
   ngOnInit() {
@@ -58,15 +57,15 @@ export class AssetInboxComponent implements OnInit {
       );
 
       Promise.all([
-        this.helpseekerService
-          .findAll()
+        this.userService
+          .findAllByRole(UserRole.HELP_SEEKER)
           .toPromise()
           .then((issuers: User[]) => {
             this.issuers = issuers;
           }),
 
-        this.volunteerService
-          .findAll()
+        this.userService
+          .findAllByRole(UserRole.VOLUNTEER)
           .toPromise()
           .then((volunteers: User[]) => {
             this.volunteers = volunteers;

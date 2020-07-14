@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { User } from "app/main/content/_model/user";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatTableDataSource } from "@angular/material/table";
@@ -13,7 +13,6 @@ import {
 } from "app/main/content/_model/derivation-rule";
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
@@ -33,7 +32,6 @@ export class TestRuleConfigurationComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
     private derivationRuleService: DerivationRuleService,
   ) { }
 

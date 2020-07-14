@@ -3,10 +3,10 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { ImageService } from "app/main/content/_service/image.service";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { timeout, timeInterval } from "rxjs/operators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { User } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 
 @Component({
   selector: "tenant-overview",
@@ -21,8 +21,8 @@ export class TenantOverviewComponent implements OnInit {
     private loginService: LoginService,
     private tenantService: TenantService,
     private imageService: ImageService,
-    private coreVolunteerService: CoreVolunteerService
-  ) {}
+    private coreUserService: CoreUserService,
+  ) { }
 
   async ngOnInit() {
     this.initialize();
@@ -49,15 +49,15 @@ export class TenantOverviewComponent implements OnInit {
   }
 
   async unsubscribe(tenant: Tenant) {
-    await this.coreVolunteerService
-      .unsubscribeTenant(this.volunteer.id, tenant.marketplaceId, tenant.id)
+    await this.coreUserService
+      .unsubscribeUserFromTenant(this.volunteer.id, tenant.marketplaceId, tenant.id, UserRole.VOLUNTEER)
       .toPromise();
     window.setTimeout(() => this.initialize(), 2000);
   }
 
   async subscribe(tenant: Tenant) {
-    await this.coreVolunteerService
-      .subscribeTenant(this.volunteer.id, tenant.marketplaceId, tenant.id)
+    await this.coreUserService
+      .subscribeUserToTenant(this.volunteer.id, tenant.marketplaceId, tenant.id, UserRole.VOLUNTEER)
       .toPromise();
     window.setTimeout(() => this.initialize(), 2000);
   }

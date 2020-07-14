@@ -3,8 +3,6 @@ import { Marketplace } from "app/main/content/_model/marketplace";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { Relationship } from "app/main/content/_model/meta/relationship";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { isNullOrUndefined } from "util";
 import { User } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
@@ -22,7 +20,6 @@ export class ConfiguratorComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
   ) { }
 
   async ngOnInit() {

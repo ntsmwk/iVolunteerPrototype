@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatTableDataSource } from "@angular/material/table";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Marketplace } from "../../../_model/marketplace";
 import { User, UserRole } from "../../../_model/user";
 import { ClassInstanceDTO } from "../../../_model/meta/class";
@@ -8,8 +7,7 @@ import { ClassInstanceService } from "../../../_service/meta/core/class/class-in
 import { isNullOrUndefined } from "util";
 import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { LoginService } from "../../../_service/login.service";
-import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
-import { ArrayService } from "../../../_service/array.service";
+
 
 @Component({
   selector: "asset-inbox-helpseeker",
@@ -24,13 +22,11 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   isLoaded: boolean;
 
   constructor(
-    private arrayService: ArrayService,
     private loginService: LoginService,
     private router: Router,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: MarketplaceService,
-    private helpSeekerService: CoreHelpSeekerService
-  ) {}
+  ) { }
 
   ngOnInit() {
     Promise.all([
@@ -69,7 +65,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       });
   }
 
-  close() {}
+  close() { }
 
   onAssetInboxSubmit() {
     this.classInstanceService

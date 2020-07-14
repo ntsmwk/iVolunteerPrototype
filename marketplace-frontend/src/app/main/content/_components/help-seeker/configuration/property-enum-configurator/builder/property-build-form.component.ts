@@ -2,13 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
 
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { PropertyDefinition } from "app/main/content/_model/meta/property";
 import { isNullOrUndefined } from "util";
-import { Tenant } from "app/main/content/_model/tenant";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Router, Route, ActivatedRoute } from "@angular/router";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { ActivatedRoute } from "@angular/router";
 import { User } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
