@@ -317,14 +317,14 @@ export class ClassConfiguratorComponent implements OnInit,
 
         // next icon
         if (cell.classArchetype !== ClassArchetype.ROOT && cell.classArchetype && !cell.classArchetype.endsWith("_HEAD")) {
-            const nextIcon: MyMxCell = this.graph.insertVertex(cell, "add_class_same_level_icon", "add class", 85, yLocation + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
+            const nextIcon: MyMxCell = this.graph.insertVertex(cell, "add_class_same_level_icon", "Partnerklasse hinzufügen", 85, yLocation + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
             nextIcon.setConnectable(false);
             nextIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
         }
 
         // down icon
         if (cell.classArchetype !== ClassArchetype.ROOT) {
-            const downIcon: MyMxCell = this.graph.insertVertex(cell, "add_class_next_level_icon", "add class", 65, yLocation + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
+            const downIcon: MyMxCell = this.graph.insertVertex(cell, "add_class_next_level_icon", "Unterklasse hinzufügen", 65, yLocation + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
             downIcon.setConnectable(false);
             downIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
         }
@@ -478,6 +478,10 @@ export class ClassConfiguratorComponent implements OnInit,
    */
 
     private deleteCells(cells: MyMxCell[]) {
+        if (cells.length == 1 && cells[0].writeProtected) {
+            return;
+        }
+
         if (this.confirmDelete) {
             this.dialogFactory.confirmationDialog("Löschen Bestätigen", "Wirklich löschen?").then((ret: boolean) => {
                 if (ret) {
@@ -1039,8 +1043,8 @@ export class ClassConfiguratorComponent implements OnInit,
         this.router.navigate([`main/configurator/instance-editor/${
             this.marketplace.id
             }`], {
-                queryParams: [this.currentSelectedCell.id]
-            });
+            queryParams: [this.currentSelectedCell.id]
+        });
     }
 
     showExportDialog() {
