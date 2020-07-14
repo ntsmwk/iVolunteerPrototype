@@ -10,12 +10,11 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { UserRole, User } from "app/main/content/_model/user";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 
 @Component({
   selector: "import",
@@ -39,8 +38,7 @@ export class ImportComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private formBuilder: FormBuilder,
-    private helpSeekerService: CoreHelpSeekerService,
-    private volunteerService: CoreVolunteerService,
+    private coreUserService: CoreUserService,
     private classInstanceService: ClassInstanceService,
     private classDefinitionService: ClassDefinitionService,
     private tenantService: TenantService,
@@ -71,11 +69,11 @@ export class ImportComponent implements OnInit {
     );
 
     this.volunteers = <User[]>(
-      await this.volunteerService
-        .findAllByTenantId(
+      await this.coreUserService
+        .findAllByRoleAndTenantId(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenantId, UserRole.VOLUNTEER
         )
         .toPromise()
     );

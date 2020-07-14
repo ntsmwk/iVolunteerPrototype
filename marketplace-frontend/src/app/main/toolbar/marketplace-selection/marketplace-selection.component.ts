@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 
 import { Marketplace } from "../../content/_model/marketplace";
 import { User, UserRole } from "../../content/_model/user";
-import { CoreVolunteerService } from "../../content/_service/core-volunteer.service";
 import { LoginService } from "../../content/_service/login.service";
 
 import { isNullOrUndefined } from "util";
@@ -11,6 +10,7 @@ import { MessageService } from "../../content/_service/message.service";
 import { ArrayService } from "../../content/_service/array.service";
 import { Subscription } from "rxjs";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 
 @Component({
   selector: "fuse-marketplace-selection",
@@ -29,8 +29,8 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
     private arrayService: ArrayService,
     private messageService: MessageService,
     private loginService: LoginService,
-    private volunterService: CoreVolunteerService
-  ) {}
+    private coreUserService: CoreUserService,
+  ) { }
 
   ngOnInit() {
     this.loadMarketplaces();
@@ -52,7 +52,7 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
       .then((values: any[]) => {
         this.role = <UserRole>values[1];
         if (this.isRoleVolunteer(this.role)) {
-          this.volunterService
+          this.coreUserService
             .findRegisteredMarketplaces((<User>values[0]).id)
             .toPromise()
             .then((marketplaces: Marketplace[]) => {

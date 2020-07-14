@@ -6,11 +6,8 @@ import {
 import { Tenant } from "app/main/content/_model/tenant";
 import { LoginService } from "app/main/content/_service/login.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { StoredChartService } from "app/main/content/_service/stored-chart.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { timer } from "rxjs";
-import { Marketplace } from "app/main/content/_model/marketplace";
 import { StoredChart } from "app/main/content/_model/stored-chart";
 import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
@@ -50,7 +47,8 @@ export class ManagementSummaryComponent implements OnInit {
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
   uniqueYears: any[] = [];
-  tenantMap: Map<String, Tenant> = new Map<String, Tenant>();
+  uniqueTenants: Tenant[] = [];
+  subscribedTenants: Tenant[] = [];
 
   durationTotal: any[] = [];
   numberTotal: any[] = [];
@@ -70,11 +68,10 @@ export class ManagementSummaryComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
-    private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
     private tenantService: TenantService,
     private localRepositoryService: LocalRepositoryService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
@@ -83,14 +80,10 @@ export class ManagementSummaryComponent implements OnInit {
 
     this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
+    this.subscribedTenants = globalInfo.tenants;
 
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
-
-    // TODO: Philipp
-    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-    //   this.volunteer
-    // );
 
     try {
       let localClassInstances = <ClassInstance[]>(
@@ -149,15 +142,13 @@ export class ManagementSummaryComponent implements OnInit {
     ];
     this.uniqueYears.sort();
 
-    let uniqueTenants = [
+    let uniqueTenantIds = [
       ...new Set(this.classInstanceDTOs.map((item) => item.tenantId)),
     ];
-    for (let tenantId of uniqueTenants) {
-      let tenant = <Tenant>(
-        await this.tenantService.findById(tenantId).toPromise()
-      );
-      this.tenantMap.set(tenantId, tenant);
-    }
+    let allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
+    this.uniqueTenants = allTenants.filter((t) => {
+      return uniqueTenantIds.indexOf(t.id) !== -1;
+    });
 
     this.generateComparisonChartData(this.comparisonYear);
     this.generateEngagementYearData(this.engagementYear);
@@ -167,7 +158,7 @@ export class ManagementSummaryComponent implements OnInit {
   }
 
   generateComparisonChartData(comparisonYear) {
-    this.tenantMap.forEach((tenant) => {
+    this.uniqueTenants.forEach((tenant) => {
       let yearData = this.classInstanceDTOs
         .filter((ci) => {
           return new Date(ci.dateFrom).getFullYear() === comparisonYear;
@@ -184,7 +175,7 @@ export class ManagementSummaryComponent implements OnInit {
     this.uniqueYears.sort();
     this.uniqueYears.forEach((curYear) => {
       let data: any[] = [];
-      this.tenantMap.forEach((tenant) => {
+      this.uniqueTenants.forEach((tenant) => {
         let currentData = this.classInstanceDTOs
           .filter((ci) => {
             return new Date(ci.dateFrom).getFullYear() === curYear;
@@ -215,7 +206,7 @@ export class ManagementSummaryComponent implements OnInit {
     this.durationYear = [];
     this.numberYear = [];
 
-    this.tenantMap.forEach((tenant) => {
+    this.uniqueTenants.forEach((tenant) => {
       let classInstancesTenant = classInstancesYear.filter((ci) => {
         return ci.tenantId === tenant.id;
       });
@@ -236,7 +227,7 @@ export class ManagementSummaryComponent implements OnInit {
   }
 
   generateEngagementTotalData() {
-    this.tenantMap.forEach((tenant) => {
+    this.uniqueTenants.forEach((tenant) => {
       let classInstancesTenant = this.classInstanceDTOs.filter((ci) => {
         return ci.tenantId === tenant.id;
       });

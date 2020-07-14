@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
-import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
 import { isNullOrUndefined } from "util";
 import { Marketplace } from "../../../../_model/marketplace";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
@@ -93,7 +92,6 @@ export class DashboardVolunteerComponent implements OnInit {
     public dialog: MatDialog,
     private classInstanceService: ClassInstanceService,
     private localRepositoryService: LocalRepositoryService,
-    private volunteerService: CoreVolunteerService,
     private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
@@ -135,10 +133,6 @@ export class DashboardVolunteerComponent implements OnInit {
     this.setVolunteerImage();
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
-
-    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-    //   this.volunteer
-    // );
 
     try {
       let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
@@ -250,7 +244,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe((result: any) => { });
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -718,7 +712,7 @@ export class DashboardVolunteerComponent implements OnInit {
     ];
     Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) {}
+  onVennClicked(event) { }
 }
 
 export interface DialogData {

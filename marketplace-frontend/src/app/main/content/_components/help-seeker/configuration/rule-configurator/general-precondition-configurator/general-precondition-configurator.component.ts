@@ -1,28 +1,18 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 
-import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
   ComparisonOperatorType,
   GeneralCondition,
 } from "app/main/content/_model/derivation-rule";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { ClassDefinition } from "app/main/content/_model/meta/class";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
 import {
-  ClassProperty,
   PropertyDefinition,
 } from "app/main/content/_model/meta/property";
-import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
-import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
+
 import { User, UserRole } from "../../../../../_model/user";
-import { ThrowStmt } from "@angular/compiler";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
 var output = console.log;
@@ -48,13 +38,8 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
   generalAttributes: PropertyDefinition<any>[];
 
   constructor(
-    private route: ActivatedRoute,
     private loginService: LoginService,
     private formBuilder: FormBuilder,
-    private classDefinitionService: ClassDefinitionService,
-    private classPropertyService: ClassPropertyService,
-    private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService,
     private derivationRuleService: DerivationRuleService,
   ) {
     this.rulePreconditionForm = formBuilder.group({

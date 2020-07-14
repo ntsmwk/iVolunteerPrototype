@@ -1,20 +1,13 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 
-import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
 import { User, UserRole } from "../../../../../_model/user";
-import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
   ComparisonOperatorType,
-  ClassCondition,
-  AggregationOperatorType,
   AttributeCondition,
 } from "app/main/content/_model/derivation-rule";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
@@ -22,7 +15,6 @@ import {
   PropertyDefinition,
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
-import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
 
@@ -56,13 +48,11 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   classDefinitionCache: ClassDefinition[] = [];
 
   constructor(
-    private route: ActivatedRoute,
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService,
+
   ) {
     this.rulePreconditionForm = formBuilder.group({
       classPropertyId: new FormControl(undefined),

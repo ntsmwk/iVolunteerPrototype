@@ -2,10 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatTableDataSource } from "@angular/material/table";
 import { Marketplace } from "../../../../_model/marketplace";
-import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
 import { LoginService } from "../../../../_service/login.service";
 import { fuseAnimations } from "@fuse/animations";
-import { isNullOrUndefined } from "util";
 import {
   DerivationRule,
   ComparisonOperatorType,
@@ -13,9 +11,7 @@ import {
 } from "../../../../_model/derivation-rule";
 import { DerivationRuleService } from "../../../../_service/derivation-rule.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { HelpSeekerGuard } from "app/main/content/_guard/help-seeker.guard";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { User, UserRole } from "app/main/content/_model/user";
+import { User } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
@@ -34,9 +30,7 @@ export class FuseRuleOverviewComponent implements OnInit {
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
     private derivationRuleService: DerivationRuleService,
-    private tenantService: TenantService,
   ) { }
 
   async ngOnInit() {

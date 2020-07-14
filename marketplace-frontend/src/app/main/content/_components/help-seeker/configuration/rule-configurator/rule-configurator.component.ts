@@ -11,7 +11,6 @@ import {
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { Tenant } from "app/main/content/_model/tenant";
@@ -45,11 +44,10 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
-    private formBuilder: FormBuilder,
     private derivationRuleService: DerivationRuleService,
     private classDefinitionService: ClassDefinitionService,
     private tenantService: TenantService,
+    private formBuilder: FormBuilder,
   ) {
     this.ruleForm = formBuilder.group({
       id: new FormControl(undefined),

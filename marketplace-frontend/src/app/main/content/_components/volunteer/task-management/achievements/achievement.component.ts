@@ -7,14 +7,13 @@ import {
 } from "app/main/content/_model/meta/class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { timer } from "rxjs";
 import { MatTabChangeEvent } from "@angular/material";
 import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User } from "app/main/content/_model/user";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 
 @Component({
   selector: "fuse-achievements",
@@ -38,10 +37,10 @@ export class AchievementsComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private volunteerService: CoreVolunteerService,
+    private coreUserService: CoreUserService,
     private classInstanceService: ClassInstanceService,
     private localRepositoryService: LocalRepositoryService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(

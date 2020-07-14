@@ -13,7 +13,6 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { PropertyDefinitionService } from "app/main/content/_service/meta/core/property/property-definition.service";
 import { EnumDefinitionService } from "app/main/content/_service/meta/core/enum/enum-configuration.service";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
@@ -54,7 +53,6 @@ export class PropertyEnumListComponent implements OnInit {
     private propertyDefinitionService: PropertyDefinitionService,
     private enumDefinitionService: EnumDefinitionService,
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
     private dialogFactory: DialogFactoryDirective
   ) { }
 

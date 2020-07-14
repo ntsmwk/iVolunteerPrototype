@@ -16,7 +16,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { PropertyInstance } from "app/main/content/_model/meta/property";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
-import { VolunteerService } from "app/main/content/_service/volunteer.service";
+import { UserService } from 'app/main/content/_service/user.service';
 
 @Component({
   selector: "app-class-instance-details",
@@ -45,7 +45,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private tenantService: TenantService,
     private localRepositoryService: LocalRepositoryService,
-    private volunteerService: VolunteerService,
+    private userService: UserService,
     private loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -87,7 +87,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
 
     if (this.role === UserRole.HELP_SEEKER) {
       this.volunteer = <User>(
-        await this.volunteerService
+        await this.userService
           .findById(this.marketplace, this.classInstance.userId)
           .toPromise()
       );
