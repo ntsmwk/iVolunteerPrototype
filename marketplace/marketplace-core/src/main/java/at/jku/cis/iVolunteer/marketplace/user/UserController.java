@@ -21,25 +21,28 @@ import javax.ws.rs.BadRequestException;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
-
-    @GetMapping("/volunteer")
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping("/volunteer/{id}")
-    public User findById(@PathVariable("id") String id) {
-        return userRepository.findOne(id);
-    }
     
     @GetMapping("/user/{id}")
     private User findUserById(@PathVariable("id") String id) {
     	return userRepository.findOne(id);
     }
 
-    @GetMapping("/volunteer/username/{username}")
-    public User findByUsername(@PathVariable("username") String username) {
-        return userRepository.findByUsername(username);
+    @GetMapping("/user/all/role/{role}")
+    private List<User> findAllByRole(@PathVariable("role") UserRole role) {
+    	//TODO implement
+    	return null;
+    }
+
+    @GetMapping("/user/all/tenant/{tenantId}")
+    private List<User> findAllByTenantId(@PathVariable("role") UserRole role) {
+    	//TODO implement
+    	return null;
+    }
+
+    @GetMapping("/user/all/tenant/{tenantId}/role/{role}")
+    private List<User> findAllByRoleAndTenantId(@PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
+    	//TODO implement
+    	return null;
     }
     
     @GetMapping("/user/username/{username}")
@@ -47,21 +50,6 @@ public class UserController {
         return userRepository.findByUsername(username);
     }
 
-    @PostMapping("/volunteer")
-    public User registerVolunteer(@RequestBody User volunteer) {
-        if (userRepository.findOne(volunteer.getId()) == null) {
-            return userRepository.insert(volunteer);
-        }
-        return null;
-    }
-
-    @PostMapping("/helpseeker")
-    public User registerHelpSeeker(@RequestBody User helpSeeker) {
-        if (userRepository.findOne(helpSeeker.getId()) != null) {
-            throw new BadRequestException("HelpSeeker already registed");
-        }
-        return userRepository.insert(helpSeeker);
-    }
     
     @PostMapping("/user/register")
     public User registerUserToMarketplace(@RequestBody User user) {
@@ -103,17 +91,5 @@ public class UserController {
     	return user;
     }
 
-    @GetMapping("/recruiter/{id}")
-    public User findById2(@PathVariable("id") String id) {
-        return userRepository.findOne(id);
-    }
-
-    @PostMapping("/recruiter")
-    public User registerRecruiter(@RequestBody User recruiter) {
-        if (userRepository.findOne(recruiter.getId()) != null) {
-            throw new BadRequestException("Recruiter already registed");
-        }
-        return userRepository.insert(recruiter);
-    }
 
 }
