@@ -35,7 +35,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     private relationshipsService: RelationshipService,
     private classDefintionService: ClassDefinitionService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   dialogForm: FormGroup;
   allClassConfigurations: ClassConfiguration[];
@@ -48,7 +48,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
       .toPromise()
       .then((helpseeker: User) => {
         this.classConfigurationService
-          .getAllClassConfigurationsSortedDesc(this.data.marketplace)
+          .getClassConfigurationsByTenantId(this.data.marketplace, this.data.tenantId)
           .toPromise()
           .then((classConfigurations: ClassConfiguration[]) => {
             this.data.tenantId = helpseeker.subscribedTenants.find(
@@ -61,12 +61,12 @@ export class NewClassConfigurationDialogComponent implements OnInit {
                 "",
                 isNullOrUndefined(this.data.classConfiguration)
                   ? stringUniqueValidator(
-                      this.allClassConfigurations.map((c) => c.name)
-                    )
+                    this.allClassConfigurations.map((c) => c.name)
+                  )
                   : stringUniqueValidator(
-                      this.allClassConfigurations.map((c) => c.name),
-                      [this.data.classConfiguration.name]
-                    )
+                    this.allClassConfigurations.map((c) => c.name),
+                    [this.data.classConfiguration.name]
+                  )
               ),
               description: new FormControl(""),
               // rootLabel: new FormControl('')

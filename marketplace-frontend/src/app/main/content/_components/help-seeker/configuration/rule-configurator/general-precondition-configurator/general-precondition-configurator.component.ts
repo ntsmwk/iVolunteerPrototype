@@ -55,7 +55,7 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
     private helpSeekerService: CoreHelpSeekerService,
-    private derivationRuleService: DerivationRuleService
+    private derivationRuleService: DerivationRuleService,
   ) {
     this.rulePreconditionForm = formBuilder.group({
       propertyDefinitionId: new FormControl(undefined),

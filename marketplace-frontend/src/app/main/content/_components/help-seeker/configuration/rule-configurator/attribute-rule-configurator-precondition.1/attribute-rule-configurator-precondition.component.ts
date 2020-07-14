@@ -62,7 +62,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
   ) {
     this.rulePreconditionForm = formBuilder.group({
       classPropertyId: new FormControl(undefined),
@@ -85,7 +85,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;

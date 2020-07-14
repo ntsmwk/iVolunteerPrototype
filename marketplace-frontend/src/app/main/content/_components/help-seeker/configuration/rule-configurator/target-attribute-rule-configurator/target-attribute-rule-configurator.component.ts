@@ -53,7 +53,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
   ) {
     this.ruleTargetAttributeForm = formBuilder.group({
       classPropertyId: new FormControl(undefined),
@@ -70,7 +70,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       value: this.attributeTarget.value || "",
     });
 
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;

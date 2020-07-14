@@ -29,7 +29,7 @@ public class TenantController {
 
 	@GetMapping("/name/{tenantName}")
 	public String getTenantByName(@PathVariable String tenantName) {
-		return tenantService.getTenantByName(tenantName);
+		return tenantService.getTenantIdByName(tenantName);
 	}
 
 	@GetMapping("/{tenantId}")

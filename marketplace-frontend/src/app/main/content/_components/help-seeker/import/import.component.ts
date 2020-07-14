@@ -43,7 +43,7 @@ export class ImportComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
     private classDefinitionService: ClassDefinitionService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
   ) {
     this.importForm = formBuilder.group({
       volunteer: new FormControl(undefined, Validators.required),

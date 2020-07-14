@@ -56,7 +56,7 @@ export class PropertyEnumListComponent implements OnInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private dialogFactory: DialogFactoryDirective
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.isLoaded = false;

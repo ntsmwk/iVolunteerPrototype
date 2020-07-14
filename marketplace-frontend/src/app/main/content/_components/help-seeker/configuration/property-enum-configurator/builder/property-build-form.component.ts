@@ -34,10 +34,7 @@ export class PropertyBuildFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private loginService: LoginService,
-    private helpseekerService: CoreHelpSeekerService,
-    private marketplaceService: MarketplaceService,
-    private tenantService: TenantService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.displayBuilder = true;
@@ -58,10 +55,9 @@ export class PropertyBuildFormComponent implements OnInit {
       }),
     ]);
 
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    globalInfo.user;
     this.helpseeker = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
 

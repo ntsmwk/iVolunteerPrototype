@@ -34,17 +34,16 @@ export class TestRuleConfigurationComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private derivationRuleService: DerivationRuleService
-  ) {}
+    private derivationRuleService: DerivationRuleService,
+  ) { }
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
     this.helpseeker = globalInfo.user;
 
-    this.testRule();
   }
 
   private testRule() {

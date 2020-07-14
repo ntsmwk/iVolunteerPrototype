@@ -103,7 +103,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
       .values[0];
   }
 
-  getVolunteerName(userId: string) {}
+  getVolunteerName(userId: string) { }
 
   sortData(sort: Sort) {
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {

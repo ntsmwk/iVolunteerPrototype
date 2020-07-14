@@ -36,8 +36,8 @@ export class FuseRuleOverviewComponent implements OnInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private derivationRuleService: DerivationRuleService,
-    private tenantService: TenantService
-  ) {}
+    private tenantService: TenantService,
+  ) { }
 
   async ngOnInit() {
     this.loadAllDerivationRules();
@@ -49,7 +49,7 @@ export class FuseRuleOverviewComponent implements OnInit {
   }
 
   private async loadAllDerivationRules() {
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;

@@ -53,8 +53,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
-    private classPropertyService: ClassPropertyService,
-    private helpSeekerService: CoreHelpSeekerService
   ) {
     this.rulePreconditionForm = formBuilder.group({
       classDefinitionId: new FormControl(undefined),
@@ -80,7 +78,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       : new Array();
     this.aggregationOperators = Object.keys(AggregationOperatorType);
 
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;

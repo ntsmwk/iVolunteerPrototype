@@ -22,11 +22,11 @@ export class ConfiguratorComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService
-  ) {}
+    private helpSeekerService: CoreHelpSeekerService,
+  ) { }
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;

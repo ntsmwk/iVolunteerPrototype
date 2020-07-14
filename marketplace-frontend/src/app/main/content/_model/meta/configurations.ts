@@ -7,7 +7,9 @@ export class ClassConfiguration {
   classDefinitionIds: string[];
   relationshipIds: string[];
   timestamp: Date;
-  userId: String;
+  userId: string;
+  tenantId: string;
+
 }
 
 export class MatchingConfiguration {
@@ -26,7 +28,7 @@ export class MatchingConfiguration {
 
 export class MatchingCollectorConfiguration {
   id: string;
-  classConfigurationId: String;
+  classConfigurationId: string;
 
   collectors: MatchingCollector[];
 }

@@ -49,7 +49,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private derivationRuleService: DerivationRuleService,
     private classDefinitionService: ClassDefinitionService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
   ) {
     this.ruleForm = formBuilder.group({
       id: new FormControl(undefined),
@@ -58,11 +58,10 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.marketplace = globalInfo.marketplace;
+    const globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+
     this.helpseeker = globalInfo.user;
+    this.marketplace = globalInfo.marketplace;
 
     this.route.params.subscribe((params) => {
       this.loadDerivationRule(this.marketplace, params["ruleId"]);

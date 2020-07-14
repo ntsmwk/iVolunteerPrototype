@@ -50,7 +50,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
   ) {
     this.ruleActionForm = formBuilder.group({
       classDefinitionId: new FormControl(undefined),
@@ -65,7 +65,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
           : "") || "",
     });
 
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
