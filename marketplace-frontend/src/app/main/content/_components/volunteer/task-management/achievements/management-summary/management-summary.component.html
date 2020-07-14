@@ -17,23 +17,23 @@
 
     <div *ngIf="classInstanceDTOs.length != 0">
       <div fxLayout="row wrap" fxLayoutAlign="space-around">
-        <div *ngFor="let tenant of tenantMap | keyvalue">
+        <div *ngFor="let tenant of uniqueTenants">
           <div fxLayout="column" style="width: 100%;">
-            <h2 style="font-size: 30px;">{{ tenant.value.name }}</h2>
+            <h2 style="font-size: 30px;">{{ tenant.name }}</h2>
             <div fxLayout="row">
               <img
-                src="{{ 'data:image/png;base64,' + tenant.value.image }}"
+                src="{{ 'data:image/png;base64,' + tenant.image }}"
                 class="img"
               />
               <table class="table">
                 <tbody>
                   <tr>
                     <td>Homepage:</td>
-                    <td>{{ tenant.value.homepage }}</td>
+                    <td>{{ tenant.homepage }}</td>
                   </tr>
                   <tr>
                     <td>Daten seit:</td>
-                    <td>{{ getMemberSince(tenant.value.id) }}</td>
+                    <td>{{ getMemberSince(tenant.id) }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -191,18 +191,25 @@
     </div>
   </div>
 
-  <p *ngIf="isLoaded && uniqueYears.length < 2" style="margin-left: 40px;">
-    Kein Vergleich möglich, da zu wenig Daten über mehrere Jahre vorhanden sind!
+  <p *ngIf="isLoaded && uniqueYears.length < 2" class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Kein Vergleich möglich, da
+    zu wenig Daten über mehrere Jahre vorhanden sind!
   </p>
 
-  <p *ngIf="isLoaded && tenantMap.size === 0" class="alert alert-info">
+  <p
+    *ngIf="isLoaded && subscribedTenants.length === 0"
+    class="alert alert-info"
+  >
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation
     beigetreten!
   </p>
 
   <p
     *ngIf="
-      isLoaded && classInstanceDTOs.length === 0 && isLocalRepositoryConnected
+      isLoaded &&
+      classInstanceDTOs.length === 0 &&
+      isLocalRepositoryConnected &&
+      uniqueTenants.length > 0
     "
     class="alert alert-info"
   >
