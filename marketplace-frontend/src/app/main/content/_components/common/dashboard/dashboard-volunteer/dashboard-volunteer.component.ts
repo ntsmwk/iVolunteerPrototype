@@ -136,10 +136,6 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-    //   this.volunteer
-    // );
-
     try {
       let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService

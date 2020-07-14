@@ -87,11 +87,6 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
 
-    // TODO: Philipp
-    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-    //   this.volunteer
-    // );
-
     try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
