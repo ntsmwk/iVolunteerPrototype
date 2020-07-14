@@ -74,8 +74,6 @@ public class UserController {
     	return user.getSubscribedTenants().stream().filter(st -> st.getMarketplaceId().equals(marketplaceId) && st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().get();
     }
     
-    
-    
     @PostMapping("/user/unsubscribe/{marketplaceId}/{tenantId}/{userId}/{role}")
     private User unsubscribeUserToTenant(@PathVariable("marketplaceId") String marketplaceId, @PathVariable("userId") String userId, @PathVariable("tenantId") String tenantId, @PathVariable("role") UserRole role) {
     	User user = userRepository.findOne(userId);
@@ -84,12 +82,9 @@ public class UserController {
     		return null;
     	}
     	
-    	
     	user.removeSubscribedTenant(marketplaceId, tenantId, role);
     	user = userRepository.save(user);
     	
     	return user;
     }
-
-
 }
