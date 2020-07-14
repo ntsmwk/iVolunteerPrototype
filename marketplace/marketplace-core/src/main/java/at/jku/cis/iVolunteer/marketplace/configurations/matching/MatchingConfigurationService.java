@@ -17,7 +17,7 @@ public class MatchingConfigurationService {
 
 	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(String producerClassConfigurationId,
 			String consumerClassConfigurationId) {
-		return matchingConfigurationRepository.findByProducerClassConfigurationIdAndConsumerClassConfigurationId(
+		return matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(
 				producerClassConfigurationId, consumerClassConfigurationId);
 	}
 

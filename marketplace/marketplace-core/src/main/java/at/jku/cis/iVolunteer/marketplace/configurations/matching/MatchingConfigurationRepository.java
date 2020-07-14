@@ -6,5 +6,5 @@ import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration
 
 public interface MatchingConfigurationRepository extends MongoRepository<MatchingConfiguration, String> {
 
-	public MatchingConfiguration findByProducerClassConfigurationIdAndConsumerClassConfigurationId(String producerClassConfigurationId, String consumerClassConfigurationId);
+	public MatchingConfiguration findByLeftClassConfigurationIdAndRightClassConfigurationId(String leftClassConfigurationId, String rightClassConfigurationId);
 }
