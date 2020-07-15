@@ -1036,7 +1036,8 @@ export class ClassConfiguratorComponent implements OnInit,
    */
 
     showInstanceForm() {
-        if (isNullOrUndefined(this.currentSelectedCell) || this.currentSelectedCell.cellType === MyMxCellType.CLASS) {
+
+        if (isNullOrUndefined(this.currentSelectedCell) || this.currentSelectedCell.cellType !== MyMxCellType.CLASS) {
             this.currentSelectedCell = this.rootCell;
         }
 
