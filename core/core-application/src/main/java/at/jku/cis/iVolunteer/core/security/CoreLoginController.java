@@ -1,9 +1,11 @@
 package at.jku.cis.iVolunteer.core.security;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,24 +34,27 @@ public class CoreLoginController {
 
 	@GetMapping("role")
 	public UserRole getLoggedInRole() {
+		// TODO Philipp: return array of users...
+
 		return loginService.getLoggedInUserRole();
 	}
 
-	@GetMapping("/globalInfo")
-	public GlobalInfo getGlobalInfo() {
-		final GlobalInfo globalInfo = new GlobalInfo();
+	@GetMapping("/globalInfo/{role}")
+	public GlobalInfo getGlobalInfo(@PathVariable("role") UserRole role) {
+		GlobalInfo globalInfo = new GlobalInfo();
 
-		globalInfo.setUser(loginService.getLoggedInUser());
-		globalInfo.setUserRole(loginService.getLoggedInUserRole());
+		CoreUser user = loginService.getLoggedInUser();
 
-		final CoreUser coreUser = (CoreUser) globalInfo.getUser();
+		globalInfo.setUser(user);
+		globalInfo.setUserRole(role);
 
-		final List<String> registeredMarketplaceIds = coreUser.getRegisteredMarketplaceIds();
+		final List<String> registeredMarketplaceIds = user.getRegisteredMarketplaceIds();
 		if (registeredMarketplaceIds.size() > 0) {
 			globalInfo.setMarketplace(this.marketplaceRepository.findOne(registeredMarketplaceIds.get(0)));
 		}
 
-		globalInfo.setTenants(this.tenantService.getTenantsByUser(coreUser.getId()));
+		globalInfo.setTenants(user.getSubscribedTenants().stream().filter(s -> s.getRole() == role)
+				.map(s -> this.tenantService.getTenantById(s.getTenantId())).collect(Collectors.toList()));
 
 		return globalInfo;
 	}

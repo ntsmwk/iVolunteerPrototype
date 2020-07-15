@@ -1,10 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 
-import { User } from "../../content/_model/user";
+import { User, UserRole } from "../../content/_model/user";
 import { LoginService } from "../../content/_service/login.service";
 import { isNullOrUndefined } from "util";
 
 import { ImageService } from "app/main/content/_service/image.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "fuse-user-menu",
@@ -13,19 +15,28 @@ import { ImageService } from "app/main/content/_service/image.service";
 })
 export class FuseUserMenuComponent implements OnInit {
   user: User;
+  role: UserRole;
 
   constructor(
+    private router: Router,
     private imageService: ImageService,
     private loginService: LoginService
   ) {}
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
+
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.role = globalInfo.userRole;
   }
 
   logout() {
     localStorage.clear();
-    window.location.reload(true);
+    this.router.navigate(["/login"]).then(() => {
+      window.location.reload(true);
+    });
   }
 
   getImage() {
@@ -48,5 +59,13 @@ export class FuseUserMenuComponent implements OnInit {
       ret += " (" + this.user.position + ")";
     }
     return ret;
+  }
+
+  getRoleString() {
+    if (this.role == UserRole.NONE || this.role == undefined) {
+      return "";
+    } else {
+      return " (" + this.role + ")";
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { User } from "../_model/user";
+import { User, UserRole } from "../_model/user";
 import { GlobalInfo } from "../_model/global-info";
 import { MarketplaceService } from "./core-marketplace.service";
 import { TenantService } from "./core-tenant.service";
@@ -48,7 +48,11 @@ export class LoginService {
         subscriber.complete();
       });
     } else {
-      return this.http.get("/core/login/role");
+      // TODO: Philipp
+      return new Observable((subscriber) => {
+        subscriber.next(UserRole.NONE);
+        subscriber.complete();
+      });
     }
   }
 
@@ -64,9 +68,9 @@ export class LoginService {
     }
   }
 
-  async generateGlobalInfo() {
+  async generateGlobalInfo(role: UserRole) {
     let globalInfo = <GlobalInfo>(
-      await this.httpClient.get(`/core/login/globalInfo`).toPromise()
+      await this.httpClient.get(`/core/login/globalInfo/${role}`).toPromise()
     );
 
     localStorage.setItem("globalInfo", JSON.stringify(globalInfo));

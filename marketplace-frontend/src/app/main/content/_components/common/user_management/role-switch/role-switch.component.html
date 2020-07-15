@@ -1,0 +1,50 @@
+<link
+  type="text/css"
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans"
+/>
+
+<div
+  class="page-layout blank p-24"
+  fusePerfectScrollbar
+  style="overflow: scroll;"
+>
+  <div
+    class="header p-24"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayout.gt-sm="row"
+    fxLayoutAlign.gt-sm="space-between end"
+  >
+    <div
+      *ngIf="user"
+      class="user-info"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="start center"
+    >
+      <div
+        class="name"
+        [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
+      >
+        Wähle deine Rolle aus, mit der du fortfahren möchtest:
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoaded">
+    <div *ngFor="let subscription of subscriptions">
+      <button
+        mat-raised-button
+        class="roleSelectButton"
+        color="primary"
+        matTooltip=""
+        (click)="onRoleSelected(subscription.role)"
+      >
+        {{ getRoleName(subscription.role) }} @
+        {{ getTenantName(subscription.tenantId) }}
+      </button>
+    </div>
+  </div>
+</div>

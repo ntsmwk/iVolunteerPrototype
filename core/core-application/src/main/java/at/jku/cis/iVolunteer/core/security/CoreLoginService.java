@@ -21,6 +21,7 @@ public class CoreLoginService {
 	}
 
 	public UserRole getLoggedInUserRole() {
+		// TODO Philipp: return array of users...
 		CoreUser user = getLoggedInUser();
 
 		if (user == null) {

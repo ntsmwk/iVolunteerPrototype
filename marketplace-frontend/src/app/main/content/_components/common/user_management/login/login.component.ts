@@ -79,9 +79,10 @@ export class FuseLoginComponent implements OnInit {
         .toPromise()
         .then((response: HttpResponse<any>) => {
           localStorage.setItem("token", response.headers.get("Authorization"));
-          this.loginService.generateGlobalInfo().then(() => {
-            this.router.navigate(["/main/dashboard"]);
-          });
+          // this.loginService.generateGlobalInfo().then(() => {
+          // this.router.navigate(["/main/dashboard"]);
+          this.router.navigate(["/role"]);
+          // });
         })
         .catch((e) => {
           console.error("error");

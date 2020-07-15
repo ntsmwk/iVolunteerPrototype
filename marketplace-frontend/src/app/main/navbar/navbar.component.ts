@@ -55,6 +55,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     private router: Router
   ) {
     // Navigation data
+
     this.loginService
       .getLoggedInUserRole()
       .toPromise()
