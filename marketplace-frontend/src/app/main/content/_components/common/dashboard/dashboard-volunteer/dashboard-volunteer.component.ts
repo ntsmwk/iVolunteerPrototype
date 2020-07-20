@@ -244,7 +244,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -712,7 +712,7 @@ export class DashboardVolunteerComponent implements OnInit {
     ];
     Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) { }
+  onVennClicked(event) {}
 }
 
 export interface DialogData {

@@ -1,0 +1,29 @@
+<div *ngIf="user && currentRole != 'NONE'">
+  <button
+    mat-button
+    [matMenuTriggerFor]="roleMenu"
+    class="user-button"
+    [matTooltip]="possibleRoles.length > 0 ? 'Rolle wechseln' : null"
+  >
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <!-- <img class="avatar" [src]="getRoleImage()" /> -->
+      <span class="rolename mr-12" fxHide fxShow.gt-sm>{{
+        getCurrentRoleName()
+      }}</span>
+      <mat-icon class="s-16" *ngIf="possibleRoles.length > 0" fxHide.xs
+        >keyboard_arrow_down</mat-icon
+      >
+    </div>
+  </button>
+
+  <mat-menu #roleMenu="matMenu" [overlapTrigger]="false">
+    <button
+      mat-menu-item
+      *ngFor="let role of possibleRoles"
+      (click)="onRoleSelected(role)"
+    >
+      <!-- <mat-icon>account_circle</mat-icon> -->
+      <span>{{ getRoleNameString(role) }}</span>
+    </button>
+  </mat-menu>
+</div>

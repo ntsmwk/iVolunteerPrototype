@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { LoginService } from "app/main/content/_service/login.service";
-import { GlobalInfo } from "app/main/content/_model/global-info";
 import {
   User,
   TenantUserSubscription,
@@ -11,11 +10,8 @@ import { fuseAnimations } from "@fuse/animations";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Router } from "@angular/router";
-import { navigation_helpseeker } from "app/navigation/navigation_helpseeker";
-import { navigation_volunteer } from "app/navigation/navigation_volunteer";
-import { navigation_flexprod } from "app/navigation/navigation_flexprod";
-import { navigation_recruiter } from "app/navigation/navigation_recruiter";
-import { navigation_admin } from "app/navigation/navigation_admin";
+import { RoleChangeService } from "app/main/content/_service/role-change.service";
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: "app-role-switch",
@@ -29,33 +25,32 @@ export class RoleSwitchComponent implements OnInit {
   allTenants: Tenant[] = [];
   navigation: any;
   isLoaded: boolean = false;
+  tenantMap = new Map<string, string[]>();
 
   constructor(
     private router: Router,
-
     private loginService: LoginService,
     private imageService: ImageService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    private roleChangeService: RoleChangeService
   ) {}
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
-    this.subscriptions = this.user.subscribedTenants;
+    this.tenantMap = this.roleChangeService.getRoleTenantMap(this.user);
+
+    if (this.tenantMap.size === 1) {
+      this.onRoleSelected(<UserRole>this.tenantMap.keys().next().value);
+    }
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
-
-    this.subscriptions.filter((s) => {
-      return s.role != UserRole.VOLUNTEER;
-    });
-
     this.isLoaded = true;
   }
 
   onRoleSelected(role: UserRole) {
     this.loginService.generateGlobalInfo(role).then(() => {
       this.router.navigate(["/main/dashboard"]).then(() => {
-        // TODO Philipp: find better solution
-        window.location.reload();
+        this.roleChangeService.changeRole(role);
       });
     });
   }
@@ -68,23 +63,16 @@ export class RoleSwitchComponent implements OnInit {
     return this.allTenants.filter((t) => t.id === tenantId);
   }
 
-  getTenantName(tenantId: string) {
-    let tenant = this.allTenants.find((t) => t.id === tenantId);
-    return tenant.name;
+  getTenantImage(tenantName: string) {
+    let tenant = this.allTenants.find((t) => t.name === tenantName);
+    if (isNullOrUndefined(tenant)) {
+      return "/assets/images/avatars/profile.jpg";
+    } else {
+      return tenant.image;
+    }
   }
 
-  getRoleName(role: UserRole) {
-    switch (role) {
-      case UserRole.VOLUNTEER:
-        return "Freiwilliger";
-      case UserRole.HELP_SEEKER:
-        return "Hilfesuchender";
-      case UserRole.RECRUITER:
-        return "Recruiter";
-      case UserRole.FLEXPROD:
-        return "Flexprod";
-      case UserRole.ADMIN:
-        return "Admin";
-    }
+  getRoleNameString(role: UserRole) {
+    return this.roleChangeService.getRoleNameString(role);
   }
 }
