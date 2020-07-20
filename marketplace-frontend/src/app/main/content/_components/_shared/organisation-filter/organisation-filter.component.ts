@@ -1,6 +1,4 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import { CoreVolunteerService } from "../../../_service/core-volunteer.service";
-import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
 import { LoginService } from "../../../_service/login.service";
 import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { TenantService } from "../../../_service/core-tenant.service";
@@ -23,13 +21,10 @@ export class OrganisationFilterComponent implements OnInit {
   tenantSelectionChanged = new EventEmitter();
 
   constructor(
-    private coreVolunteerService: CoreVolunteerService,
-    private coreHelpseekerService: CoreHelpSeekerService,
     private loginService: LoginService,
-    private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
-    private imageService: ImageService
-  ) {}
+    private imageService: ImageService,
+  ) { }
 
   async ngOnInit() {
     this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();

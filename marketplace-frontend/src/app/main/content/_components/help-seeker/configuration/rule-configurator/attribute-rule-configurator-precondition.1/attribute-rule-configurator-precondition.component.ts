@@ -1,20 +1,13 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 
-import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
 import { User, UserRole } from "../../../../../_model/user";
-import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl, FormGroupDirective, ControlContainer, FormArray, Validators } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
   ComparisonOperatorType,
-  ClassCondition,
-  AggregationOperatorType,
   AttributeCondition,
 } from "app/main/content/_model/derivation-rule";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
@@ -22,8 +15,9 @@ import {
   PropertyDefinition,
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
-import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
 import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "attribute-rule-precondition",
@@ -43,6 +37,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   helpseeker: User;
   marketplace: Marketplace;
   role: UserRole;
+  tenants: Tenant[];
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
@@ -58,13 +53,10 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   attributeValidationMessages = DerivationRuleValidators.ruleValidationMessages;
   
   constructor(
-    private route: ActivatedRoute,
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService,
     private parent: FormGroupDirective
   ) {
     this.rulePreconditionForm = formBuilder.group({
@@ -74,7 +66,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.rulePreconditionForm.setValue({
       classPropertyId:
         (this.attributeCondition.classProperty
@@ -91,36 +83,33 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
-    this.loginService
-      .getLoggedIn()
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+    this.tenants = globalInfo.tenants;
+
+    this.classDefinitionService
+      .getAllClassDefinitionsWithoutHeadAndEnums(
+        this.marketplace,
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId
+      )
       .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
-            this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
-                marketplace,
-                this.helpseeker.subscribedTenants.find(
-                  (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
-              )
-              .toPromise()
-              .then((definitions: ClassDefinition[]) => {
-                this.classDefinitions = definitions;
-                this.loadClassProperties(null);
-              });
-          });
+      .then((definitions: ClassDefinition[]) => {
+        this.classDefinitions = definitions;
+        this.loadClassProperties(null);
       });
   }
 
   onPropertyChange(classProperty: ClassProperty<any>, $event) {
-    if ($event.isUserInput && 
-        (!this.attributeCondition.classProperty ||
-         (this.attributeCondition.classProperty.id != classProperty.id))) {
+    if (
+      $event.isUserInput &&
+      (!this.attributeCondition.classProperty ||
+        this.attributeCondition.classProperty.id != classProperty.id)
+    ) {
       this.initAttributeCondition();
       this.attributeCondition.classProperty = classProperty;
       this.attributeConditionChange.emit(this.attributeCondition);
@@ -129,7 +118,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     // this.rulePreconditionForm.value.classPropertyId = $event.source.value;
   }
 
-  private initAttributeCondition(){
+  private initAttributeCondition() {
     this.attributeCondition.classProperty = new ClassProperty();
     this.attributeCondition.comparisonOperatorType = ComparisonOperatorType.EQ;
     this.attributeCondition.value = undefined;

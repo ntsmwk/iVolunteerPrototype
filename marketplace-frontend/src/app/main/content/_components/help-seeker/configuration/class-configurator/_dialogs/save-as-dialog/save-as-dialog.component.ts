@@ -92,18 +92,18 @@ export class SaveClassConfigurationAsDialogComponent implements OnInit {
   }
 
   handleBrowseClick() {
-    this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
+    // this.classConfigurationService.getClassConfigurationsByTenantId(this.data.marketplace, this.).toPromise().then((classConfigurations: ClassConfiguration[]) => {
 
-      this.allClassConfigurations = classConfigurations;
+    //   this.allClassConfigurations = classConfigurations;
 
 
-      // ----DEBUG
-      // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-      // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-      // ----
+    //   // ----DEBUG
+    //   // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+    //   // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+    //   // ----
 
-      this.loaded = true;
-    });
+    //   this.loaded = true;
+    // });
   }
 
 

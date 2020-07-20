@@ -8,15 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class MatchingConfiguration {
-	@Id String id;
-	String name;
-	Date timestamp;
+	@Id private String id;
+	private String name;
+	private Date timestamp;
 
-	String producerClassConfigurationId;
-	String producerClassConfigurationName;
+	private String leftClassConfigurationId;
+	private String leftClassConfigurationName;
 
-	String consumerClassConfigurationId;
-	String consumerClassConfigurationName;
+	private String rightClassConfigurationId;
+	private String rightClassConfigurationName;
 
 	List<MatchingOperatorRelationship> relationships;
 
@@ -51,37 +51,39 @@ public class MatchingConfiguration {
 	public void setRelationships(List<MatchingOperatorRelationship> relationships) {
 		this.relationships = relationships;
 	}
-
-	public String getProducerClassConfigurationId() {
-		return producerClassConfigurationId;
+	
+	
+	
+	public String getLeftClassConfigurationId() {
+		return leftClassConfigurationId;
 	}
 
-	public void setProducerClassConfigurationId(String producerClassConfigurationId) {
-		this.producerClassConfigurationId = producerClassConfigurationId;
+	public void setLeftClassConfigurationId(String leftClassConfigurationId) {
+		this.leftClassConfigurationId = leftClassConfigurationId;
 	}
 
-	public String getProducerClassConfigurationName() {
-		return producerClassConfigurationName;
+	public String getLeftClassConfigurationName() {
+		return leftClassConfigurationName;
 	}
 
-	public void setProducerClassConfigurationName(String producerClassConfigurationName) {
-		this.producerClassConfigurationName = producerClassConfigurationName;
+	public void setLeftClassConfigurationName(String leftClassConfigurationName) {
+		this.leftClassConfigurationName = leftClassConfigurationName;
 	}
 
-	public String getConsumerClassConfigurationId() {
-		return consumerClassConfigurationId;
+	public String getRightClassConfigurationId() {
+		return rightClassConfigurationId;
 	}
 
-	public void setConsumerClassConfigurationId(String consumerClassConfigurationId) {
-		this.consumerClassConfigurationId = consumerClassConfigurationId;
+	public void setRightClassConfigurationId(String rightClassConfigurationId) {
+		this.rightClassConfigurationId = rightClassConfigurationId;
 	}
 
-	public String getConsumerClassConfigurationName() {
-		return consumerClassConfigurationName;
+	public String getRightClassConfigurationName() {
+		return rightClassConfigurationName;
 	}
 
-	public void setConsumerClassConfigurationName(String consumerClassConfigurationName) {
-		this.consumerClassConfigurationName = consumerClassConfigurationName;
+	public void setRightClassConfigurationName(String rightClassConfigurationName) {
+		this.rightClassConfigurationName = rightClassConfigurationName;
 	}
 
 	@Override

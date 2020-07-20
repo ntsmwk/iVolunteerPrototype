@@ -2,21 +2,17 @@ import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatTableDataSource } from "@angular/material";
 import {
-  ClassDefinition,
   ClassArchetype,
 } from "app/main/content/_model/meta/class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { FormBuilder } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { isNullOrUndefined } from "util";
-import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
-import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import { ClassDefinitionDTO } from "app/main/content/_model/meta/class";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   templateUrl: "./task-select.component.html",
@@ -31,33 +27,18 @@ export class FuseTaskSelectComponent implements OnInit {
 
   constructor(
     formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private loginService: LoginService,
-    private coreHelpSeekerService: CoreHelpSeekerService,
     private classDefinitionService: ClassDefinitionService,
-    private classConfigurationService: ClassConfigurationService,
-    private tenantService: TenantService
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
-
-    this.tenant = <Tenant>(
-      await this.tenantService
-        .findById(
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
-        )
-        .toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
     );
-
-    this.marketplace = <Marketplace>(
-      await this.coreHelpSeekerService
-        .findRegisteredMarketplaces(this.helpseeker.id)
-        .toPromise()
-    );
+    this.helpseeker = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
+    this.marketplace = globalInfo.marketplace;
 
     if (!isNullOrUndefined(this.marketplace)) {
       let tasks = <ClassDefinitionDTO[]>(

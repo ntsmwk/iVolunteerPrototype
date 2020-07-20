@@ -23,6 +23,7 @@ import {
   MatSortModule,
   MatChipsModule,
   MatSlideToggleModule,
+  MatProgressSpinnerModule,
 } from "@angular/material";
 import {
   FuseConfirmDialogModule,
@@ -67,6 +68,7 @@ const routes = [{ path: "", component: ManagementSummaryComponent }];
     MatSortModule,
     MatChipsModule,
     MatSlideToggleModule,
+    MatProgressSpinnerModule,
 
     FuseTruncatePipeModule,
     FuseSharedModule,

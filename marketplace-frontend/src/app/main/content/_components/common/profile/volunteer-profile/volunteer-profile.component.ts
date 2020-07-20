@@ -9,7 +9,7 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 
 @Component({
   selector: "volunteer-profile",
@@ -29,7 +29,7 @@ export class VolunteerProfileComponent implements OnInit {
     private loginService: LoginService,
     private imageService: ImageService,
     private formBuilder: FormBuilder,
-    private volunteerService: CoreVolunteerService
+    private coreUserService: CoreUserService,
   ) {
     this.profileFormErrors = {
       firstName: {},
@@ -82,7 +82,7 @@ export class VolunteerProfileComponent implements OnInit {
     this.volunteer.firstname = this.profileForm.value.firstName;
     this.volunteer.lastname = this.profileForm.value.lastName;
     this.volunteer.birthday = this.profileForm.value.birthday;
-    await this.volunteerService.updateVolunteer(this.volunteer).toPromise();
+    await this.coreUserService.updateUser(this.volunteer, true).toPromise();
     this.reload();
   }
 

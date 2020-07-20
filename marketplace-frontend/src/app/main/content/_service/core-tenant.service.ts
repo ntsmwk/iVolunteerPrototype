@@ -7,7 +7,7 @@ import { ImageService } from "./image.service";
   providedIn: "root",
 })
 export class TenantService {
-  constructor(private http: HttpClient, private imageService: ImageService) {}
+  constructor(private http: HttpClient, private imageService: ImageService) { }
 
   findAll() {
     return this.http.get(`/core/tenant`);
@@ -43,7 +43,7 @@ export class TenantService {
   }
 
   initHeader(tenant: Tenant) {
-    (<HTMLElement>document.querySelector('.header')).style.background =
+    (<HTMLElement>document.querySelector(".header")).style.background =
       tenant.primaryColor;
   }
 }

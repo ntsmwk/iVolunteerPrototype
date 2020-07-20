@@ -3,15 +3,25 @@ package at.jku.cis.iVolunteer.model;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 public class TenantUserSubscription {
+    private String marketplaceId;
     private String tenantId;
     private UserRole role;
 
     public TenantUserSubscription() {
     }
 
-    public TenantUserSubscription(String tenantId, UserRole role) {
+    public TenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
+        this.marketplaceId = marketplaceId;
         this.tenantId = tenantId;
         this.role = role;
+    }
+
+    public String getMarketplaceId() {
+        return this.marketplaceId;
+    }
+
+    public void setMarketplaceId(String marketplaceId) {
+        this.marketplaceId = marketplaceId;
     }
 
     public String getTenantId() {

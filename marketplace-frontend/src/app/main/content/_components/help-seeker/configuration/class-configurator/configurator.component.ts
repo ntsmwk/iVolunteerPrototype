@@ -3,9 +3,8 @@ import { Marketplace } from "app/main/content/_model/marketplace";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { Relationship } from "app/main/content/_model/meta/relationship";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { isNullOrUndefined } from "util";
 import { User } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "app-configurator",
@@ -21,26 +20,16 @@ export class ConfiguratorComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService
-  ) {}
+  ) { }
 
-  ngOnInit() {
-    // get marketplace
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            if (!isNullOrUndefined(marketplace)) {
-              this.marketplace = marketplace;
-              this.isLoaded = true;
-            }
-          });
-      });
+  async ngOnInit() {
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+
+    this.isLoaded = true;
   }
 
   navigateBack() {

@@ -18,19 +18,21 @@ export class User {
   websites: string[] = [];
   emails: string[] = [];
 
+  registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
   image;
 }
 
 export enum UserRole {
-  VOLUNTEER = "VOLUNTEER",
-  HELP_SEEKER = "HELP_SEEKER",
-  ADMIN = "ADMIN",
-  RECRUITER = "RECRUITER",
-  FLEXPROD = "FLEXPROD",
+  VOLUNTEER = 'VOLUNTEER',
+  HELP_SEEKER = 'HELP_SEEKER',
+  ADMIN = 'ADMIN',
+  RECRUITER = 'RECRUITER',
+  FLEXPROD = 'FLEXPROD',
 }
 export class TenantUserSubscription {
+  marketplaceId: string;
   tenantId: string;
   role: UserRole;
 }

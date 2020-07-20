@@ -1,37 +1,46 @@
-import { mxgraph } from 'mxgraph';
-import { Component, OnInit, AfterContentInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { DialogFactoryDirective } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.component';
-import { Router } from '@angular/router';
-import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { User, UserRole } from 'app/main/content/_model/user';
-import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/class';
-import { Relationship, RelationshipType, AssociationCardinality, Association, Inheritance } from 'app/main/content/_model/meta/relationship';
-import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
-import { EditorPopupMenu } from './popup-menu';
-import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
-import { MyMxCell, MyMxCellType } from '../myMxCell';
-import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
-import { CConstants } from './utils-and-constants';
-import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property';
-import { isNullOrUndefined } from 'util';
+import { mxgraph } from "mxgraph";
+import {
+    Component,
+    OnInit,
+    AfterContentInit,
+    Input,
+    ViewChild,
+    ElementRef,
+    HostListener
+} from "@angular/core";
+import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory/dialog-factory.component";
+import { Router } from "@angular/router";
+import { ObjectIdService } from "app/main/content/_service/objectid.service.";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { User, UserRole } from "app/main/content/_model/user";
+import { ClassDefinition, ClassArchetype } from "app/main/content/_model/meta/class";
+import {
+    Relationship,
+    RelationshipType,
+    AssociationCardinality,
+    Association,
+    Inheritance
+} from "app/main/content/_model/meta/relationship";
+import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
+import { EditorPopupMenu } from "./popup-menu";
+import { TopMenuResponse } from "./top-menu-bar/top-menu-bar.component";
+import { MyMxCell, MyMxCellType } from "../myMxCell";
+import { ClassOptionsOverlayContentData } from "./options-overlay/options-overlay-content/options-overlay-content.component";
+import { CConstants } from "./utils-and-constants";
+import { ClassProperty, PropertyType } from "app/main/content/_model/meta/property";
+import { isNullOrUndefined } from "util";
 
 declare var require: any;
 
 //
-const mx: typeof mxgraph = require('mxgraph')({
+const mx: typeof mxgraph = require("mxgraph")({
     // mxDefaultLanguage: 'de',
     // mxBasePath: './mxgraph_resources',
 });
 
 // tslint:disable-next-line: class-name
 
-@Component({
-    selector: "app-class-configurator",
-    templateUrl: './class-configurator.component.html',
-    styleUrls: ['./class-configurator.component.scss'],
-    providers: [DialogFactoryDirective]
-})
+@Component({ selector: "app-class-configurator", templateUrl: "./class-configurator.component.html", styleUrls: ["./class-configurator.component.scss"], providers: [DialogFactoryDirective] })
 export class ClassConfiguratorComponent implements OnInit,
     AfterContentInit {
     constructor(private router: Router, private objectIdService: ObjectIdService, private dialogFactory: DialogFactoryDirective) { }
@@ -56,8 +65,8 @@ export class ClassConfiguratorComponent implements OnInit,
 
     // hiddenEdges: MyMxCell[];
 
-    @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
-    @ViewChild('rightSidebarContainer', { static: true })
+    @ViewChild("graphContainer", { static: true }) graphContainer: ElementRef;
+    @ViewChild("rightSidebarContainer", { static: true })
     rightSidebarContainer: ElementRef;
 
     layout: any;
@@ -102,43 +111,35 @@ export class ClassConfiguratorComponent implements OnInit,
     }
 
     ngAfterContentInit() {
-        this.graphContainer.nativeElement.style.position = 'absolute';
-        this.graphContainer.nativeElement.style.overflow = 'hidden';
-        this.graphContainer.nativeElement.style.left = '0px';
-        this.graphContainer.nativeElement.style.top = '35px';
-        this.graphContainer.nativeElement.style.right = '0px';
-        this.graphContainer.nativeElement.style.bottom = '0px';
-        this.graphContainer.nativeElement.style.background = 'white';
+        this.graphContainer.nativeElement.style.position = "absolute";
+        this.graphContainer.nativeElement.style.overflow = "hidden";
+        this.graphContainer.nativeElement.style.left = "0px";
+        this.graphContainer.nativeElement.style.top = "35px";
+        this.graphContainer.nativeElement.style.right = "0px";
+        this.graphContainer.nativeElement.style.bottom = "0px";
+        this.graphContainer.nativeElement.style.background = "white";
 
-        this.rightSidebarContainer.nativeElement.style.position = 'absolute';
-        this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
-        this.rightSidebarContainer.nativeElement.style.right = '0px';
-        this.rightSidebarContainer.nativeElement.style.top = '35px';
-        this.rightSidebarContainer.nativeElement.style.width = '300px';
-        this.rightSidebarContainer.nativeElement.style.bottom = '0px';
-        this.rightSidebarContainer.nativeElement.style.background = 'rgba(255, 255, 255, 0.9)';
-        this.rightSidebarContainer.nativeElement.style.color = 'black';
-        this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 2px black';
+        this.rightSidebarContainer.nativeElement.style.position = "absolute";
+        this.rightSidebarContainer.nativeElement.style.overflow = "auto";
+        this.rightSidebarContainer.nativeElement.style.right = "0px";
+        this.rightSidebarContainer.nativeElement.style.top = "35px";
+        this.rightSidebarContainer.nativeElement.style.width = "300px";
+        this.rightSidebarContainer.nativeElement.style.bottom = "0px";
+        this.rightSidebarContainer.nativeElement.style.background = "rgba(255, 255, 255, 0.9)";
+        this.rightSidebarContainer.nativeElement.style.color = "black";
+        this.rightSidebarContainer.nativeElement.style.borderLeft = "solid 2px black";
 
         this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
         this.graph.isCellSelectable = function (cell) {
             const state = this.view.getState(cell);
             const style = state != null ? state.style : this.getCellStyle(cell);
 
-            return (this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0);
+            return (this.isCellsSelectable() && !this.isCellLocked(cell) && style["selectable"] !== 0);
         };
 
         const outer = this;
         this.graph.getCursorForCell = function (cell: MyMxCell) {
-            if (cell.cellType === MyMxCellType.PROPERTY
-                || cell.cellType === MyMxCellType.ADD_PROPERTY_ICON
-                || cell.cellType === MyMxCellType.REMOVE_ICON
-                || cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON
-                || cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON
-                || cell.cellType === MyMxCellType.ADD_ASSOCIATION_ICON
-                || cell.cellType === MyMxCellType.OPTIONS_ICON
-                || (outer.clickToDeleteMode && cell.cellType === MyMxCellType.CLASS)
-                || (outer.clickToDeleteMode && MyMxCellType.isRelationship(cell.cellType))) {
+            if (cell.cellType === MyMxCellType.PROPERTY || cell.cellType === MyMxCellType.ADD_PROPERTY_ICON || cell.cellType === MyMxCellType.REMOVE_ICON || cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON || cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON || cell.cellType === MyMxCellType.ADD_ASSOCIATION_ICON || cell.cellType === MyMxCellType.OPTIONS_ICON || (outer.clickToDeleteMode && cell.cellType === MyMxCellType.CLASS) || (outer.clickToDeleteMode && MyMxCellType.isRelationship(cell.cellType))) {
                 return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
             }
         };
@@ -150,7 +151,7 @@ export class ClassConfiguratorComponent implements OnInit,
                 let style = modelGetStyle.apply(this, arguments);
 
                 if (this.isCollapsed(cell)) {
-                    style = style + ';shape=rectangle';
+                    style = style + ";shape=rectangle";
                 }
                 return style;
             }
@@ -158,7 +159,7 @@ export class ClassConfiguratorComponent implements OnInit,
         };
 
         if (!mx.mxClient.isBrowserSupported()) {
-            mx.mxUtils.error('Browser is not supported!', 200, false);
+            mx.mxUtils.error("Browser is not supported!", 200, false);
         } else { // Disables the built-in context menu
             mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
 
@@ -176,7 +177,7 @@ export class ClassConfiguratorComponent implements OnInit,
        */
 
             this.graph.addListener(mx.mxEvent.CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-                const mouseEvent = evt.getProperty('event');
+                const mouseEvent = evt.getProperty("event");
 
                 if (outer.clickToDeleteMode && mouseEvent.button === 0) {
                     outer.handleClickToDeleteEvent(evt);
@@ -190,7 +191,7 @@ export class ClassConfiguratorComponent implements OnInit,
             });
 
             this.graph.addListener(mx.mxEvent.FOLD_CELLS, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-                const cells: MyMxCell[] = evt.getProperty('cells');
+                const cells: MyMxCell[] = evt.getProperty("cells");
                 const cell = cells.pop();
                 outer.handleMXGraphFoldEvent(cell);
             });
@@ -257,7 +258,7 @@ export class ClassConfiguratorComponent implements OnInit,
         let cell: MyMxCell;
         let style: string;
 
-        if (classDefinition.classArchetype.startsWith('ENUM')) {
+        if (classDefinition.classArchetype.startsWith("ENUM")) {
             style = CConstants.mxStyles.classEnum;
         } else if (classDefinition.collector) {
             style = CConstants.mxStyles.classFlexprodCollector;
@@ -286,7 +287,7 @@ export class ClassConfiguratorComponent implements OnInit,
                 this.rootCellSet = true;
             } else {
                 cell.root = false;
-                console.error('root cell already set - there must not be more than one root cell!');
+                console.error("root cell already set - there must not be more than one root cell!");
             }
         }
 
@@ -298,7 +299,7 @@ export class ClassConfiguratorComponent implements OnInit,
         cell.setConnectable(true);
 
         if (!isNullOrUndefined(classDefinition.imagePath)) {
-            const overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), 'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
+            const overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), "Overlay", mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
             this.graph.addCellOverlay(cell, overlay);
         }
 
@@ -315,21 +316,21 @@ export class ClassConfiguratorComponent implements OnInit,
         // yLocation = this.addEnumsToCell(cell, classDefinition.enums, yLocation);
 
         // next icon
-        if (cell.classArchetype !== ClassArchetype.ROOT && cell.classArchetype && !cell.classArchetype.endsWith('_HEAD')) {
-            const nextIcon: MyMxCell = this.graph.insertVertex(cell, 'add_class_same_level_icon', 'add class', 85, yLocation + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
+        if (cell.classArchetype !== ClassArchetype.ROOT && cell.classArchetype && !cell.classArchetype.endsWith("_HEAD")) {
+            const nextIcon: MyMxCell = this.graph.insertVertex(cell, "add_class_same_level_icon", "Partnerklasse hinzufügen", 85, yLocation + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
             nextIcon.setConnectable(false);
             nextIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
         }
 
         // down icon
         if (cell.classArchetype !== ClassArchetype.ROOT) {
-            const downIcon: MyMxCell = this.graph.insertVertex(cell, 'add_class_next_level_icon', 'add class', 65, yLocation + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
+            const downIcon: MyMxCell = this.graph.insertVertex(cell, "add_class_next_level_icon", "Unterklasse hinzufügen", 65, yLocation + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
             downIcon.setConnectable(false);
             downIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
         }
 
         // options icon
-        const optionsIcon: MyMxCell = this.graph.insertVertex(cell, 'options', 'options', 5, yLocation + 50, 20, 20, CConstants.mxStyles.optionsIcon) as MyMxCell;
+        const optionsIcon: MyMxCell = this.graph.insertVertex(cell, "options", "options", 5, yLocation + 50, 20, 20, CConstants.mxStyles.optionsIcon) as MyMxCell;
         optionsIcon.setConnectable(false);
         optionsIcon.cellType = MyMxCellType.OPTIONS_ICON;
 
@@ -410,11 +411,11 @@ export class ClassConfiguratorComponent implements OnInit,
             cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as MyMxCell;
             cell.cellType = MyMxCellType.INHERITANCE;
 
-            if (source.classArchetype.startsWith('ENUM_')) {
+            if (source.classArchetype.startsWith("ENUM_")) {
                 cell.setStyle(CConstants.mxStyles.inheritanceEnum);
             }
         } else if (r.relationshipType === RelationshipType.ASSOCIATION) {
-            cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as MyMxCell;
+            cell = new mx.mxCell("", new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as MyMxCell;
             cell.cellType = MyMxCellType.ASSOCIATION;
 
             const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
@@ -429,7 +430,7 @@ export class ClassConfiguratorComponent implements OnInit,
             cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.composition) as MyMxCell;
             cell.cellType = MyMxCellType.COMPOSITION;
         } else {
-            console.error('invalid RelationshipType');
+            console.error("invalid RelationshipType");
         } cell.id = r.id;
         // cell.newlyAdded = createNew;
         cell.geometry.relative = true;
@@ -459,11 +460,11 @@ export class ClassConfiguratorComponent implements OnInit,
         hack.relationshipType = RelationshipType.ASSOCIATION;
         hack.source = sourceCell.id;
         hack.target = targetCell.id;
-        hack.sourceCardinality = 'ONE';
-        hack.targetCardinality = 'ONE';
+        hack.sourceCardinality = "ONE";
+        hack.targetCardinality = "ONE";
         hack.id = this.objectIdService.getNewObjectId();
 
-        const relationshipCell = new mx.mxCell('', new mx.mxGeometry(0, 0, 0, 0), CConstants.mxStyles.association) as MyMxCell;
+        const relationshipCell = new mx.mxCell("", new mx.mxGeometry(0, 0, 0, 0), CConstants.mxStyles.association) as MyMxCell;
         relationshipCell.cellType = MyMxCellType.ASSOCIATION;
         relationshipCell.setVertex(false);
         relationshipCell.setEdge(true);
@@ -477,8 +478,12 @@ export class ClassConfiguratorComponent implements OnInit,
    */
 
     private deleteCells(cells: MyMxCell[]) {
+        if (cells.length == 1 && cells[0].writeProtected) {
+            return;
+        }
+
         if (this.confirmDelete) {
-            this.dialogFactory.confirmationDialog('Löschen Bestätigen', 'Wirklich löschen?').then((ret: boolean) => {
+            this.dialogFactory.confirmationDialog("Löschen Bestätigen", "Wirklich löschen?").then((ret: boolean) => {
                 if (ret) {
                     this.performDelete(cells);
                 }
@@ -592,7 +597,7 @@ export class ClassConfiguratorComponent implements OnInit,
    * ******EVENT HANDLING******
    */
     handleMXGraphLeftClickEvent(event: mxgraph.mxEventObject) {
-        const cell: MyMxCell = event.getProperty('cell');
+        const cell: MyMxCell = event.getProperty("cell");
         this.currentSelectedCell = cell;
 
         if (!isNullOrUndefined(cell)) {
@@ -640,7 +645,7 @@ export class ClassConfiguratorComponent implements OnInit,
 
     addClassWithRelationship(iconCell: MyMxCell, sourceId: string): {
         class: ClassDefinition;
-        relationship: Relationship
+        relationship: Relationship;
     } {
         const addedClass = new ClassDefinition();
         addedClass.configurationId = this.currentClassConfiguration.id;
@@ -653,7 +658,7 @@ export class ClassConfiguratorComponent implements OnInit,
             addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
         } else {
             addedClass.classArchetype = parentClassArchetype;
-        } addedClass.name = 'Neue Klasse\n(' + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ')';
+        } addedClass.name = "Neue Klasse\n(" + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ")";
         addedClass.tenantId = this.helpseeker.subscribedTenants.find((t) => t.role === UserRole.HELP_SEEKER).tenantId;
         addedClass.properties = [];
 
@@ -667,11 +672,11 @@ export class ClassConfiguratorComponent implements OnInit,
     }
 
     handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
-        const pointerevent = event.getProperty('event') as PointerEvent;
+        const pointerevent = event.getProperty("event") as PointerEvent;
     }
 
     handleMXGraphDoubleClickEvent(event: mxgraph.mxEventObject) {
-        this.openOverlay(event.getProperty('cell'), event);
+        this.openOverlay(event.getProperty("cell"), event);
     }
 
     handleMXGraphFoldEvent(cell: MyMxCell) {
@@ -684,10 +689,8 @@ export class ClassConfiguratorComponent implements OnInit,
                         if (cell.isCollapsed()) {
                             this.setAllCellsInvisibleRec(cell);
                         }
-                    } else {
-                        // this.graph.foldCells(false, false, [edge.target]);
-                        if (!cell.isCollapsed()) {
-                            // this.setAllCellsVisibleRec(cell);
+                    } else { // this.graph.foldCells(false, false, [edge.target]);
+                        if (!cell.isCollapsed()) { // this.setAllCellsVisibleRec(cell);
                             this.setNextCellVisible(cell);
                         }
                     }
@@ -706,7 +709,7 @@ export class ClassConfiguratorComponent implements OnInit,
     }
 
     handleClickToDeleteEvent(event: mxgraph.mxEventObject) {
-        const cell = event.getProperty('cell') as MyMxCell;
+        const cell = event.getProperty("cell") as MyMxCell;
 
         if (!isNullOrUndefined(cell)) {
             if (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType)) {
@@ -729,7 +732,7 @@ export class ClassConfiguratorComponent implements OnInit,
 
     private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
         if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType))) {
-            this.overlayEvent = event.getProperty('event');
+            this.overlayEvent = event.getProperty("event");
 
             this.overlayContent = new ClassOptionsOverlayContentData();
             this.overlayContent.marketplace = this.marketplace;
@@ -757,7 +760,7 @@ export class ClassConfiguratorComponent implements OnInit,
         this.displayOverlay = false;
 
         // tslint:disable-next-line: no-unused-expression
-        !isNullOrUndefined(event) ? this.handleModelChanges(event.classDefinition) : '';
+        !isNullOrUndefined(event) ? this.handleModelChanges(event.classDefinition) : "";
 
         this.overlayContent = undefined;
         this.overlayEvent = undefined;
@@ -892,52 +895,61 @@ export class ClassConfiguratorComponent implements OnInit,
     async consumeMenuOptionClickedEvent(event: any) {
         this.eventResponse = new TopMenuResponse();
         switch (event.id) {
-            case 'editor_save': {
-                this.updateModel();
-                this.eventResponse.action = 'save';
-                this.eventResponse.classConfiguration = this.currentClassConfiguration;
-                this.eventResponse.followingAction = event.followingAction;
-                this.eventResponse.classDefintions = this.classDefinitions;
-                this.eventResponse.relationships = this.relationships;
-                this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
-                this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
+            case "editor_save":
+                {
+                    this.updateModel();
+                    this.eventResponse.action = "save";
+                    this.eventResponse.classConfiguration = this.currentClassConfiguration;
+                    this.eventResponse.followingAction = event.followingAction;
+                    this.eventResponse.classDefintions = this.classDefinitions;
+                    this.eventResponse.relationships = this.relationships;
+                    this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
+                    this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
 
-                break;
-            }
-            case 'editor_save_return': {
-                this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
-                break;
-            }
-            case 'editor_save_as': {
-                console.error('not implemented');
-                break;
-            }
-            case 'editor_new': {
-                this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
-                break;
-            }
-            case 'editor_open': {
-                this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
-                break;
-            }
-            case 'editor_delete': {
-                if (!isNullOrUndefined(event.payload.idsToDelete) && !isNullOrUndefined(this.currentClassConfiguration) && event.payload.idsToDelete.find((id: string) => id === this.currentClassConfiguration.id)) {
-                    this.openGraph(undefined, [], []);
+                    break;
                 }
-                break;
-            }
-            case 'editor_create_instance': {
-                this.showInstanceForm();
-                break;
-            }
-            case 'editor_meta_edit': {
-                this.currentClassConfiguration.name = event.payload.name;
-                this.currentClassConfiguration.description = event.payload.description;
-                break;
-            }
-            case 'cancelled': {
-                break;
-            }
+            case "editor_save_return":
+                {
+                    this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
+                    break;
+                }
+            case "editor_save_as":
+                {
+                    console.error("not implemented");
+                    break;
+                }
+            case "editor_new":
+                {
+                    this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
+                    break;
+                }
+            case "editor_open":
+                {
+                    this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
+                    break;
+                }
+            case "editor_delete":
+                {
+                    if (!isNullOrUndefined(event.payload.idsToDelete) && !isNullOrUndefined(this.currentClassConfiguration) && event.payload.idsToDelete.find((id: string) => id === this.currentClassConfiguration.id)) {
+                        this.openGraph(undefined, [], []);
+                    }
+                    break;
+                }
+            case "editor_create_instance":
+                {
+                    this.showInstanceForm();
+                    break;
+                }
+            case "editor_meta_edit":
+                {
+                    this.currentClassConfiguration.name = event.payload.name;
+                    this.currentClassConfiguration.description = event.payload.description;
+                    break;
+                }
+            case "cancelled":
+                {
+                    break;
+                }
         }
         return;
     }
@@ -957,8 +969,7 @@ export class ClassConfiguratorComponent implements OnInit,
         // this.collapseGraph();
     }
 
-    updateModel() {
-        // store current connections in relationships
+    updateModel() { // store current connections in relationships
         const allCells = this.graph.getModel().getChildren(this.graph.getDefaultParent());
 
         for (const cd of this.classDefinitions) {
@@ -1008,32 +1019,33 @@ export class ClassConfiguratorComponent implements OnInit,
 
     showSidebar() {
         this.rightSidebarVisible = true;
-        this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 2px black';
-        this.rightSidebarContainer.nativeElement.style.height = 'auto';
-        this.rightSidebarContainer.nativeElement.style.width = '300px';
+        this.rightSidebarContainer.nativeElement.style.borderLeft = "solid 2px black";
+        this.rightSidebarContainer.nativeElement.style.height = "auto";
+        this.rightSidebarContainer.nativeElement.style.width = "300px";
     }
 
     hideSidebar() {
         this.rightSidebarVisible = false;
-        this.rightSidebarContainer.nativeElement.style.borderLeft = 'none';
-        this.rightSidebarContainer.nativeElement.style.height = '35px';
-        this.rightSidebarContainer.nativeElement.style.width = '35px';
+        this.rightSidebarContainer.nativeElement.style.borderLeft = "none";
+        this.rightSidebarContainer.nativeElement.style.height = "35px";
+        this.rightSidebarContainer.nativeElement.style.width = "35px";
     }
 
-    /** 
+    /**
    * ******INSTANTIATION******
    */
 
     showInstanceForm() {
-        if (isNullOrUndefined(this.currentSelectedCell) || this.currentSelectedCell.cellType === MyMxCellType.CLASS) {
+
+        if (isNullOrUndefined(this.currentSelectedCell) || this.currentSelectedCell.cellType !== MyMxCellType.CLASS) {
             this.currentSelectedCell = this.rootCell;
         }
 
-        this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`],
-            {
-                queryParams: [this.currentSelectedCell.id]
-            }
-        );
+        this.router.navigate([`main/configurator/instance-editor/${
+            this.marketplace.id
+            }`], {
+            queryParams: [this.currentSelectedCell.id]
+        });
     }
 
     showExportDialog() {
@@ -1046,20 +1058,17 @@ export class ClassConfiguratorComponent implements OnInit,
     /**
    * ******KEY LISTENER/HANDLER******
    */
-    @HostListener('document:keypress', ['$event'])
+    @HostListener("document:keypress", ["$event"])
     handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.key === 'Delete') {
+        if (event.key === "Delete") {
             const cells = this.graph.getSelectionCells() as MyMxCell[];
             this.deleteCells(cells);
         }
     }
 
-
-
     /**
    * ******DEBUGGING******
    */
-
 
     showZoomLevel() {
         const scale = this.graph.view.getScale();

@@ -16,15 +16,15 @@ public class CoreMarketplaceRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
 
-	private String preUrl;
-
 	@Autowired
 	private RestTemplate restTemplate;
 
+	//TODO remove
 	public User registerUser(String marketplaceURL, String authorization, User user) {
 		UserRole role = user.getSubscribedTenants().stream().map(t -> t.getRole()).findFirst()
 				.orElse(UserRole.VOLUNTEER);
 
+		String preUrl = "";
 		switch (role) {
 			case VOLUNTEER:
 				preUrl = "{0}/volunteer";
@@ -44,6 +44,25 @@ public class CoreMarketplaceRestClient {
 
 		String url = format(preUrl, marketplaceURL, user);
 		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
+	}
+	
+	public User registerOrUpdateMarketplaceUser(String marketplaceURL, String authorization, User user) {
+		String preUrl = "{0}/user/register";
+		String url = format(preUrl, marketplaceURL, user);
+		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
+	}
+
+	
+	public User subscribeUserToTenant(String marketplaceUrl, String marketplaceId, String tenantId, String userId, String authorization, UserRole role) {		
+		String preUrl = "{0}/user/subscribe/{1}/{2}/{3}/{4}";
+		String url = format(preUrl, marketplaceUrl, marketplaceId, tenantId, userId, role);
+		return restTemplate.postForObject(url, buildEntity(new User(), authorization), User.class);
+	}
+	
+	public User unsubscribeUserFromTenant(String marketplaceUrl, String marketplaceId, String tenantId, String userId, String authorization, UserRole role) {
+		String preUrl = "{0}/user/unsubscribe/{1}/{2}/{3}/{4}";
+		String url = format(preUrl, marketplaceUrl, marketplaceId, tenantId, userId, role);
+		return restTemplate.postForObject(url, buildEntity(new User(), authorization), User.class);
 	}
 
 	private HttpEntity<?> buildEntity(Object body, String authorization) {

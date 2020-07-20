@@ -21,25 +21,25 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired protected CoreUserRepository coreUserRepository;
-
-	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private Environment environment;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	protected CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private Environment environment;
 
 	public void init() {
-		createMarketplace();
-
-		coreTenantInitializationService.initTenants();
-		coreVolunteerInitializationService.initVolunteers();
-		coreHelpSeekerInitializationService.initHelpSeekers();
-
-		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
-		createAdminUser(ADMIN, RAW_PASSWORD);
-		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
+//		createMarketplace();
+//
+//		coreTenantInitializationService.initTenants();
+//		coreVolunteerInitializationService.initVolunteers();
+//		coreHelpSeekerInitializationService.initHelpSeekers();
+//
+//		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
+//		createAdminUser(ADMIN, RAW_PASSWORD);
+//		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
 
 	}
 
@@ -60,7 +60,7 @@ public class CoreInitializationService {
 	protected void createStandardRecruiter() {
 		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
 	}
-	
+
 	private void createRecruiter(String username, String password, String firstName, String lastName, String position) {
 		CoreUser recruiter = coreUserRepository.findByUsername(username);
 		if (recruiter == null) {
@@ -70,29 +70,58 @@ public class CoreInitializationService {
 			recruiter.setFirstname(firstName);
 			recruiter.setLastname(lastName);
 			recruiter.setPosition(position);
-			recruiter.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.RECRUITER)));
-			recruiter = coreUserRepository.insert(recruiter);
+			recruiter = coreUserRepository.save(recruiter);
 		}
 	}
-	
+
+	protected void subscribedRecruitersToTenant() {
+		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
+		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
+		recruiter.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
+		coreUserRepository.save(recruiter);
+	}
+
+	protected void registerRecruitersToMarketplace() {
+		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
+		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
+		if (marketplace != null) {
+//			TODO register init
+//			coreRecruiterController.registerMarketpace(recruiter.getId(), marketplace.getId(), "");
+		}
+	}
+
 	protected void createStandardAdminUser() {
 		createAdminUser(ADMIN, RAW_PASSWORD);
 	}
 
 	private CoreUser createAdminUser(String username, String password) {
-		CoreUser fpUser = coreUserRepository.findByUsername(username);
-		if (fpUser == null) {
-			fpUser = new CoreUser();
-			fpUser.setUsername(username);
-			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
-			fpUser.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.ADMIN)));
-			fpUser = coreUserRepository.insert(fpUser);
+		CoreUser admin = coreUserRepository.findByUsername(username);
+		if (admin == null) {
+			admin = new CoreUser();
+			admin.setUsername(username);
+			admin.setPassword(bCryptPasswordEncoder.encode(password));
+			admin = coreUserRepository.save(admin);
 		}
-		return fpUser;
+		return admin;
 	}
-	
+
+	protected void subscribeAdminsToTenant() {
+		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
+		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
+		admin.setSubscribedTenants(
+				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
+		coreUserRepository.save(admin);
+	}
+
+	protected void registerAdminsToMarketplace() {
+		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
+		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
+		if (marketplace != null) {
+			// TODO - no function
+		}
+	}
+
 	protected void createStandardFlexProdUser() {
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 	}
@@ -103,8 +132,9 @@ public class CoreInitializationService {
 			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
+			// TODO: needs proper registration
 			fpUser.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.FLEXPROD)));
+					Collections.singletonList(new TenantUserSubscription(null, null, UserRole.FLEXPROD)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 

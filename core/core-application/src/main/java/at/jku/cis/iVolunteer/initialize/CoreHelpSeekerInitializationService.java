@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
+import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
@@ -44,19 +44,16 @@ public class CoreHelpSeekerInitializationService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
-	private CoreHelpSeekerService coreHelpSeekerService;
-	@Autowired
 	private MarketplaceRepository marketplaceRepository;
 	@Autowired
 	private CoreUserService coreUserService;
+	@Autowired TenantService tenantService;
 
 	public void initHelpSeekers() {
 		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD, "M", "Mustermann", "", "HelpSeeker");
 		createHelpSeeker(USER_FF, "passme", "Wolfgang", "Kronsteiner", "", "Feuerwehr Kommandant");
 		createHelpSeeker("OERK", "passme", "Sandra", "Horvatis", "Rotes Kreuz", "Freiwilligenmanagement");
-		createHelpSeeker(USER_MV, "passme", "Johannes", "Schönböck", "", "Musikverein Obmann");
-		//TODO temp
-		subscribeDefaultHelpseekersToTenants();
+		createHelpSeeker(USER_MV, "passme", "Johannes", "Schönböck", "", "Musikverein Obmann");;
 	}
 
 	private CoreUser createHelpSeeker(String username, String password, String firstName, String lastName,
@@ -71,12 +68,13 @@ public class CoreHelpSeekerInitializationService {
 			helpSeeker.setLastname(lastName);
 			helpSeeker.setNickname(nickName);
 			helpSeeker.setPosition(position);
-			
-			helpSeeker = coreUserRepository.insert(helpSeeker);
+
+//			helpSeeker = coreUserRepository.insert(helpSeeker);
+			coreUserService.addNewUser(helpSeeker, "", false);
 		}
 		return helpSeeker;
 	}
-	
+
 	public void subscribeDefaultHelpseekersToTenants() {
 		String tenantIdFF = coreTenantRepository.findByName(FFEIDENBERG).getId();
 		CoreUser ffUser = coreUserRepository.findOne(USER_FF);
@@ -85,13 +83,25 @@ public class CoreHelpSeekerInitializationService {
 		String tenantIdMV = coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG).getId();
 		CoreUser mvUser = coreUserRepository.findOne(USER_MV);
 
-		ffUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdFF, UserRole.HELP_SEEKER)));
-		rkUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdRK, UserRole.HELP_SEEKER)));
-		mvUser.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenantIdMV, UserRole.HELP_SEEKER)));
+		// TODO: needs change later on, works for now,
+		// since there is only one marketplace
+		Marketplace mp = this.marketplaceRepository.findByName("Marketplace 1");
 		
-		coreUserRepository.save(ffUser);
-		coreUserRepository.save(rkUser);
-		coreUserRepository.save(mvUser);
+		coreUserService.subscribeUserToTenant(USER_FF, mp.getId(), tenantIdFF, UserRole.HELP_SEEKER, "", false);
+		coreUserService.subscribeUserToTenant(USER_RK, mp.getId(), tenantIdRK, UserRole.HELP_SEEKER, "", false);
+		coreUserService.subscribeUserToTenant(USER_MV, mp.getId(), tenantIdMV, UserRole.HELP_SEEKER, "", false);
+
+		
+//		ffUser.setSubscribedTenants(
+//				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdFF, UserRole.HELP_SEEKER)));
+//		rkUser.setSubscribedTenants(
+//				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdRK, UserRole.HELP_SEEKER)));
+//		mvUser.setSubscribedTenants(
+//				Collections.singletonList(new TenantUserSubscription(mp.getId(), tenantIdMV, UserRole.HELP_SEEKER)));
+//
+//		coreUserRepository.save(ffUser);
+//		coreUserRepository.save(rkUser);
+//		coreUserRepository.save(mvUser);
 
 	}
 
@@ -101,28 +111,35 @@ public class CoreHelpSeekerInitializationService {
 		registerDefaultHelpSeeker(USER_RK, TENANT_RK);
 	}
 
-	private void registerDefaultHelpSeeker(String helpSeekerUser, String tenantName) {
-		List<CoreUser> helpSeekers = this.coreUserService.getCoreUsersByRole(UserRole.HELP_SEEKER);
-		List<Tenant> tenants = coreTenantRepository.findAll();
+	private void registerDefaultHelpSeeker(String helpseekerId, String tenantName) {
+//		List<CoreUser> helpSeekers = this.coreUserService.getCoreUsersByRole(UserRole.HELP_SEEKER);
+		
+//		List<Tenant> tenants = coreTenantRepository.findAll();
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+		Tenant tenant = tenantService.getTenantByName(tenantName);
+		
+		coreUserService.registerToMarketplace(helpseekerId, mp.getId(), "");
+		
+		
 
-		CoreUser MV_helpSeeker = helpSeekers.stream().filter(helpSeeker -> helpSeeker.getId().equals(helpSeekerUser))
-				.findFirst().orElse(null);
-		Tenant MV_tenant = tenants.stream().filter(tenant -> tenant.getName().equals(tenantName)).findFirst()
-				.orElse(null);
-		if (MV_helpSeeker != null && MV_tenant != null) {
-			this.registerHelpSeeker(MV_helpSeeker, MV_tenant.getId());
-		}
+//		CoreUser MV_helpSeeker = helpSeekers.stream().filter(helpSeeker -> helpSeeker.getId().equals(helpSeekerUser))
+//				.findFirst().orElse(null);
+//		Tenant MV_tenant = tenants.stream().filter(tenant -> tenant.getName().equals(tenantName)).findFirst()
+//				.orElse(null);
+//		if (MV_helpSeeker != null && MV_tenant != null) {
+//			this.registerHelpSeeker(MV_helpSeeker, MV_tenant.getId());
+//		}
 	}
 
-	private void registerHelpSeeker(CoreUser helpSeeker, String tenantId) {
-		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
-				.findFirst().orElse(null);
-		if (mp != null) {
-			try {
-				coreHelpSeekerService.registerMarketplace(helpSeeker.getId(), mp.getId(), tenantId, "");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+//	private void registerHelpSeeker(CoreUser helpSeeker, String tenantId) {
+//		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+//
+//		if (mp != null) {
+//			try {
+//				coreHelpSeekerService.registerMarketplace(helpSeeker.getId(), mp.getId(), tenantId, "");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 }

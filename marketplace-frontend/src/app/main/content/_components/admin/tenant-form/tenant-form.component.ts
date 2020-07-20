@@ -10,8 +10,8 @@ import { MarketplaceService } from "app/main/content/_service/core-marketplace.s
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { MatTableDataSource } from "@angular/material";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { User } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 
 @Component({
   selector: "tenant-form",
@@ -30,7 +30,7 @@ export class FuseTenantFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private tenantService: TenantService,
-    private coreHelpSeekerService: CoreHelpSeekerService
+    private coreUserService: CoreUserService,
   ) {
     this.tenantForm = formBuilder.group({
       id: new FormControl(undefined),
@@ -68,8 +68,8 @@ export class FuseTenantFormComponent implements OnInit {
     });
 
     this.dataSource.data = <User[]>(
-      await this.coreHelpSeekerService
-        .findAllByTenantId(this.tenant.id)
+      await this.coreUserService
+        .findAllByRoleAndTenantId(this.tenant.id, UserRole.HELP_SEEKER)
         .toPromise()
     );
     console.error(this.dataSource.data);

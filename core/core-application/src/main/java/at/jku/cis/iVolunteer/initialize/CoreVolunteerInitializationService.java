@@ -17,12 +17,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -50,8 +50,6 @@ public class CoreVolunteerInitializationService {
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
 	@Autowired
-	private CoreVolunteerService coreVolunteerService;
-	@Autowired
 	private CoreUserRepository coreUserRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -64,21 +62,21 @@ public class CoreVolunteerInitializationService {
 
 		createVolunteer(USERNAMES[0], RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
 		createVolunteer(USERNAMES[1], RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "",
-				"img/pstarzer.jpg");
+				"/img/pstarzer.jpg");
 		createVolunteer(USERNAMES[2], RAW_PASSWORD, "Markus", "Weißenbek", LocalDate.of(1994, 1, 23), "", "");
 		createVolunteer(USERNAMES[3], RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "",
-				"img/weixlbaumer_small.png");
+				"/img/weixlbaumer_small.png");
 
-		createVolunteer(USERNAMES[4], "passme", "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
-		createVolunteer(USERNAMES[5], "passme", "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
-		createVolunteer(USERNAMES[6], "passme", "Wieland", "Schwinger", LocalDate.of(1976, 6, 9), "", "");
-		createVolunteer(USERNAMES[7], "passme", "Birgit", "Pröll", LocalDate.of(1976, 10, 5), "", "");
-		createVolunteer(USERNAMES[8], "passme", "Katharina", "Kofler", LocalDate.of(1998, 5, 8), "Kati", "");
-		createVolunteer(USERNAMES[9], "passme", "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
-		createVolunteer(USERNAMES[10], "passme", "Kerstin", "Bauer", LocalDate.of(1960, 2, 17), "", "");
-		createVolunteer(USERNAMES[11], "passme", "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
-		createVolunteer(USERNAMES[12], "passme", "Werner", "Haube", LocalDate.of(1970, 8, 8), "", "");
-		createVolunteer(USERNAMES[13], "passme", "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");
+		createVolunteer(USERNAMES[4], RAW_PASSWORD, "Alexander", "Kopp", LocalDate.of(1989, 11, 29), "Alex", "");
+		createVolunteer(USERNAMES[5], RAW_PASSWORD, "Werner", "Retschitzegger", LocalDate.of(1975, 11, 4), "", "");
+		createVolunteer(USERNAMES[6], RAW_PASSWORD, "Wieland", "Schwinger", LocalDate.of(1976, 6, 9), "", "");
+		createVolunteer(USERNAMES[7], RAW_PASSWORD, "Birgit", "Pröll", LocalDate.of(1976, 10, 5), "", "");
+		createVolunteer(USERNAMES[8], RAW_PASSWORD, "Katharina", "Kofler", LocalDate.of(1998, 5, 8), "Kati", "");
+		createVolunteer(USERNAMES[9], RAW_PASSWORD, "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
+		createVolunteer(USERNAMES[10], RAW_PASSWORD, "Kerstin", "Bauer", LocalDate.of(1960, 2, 17), "", "");
+		createVolunteer(USERNAMES[11], RAW_PASSWORD, "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
+		createVolunteer(USERNAMES[12], RAW_PASSWORD, "Werner", "Haube", LocalDate.of(1970, 8, 8), "", "");
+		createVolunteer(USERNAMES[13], RAW_PASSWORD, "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");
 	}
 
 	private CoreUser createVolunteer(String username, String password, String firstName, String lastName,
@@ -97,15 +95,17 @@ public class CoreVolunteerInitializationService {
 
 			setImage(fileName, volunteer);
 
-			// TODO
-			volunteer.setRegisteredMarketplaces(marketplaceRepository.findAll());
+			volunteer.setRegisteredMarketplaceIds(
+					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
 			volunteer = coreUserRepository.insert(volunteer);
+			
+			coreUserService.addNewUser(volunteer, "", false);
 
-//			List<String> tenantIds = new ArrayList<String>();
-//			tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
-//			tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
-//			tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
+			// List<String> tenantIds = new ArrayList<String>();
+			// tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
+			// tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
+			// tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
 			// registerVolunteer(volunteer, tenantIds);
 		}
 		return volunteer;
@@ -113,10 +113,10 @@ public class CoreVolunteerInitializationService {
 
 	private void setImage(String fileName, CoreUser volunteer) {
 		if (fileName != null && !fileName.equals("")) {
+			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
-				Resource resource = new ClassPathResource(fileName);
-				File file = resource.getFile();
-				volunteer.setImage(Files.readAllBytes(file.toPath()));
+				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
+				volunteer.setImage(binaryData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -124,36 +124,35 @@ public class CoreVolunteerInitializationService {
 	}
 
 	protected void subscribeVolunteersToAllTenants() {
-		List<CoreUser> volunteers = new ArrayList<>();
-		coreUserRepository.findAll(Arrays.asList(USERNAMES)).forEach(volunteers::add);
+		ArrayList<CoreUser> volunteers = new ArrayList<>();
+		coreUserRepository.findByUsernameIn(Arrays.asList(USERNAMES)).forEach(volunteers::add);
 
 		List<Tenant> tenants = coreTenantRepository.findAll();
 
-		for (CoreUser user : volunteers) {
-			for (Tenant tenant : tenants) {
-				user.setSubscribedTenants(Collections.singletonList(new TenantUserSubscription(tenant.getId(), UserRole.VOLUNTEER)));
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+
+		for (int i = 0; i < volunteers.size(); i++) {
+			CoreUser volunteer = volunteers.get(i);
+			volunteer.setSubscribedTenants(new ArrayList<TenantUserSubscription>());
+			for (Tenant t : tenants) {
+				volunteer.addSubscribedTenant(mp.getId(), t.getId(), UserRole.VOLUNTEER);
 			}
+			coreUserService.updateUser(volunteer, "", false);
 		}
-		coreUserRepository.save(volunteers);
+
 	}
-	
 
 	protected void registerVolunteers() {
-		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
-				.collect(Collectors.toList());
-		this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER)
-				.forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+		
+		this.coreUserService.getAllByUserRole(UserRole.VOLUNTEER).forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
 	}
 
-	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
-		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
-				.findFirst().orElse(null);
-		if (mp != null) {
-			try {
-				coreVolunteerService.subscribeTenant(volunteer.getId(), mp.getId(), tenantIds, "");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+//	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
+//		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+//
+//		if (mp != null) {
+//			coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
+//		}
+//	}
 }

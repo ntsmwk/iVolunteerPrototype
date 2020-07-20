@@ -7,11 +7,11 @@ import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { Marketplace } from "../../../_model/marketplace";
 import { StoredChart } from "../../../_model/stored-chart";
 import { isNullOrUndefined } from "util";
-import { ClassInstance, ClassInstanceDTO } from "../../../_model/meta/class";
+import { ClassInstanceDTO } from "../../../_model/meta/class";
 import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
 import { MatPaginator, MatSort } from "@angular/material";
 import { TenantService } from "../../../_service/core-tenant.service";
-import { VolunteerService } from "../../../_service/volunteer.service";
+import { UserService } from 'app/main/content/_service/user.service';
 
 @Component({
   selector: "recruit-view",
@@ -25,8 +25,8 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     private marketplaceService: MarketplaceService,
     private classInstanceService: ClassInstanceService,
     private coreTenantService: TenantService,
-    private volunteerService: VolunteerService
-  ) {}
+    private userService: UserService,
+  ) { }
   private tableDataSource = new MatTableDataSource<ClassInstanceDTO>([]);
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -73,7 +73,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   verify3 = false;
   verify5 = false;
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit(): void {
     Promise.all([
@@ -104,7 +104,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       .then((tenantId: string) => {
         this.tenantId.push(tenantId);
 
-        this.volunteerService
+        this.userService
           .findByName(this.marketplace, "mweixlbaumer")
           .toPromise()
           .then((volunteer: User) => {

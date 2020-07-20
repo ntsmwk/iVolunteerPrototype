@@ -1,8 +1,8 @@
 <div class="browse-dialog-content pt-8">
 
   <div fxLayout="row" fxLayoutAlign="space-between center pb-4">
-    <h2 *ngIf="data.sourceReference === 'PRODUCER'">Konfiguration für Werkunternehmen wählen</h2>
-    <h2 *ngIf="data.sourceReference === 'CONSUMER'">Konfiguration für Werkbesteller wählen</h2>
+    <h2 *ngIf="data.sourceReference === 'LEFT'">Konfiguration für Werkunternehmen wählen</h2>
+    <h2 *ngIf="data.sourceReference === 'RIGHT'">Konfiguration für Werkbesteller wählen</h2>
     <h2 *ngIf="data.sourceReference === undefined">{{data.title}}</h2>
   </div>
 

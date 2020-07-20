@@ -2,14 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
 
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { PropertyDefinition } from "app/main/content/_model/meta/property";
 import { isNullOrUndefined } from "util";
-import { Tenant } from "app/main/content/_model/tenant";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Router, Route, ActivatedRoute } from "@angular/router";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { ActivatedRoute } from "@angular/router";
 import { User } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "app-property-build-form",
@@ -33,10 +30,7 @@ export class PropertyBuildFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private loginService: LoginService,
-    private helpseekerService: CoreHelpSeekerService,
-    private marketplaceService: MarketplaceService,
-    private tenantService: TenantService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.displayBuilder = true;
@@ -57,14 +51,11 @@ export class PropertyBuildFormComponent implements OnInit {
       }),
     ]);
 
-    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
-    // console.log(this.helpseeker);
-
-    this.marketplace = <
-      Marketplace // await this.helpseekerService
-    >//   .findRegisteredMarketplaces(this.helpseeker.id)
-    //   .toPromise()
-    await this.marketplaceService.findById(this.marketplaceId).toPromise();
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.helpseeker = globalInfo.user;
+    this.marketplace = globalInfo.marketplace;
 
     this.loaded = true;
   }

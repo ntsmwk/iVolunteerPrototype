@@ -49,22 +49,12 @@ public class ClassConfigurationController {
 	List<ClassConfiguration> getAllClassConfigurations() {
 		return classConfigurationRepository.findAll();
 	}
-
-	@GetMapping("class-configuration/all/sort")
-	public List<ClassConfiguration> getAllClassConfigurationsWithSort(
-			@RequestParam(value = "sorted", required = false) String sortType) {
-
-//		if (sortType.equalsIgnoreCase("asc")) {
-//			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
-//
-//		} else if (sortType.equalsIgnoreCase("desc")) {
-//			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.DESC, "date"));
-//		} 
-
-		List<ClassConfiguration> classConfigurations = classConfigurationRepository
-				.findAllWithSort(new Sort(Sort.Direction.ASC, "name"));
-		return classConfigurations;
+	
+	@GetMapping("class-configuration/all/tenant/{tenantId}")
+	private List<ClassConfiguration> getClassConfigurationsByTenantId(@PathVariable("tenantId") String tenantId)  {
+		return classConfigurationRepository.findByTenantId(tenantId);
 	}
+
 
 	@GetMapping("class-configuration/{id}")
 	public ClassConfiguration getClassConfigurationById(@PathVariable("id") String id) {
@@ -92,8 +82,6 @@ public class ClassConfigurationController {
 
 	@PostMapping("class-configuration/new")
 	public ClassConfiguration createNewClassConfiguration(@RequestBody String[] params) {
-		System.out.println(params.length);
-		System.out.println(params[0] + " " + params[1] + " " + params[2]);
 		if (params.length != 3) {
 			return null;
 		}

@@ -1,25 +1,26 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
 import { User, UserRole } from "../../../../../_model/user";
-import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, ControlContainer, FormArray } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
   AttributeCondition,
   ClassCondition,
   AggregationOperatorType,
 } from "app/main/content/_model/derivation-rule";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
-
+import { GlobalInfo } from "app/main/content/_model/global-info";
 @Component({
   selector: "class-rule-precondition",
   templateUrl: "./class-rule-configurator-precondition.component.html",
@@ -50,9 +51,8 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private helpSeekerService: CoreHelpSeekerService,
     private parentForm: FormGroupDirective
-  ) {
+) {
     this.rulePreconditionForm = formBuilder.group({
       classDefinitionId: new FormControl(undefined, [Validators.required]),
       aggregationOperatorType: new FormControl(undefined, [Validators.required]),
@@ -61,7 +61,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.classConditionForms = <FormArray>this.parentForm.form.controls['classConditionForms'];  
     this.classConditionForms.push(this.rulePreconditionForm);
 
@@ -70,9 +70,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         (this.classCondition.classDefinition
           ? this.classCondition.classDefinition.id
           : "") || "",
-      aggregationOperatorType: this.classCondition.aggregationOperatorType 
-         || "" ,
-       value: this.classCondition.value || "",
+      aggregationOperatorType:
+        this.classCondition.aggregationOperatorType || "",
+      value: this.classCondition.value || "",
     });
 
     this.classCondition.attributeConditions = this.classCondition
@@ -81,28 +81,22 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       : new Array();
     this.aggregationOperators = Object.keys(AggregationOperatorType);
 
-    this.loginService
-      .getLoggedIn()
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.marketplace = globalInfo.marketplace;
+    this.helpseeker = globalInfo.user;
+
+    this.classDefinitionService
+      .getAllClassDefinitionsWithoutHeadAndEnums(
+        this.marketplace,
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId
+      )
       .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
-            this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
-                marketplace,
-                this.helpseeker.subscribedTenants.find(
-                  (t) => t.role === UserRole.HELP_SEEKER
-                ).tenantId
-              )
-              .toPromise()
-              .then((definitions: ClassDefinition[]) => {
-                this.classDefinitions = definitions;
-              });
-          });
+      .then((definitions: ClassDefinition[]) => {
+        this.classDefinitions = definitions;
       });
   }
 
@@ -111,7 +105,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   }*/
 
   onClassChange(classDefinition: ClassDefinition, $event) {
-    if ($event.isUserInput){
+    if ($event.isUserInput) {
       if (!this.classCondition.classDefinition) {
         this.classCondition.classDefinition = new ClassDefinition();
       }

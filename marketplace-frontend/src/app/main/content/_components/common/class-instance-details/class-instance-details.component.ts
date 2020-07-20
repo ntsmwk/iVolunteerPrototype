@@ -15,10 +15,8 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { PropertyInstance } from "app/main/content/_model/meta/property";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { GlobalService } from "app/main/content/_service/global.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
-import { globalEval } from "jquery";
-import { VolunteerService } from "app/main/content/_service/volunteer.service";
+import { UserService } from 'app/main/content/_service/user.service';
 
 @Component({
   selector: "app-class-instance-details",
@@ -46,9 +44,9 @@ export class ClassInstanceDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private classInstanceService: ClassInstanceService,
     private tenantService: TenantService,
-    private globalService: GlobalService,
     private localRepositoryService: LocalRepositoryService,
-    private volunteerService: VolunteerService,
+    private userService: UserService,
+    private loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.route.params.subscribe((params) => {
@@ -63,7 +61,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
     }
 
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
     this.user = globalInfo.user;
     this.role = globalInfo.userRole;
@@ -89,7 +87,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
 
     if (this.role === UserRole.HELP_SEEKER) {
       this.volunteer = <User>(
-        await this.volunteerService
+        await this.userService
           .findById(this.marketplace, this.classInstance.userId)
           .toPromise()
       );
@@ -105,7 +103,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
       .values[0];
   }
 
-  getVolunteerName(userId: string) {}
+  getVolunteerName(userId: string) { }
 
   sortData(sort: Sort) {
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {

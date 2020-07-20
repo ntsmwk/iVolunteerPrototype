@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
-import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
 import { isNullOrUndefined } from "util";
 import { Marketplace } from "../../../../_model/marketplace";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
@@ -23,9 +22,9 @@ import * as Highcharts from "highcharts";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { DialogFactoryDirective } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { GlobalService } from "app/main/content/_service/global.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { User } from "app/main/content/_model/user";
+import { LoginService } from "app/main/content/_service/login.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -41,7 +40,7 @@ export class DashboardVolunteerComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  isLoaded: boolean;
+  isLoaded: boolean = false;
 
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
   private displayedColumnsRepository: string[] = [
@@ -70,8 +69,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   nrMpUnionLr: number = 0;
 
-  isLocalRepositoryConnected: boolean;
-  timeout: boolean = false;
+  isLocalRepositoryConnected: boolean = true;
 
   vennData = [];
   chartOptions: Highcharts.Options = {
@@ -94,14 +92,13 @@ export class DashboardVolunteerComponent implements OnInit {
     public dialog: MatDialog,
     private classInstanceService: ClassInstanceService,
     private localRepositoryService: LocalRepositoryService,
-    private volunteerService: CoreVolunteerService,
     private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
     private router: Router,
     private iconRegistry: MatIconRegistry,
     private dialogFactory: DialogFactoryDirective,
-    private globalService: GlobalService
+    private loginService: LoginService
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -126,15 +123,9 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let t = timer(3000);
-    t.subscribe(() => {
-      this.timeout = true;
-    });
-
     let globalInfo = <GlobalInfo>(
-      await this.globalService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo().toPromise()
     );
-
     this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
@@ -143,10 +134,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-      this.volunteer
-    );
-    if (this.isLocalRepositoryConnected) {
+    try {
       let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
@@ -205,7 +193,11 @@ export class DashboardVolunteerComponent implements OnInit {
       this.dataSource.data = this.filteredClassInstanceDTOs;
 
       this.generateSharedTenantsMap();
+      this.isLocalRepositoryConnected = true;
+    } catch (e) {
+      this.isLocalRepositoryConnected = false;
     }
+    this.isLoaded = true;
   }
 
   setVolunteerImage() {
@@ -252,7 +244,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe((result: any) => { });
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -720,7 +712,7 @@ export class DashboardVolunteerComponent implements OnInit {
     ];
     Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) {}
+  onVennClicked(event) { }
 }
 
 export interface DialogData {

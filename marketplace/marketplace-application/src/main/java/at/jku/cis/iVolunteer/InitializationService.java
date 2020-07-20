@@ -16,7 +16,9 @@ import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
-import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.enums.EnumDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingCollectorConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
@@ -46,6 +48,8 @@ public class InitializationService {
 	@Autowired protected PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired protected ClassConfigurationRepository classConfigurationRepository;
 	@Autowired protected MatchingConfigurationRepository matchingConfigurationRepository;
+	@Autowired protected MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired protected EnumDefinitionRepository enumDefinitionRepository;
 	
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
@@ -55,8 +59,6 @@ public class InitializationService {
 
 	@Autowired protected TestDataClasses testDataClasses;
 	@Autowired protected TestDataInstances testDataInstances;
-	
-	@Autowired private APIInitializationService apiInitializationService;
 
 //	private static final String FFEIDENBERG = "FF Eidenberg";
 //	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
@@ -82,12 +84,12 @@ public class InitializationService {
 		// addConfigurators();
 
 		// addConfiguratorSlots();
-		addiVolunteerPropertyDefinitions();
-		addClassConfigurations();
-		
-		apiInitializationService.addiVolunteerAPIClassDefinition();
-		// testDataClasses.createClassConfigurations();
-		testDataInstances.createUserData();
+//		addiVolunteerPropertyDefinitions();
+//		addClassConfigurations();
+//		
+//		apiInitializationService.addiVolunteerAPIClassDefinition();
+//		// testDataClasses.createClassConfigurations();
+//		testDataInstances.createUserData();
 		// addTestClassInstances();
 	}
 	

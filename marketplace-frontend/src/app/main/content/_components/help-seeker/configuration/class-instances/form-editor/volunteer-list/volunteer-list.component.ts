@@ -6,12 +6,12 @@ import {
   EventEmitter,
   ViewChild,
 } from "@angular/core";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ImageService } from "app/main/content/_service/image.service";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 
 @Component({
   selector: "app-instance-creation-volunteer-list",
@@ -33,20 +33,20 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
   loaded: boolean;
 
   constructor(
-    private coreVolunteerService: CoreVolunteerService,
+    private coreUserService: CoreUserService,
     private imageService: ImageService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.volunteers = [];
     this.datasource = new MatTableDataSource();
 
     Promise.all([
-      this.coreVolunteerService
-        .findAllByTenantId(
+      this.coreUserService
+        .findAllByRoleAndTenantId(
           this.helpseeker.subscribedTenants.find(
             (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          ).tenantId, UserRole.VOLUNTEER
         )
         .toPromise()
         .then((volunteers: User[]) => {
@@ -64,8 +64,7 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
 
   getImage(userId: string) {
     let user = this.volunteers.find((v) => v.id === userId);
-
-    if (isNullOrUndefined(user)) {
+    if (isNullOrUndefined(user.image)) {
       return "/assets/images/avatars/profile.jpg";
     } else {
       return this.imageService.getImgSourceFromBytes(user.image);

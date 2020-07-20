@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.core.marketplace;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class MarketplaceService {
 
 	public Marketplace findById(@PathVariable("marketplaceId") String marketplaceId) {
 		return marketplaceRepository.findOne(marketplaceId);
+	}
+	
+	public List<Marketplace> findAll(List<String> marketplaceIds) {
+		List<Marketplace> marketplaces = new ArrayList<Marketplace>();
+		marketplaceRepository.findAll(marketplaceIds).forEach(marketplaces::add);
+		return marketplaces;
 	}
 
 	public Marketplace createMarketplace(@RequestBody Marketplace marketplace) {
