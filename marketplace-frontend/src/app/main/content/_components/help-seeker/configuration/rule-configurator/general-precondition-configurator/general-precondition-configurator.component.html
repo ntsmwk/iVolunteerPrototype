@@ -4,7 +4,7 @@
   <mat-form-field *ngIf="generalAttributes && generalAttributes.length > 0" style="width: 225px">
     <mat-label>Attribut</mat-label>
     <mat-select formControlName="propertyDefinitionId" [value]="generalCondition?.propertyDefinition?.id">
-      <mat-option *ngFor="let pd of generalAttributes" [value]="pd?.id" (onSelectionChange)="onPropertyChange($event)">
+      <mat-option *ngFor="let pd of generalAttributes" [value]="pd?.id" (onSelectionChange)="onPropertyChange(pd, $event)">
         {{pd.name}} </mat-option>
     </mat-select>
   </mat-form-field>

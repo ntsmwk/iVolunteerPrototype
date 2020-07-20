@@ -16,6 +16,13 @@ export class GeneralCondition{
   propertyDefinition: PropertyDefinition<any>;
   comparisonOperatorType: ComparisonOperatorType;
   value: any;
+
+  private retrieveComparisonOperatorValueOf(op) {
+    let x: ComparisonOperatorType =
+      ComparisonOperatorType[op as keyof typeof ComparisonOperatorType];
+    return x;
+  }
+
 }
 
 export class AttributeCondition {
@@ -27,6 +34,12 @@ export class AttributeCondition {
 
   constructor(classDefinition: ClassDefinition) {
     this.classDefinition = classDefinition;
+  }
+
+  private retrieveComparisonOperatorValueOf(op) {
+    let x: ComparisonOperatorType =
+      ComparisonOperatorType[op as keyof typeof ComparisonOperatorType];
+    return x;
   }
 }
 

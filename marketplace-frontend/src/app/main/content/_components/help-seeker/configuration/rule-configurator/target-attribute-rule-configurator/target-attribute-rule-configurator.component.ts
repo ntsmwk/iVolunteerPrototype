@@ -5,7 +5,7 @@ import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
 
 import { MessageService } from "../../../../../_service/message.service";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, ControlContainer, FormGroupDirective, Validators, FormArray } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { AttributeCondition } from "app/main/content/_model/derivation-rule";
@@ -19,16 +19,19 @@ import {
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
 import { User, UserRole } from "app/main/content/_model/user";
+import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 
 @Component({
   selector: "target-attribute-rule-configurator",
   templateUrl: "./target-attribute-rule-configurator.component.html",
   styleUrls: ["./target-attribute-rule-configurator.component.scss"],
+  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
 })
 export class TargetAttributeRuleConfiguratorComponent implements OnInit {
+ // @Input("parentFormArray") parentFormArray: FormArray;
   @Input("attributeTarget")
   attributeTarget: AttributeCondition;
-  @Output("attributeTarget")
+  @Output("attributeTargetChange")
   attributeTargetChange: EventEmitter<AttributeCondition> = new EventEmitter<
     AttributeCondition
   >();
@@ -39,11 +42,15 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   ruleTargetAttributeForm: FormGroup;
   classProperties: ClassProperty<any>[] = [];
 
+  attributeForms: FormArray;
+
   enumValues = [];
 
   propertyDefinition: PropertyDefinition<any>;
 
   classDefinitionCache: ClassDefinition[] = [];
+
+  targetValidationMessages = DerivationRuleValidators.ruleValidationMessages;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,15 +59,20 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
+    private parent: FormGroupDirective
   ) {
-    this.ruleTargetAttributeForm = formBuilder.group({
-      classPropertyId: new FormControl(undefined),
-      value: new FormControl(undefined),
-    });
   }
 
   ngOnInit() {
+    this.attributeForms = <FormArray>this.parent.form.controls['targetAttributes'];  
+    
+    this.ruleTargetAttributeForm = this.formBuilder.group({
+      classPropertyId: new FormControl(undefined, [Validators.required]),
+      value: new FormControl(undefined, [Validators.required])
+    });
+    
+    this.attributeForms.push(this.ruleTargetAttributeForm);
     this.ruleTargetAttributeForm.setValue({
       classPropertyId:
         (this.attributeTarget.classProperty
@@ -85,6 +97,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   onPropertyChange($event) {
+    console.log( "attribute target --> property change");
     if (!this.attributeTarget.classProperty) {
       this.attributeTarget.classProperty = new ClassProperty();
     }
@@ -131,16 +144,19 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   onChange($event) {
+    console.log(" attribute target --> on change --> set class property definition");
     if (this.classProperties.length > 0) {
       this.attributeTarget.classProperty =
         this.classProperties.find(
           (cp) => cp.id === this.ruleTargetAttributeForm.value.classPropertyId
         ) || new ClassProperty();
+      console.log(" class property: " + this.attributeTarget.classProperty);
       this.attributeTargetChange.emit(this.attributeTarget);
     }
   }
 
   onChangeValue($event) {
+    console.log( "attribute target --> value change");
     if (this.classProperties.length > 0) {
       this.attributeTarget.classProperty =
         this.classProperties.find(

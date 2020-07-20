@@ -7,6 +7,11 @@
         <mat-option *ngFor="let cp of classProperties" [value]="cp?.id" (onSelectionChange)="onPropertyChange(cp, $event)">
           {{cp.name}} </mat-option>
       </mat-select>
+      <mat-error *ngFor="let validation of attributeValidationMessages.property">
+        <mat-error class="error-message" *ngIf="rulePreconditionForm.get('classPropertyId').hasError(validation.type) && 
+         (rulePreconditionForm.get('classPropertyId').dirty || rulePreconditionForm.get('classPropertyId').touched)">
+         {{validation.message}}</mat-error>
+      </mat-error>
     </mat-form-field>
     <mat-form-field style="width: 100px">
       <mat-label>Vergleichsoperator</mat-label>
@@ -16,6 +21,11 @@
           {{ retrieveComparisonOperatorValueOf(op)}}
         </mat-option>
       </mat-select>
+      <mat-error *ngFor="let validation of attributeValidationMessages.comparisonOperator">
+        <mat-error class="error-message" *ngIf="rulePreconditionForm.get('comparisonOperatorType').hasError(validation.type) && 
+         (rulePreconditionForm.get('comparisonOperatorType').dirty || rulePreconditionForm.get('comparisonOperatorType').touched)">
+         {{validation.message}}</mat-error>
+      </mat-error>
     </mat-form-field>
     <mat-form-field style="width: 150px">
       <input *ngIf="attributeCondition?.classProperty?.type != 'ENUM'" matInput placeholder="value"
@@ -26,6 +36,11 @@
           {{ enumVal }}
         </mat-option>
       </mat-select>
+      <mat-error *ngFor="let validation of attributeValidationMessages.value">
+        <mat-error class="error-message" *ngIf="rulePreconditionForm.get('value').hasError(validation.type) && 
+         (rulePreconditionForm.get('value').dirty || rulePreconditionForm.get('value').touched)">
+         {{validation.message}}</mat-error>
+      </mat-error>
     </mat-form-field>
   </div>
 </form>

@@ -13,11 +13,9 @@ public class NECriteria extends SingleCriteria {
 	}
 
 	@Override
-	public List<ClassInstance> meetCriteria(List<ClassInstance> instances){
-		System.out.println(" not equals - filter .... instances: " + instances.size());	
-		List<ClassInstance> filtered = instances.stream().filter(p -> !p.getProperty(propertyId).getValues().get(0).equals(value)).collect(Collectors.toList());
-		System.out.println(" filtered .... instances: " + filtered.size());
-		return instances.stream().filter(p -> !p.getProperty(propertyId).getValues().get(0).equals(value)).collect(Collectors.toList());
+	protected boolean filterByCriteria(PropertyInstance<Object> pi) {
+		return pi.getValues()
+			     .stream().noneMatch(v -> v.equals(value));
 	}
 	
 }

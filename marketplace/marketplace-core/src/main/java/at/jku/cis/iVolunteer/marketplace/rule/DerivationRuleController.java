@@ -30,16 +30,12 @@ public class DerivationRuleController {
 	
 	@GetMapping("/{ruleId}")
 	public DerivationRuleDTO getRule(@PathVariable String ruleId) {
-		System.out.println(" get rule by id");
 		return derivationRuleService.getRule(ruleId);
 	}
 
 	@GetMapping("/tenant/{tenantId}/container/{container}/rule/{ruleName}")
 	public DerivationRuleDTO getRule(@PathVariable String tenantId, @PathVariable String container, @PathVariable String ruleName) {
-		System.out.println("getRule - tenantId: " + tenantId + ", container: " + container + ", ruleName: " + ruleName);
 		DerivationRuleDTO dto = derivationRuleService.getRuleByContainerAndName(tenantId, container, ruleName);
-		System.out.println(" -------------------------------------------------------------------");
-		System.out.println(" ruleId: " + dto.getId());
 		return dto;
 	}
 
@@ -55,7 +51,6 @@ public class DerivationRuleController {
 
 	@PutMapping("/{ruleId}")
 	public void updateRule(@PathVariable String ruleId, @RequestBody DerivationRuleDTO derivationRule) {
-		System.out.println("update rule???????");
 		derivationRuleService.updateRule(ruleId, derivationRule);
 	}
 	

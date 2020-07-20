@@ -7,6 +7,11 @@
                 <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
                     (onSelectionChange)="onClassChange(cd, $event)"> {{cd.name}} </mat-option>
             </mat-select>
+            <mat-error *ngFor="let validation of conditionValidationMessages.classDefinition">
+                <mat-error class="error-message" *ngIf="rulePreconditionForm.get('classDefinitionId').hasError(validation.type) && 
+                 (rulePreconditionForm.get('classDefinitionId').dirty || rulePreconditionForm.get('classDefinitionId').touched)">
+                 {{validation.message}}</mat-error>
+              </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 115px">
             <mat-label>Aggregationsoperator</mat-label>
@@ -16,15 +21,22 @@
                          {{ retrieveAggregationOperatorValueOf(op)}} 
                 </mat-option>
             </mat-select>
+            <mat-error *ngFor="let validation of conditionValidationMessages.aggregationOperator">
+                <mat-error class="error-message" *ngIf="rulePreconditionForm.get('aggregationOperatorType').hasError(validation.type) && 
+                 (rulePreconditionForm.get('aggregationOperatorType').dirty || rulePreconditionForm.get('aggregationOperatorType').touched)">
+                 {{validation.message}}</mat-error>
+              </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 150px">
             <input matInput placeholder="Wert" formControlName="value" />
         </mat-form-field>
     </div>
+    <div formArrayName="classAttributeForms">
     <div *ngFor="let attribute of classCondition.attributeConditions">
         <attribute-rule-precondition
           [(attributeCondition)]="attribute"
         ></attribute-rule-precondition>
+    </div>
     </div>
     <div *ngIf="classCondition?.classDefinition?.properties.length > 0">
         <button

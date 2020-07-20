@@ -5,7 +5,7 @@ import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
 import { User, UserRole } from "../../../../../_model/user";
 import { MessageService } from "../../../../../_service/message.service";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, ControlContainer, FormArray } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
@@ -18,11 +18,13 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
+import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 
 @Component({
   selector: "class-rule-precondition",
   templateUrl: "./class-rule-configurator-precondition.component.html",
   styleUrls: ["../rule-configurator.component.scss"],
+  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
 })
 export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   @Input("classCondition") classCondition: ClassCondition;
@@ -33,12 +35,14 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   helpseeker: User;
   marketplace: Marketplace;
   role: UserRole;
+  classConditionForms: FormArray;
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   attributes: AttributeCondition[] = [];
   aggregationOperators: any;
 
   classDefinitionCache: ClassDefinition[] = [];
+  conditionValidationMessages = DerivationRuleValidators.ruleValidationMessages;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,17 +50,22 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
+    private parentForm: FormGroupDirective
   ) {
     this.rulePreconditionForm = formBuilder.group({
-      classDefinitionId: new FormControl(undefined),
-      aggregationOperatorType: new FormControl(undefined),
-      value: new FormControl(undefined),
+      classDefinitionId: new FormControl(undefined, [Validators.required]),
+      aggregationOperatorType: new FormControl(undefined, [Validators.required]),
+      value: new FormControl(undefined), 
+      classAttributeForms: new FormArray([])
     });
   }
 
   ngOnInit() {
-    this.rulePreconditionForm.setValue({
+    this.classConditionForms = <FormArray>this.parentForm.form.controls['classConditionForms'];  
+    this.classConditionForms.push(this.rulePreconditionForm);
+
+    this.rulePreconditionForm.patchValue({
       classDefinitionId:
         (this.classCondition.classDefinition
           ? this.classCondition.classDefinition.id

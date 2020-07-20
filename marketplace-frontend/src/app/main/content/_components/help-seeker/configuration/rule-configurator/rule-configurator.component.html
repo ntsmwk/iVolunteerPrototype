@@ -80,9 +80,14 @@
     <div fxLayout="row">
       <mat-form-field class="nameInput">
         <input matInput placeholder="Regelname" (change)="onChangeName($event)" formControlName="name" />
+        <mat-error *ngFor="let validation of ruleValidationMessages.name">
+          <mat-error class="error-message" *ngIf="ruleForm.get('name').hasError(validation.type) && 
+           (ruleForm.get('name').dirty || ruleForm.get('name').touched)">
+           {{validation.message}}</mat-error>
+        </mat-error>
       </mat-form-field>
     </div>
-
+  
     <div style="font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
       <div fxFlex fxLayout="row" fxLayoutAlign="start start">
@@ -139,11 +144,14 @@
       </div>
       <mat-divider></mat-divider>
     </div>
+    <div formArrayName="genConditionForms">
     <div *ngFor="let entry of derivationRule.generalConditions">
       <general-precondition
           [(generalCondition)]="entry"
+          (onChangeGeneralCondition) = "onChangeGeneralCondition($event)"
         ></general-precondition>     
       </div>
+    </div>
    <div>
       <button
         type="button"
@@ -157,11 +165,13 @@
 
     <div style="font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
+    <div formArrayName="classConditionForms">
     <div *ngFor="let entry of derivationRule.conditions">
       <class-rule-precondition 
         [(classCondition)]="entry"
         (classConditionChange)="onChangeClassCondition($event)"
       ></class-rule-precondition>
+    </div>
     </div>
   </div>
 
@@ -211,3 +221,4 @@
 </div>
 <!--(change)="onChange($event)"-->
 <!-- (classConditionChange)="onChangeClassCondition($event)"-->
+<!-- [(ruleActionForm)] = "ruleActionForm[i]"-->

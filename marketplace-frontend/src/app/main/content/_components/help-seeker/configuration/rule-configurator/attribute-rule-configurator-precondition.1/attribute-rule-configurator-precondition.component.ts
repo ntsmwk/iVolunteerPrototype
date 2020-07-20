@@ -5,7 +5,7 @@ import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
 import { User, UserRole } from "../../../../../_model/user";
 import { MessageService } from "../../../../../_service/message.service";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, FormGroupDirective, ControlContainer, FormArray, Validators } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
@@ -23,11 +23,13 @@ import {
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
+import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 
 @Component({
   selector: "attribute-rule-precondition",
   templateUrl: "./attribute-rule-configurator-precondition.component.html",
   styleUrls: ["../rule-configurator.component.scss"],
+  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
 })
 export class FuseAttributeRulePreconditionConfiguratorComponent
   implements OnInit {
@@ -51,7 +53,10 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   propertyDefinition: PropertyDefinition<any>;
 
   classDefinitionCache: ClassDefinition[] = [];
+  attributeForms: FormArray;
 
+  attributeValidationMessages = DerivationRuleValidators.ruleValidationMessages;
+  
   constructor(
     private route: ActivatedRoute,
     private loginService: LoginService,
@@ -59,12 +64,13 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
     private propertyDefinitionService: PropertyDefinitionService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
+    private parent: FormGroupDirective
   ) {
     this.rulePreconditionForm = formBuilder.group({
-      classPropertyId: new FormControl(undefined),
-      comparisonOperatorType: new FormControl(undefined),
-      value: new FormControl(undefined),
+      classPropertyId: new FormControl(undefined, [Validators.required]),
+      comparisonOperatorType: new FormControl(undefined, [Validators.required]),
+      value: new FormControl(undefined, [Validators.required]),
     });
   }
 
@@ -76,9 +82,12 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
           : "") || "",
       comparisonOperatorType:
         this.attributeCondition.comparisonOperatorType ||
-        ComparisonOperatorType.EQ,
+        " ",
       value: this.attributeCondition.value || "",
     });
+    this.attributeForms = <FormArray>this.parent.form.controls['classAttributeForms'];  
+    this.attributeForms.push(this.rulePreconditionForm);
+
 
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
@@ -165,19 +174,13 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   }
 
   onOperatorChange(op, $event) {
-    console.log("on operator change begin ....");
     if ($event.isUserInput) {
       // ignore on deselection of the previous option
-      console.log("Selection changed to " + op);
-      console.log("operator changed to " + op);
       this.attributeCondition.comparisonOperatorType = op;
-      console.log("op neu: " + this.attributeCondition.comparisonOperatorType);
     }
-    console.log("on operator change end ....");
   }
 
   onChange($event) {
-    console.log("change values in attribute, yay!");
     if (this.classProperties.length > 0 ) {
       this.attributeCondition.classProperty =
         this.classProperties.find(
@@ -186,9 +189,6 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       this.attributeCondition.comparisonOperatorType = this.rulePreconditionForm.value.comparisonOperatorType;
       this.attributeCondition.value = this.rulePreconditionForm.value.value;
       this.attributeConditionChange.emit(this.attributeCondition);
-      console.log(this.attributeCondition.value);
-      console.log(this.attributeCondition.classProperty.name);
-      console.log(this.attributeCondition.comparisonOperatorType);
     }
   }
 

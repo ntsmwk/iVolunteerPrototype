@@ -3,17 +3,25 @@
     <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
         <mat-form-field *ngIf="classDefinitions && classDefinitions.length > 0" style="width: 225px">
             <mat-label>Neuer Freiwillenpasseintrag</mat-label>
-            <mat-select formControlName="classDefinitionId" [value]="classAction.classDefinition?.id">
+            <mat-select formControlName="classDefinitionId" [value]="classAction.classDefinition?.id" >
                 <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
                     (onSelectionChange)="onTargetChange(cd, $event)">
                {{retrieveClassType(cd.classArchetype)}} &ngsp; {{cd.name}} </mat-option>
             </mat-select>
+            <mat-error *ngFor="let validation of targetValidationMessages.classDefinition">
+              <mat-error class="error-message" *ngIf="ruleActionForm.get('classDefinitionId').hasError(validation.type) && 
+               (ruleActionForm.get('classDefinitionId').dirty || ruleActionForm.get('classDefinitionId').touched)">
+               {{validation.message}}</mat-error>
+            </mat-error>
         </mat-form-field>
     </div>
+    <div formArrayName="targetAttributes">
     <div *ngFor="let attribute of classAction.attributes">
-        <target-attribute-rule-configurator
+        <target-attribute-rule-configurator 
           [(attributeTarget)]="attribute"
+          (attributeTargetChange) = "onChangeTargetAttribute($event)"
         ></target-attribute-rule-configurator>
+    </div>
     </div>
     <div *ngIf="classAction?.classDefinition?.properties.length > 0"> 
         <button
@@ -26,3 +34,12 @@
         </button>
       </div>
 </form>
+<!--
+  <mat-error *ngFor="let validation of ruleValidationMessages.name">
+              <mat-error class="error-message" *ngIf="ruleForm.get('name').hasError(validation.type) && 
+               (ruleForm.get('name').dirty || ruleForm.get('name').touched)">
+               {{validation.message}}</mat-error>
+            </mat-error>
+
+           
+-->

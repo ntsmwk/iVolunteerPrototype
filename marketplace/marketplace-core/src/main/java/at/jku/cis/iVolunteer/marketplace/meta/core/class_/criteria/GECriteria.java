@@ -1,8 +1,10 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria;
 
 import java.util.List;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -11,31 +13,27 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 public class GECriteria extends SingleCriteria {
+	
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd.yyyy");
 
 	public GECriteria(String propertyId, Object value) {
 		super(propertyId, value);
 	}
-
-	@Override
-	public List<ClassInstance> meetCriteria(List<ClassInstance> instances){
-		System.out.println(" filter .... " + instances.size());
-		List<ClassInstance> filtered = instances.stream().filter(p -> {
-			PropertyInstance<Object> pi = p.getProperty(propertyId);
-			switch (pi.getType()) {
-			case DATE:
-				LocalDateTime d = LocalDateTime.ofInstant(((Date)pi.getValues().get(0)).toInstant(),
-                        ZoneId.systemDefault());
-				return d.isAfter(LocalDateTime.parse((CharSequence) value)) ||
-					   d.isEqual(LocalDateTime.parse((CharSequence) value));
-			case FLOAT_NUMBER:
-				return (Double)pi.getValues().get(0) >= (Double)value;
-			case WHOLE_NUMBER:
-				return Integer.parseInt((String) pi.getValues().get(0)) >= Integer.parseInt((String) value);
-			default:
-				return false;
-			}
-		}).collect(Collectors.toList());
-		return filtered;
+	
+	protected boolean filterByCriteria(PropertyInstance<Object> pi) {
+		switch (pi.getType()) {
+		case DATE:
+			return pi.getValues().stream().anyMatch(v -> 
+				convert((Date)v).isAfter(parse(value)) ||
+				convert((Date)v).isEqual(parse(value))
+				);
+		case FLOAT_NUMBER:
+			return pi.getValues().stream().anyMatch(v -> (Double)v >= (Double)value);
+		case WHOLE_NUMBER:
+		    return pi.getValues().stream().anyMatch(v -> Integer.parseInt((String)v) >= Integer.parseInt((String) value));
+		default:
+			return false;
+		}
 	}
 }
 	

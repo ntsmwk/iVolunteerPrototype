@@ -5,7 +5,7 @@ import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
 
 import { MessageService } from "../../../../../_service/message.service";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, ControlContainer, FormArray } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
@@ -18,11 +18,13 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { User, UserRole } from "app/main/content/_model/user";
+import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 
 @Component({
   selector: "target-rule-configurator",
   templateUrl: "./target-rule-configurator.component.html",
   styleUrls: ["../rule-configurator.component.scss"],
+  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
 })
 export class TargetRuleConfiguratorComponent implements OnInit {
   @Input("classAction") classAction: ClassAction;
@@ -33,12 +35,15 @@ export class TargetRuleConfiguratorComponent implements OnInit {
   helpseeker: User;
   marketplace: Marketplace;
   role: UserRole;
-  ruleActionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
   initialized: boolean = false;
 
+  ruleActionForm: FormGroup;
+
   classDefinitionCache: ClassDefinition[] = [];
+
+  targetValidationMessages = DerivationRuleValidators.ruleValidationMessages;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,22 +51,36 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private helpSeekerService: CoreHelpSeekerService
+    private helpSeekerService: CoreHelpSeekerService,
+    private parent: FormGroupDirective
   ) {
-    this.ruleActionForm = formBuilder.group({
-      classDefinitionId: new FormControl(undefined),
+    //this.actionForm = this.parent.form;
+    this.ruleActionForm = this.formBuilder.group({
+      classDefinitionId: new FormControl(undefined, [Validators.required]),
+      targetAttributes: new FormArray([]) 
     });
   }
 
   ngOnInit() {
-    this.ruleActionForm.setValue({
-      classDefinitionId:
-        (this.classAction.classDefinition
-          ? this.classAction.classDefinition.id
-          : "") || "",
+    this.ruleActionForm.patchValue({
+      classDefinitionId: 
+      this.classAction.classDefinition
+      ? this.classAction.classDefinition.id
+      : "",
+
     });
 
-    this.loginService
+    this.parent.form.addControl('ruleActionForm', this.ruleActionForm);
+    /*
+    let attributes = <FormArray>this.ruleActionForm.controls['targetAttributes'];  
+
+     // console.log("classDefinitionId: " + classDefinitionId);
+      let control = <FormArray>this.ruleActionForm.controls['attributes'];  
+      console.log(" control from form --> " + control);
+      // this.ruleActionForm.value.attributes.controls = [];
+      console.log("attributes array: " + attributes.controls);*/
+
+   this.loginService
       .getLoggedIn()
       .toPromise()
       .then((helpseeker: User) => {
@@ -91,6 +110,13 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     this.classAction.attributes.push(
       new AttributeCondition(this.classAction.classDefinition)
     );
+    this.classActionChange.emit(this.classAction);
+  }
+
+  onChangeTargetAttribute($event){
+    if ($event.isUserInput){
+      this.classActionChange.emit(this.classAction);
+    }
   }
 
   onTargetChange(classDefinition, $event) {
@@ -99,9 +125,9 @@ export class TargetRuleConfiguratorComponent implements OnInit {
           (!this.classAction.classDefinition || 
           (this.classAction.classDefinition &&
            this.classAction.classDefinition.id != classDefinition.id))) {
-        this.classAction.classDefinition = this.classDefinitions.find(
-          (cd) => cd.id === this.ruleActionForm.value.classDefinitionId
-        );
+        /*this.classAction.classDefinition = this.classDefinitions.find(
+          (cd) => cd.id === this.parent.form.get('ruleActionForm').get('classDefinitionId').value
+        );*/
         this.classAction.classDefinition = classDefinition;
         this.classAction.attributes = new Array();
         this.classActionChange.emit(this.classAction);

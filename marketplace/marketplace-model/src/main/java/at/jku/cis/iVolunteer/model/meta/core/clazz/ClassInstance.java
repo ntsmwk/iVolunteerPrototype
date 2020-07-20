@@ -57,7 +57,13 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.properties = properties;
 	}
 	
-	public Boolean containsProperty(String name){
+	public Boolean containsProperty(String propertyId) {
+		if (properties == null || properties.size() == 0)
+			return false;
+		return properties.stream().filter(p -> p.getId().equals(propertyId)).findAny().isPresent();
+	}
+	
+	public Boolean containsPropertyByName(String name){
 		if (properties == null || properties.size() == 0)
 			return false;
 		for (PropertyInstance<Object> pi: properties) {

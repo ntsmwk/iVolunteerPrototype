@@ -7,6 +7,11 @@
         <mat-option *ngFor="let cp of classProperties" [value]="cp?.id" (onSelectionChange)="onPropertyChange($event)">
           {{cp.name}} </mat-option>
       </mat-select>
+      <mat-error *ngFor="let validation of targetValidationMessages.property">
+        <mat-error class="error-message" *ngIf="ruleTargetAttributeForm.get('classPropertyId').hasError(validation.type) && 
+         (ruleTargetAttributeForm.get('classPropertyId').dirty || ruleTargetAttributeForm.get('classPropertyId').touched)">
+         {{validation.message}}</mat-error>
+      </mat-error>
     </mat-form-field>
     <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 150px">
       <input *ngIf="attributeTarget?.classProperty?.type != 'ENUM'" matInput placeholder="value"
@@ -16,6 +21,11 @@
         <mat-option *ngFor="let enumVal of findEnumValues()" [value]="enumVal" (onSelectionChange)="onChangeValue($event)">
           {{ enumVal }}
         </mat-option>
+        <mat-error *ngFor="let validation of targetValidationMessages.value">
+          <mat-error class="error-message" *ngIf="ruleTargetAttributeForm.get('value').hasError(validation.type) && 
+           (ruleTargetAttributeForm.get('value').dirty || ruleTargetAttributeForm.get('value').touched)">
+           {{validation.message}}</mat-error>
+        </mat-error>
       </mat-select>
     </mat-form-field>
   </div>
