@@ -1,10 +1,14 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 
-import { User } from "../../content/_model/user";
+import { User, UserRole } from "../../content/_model/user";
 import { LoginService } from "../../content/_service/login.service";
 import { isNullOrUndefined } from "util";
 
 import { ImageService } from "app/main/content/_service/image.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { RoleChangeService } from "app/main/content/_service/role-change.service";
 
 @Component({
   selector: "fuse-user-menu",
@@ -13,10 +17,13 @@ import { ImageService } from "app/main/content/_service/image.service";
 })
 export class FuseUserMenuComponent implements OnInit {
   user: User;
+  role: UserRole;
 
   constructor(
+    private router: Router,
+    private loginService: LoginService,
     private imageService: ImageService,
-    private loginService: LoginService
+    private roleChangeService: RoleChangeService
   ) {}
 
   async ngOnInit() {
@@ -25,7 +32,9 @@ export class FuseUserMenuComponent implements OnInit {
 
   logout() {
     localStorage.clear();
-    window.location.reload(true);
+    this.router.navigate(["/login"]).then(() => {
+      window.location.reload(true);
+    });
   }
 
   getImage() {
@@ -44,9 +53,9 @@ export class FuseUserMenuComponent implements OnInit {
       ret += this.user.username;
     }
 
-    if (!isNullOrUndefined(this.user.position)) {
-      ret += " (" + this.user.position + ")";
-    }
+    // if (!isNullOrUndefined(this.user.position)) {
+    //   ret += " (" + this.user.position + ")";
+    // }
     return ret;
   }
 }

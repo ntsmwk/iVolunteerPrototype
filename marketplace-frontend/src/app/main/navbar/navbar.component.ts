@@ -23,6 +23,7 @@ import { UserRole, User } from "../content/_model/user";
 import { MessageService } from "../content/_service/message.service";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { navigation_admin } from "app/navigation/navigation_admin";
+import { RoleChangeService } from "../content/_service/role-change.service";
 
 @Component({
   selector: "fuse-navbar",
@@ -33,6 +34,8 @@ import { navigation_admin } from "app/navigation/navigation_admin";
 })
 export class FuseNavbarComponent implements OnInit, OnDestroy {
   private fusePerfectScrollbar: FusePerfectScrollbarDirective;
+
+  onRoleChanged: Subscription;
 
   @ViewChild(FusePerfectScrollbarDirective, { static: true }) set directive(
     theDirective: FusePerfectScrollbarDirective
@@ -52,9 +55,11 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     private sidebarService: FuseSidebarService,
     private loginService: LoginService,
     private navigationService: FuseNavigationService,
-    private router: Router
+    private router: Router,
+    private roleChangeService: RoleChangeService
   ) {
     // Navigation data
+
     this.loginService
       .getLoggedInUserRole()
       .toPromise()
@@ -82,6 +87,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       });
     // Default layout
     this.layout = "vertical";
+
+    this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(
+      (newRole) => {
+        this.changeNavigation(newRole);
+      }
+    );
   }
 
   ngOnInit() {
@@ -109,6 +120,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     if (this.navigationServiceWatcher) {
       this.navigationServiceWatcher.unsubscribe();
     }
+
+    this.onRoleChanged.unsubscribe();
   }
 
   toggleSidebarOpened() {
@@ -116,5 +129,25 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
   }
   toggleSidebarFolded() {
     this.sidebarService.getSidebar("navbar").toggleFold();
+  }
+
+  changeNavigation(role: UserRole) {
+    switch (role) {
+      case UserRole.HELP_SEEKER:
+        this.navigation = navigation_helpseeker;
+        break;
+      case UserRole.VOLUNTEER:
+        this.navigation = navigation_volunteer;
+        break;
+      case UserRole.FLEXPROD:
+        this.navigation = navigation_flexprod;
+        break;
+      case UserRole.RECRUITER:
+        this.navigation = navigation_recruiter;
+        break;
+      case UserRole.ADMIN:
+        this.navigation = navigation_admin;
+        break;
+    }
   }
 }

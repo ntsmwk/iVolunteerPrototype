@@ -1,0 +1,17 @@
+@import "src/@fuse/scss/fuse";
+
+.user-button,
+fuse-search-bar,
+.language-button,
+.quick-panel-toggle-button {
+  min-width: 64px;
+  height: 64px;
+
+  @include media-breakpoint-down("xs") {
+    height: 56px;
+  }
+}
+
+.rolename {
+  font-size: 20px;
+}

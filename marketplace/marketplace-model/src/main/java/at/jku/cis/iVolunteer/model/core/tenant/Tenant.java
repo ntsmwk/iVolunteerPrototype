@@ -2,23 +2,25 @@ package at.jku.cis.iVolunteer.model.core.tenant;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 
 public class Tenant {
 
-	@Id private String id;
+	@Id
+	private String id;
 	private String name;
-	
+
 	private String homepage;
 
 	private byte[] image;
 
 	private String primaryColor;
 	private String secondaryColor;
-	
+
 	private String marketplaceId;
-	
+
 	private List<SubscriptionRule> subscriptionRules = new ArrayList<>();
 
 	public String getId() {
@@ -83,6 +85,23 @@ public class Tenant {
 
 	public void setSubscriptionRules(List<SubscriptionRule> subscriptionRules) {
 		this.subscriptionRules = subscriptionRules;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof Tenant)) {
+			return false;
+		}
+		Tenant tenant = (Tenant) o;
+		return Objects.equals(id, tenant.id) && Objects.equals(name, tenant.name)
+				&& Objects.equals(marketplaceId, tenant.marketplaceId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, marketplaceId);
 	}
 
 }

@@ -34,6 +34,14 @@ const routes: Route[] = [
     // canActivate: [AnonymGuard]
   },
   {
+    path: "role",
+    loadChildren: () =>
+      import(
+        "./_components/common/user_management/role-switch/role-switch.module"
+      ).then((m) => m.FuseRoleSwitchModule),
+    // canActivate: [TokenGuard, VolunteerGuard, HelpSeekerGuard],
+  },
+  {
     path: "main/volunteer/asset-inbox",
     loadChildren: () =>
       import(

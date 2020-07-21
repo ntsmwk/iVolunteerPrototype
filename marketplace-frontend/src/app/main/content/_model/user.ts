@@ -25,11 +25,12 @@ export class User {
 }
 
 export enum UserRole {
-  VOLUNTEER = 'VOLUNTEER',
-  HELP_SEEKER = 'HELP_SEEKER',
-  ADMIN = 'ADMIN',
-  RECRUITER = 'RECRUITER',
-  FLEXPROD = 'FLEXPROD',
+  VOLUNTEER = "VOLUNTEER",
+  HELP_SEEKER = "HELP_SEEKER",
+  ADMIN = "ADMIN",
+  RECRUITER = "RECRUITER",
+  FLEXPROD = "FLEXPROD",
+  NONE = "NONE",
 }
 export class TenantUserSubscription {
   marketplaceId: string;
