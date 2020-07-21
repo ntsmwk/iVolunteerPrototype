@@ -27,6 +27,13 @@
       *ngIf="dataSource.data.length != 0"
     >
 
+    <ng-container matColumnDef="active">
+      <mat-header-cell *matHeaderCellDef>Aktiv</mat-header-cell>
+      <mat-cell *matCellDef="let rule"> 
+        <mat-checkbox (click)="$event.stopPropagation()" checked="rule.active" (change)="onChangeActivation(rule)" [(ngModel)]="rule.active"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
       <mat-cell *matCellDef="let rule">{{ rule.id }}</mat-cell>

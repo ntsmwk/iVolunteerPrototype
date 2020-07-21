@@ -36,20 +36,12 @@ public class DerivationRuleService {
 		return derivationRuleMapper.toTarget(derivationRuleRepository.getByTenantIdAndContainerAndName(tenantId, container, ruleName));
 	}
 
-	public void createRule(DerivationRuleDTO derivationRuleDTO) {
+	public DerivationRuleDTO createRule(DerivationRuleDTO derivationRuleDTO) {
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		DerivationRule derivationRuleDB = derivationRuleRepository.
-				getByTenantIdAndContainerAndName(derivationRule.getTenantId(), 
-						                         derivationRule.getContainer(),
-						                         derivationRule.getName());
-		if (derivationRuleDB != null) { // replace old rule to ensure container + name is unique for tenant
-			derivationRuleDTO.setId(derivationRuleDB.getId());
-			updateRule(derivationRuleDB.getId(), derivationRuleDTO);
-		} else 
-			derivationRuleRepository.save(derivationRule);
-		ruleService.addRule(derivationRule);
-		
-		ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
+		ruleService.addRule(derivationRule, false);
+		derivationRuleRepository.save(derivationRule);
+		//ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
+		return derivationRuleMapper.toTarget(derivationRule);
 	}
 	
 	public List<RuleExecution> testRule(DerivationRuleDTO derivationRuleDTO) {
@@ -57,9 +49,8 @@ public class DerivationRuleService {
 		derivationRuleDTO.setClassActions(new ArrayList<ClassActionDTO>());
 		
 	    DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		
-		derivationRule.setContainer(derivationRule.getContainer());
-		ruleService.addRule(derivationRule);
+		// add rule to container in testing mode
+		ruleService.addRule(derivationRule, true);
 		// only for test --> execute rule 
 		List<RuleExecution> ruleExecution = ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
 		// remove container rule again
@@ -67,8 +58,10 @@ public class DerivationRuleService {
 		return ruleExecution;
 	}
 
-	public void updateRule(String id, DerivationRuleDTO derivationRule) {
-		derivationRuleRepository.save(derivationRuleMapper.toSource(derivationRule));
+	public void updateRule(String id, DerivationRuleDTO derivationRuleDTO) {
+		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
+		ruleService.addRule(derivationRule, false);
+		derivationRuleRepository.save(derivationRule);
 	}
 	
 	public List<PropertyDefinition<Object>> getGeneralProperties(String tenantId){

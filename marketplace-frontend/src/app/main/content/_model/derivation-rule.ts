@@ -10,6 +10,7 @@ export class DerivationRule {
   generalConditions: GeneralCondition[];
   conditions: ClassCondition[];
   classActions: ClassAction[];
+  active: boolean;
 }
 
 export class GeneralCondition{

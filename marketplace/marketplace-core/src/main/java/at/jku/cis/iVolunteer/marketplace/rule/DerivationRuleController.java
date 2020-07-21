@@ -40,8 +40,8 @@ public class DerivationRuleController {
 	}
 
 	@PostMapping
-	public void createDerivationRule(@RequestBody DerivationRuleDTO derivationRule) {
-		derivationRuleService.createRule(derivationRule);
+	public DerivationRuleDTO createDerivationRule(@RequestBody DerivationRuleDTO derivationRule) {
+		return derivationRuleService.createRule(derivationRule);
 	}
 	
 	@PostMapping(path= "/test")

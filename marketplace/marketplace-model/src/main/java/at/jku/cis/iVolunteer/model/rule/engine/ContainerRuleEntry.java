@@ -16,25 +16,22 @@ public class ContainerRuleEntry extends IVolunteerObject {
 	private String container;
 	private String content;
 	private ResourceType type;
+	private boolean active;
 	
 	public ContainerRuleEntry() {
+		Timestamp stamp = new Timestamp(System.currentTimeMillis());
+	    this.timestamp = new Date(stamp.getTime()); 
+	    this.active = false;
+	    setType(ResourceType.DRL);
 	}
 
-	public ContainerRuleEntry(String tenantId, String marketplaceId, String container) {
+	/*
+	public ContainerRuleEntry(String tenantId, String marketplaceId, String container, String name) {
+		this();
 		this.tenantId = tenantId;
 		this.marketplaceId = marketplaceId;
 		this.container = container;
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-	    this.timestamp = new Date(stamp.getTime()); 
-	}
-
-	public ContainerRuleEntry(String tenantId, String marketplaceId, String container, String name, String content) {
-		this(tenantId, marketplaceId, container);
-		this.name = name;
-		this.container = container;
-		this.content = content;
-		setType(ResourceType.DRL);
-	}
+	}*/
 	
 	public String getId() {
 		return id;
@@ -82,6 +79,18 @@ public class ContainerRuleEntry extends IVolunteerObject {
 
 	public void setType(ResourceType type) {
 		this.type = type;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	public boolean getActive() {
+		return active;
+	}
+	
+	public boolean isActivated() {
+		return active;
 	}
 	
 	public String toString() {

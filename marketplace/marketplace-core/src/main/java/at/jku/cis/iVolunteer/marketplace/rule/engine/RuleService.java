@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
+import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.NoSuchContainerException;
@@ -62,7 +63,10 @@ public class RuleService {
 	public List<String> getContainerNames(String tenantId) {
 		List<ContainerRuleEntry> rules = containerRuleEntryRepository.findByTenantId(tenantId);
 		// obtain containers with rules
-		List<String> containerNames = rules.stream().map(x -> x.getContainer()).distinct().collect(Collectors.toList());
+		List<String> containerNames = rules.stream()
+				.map(x -> x.getContainer())
+				.distinct()
+				.collect(Collectors.toList());
 		return containerNames;
 	}
 
@@ -80,8 +84,11 @@ public class RuleService {
 	}
 
 	public void refreshContainer(String tenantId, String container) {
-		List<ContainerRuleEntry> containerEntries = containerRuleEntryRepository.getByTenantIdAndContainer(tenantId,
-				container);
+		List<ContainerRuleEntry> containerEntries = 
+				containerRuleEntryRepository.getByTenantIdAndContainer(tenantId, container)
+				.stream()
+				.filter(rule -> rule.isActivated())
+				.collect(Collectors.toList());
 
 		ReleaseId releaseId = RuleEngineUtil.generateReleaseId(tenantId, container);
 
@@ -180,12 +187,24 @@ public class RuleService {
 			containerRuleEntryRepository.delete(rule);
 	}
 
-	public void addRule(DerivationRule derivationRule) {
+	public void addRule(DerivationRule derivationRule, boolean isTest) {
 		String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(derivationRule);
-		ContainerRuleEntry containerRule = new ContainerRuleEntry(derivationRule.getTenantId(),
-				derivationRule.getMarketplaceId(), derivationRule.getContainer(), derivationRule.getName(),
-				ruleContent);
-		containerRuleEntryRepository.insert(containerRule);
+		ContainerRuleEntry containerRule;
+		if (derivationRule.getContainerRuleEntryId() == null) {
+			containerRule = new ContainerRuleEntry();
+			containerRule.setTenantId(derivationRule.getTenantId());
+			containerRule.setMarketplaceId(derivationRule.getMarketplaceId());
+		} else {
+			containerRule = containerRuleEntryRepository.findOne(derivationRule.getContainerRuleEntryId());
+		}
+		containerRule.setContainer(derivationRule.getContainer());
+		containerRule.setName(derivationRule.getName());
+		containerRule.setContent(ruleContent);
+		containerRule.setActive(derivationRule.getActive());
+		containerRuleEntryRepository.save(containerRule);
+		if (derivationRule.getContainerRuleEntryId() == null) {
+			derivationRule.setContainerRuleEntryId(containerRule.getId());
+		}
 		refreshContainer(derivationRule.getTenantId());
 	}
 
