@@ -32,13 +32,6 @@ public class CoreLoginController {
 		return user;
 	}
 
-	@GetMapping("role")
-	public UserRole getLoggedInRole() {
-		// TODO Philipp: return array of users...
-
-		return loginService.getLoggedInUserRole();
-	}
-
 	@GetMapping("/globalInfo/{role}")
 	public GlobalInfo getGlobalInfo(@PathVariable("role") UserRole role) {
 		GlobalInfo globalInfo = new GlobalInfo();
