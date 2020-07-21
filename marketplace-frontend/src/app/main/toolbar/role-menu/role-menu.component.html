@@ -6,6 +6,11 @@
     [matTooltip]="possibleRoles.length > 0 ? 'Rolle wechseln' : null"
   >
     <div fxLayout="row" fxLayoutAlign="center center">
+      <img
+        *ngIf="currentRole == 'HELP_SEEKER'"
+        class="avatar"
+        src="{{ 'data:image/png;base64,' + getHelpseekerTenantImage() }}"
+      />
       <span class="rolename mr-12" fxHide fxShow.gt-sm>{{
         getCurrentRoleName()
       }}</span>

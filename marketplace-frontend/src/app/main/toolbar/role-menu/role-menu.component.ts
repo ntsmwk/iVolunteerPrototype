@@ -6,6 +6,7 @@ import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: "app-role-menu",
@@ -79,5 +80,18 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
   getRoleNameString(role: UserRole) {
     return this.roleChangeService.getRoleNameString(role);
+  }
+
+  getHelpseekerTenantImage() {
+    let tenantId = this.user.subscribedTenants.find(
+      (s) => s.role === UserRole.HELP_SEEKER
+    ).tenantId;
+
+    let tenant = this.allTenants.find((t) => t.id === tenantId);
+    if (isNullOrUndefined(tenant)) {
+      return "/assets/images/avatars/profile.jpg";
+    } else {
+      return tenant.image;
+    }
   }
 }
