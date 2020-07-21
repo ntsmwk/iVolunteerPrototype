@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 
 @RestController
@@ -39,7 +38,7 @@ public class TenantController {
 
 	@GetMapping("/volunteer/{volunteerId}")
 	public List<Tenant> getTenantsByVolunteer(@PathVariable String volunteerId) {
-		return tenantService.getTenantsByUser(volunteerId);
+		return tenantService.getTenantsByUser(volunteerId).stream().distinct().collect(Collectors.toList());
 	}
 
 	@GetMapping("/marketplace/{marketplaceId}")

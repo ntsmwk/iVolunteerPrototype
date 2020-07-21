@@ -21,6 +21,7 @@ import { navigation_flexprod } from "app/navigation/navigation_flexprod";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { Router } from "@angular/router";
 import { navigation_admin } from "app/navigation/navigation_admin";
+import { RoleChangeService } from "./content/_service/role-change.service";
 
 @Component({
   selector: "fuse-main",
@@ -31,8 +32,12 @@ import { navigation_admin } from "app/navigation/navigation_admin";
 })
 export class FuseMainComponent implements OnDestroy {
   onConfigChanged: Subscription;
+  onRoleChanged: Subscription;
+
   fuseSettings: any;
   navigation: any;
+
+  role: UserRole = UserRole.NONE;
 
   @HostBinding("attr.fuse-layout-mode") layoutMode;
 
@@ -43,6 +48,7 @@ export class FuseMainComponent implements OnDestroy {
     private loginService: LoginService,
     private platform: Platform,
     private router: Router,
+    private roleChangeService: RoleChangeService,
     @Inject(DOCUMENT) private document: any
   ) {
     this.onConfigChanged = this.fuseConfig.onConfigChanged.subscribe(
@@ -56,35 +62,23 @@ export class FuseMainComponent implements OnDestroy {
       this.document.body.className += " is-mobile";
     }
 
-    this.loginService
+    loginService
       .getLoggedInUserRole()
       .toPromise()
       .then((role: UserRole) => {
-        switch (role) {
-          case UserRole.HELP_SEEKER:
-            this.navigation = navigation_helpseeker;
-            break;
-          case UserRole.VOLUNTEER:
-            this.navigation = navigation_volunteer;
-            break;
-          case UserRole.FLEXPROD:
-            this.navigation = navigation_flexprod;
-            break;
-          case UserRole.RECRUITER:
-            this.navigation = navigation_recruiter;
-            break;
-          case UserRole.ADMIN:
-            this.navigation = navigation_admin;
-            break;
-        }
-      })
-      .catch((e) => {
-        console.warn("MAIN COMPONENT ERROR: " + JSON.stringify(e));
+        this.role = role;
       });
+
+    this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(
+      (newRole) => {
+        this.role = newRole;
+      }
+    );
   }
 
   ngOnDestroy() {
     this.onConfigChanged.unsubscribe();
+    this.onRoleChanged.unsubscribe();
   }
 
   addClass(className: string) {

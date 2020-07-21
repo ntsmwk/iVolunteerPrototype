@@ -1,0 +1,44 @@
+@import "src/@fuse/scss/fuse";
+
+.header {
+  height: 220px;
+  min-height: 220px;
+  max-height: 220px;
+  background: url("/assets/images/backgrounds/dark-material-bg.jpg") no-repeat 0
+    45%;
+  background-size: cover;
+
+  .profile-image {
+    margin-right: 24px;
+
+    @include media-breakpoint("sm") {
+      margin: 0 0 16px 0;
+    }
+  }
+
+  .name {
+    font-size: 34px;
+    color: #ffffff;
+
+    @include media-breakpoint("sm") {
+      margin-bottom: 32px;
+    }
+  }
+
+  .actions {
+    button {
+      text-transform: none;
+      padding: 0 16px;
+      margin: 0 0 0 8px;
+    }
+  }
+}
+
+.card-parent {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.tenant-card {
+  width: 250px;
+  cursor: pointer;
+}
