@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.configurations.matching;
+package at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration;
 
 import java.util.Date;
 
@@ -15,10 +15,10 @@ public class MatchingConfigurationService {
 	@Autowired private ClassConfigurationRepository configuratorRepository;
 	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
 
-	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(String producerClassConfigurationId,
-			String consumerClassConfigurationId) {
+	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(String leftClassConfigurationId,
+			String rightClassConfigurationId) {
 		return matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(
-				producerClassConfigurationId, consumerClassConfigurationId);
+				leftClassConfigurationId, rightClassConfigurationId);
 	}
 
 	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIdsUnordered(String classConfigurationId1,

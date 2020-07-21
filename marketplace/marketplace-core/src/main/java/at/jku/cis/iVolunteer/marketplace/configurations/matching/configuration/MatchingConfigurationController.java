@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.configurations.matching;
+package at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration;
 
 import java.util.List;
 
@@ -29,12 +29,12 @@ public class MatchingConfigurationController {
 		return matchingConfigurationRepository.findOne(id);
 	}
 
-	@GetMapping("matching-configuration/by-class-configurators/{producerClassConfigurationId}/{consumerClassConfigurationId}")
+	@GetMapping("matching-configuration/by-class-configurators/{leftClassConfigurationId}/{rightClassConfigurationId}")
 	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(
-			@PathVariable("producerClassConfigurationId") String producerClassConfigurationId,
-			@PathVariable("consumerClassConfigurationId") String consumerClassConfigurationId) {
-		return matchingConfigurationService.getMatchingConfiguratorByClassConfigurationIds(producerClassConfigurationId,
-				consumerClassConfigurationId);
+			@PathVariable("leftClassConfigurationId") String leftClassConfigurationId,
+			@PathVariable("rightClassConfigurationId") String rightClassConfigurationId) {
+		return matchingConfigurationService.getMatchingConfiguratorByClassConfigurationIds(leftClassConfigurationId,
+				rightClassConfigurationId);
 	}
 
 	@GetMapping("matching-configuration/by-class-configurators/{classConfigurationId1}/{classConfigurationId2}/unordered")
