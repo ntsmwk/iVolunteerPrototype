@@ -29,7 +29,7 @@
         class="name"
         [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
       >
-        Wähle deine Rolle aus, mit der du fortfahren möchtest:
+        Wähle eine Rolle aus, mit der du fortfahren möchtest:
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@
               src="{{ 'data:image/png;base64,' + getTenantImage(tenant) }}"
             />
             <p>
-              {{ tenant }}
+              {{ getTenantNameString(tenant) }}
             </p>
           </div>
         </mat-card-content>

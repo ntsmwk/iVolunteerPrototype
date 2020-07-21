@@ -6,7 +6,6 @@
     [matTooltip]="possibleRoles.length > 0 ? 'Rolle wechseln' : null"
   >
     <div fxLayout="row" fxLayoutAlign="center center">
-      <!-- <img class="avatar" [src]="getRoleImage()" /> -->
       <span class="rolename mr-12" fxHide fxShow.gt-sm>{{
         getCurrentRoleName()
       }}</span>
@@ -22,7 +21,6 @@
       *ngFor="let role of possibleRoles"
       (click)="onRoleSelected(role)"
     >
-      <!-- <mat-icon>account_circle</mat-icon> -->
       <span>{{ getRoleNameString(role) }}</span>
     </button>
   </mat-menu>

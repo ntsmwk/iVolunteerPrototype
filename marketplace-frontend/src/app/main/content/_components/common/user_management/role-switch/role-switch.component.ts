@@ -63,8 +63,8 @@ export class RoleSwitchComponent implements OnInit {
     return this.allTenants.filter((t) => t.id === tenantId);
   }
 
-  getTenantImage(tenantName: string) {
-    let tenant = this.allTenants.find((t) => t.name === tenantName);
+  getTenantImage(tenantId: string) {
+    let tenant = this.allTenants.find((t) => t.id === tenantId);
     if (isNullOrUndefined(tenant)) {
       return "/assets/images/avatars/profile.jpg";
     } else {
@@ -74,5 +74,10 @@ export class RoleSwitchComponent implements OnInit {
 
   getRoleNameString(role: UserRole) {
     return this.roleChangeService.getRoleNameString(role);
+  }
+
+  getTenantNameString(tenantId: string) {
+    let tenant = this.allTenants.find((t) => t.id === tenantId);
+    return tenant.name;
   }
 }

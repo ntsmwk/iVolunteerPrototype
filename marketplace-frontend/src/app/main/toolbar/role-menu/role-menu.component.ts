@@ -2,9 +2,10 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { LoginService } from "app/main/content/_service/login.service";
 import { RoleChangeService } from "app/main/content/_service/role-change.service";
 import { User, UserRole } from "app/main/content/_model/user";
-import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
+import { Tenant } from "app/main/content/_model/tenant";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
 
 @Component({
   selector: "app-role-menu",
@@ -16,13 +17,15 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
   currentRole: UserRole;
   allRoles: UserRole[] = [];
   possibleRoles: UserRole[] = [];
+  allTenants: Tenant[] = [];
 
   onRoleChanged: Subscription;
 
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private roleChangeService: RoleChangeService
+    private roleChangeService: RoleChangeService,
+    private tenantService: TenantService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(
       (newRole) => {
@@ -33,15 +36,13 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
       }
     );
   }
-  ngOnDestroy() {
-    this.onRoleChanged.unsubscribe();
-  }
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
     this.currentRole = <UserRole>(
       await this.loginService.getLoggedInUserRole().toPromise()
     );
+    this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
     if (this.user) {
       this.allRoles = [
@@ -52,18 +53,6 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.possibleRoles = this.allRoles.filter((r) => {
       return r != this.currentRole;
     });
-  }
-
-  getCurrentRoleName() {
-    return this.roleChangeService.getRoleNameString(this.currentRole);
-  }
-
-  getRoleNameString(role: UserRole) {
-    return this.roleChangeService.getRoleNameString(role);
-  }
-
-  getRoleImage(role: UserRole) {
-    return "/assets/images/avatars/profile.jpg";
   }
 
   onRoleSelected(role: UserRole) {
@@ -78,5 +67,17 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
         this.router.navigate(["/main/dashboard"]);
       });
     });
+  }
+
+  ngOnDestroy() {
+    this.onRoleChanged.unsubscribe();
+  }
+
+  getCurrentRoleName() {
+    return this.roleChangeService.getRoleNameString(this.currentRole);
+  }
+
+  getRoleNameString(role: UserRole) {
+    return this.roleChangeService.getRoleNameString(role);
   }
 }

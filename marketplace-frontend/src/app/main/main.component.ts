@@ -62,6 +62,13 @@ export class FuseMainComponent implements OnDestroy {
       this.document.body.className += " is-mobile";
     }
 
+    loginService
+      .getLoggedInUserRole()
+      .toPromise()
+      .then((role: UserRole) => {
+        this.role = role;
+      });
+
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(
       (newRole) => {
         this.role = newRole;

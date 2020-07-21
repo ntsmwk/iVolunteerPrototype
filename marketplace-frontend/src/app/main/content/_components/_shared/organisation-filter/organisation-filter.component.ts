@@ -23,8 +23,8 @@ export class OrganisationFilterComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private tenantService: TenantService,
-    private imageService: ImageService,
-  ) { }
+    private imageService: ImageService
+  ) {}
 
   async ngOnInit() {
     this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();

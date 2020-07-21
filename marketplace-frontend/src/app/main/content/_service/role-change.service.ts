@@ -10,15 +10,8 @@ import { TenantService } from "./core-tenant.service";
 export class RoleChangeService {
   onRoleChanged: BehaviorSubject<any>;
   currentRole: UserRole = UserRole.NONE;
-  allTenants: Tenant[];
 
-  constructor(private tenantService: TenantService) {
-    this.tenantService
-      .findAll()
-      .toPromise()
-      .then((allTenants: Tenant[]) => {
-        this.allTenants = allTenants;
-      });
+  constructor() {
     this.onRoleChanged = new BehaviorSubject(this.currentRole);
   }
 
@@ -29,7 +22,6 @@ export class RoleChangeService {
 
   getRoleTenantMap(user: User) {
     let tenantMap = new Map<string, string[]>();
-
     let volunteerSubs = user.subscribedTenants.filter((s) => {
       return s.role === UserRole.VOLUNTEER;
     });
@@ -37,7 +29,7 @@ export class RoleChangeService {
     if (volunteerSubs.length > 0) {
       tenantMap.set(
         UserRole.VOLUNTEER,
-        volunteerSubs.map((s) => this.getTenantNameString(s.tenantId))
+        volunteerSubs.map((s) => s.tenantId)
       );
     }
 
@@ -46,7 +38,7 @@ export class RoleChangeService {
         return s.role != UserRole.VOLUNTEER;
       })
       .forEach((s) => {
-        tenantMap.set(s.role, Array.of(this.getTenantNameString(s.tenantId)));
+        tenantMap.set(s.role, Array.of(s.tenantId));
       });
 
     return tenantMap;
@@ -65,10 +57,5 @@ export class RoleChangeService {
       case UserRole.ADMIN:
         return "Admin";
     }
-  }
-
-  private getTenantNameString(tenantId: string) {
-    let tenant = this.allTenants.find((t) => t.id === tenantId);
-    return tenant.name;
   }
 }
