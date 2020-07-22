@@ -9,7 +9,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 @Component({
   selector: "app-configurator",
   templateUrl: "./configurator.component.html",
-  styleUrls: ["./configurator.component.scss"],
+  styleUrls: ["./configurator.component.scss"]
 })
 export class ConfiguratorComponent implements OnInit {
   marketplace: Marketplace;
@@ -18,9 +18,7 @@ export class ConfiguratorComponent implements OnInit {
   helpseeker: User;
   isLoaded = false;
 
-  constructor(
-    private loginService: LoginService,
-  ) { }
+  constructor(private loginService: LoginService) {}
 
   async ngOnInit() {
     const globalInfo = <GlobalInfo>(
