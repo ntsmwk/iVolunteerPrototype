@@ -5,7 +5,7 @@ import { MatCommonModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ClassOptionsOverlayControlComponent } from './options-overlay-control.component';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { ClassOptionsOverlayContentModule } from '../options-overlay-content/options-overlay-content.module';
+import { ClassOptionsOverlayContentModule } from '../class-options-overlay-content/class-options-overlay-content.module';
 
 @NgModule({
     imports: [

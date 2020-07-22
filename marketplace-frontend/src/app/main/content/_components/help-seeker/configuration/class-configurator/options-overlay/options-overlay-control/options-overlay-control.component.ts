@@ -1,5 +1,5 @@
 import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output, OnInit, OnChanges } from '@angular/core';
-import { ClassOptionsOverlayContentData } from '../options-overlay-content/options-overlay-content.component';
+import { ClassOptionsOverlayContentData } from '../class-options-overlay-content/class-options-overlay-content.component';
 
 declare var $: any;
 

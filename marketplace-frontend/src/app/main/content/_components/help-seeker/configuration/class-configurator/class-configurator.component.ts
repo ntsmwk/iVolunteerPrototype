@@ -23,7 +23,7 @@ import { ClassConfiguration } from "app/main/content/_model/meta/configurations"
 import { EditorPopupMenu } from "./popup-menu";
 import { TopMenuResponse } from "./top-menu-bar/top-menu-bar.component";
 import { MyMxCell, MyMxCellType } from "../myMxCell";
-import { ClassOptionsOverlayContentData } from "./options-overlay/options-overlay-content/options-overlay-content.component";
+import { ClassOptionsOverlayContentData } from "./options-overlay/class-options-overlay-content/class-options-overlay-content.component";
 import { CConstants } from "./utils-and-constants";
 import { ClassProperty, PropertyType } from "app/main/content/_model/meta/property";
 import { isNullOrUndefined } from "util";

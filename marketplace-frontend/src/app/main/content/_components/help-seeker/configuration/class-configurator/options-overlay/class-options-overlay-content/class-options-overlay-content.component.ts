@@ -32,8 +32,8 @@ export interface PropertyOrEnumEntry {
 
 @Component({
   selector: "class-options-overlay-content",
-  templateUrl: "./options-overlay-content.component.html",
-  styleUrls: ["./options-overlay-content.component.scss"],
+  templateUrl: "./class-options-overlay-content.component.html",
+  styleUrls: ["./class-options-overlay-content.component.scss"],
 })
 export class ClassOptionsOverlayContentComponent implements OnInit {
   @Input() inputData: ClassOptionsOverlayContentData;
@@ -47,7 +47,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
   constructor(
     private dialogFactory: DialogFactoryDirective,
     private _sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.updatePropertiesAndEnumsList();
@@ -138,7 +138,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         this.inputData.allRelationships,
         this.inputData.classDefinition
       )
-      .then(() => {});
+      .then(() => { });
   }
 
   updatePropertiesAndEnumsList() {
