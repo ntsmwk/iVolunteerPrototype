@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration;
+package at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships;
 
 import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelationship;
