@@ -5,20 +5,10 @@ import { User } from 'app/main/content/_model/user';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { Relationship, RelationshipType } from 'app/main/content/_model/meta/relationship';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ClassOptionsOverlayContentData, PropertyOrEnumEntry } from '../class-options-overlay-content/class-options-overlay-content.component';
+import { PropertyOrEnumEntry } from '../class-options-overlay-content/class-options-overlay-content.component';
 import { CConstants } from '../../utils-and-constants';
+import { OptionsOverlayContentData } from '../options-overlay-control/options-overlay-control.component';
 
-
-export class RelationshipOptionsOverlayContentData {
-  marketplace: Marketplace;
-  helpseeker: User;
-
-  classDefinition: ClassDefinition;
-  relationship: Relationship;
-
-  allClassDefinitions: ClassDefinition[];
-  allRelationships: Relationship[];
-}
 
 
 @Component({
@@ -27,11 +17,10 @@ export class RelationshipOptionsOverlayContentData {
   styleUrls: ["./relationship-options-overlay-content.component.scss"],
 })
 export class RelationshipOptionsOverlayContentComponent implements OnInit {
-  @Input() inputData: ClassOptionsOverlayContentData;
-  @Output() resultData = new EventEmitter<ClassOptionsOverlayContentData>();
+  @Input() inputData: OptionsOverlayContentData;
+  @Output() resultData = new EventEmitter<OptionsOverlayContentData>();
 
   relationshipPalettes = CConstants.relationshipPalettes;
-  propertyTypePalettes = CConstants.propertyTypePalettes;
 
   entryList: PropertyOrEnumEntry[];
 
@@ -56,6 +45,11 @@ export class RelationshipOptionsOverlayContentComponent implements OnInit {
 
   getLabelForRelationship(relationshipType: RelationshipType) {
     return RelationshipType.getLabelFromRelationshipType(relationshipType);
+  }
+
+  onRelationshipTypeSelect(relationshipType: RelationshipType) {
+    console.log(relationshipType);
+    this.inputData.relationship.relationshipType = relationshipType;
   }
 
 }

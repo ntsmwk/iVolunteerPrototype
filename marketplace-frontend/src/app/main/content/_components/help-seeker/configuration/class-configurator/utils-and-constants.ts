@@ -18,7 +18,7 @@ const relationshipPalettes = {
         RelationshipType.INHERITANCE
       ),
       imgPath: '/assets/icons/class_editor/relationships/inheritance.png',
-      type: 'inheritance',
+      type: RelationshipType.INHERITANCE,
       shape: undefined,
     },
     {
@@ -27,18 +27,18 @@ const relationshipPalettes = {
         RelationshipType.ASSOCIATION
       ),
       imgPath: '/assets/icons/class_editor/relationships/',
-      type: 'association',
+      type: RelationshipType.ASSOCIATION,
       shape: undefined,
     },
-    {
-      id: RelationshipType.AGGREGATION,
-      label: RelationshipType.getLabelFromRelationshipType(
-        RelationshipType.AGGREGATION
-      ),
-      imgPath: '/assets/icons/class_editor/relationships/aggregation.png',
-      type: 'aggregation',
-      shape: undefined,
-    },
+    // {
+    //   id: RelationshipType.AGGREGATION,
+    //   label: RelationshipType.getLabelFromRelationshipType(
+    //     RelationshipType.AGGREGATION
+    //   ),
+    //   imgPath: '/assets/icons/class_editor/relationships/aggregation.png',
+    //   type: 'aggregation',
+    //   shape: undefined,
+    // },
   ],
 };
 

@@ -24,12 +24,13 @@
 
             <mat-menu #menu="matMenu" class="custom">
                 <button *ngFor="let p of relationshipPalettes.rows" mat-button fxLayout="column"
-                    fxLayoutAlign="space-between center" [matTooltip]="p.label" (click)=undefined>
+                    fxLayoutAlign="space-between center" [matTooltip]="p.label"
+                    (click)=onRelationshipTypeSelect(p.type)>
                     <div></div>
                     <div style="width: 150px; height: 40px" fxLayout="row" fxLayoutAlign="start center">
                         <img width="40" height="40" [src]="p.imgPath">
                         <div class="pl-8">
-                            {{getLabelForRelationship(p.id)}}
+                            {{p.label}}
                         </div>
                     </div>
                     <div></div>
