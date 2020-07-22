@@ -23,10 +23,10 @@ import { ClassConfiguration } from "app/main/content/_model/meta/configurations"
 import { EditorPopupMenu } from "./popup-menu";
 import { TopMenuResponse } from "./top-menu-bar/top-menu-bar.component";
 import { MyMxCell, MyMxCellType } from "../myMxCell";
-import { ClassOptionsOverlayContentData } from "./options-overlay/class-options-overlay-content/class-options-overlay-content.component";
 import { CConstants } from "./utils-and-constants";
 import { ClassProperty, PropertyType } from "app/main/content/_model/meta/property";
 import { isNullOrUndefined } from "util";
+import { OptionsOverlayContentData } from './options-overlay/options-overlay-control/options-overlay-control.component';
 
 declare var require: any;
 
@@ -86,7 +86,8 @@ export class ClassConfiguratorComponent implements OnInit,
 
     // Overlay
     displayOverlay: boolean;
-    overlayContent: ClassOptionsOverlayContentData;
+    overlayType: 'CLASS' | 'RELATIONSHIP';
+    overlayContent: OptionsOverlayContentData;
     overlayEvent: PointerEvent;
 
     /**
@@ -736,16 +737,18 @@ export class ClassConfiguratorComponent implements OnInit,
         if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType))) {
             this.overlayEvent = event.getProperty("event");
 
-            this.overlayContent = new ClassOptionsOverlayContentData();
+            this.overlayContent = new OptionsOverlayContentData();
             this.overlayContent.marketplace = this.marketplace;
             this.overlayContent.helpseeker = this.helpseeker;
 
             if (cell.cellType === MyMxCellType.CLASS) {
+                this.overlayType = 'CLASS';
                 this.overlayContent.classDefinition = this.classDefinitions.find((c) => c.id === cell.id);
                 this.overlayContent.allClassDefinitions = this.classDefinitions;
                 this.overlayContent.allRelationships = this.relationships;
             } else if (MyMxCellType.isRelationship(cell.cellType)) {
                 this.overlayContent.relationship = this.relationships.find((r) => r.id === cell.id);
+                this.overlayType = 'RELATIONSHIP';
             }
 
             this.graph.setPanning(false);
@@ -755,7 +758,7 @@ export class ClassConfiguratorComponent implements OnInit,
         }
     }
 
-    handleOverlayClosedEvent(event: ClassOptionsOverlayContentData) {
+    handleOverlayClosedEvent(event: OptionsOverlayContentData) {
         this.graph.setPanning(true);
         this.graph.setEnabled(true);
         this.graph.setTooltips(true);
