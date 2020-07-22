@@ -18,7 +18,7 @@ public class MatchingConfiguration {
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
 
-	List<MatchingOperatorRelationship> relationships;
+//	List<MatchingOperatorRelationship> relationships;
 
 	public String getId() {
 		return id;
@@ -44,16 +44,6 @@ public class MatchingConfiguration {
 		this.timestamp = timestamp;
 	}
 
-	public List<MatchingOperatorRelationship> getRelationships() {
-		return relationships;
-	}
-
-	public void setRelationships(List<MatchingOperatorRelationship> relationships) {
-		this.relationships = relationships;
-	}
-	
-	
-	
 	public String getLeftClassConfigurationId() {
 		return leftClassConfigurationId;
 	}
