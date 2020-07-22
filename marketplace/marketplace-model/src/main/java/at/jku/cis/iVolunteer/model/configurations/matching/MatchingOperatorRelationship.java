@@ -1,10 +1,13 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class MatchingOperatorRelationship {
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
 
-	@Id private String id;
+@Document
+public class MatchingOperatorRelationship extends IVolunteerObject {
+
+	private String matchingConfigurationId;
 
 	private String leftMatchingEntityPath;
 	private MatchingEntityType leftMatchingEntityType;
@@ -107,6 +110,14 @@ public class MatchingOperatorRelationship {
 
 	public void setRightMatchingEntityType(MatchingEntityType rightMatchingEntityType) {
 		this.rightMatchingEntityType = rightMatchingEntityType;
+	}
+
+	public String getMatchingConfigurationId() {
+		return matchingConfigurationId;
+	}
+
+	public void setMatchingConfigurationId(String matchingConfigurationId) {
+		this.matchingConfigurationId = matchingConfigurationId;
 	}
 
 }
