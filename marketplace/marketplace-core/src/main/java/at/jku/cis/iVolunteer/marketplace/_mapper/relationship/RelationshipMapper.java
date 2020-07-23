@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Composition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipDTO;
@@ -23,7 +22,6 @@ public class RelationshipMapper implements AbstractMapper<Relationship, Relation
 	@Autowired AssociationRelationshipDTOMapper associationMapper;
 	@Autowired InheritanceRelationshipDTOMapper inheritanceMapper;
 	@Autowired AggregationRelationshipDTOMapper aggregationMapper;
-	@Autowired CompositionRelationshipDTOMapper compositionMapper;
 
 	@Override
 	public RelationshipDTO toTarget(Relationship source) {
@@ -35,8 +33,6 @@ public class RelationshipMapper implements AbstractMapper<Relationship, Relation
 			return inheritanceMapper.toTarget((Inheritance) source);
 		} else if (source.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
 			return aggregationMapper.toTarget((Aggregation) source);
-		} else if (source.getRelationshipType().equals(RelationshipType.COMPOSITION)) {
-			return compositionMapper.toTarget((Composition) source);
 		} else {
 			throw new NotAcceptableException("RelationshipType not recognized");
 		}
@@ -67,8 +63,6 @@ public class RelationshipMapper implements AbstractMapper<Relationship, Relation
 			return inheritanceMapper.toSource(target);
 		} else if (target.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
 			return aggregationMapper.toSource(target);
-		} else if (target.getRelationshipType().equals(RelationshipType.COMPOSITION)) {
-			return compositionMapper.toSource(target);
 		} else {
 			throw new NotAcceptableException("RelationshipType not recognized");
 		}

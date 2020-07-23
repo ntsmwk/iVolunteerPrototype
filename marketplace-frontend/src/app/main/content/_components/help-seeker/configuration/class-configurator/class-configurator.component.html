@@ -115,7 +115,7 @@
                   <!-- <mat-option value="association" (click)="">Assoziation</mat-option> -->
 
                   <!-- TODO This is only a quick fix. Refactor the available options. -->
-                  <mat-option value="AGGREGATION">Assoziation</mat-option>
+                  <mat-option value="ASSOCIATION">Assoziation</mat-option>
                   <!-- <mat-option value="COMPOSITION ">Komposition</mat-option> -->
                 </mat-select>
               </mat-form-field>
@@ -143,5 +143,5 @@
 
 
 <class-options-overlay-control [displayOverlay]="displayOverlay" [overlayContent]="overlayContent"
-  [overlayEvent]="overlayEvent" (overlayClosed)="handleOverlayClosedEvent($event)">
+  [overlayEvent]="overlayEvent" [overlayType]="overlayType" (overlayClosed)="handleOverlayClosedEvent($event)">
 </class-options-overlay-control>

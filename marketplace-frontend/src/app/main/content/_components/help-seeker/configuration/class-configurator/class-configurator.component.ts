@@ -18,17 +18,15 @@ import {
     Relationship,
     RelationshipType,
     AssociationCardinality,
-    Association,
-    Inheritance
 } from "app/main/content/_model/meta/relationship";
 import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
 import { EditorPopupMenu } from "./popup-menu";
 import { TopMenuResponse } from "./top-menu-bar/top-menu-bar.component";
 import { MyMxCell, MyMxCellType } from "../myMxCell";
-import { ClassOptionsOverlayContentData } from "./options-overlay/options-overlay-content/options-overlay-content.component";
 import { CConstants } from "./utils-and-constants";
 import { ClassProperty, PropertyType } from "app/main/content/_model/meta/property";
 import { isNullOrUndefined } from "util";
+import { OptionsOverlayContentData } from './options-overlay/options-overlay-control/options-overlay-control.component';
 
 declare var require: any;
 
@@ -88,7 +86,8 @@ export class ClassConfiguratorComponent implements OnInit,
 
     // Overlay
     displayOverlay: boolean;
-    overlayContent: ClassOptionsOverlayContentData;
+    overlayType: 'CLASS' | 'RELATIONSHIP';
+    overlayContent: OptionsOverlayContentData;
     overlayEvent: PointerEvent;
 
     /**
@@ -258,9 +257,7 @@ export class ClassConfiguratorComponent implements OnInit,
         let cell: MyMxCell;
         let style: string;
 
-        if (classDefinition.classArchetype.startsWith("ENUM")) {
-            style = CConstants.mxStyles.classEnum;
-        } else if (classDefinition.collector) {
+        if (classDefinition.collector) {
             style = CConstants.mxStyles.classFlexprodCollector;
         } else {
             style = CConstants.mxStyles.classNormal;
@@ -277,7 +274,8 @@ export class ClassConfiguratorComponent implements OnInit,
             this.graph.setCellStyle(style, [cell]);
         } else {
             cell = new mx.mxCell(classDefinition.name, geometry, style) as MyMxCell;
-        } cell.root = classDefinition.root;
+        }
+        cell.root = classDefinition.root;
         cell.writeProtected = classDefinition.writeProtected;
 
         if (cell.root) {
@@ -390,53 +388,90 @@ export class ClassConfiguratorComponent implements OnInit,
         try {
             this.graph.getModel().beginUpdate();
             for (const r of this.relationships) {
-                const rel: MyMxCell = this.insertRelationshipIntoGraph(r, new mx.mxPoint(0, 0), false) as MyMxCell;
-                if (rel.cellType === MyMxCellType.ASSOCIATION) {
-                    this.addHiddenRelationshipHack(rel);
+                if (r.relationshipType === RelationshipType.AGGREGATION) {
+                    r.relationshipType = RelationshipType.ASSOCIATION;
+
                 }
+                const rel: MyMxCell = this.insertRelationshipIntoGraph(r, new mx.mxPoint(0, 0)) as MyMxCell;
+                // if (rel.cellType === MyMxCellType.ASSOCIATION) {
+                //     this.addHiddenRelationshipHack(rel);
+                // }
             }
         } finally {
             this.graph.getModel().endUpdate();
         }
     }
 
-    private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, createNew: boolean) {
+    private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, replaceCell?: MyMxCell) {
         const parent = this.graph.getDefaultParent();
         const source: MyMxCell = this.graph.getModel().getCell(r.source) as MyMxCell;
         const target: MyMxCell = this.graph.getModel().getCell(r.target) as MyMxCell;
 
-        let cell: MyMxCell;
+
+        let cell = replaceCell;
+        let style: string;
+        let type: MyMxCellType;
+        let geometry: mxgraph.mxGeometry;
 
         if (r.relationshipType === RelationshipType.INHERITANCE) {
-            cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as MyMxCell;
-            cell.cellType = MyMxCellType.INHERITANCE;
+            style = CConstants.mxStyles.inheritance;
+            type = MyMxCellType.INHERITANCE;
 
-            if (source.classArchetype.startsWith("ENUM_")) {
-                cell.setStyle(CConstants.mxStyles.inheritanceEnum);
-            }
         } else if (r.relationshipType === RelationshipType.ASSOCIATION) {
-            cell = new mx.mxCell("", new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as MyMxCell;
-            cell.cellType = MyMxCellType.ASSOCIATION;
-
-            const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
-            this.addAssociationLabel(cell1, cell);
-
-            const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
-            this.addAssociationLabel(cell2, cell);
-        } else if (r.relationshipType === RelationshipType.AGGREGATION) {
-            cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as MyMxCell;
-            cell.cellType = MyMxCellType.AGGREGATION;
-        } else if (r.relationshipType === RelationshipType.COMPOSITION) {
-            cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.composition) as MyMxCell;
-            cell.cellType = MyMxCellType.COMPOSITION;
+            style = CConstants.mxStyles.association;
+            type = MyMxCellType.ASSOCIATION;
         } else {
-            console.error("invalid RelationshipType");
-        } cell.id = r.id;
-        // cell.newlyAdded = createNew;
-        cell.geometry.relative = true;
-        cell.edge = true;
+            console.error("Invalid Relationshiptype");
+        }
 
-        return this.graph.addEdge(cell, parent, source, target);
+        if (isNullOrUndefined(cell)) {
+            geometry = new mx.mxGeometry(coords.x, coords.y, 0, 0);
+            cell = new mx.mxCell(undefined, geometry, style) as MyMxCell;
+            cell.id = r.id;
+            // cell.newlyAdded = createNew;
+            cell.geometry.relative = true;
+            cell.edge = true;
+            cell.cellType = type;
+
+            return this.graph.addEdge(cell, parent, source, target)
+        } else {
+            // this.graph.removeCells([cell], false);
+            // this.graph.setCellStyle(style, [cell]);
+            // this.graph.getModel().getCell(cell.id).setStyle(style);
+            this.graph.setCellStyle(style, [cell]);
+            (this.graph.getModel().getCell(cell.id) as MyMxCell).cellType = type;
+            return cell;
+        }
+
+
+
+
+
+
+        // if (r.relationshipType === RelationshipType.INHERITANCE) {
+        //     cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as MyMxCell;
+        //     cell.cellType = MyMxCellType.INHERITANCE;
+
+        // } else if (r.relationshipType === RelationshipType.ASSOCIATION) {
+        //     cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as MyMxCell;
+        //     cell.cellType = MyMxCellType.ASSOCIATION;
+
+        //     // const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
+        //     // this.addAssociationLabel(cell1, cell);
+
+        //     // const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
+        //     // this.addAssociationLabel(cell2, cell);
+        //     // } else if (r.relationshipType === RelationshipType.AGGREGATION) {
+        //     //     cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as MyMxCell;
+        //     //     cell.cellType = MyMxCellType.AGGREGATION;
+        // } else {
+        //     console.error("invalid RelationshipType");
+        // }
+
+
+
+
+        // return;
     }
 
     private addAssociationLabel(associationCell: MyMxCell, daddyCell: MyMxCell) {
@@ -456,7 +491,7 @@ export class ClassConfiguratorComponent implements OnInit,
         const sourceCell = relationship.source.getParent();
         const targetCell = relationship.target;
 
-        const hack = new Association();
+        const hack = new Relationship();
         hack.relationshipType = RelationshipType.ASSOCIATION;
         hack.source = sourceCell.id;
         hack.target = targetCell.id;
@@ -526,7 +561,7 @@ export class ClassConfiguratorComponent implements OnInit,
         this.layout.alignRanks = true;
         this.layout.minEdgeJetty = 50;
         this.layout.prefHozEdgeSep = 5;
-        this.layout.resetEdges = false;
+        this.layout.resetEdges = true;
         this.layout.edgeRouting = true;
     }
 
@@ -611,7 +646,7 @@ export class ClassConfiguratorComponent implements OnInit,
                 const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x + 130, parent.geometry.y, 110, 45));
                 this.classDefinitions.push(addedClass);
 
-                const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
+                const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0));
                 this.relationships.push(addedRelationship);
 
                 if (!this.quickEditMode) {
@@ -627,7 +662,7 @@ export class ClassConfiguratorComponent implements OnInit,
                 const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x, parent.geometry.y + parent.geometry.height + 20, 110, 45));
                 this.classDefinitions.push(addedClass);
 
-                const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
+                const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0));
                 this.relationships.push(addedRelationship);
 
                 if (!this.quickEditMode) {
@@ -654,18 +689,21 @@ export class ClassConfiguratorComponent implements OnInit,
 
         addedClass.id = this.objectIdService.getNewObjectId();
 
-        if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
-            addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
-        } else {
-            addedClass.classArchetype = parentClassArchetype;
-        } addedClass.name = "Neue Klasse\n(" + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ")";
+
+        addedClass.classArchetype = parentClassArchetype;
+        addedClass.name = "Neue Klasse\n(" + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ")";
         addedClass.tenantId = this.helpseeker.subscribedTenants.find((t) => t.role === UserRole.HELP_SEEKER).tenantId;
         addedClass.properties = [];
 
         const addedRelationship = new Relationship();
         addedRelationship.relationshipType = this.relationshipType;
+        if (addedRelationship.relationshipType === RelationshipType.ASSOCIATION) {
+            addedRelationship.sourceCardinality = AssociationCardinality.ONE;
+            addedRelationship.targetCardinality = AssociationCardinality.ONE;
+        }
         addedRelationship.source = sourceId;
         addedRelationship.target = addedClass.id;
+
         addedRelationship.id = this.objectIdService.getNewObjectId();
 
         return { class: addedClass, relationship: addedRelationship };
@@ -734,16 +772,18 @@ export class ClassConfiguratorComponent implements OnInit,
         if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType))) {
             this.overlayEvent = event.getProperty("event");
 
-            this.overlayContent = new ClassOptionsOverlayContentData();
+            this.overlayContent = new OptionsOverlayContentData();
             this.overlayContent.marketplace = this.marketplace;
             this.overlayContent.helpseeker = this.helpseeker;
 
             if (cell.cellType === MyMxCellType.CLASS) {
+                this.overlayType = 'CLASS';
                 this.overlayContent.classDefinition = this.classDefinitions.find((c) => c.id === cell.id);
                 this.overlayContent.allClassDefinitions = this.classDefinitions;
                 this.overlayContent.allRelationships = this.relationships;
             } else if (MyMxCellType.isRelationship(cell.cellType)) {
                 this.overlayContent.relationship = this.relationships.find((r) => r.id === cell.id);
+                this.overlayType = 'RELATIONSHIP';
             }
 
             this.graph.setPanning(false);
@@ -753,20 +793,43 @@ export class ClassConfiguratorComponent implements OnInit,
         }
     }
 
-    handleOverlayClosedEvent(event: ClassOptionsOverlayContentData) {
+    handleOverlayClosedEvent(event: OptionsOverlayContentData) {
         this.graph.setPanning(true);
         this.graph.setEnabled(true);
         this.graph.setTooltips(true);
         this.displayOverlay = false;
 
         // tslint:disable-next-line: no-unused-expression
-        !isNullOrUndefined(event) ? this.handleModelChanges(event.classDefinition) : "";
+        !isNullOrUndefined(event) ? this.handleModelChanges(event, this.overlayType) : "";
 
         this.overlayContent = undefined;
+        this.overlayType = undefined;
         this.overlayEvent = undefined;
     }
 
-    handleModelChanges(classDefinition: ClassDefinition) {
+    handleModelChanges(overlayData: OptionsOverlayContentData, overlayType: 'CLASS' | 'RELATIONSHIP') {
+        const classDefinition = overlayData.classDefinition;
+        const relationship = overlayData.relationship;
+
+
+
+        let redrawCell;
+
+        if (overlayType === 'CLASS') {
+
+            redrawCell = this.handleClassDefinitionModelChanges(overlayData.classDefinition);
+
+        } else if (overlayType === 'RELATIONSHIP') {
+            redrawCell = this.handleRelationshipModelChanges(overlayData.relationship);
+        }
+
+
+        if (!isNullOrUndefined(redrawCell)) {
+            this.redrawContent(redrawCell);
+        }
+    }
+
+    private handleClassDefinitionModelChanges(classDefinition: ClassDefinition) {
         const i = this.classDefinitions.findIndex((c) => c.id === classDefinition.id);
         const existingClassDefinition = this.classDefinitions[i];
 
@@ -781,7 +844,25 @@ export class ClassConfiguratorComponent implements OnInit,
         this.classDefinitions[i] = classDefinition;
 
         if (!this.quickEditMode && classDefinition.properties.length !== existingClassDefinition.properties.length) {
-            this.redrawContent(cell);
+            return cell;
+        }
+    }
+
+    private handleRelationshipModelChanges(relationship: Relationship) {
+        const i = this.relationships.findIndex((r) => r.id === relationship.id);
+        const existingRelationship = this.relationships[i];
+
+        const cell = this.graph.getModel().getCell(relationship.id) as MyMxCell;
+        try {
+            this.graph.getModel().beginUpdate();
+            const newCell = this.insertRelationshipIntoGraph(relationship, undefined, cell) as MyMxCell;
+
+        } finally {
+            this.graph.getModel().endUpdate();
+        }
+        this.relationships[i] = relationship;
+        if (!this.quickEditMode) {
+            return cell;
         }
     }
 
@@ -994,14 +1075,9 @@ export class ClassConfiguratorComponent implements OnInit,
             if (!isNullOrUndefined(cell.target)) {
                 r.target = cell.target.id;
             }
-
-            if (cell.cellType === MyMxCellType.INHERITANCE) {
-                if (!isNullOrUndefined(cell.source)) {
-                    (<Inheritance>r).superClassId = cell.source.id;
-                }
-            } else if (cell.cellType === MyMxCellType.ASSOCIATION) {
-                (<Association>(r)).sourceCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(0).value);
-                (<Association>(r)).targetCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(1).value);
+            if (cell.cellType === MyMxCellType.ASSOCIATION) {
+                // r.sourceCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(0).value);
+                // r.targetCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(1).value);
             } else if (cell.cellType === MyMxCellType.AGGREGATION || cell.cellType === MyMxCellType.COMPOSITION) { // TODO
             } else {
                 // console.error('invalid cellType');
@@ -1044,8 +1120,8 @@ export class ClassConfiguratorComponent implements OnInit,
         this.router.navigate([`main/configurator/instance-editor/${
             this.marketplace.id
             }`], {
-            queryParams: [this.currentSelectedCell.id]
-        });
+                queryParams: [this.currentSelectedCell.id]
+            });
     }
 
     showExportDialog() {

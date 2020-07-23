@@ -174,33 +174,29 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.ruleForm.markAllAsTouched();
     
     if (this.ruleForm.valid) {     
-      if (this.ruleForm.value.name &&
-          this.derivationRule.classActions[0].classDefinition
-      ) {
-        this.derivationRule.name = this.ruleForm.value.name;
-        this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
+      this.derivationRule.name = this.ruleForm.value.name;
+       this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
-      ).tenantId;
-        this.derivationRule.container = "Test-Frontend";
-
+        ).tenantId;
+      this.derivationRule.container = "Test-Frontend";
+      
+      if (this.derivationRule.id){
         this.derivationRuleService
           .save(this.marketplace, this.derivationRule)
           .toPromise()
           .then(() => {
-              this.showSuccessMsg = true;
-                if (this.derivationRule.id){
-                 // window.location.reload()
-                  this.loadDerivationRule(this.marketplace, this.derivationRule.id);
-                } else {
-                  this.loadDerivationRuleByName(this.marketplace, 
-                                                this.derivationRule.tenantId, 
-                                                this.derivationRule.container,
-                                                this.derivationRule.name);
-                }
-            }
-          );
+             this.loadDerivationRule(this.marketplace, this.derivationRule.id);
+          });
+      } else {
+          this.derivationRuleService
+            .save(this.marketplace, this.derivationRule)
+            .toPromise()
+            .then((rule:DerivationRule) => { 
+              this.derivationRule = rule;
+              // this.router.navigate(["/main/rule/" + this.derivationRule.id])
+            });
       }
-      //this.ruleForm.reset();
+      this.showSuccessMsg = true;
       this.testConditions = false;
     } 
   }

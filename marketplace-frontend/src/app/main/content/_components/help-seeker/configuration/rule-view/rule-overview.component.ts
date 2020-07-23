@@ -23,7 +23,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 export class FuseRuleOverviewComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<DerivationRule>();
-  displayedColumns = ["name", "sourcesGeneral", "sourcesClasses", "target"];
+  displayedColumns = ["active", "name", "sourcesGeneral", "sourcesClasses", "target"];
   helpseeker: User;
   tenant: Tenant;
 
@@ -37,9 +37,15 @@ export class FuseRuleOverviewComponent implements OnInit {
     this.loadAllDerivationRules();
   }
 
-  onRowSelect(derivationRule: DerivationRule) {
-    console.log("row selected: " + derivationRule.id);
+  onRowSelect(derivationRule: DerivationRule, event) {
     this.router.navigate(["/main/rule/" + derivationRule.id]);
+  }
+
+  onChangeActivation(derivationRule: DerivationRule){
+    this.derivationRuleService
+      .save(this.marketplace, derivationRule)
+      .toPromise();
+    // this.loadAllDerivationRules();
   }
 
   private async loadAllDerivationRules() {
@@ -71,4 +77,5 @@ export class FuseRuleOverviewComponent implements OnInit {
       AggregationOperatorType[op as keyof typeof AggregationOperatorType];
     return x;
   }
+
 }

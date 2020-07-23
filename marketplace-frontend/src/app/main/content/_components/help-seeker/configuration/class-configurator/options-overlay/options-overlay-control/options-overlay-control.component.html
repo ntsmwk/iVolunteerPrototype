@@ -9,6 +9,10 @@
 
     </div>
 
-    <class-options-overlay-content [inputData]="model" (resultData)="handleResultEvent($event)">
+    <class-options-overlay-content *ngIf="overlayType == 'CLASS'" [inputData]="model"
+        (resultData)="handleResultEvent($event)">
     </class-options-overlay-content>
+
+    <relationship-options-overlay-content *ngIf="overlayType == 'RELATIONSHIP'" [inputData]="model"
+        (resultData)="handleResultEvent($event)"></relationship-options-overlay-content>
 </div>

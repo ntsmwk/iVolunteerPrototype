@@ -12,18 +12,22 @@ public class DerivationRule extends IVolunteerObject {
 
 	private String name;
 	private String container;
+	private boolean active;
 	private List<GeneralCondition> generalConditions = new ArrayList<GeneralCondition>();
 	private List<Condition> conditions = new ArrayList<>();
 	private List<ClassAction> actions = new ArrayList<>();
+	private String containerRuleEntryId;
 
 	public DerivationRule() {
-		
+		this.active = false;
+		containerRuleEntryId = null;
 	}
 	
 	public DerivationRule(String name, String container) {
 		this();
 		this.name = name;
 		this.container = container;
+		
 	}
 
 	public String getName() {
@@ -76,6 +80,26 @@ public class DerivationRule extends IVolunteerObject {
 	
 	public void addAction(ClassAction action) {
 		actions.add(action);
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	public boolean getActive() {
+		return active;
+	}
+	
+	public boolean isActivated() {
+		return active;
+	}
+	
+	public void setContainerRuleEntryId(String containerRuleEntryId) {
+		this.containerRuleEntryId = containerRuleEntryId;
+	}
+	
+	public String getContainerRuleEntryId() {
+		return containerRuleEntryId;
 	}
 
 }

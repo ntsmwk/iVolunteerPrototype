@@ -43,6 +43,7 @@ public class ClassConditionMapper {
 	}
 
 	public ClassCondition toSource (ClassConditionDTO target) {
+		System.out.println("  class condition: " + target.getClassDefinition().getName() + " " + target.getAggregationOperatorType());
 		ClassCondition entry = new ClassCondition(target.getClassDefinition().getId(),
 			                                      target.getValue(), 
 			                                      target.getAggregationOperatorType());

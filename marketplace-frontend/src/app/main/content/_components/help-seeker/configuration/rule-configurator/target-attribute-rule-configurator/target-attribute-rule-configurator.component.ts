@@ -82,7 +82,6 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   onPropertyChange($event) {
-    console.log( "attribute target --> property change");
     if (!this.attributeTarget.classProperty) {
       this.attributeTarget.classProperty = new ClassProperty();
     }
@@ -129,19 +128,16 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   onChange($event) {
-    console.log(" attribute target --> on change --> set class property definition");
     if (this.classProperties.length > 0) {
       this.attributeTarget.classProperty =
         this.classProperties.find(
           (cp) => cp.id === this.ruleTargetAttributeForm.value.classPropertyId
         ) || new ClassProperty();
-      console.log(" class property: " + this.attributeTarget.classProperty);
       this.attributeTargetChange.emit(this.attributeTarget);
     }
   }
 
   onChangeValue($event) {
-    console.log( "attribute target --> value change");
     if (this.classProperties.length > 0) {
       this.attributeTarget.classProperty =
         this.classProperties.find(

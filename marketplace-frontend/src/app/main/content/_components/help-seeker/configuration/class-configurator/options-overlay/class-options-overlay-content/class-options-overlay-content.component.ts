@@ -13,17 +13,8 @@ import { isNullOrUndefined } from "util";
 import { RemoveDialogData } from "app/main/content/_components/_shared/dialogs/remove-dialog/remove-dialog.component";
 import { DialogFactoryDirective } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { User } from "app/main/content/_model/user";
+import { OptionsOverlayContentData } from '../options-overlay-control/options-overlay-control.component';
 
-export class ClassOptionsOverlayContentData {
-  marketplace: Marketplace;
-  helpseeker: User;
-
-  classDefinition: ClassDefinition;
-  relationship: Relationship;
-
-  allClassDefinitions: ClassDefinition[];
-  allRelationships: Relationship[];
-}
 
 export interface PropertyOrEnumEntry {
   name: string;
@@ -32,12 +23,12 @@ export interface PropertyOrEnumEntry {
 
 @Component({
   selector: "class-options-overlay-content",
-  templateUrl: "./options-overlay-content.component.html",
-  styleUrls: ["./options-overlay-content.component.scss"],
+  templateUrl: "./class-options-overlay-content.component.html",
+  styleUrls: ["./class-options-overlay-content.component.scss"],
 })
 export class ClassOptionsOverlayContentComponent implements OnInit {
-  @Input() inputData: ClassOptionsOverlayContentData;
-  @Output() resultData = new EventEmitter<ClassOptionsOverlayContentData>();
+  @Input() inputData: OptionsOverlayContentData;
+  @Output() resultData = new EventEmitter<OptionsOverlayContentData>();
 
   relationshipPalettes = CConstants.relationshipPalettes;
   propertyTypePalettes = CConstants.propertyTypePalettes;
@@ -47,7 +38,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
   constructor(
     private dialogFactory: DialogFactoryDirective,
     private _sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.updatePropertiesAndEnumsList();
@@ -138,7 +129,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         this.inputData.allRelationships,
         this.inputData.classDefinition
       )
-      .then(() => {});
+      .then(() => { });
   }
 
   updatePropertiesAndEnumsList() {

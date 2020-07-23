@@ -24,6 +24,7 @@ public class DerivationRuleDTO {
 	private List<ClassConditionDTO> conditions = new ArrayList<ClassConditionDTO>();
 	private List<ClassActionDTO> classActions = new ArrayList<ClassActionDTO>();
 	private Date timestamp;
+	private boolean active;
 
 	public DerivationRuleDTO() {
 		
@@ -111,6 +112,14 @@ public class DerivationRuleDTO {
 
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	public boolean getActive() {
+		return active;
 	}
 
 }
