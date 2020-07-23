@@ -1,3 +1,5 @@
+import { map } from "lodash";
+
 export class User {
   id: string;
   username: string;
@@ -36,4 +38,9 @@ export class TenantUserSubscription {
   marketplaceId: string;
   tenantId: string;
   role: UserRole;
+}
+
+export class roleTenantMapping {
+  role: UserRole;
+  tenantIds: string[];
 }

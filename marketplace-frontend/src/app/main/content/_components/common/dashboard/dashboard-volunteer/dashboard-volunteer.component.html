@@ -145,12 +145,7 @@
           >
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <img
-                class="avatar"
-                src="{{
-                  'data:image/png;base64,' + getTenantImage(entry.tenantId)
-                }}"
-              />
+              <img class="avatar" [src]="getTenantImage(entry.tenantId)" />
 
               <!-- <div>{{ getIssuerName(entry.issuerId) }}</div> -->
               <div style="align-self: center;">
@@ -248,12 +243,7 @@
                       (click)="shareClassInstanceToOthers(entry, tenant)"
                     >
                       <div fxLayout="row" fxLayoutAlign="start center">
-                        <img
-                          class="avatar"
-                          src="{{
-                            'data:image/png;base64,' + getTenantImage(tenant.id)
-                          }}"
-                        />
+                        <img class="avatar" [src]="getTenantImage(tenant.id)" />
                         <div>{{ tenant.name }}</div>
                       </div>
                     </button>
@@ -275,10 +265,7 @@
                     <div fxLayout="row" fxLayoutAlign="start center">
                       <img
                         class="avatar"
-                        src="{{
-                          'data:image/png;base64,' +
-                            getTenantImage(entry.tenantId)
-                        }}"
+                        [src]="getTenantImage(entry.tenantId)"
                       />
                       <div>{{ getTenantName(entry.tenantId) }}</div>
                     </div>
@@ -298,7 +285,7 @@
               *ngFor="let tenant of getSharedWithTenants(entry)"
               class="avatar"
               matTooltip="{{ tenant.name }}"
-              src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}"
+              [src]="getTenantImage(tenant.id)"
               style="cursor: pointer;"
               [matMenuTriggerFor]="revokeMenu"
               [matMenuTriggerData]="{ tenant: tenant }"

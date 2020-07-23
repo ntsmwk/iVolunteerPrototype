@@ -16,7 +16,7 @@ import { FuseConfigService } from "@fuse/services/config.service";
 import { navigation_volunteer } from "app/navigation/navigation_volunteer";
 import { navigation_helpseeker } from "app/navigation/navigation_helpseeker";
 import { LoginService } from "./content/_service/login.service";
-import { UserRole, User } from "./content/_model/user";
+import { UserRole, User, roleTenantMapping } from "./content/_model/user";
 import { navigation_flexprod } from "app/navigation/navigation_flexprod";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { Router } from "@angular/router";
@@ -70,8 +70,8 @@ export class FuseMainComponent implements OnDestroy {
       });
 
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(
-      (newRole) => {
-        this.role = newRole;
+      (role: UserRole) => {
+        this.role = role;
       }
     );
   }

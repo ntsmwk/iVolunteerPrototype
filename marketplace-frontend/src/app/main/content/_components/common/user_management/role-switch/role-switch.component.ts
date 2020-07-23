@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "app/main/content/_service/login.service";
 import {
   User,
-  TenantUserSubscription,
   UserRole,
+  roleTenantMapping,
 } from "app/main/content/_model/user";
 import { ImageService } from "app/main/content/_service/image.service";
 import { fuseAnimations } from "@fuse/animations";
@@ -21,11 +21,10 @@ import { isNullOrUndefined } from "util";
 })
 export class RoleSwitchComponent implements OnInit {
   user: User;
-  subscriptions: TenantUserSubscription[] = [];
   allTenants: Tenant[] = [];
-  navigation: any;
+  roleTenantMappings: roleTenantMapping[] = [];
+
   isLoaded: boolean = false;
-  tenantMap = new Map<string, string[]>();
 
   constructor(
     private router: Router,
@@ -37,26 +36,27 @@ export class RoleSwitchComponent implements OnInit {
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
-    this.tenantMap = this.roleChangeService.getRoleTenantMap(this.user);
 
-    if (this.tenantMap.size === 1) {
-      this.onRoleSelected(<UserRole>this.tenantMap.keys().next().value);
+    this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(
+      this.user
+    );
+
+    if (this.roleTenantMappings.length === 1) {
+      this.onRoleSelected(this.roleTenantMappings[0]);
     }
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
     this.isLoaded = true;
   }
 
-  onRoleSelected(role: UserRole) {
-    this.loginService.generateGlobalInfo(role).then(() => {
-      this.router.navigate(["/main/dashboard"]).then(() => {
-        this.roleChangeService.changeRole(role);
+  onRoleSelected(mapping: roleTenantMapping) {
+    this.loginService
+      .generateGlobalInfo(mapping.role, mapping.tenantIds)
+      .then(() => {
+        this.router.navigate(["/main/dashboard"]).then(() => {
+          this.roleChangeService.changeRole(mapping.role);
+        });
       });
-    });
-  }
-
-  getProfileImage() {
-    return this.imageService.getImgSourceFromBytes(this.user.image);
   }
 
   getTenant(tenantId: string) {
@@ -68,16 +68,16 @@ export class RoleSwitchComponent implements OnInit {
     if (isNullOrUndefined(tenant)) {
       return "/assets/images/avatars/profile.jpg";
     } else {
-      return tenant.image;
+      return this.imageService.getImgSourceFromBytes(tenant.image);
     }
-  }
-
-  getRoleNameString(role: UserRole) {
-    return this.roleChangeService.getRoleNameString(role);
   }
 
   getTenantNameString(tenantId: string) {
     let tenant = this.allTenants.find((t) => t.id === tenantId);
     return tenant.name;
+  }
+
+  getRoleNameString(role: UserRole) {
+    return this.roleChangeService.getRoleNameString(role);
   }
 }

@@ -1,20 +1,25 @@
-<div *ngIf="user && currentRole != 'NONE'">
+<div *ngIf="isLoaded">
   <button
     mat-button
     [matMenuTriggerFor]="roleMenu"
     class="user-button"
-    [matTooltip]="possibleRoles.length > 0 ? 'Rolle wechseln' : null"
+    [matTooltip]="
+      possibleRoleTenantMappings.length > 0 ? 'Rolle wechseln' : null
+    "
   >
     <div fxLayout="row" fxLayoutAlign="center center">
       <img
-        *ngIf="currentRole == 'HELP_SEEKER'"
+        *ngIf="role != 'VOLUNTEER'"
         class="avatar"
-        src="{{ 'data:image/png;base64,' + getHelpseekerTenantImage() }}"
+        [src]="getCurrentTenantImage()"
       />
       <span class="rolename mr-12" fxHide fxShow.gt-sm>{{
-        getCurrentRoleName()
+        getCurrentRoleNameString()
       }}</span>
-      <mat-icon class="s-16" *ngIf="possibleRoles.length > 0" fxHide.xs
+      <mat-icon
+        class="s-16"
+        *ngIf="possibleRoleTenantMappings.length > 0"
+        fxHide.xs
         >keyboard_arrow_down</mat-icon
       >
     </div>
@@ -23,10 +28,13 @@
   <mat-menu #roleMenu="matMenu" [overlapTrigger]="false">
     <button
       mat-menu-item
-      *ngFor="let role of possibleRoles"
-      (click)="onRoleSelected(role)"
+      *ngFor="let mapping of possibleRoleTenantMappings"
+      (click)="onRoleSelected(mapping)"
     >
-      <span>{{ getRoleNameString(role) }}</span>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <img class="avatar" [src]="getTenantImage(mapping)" />
+        <span>{{ getRoleNameString(mapping.role) }}</span>
+      </div>
     </button>
   </mat-menu>
 </div>
