@@ -31,6 +31,7 @@ import { ObjectIdService } from "../../../../_service/objectid.service.";
 import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { MyMxCell, MyMxCellType } from "../myMxCell";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { MatchingOperatorRelationshipService } from "app/main/content/_service/configuration/matching-operator-relationship.service";
 
 declare var require: any;
 
@@ -52,6 +53,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     private matchingCollectorConfigurationService: MatchingCollectorConfigurationService,
     private loginService: LoginService,
     private matchingConfigurationService: MatchingConfigurationService,
+    private matchingOperatorRelationshipService: MatchingOperatorRelationshipService,
     private objectIdService: ObjectIdService,
     private renderer: Renderer2,
     private dialogFactory: DialogFactoryDirective
@@ -98,57 +100,62 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.marketplace = globalInfo.marketplace;
   }
 
-  loadClassesAndRelationships(
+  async loadClassesAndRelationships(
     leftClassConfigurationId: string,
     rightClassConfigurationId: string
   ) {
     this.clearEditor();
     this.matchingConfiguration = undefined;
+    this.relationships = [];
 
-    Promise.all([
-      this.matchingCollectorConfigurationService
+    // TODO MWE less requests to server....
+
+    this.leftMatchingCollectorConfiguration = <MatchingCollectorConfiguration>(
+      await this.matchingCollectorConfigurationService
         .getSavedMatchingCollectorConfiguration(
           this.marketplace,
           leftClassConfigurationId
         )
         .toPromise()
-        .then((configuration: MatchingCollectorConfiguration) => {
-          this.leftMatchingCollectorConfiguration = configuration;
-          this.insertClassDefinitionsLeftFromCollector();
-        }),
-      this.matchingCollectorConfigurationService
+    );
+    this.insertClassDefinitionsLeftFromCollector();
+
+    this.rightMatchingCollectorConfiguration = <MatchingCollectorConfiguration>(
+      await this.matchingCollectorConfigurationService
         .getSavedMatchingCollectorConfiguration(
           this.marketplace,
           rightClassConfigurationId
         )
         .toPromise()
-        .then((configuration: MatchingCollectorConfiguration) => {
-          this.rightMatchingCollectorConfiguration = configuration;
-          this.insertClassDefinitionsRightFromCollector();
-        })
-    ]).then(() => {
-      this.matchingConfigurationService
+    );
+    this.insertClassDefinitionsRightFromCollector();
+
+    const retrievedMatchingConfiguration = <MatchingConfiguration>(
+      await this.matchingConfigurationService
         .getMatchingConfigurationByClassConfigurationIds(
           this.marketplace,
           leftClassConfigurationId,
           rightClassConfigurationId
         )
         .toPromise()
-        .then((matchingConfiguration: MatchingConfiguration) => {
-          if (!isNullOrUndefined(matchingConfiguration)) {
-            this.matchingConfiguration = matchingConfiguration;
-
-            // TODO init relationships
-            this.insertMatchingOperatorsAndRelationships();
-          } else {
-            this.matchingConfiguration = new MatchingConfiguration();
-            this.matchingConfiguration.rightClassConfigurationId = rightClassConfigurationId;
-            this.matchingConfiguration.leftClassConfigurationId = leftClassConfigurationId;
-            this.relationships = [];
-            // this.matchingConfiguration.relationships = [];
-          }
-        });
-    });
+    );
+    if (!isNullOrUndefined(retrievedMatchingConfiguration)) {
+      this.matchingConfiguration = retrievedMatchingConfiguration;
+      this.relationships = <MatchingOperatorRelationship[]>(
+        await this.matchingOperatorRelationshipService
+          .getMatchingOperatorRelationshipByMatchingConfiguration(
+            this.marketplace,
+            this.matchingConfiguration.id
+          )
+          .toPromise()
+      );
+      this.insertMatchingOperatorsAndRelationships();
+    } else {
+      this.matchingConfiguration = new MatchingConfiguration();
+      this.matchingConfiguration.rightClassConfigurationId = rightClassConfigurationId;
+      this.matchingConfiguration.leftClassConfigurationId = leftClassConfigurationId;
+      this.relationships = [];
+    }
   }
 
   ngAfterContentInit() {
@@ -397,13 +404,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       20
     );
 
-    // console.log("C: " + collector.path);
-
     let addPropertiesReturn = this.addPropertiesToCell(cell, collector, 5, 45);
     cell = addPropertiesReturn.cell;
 
     for (const entry of collector.collectorEntries) {
-      // console.log("E: " + entry.path);
       const boundaryHeight =
         entry.classDefinition.name.split(/\r?\n/).length * 25;
       const boundary = this.graph.insertVertex(
@@ -480,7 +484,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private insertMatchingOperatorsAndRelationships() {
-    // TODO init relationships
     for (const entry of this.relationships) {
       const operatorCell = this.insertMatchingOperator(entry);
 
@@ -614,7 +617,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private performSave() {
+  private async performSave() {
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
     const matchingOperatorCells = cells.filter(
       (cell: MyMxCell) => cell.cellType === MyMxCellType.MATCHING_OPERATOR
@@ -665,12 +668,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     this.relationships = updatedRelationships;
-    this.matchingConfigurationService
+    await this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, this.matchingConfiguration)
-      .toPromise()
-      .then((ret: MatchingConfiguration) => {
-        // not doing anything currently
-      });
+      .toPromise();
+    await this.matchingOperatorRelationshipService
+      .saveMatchingOperatorRelationships(this.marketplace, this.relationships)
+      .toPromise();
+
+    // TODO save relationships!!!
   }
 
   performOpen(matchingConfiguration: MatchingConfiguration) {
@@ -690,7 +695,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       rightClassConfiguration.id;
     matchingConfiguration.leftClassConfigurationId = leftClassConfiguration.id;
     matchingConfiguration.name = name;
-    matchingConfiguration.relationships = [];
 
     this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, matchingConfiguration)
@@ -858,7 +862,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     try {
       this.graph.getModel().beginUpdate();
       this.graph.removeCells(cellsToRemove, true);
-      this.matchingConfiguration.relationships = this.matchingConfiguration.relationships.filter(
+      this.relationships = this.relationships.filter(
         r => cellsToRemove.findIndex(c => r.id === c.id) < 0
       );
     } finally {
@@ -887,9 +891,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   handleOverlayOpened(event: mxgraph.mxEventObject, cell: MyMxCell) {
-    this.overlayRelationship = this.matchingConfiguration.relationships.find(
-      r => r.id === cell.id
-    );
+    this.overlayRelationship = this.relationships.find(r => r.id === cell.id);
     this.overlayEvent = event.properties.event;
     this.displayOverlay = true;
 
@@ -903,10 +905,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.graphContainer.nativeElement.style.overflow = "scroll";
 
     if (!isNullOrUndefined(event)) {
-      const index = this.matchingConfiguration.relationships.findIndex(
-        r => r.id === event.id
-      );
-      this.matchingConfiguration.relationships[index] = event;
+      const index = this.relationships.findIndex(r => r.id === event.id);
+      this.relationships[index] = event;
 
       try {
         this.graph.getModel().beginUpdate();
