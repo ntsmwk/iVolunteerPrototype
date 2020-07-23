@@ -26,7 +26,7 @@ const relationshipPalettes = {
       label: RelationshipType.getLabelFromRelationshipType(
         RelationshipType.ASSOCIATION
       ),
-      imgPath: '/assets/icons/class_editor/relationships/',
+      imgPath: '/assets/icons/class_editor/relationships/aggregation.png',
       type: RelationshipType.ASSOCIATION,
       shape: undefined,
     },
