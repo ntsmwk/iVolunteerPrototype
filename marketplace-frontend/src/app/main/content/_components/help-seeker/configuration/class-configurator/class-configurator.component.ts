@@ -387,11 +387,8 @@ export class ClassConfiguratorComponent implements OnInit,
     private parseIncomingRelationships() {
         try {
             this.graph.getModel().beginUpdate();
-            for (const r of this.relationships) {
-                if (r.relationshipType === RelationshipType.AGGREGATION) {
-                    r.relationshipType = RelationshipType.ASSOCIATION;
-
-                }
+            for (let r of this.relationships) {
+                r = this.convertAggregation(r);
                 const rel: MyMxCell = this.insertRelationshipIntoGraph(r, new mx.mxPoint(0, 0)) as MyMxCell;
                 // if (rel.cellType === MyMxCellType.ASSOCIATION) {
                 //     this.addHiddenRelationshipHack(rel);
@@ -474,8 +471,8 @@ export class ClassConfiguratorComponent implements OnInit,
         hack.relationshipType = RelationshipType.ASSOCIATION;
         hack.source = sourceCell.id;
         hack.target = targetCell.id;
-        hack.sourceCardinality = "ONE";
-        hack.targetCardinality = "ONE";
+        hack.sourceCardinality = AssociationCardinality.ONE;
+        hack.sourceCardinality = AssociationCardinality.ONE;
         hack.id = this.objectIdService.getNewObjectId();
 
         const relationshipCell = new mx.mxCell("", new mx.mxGeometry(0, 0, 0, 0), CConstants.mxStyles.association) as MyMxCell;
@@ -754,11 +751,11 @@ export class ClassConfiguratorComponent implements OnInit,
             this.overlayContent = new OptionsOverlayContentData();
             this.overlayContent.marketplace = this.marketplace;
             this.overlayContent.helpseeker = this.helpseeker;
+            this.overlayContent.allClassDefinitions = this.classDefinitions;
 
             if (cell.cellType === MyMxCellType.CLASS) {
                 this.overlayType = 'CLASS';
                 this.overlayContent.classDefinition = this.classDefinitions.find((c) => c.id === cell.id);
-                this.overlayContent.allClassDefinitions = this.classDefinitions;
                 this.overlayContent.allRelationships = this.relationships;
             } else if (MyMxCellType.isRelationship(cell.cellType)) {
                 this.overlayContent.relationship = this.relationships.find((r) => r.id === cell.id);
@@ -1124,6 +1121,15 @@ export class ClassConfiguratorComponent implements OnInit,
     /**
    * ******DEBUGGING******
    */
+
+    private convertAggregation(r: Relationship) {
+        if (r.relationshipType === RelationshipType.AGGREGATION) {
+            r.relationshipType = RelationshipType.ASSOCIATION;
+            r.targetCardinality = AssociationCardinality.ONE;
+            r.sourceCardinality = AssociationCardinality.ONE;
+        }
+        return r;
+    }
 
     showZoomLevel() {
         const scale = this.graph.view.getScale();
