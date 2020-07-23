@@ -10,6 +10,8 @@ export class ServiceNameService {
     marketplace: Marketplace,
     matchingConfiguratorId: string
   ) {
-    return this.httpClient.get(``);
+    return this.httpClient.get(
+      `${marketplace.url}/matching-operator-relationship/${matchingConfiguratorId}`
+    );
   }
 }

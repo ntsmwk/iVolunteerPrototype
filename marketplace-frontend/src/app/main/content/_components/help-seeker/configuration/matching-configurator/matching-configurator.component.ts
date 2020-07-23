@@ -623,7 +623,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const updatedRelationships: MatchingOperatorRelationship[] = [];
 
     for (const operatorCell of matchingOperatorCells) {
-      const relationship = this.matchingConfiguration.relationships.find(
+      const relationship = this.relationships.find(
         r => r.id === operatorCell.id
       );
 
@@ -664,7 +664,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       updatedRelationships.push(relationship);
     }
 
-    this.matchingConfiguration.relationships = updatedRelationships;
+    this.relationships = updatedRelationships;
     this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, this.matchingConfiguration)
       .toPromise()
@@ -761,7 +761,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           relationship.coordY = cell.geometry.y;
           relationship.matchingOperatorType = cell.matchingOperatorType;
 
-          outer.matchingConfiguration.relationships.push(relationship);
+          outer.relationships.push(relationship);
         } else if (paletteItem.type === "connector") {
           const cell = new mx.mxCell(
             undefined,
