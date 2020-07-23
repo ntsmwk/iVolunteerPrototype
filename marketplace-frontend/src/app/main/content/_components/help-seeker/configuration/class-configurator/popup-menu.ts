@@ -1,9 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
-import { AssociationCardinality, Association } from 'app/main/content/_model/meta/relationship';
 import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguratorComponent } from './class-configurator.component';
-import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 
 declare var require: any;
 
@@ -212,51 +210,51 @@ export class EditorPopupMenu {
     }
   }
 
-  addCardinalitiesToSubmenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, parent: HTMLTableRowElement, cell: MyMxCell, childId: 0 | 1) {
-    menu.addItem(AssociationCardinality.ZEROSTAR, null, function () {
-      setCellValue(cell, childId, 'ZEROSTAR');
-    }, parent, null, null, null);
+  // addCardinalitiesToSubmenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, parent: HTMLTableRowElement, cell: MyMxCell, childId: 0 | 1) {
+  //   menu.addItem(AssociationCardinality.ZEROSTAR, null, function () {
+  //     setCellValue(cell, childId, 'ZEROSTAR');
+  //   }, parent, null, null, null);
 
-    menu.addItem(AssociationCardinality.ZEROONE, null, function () {
-      setCellValue(cell, childId, 'ZEROONE');
-    }, parent, null, null, null);
+  //   menu.addItem(AssociationCardinality.ZEROONE, null, function () {
+  //     setCellValue(cell, childId, 'ZEROONE');
+  //   }, parent, null, null, null);
 
-    menu.addItem(AssociationCardinality.ONE, null, function () {
-      setCellValue(cell, childId, 'ONE');
-    }, parent, null, null, null);
+  //   menu.addItem(AssociationCardinality.ONE, null, function () {
+  //     setCellValue(cell, childId, 'ONE');
+  //   }, parent, null, null, null);
 
-    menu.addItem(AssociationCardinality.ONESTAR, null, function () {
-      setCellValue(cell, childId, 'ONESTAR');
-    }, parent, null, null, null);
+  //   menu.addItem(AssociationCardinality.ONESTAR, null, function () {
+  //     setCellValue(cell, childId, 'ONESTAR');
+  //   }, parent, null, null, null);
 
 
-    const outer = this;
-    function setCellValue(cell: MyMxCell, childId: 0 | 1, parameter: string) {
-      // updateCardinality(cell, childId, parameter);
+  //   const outer = this;
+  //   function setCellValue(cell: MyMxCell, childId: 0 | 1, parameter: string) {
+  //     // updateCardinality(cell, childId, parameter);
 
-      try {
-        graph.getModel().beginUpdate();
-        if (!isNullOrUndefined(cell.children)) {
-          graph.getModel().getChildren(cell)[childId].setValue(AssociationCardinality[parameter]);
-          // workaround to get graph to update
-          graph.getModel().remove(cell);
-          graph.addCell(cell);
-        } else {
-          cell.setValue(AssociationCardinality[parameter]);
-          graph.getModel().remove(cell.getParent());
-          graph.addCell(cell.getParent());
-        }
-      } finally {
-        graph.getModel().endUpdate();
-      }
-    }
+  //     try {
+  //       graph.getModel().beginUpdate();
+  //       if (!isNullOrUndefined(cell.children)) {
+  //         graph.getModel().getChildren(cell)[childId].setValue(AssociationCardinality[parameter]);
+  //         // workaround to get graph to update
+  //         graph.getModel().remove(cell);
+  //         graph.addCell(cell);
+  //       } else {
+  //         cell.setValue(AssociationCardinality[parameter]);
+  //         graph.getModel().remove(cell.getParent());
+  //         graph.addCell(cell.getParent());
+  //       }
+  //     } finally {
+  //       graph.getModel().endUpdate();
+  //     }
+  //   }
 
-    function updateCardinality(associationCell: MyMxCell, childId: 0 | 1, parameter: string) {
-      (<Association>outer.editorInstance.relationships.find((r: Association) => {
-        return r.id === associationCell.id;
-      }))['param' + (childId + 1)] = parameter;
-      console.log(outer.editorInstance.relationships);
+  //   function updateCardinality(associationCell: MyMxCell, childId: 0 | 1, parameter: string) {
+  //     (<Association>outer.editorInstance.relationships.find((r: Association) => {
+  //       return r.id === associationCell.id;
+  //     }))['param' + (childId + 1)] = parameter;
+  //     console.log(outer.editorInstance.relationships);
 
-    }
-  }
+  //   }
+  // }
 }

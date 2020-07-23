@@ -25,6 +25,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { User } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
+import { ImageService } from "app/main/content/_service/image.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -98,7 +99,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private router: Router,
     private iconRegistry: MatIconRegistry,
     private dialogFactory: DialogFactoryDirective,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private imageService: ImageService
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -218,7 +220,7 @@ export class DashboardVolunteerComponent implements OnInit {
     if (isNullOrUndefined(tenant)) {
       return "/assets/images/avatars/profile.jpg";
     } else {
-      return tenant.image;
+      return this.imageService.getImgSourceFromBytes(tenant.image);
     }
   }
 

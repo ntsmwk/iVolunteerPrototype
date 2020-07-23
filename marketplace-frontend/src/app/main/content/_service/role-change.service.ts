@@ -1,36 +1,33 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { UserRole, User } from "../_model/user";
-import { Tenant } from "../_model/tenant";
-import { TenantService } from "./core-tenant.service";
+import { UserRole, User, roleTenantMapping } from "../_model/user";
 
 @Injectable({
   providedIn: "root",
 })
 export class RoleChangeService {
   onRoleChanged: BehaviorSubject<any>;
-  currentRole: UserRole = UserRole.NONE;
 
   constructor() {
-    this.onRoleChanged = new BehaviorSubject(this.currentRole);
+    this.onRoleChanged = new BehaviorSubject(UserRole.NONE);
   }
 
   changeRole(role: UserRole) {
-    this.currentRole = role;
     this.onRoleChanged.next(role);
   }
 
-  getRoleTenantMap(user: User) {
-    let tenantMap = new Map<string, string[]>();
+  getRoleTenantMappings(user: User) {
+    let map: roleTenantMapping[] = [];
+
     let volunteerSubs = user.subscribedTenants.filter((s) => {
       return s.role === UserRole.VOLUNTEER;
     });
 
     if (volunteerSubs.length > 0) {
-      tenantMap.set(
-        UserRole.VOLUNTEER,
-        volunteerSubs.map((s) => s.tenantId)
-      );
+      let data = new roleTenantMapping();
+      data.role = volunteerSubs[0].role;
+      data.tenantIds = volunteerSubs.map((s) => s.tenantId);
+      map.push(data);
     }
 
     user.subscribedTenants
@@ -38,10 +35,13 @@ export class RoleChangeService {
         return s.role != UserRole.VOLUNTEER;
       })
       .forEach((s) => {
-        tenantMap.set(s.role, Array.of(s.tenantId));
+        let data = new roleTenantMapping();
+        data.role = s.role;
+        data.tenantIds = Array.of(s.tenantId);
+        map.push(data);
       });
 
-    return tenantMap;
+    return map;
   }
 
   getRoleNameString(role: UserRole) {

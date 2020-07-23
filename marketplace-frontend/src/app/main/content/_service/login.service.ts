@@ -46,20 +46,24 @@ export class LoginService {
   }
 
   getGlobalInfo() {
-    let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
-    if (globalInfo) {
-      return new Observable((subscriber) => {
+    const observable = new Observable((subscriber) => {
+      let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
+      if (globalInfo) {
         subscriber.next(globalInfo);
         subscriber.complete();
-      });
-    } else {
-      this.httpClient.get(`/core/login/globalInfo`);
-    }
+      } else {
+        this.httpClient.get(`/core/login/globalInfo`);
+      }
+    });
+
+    return observable;
   }
 
-  async generateGlobalInfo(role: UserRole) {
+  async generateGlobalInfo(role: UserRole, tenantIds: string[]) {
     let globalInfo = <GlobalInfo>(
-      await this.httpClient.get(`/core/login/globalInfo/${role}`).toPromise()
+      await this.httpClient
+        .put(`/core/login/globalInfo/role/${role}`, tenantIds)
+        .toPromise()
     );
 
     localStorage.setItem("globalInfo", JSON.stringify(globalInfo));

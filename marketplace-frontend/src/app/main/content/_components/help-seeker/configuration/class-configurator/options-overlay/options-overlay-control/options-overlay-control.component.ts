@@ -1,10 +1,24 @@
 import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output, OnInit, OnChanges } from '@angular/core';
-import { ClassOptionsOverlayContentData } from '../options-overlay-content/options-overlay-content.component';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { User } from 'app/main/content/_model/user';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
 
 declare var $: any;
 
 const OVERLAY_WIDTH = 400;
 const OVERLAY_HEIGHT = 390;
+
+export class OptionsOverlayContentData {
+  marketplace: Marketplace;
+  helpseeker: User;
+
+  classDefinition: ClassDefinition;
+  relationship: Relationship;
+
+  allClassDefinitions: ClassDefinition[];
+  allRelationships: Relationship[];
+}
 
 
 @Component({
@@ -17,11 +31,12 @@ export class ClassOptionsOverlayControlComponent implements OnInit, OnChanges {
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
   @Input() displayOverlay: boolean;
-  @Input() overlayContent: ClassOptionsOverlayContentData;
+  @Input() overlayType: 'CLASS' | 'RELATIONSHIP';
+  @Input() overlayContent: OptionsOverlayContentData;
   @Input() overlayEvent: PointerEvent;
-  @Output() overlayClosed = new EventEmitter<ClassOptionsOverlayContentData>();
+  @Output() overlayClosed = new EventEmitter<OptionsOverlayContentData>();
 
-  model: ClassOptionsOverlayContentData = new ClassOptionsOverlayContentData();
+  model: OptionsOverlayContentData = new OptionsOverlayContentData();
 
   constructor(
     private changeDetector: ChangeDetectorRef
@@ -65,7 +80,7 @@ export class ClassOptionsOverlayControlComponent implements OnInit, OnChanges {
     }
   }
 
-  handleResultEvent(event: ClassOptionsOverlayContentData) {
+  handleResultEvent(event: OptionsOverlayContentData) {
     this.displayOverlay = false;
     this.overlayClosed.emit(event);
   }
