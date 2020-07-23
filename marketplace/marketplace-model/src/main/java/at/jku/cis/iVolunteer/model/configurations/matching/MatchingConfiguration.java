@@ -18,7 +18,6 @@ public class MatchingConfiguration {
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
 
-//	List<MatchingOperatorRelationship> relationships;
 
 	public String getId() {
 		return id;

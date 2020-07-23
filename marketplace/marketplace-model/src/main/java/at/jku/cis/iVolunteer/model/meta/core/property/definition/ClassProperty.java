@@ -32,8 +32,6 @@ public class ClassProperty<T> {
 	private boolean visible;
 	private int tabId;
 	
-	
-
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
 	public ClassProperty() {
