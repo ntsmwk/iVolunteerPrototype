@@ -21,6 +21,7 @@ export class FormEntryViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.formEntry);
   }
 
   handleResultEvent(event) {

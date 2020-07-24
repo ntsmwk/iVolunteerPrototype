@@ -62,7 +62,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
     private objectIdService: ObjectIdService
-  ) {}
+  ) { }
 
   ngOnInit() {
     let marketplaceId: string;
@@ -124,6 +124,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
+    // formEntry.questions = this.questionService.getQuestionsFromProperties(
+    //   formEntry.classProperties,
+    //   idPrefix
+    // );
     formEntry.questions = this.questionService.getQuestionsFromProperties(
       formEntry.classProperties,
       idPrefix
@@ -132,10 +136,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       formEntry.questions
     );
 
-    if (
-      !isNullOrUndefined(formEntry.questions) &&
-      formEntry.questions.length > 0
-    ) {
+    if (!isNullOrUndefined(formEntry.questions) && formEntry.questions.length > 0) {
       this.expectedNumberOfResults++;
     }
 

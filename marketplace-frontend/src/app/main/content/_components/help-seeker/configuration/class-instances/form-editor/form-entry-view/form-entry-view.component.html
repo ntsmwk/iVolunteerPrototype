@@ -35,6 +35,9 @@
         </app-dynamic-class-instance-creation-form>
       </div>
       <div *ngFor="let entry of formEntry.subEntries">
+        <div *ngIf="entry.multipleAllowed">
+          test for multiple
+        </div>
         <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
           expanded="false" [ignoreValidity]="ignoreValidity" (result)="handleResultEvent($event)"
           (tupleSelected)="handleTupleSelection($event)">

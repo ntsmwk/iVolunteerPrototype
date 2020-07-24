@@ -26,6 +26,8 @@ import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 //import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
@@ -245,11 +247,13 @@ public class CollectionService {
 		while (!sourceStack.isEmpty()) {
 			Relationship relationship = sourceStack.pop();
 
-			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
+			if (relationship.getRelationshipType().equals(RelationshipType.ASSOCIATION)) {
 				ClassDefinition classDefinition = allClassDefinitions.stream()
 						.filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
 				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()),
 						allClassDefinitions, allRelationships, false);
+				subFormEntry.setMultipleAllowed(((Association) relationship).getTargetCardinality() == AssociationCardinality.N);
+				
 				subFormEntries.add(subFormEntry);
 
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
