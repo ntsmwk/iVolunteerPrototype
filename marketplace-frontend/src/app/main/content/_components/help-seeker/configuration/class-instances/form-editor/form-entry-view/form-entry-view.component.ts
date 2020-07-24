@@ -15,6 +15,7 @@ export class FormEntryViewComponent implements OnInit {
   @Input() finishClicked: boolean;
   @Input() expanded: boolean;
   @Input() ignoreValidity: boolean;
+  @Input() subEntry: boolean;
   @Output() result = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 

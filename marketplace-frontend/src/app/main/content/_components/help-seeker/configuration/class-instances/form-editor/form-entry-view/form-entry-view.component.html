@@ -28,13 +28,30 @@
 
       <div class="m-12">
         <!-- <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0" -->
-        <app-dynamic-class-instance-creation-form
-          *ngFor="let formArrayEntry of formEntry.formGroup.controls['entries'].controls"
-          [questions]="formEntry.questions" hideButtons="true" [formConfigurationId]="formConfiguration.id"
-          [form]="formArrayEntry" lastEntry="false" [finishClicked]="finishClicked" [ignoreValidity]="ignoreValidity"
-          (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()"
-          (tupleSelected)="handleTupleSelection($event)">
-        </app-dynamic-class-instance-creation-form>
+        <div *ngFor="let formArrayEntry of formEntry.formGroup.controls['entries'].controls">
+          <div [ngClass]="{'form-with-border': subEntry}">
+
+            <div *ngIf="!subEntry">
+              <ng-container *ngTemplateOutlet="questionForm"></ng-container>
+            </div>
+
+            <div *ngIf="subEntry">
+              subentry
+              <ng-container *ngTemplateOutlet="questionForm"></ng-container>
+            </div>
+
+            <ng-template #questionForm>
+              <app-dynamic-class-instance-creation-form [questions]="formEntry.questions" hideButtons="true"
+                [formConfigurationId]="formConfiguration.id" [form]="formArrayEntry" lastEntry="false"
+                [finishClicked]="finishClicked" [ignoreValidity]="ignoreValidity"
+                (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()"
+                (tupleSelected)="handleTupleSelection($event)">
+              </app-dynamic-class-instance-creation-form>
+            </ng-template>
+          </div>
+
+
+        </div>
       </div>
       <div *ngFor="let entry of formEntry.subEntries">
 
@@ -43,7 +60,7 @@
         </div>
 
         <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
-          expanded="false" [ignoreValidity]="ignoreValidity" (result)="handleResultEvent($event)"
+          expanded="false" [ignoreValidity]="ignoreValidity" subEntry="true" (result)="handleResultEvent($event)"
           (tupleSelected)="handleTupleSelection($event)">
         </app-form-entry-view>
       </div>
