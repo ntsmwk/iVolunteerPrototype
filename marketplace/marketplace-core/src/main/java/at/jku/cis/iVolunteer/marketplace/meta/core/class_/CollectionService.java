@@ -103,7 +103,7 @@ public class CollectionService {
 			List<Relationship> relationships = this.relationshipRepository.findByTarget(classDefinition.getId());
 
 			relationships = relationships.stream()
-					.filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION)
+					.filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
 							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
 					.collect(Collectors.toList());
 
@@ -146,7 +146,7 @@ public class CollectionService {
 			List<MatchingCollectorEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
-		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION)
+		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
 				| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
 
 		Collections.reverse(relationships);

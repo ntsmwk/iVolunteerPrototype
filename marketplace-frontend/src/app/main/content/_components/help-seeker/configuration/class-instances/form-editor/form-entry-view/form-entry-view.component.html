@@ -29,15 +29,17 @@
       <div class="m-12">
         <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0"
           [questions]="formEntry.questions" hideButtons="true" [formConfigurationId]="formConfiguration.id"
-          [form]="formEntry.formGroup" lastEntry="false" [finishClicked]="finishClicked"
+          [form]="formEntry.formGroup.controls['entries'].get('0')" lastEntry="false" [finishClicked]="finishClicked"
           [ignoreValidity]="ignoreValidity" (resultEvent)="handleResultEvent($event)"
           (cancelEvent)="handleCancelEvent()" (tupleSelected)="handleTupleSelection($event)">
         </app-dynamic-class-instance-creation-form>
       </div>
       <div *ngFor="let entry of formEntry.subEntries">
+
         <div *ngIf="entry.multipleAllowed">
           test for multiple
         </div>
+
         <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
           expanded="false" [ignoreValidity]="ignoreValidity" (result)="handleResultEvent($event)"
           (tupleSelected)="handleTupleSelection($event)">

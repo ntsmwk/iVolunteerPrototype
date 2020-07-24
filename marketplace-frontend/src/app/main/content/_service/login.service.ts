@@ -2,13 +2,13 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { UserRole } from "../_model/user";
 import { GlobalInfo } from "../_model/global-info";
-import { Observable } from "rxjs";
+import { Observable, generate } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class LoginService {
-  constructor(private http: HttpClient, private httpClient: HttpClient) {}
+  constructor(private http: HttpClient, private httpClient: HttpClient) { }
 
   login(username: string, password: string) {
     return this.http.post(
@@ -67,5 +67,6 @@ export class LoginService {
     );
 
     localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
+    console.log(globalInfo);
   }
 }

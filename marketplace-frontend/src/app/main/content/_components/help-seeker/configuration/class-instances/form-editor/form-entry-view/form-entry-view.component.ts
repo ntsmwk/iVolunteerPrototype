@@ -22,6 +22,10 @@ export class FormEntryViewComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.formEntry);
+    console.log(this.formEntry.formGroup);
+    console.log(this.formEntry.formGroup.controls);
+    console.log(this.formEntry.formGroup.controls['entries']);
+    console.log(this.formEntry.formGroup.controls['entries'].get('0'));
   }
 
   handleResultEvent(event) {
