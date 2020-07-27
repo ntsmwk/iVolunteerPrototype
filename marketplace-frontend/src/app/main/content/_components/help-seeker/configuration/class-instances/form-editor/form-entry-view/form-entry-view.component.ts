@@ -15,12 +15,18 @@ export class FormEntryViewComponent implements OnInit {
   @Input() finishClicked: boolean;
   @Input() expanded: boolean;
   @Input() ignoreValidity: boolean;
+  @Input() subEntry: boolean;
   @Output() result = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.formEntry);
+    console.log(this.formEntry.formGroup);
+    console.log(this.formEntry.formGroup.controls);
+    console.log(this.formEntry.formGroup.controls['entries']);
+    console.log(this.formEntry.formGroup.controls['entries'].get('0'));
   }
 
   handleResultEvent(event) {

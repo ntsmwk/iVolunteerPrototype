@@ -17,6 +17,7 @@ public class FormEntry {
 	private List<FormEntry> subEntries = new ArrayList<>();
 
 	private String imagePath;
+	private boolean multipleAllowed;
 	
 	
 	public FormEntry(String id) {
@@ -73,6 +74,18 @@ public class FormEntry {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+
+	public boolean isMultipleAllowed() {
+		return multipleAllowed;
+	}
+
+	public void setMultipleAllowed(boolean multipleAllowed) {
+		this.multipleAllowed = multipleAllowed;
+	}
+
+	
+
+	
 	
 	
 

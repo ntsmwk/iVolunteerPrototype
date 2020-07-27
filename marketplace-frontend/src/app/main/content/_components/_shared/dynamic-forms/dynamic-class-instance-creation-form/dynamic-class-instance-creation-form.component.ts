@@ -54,7 +54,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
     private classDefinitionService: ClassDefinitionService) { }
 
   ngOnInit() {
-    if (!isNullOrUndefined(this.form)) {
+    if (isNullOrUndefined(this.form)) {
       this.form = this.qcs.toFormGroup(this.questions);
     }
 
