@@ -17,14 +17,19 @@ export class QuestionControlService {
     array.push(innerGroup);
 
     //Test with 2nd group
-    const innerGroup2 = fb.group({});
-    this.addChildToGroup(fb, questions, innerGroup2);
-    array.push(innerGroup2);
+    // const innerGroup2 = fb.group({});
+    // this.addChildToGroup(fb, questions, innerGroup2);
+    // array.push(innerGroup2);
     //....
 
     outerGroup.setControl("entries", array);
     // console.log(ret.controls);
     return outerGroup;
+  }
+
+  getControlForSubEntry(questions: QuestionBase<any>[]) {
+    const fb: FormBuilder = new FormBuilder();
+    return this.addChildToGroup(fb, questions, fb.group({}));
   }
 
 

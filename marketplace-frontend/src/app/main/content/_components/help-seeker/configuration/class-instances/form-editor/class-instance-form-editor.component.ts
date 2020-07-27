@@ -38,10 +38,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   returnedClassInstances: ClassInstance[];
 
-  canContinue: boolean;
-  canFinish: boolean;
-  lastEntry: boolean;
-
   loaded = false;
   finishClicked = false;
   showResultPage = false;
@@ -112,11 +108,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
               }),
           ]).then(() => {
             this.currentFormConfiguration = this.formConfigurations.pop();
-
-            if (this.formConfigurations.length === 0) {
-              this.lastEntry = true;
-            }
-
             this.loaded = true;
           });
         });
@@ -360,4 +351,5 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   navigateBack() {
     window.history.back();
   }
+
 }

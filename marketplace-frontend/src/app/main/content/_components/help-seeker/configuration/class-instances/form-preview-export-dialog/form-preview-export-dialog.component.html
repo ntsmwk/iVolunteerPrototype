@@ -5,10 +5,6 @@
 
 
         <mat-accordion multi=true displayMode="flat">
-            <!-- <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
-                [formConfiguration]="currentFormConfiguration" [finishClicked]="exportClicked" ignoreValidity="true"
-                (result)=handleResultEvent($event) (tupleSelected)="handleTupleSelection($event)">
-            </app-form-entry-view> -->
             <app-form-preview-entry [formEntry]="currentFormConfiguration.formEntry"
                 [formConfiguration]="currentFormConfiguration" [exportClicked]="exportClicked" expanded="true"
                 (result)=handleResultEvent($event) (tupleSelected)="handleTupleSelection($event)">

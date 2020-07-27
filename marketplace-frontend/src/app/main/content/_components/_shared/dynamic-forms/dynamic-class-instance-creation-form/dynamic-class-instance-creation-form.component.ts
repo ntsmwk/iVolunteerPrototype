@@ -40,9 +40,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
   @Input() hideButtons: boolean;
   @Input() formConfigurationId: string;
   @Input() form: FormGroup;
-  @Input() lastEntry: boolean;
   @Input() finishClicked: boolean;
-  @Input() ignoreValidity: boolean;
 
   submitPressed: boolean;
 
@@ -71,7 +69,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
     this.submitPressed = true;
     this.form.updateValueAndValidity();
 
-    if (this.ignoreValidity || this.form.valid) {
+    if (this.form.valid) {
       // this.form.disable();
       this.fireResultEvent();
 
