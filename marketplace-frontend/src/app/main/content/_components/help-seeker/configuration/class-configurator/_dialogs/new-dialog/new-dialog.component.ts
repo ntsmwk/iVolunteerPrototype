@@ -25,7 +25,7 @@ export interface NewClassConfigurationDialogData {
 @Component({
   selector: "new-class-configuration-dialog",
   templateUrl: "./new-dialog.component.html",
-  styleUrls: ["./new-dialog.component.scss"],
+  styleUrls: ["./new-dialog.component.scss"]
 })
 export class NewClassConfigurationDialogComponent implements OnInit {
   constructor(
@@ -35,7 +35,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     private relationshipsService: RelationshipService,
     private classDefintionService: ClassDefinitionService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   dialogForm: FormGroup;
   allClassConfigurations: ClassConfiguration[];
@@ -48,27 +48,29 @@ export class NewClassConfigurationDialogComponent implements OnInit {
       .toPromise()
       .then((helpseeker: User) => {
         this.classConfigurationService
-          .getClassConfigurationsByTenantId(this.data.marketplace, this.data.tenantId)
+          .getClassConfigurationsByTenantId(
+            this.data.marketplace,
+            this.data.tenantId
+          )
           .toPromise()
           .then((classConfigurations: ClassConfiguration[]) => {
             this.data.tenantId = helpseeker.subscribedTenants.find(
-              (t) => t.role === UserRole.HELP_SEEKER
+              t => t.role === UserRole.HELP_SEEKER
             ).tenantId;
             this.allClassConfigurations = classConfigurations;
-
             this.dialogForm = new FormGroup({
               label: new FormControl(
                 "",
                 isNullOrUndefined(this.data.classConfiguration)
                   ? stringUniqueValidator(
-                    this.allClassConfigurations.map((c) => c.name)
-                  )
+                      this.allClassConfigurations.map(c => c.name)
+                    )
                   : stringUniqueValidator(
-                    this.allClassConfigurations.map((c) => c.name),
-                    [this.data.classConfiguration.name]
-                  )
+                      this.allClassConfigurations.map(c => c.name),
+                      [this.data.classConfiguration.name]
+                    )
               ),
-              description: new FormControl(""),
+              description: new FormControl("")
               // rootLabel: new FormControl('')
             });
 
@@ -139,7 +141,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
             .toPromise()
             .then((ret: ClassDefinition[]) => {
               this.data.classDefinitions = ret;
-            }),
+            })
         ]).then(() => {
           this.dialogRef.close(this.data);
         });
