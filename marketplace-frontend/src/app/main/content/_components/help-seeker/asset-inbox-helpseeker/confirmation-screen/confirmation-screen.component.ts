@@ -19,7 +19,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
 
   isLoaded: boolean;
   marketplace: Marketplace;
-  participant: User;
+  user: User;
   classInstanceDTOs: ClassInstanceDTO[];
 
   constructor(
@@ -31,19 +31,16 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
   ) {
     if (!isNullOrUndefined(this.router.getCurrentNavigation().extras.state)) {
       this.marketplace = this.router.getCurrentNavigation().extras.state.marketplace;
-      this.participant = this.router.getCurrentNavigation().extras.state.participant;
+      this.user = this.router.getCurrentNavigation().extras.state.participant;
       this.classInstanceDTOs = this.router.getCurrentNavigation().extras.state.classInstances;
     }
   }
 
   ngOnInit() {
     console.log(this.marketplace);
-    console.log(this.participant);
+    console.log(this.user);
 
-    if (
-      isNullOrUndefined(this.marketplace) ||
-      isNullOrUndefined(this.participant)
-    ) {
+    if (isNullOrUndefined(this.marketplace) || isNullOrUndefined(this.user)) {
       Promise.all([
         this.marketplaceService
           .findAll()
@@ -56,8 +53,8 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
         this.loginService
           .getLoggedIn()
           .toPromise()
-          .then((participant: User) => {
-            this.participant = participant;
+          .then((user: User) => {
+            this.user = user;
           }),
       ]).then(() => {});
     }
@@ -68,7 +65,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
       state: {
         instances: undefined,
         marketplace: this.marketplace,
-        participant: this.participant,
+        participant: this.user,
       },
     });
   }
