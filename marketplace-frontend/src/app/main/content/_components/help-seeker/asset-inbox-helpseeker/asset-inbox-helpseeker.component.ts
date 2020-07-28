@@ -7,7 +7,8 @@ import { ClassInstanceService } from "../../../_service/meta/core/class/class-in
 import { isNullOrUndefined } from "util";
 import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { LoginService } from "../../../_service/login.service";
-
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "asset-inbox-helpseeker",
@@ -18,6 +19,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   public marketplaces = new Array<Marketplace>();
   marketplace: Marketplace;
   helpseeker: User;
+  tenant: Tenant;
   classInstanceDTO: ClassInstanceDTO[];
   isLoaded: boolean;
 
@@ -25,28 +27,19 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private classInstanceService: ClassInstanceService,
-    private marketplaceService: MarketplaceService,
-  ) { }
+    private marketplaceService: MarketplaceService
+  ) {}
 
-  ngOnInit() {
-    Promise.all([
-      this.marketplaceService
-        .findAll()
-        .toPromise()
-        .then((marketplaces: Marketplace[]) => {
-          if (!isNullOrUndefined(marketplaces)) {
-            this.marketplace = marketplaces[0];
-          }
-        }),
-      this.loginService
-        .getLoggedIn()
-        .toPromise()
-        .then((helpseeker: User) => {
-          this.helpseeker = helpseeker;
-        }),
-    ]).then(() => {
-      this.loadInboxEntries();
-    });
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+
+    this.helpseeker = globalInfo.user;
+    this.marketplace = globalInfo.marketplace;
+    this.tenant = globalInfo[0];
+
+    this.loadInboxEntries();
   }
 
   loadInboxEntries() {
@@ -54,9 +47,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       .getClassInstancesInIssuerInbox(
         this.marketplace,
         this.helpseeker.id,
-        this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
+        this.tenant.id
       )
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {
@@ -65,7 +56,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       });
   }
 
-  close() { }
+  close() {}
 
   onAssetInboxSubmit() {
     this.classInstanceService

@@ -12,12 +12,12 @@ import { ImageService } from "app/main/content/_service/image.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
-  selector: "dashboard-helpseeker",
-  templateUrl: "./dashboard-helpseeker.component.html",
-  styleUrls: ["dashboard-helpseeker.scss"],
+  selector: "dashboard-helpseeker-tenantAdmin",
+  templateUrl: "./dashboard-helpseeker-tenantAdmin.component.html",
+  styleUrls: ["dashboard-helpseeker-tenantAdmin.component.scss"],
   animations: fuseAnimations,
 })
-export class DashboardHelpSeekerComponent implements OnInit {
+export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
   user: User;
   tenant: Tenant;
 
@@ -33,7 +33,6 @@ export class DashboardHelpSeekerComponent implements OnInit {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-
     this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
   }
@@ -43,6 +42,6 @@ export class DashboardHelpSeekerComponent implements OnInit {
   }
 
   private isMV() {
-    return this.tenant && this.tenant.name === "Musikverein_Schwertberg";
+    return this.tenant && this.tenant.name === "MV Schwertberg";
   }
 }

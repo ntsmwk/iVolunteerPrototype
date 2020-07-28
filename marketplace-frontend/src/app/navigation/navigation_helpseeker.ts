@@ -32,37 +32,4 @@ export const navigation_helpseeker = [
     icon: "unlock",
     url: "/main/helpseeker/asset-inbox",
   },
-  {
-    id: "config",
-    title: "Konfigurieren",
-    type: "group",
-  },
-  {
-    id: "configurator",
-    title: "Klassen konfigurieren",
-    type: "item",
-    icon: "cogs",
-    url: "/main/configurator",
-  },
-  {
-    id: "matching-configurator",
-    title: "Matching konfigurieren",
-    type: "item",
-    icon: "less-than-equal-solid",
-    url: "/main/matching-configurator/",
-  },
-  {
-    id: "rule-configurator",
-    title: "Einträge ableiten",
-    type: "item",
-    icon: "share-square",
-    url: "/main/rules/all",
-  },
-  {
-    id: "property-builder",
-    title: "Properties konfigurieren",
-    type: "item",
-    icon: "hammer-solid",
-    url: "/main/properties/all/"
-  },
 ];

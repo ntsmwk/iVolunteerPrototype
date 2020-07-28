@@ -17,6 +17,8 @@ import { isNullOrUndefined } from "util";
 import { FormGroup, FormControl } from "@angular/forms";
 import { QuestionBase } from "app/main/content/_model/dynamic-forms/questions";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface ClassInstanceFormPreviewExportDialogData {
   marketplace: Marketplace;
@@ -43,6 +45,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   results: FormEntryReturnEventData[] = [];
 
   helpseeker: User;
+  tenant: Tenant;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -57,50 +60,49 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     private loginService: LoginService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.returnedClassInstances = [];
     this.expectedNumberOfResults = 0;
 
-    this.loginService
-      .getLoggedIn()
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.helpseeker = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
+
+    this.classDefinitionService
+      .getFormConfigurations(
+        this.data.marketplace,
+        this.data.classConfigurationIds
+      )
       .toPromise()
-      .then((helpseeker: User) => {
-        this.helpseeker = helpseeker;
+      .then((formConfigurations: FormConfiguration[]) => {
+        this.formConfigurations = formConfigurations;
 
-        this.classDefinitionService
-          .getFormConfigurations(
-            this.data.marketplace,
-            this.data.classConfigurationIds
-          )
-          .toPromise()
-          .then((formConfigurations: FormConfiguration[]) => {
-            this.formConfigurations = formConfigurations;
+        for (const config of this.formConfigurations) {
+          const classProperties: ClassProperty<any>[] = [];
+          for (const classProperty of config.formEntry.classProperties) {
+            classProperty.id = classProperty.name;
+          }
 
-            for (const config of this.formConfigurations) {
-              const classProperties: ClassProperty<any>[] = [];
-              for (const classProperty of config.formEntry.classProperties) {
-                classProperty.id = classProperty.name;
-              }
+          config.formEntry = this.addQuestionsAndFormGroup(
+            config.formEntry,
+            config.formEntry.id
+          );
 
-              config.formEntry = this.addQuestionsAndFormGroup(
-                config.formEntry,
-                config.formEntry.id
-              );
+          // config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+          // config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
+        }
+      })
+      .then(() => {
+        this.currentFormConfiguration = this.formConfigurations.pop();
+        this.isLoaded = true;
 
-              // config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-              // config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-            }
-          })
-          .then(() => {
-            this.currentFormConfiguration = this.formConfigurations.pop();
-            this.isLoaded = true;
+        console.log(this.currentFormConfiguration);
 
-            console.log(this.currentFormConfiguration);
-
-            // const returnData = new FormEntryReturnEventData(this.currentFormConfiguration.formEntry.formGroup, this.currentFormConfiguration.id);
-            // this.handleExportClick(returnData);
-            // this.handleCloseClick();
-          });
+        // const returnData = new FormEntryReturnEventData(this.currentFormConfiguration.formEntry.formGroup, this.currentFormConfiguration.id);
+        // this.handleExportClick(returnData);
+        // this.handleCloseClick();
       });
   }
 
@@ -272,12 +274,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   // }
 
   private doExport() {
-    const json =
-      "{" +
-      '"tenantId": "' +
-      this.helpseeker.subscribedTenants.find(
-        (t) => t.role === UserRole.HELP_SEEKER
-      ).tenantId;
+    const json = "{" + '"tenantId": "' + this.tenant.id;
     '", ' + this.addClassToJSON(this.currentFormConfiguration.formEntry) + "}";
 
     this.exportFile([json]);

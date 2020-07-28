@@ -13,6 +13,9 @@ import { EnumDefinitionService } from "app/main/content/_service/meta/core/enum/
 
 import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { LoginService } from "app/main/content/_service/login.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export class OpenEnumDefinitionDialogData {
   helpseeker: User;
@@ -29,21 +32,22 @@ export class OpenEnumDefinitionDialogData {
 export class OpenEnumDefinitionDialogComponent implements OnInit {
   enumDefinitions: EnumDefinition[];
   loaded: boolean;
+  tenant: Tenant;
 
   constructor(
     public dialogRef: MatDialogRef<OpenEnumDefinitionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OpenEnumDefinitionDialogData,
-    private enumDefinitionService: EnumDefinitionService
+    private enumDefinitionService: EnumDefinitionService,
+    private loginService: LoginService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
     this.enumDefinitionService
-      .getAllEnumDefinitionsForTenant(
-        this.data.marketplace,
-        this.data.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
-      )
+      .getAllEnumDefinitionsForTenant(this.data.marketplace, this.tenant.id)
       .toPromise()
       .then((enumDefinitions: EnumDefinition[]) => {
         if (!isNullOrUndefined(enumDefinitions)) {

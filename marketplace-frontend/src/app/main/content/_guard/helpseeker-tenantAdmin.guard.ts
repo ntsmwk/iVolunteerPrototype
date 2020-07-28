@@ -6,8 +6,8 @@ import { UserRole } from "../_model/user";
 @Injectable({
   providedIn: "root",
 })
-export class LoginGuard implements CanActivate {
-  constructor(private router: Router, private loginService: LoginService) {}
+export class HelpSeekerOrTenantAdminGuard implements CanActivate {
+  constructor(private loginService: LoginService, private router: Router) {}
 
   canActivate(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
@@ -16,12 +16,7 @@ export class LoginGuard implements CanActivate {
         .toPromise()
         .then((role: UserRole) => {
           resolve(
-            role == UserRole.HELP_SEEKER ||
-              role == UserRole.VOLUNTEER ||
-              role == UserRole.RECRUITER ||
-              role == UserRole.FLEXPROD ||
-              role == UserRole.ADMIN ||
-              role == UserRole.TENANT_ADMIN
+            role == UserRole.TENANT_ADMIN || role == UserRole.HELP_SEEKER
           );
         });
     });

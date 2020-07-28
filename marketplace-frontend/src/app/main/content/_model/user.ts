@@ -29,6 +29,7 @@ export class User {
 export enum UserRole {
   VOLUNTEER = "VOLUNTEER",
   HELP_SEEKER = "HELP_SEEKER",
+  TENANT_ADMIN = "TENANT_ADMIN",
   ADMIN = "ADMIN",
   RECRUITER = "RECRUITER",
   FLEXPROD = "FLEXPROD",

@@ -10,6 +10,8 @@ import { Marketplace } from "app/main/content/_model/marketplace";
 import { LoginService } from "app/main/content/_service/login.service";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { PropertyDefinitionService } from "app/main/content/_service/meta/core/property/property-definition.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "app-property-detail",
@@ -20,6 +22,7 @@ export class PropertyDetailComponent implements OnInit {
   role: UserRole;
   helpseeker: User;
   marketplace: Marketplace;
+  tenant: Tenant;
   propertyDefintion: PropertyDefinition<any>;
 
   templateItem: PropertyParentTemplate;
@@ -37,36 +40,32 @@ export class PropertyDetailComponent implements OnInit {
     this.isLoaded = false;
   }
 
-  ngOnInit() {
-    Promise.all([
-      this.loginService
-        .getLoggedInUserRole()
-        .toPromise()
-        .then((role: UserRole) => (this.role = role)),
-      this.loginService
-        .getLoggedIn()
-        .toPromise()
-        .then((helpseeker: User) => (this.helpseeker = helpseeker)),
-    ]).then(() => {
-      let parameters;
-      let queryParameters;
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.role = globalInfo.userRole;
+    this.helpseeker = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
 
-      Promise.all([
-        this.route.params.subscribe((params) => {
-          parameters = params;
-        }),
-        this.route.queryParams.subscribe((params) => {
-          queryParameters = params;
-        }),
-      ]).then(() => {
-        this.loadProperty(
-          parameters["marketplaceId"],
-          parameters["templateId"],
-          parameters["subtemplateId"],
-          parameters["propertyId"],
-          queryParameters["ref"]
-        );
-      });
+    let parameters;
+    let queryParameters;
+
+    Promise.all([
+      this.route.params.subscribe((params) => {
+        parameters = params;
+      }),
+      this.route.queryParams.subscribe((params) => {
+        queryParameters = params;
+      }),
+    ]).then(() => {
+      this.loadProperty(
+        parameters["marketplaceId"],
+        parameters["templateId"],
+        parameters["subtemplateId"],
+        parameters["propertyId"],
+        queryParameters["ref"]
+      );
     });
   }
 
@@ -85,13 +84,7 @@ export class PropertyDetailComponent implements OnInit {
 
         if (ref === "list") {
           this.propertyDefinitionService
-            .getPropertyDefinitionById(
-              marketplace,
-              propId,
-              this.helpseeker.subscribedTenants.find(
-                (t) => t.role === UserRole.HELP_SEEKER
-              ).tenantId
-            )
+            .getPropertyDefinitionById(marketplace, propId, this.tenant.id)
             .toPromise()
             .then((propertyDefintion: PropertyDefinition<any>) => {
               this.propertyDefintion = propertyDefintion;

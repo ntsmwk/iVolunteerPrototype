@@ -29,13 +29,13 @@ import {
 } from "@angular/material";
 import { AssetInboxHelpseekerModule } from "../../help-seeker/asset-inbox-helpseeker/asset-inbox-helpseeker.module";
 import { AssetInboxModule } from "../../_shared/asset-inbox/asset-inbox.module";
-import { DashboardHelpSeekerComponent } from "./dashboard-helpseeker/dashboard-helpseeker.component";
 import { OrganisationFilterModule } from "app/main/content/_components/_shared/organisation-filter/organisation-filter.module";
 import { TenantOverviewComponent } from "./tenant-overview/tenant-overview.component";
 import { FuseTruncatePipeModule } from "app/main/content/_pipe/truncate-pipe.module";
 import { HeaderModule } from "app/main/content/_components/_shared/header/header.module";
 import { HighchartsChartModule } from "highcharts-angular";
 import { DialogFactoryModule } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.module";
+import { DashboardHelpSeekerTenantAdminComponent } from "./dashboard-helpseeker-tenantAdmin/dashboard-helpseeker-tenantAdmin.component";
 
 const routes = [
   {
@@ -51,7 +51,7 @@ const routes = [
 @NgModule({
   declarations: [
     DashboardVolunteerComponent,
-    DashboardHelpSeekerComponent,
+    DashboardHelpSeekerTenantAdminComponent,
     DashboardComponent,
     TenantOverviewComponent,
     ShareDialog,
@@ -91,4 +91,4 @@ const routes = [
   exports: [DashboardComponent],
   entryComponents: [ShareDialog],
 })
-export class FuseDashboardModule { }
+export class FuseDashboardModule {}
