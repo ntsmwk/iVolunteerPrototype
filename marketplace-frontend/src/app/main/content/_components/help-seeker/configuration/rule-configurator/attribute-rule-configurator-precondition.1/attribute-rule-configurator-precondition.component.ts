@@ -2,7 +2,15 @@ import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 
 import { LoginService } from "../../../../../_service/login.service";
 import { User, UserRole } from "../../../../../_model/user";
-import { FormGroup, FormBuilder, FormControl, FormGroupDirective, ControlContainer, FormArray, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroupDirective,
+  ControlContainer,
+  FormArray,
+  Validators,
+} from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ComparisonOperatorType,
@@ -15,7 +23,7 @@ import {
   PropertyDefinition,
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
-import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
+import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
 
@@ -23,7 +31,9 @@ import { Tenant } from "app/main/content/_model/tenant";
   selector: "attribute-rule-precondition",
   templateUrl: "./attribute-rule-configurator-precondition.component.html",
   styleUrls: ["../rule-configurator.component.scss"],
-  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
+  viewProviders: [
+    { provide: ControlContainer, useExisting: FormGroupDirective },
+  ],
 })
 export class FuseAttributeRulePreconditionConfiguratorComponent
   implements OnInit {
@@ -37,7 +47,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   helpseeker: User;
   marketplace: Marketplace;
   role: UserRole;
-  tenants: Tenant[];
+  tenant: Tenant;
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
@@ -51,7 +61,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   attributeForms: FormArray;
 
   attributeValidationMessages = DerivationRuleValidators.ruleValidationMessages;
-  
+
   constructor(
     private loginService: LoginService,
     private formBuilder: FormBuilder,
@@ -73,13 +83,13 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
           ? this.attributeCondition.classProperty.id
           : "") || "",
       comparisonOperatorType:
-        this.attributeCondition.comparisonOperatorType ||
-        " ",
+        this.attributeCondition.comparisonOperatorType || " ",
       value: this.attributeCondition.value || "",
     });
-    this.attributeForms = <FormArray>this.parent.form.controls['classAttributeForms'];  
+    this.attributeForms = <FormArray>(
+      this.parent.form.controls["classAttributeForms"]
+    );
     this.attributeForms.push(this.rulePreconditionForm);
-
 
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
@@ -88,14 +98,12 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     );
     this.marketplace = globalInfo.marketplace;
     this.helpseeker = globalInfo.user;
-    this.tenants = globalInfo.tenants;
+    this.tenant = globalInfo.tenants[0];
 
     this.classDefinitionService
       .getAllClassDefinitionsWithoutHeadAndEnums(
         this.marketplace,
-        this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
+        this.tenant.id
       )
       .toPromise()
       .then((definitions: ClassDefinition[]) => {
@@ -150,9 +158,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
         .getEnumValuesFromEnumHeadClassDefinition(
           this.marketplace,
           this.attributeCondition.classProperty.allowedValues[0].enumClassId,
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          this.tenant.id
         )
         .toPromise()
         .then((list: any[]) => {
@@ -170,7 +176,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   }
 
   onChange($event) {
-    if (this.classProperties.length > 0 ) {
+    if (this.classProperties.length > 0) {
       this.attributeCondition.classProperty =
         this.classProperties.find(
           (cp) => cp.id === this.rulePreconditionForm.value.classPropertyId

@@ -21,6 +21,8 @@ import {
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "app-class-instance-form-editor",
@@ -31,6 +33,7 @@ import { User, UserRole } from "app/main/content/_model/user";
 export class ClassInstanceFormEditorComponent implements OnInit {
   marketplace: Marketplace;
   helpseeker: User;
+  tenant: Tenant;
 
   formConfigurations: FormConfiguration[];
   currentFormConfiguration: FormConfiguration;
@@ -64,7 +67,14 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private objectIdService: ObjectIdService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.helpseeker = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
+    this.marketplace = globalInfo.marketplace;
+
     let marketplaceId: string;
     const childClassIds: string[] = [];
 
@@ -84,42 +94,28 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         }
       }),
     ]).then(() => {
-      this.marketplaceService
-        .findById(marketplaceId)
-        .toPromise()
-        .then((marketplace: Marketplace) => {
-          this.marketplace = marketplace;
-
-          Promise.all([
-            this.classDefinitionService
-              .getFormConfigurations(this.marketplace, childClassIds)
-              .toPromise()
-              .then((formConfigurations: FormConfiguration[]) => {
-                this.formConfigurations = formConfigurations;
-                for (const config of this.formConfigurations) {
-                  config.formEntry = this.addQuestionsAndFormGroup(
-                    config.formEntry,
-                    config.formEntry.id
-                  );
-                }
-              }),
-
-            this.loginService
-              .getLoggedIn()
-              .toPromise()
-              .then((helpseeker: User) => {
-                this.helpseeker = helpseeker;
-              }),
-          ]).then(() => {
-            this.currentFormConfiguration = this.formConfigurations.pop();
-
-            if (this.formConfigurations.length === 0) {
-              this.lastEntry = true;
+      Promise.all([
+        this.classDefinitionService
+          .getFormConfigurations(this.marketplace, childClassIds)
+          .toPromise()
+          .then((formConfigurations: FormConfiguration[]) => {
+            this.formConfigurations = formConfigurations;
+            for (const config of this.formConfigurations) {
+              config.formEntry = this.addQuestionsAndFormGroup(
+                config.formEntry,
+                config.formEntry.id
+              );
             }
+          }),
+      ]).then(() => {
+        this.currentFormConfiguration = this.formConfigurations.pop();
 
-            this.loaded = true;
-          });
-        });
+        if (this.formConfigurations.length === 0) {
+          this.lastEntry = true;
+        }
+
+        this.loaded = true;
+      });
     });
   }
 
@@ -237,12 +233,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         this.currentFormConfiguration.id,
         allControls
       );
-      classInstance.tenantId = this.helpseeker.subscribedTenants.find(
-        (t) => t.role === UserRole.HELP_SEEKER
-      ).tenantId;
-      classInstance.issuerId = this.helpseeker.subscribedTenants.find(
-        (t) => t.role === UserRole.HELP_SEEKER
-      ).tenantId;
+      classInstance.tenantId = this.tenant.id;
+      classInstance.issuerId = this.tenant.id;
       classInstances.push(classInstance);
     } else {
       for (const volunteer of this.selectedVolunteers) {
@@ -251,12 +243,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           this.currentFormConfiguration.id,
           allControls
         );
-        classInstance.tenantId = this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId;
-        classInstance.issuerId = this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId;
+        classInstance.tenantId = this.tenant.id;
+        classInstance.issuerId = this.tenant.id;
         classInstance.userId = volunteer.id;
         classInstances.push(classInstance);
       }

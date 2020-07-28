@@ -16,7 +16,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { PropertyInstance } from "app/main/content/_model/meta/property";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
-import { UserService } from 'app/main/content/_service/user.service';
+import { UserService } from "app/main/content/_service/user.service";
 
 @Component({
   selector: "app-class-instance-details",
@@ -85,7 +85,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
       }
     }
 
-    if (this.role === UserRole.HELP_SEEKER) {
+    if (this.role === UserRole.HELP_SEEKER || UserRole.TENANT_ADMIN) {
       this.volunteer = <User>(
         await this.userService
           .findById(this.marketplace, this.classInstance.userId)
@@ -103,7 +103,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
       .values[0];
   }
 
-  getVolunteerName(userId: string) { }
+  getVolunteerName(userId: string) {}
 
   sortData(sort: Sort) {
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {

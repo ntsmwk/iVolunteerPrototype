@@ -11,7 +11,7 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
 import { ClassBrowseSubDialogData } from "../browse-sub-dialog/browse-sub-dialog.component";
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 export interface OpenClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
@@ -32,8 +32,8 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
-    private loginService: LoginService,
-  ) { }
+    private loginService: LoginService
+  ) {}
 
   selected: string;
   allClassConfigurations: ClassConfiguration[];
@@ -43,35 +43,34 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   browseMode: boolean;
   browseDialogData: ClassBrowseSubDialogData;
 
-  ngOnInit() {
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
 
-    this.loginService.getGlobalInfo().toPromise().then((globalInfo: GlobalInfo) => {
-      const tenantId = globalInfo.user.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId;
+    const tenantId = globalInfo.tenants[0].id;
 
-
-
-      this.classConfigurationService
-        .getClassConfigurationsByTenantId(this.data.marketplace, tenantId)
-        .toPromise()
-        .then((classConfigurations: ClassConfiguration[]) => {
-          this.allClassConfigurations = classConfigurations.filter((c) => {
-            return c.tenantId === tenantId;
-          });
-
-          this.recentClassConfigurations = this.allClassConfigurations;
-          this.recentClassConfigurations = this.recentClassConfigurations.sort(
-            (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
-          );
-
-          if (this.recentClassConfigurations.length > 6) {
-            this.recentClassConfigurations = this.recentClassConfigurations.slice(
-              0,
-              6
-            );
-          }
-          this.loaded = true;
+    this.classConfigurationService
+      .getClassConfigurationsByTenantId(this.data.marketplace, tenantId)
+      .toPromise()
+      .then((classConfigurations: ClassConfiguration[]) => {
+        this.allClassConfigurations = classConfigurations.filter((c) => {
+          return c.tenantId === tenantId;
         });
-    });
+
+        this.recentClassConfigurations = this.allClassConfigurations;
+        this.recentClassConfigurations = this.recentClassConfigurations.sort(
+          (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+        );
+
+        if (this.recentClassConfigurations.length > 6) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(
+            0,
+            6
+          );
+        }
+        this.loaded = true;
+      });
   }
 
   handleRowClick(c: ClassConfiguration) {

@@ -33,7 +33,6 @@ export class DashboardHelpSeekerComponent implements OnInit {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-
     this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
   }
@@ -43,6 +42,6 @@ export class DashboardHelpSeekerComponent implements OnInit {
   }
 
   private isMV() {
-    return this.tenant && this.tenant.name === "Musikverein_Schwertberg";
+    return this.tenant && this.tenant.name === "MV Schwertberg";
   }
 }

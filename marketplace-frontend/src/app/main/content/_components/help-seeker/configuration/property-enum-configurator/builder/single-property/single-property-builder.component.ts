@@ -18,6 +18,9 @@ import { propertyNameUniqueValidator } from "app/main/content/_validator/propert
 import { listNotEmptyValidator } from "app/main/content/_validator/list-not-empty.validator";
 import { PropertyConstraint } from "app/main/content/_model/meta/constraint";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { LoginService } from "app/main/content/_service/login.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface PropertyTypeOption {
   type: PropertyType;
@@ -52,13 +55,21 @@ export class SinglePropertyBuilderComponent implements OnInit {
   allPropertyDefinitions: PropertyDefinition<any>[];
   propertyDefinition: PropertyDefinition<any>;
 
+  tenant: Tenant;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private propertyDefinitionService: PropertyDefinitionService
+    private propertyDefinitionService: PropertyDefinitionService,
+    private loginService: LoginService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
+
     this.preparePropertyTypeOptions();
 
     this.clearForm();
@@ -82,12 +93,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   getAllPropertyDefinitions() {
     return this.propertyDefinitionService
-      .getAllPropertyDefinitons(
-        this.marketplace,
-        this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
-      )
+      .getAllPropertyDefinitons(this.marketplace, this.tenant.id)
       .toPromise()
       .then((ret: PropertyDefinition<any>[]) => {
         this.allPropertyDefinitions = ret;
@@ -96,13 +102,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   getCurrentPropertyDefinition() {
     return this.propertyDefinitionService
-      .getPropertyDefinitionById(
-        this.marketplace,
-        this.entryId,
-        this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
-      )
+      .getPropertyDefinitionById(this.marketplace, this.entryId, this.tenant.id)
       .toPromise()
       .then((ret: PropertyDefinition<any>) => {
         this.propertyDefinition = ret;
@@ -267,9 +267,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   createPropertyFromForm(): PropertyDefinition<any> {
     const property: PropertyDefinition<any> = new PropertyDefinition<any>();
-    property.tenantId = this.helpseeker.subscribedTenants.find(
-      (t) => t.role === UserRole.HELP_SEEKER
-    ).tenantId;
+    property.tenantId = this.tenant.id;
     property.custom = true;
 
     if (isNullOrUndefined(this.propertyDefinition)) {

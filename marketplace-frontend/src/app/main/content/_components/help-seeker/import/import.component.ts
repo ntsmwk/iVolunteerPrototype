@@ -14,7 +14,7 @@ import { ClassInstanceService } from "app/main/content/_service/meta/core/class/
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 
 @Component({
   selector: "import",
@@ -41,7 +41,7 @@ export class ImportComponent implements OnInit {
     private coreUserService: CoreUserService,
     private classInstanceService: ClassInstanceService,
     private classDefinitionService: ClassDefinitionService,
-    private tenantService: TenantService,
+    private tenantService: TenantService
   ) {
     this.importForm = formBuilder.group({
       volunteer: new FormControl(undefined, Validators.required),
@@ -55,26 +55,20 @@ export class ImportComponent implements OnInit {
     );
     this.marketplace = globalInfo.marketplace;
     this.helpseeker = globalInfo.user;
-    this.tenant = globalInfo.tenants[0]; // Philipp: not that nice...
+    this.tenant = globalInfo.tenants[0]; // TODO Philipp: not that nice...
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
         .getAllClassDefinitionsWithoutRootAndEnums(
           this.marketplace,
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          this.tenant.id
         )
         .toPromise()
     );
 
     this.volunteers = <User[]>(
       await this.coreUserService
-        .findAllByRoleAndTenantId(
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId, UserRole.VOLUNTEER
-        )
+        .findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER)
         .toPromise()
     );
   }
