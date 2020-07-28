@@ -20,6 +20,7 @@ public class CoreInitializationController {
 		createMarketplace();
 		createTenants();
 		createUsers();
+		registerAllToMarketplace();
 	}
 	
 	/**
