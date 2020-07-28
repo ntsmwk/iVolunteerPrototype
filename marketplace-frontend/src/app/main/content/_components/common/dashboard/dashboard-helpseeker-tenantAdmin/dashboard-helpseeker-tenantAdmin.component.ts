@@ -12,12 +12,12 @@ import { ImageService } from "app/main/content/_service/image.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
-  selector: "dashboard-helpseeker",
-  templateUrl: "./dashboard-helpseeker.component.html",
-  styleUrls: ["dashboard-helpseeker.scss"],
+  selector: "dashboard-helpseeker-tenantAdmin",
+  templateUrl: "./dashboard-helpseeker-tenantAdmin.component.html",
+  styleUrls: ["dashboard-helpseeker-tenantAdmin.component.scss"],
   animations: fuseAnimations,
 })
-export class DashboardHelpSeekerComponent implements OnInit {
+export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
   user: User;
   tenant: Tenant;
 
