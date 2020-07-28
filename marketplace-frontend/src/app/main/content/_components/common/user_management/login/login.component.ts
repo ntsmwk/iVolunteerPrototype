@@ -80,6 +80,8 @@ export class FuseLoginComponent implements OnInit {
         .then((response: HttpResponse<any>) => {
           localStorage.setItem("token", response.headers.get("Authorization"));
           this.router.navigate(["/role"]);
+
+          // this.router.navigate["/main/dashboard"];
         })
         .catch((e) => {
           console.error("error");

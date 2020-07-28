@@ -61,11 +61,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     private loginService: LoginService
   ) {}
 
-  // TODO Philipp: @Inputs weg, globalInfo verwenden, helpseeker umbenenen zu "tenantAdmin" oder "user"
   @Input() marketplace: Marketplace;
   @Input() helpseeker: User;
-
-  tenant: Tenant;
 
   classDefinitions: ClassDefinition[];
   deletedClassIds: string[];
@@ -111,11 +108,18 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   overlayContent: OptionsOverlayContentData;
   overlayEvent: PointerEvent;
 
+  tenant: Tenant;
+
   /**
    * ******INITIALIZATION******
    */
 
   async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
+
     this.classDefinitions = [];
     this.deletedClassIds = [];
     this.relationships = [];
@@ -128,11 +132,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deleteRelationships = true;
     this.clickToDeleteMode = false;
     this.quickEditMode = false;
-
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.tenant = globalInfo.tenants[0];
   }
 
   ngAfterContentInit() {
@@ -518,10 +517,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   private parseIncomingRelationships() {
     try {
       this.graph.getModel().beginUpdate();
-      for (const r of this.relationships) {
-        if (r.relationshipType === RelationshipType.AGGREGATION) {
-          r.relationshipType = RelationshipType.ASSOCIATION;
-        }
+      for (let r of this.relationships) {
+        r = this.convertAggregation(r);
         const rel: MyMxCell = this.insertRelationshipIntoGraph(
           r,
           new mx.mxPoint(0, 0)
@@ -537,8 +534,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   private insertRelationshipIntoGraph(
     r: Relationship,
-    coords: mxgraph.mxPoint,
-    replaceCell?: MyMxCell
+    coords: mxgraph.mxPoint
   ) {
     const parent = this.graph.getDefaultParent();
     const source: MyMxCell = this.graph
@@ -548,10 +544,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       .getModel()
       .getCell(r.target) as MyMxCell;
 
-    let cell = replaceCell;
     let style: string;
     let type: MyMxCellType;
-    let geometry: mxgraph.mxGeometry;
 
     if (r.relationshipType === RelationshipType.INHERITANCE) {
       style = CConstants.mxStyles.inheritance;
@@ -563,46 +557,34 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       console.error("Invalid Relationshiptype");
     }
 
-    if (isNullOrUndefined(cell)) {
-      geometry = new mx.mxGeometry(coords.x, coords.y, 0, 0);
-      cell = new mx.mxCell(undefined, geometry, style) as MyMxCell;
-      cell.id = r.id;
-      // cell.newlyAdded = createNew;
-      cell.geometry.relative = true;
-      cell.edge = true;
-      cell.cellType = type;
+    const geometry = new mx.mxGeometry(coords.x, coords.y, 0, 0);
+    const cell = new mx.mxCell(undefined, geometry, style) as MyMxCell;
+    cell.id = r.id;
+    cell.geometry.relative = true;
+    cell.edge = true;
+    cell.cellType = type;
 
-      return this.graph.addEdge(cell, parent, source, target);
+    return this.graph.addEdge(cell, parent, source, target);
+  }
+
+  private updateRelationshipInGraph(relationship: Relationship) {
+    let style: string;
+    let type: MyMxCellType;
+
+    if (relationship.relationshipType === RelationshipType.INHERITANCE) {
+      style = CConstants.mxStyles.inheritance;
+      type = MyMxCellType.INHERITANCE;
+    } else if (relationship.relationshipType === RelationshipType.ASSOCIATION) {
+      style = CConstants.mxStyles.association;
+      type = MyMxCellType.ASSOCIATION;
     } else {
-      // this.graph.removeCells([cell], false);
-      // this.graph.setCellStyle(style, [cell]);
-      // this.graph.getModel().getCell(cell.id).setStyle(style);
-      this.graph.setCellStyle(style, [cell]);
-      (this.graph.getModel().getCell(cell.id) as MyMxCell).cellType = type;
-      return cell;
+      console.error("Invalid Relationshiptype");
     }
 
-    // if (r.relationshipType === RelationshipType.INHERITANCE) {
-    //     cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as MyMxCell;
-    //     cell.cellType = MyMxCellType.INHERITANCE;
-
-    // } else if (r.relationshipType === RelationshipType.ASSOCIATION) {
-    //     cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as MyMxCell;
-    //     cell.cellType = MyMxCellType.ASSOCIATION;
-
-    //     // const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
-    //     // this.addAssociationLabel(cell1, cell);
-
-    //     // const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
-    //     // this.addAssociationLabel(cell2, cell);
-    //     // } else if (r.relationshipType === RelationshipType.AGGREGATION) {
-    //     //     cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as MyMxCell;
-    //     //     cell.cellType = MyMxCellType.AGGREGATION;
-    // } else {
-    //     console.error("invalid RelationshipType");
-    // }
-
-    // return;
+    this.graph.getModel().getCell(relationship.id).setStyle(style);
+    (this.graph
+      .getModel()
+      .getCell(relationship.id) as MyMxCell).cellType = type;
   }
 
   private addAssociationLabel(associationCell: MyMxCell, daddyCell: MyMxCell) {
@@ -626,8 +608,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     hack.relationshipType = RelationshipType.ASSOCIATION;
     hack.source = sourceCell.id;
     hack.target = targetCell.id;
-    hack.sourceCardinality = "ONE";
-    hack.targetCardinality = "ONE";
+    hack.sourceCardinality = AssociationCardinality.ONE;
+    hack.sourceCardinality = AssociationCardinality.ONE;
     hack.id = this.objectIdService.getNewObjectId();
 
     const relationshipCell = new mx.mxCell(
@@ -959,13 +941,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.overlayContent = new OptionsOverlayContentData();
       this.overlayContent.marketplace = this.marketplace;
       this.overlayContent.helpseeker = this.helpseeker;
+      this.overlayContent.allClassDefinitions = this.classDefinitions;
 
       if (cell.cellType === MyMxCellType.CLASS) {
         this.overlayType = "CLASS";
         this.overlayContent.classDefinition = this.classDefinitions.find(
           (c) => c.id === cell.id
         );
-        this.overlayContent.allClassDefinitions = this.classDefinitions;
         this.overlayContent.allRelationships = this.relationships;
       } else if (MyMxCellType.isRelationship(cell.cellType)) {
         this.overlayContent.relationship = this.relationships.find(
@@ -1057,11 +1039,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     const cell = this.graph.getModel().getCell(relationship.id) as MyMxCell;
     try {
       this.graph.getModel().beginUpdate();
-      const newCell = this.insertRelationshipIntoGraph(
-        relationship,
-        undefined,
-        cell
-      ) as MyMxCell;
+      this.updateRelationshipInGraph(relationship);
     } finally {
       this.graph.getModel().endUpdate();
     }
@@ -1392,6 +1370,15 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   /**
    * ******DEBUGGING******
    */
+
+  private convertAggregation(r: Relationship) {
+    if (r.relationshipType === RelationshipType.AGGREGATION) {
+      r.relationshipType = RelationshipType.ASSOCIATION;
+      r.targetCardinality = AssociationCardinality.ONE;
+      r.sourceCardinality = AssociationCardinality.ONE;
+    }
+    return r;
+  }
 
   showZoomLevel() {
     const scale = this.graph.view.getScale();

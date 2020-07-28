@@ -64,15 +64,13 @@ export class SinglePropertyBuilderComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.preparePropertyTypeOptions();
+    this.clearForm();
+
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.tenant = globalInfo.tenants[0];
-    console.error(this.tenant);
-
-    this.preparePropertyTypeOptions();
-
-    this.clearForm();
 
     this.dropdownToggled = false;
 

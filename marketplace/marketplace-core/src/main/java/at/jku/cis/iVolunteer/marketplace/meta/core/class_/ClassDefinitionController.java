@@ -22,7 +22,6 @@ public class ClassDefinitionController {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private CollectionService collectionService;
 	@Autowired private ClassDefinitionMapper classDefinitionMapper;
 
 	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")

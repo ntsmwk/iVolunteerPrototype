@@ -1,4 +1,5 @@
 <form
+  *ngIf="loaded"
   [formGroup]="form"
   (ngSubmit)="onSubmit()"
   #f="ngForm"

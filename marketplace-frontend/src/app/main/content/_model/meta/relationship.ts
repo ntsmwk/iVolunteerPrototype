@@ -7,8 +7,8 @@ export class Relationship {
 
     relationshipType: RelationshipType;
 
-    sourceCardinality: string;
-    targetCardinality: string;
+    sourceCardinality: AssociationCardinality;
+    targetCardinality: AssociationCardinality;
 
     hidden: boolean;
 }
@@ -44,15 +44,20 @@ export enum AssociationCardinality {
 }
 
 export namespace AssociationCardinality {
-    const reverseMode = new Map<string, AssociationCardinality>();
+    // const reverseMode = new Map<string, AssociationCardinality>();
 
-    export function getAssociationParameterFromLabel(label: string): string {
-        Object.keys(AssociationCardinality).forEach((param: AssociationCardinality) => {
-            const modeValue: string = AssociationCardinality[<any>param];
-            reverseMode.set(modeValue, param);
+    // export function getAssociationParameterFromLabel(label: string): string {
+    //     Object.keys(AssociationCardinality).forEach((param: AssociationCardinality) => {
+    //         const modeValue: string = AssociationCardinality[<any>param];
+    //         reverseMode.set(modeValue, param);
 
-        });
-        return reverseMode.get(label);
+    //     });
+    //     return reverseMode.get(label);
+    // }
+
+    export function getLabelForAssociationCardinality(cardinality: AssociationCardinality) {
+        return cardinality === AssociationCardinality.ONE ? '1' :
+            cardinality === AssociationCardinality.N ? 'N' : '';
     }
 
 }

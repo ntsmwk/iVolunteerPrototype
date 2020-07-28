@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormConfiguration, FormEntry } from 'app/main/content/_model/meta/form';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 
 @Component({
   selector: 'app-form-entry-view',
@@ -14,11 +15,14 @@ export class FormEntryViewComponent implements OnInit {
   @Input() formConfiguration: FormConfiguration;
   @Input() finishClicked: boolean;
   @Input() expanded: boolean;
-  @Input() ignoreValidity: boolean;
+  @Input() subEntry: boolean;
   @Output() result = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    private qcs: QuestionControlService
+  ) {
+  }
 
   ngOnInit() {
   }
@@ -36,4 +40,14 @@ export class FormEntryViewComponent implements OnInit {
 
   }
 
+  onAddSubEntryClicked() {
+    const formArray = this.formEntry.formGroup.controls['entries'] as FormArray;
+    formArray.push(this.qcs.getControlForSubEntry(this.formEntry.questions));
+
+  }
+
+  onRemoveSubEntryClicked(index: number) {
+    const formArray = this.formEntry.formGroup.controls['entries'] as FormArray;
+    formArray.removeAt(index);
+  }
 }

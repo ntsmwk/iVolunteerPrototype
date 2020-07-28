@@ -7,6 +7,7 @@ import { PropertyType, ClassProperty } from '../_model/meta/property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
+import { FormEntry } from '../_model/meta/form';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
@@ -24,16 +25,16 @@ export interface SingleValidatorData {
 export class QuestionService {
   key = 0;
 
-  public getQuestionsFromProperties(properties: ClassProperty<any>[], idPrefix?: string): QuestionBase<any>[] {
+  public getQuestionsFromProperties(classProperties: ClassProperty<any>[], idPrefix?: string): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
-    questions = this.createQuestionsFromProperties(properties, idPrefix);
+    questions = this.createQuestionsFromProperties(classProperties, idPrefix);
 
     return questions.sort((a, b) => a.order - b.order);
   }
 
-  private createQuestionsFromProperties(templateProperties: ClassProperty<any>[], idPrefix?: string) {
+  private createQuestionsFromProperties(classProperties: ClassProperty<any>[], idPrefix?: string) {
     const questions: QuestionBase<any>[] = [];
-    for (const property of templateProperties) {
+    for (const property of classProperties) {
 
       const question = this.createQuestionFromProperty(property);
 

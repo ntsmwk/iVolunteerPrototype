@@ -41,10 +41,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   returnedClassInstances: ClassInstance[];
 
-  canContinue: boolean;
-  canFinish: boolean;
-  lastEntry: boolean;
-
   loaded = false;
   finishClicked = false;
   showResultPage = false;
@@ -94,32 +90,45 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         }
       }),
     ]).then(() => {
-      Promise.all([
-        this.classDefinitionService
-          .getFormConfigurations(this.marketplace, childClassIds)
-          .toPromise()
-          .then((formConfigurations: FormConfiguration[]) => {
-            this.formConfigurations = formConfigurations;
-            for (const config of this.formConfigurations) {
-              config.formEntry = this.addQuestionsAndFormGroup(
-                config.formEntry,
-                config.formEntry.id
-              );
-            }
-          }),
-      ]).then(() => {
-        this.currentFormConfiguration = this.formConfigurations.pop();
+      this.marketplaceService
+        .findById(marketplaceId)
+        .toPromise()
+        .then((marketplace: Marketplace) => {
+          this.marketplace = marketplace;
 
-        if (this.formConfigurations.length === 0) {
-          this.lastEntry = true;
-        }
+          Promise.all([
+            this.classDefinitionService
+              .getFormConfigurations(this.marketplace, childClassIds)
+              .toPromise()
+              .then((formConfigurations: FormConfiguration[]) => {
+                this.formConfigurations = formConfigurations;
+                for (const config of this.formConfigurations) {
+                  config.formEntry = this.addQuestionsAndFormGroup(
+                    config.formEntry,
+                    config.formEntry.id
+                  );
+                }
+              }),
 
-        this.loaded = true;
-      });
+            this.loginService
+              .getLoggedIn()
+              .toPromise()
+              .then((helpseeker: User) => {
+                this.helpseeker = helpseeker;
+              }),
+          ]).then(() => {
+            this.currentFormConfiguration = this.formConfigurations.pop();
+            this.loaded = true;
+          });
+        });
     });
   }
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
+    // formEntry.questions = this.questionService.getQuestionsFromProperties(
+    //   formEntry.classProperties,
+    //   idPrefix
+    // );
     formEntry.questions = this.questionService.getQuestionsFromProperties(
       formEntry.classProperties,
       idPrefix

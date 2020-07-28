@@ -7,8 +7,6 @@
       </h1>
     </div>
     <div *ngFor="let entry of formEntry.subEntries">
-      <!-- <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
-        [ignoreValidity]="ignoreValidity" (result)="handleResultEvent($event)"></app-form-entry-view> -->
       <app-form-preview-entry [formEntry]="entry" [formConfiguration]="formConfiguration"
         [exportClicked]="exportClicked" expanded="true" (result)="handleResultEvent($event)"
         (tupleSelected)="emitTupleSelectionEvent($event)">
@@ -17,8 +15,6 @@
   </div>
 
   <div *ngIf="formEntry.questions.length > 0" fxLayout="row" fxLayoutAlign="center center" class="m-12">
-    <!-- <mat-icon>chevron_right</mat-icon> -->
-
     <mat-expansion-panel [expanded]="expanded" style="width: 100%;">
       <mat-expansion-panel-header class="class-mat-expansion-panel-header" expandedHeight="40px" collapsedHeight="40px">
         <mat-panel-title>
@@ -27,12 +23,6 @@
       </mat-expansion-panel-header>
 
       <div class="m-12 mt-0">
-        <!-- <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0"
-          [questions]="formEntry.questions" hideButtons="true" [formConfigurationId]="formConfiguration.id"
-          [form]="formEntry.formGroup" lastEntry="false" [finishClicked]="finishClicked"
-          [ignoreValidity]="ignoreValidity" (resultEvent)="handleResultEvent($event)"
-          (cancelEvent)="handleCancelEvent()" (tupleSelected)="handleTupleSelection($event)">
-        </app-dynamic-class-instance-creation-form> -->
         Beeinhaltet die folgenden Properties:
         <div class="pl-24 pr-24">
           <mat-expansion-panel [expanded]="formEntry.questions.length <= 5" style="width: 100%;">
@@ -67,14 +57,9 @@
 
                 <mat-select placeholder="{{question.label}} *" [formControlName]="question.key" [id]="question.key"
                   [value]="question.value">
-                  <!-- <mat-option [value]="undefined"></mat-option> -->
                   <mat-option *ngFor="let opt of question.options" [value]="opt" (click)="handleTupleSelection(opt)">
                     {{opt.label}}</mat-option>
                 </mat-select>
-                <!-- {{ getQuestionValue(question) }} -->
-                <!-- <mat-error *ngIf="formEntry.formGroup.controls[question.key].invalid">Error Message
-                </mat-error> -->
-
               </mat-form-field>
 
             </div>

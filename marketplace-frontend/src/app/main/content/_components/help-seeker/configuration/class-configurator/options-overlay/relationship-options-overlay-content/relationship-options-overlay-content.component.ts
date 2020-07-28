@@ -3,11 +3,12 @@ import { isNullOrUndefined } from "util";
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { User } from 'app/main/content/_model/user';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { Relationship, RelationshipType } from 'app/main/content/_model/meta/relationship';
+import { Relationship, RelationshipType, AssociationCardinality } from 'app/main/content/_model/meta/relationship';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PropertyOrEnumEntry } from '../class-options-overlay-content/class-options-overlay-content.component';
 import { CConstants } from '../../utils-and-constants';
 import { OptionsOverlayContentData } from '../options-overlay-control/options-overlay-control.component';
+import { MyMxCell } from '../../../myMxCell';
 
 
 
@@ -23,11 +24,20 @@ export class RelationshipOptionsOverlayContentComponent implements OnInit {
   relationshipPalettes = CConstants.relationshipPalettes;
 
   entryList: PropertyOrEnumEntry[];
+  sourceClass: ClassDefinition;
+  targetClass: ClassDefinition;
 
   constructor(
   ) { }
 
   ngOnInit() {
+    console.log(this.inputData);
+    this.initSourceAndTargetClasses();
+  }
+
+  private initSourceAndTargetClasses() {
+    this.sourceClass = this.inputData.allClassDefinitions.find(c => c.id === this.inputData.relationship.source);
+    this.targetClass = this.inputData.allClassDefinitions.find(c => c.id === this.inputData.relationship.target);
   }
 
   onSubmit() {
@@ -48,8 +58,33 @@ export class RelationshipOptionsOverlayContentComponent implements OnInit {
   }
 
   onRelationshipTypeSelect(relationshipType: RelationshipType) {
-    console.log(relationshipType);
     this.inputData.relationship.relationshipType = relationshipType;
+
+    if (relationshipType === RelationshipType.ASSOCIATION) {
+      this.onChangeCardinalities('1:1');
+    }
+  }
+
+  getCardinalityLabel(key: string) {
+    if (key === 'source') {
+      return AssociationCardinality.getLabelForAssociationCardinality(this.inputData.relationship.sourceCardinality);
+    } else if (key === 'target') {
+      return AssociationCardinality.getLabelForAssociationCardinality(this.inputData.relationship.targetCardinality);
+    }
+    return '';
+  }
+
+  onChangeCardinalities(key: string) {
+    if (key === '1:1') {
+      this.inputData.relationship.sourceCardinality = AssociationCardinality.ONE;
+      this.inputData.relationship.targetCardinality = AssociationCardinality.ONE;
+    } else if (key === '1:N') {
+      this.inputData.relationship.sourceCardinality = AssociationCardinality.ONE;
+      this.inputData.relationship.targetCardinality = AssociationCardinality.N;
+    } else {
+      this.inputData.relationship.sourceCardinality = null;
+      this.inputData.relationship.targetCardinality = null;
+    }
   }
 
 }
