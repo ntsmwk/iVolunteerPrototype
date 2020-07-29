@@ -20,7 +20,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 })
 export class PropertyDetailComponent implements OnInit {
   role: UserRole;
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   tenant: Tenant;
   propertyDefintion: PropertyDefinition<any>;
@@ -45,7 +45,7 @@ export class PropertyDetailComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.role = globalInfo.userRole;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     let parameters;

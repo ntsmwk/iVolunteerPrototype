@@ -62,7 +62,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   ) {}
 
   @Input() marketplace: Marketplace;
-  @Input() helpseeker: User;
+  @Input() tenantAdmin: User;
 
   classDefinitions: ClassDefinition[];
   deletedClassIds: string[];
@@ -115,11 +115,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.tenant = globalInfo.tenants[0];
-
     this.classDefinitions = [];
     this.deletedClassIds = [];
     this.relationships = [];
@@ -132,6 +127,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deleteRelationships = true;
     this.clickToDeleteMode = false;
     this.quickEditMode = false;
+
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
   }
 
   ngAfterContentInit() {
@@ -940,7 +940,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.overlayContent = new OptionsOverlayContentData();
       this.overlayContent.marketplace = this.marketplace;
-      this.overlayContent.helpseeker = this.helpseeker;
+      this.overlayContent.tenantAdmin = this.tenantAdmin;
       this.overlayContent.allClassDefinitions = this.classDefinitions;
 
       if (cell.cellType === MyMxCellType.CLASS) {

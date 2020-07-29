@@ -18,7 +18,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 export class AssetInboxHelpseekerComponent implements OnInit {
   public marketplaces = new Array<Marketplace>();
   marketplace: Marketplace;
-  helpseeker: User;
+  user: User;
   tenant: Tenant;
   classInstanceDTO: ClassInstanceDTO[];
   isLoaded: boolean;
@@ -35,9 +35,9 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
 
-    this.helpseeker = globalInfo.user;
+    this.user = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
-    this.tenant = globalInfo[0];
+    this.tenant = globalInfo.tenants[0];
 
     this.loadInboxEntries();
   }
@@ -46,7 +46,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     this.classInstanceService
       .getClassInstancesInIssuerInbox(
         this.marketplace,
-        this.helpseeker.id,
+        this.user.id,
         this.tenant.id
       )
       .toPromise()
@@ -72,9 +72,21 @@ export class AssetInboxHelpseekerComponent implements OnInit {
           state: {
             instances: this.classInstanceDTO,
             marketplace: this.marketplace,
-            participant: this.helpseeker,
+            participant: this.user,
           },
         });
       });
+  }
+
+  private isFF() {
+    return this.tenant && this.tenant.name == "FF Eidenberg";
+  }
+
+  private isMV() {
+    return this.tenant && this.tenant.name === "MV Schwertberg";
+  }
+
+  private isOther() {
+    return !this.isFF() && !this.isMV();
   }
 }

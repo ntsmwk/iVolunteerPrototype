@@ -37,7 +37,7 @@ export class EnumBuilderComponent implements OnInit {
   ) {}
 
   @Input() marketplace: Marketplace;
-  @Input() helpseeker: User;
+  @Input() tenantAdmin: User;
   @Input() entryId: string;
   @Input() sourceString: string;
   @Output() result: EventEmitter<{

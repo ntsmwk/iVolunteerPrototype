@@ -37,7 +37,7 @@ export class DeleteMatchingDialogComponent implements OnInit {
     this.loginService
       .getLoggedIn()
       .toPromise()
-      .then((helpseeker: User) => {
+      .then(() => {
         this.matchingConfigurationService
           .getAllMatchingConfigurations(this.data.marketplace)
           .toPromise()

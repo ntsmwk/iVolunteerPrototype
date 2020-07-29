@@ -18,7 +18,7 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { Tenant } from "app/main/content/_model/tenant";
 
 export class OpenEnumDefinitionDialogData {
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
 
   enumDefinition: EnumDefinition;

@@ -12,6 +12,7 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
 import { ClassBrowseSubDialogData } from "../browse-sub-dialog/browse-sub-dialog.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface OpenClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
@@ -43,19 +44,21 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   browseMode: boolean;
   browseDialogData: ClassBrowseSubDialogData;
 
+  tenant: Tenant;
+
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
 
-    const tenantId = globalInfo.tenants[0].id;
+    this.tenant = globalInfo.tenants[0];
 
     this.classConfigurationService
-      .getClassConfigurationsByTenantId(this.data.marketplace, tenantId)
+      .getClassConfigurationsByTenantId(this.data.marketplace, this.tenant.id)
       .toPromise()
       .then((classConfigurations: ClassConfiguration[]) => {
         this.allClassConfigurations = classConfigurations.filter((c) => {
-          return c.tenantId === tenantId;
+          return c.tenantId === this.tenant.id;
         });
 
         this.recentClassConfigurations = this.allClassConfigurations;

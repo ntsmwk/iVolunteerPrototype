@@ -50,7 +50,7 @@ export class EnumGraphEditorComponent implements AfterContentInit {
   ) {}
 
   @Input() marketplace: Marketplace;
-  @Input() helpseeker: User;
+  @Input() tenantAdmin: User;
   @Input() enumDefinition: EnumDefinition;
   @Output() result: EventEmitter<{
     type: string;

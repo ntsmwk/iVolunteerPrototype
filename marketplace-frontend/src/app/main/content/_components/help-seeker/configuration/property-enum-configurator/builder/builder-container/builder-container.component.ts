@@ -13,7 +13,7 @@ import { User } from "app/main/content/_model/user";
 })
 export class BuilderContainerComponent implements OnInit {
   @Input() marketplace: Marketplace;
-  @Input() helpseeker: User;
+  @Input() tenantAdmin: User;
   @Input() allPropertyDefinitions: PropertyDefinition<any>[];
   @Input() builderType: string;
   @Input() entryId: string;

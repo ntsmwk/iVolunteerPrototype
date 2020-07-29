@@ -44,7 +44,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   results: FormEntryReturnEventData[] = [];
 
-  helpseeker: User;
+  tenantAdmin: User;
   tenant: Tenant;
 
   constructor(
@@ -67,7 +67,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     this.classDefinitionService

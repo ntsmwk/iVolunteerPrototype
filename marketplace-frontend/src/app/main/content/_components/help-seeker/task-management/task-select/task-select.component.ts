@@ -20,7 +20,7 @@ export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<ClassDefinitionDTO>();
   displayedColumns = ["name", "configuration"];
-  helpseeker: User;
+  user: User;
   tenant: Tenant;
 
   constructor(
@@ -34,7 +34,7 @@ export class FuseTaskSelectComponent implements OnInit {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    this.helpseeker = globalInfo.user;
+    this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
     this.marketplace = globalInfo.marketplace;
 
