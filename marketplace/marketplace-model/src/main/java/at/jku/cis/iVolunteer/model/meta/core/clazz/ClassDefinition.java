@@ -20,7 +20,6 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	private String configurationId;
 	private String name;
 	private List<ClassProperty<Object>> properties = new ArrayList<>();
-	private List<EnumDefinition> enums = new ArrayList<>();
 	private ClassArchetype classArchetype;
 	
 	
@@ -88,14 +87,6 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 		return false;
 	}*/
 	
-
-	public List<EnumDefinition> getEnums() {
-		return enums;
-	}
-
-	public void setEnums(List<EnumDefinition> enums) {
-		this.enums = enums;
-	}
 
 	public String getImagePath() {
 		return imagePath;

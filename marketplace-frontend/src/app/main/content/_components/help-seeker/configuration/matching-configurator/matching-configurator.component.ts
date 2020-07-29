@@ -660,6 +660,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
                 : MatchingEntityType.CLASS;
             rightSet = true;
             relationship.matchingConfigurationId = this.matchingConfiguration.id;
+            relationship.tenantId = this.tenant.id;
           }
         }
 
