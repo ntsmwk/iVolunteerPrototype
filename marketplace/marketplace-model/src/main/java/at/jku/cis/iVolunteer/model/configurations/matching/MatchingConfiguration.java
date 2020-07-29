@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
+
 @Document
-public class MatchingConfiguration {
-	@Id private String id;
+public class MatchingConfiguration extends IVolunteerObject{
 	private String name;
-	private Date timestamp;
 
 	private String leftClassConfigurationId;
 	private String leftClassConfigurationName;
@@ -19,13 +19,6 @@ public class MatchingConfiguration {
 	private String rightClassConfigurationName;
 
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -33,14 +26,6 @@ public class MatchingConfiguration {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	public String getLeftClassConfigurationId() {
