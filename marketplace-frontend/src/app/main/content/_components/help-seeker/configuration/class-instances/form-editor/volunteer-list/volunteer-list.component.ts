@@ -24,7 +24,7 @@ import { Tenant } from "app/main/content/_model/tenant";
   providers: [],
 })
 export class InstanceCreationVolunteerListComponent implements OnInit {
-  @Input() helpseeker: User;
+  @Input() tenantAdmin: User;
   @Output() selectedVolunteers: EventEmitter<User[]> = new EventEmitter();
 
   tenant: Tenant;

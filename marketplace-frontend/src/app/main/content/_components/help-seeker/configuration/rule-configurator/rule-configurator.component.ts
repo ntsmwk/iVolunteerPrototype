@@ -32,7 +32,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
   providers: [],
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   role: UserRole;
   tenant: Tenant;
@@ -80,7 +80,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
 
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
 

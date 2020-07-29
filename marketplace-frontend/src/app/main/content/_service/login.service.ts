@@ -8,7 +8,7 @@ import { Observable, generate } from "rxjs";
   providedIn: "root",
 })
 export class LoginService {
-  constructor(private http: HttpClient, private httpClient: HttpClient) { }
+  constructor(private http: HttpClient, private httpClient: HttpClient) {}
 
   login(username: string, password: string) {
     return this.http.post(

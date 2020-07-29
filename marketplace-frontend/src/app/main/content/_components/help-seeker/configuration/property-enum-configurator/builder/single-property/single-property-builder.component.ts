@@ -35,7 +35,7 @@ export interface PropertyTypeOption {
 })
 export class SinglePropertyBuilderComponent implements OnInit {
   @Input() marketplace: Marketplace;
-  @Input() helpseeker: User;
+  @Input() tenantAdmin: User;
   @Input() entryId: string;
   @Input() sourceString: string;
   @Output() result: EventEmitter<{
@@ -91,14 +91,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   getAllPropertyDefinitions() {
     return this.propertyDefinitionService
-      .getAllPropertyDefinitons(
-        this.marketplace,
-        this.tenant.id
-        // this.helpseeker.subscribedTenants.find(
-        //   (t) =>
-        //     t.role === UserRole.HELP_SEEKER || t.role === UserRole.TENANT_ADMIN
-        // ).tenantId
-      )
+      .getAllPropertyDefinitons(this.marketplace, this.tenant.id)
       .toPromise()
       .then((ret: PropertyDefinition<any>[]) => {
         this.allPropertyDefinitions = ret;
@@ -107,15 +100,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   getCurrentPropertyDefinition() {
     return this.propertyDefinitionService
-      .getPropertyDefinitionById(
-        this.marketplace,
-        this.entryId,
-        this.tenant.id
-        // this.helpseeker.subscribedTenants.find(
-        //   (t) =>
-        //     t.role === UserRole.HELP_SEEKER || t.role === UserRole.TENANT_ADMIN
-        // ).tenantId
-      )
+      .getPropertyDefinitionById(this.marketplace, this.entryId, this.tenant.id)
       .toPromise()
       .then((ret: PropertyDefinition<any>) => {
         this.propertyDefinition = ret;
@@ -281,9 +266,6 @@ export class SinglePropertyBuilderComponent implements OnInit {
   createPropertyFromForm(): PropertyDefinition<any> {
     const property: PropertyDefinition<any> = new PropertyDefinition<any>();
     property.tenantId = this.tenant.id;
-    // this.helpseeker.subscribedTenants.find(
-    //   (t) => t.role === UserRole.HELP_SEEKER || t.role === UserRole.TENANT_ADMIN
-    // ).tenantId;
     property.custom = true;
 
     if (isNullOrUndefined(this.propertyDefinition)) {

@@ -15,7 +15,7 @@ export class ConfiguratorComponent implements OnInit {
   marketplace: Marketplace;
   configurableClasses: ClassDefinition[];
   relationships: Relationship[];
-  helpseeker: User;
+  tenantAdmin: User;
   isLoaded = false;
 
   constructor(private loginService: LoginService) {}
@@ -25,7 +25,7 @@ export class ConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
 
     this.isLoaded = true;
   }

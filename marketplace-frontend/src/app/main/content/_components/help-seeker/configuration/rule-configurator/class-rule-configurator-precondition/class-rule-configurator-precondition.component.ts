@@ -38,7 +38,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     ClassCondition
   > = new EventEmitter<ClassCondition>();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   tenant: Tenant;
   classConditionForms: FormArray;
@@ -94,7 +94,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     this.classDefinitionService

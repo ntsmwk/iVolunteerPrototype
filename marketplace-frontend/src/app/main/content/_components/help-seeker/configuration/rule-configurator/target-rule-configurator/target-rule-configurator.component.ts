@@ -40,7 +40,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     ClassAction
   > = new EventEmitter<ClassAction>();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   tenant: Tenant;
   classDefinitions: ClassDefinition[] = [];
@@ -87,7 +87,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     this.classDefinitionService

@@ -30,7 +30,7 @@ import {
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
-  helpseeker: User;
+  tenantAdmin: User;
 
   classDefinition: ClassDefinition;
 
@@ -52,7 +52,7 @@ export class AddPropertyDialogComponent implements OnInit {
     private classPropertyService: ClassPropertyService,
     private enumDefinitionService: EnumDefinitionService,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   propertyDatasource = new MatTableDataSource<PropertyItem>();
   enumDataSource = new MatTableDataSource<EnumDefinition>();
@@ -79,7 +79,6 @@ export class AddPropertyDialogComponent implements OnInit {
     this.tabIndex = 0;
     console.log(this.data.marketplace);
     console.log(this.data.classDefinition);
-
 
     Promise.all([
       this.propertyDefinitionService
@@ -228,7 +227,7 @@ export class AddPropertyDialogComponent implements OnInit {
       minHeight: "90vh",
       data: {
         marketplace: this.data.marketplace,
-        helpseeker: this.data.helpseeker,
+        tenantAdmin: this.data.tenantAdmin,
         allPropertyDefinitions: this.propertyDatasource.data,
         builderType: type,
       },

@@ -40,7 +40,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     AttributeCondition
   >();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   role: UserRole;
   tenants: Tenant[];
@@ -89,7 +89,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenants = globalInfo.tenants;
 
     this.loadClassProperties(null);

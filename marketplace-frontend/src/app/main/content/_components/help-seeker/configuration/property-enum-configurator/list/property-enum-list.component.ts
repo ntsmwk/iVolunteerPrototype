@@ -37,7 +37,7 @@ export class PropertyEnumListComponent implements OnInit {
   displayedColumns = ["type", "name", "filler", "actions"];
 
   marketplace: Marketplace;
-  helpseeker: User;
+  tenantAdmin: User;
   tenants: Tenant[];
 
   propertyDefinitions: PropertyDefinition<any>[];
@@ -84,7 +84,7 @@ export class PropertyEnumListComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenants = globalInfo.tenants;
 
     Promise.all([

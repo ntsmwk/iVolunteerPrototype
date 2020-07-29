@@ -39,7 +39,7 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     GeneralCondition
   >();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   tenant: Tenant;
   rulePreconditionForm: FormGroup;
@@ -83,7 +83,7 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     this.derivationRuleService

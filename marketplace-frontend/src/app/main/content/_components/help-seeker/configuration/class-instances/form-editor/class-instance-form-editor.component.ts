@@ -32,7 +32,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
   marketplace: Marketplace;
-  helpseeker: User;
+  tenantAdmin: User;
   tenant: Tenant;
 
   formConfigurations: FormConfiguration[];
@@ -67,7 +67,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
     this.marketplace = globalInfo.marketplace;
 
@@ -113,8 +113,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             this.loginService
               .getLoggedIn()
               .toPromise()
-              .then((helpseeker: User) => {
-                this.helpseeker = helpseeker;
+              .then((tenantAdmin: User) => {
+                this.tenantAdmin = tenantAdmin;
               }),
           ]).then(() => {
             this.currentFormConfiguration = this.formConfigurations.pop();

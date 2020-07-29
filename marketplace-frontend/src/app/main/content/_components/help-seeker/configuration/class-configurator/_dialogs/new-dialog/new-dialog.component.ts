@@ -53,10 +53,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     this.tenant = globalInfo.tenants[0];
 
     this.classConfigurationService
-      .getClassConfigurationsByTenantId(
-        this.data.marketplace,
-        this.data.tenantId
-      )
+      .getClassConfigurationsByTenantId(this.data.marketplace, this.tenant.id)
       .toPromise()
       .then((classConfigurations: ClassConfiguration[]) => {
         this.data.tenantId = this.tenant.id;

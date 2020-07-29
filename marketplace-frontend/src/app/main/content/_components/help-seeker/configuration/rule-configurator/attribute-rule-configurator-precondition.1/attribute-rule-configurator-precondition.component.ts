@@ -44,7 +44,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     AttributeCondition
   >();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   role: UserRole;
   tenant: Tenant;
@@ -97,7 +97,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     this.classDefinitionService

@@ -5,7 +5,7 @@
     [displayNavigateBack]="true"
     headerText="Einträge ableiten"
   ></customizable-header>
-  <div *ngIf="helpseeker && isFF()">
+  <div *ngIf="tenantAdmin && isFF()">
     <div
       class="header-ff p-16 p-sm-24"
       fxLayout="row"
@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <div *ngIf="helpseeker && isMV()">
+  <div *ngIf="tenantAdmin && isMV()">
     <div
       class="header-mv p-16 p-sm-24"
       fxLayout="row"
@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div *ngIf="helpseeker && isOther()">
+  <div *ngIf="tenantAdmin && isOther()">
     <div
       class="header p-16 p-sm-24"
       fxLayout="row"
