@@ -57,10 +57,6 @@ public class MatchingConfigurationController {
 
 	@PutMapping("matching-configuration/delete-multiple")
 	public List<MatchingConfiguration> deleteMultipleMatchingConfigurations(@RequestBody() List<String> ids) {
-//		List<MatchingConfiguration> matchingConfigurations = new ArrayList<>();
-//		this.matchingConfigurationRepository.findAll(ids).forEach(matchingConfigurations::add);;
-//		this.matchingConfigurationRepository.delete(matchingConfigurations);
-
 		ids.forEach(this.matchingConfigurationRepository::delete);
 		return this.matchingConfigurationRepository.findAll();
 	}

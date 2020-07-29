@@ -4,32 +4,32 @@ export const navigation_helpseeker = [
     title: "Übersicht",
     type: "item",
     icon: "door-open",
-    url: "/main/dashboard",
+    url: "/main/dashboard"
   },
   {
     id: "digi",
     title: "Digitalisieren",
-    type: "group",
+    type: "group"
   },
   {
     id: "tasks",
     title: "Einträge erfassen",
     type: "item",
     icon: "pencil",
-    url: "/main/tasks/all",
+    url: "/main/tasks/all"
   },
   {
     id: "tasks",
     title: "Einträge importieren",
     type: "item",
     icon: "import",
-    url: "/main/import",
-  },
-  {
-    id: "inbox",
-    title: "Einträge bestätigen",
-    type: "item",
-    icon: "unlock",
-    url: "/main/helpseeker/asset-inbox",
-  },
+    url: "/main/import"
+  }
+  // {
+  //   id: "inbox",
+  //   title: "Einträge bestätigen",
+  //   type: "item",
+  //   icon: "unlock",
+  //   url: "/main/helpseeker/asset-inbox",
+  // },
 ];

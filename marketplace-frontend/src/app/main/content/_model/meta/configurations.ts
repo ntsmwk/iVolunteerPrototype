@@ -9,7 +9,6 @@ export class ClassConfiguration {
   timestamp: Date;
   userId: string;
   tenantId: string;
-
 }
 
 export class MatchingConfiguration {
@@ -22,8 +21,6 @@ export class MatchingConfiguration {
 
   rightClassConfigurationId: string;
   rightClassConfigurationName: string;
-
-  relationships: MatchingOperatorRelationship[];
 }
 
 export class MatchingCollectorConfiguration {

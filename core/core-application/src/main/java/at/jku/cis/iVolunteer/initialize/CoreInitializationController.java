@@ -104,16 +104,14 @@ public class CoreInitializationController {
 
 	@PutMapping("/init/tenant/subscribe/all")
 	public void subscribeAllToTenant() {
-		subscribeHelpseekersToTenant();
-		subscribeTenantAdminsToTenant();
+		subscribeAllToTenantExceptVolunteers();
 		subscribeVolunteersToTenant();
-		subscribeAdminsToTenant();
-		subscribeRecruitersToTenant();
 	}
 
 	@PutMapping("/init/tenant/subscribe/all-except-volunteers")
 	public void subscribeAllToTenantExceptVolunteers() {
 		subscribeHelpseekersToTenant();
+		subscribeTenantAdminsToTenant();
 		subscribeAdminsToTenant();
 		subscribeRecruitersToTenant();
 	}

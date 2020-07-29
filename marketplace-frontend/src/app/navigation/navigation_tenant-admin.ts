@@ -4,65 +4,65 @@ export const navigation_tenantAdmin = [
     title: "Übersicht",
     type: "item",
     icon: "door-open",
-    url: "/main/dashboard",
+    url: "/main/dashboard"
   },
   {
     id: "digi",
     title: "Digitalisieren",
-    type: "group",
+    type: "group"
   },
   {
     id: "tasks",
     title: "Einträge erfassen",
     type: "item",
     icon: "pencil",
-    url: "/main/tasks/all",
+    url: "/main/tasks/all"
   },
   {
     id: "tasks",
     title: "Einträge importieren",
     type: "item",
     icon: "import",
-    url: "/main/import",
+    url: "/main/import"
   },
-  {
-    id: "inbox",
-    title: "Einträge bestätigen",
-    type: "item",
-    icon: "unlock",
-    url: "/main/helpseeker/asset-inbox",
-  },
+  // {
+  //   id: "inbox",
+  //   title: "Einträge bestätigen",
+  //   type: "item",
+  //   icon: "unlock",
+  //   url: "/main/helpseeker/asset-inbox",
+  // },
   {
     id: "config",
     title: "Konfigurieren",
-    type: "group",
+    type: "group"
   },
   {
     id: "configurator",
     title: "Klassen konfigurieren",
     type: "item",
     icon: "cogs",
-    url: "/main/configurator",
+    url: "/main/configurator"
   },
   {
     id: "matching-configurator",
     title: "Matching konfigurieren",
     type: "item",
     icon: "less-than-equal-solid",
-    url: "/main/matching-configurator/",
+    url: "/main/matching-configurator/"
   },
   {
     id: "rule-configurator",
     title: "Einträge ableiten",
     type: "item",
     icon: "share-square",
-    url: "/main/rules/all",
+    url: "/main/rules/all"
   },
   {
     id: "property-builder",
     title: "Properties konfigurieren",
     type: "item",
     icon: "hammer-solid",
-    url: "/main/properties/all/",
-  },
+    url: "/main/properties/all/"
+  }
 ];

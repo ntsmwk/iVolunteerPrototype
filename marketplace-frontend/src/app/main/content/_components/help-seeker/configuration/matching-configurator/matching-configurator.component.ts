@@ -31,10 +31,11 @@ import { ObjectIdService } from "../../../../_service/objectid.service.";
 import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { MyMxCell, MyMxCellType } from "../myMxCell";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { MatchingOperatorRelationshipService } from "app/main/content/_service/configuration/matching-operator-relationship.service";
 
 declare var require: any;
 
-const mx: typeof mxgraph = require('mxgraph')({
+const mx: typeof mxgraph = require("mxgraph")({
   // mxDefaultLanguage: 'de',
   // mxBasePath: './mxgraph_resources',
 });
@@ -43,27 +44,28 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 @Component({
   selector: "app-matching-configurator",
-  templateUrl: './matching-configurator.component.html',
-  styleUrls: ['./matching-configurator.component.scss'],
-  providers: [DialogFactoryDirective],
+  templateUrl: "./matching-configurator.component.html",
+  styleUrls: ["./matching-configurator.component.scss"],
+  providers: [DialogFactoryDirective]
 })
 export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   constructor(
     private matchingCollectorConfigurationService: MatchingCollectorConfigurationService,
     private loginService: LoginService,
     private matchingConfigurationService: MatchingConfigurationService,
+    private matchingOperatorRelationshipService: MatchingOperatorRelationshipService,
     private objectIdService: ObjectIdService,
     private renderer: Renderer2,
     private dialogFactory: DialogFactoryDirective
-  ) { }
+  ) {}
 
   marketplace: Marketplace;
 
   eventResponseAction: string;
 
-  @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
-  @ViewChild('paletteContainer', { static: true }) paletteContainer: ElementRef;
-  @ViewChild('deleteOperationIcon', { static: true })
+  @ViewChild("graphContainer", { static: true }) graphContainer: ElementRef;
+  @ViewChild("paletteContainer", { static: true }) paletteContainer: ElementRef;
+  @ViewChild("deleteOperationIcon", { static: true })
   deleteOperationContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
@@ -79,6 +81,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   deleteOperationPalette = CConstants.deleteOperationPalette;
 
   matchingConfiguration: MatchingConfiguration;
+  relationships: MatchingOperatorRelationship[] = [];
 
   displayOverlay: boolean;
   overlayRelationship: MatchingOperatorRelationship;
@@ -97,123 +100,125 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.marketplace = globalInfo.marketplace;
   }
 
-
-
-
-
-
-
-  loadClassesAndRelationships(
+  async loadClassesAndRelationships(
     leftClassConfigurationId: string,
     rightClassConfigurationId: string
   ) {
     this.clearEditor();
     this.matchingConfiguration = undefined;
+    this.relationships = [];
 
-    Promise.all([
-      this.matchingCollectorConfigurationService
+    // TODO MWE less requests to server....
+
+    this.leftMatchingCollectorConfiguration = <MatchingCollectorConfiguration>(
+      await this.matchingCollectorConfigurationService
         .getSavedMatchingCollectorConfiguration(
           this.marketplace,
           leftClassConfigurationId
         )
         .toPromise()
-        .then((configuration: MatchingCollectorConfiguration) => {
-          this.leftMatchingCollectorConfiguration = configuration;
-          this.insertClassDefinitionsLeftFromCollector();
-        }),
-      this.matchingCollectorConfigurationService
+    );
+    this.insertClassDefinitionsLeftFromCollector();
+
+    this.rightMatchingCollectorConfiguration = <MatchingCollectorConfiguration>(
+      await this.matchingCollectorConfigurationService
         .getSavedMatchingCollectorConfiguration(
           this.marketplace,
           rightClassConfigurationId
         )
         .toPromise()
-        .then((configuration: MatchingCollectorConfiguration) => {
-          this.rightMatchingCollectorConfiguration = configuration;
-          this.insertClassDefinitionsRightFromCollector();
-        })
-    ]).then(() => {
-      this.matchingConfigurationService
+    );
+    this.insertClassDefinitionsRightFromCollector();
+
+    const retrievedMatchingConfiguration = <MatchingConfiguration>(
+      await this.matchingConfigurationService
         .getMatchingConfigurationByClassConfigurationIds(
           this.marketplace,
           leftClassConfigurationId,
           rightClassConfigurationId
         )
         .toPromise()
-        .then((matchingConfiguration: MatchingConfiguration) => {
-          if (!isNullOrUndefined(matchingConfiguration)) {
-            this.matchingConfiguration = matchingConfiguration;
-            this.insertMatchingOperatorsAndRelationships();
-          } else {
-            this.matchingConfiguration = new MatchingConfiguration();
-            this.matchingConfiguration.rightClassConfigurationId = rightClassConfigurationId;
-            this.matchingConfiguration.leftClassConfigurationId = leftClassConfigurationId;
-            this.matchingConfiguration.relationships = [];
-          }
-        });
-    });
+    );
+    if (!isNullOrUndefined(retrievedMatchingConfiguration)) {
+      this.matchingConfiguration = retrievedMatchingConfiguration;
+      this.relationships = <MatchingOperatorRelationship[]>(
+        await this.matchingOperatorRelationshipService
+          .getMatchingOperatorRelationshipByMatchingConfiguration(
+            this.marketplace,
+            this.matchingConfiguration.id
+          )
+          .toPromise()
+      );
+      this.insertMatchingOperatorsAndRelationships();
+    } else {
+      this.matchingConfiguration = new MatchingConfiguration();
+      this.matchingConfiguration.rightClassConfigurationId = rightClassConfigurationId;
+      this.matchingConfiguration.leftClassConfigurationId = leftClassConfigurationId;
+      this.relationships = [];
+    }
   }
 
   ngAfterContentInit() {
-    this.graphContainer.nativeElement.style.position = 'absolute';
-    this.graphContainer.nativeElement.style.overflow = 'scroll';
-    this.graphContainer.nativeElement.style.left = '0px';
-    this.graphContainer.nativeElement.style.top = '60px';
-    this.graphContainer.nativeElement.style.right = '0px';
-    this.graphContainer.nativeElement.style.bottom = '0px';
-    this.graphContainer.nativeElement.style.background = 'white';
-    this.graphContainer.nativeElement.style.width = '100%';
+    this.graphContainer.nativeElement.style.position = "absolute";
+    this.graphContainer.nativeElement.style.overflow = "scroll";
+    this.graphContainer.nativeElement.style.left = "0px";
+    this.graphContainer.nativeElement.style.top = "60px";
+    this.graphContainer.nativeElement.style.right = "0px";
+    this.graphContainer.nativeElement.style.bottom = "0px";
+    this.graphContainer.nativeElement.style.background = "white";
+    this.graphContainer.nativeElement.style.width = "100%";
 
-    this.paletteContainer.nativeElement.style.position = 'absolute';
-    this.paletteContainer.nativeElement.style.overflow = 'hidden';
-    this.paletteContainer.nativeElement.style.padding = '2px';
-    this.paletteContainer.nativeElement.style.right = '0px';
-    this.paletteContainer.nativeElement.style.top = '30px';
-    this.paletteContainer.nativeElement.style.left = '0px';
-    this.paletteContainer.nativeElement.style.height = '30px';
-    this.paletteContainer.nativeElement.style.background = 'white';
+    this.paletteContainer.nativeElement.style.position = "absolute";
+    this.paletteContainer.nativeElement.style.overflow = "hidden";
+    this.paletteContainer.nativeElement.style.padding = "2px";
+    this.paletteContainer.nativeElement.style.right = "0px";
+    this.paletteContainer.nativeElement.style.top = "30px";
+    this.paletteContainer.nativeElement.style.left = "0px";
+    this.paletteContainer.nativeElement.style.height = "30px";
+    this.paletteContainer.nativeElement.style.background = "white";
     this.paletteContainer.nativeElement.style.font =
-      'Arial, Helvetica, sans-serif';
+      "Arial, Helvetica, sans-serif";
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
     const outer = this;
 
-    this.graph.isCellSelectable = function (cell) {
+    this.graph.isCellSelectable = function(cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
 
       return (
         this.isCellsSelectable() &&
         !this.isCellLocked(cell) &&
-        style['selectable'] !== 0
+        style["selectable"] !== 0
       );
     };
 
-    this.graph.getCursorForCell = function (cell: MyMxCell) {
+    this.graph.getCursorForCell = function(cell: MyMxCell) {
       if (
         cell.cellType === MyMxCellType.MATCHING_OPERATOR &&
         outer.deleteMode
       ) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       } else if (outer.deleteMode) {
-        return 'default';
+        return "default";
       }
     };
 
     const modelGetStyle = this.graph.model.getStyle;
-    this.graph.model.getStyle = function (cell) {
+    this.graph.model.getStyle = function(cell) {
       if (cell != null) {
         let style = modelGetStyle.apply(this, arguments);
 
         if (this.isCollapsed(cell)) {
-          style = style + ';shape=rectangle';
+          style = style + ";shape=rectangle";
         }
         return style;
       }
       return null;
     };
 
-    this.graph.getEdgeValidationError = function (
+    this.graph.getEdgeValidationError = function(
       edge: MyMxCell,
       source: MyMxCell,
       target: MyMxCell
@@ -226,12 +231,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         edge.target.id === target.id
       ) {
         if (source.edges.length >= 2) {
-          return '';
+          return "";
         }
 
         for (const e of source.edges) {
           if (!isNullOrUndefined(e.source) && e.source.id === source.id) {
-            return '';
+            return "";
           }
         }
       } else if (
@@ -242,23 +247,23 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         edge.source.id === source.id
       ) {
         if (target.edges.length >= 2) {
-          return '';
+          return "";
         }
 
         if (source.cellType === MyMxCellType.MATCHING_OPERATOR) {
-          return '';
+          return "";
         }
 
         for (const e of target.edges) {
           if (!isNullOrUndefined(e.target) && e.target.id === target.id) {
-            return '';
+            return "";
           }
         }
       }
     };
 
     if (!mx.mxClient.isBrowserSupported()) {
-      mx.mxUtils.error('Browser is not supported!', 200, false);
+      mx.mxUtils.error("Browser is not supported!", 200, false);
     } else {
       // Disables the built-in context menu
       mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
@@ -272,19 +277,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.setPanning(true);
       this.graph.useScrollbarsForPanning = true;
 
-      this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
+      this.graph.addListener(mx.mxEvent.CLICK, function(sender, evt) {
         // Handle Click
         outer.handleClickEvent(evt);
       });
 
-      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender, evt) {
+      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function(sender, evt) {
         // Handle Double Click
         outer.handleDoubleClickEvent(evt);
       });
 
       this.graph
         .getSelectionModel()
-        .addListener(mx.mxEvent.CHANGE, function (sender, evt) {
+        .addListener(mx.mxEvent.CHANGE, function(sender, evt) {
           // Handle Select
         });
     }
@@ -361,7 +366,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   ): MyMxCell {
     // create class cell
     let cell: MyMxCell;
-    if (collector.classDefinition.classArchetype.startsWith('ENUM')) {
+    if (collector.classDefinition.classArchetype.startsWith("ENUM")) {
       cell = new mx.mxCell(
         collector.classDefinition.name,
         geometry,
@@ -399,13 +404,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       20
     );
 
-    // console.log("C: " + collector.path);
-
     let addPropertiesReturn = this.addPropertiesToCell(cell, collector, 5, 45);
     cell = addPropertiesReturn.cell;
 
     for (const entry of collector.collectorEntries) {
-      // console.log("E: " + entry.path);
       const boundaryHeight =
         entry.classDefinition.name.split(/\r?\n/).length * 25;
       const boundary = this.graph.insertVertex(
@@ -414,8 +416,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         entry.classDefinition.name,
         0,
         addPropertiesReturn.lastPropertyGeometry.y +
-        addPropertiesReturn.lastPropertyGeometry.height +
-        2,
+          addPropertiesReturn.lastPropertyGeometry.height +
+          2,
         200,
         boundaryHeight,
         CConstants.mxStyles.matchingClassSeparator
@@ -482,7 +484,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private insertMatchingOperatorsAndRelationships() {
-    for (const entry of this.matchingConfiguration.relationships) {
+    for (const entry of this.relationships) {
       const operatorCell = this.insertMatchingOperator(entry);
 
       let leftCell: MyMxCell;
@@ -591,7 +593,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   consumeMenuOptionClickedEvent(event: any) {
     this.deleteMode = false;
 
-    this.deleteOperationContainer.nativeElement.style.background = 'none';
+    this.deleteOperationContainer.nativeElement.style.background = "none";
     this.graph.setEnabled(true);
 
     this.displayOverlay = false;
@@ -599,13 +601,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.overlayRelationship = undefined;
 
     switch (event.id) {
-      case 'editor_save':
+      case "editor_save":
         this.performSave();
         break;
-      case 'editor_open':
+      case "editor_open":
         this.performOpen(event.payload);
         break;
-      case 'editor_new':
+      case "editor_new":
         this.performNew(
           event.payload.leftClassConfiguration,
           event.payload.rightClassConfiguration,
@@ -615,7 +617,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private performSave() {
+  private async performSave() {
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
     const matchingOperatorCells = cells.filter(
       (cell: MyMxCell) => cell.cellType === MyMxCellType.MATCHING_OPERATOR
@@ -624,7 +626,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const updatedRelationships: MatchingOperatorRelationship[] = [];
 
     for (const operatorCell of matchingOperatorCells) {
-      const relationship = this.matchingConfiguration.relationships.find(
+      const relationship = this.relationships.find(
         r => r.id === operatorCell.id
       );
 
@@ -654,6 +656,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
                 ? MatchingEntityType.PROPERTY
                 : MatchingEntityType.CLASS;
             rightSet = true;
+            relationship.matchingConfigurationId = this.matchingConfiguration.id;
           }
         }
 
@@ -665,13 +668,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       updatedRelationships.push(relationship);
     }
 
-    this.matchingConfiguration.relationships = updatedRelationships;
-    this.matchingConfigurationService
+    this.relationships = updatedRelationships;
+    await this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, this.matchingConfiguration)
-      .toPromise()
-      .then((ret: MatchingConfiguration) => {
-        // not doing anything currently
-      });
+      .toPromise();
+    await this.matchingOperatorRelationshipService
+      .saveMatchingOperatorRelationships(this.marketplace, this.relationships)
+      .toPromise();
+
+    // TODO save relationships!!!
   }
 
   performOpen(matchingConfiguration: MatchingConfiguration) {
@@ -691,7 +696,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       rightClassConfiguration.id;
     matchingConfiguration.leftClassConfigurationId = leftClassConfiguration.id;
     matchingConfiguration.name = name;
-    matchingConfiguration.relationships = [];
 
     this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, matchingConfiguration)
@@ -714,17 +718,17 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const outer = this;
     let positionEvent: MouseEvent;
 
-    const onDragstart = function (evt) {
+    const onDragstart = function(evt) {
       evt.dataTransfer.setData("text", item.id);
       evt.dataTransfer.effect = "move";
       evt.dataTransfer.effectAllowed = "move";
     };
 
-    const onDragOver = function (evt) {
+    const onDragOver = function(evt) {
       positionEvent = evt;
     };
 
-    const onDragend = function (evt) {
+    const onDragend = function(evt) {
       evt.dataTransfer.getData("text");
       try {
         addObjectToGraph(evt, item);
@@ -739,7 +743,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           false
         );
         graph.getModel().beginUpdate();
-        if (paletteItem.type === 'matchingOperator') {
+        if (paletteItem.type === "matchingOperator") {
           const cell = graph.insertVertex(
             graph.getDefaultParent(),
             null,
@@ -749,7 +753,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             50,
             50,
             `shape=image;image=${paletteItem.imgPath};` +
-            CConstants.mxStyles.matchingOperator
+              CConstants.mxStyles.matchingOperator
           ) as MyMxCell;
 
           cell.cellType = MyMxCellType.MATCHING_OPERATOR;
@@ -762,8 +766,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           relationship.coordY = cell.geometry.y;
           relationship.matchingOperatorType = cell.matchingOperatorType;
 
-          outer.matchingConfiguration.relationships.push(relationship);
-        } else if (paletteItem.type === 'connector') {
+          outer.relationships.push(relationship);
+        } else if (paletteItem.type === "connector") {
           const cell = new mx.mxCell(
             undefined,
             new mx.mxGeometry(coords.x, coords.y, 0, 0),
@@ -787,21 +791,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       }
     };
 
-    const onMouseUp = function (evt) {
+    const onMouseUp = function(evt) {
       removeEventListeners(outer);
     };
 
-    event.srcElement.addEventListener('dragend', onDragend);
-    event.srcElement.addEventListener('mouseup', onMouseUp);
-    event.srcElement.addEventListener('dragstart', onDragstart);
-    this.graphContainer.nativeElement.addEventListener('dragover', onDragOver);
+    event.srcElement.addEventListener("dragend", onDragend);
+    event.srcElement.addEventListener("mouseup", onMouseUp);
+    event.srcElement.addEventListener("dragstart", onDragstart);
+    this.graphContainer.nativeElement.addEventListener("dragover", onDragOver);
 
     function removeEventListeners(outerScope: any) {
-      event.srcElement.removeEventListener('dragend', onDragend);
-      event.srcElement.removeEventListener('mouseup', onMouseUp);
-      event.srcElement.removeEventListener('dragstart', onDragstart);
+      event.srcElement.removeEventListener("dragend", onDragend);
+      event.srcElement.removeEventListener("mouseup", onMouseUp);
+      event.srcElement.removeEventListener("dragstart", onDragstart);
       outerScope.graphContainer.nativeElement.removeEventListener(
-        'dragover',
+        "dragover",
         onDragOver
       );
     }
@@ -833,8 +837,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       if (this.confirmDelete) {
         this.dialogFactory
           .confirmationDialog(
-            'Löschen bestätigen',
-            'Soll der Operator wirklich gelöscht werden?'
+            "Löschen bestätigen",
+            "Soll der Operator wirklich gelöscht werden?"
           )
           .then((ret: boolean) => {
             if (ret) {
@@ -859,7 +863,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     try {
       this.graph.getModel().beginUpdate();
       this.graph.removeCells(cellsToRemove, true);
-      this.matchingConfiguration.relationships = this.matchingConfiguration.relationships.filter(
+      this.relationships = this.relationships.filter(
         r => cellsToRemove.findIndex(c => r.id === c.id) < 0
       );
     } finally {
@@ -875,10 +879,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.deleteMode = !this.deleteMode;
 
     if (this.deleteMode) {
-      this.renderer.setStyle(event.target, 'background', 'skyblue');
+      this.renderer.setStyle(event.target, "background", "skyblue");
       this.graph.setEnabled(false);
     } else {
-      this.renderer.setStyle(event.target, 'background', 'none');
+      this.renderer.setStyle(event.target, "background", "none");
       this.graph.setEnabled(true);
     }
   }
@@ -888,26 +892,22 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   handleOverlayOpened(event: mxgraph.mxEventObject, cell: MyMxCell) {
-    this.overlayRelationship = this.matchingConfiguration.relationships.find(
-      r => r.id === cell.id
-    );
+    this.overlayRelationship = this.relationships.find(r => r.id === cell.id);
     this.overlayEvent = event.properties.event;
     this.displayOverlay = true;
 
-    this.graphContainer.nativeElement.style.overflow = 'hidden';
+    this.graphContainer.nativeElement.style.overflow = "hidden";
   }
 
   handleOverlayClosedEvent(event: MatchingOperatorRelationship) {
     this.displayOverlay = false;
     this.overlayRelationship = undefined;
     this.overlayEvent = undefined;
-    this.graphContainer.nativeElement.style.overflow = 'scroll';
+    this.graphContainer.nativeElement.style.overflow = "scroll";
 
     if (!isNullOrUndefined(event)) {
-      const index = this.matchingConfiguration.relationships.findIndex(
-        r => r.id === event.id
-      );
-      this.matchingConfiguration.relationships[index] = event;
+      const index = this.relationships.findIndex(r => r.id === event.id);
+      this.relationships[index] = event;
 
       try {
         this.graph.getModel().beginUpdate();
@@ -932,9 +932,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    * ...........Key Handler..............
    */
 
-  @HostListener('document:keypress', ['$event'])
+  @HostListener("document:keypress", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.key === 'Delete') {
+    if (event.key === "Delete") {
       const cells = this.graph.getSelectionCells() as MyMxCell[];
       this.deleteOperators(cells);
     }

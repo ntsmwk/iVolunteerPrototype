@@ -26,7 +26,7 @@ export interface NewClassConfigurationDialogData {
 @Component({
   selector: "new-class-configuration-dialog",
   templateUrl: "./new-dialog.component.html",
-  styleUrls: ["./new-dialog.component.scss"],
+  styleUrls: ["./new-dialog.component.scss"]
 })
 export class NewClassConfigurationDialogComponent implements OnInit {
   constructor(
@@ -64,14 +64,14 @@ export class NewClassConfigurationDialogComponent implements OnInit {
             "",
             isNullOrUndefined(this.data.classConfiguration)
               ? stringUniqueValidator(
-                  this.allClassConfigurations.map((c) => c.name)
+                  this.allClassConfigurations.map(c => c.name)
                 )
               : stringUniqueValidator(
-                  this.allClassConfigurations.map((c) => c.name),
+                  this.allClassConfigurations.map(c => c.name),
                   [this.data.classConfiguration.name]
                 )
           ),
-          description: new FormControl(""),
+          description: new FormControl("")
           // rootLabel: new FormControl('')
         });
 
@@ -141,7 +141,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
             .toPromise()
             .then((ret: ClassDefinition[]) => {
               this.data.classDefinitions = ret;
-            }),
+            })
         ]).then(() => {
           this.dialogRef.close(this.data);
         });
