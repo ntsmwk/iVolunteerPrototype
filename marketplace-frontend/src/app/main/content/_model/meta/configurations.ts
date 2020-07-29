@@ -15,6 +15,7 @@ export class MatchingConfiguration {
   id: string;
   name: string;
   timestamp: Date;
+  tenantId: string;
 
   leftClassConfigurationId: string;
   leftClassConfigurationName: string;

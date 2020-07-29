@@ -21,6 +21,7 @@ export class MatchingCollectorEntry {
 
 export class MatchingOperatorRelationship {
   id: string;
+  tenantId: string;
   matchingConfigurationId: string;
 
   leftMatchingEntityPath: string;

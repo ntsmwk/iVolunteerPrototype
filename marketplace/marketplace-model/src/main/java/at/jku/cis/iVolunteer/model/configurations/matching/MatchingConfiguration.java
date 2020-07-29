@@ -1,15 +1,11 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
 
 @Document
-public class MatchingConfiguration extends IVolunteerObject{
+public class MatchingConfiguration extends IVolunteerObject {
 	private String name;
 
 	private String leftClassConfigurationId;
@@ -17,8 +13,6 @@ public class MatchingConfiguration extends IVolunteerObject{
 
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
-
-
 
 	public String getName() {
 		return name;
