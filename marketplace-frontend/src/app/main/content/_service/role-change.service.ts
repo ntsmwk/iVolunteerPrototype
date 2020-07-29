@@ -56,6 +56,8 @@ export class RoleChangeService {
         return "Flexprod";
       case UserRole.ADMIN:
         return "Admin";
+      case UserRole.TENANT_ADMIN:
+        return "Organisations-Admin";
     }
   }
 }

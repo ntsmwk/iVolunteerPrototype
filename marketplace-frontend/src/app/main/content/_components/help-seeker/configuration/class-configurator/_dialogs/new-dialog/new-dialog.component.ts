@@ -12,10 +12,11 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { stringUniqueValidator } from "app/main/content/_validator/string-unique.validator";
 import { User, UserRole } from "app/main/content/_model/user";
 import { isNullOrUndefined } from "util";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface NewClassConfigurationDialogData {
   marketplace: Marketplace;
-
   classConfiguration: ClassConfiguration;
   relationships: Relationship[];
   classDefinitions: ClassDefinition[];
@@ -36,60 +37,62 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     private classDefintionService: ClassDefinitionService,
     private loginService: LoginService
   ) {}
+  marketplace: Marketplace;
+  user: User;
+  tenant: Tenant;
 
   dialogForm: FormGroup;
   allClassConfigurations: ClassConfiguration[];
   showEditDialog: boolean;
   loaded = false;
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
+
+    this.classConfigurationService
+      .getClassConfigurationsByTenantId(
+        this.data.marketplace,
+        this.data.tenantId
+      )
       .toPromise()
-      .then((helpseeker: User) => {
-        this.classConfigurationService
-          .getClassConfigurationsByTenantId(
-            this.data.marketplace,
-            this.data.tenantId
-          )
-          .toPromise()
-          .then((classConfigurations: ClassConfiguration[]) => {
-            this.data.tenantId = helpseeker.subscribedTenants.find(
-              t => t.role === UserRole.HELP_SEEKER
-            ).tenantId;
-            this.allClassConfigurations = classConfigurations;
-            this.dialogForm = new FormGroup({
-              label: new FormControl(
-                "",
-                isNullOrUndefined(this.data.classConfiguration)
-                  ? stringUniqueValidator(
-                      this.allClassConfigurations.map(c => c.name)
-                    )
-                  : stringUniqueValidator(
-                      this.allClassConfigurations.map(c => c.name),
-                      [this.data.classConfiguration.name]
-                    )
-              ),
-              description: new FormControl("")
-              // rootLabel: new FormControl('')
-            });
+      .then((classConfigurations: ClassConfiguration[]) => {
+        this.data.tenantId = this.tenant.id;
+        this.allClassConfigurations = classConfigurations;
 
-            if (!isNullOrUndefined(this.data.classConfiguration)) {
-              this.showEditDialog = true;
-              this.dialogForm
-                .get("label")
-                .setValue(this.data.classConfiguration.name);
-              this.dialogForm
-                .get("description")
-                .setValue(this.data.classConfiguration.description);
-            }
-            // ----DEBUG
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            // ----
+        this.dialogForm = new FormGroup({
+          label: new FormControl(
+            "",
+            isNullOrUndefined(this.data.classConfiguration)
+              ? stringUniqueValidator(
+                  this.allClassConfigurations.map(c => c.name)
+                )
+              : stringUniqueValidator(
+                  this.allClassConfigurations.map(c => c.name),
+                  [this.data.classConfiguration.name]
+                )
+          ),
+          description: new FormControl("")
+          // rootLabel: new FormControl('')
+        });
 
-            this.loaded = true;
-          });
+        if (!isNullOrUndefined(this.data.classConfiguration)) {
+          this.showEditDialog = true;
+          this.dialogForm
+            .get("label")
+            .setValue(this.data.classConfiguration.name);
+          this.dialogForm
+            .get("description")
+            .setValue(this.data.classConfiguration.description);
+        }
+        // ----DEBUG
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        // ----
+
+        this.loaded = true;
       });
   }
 

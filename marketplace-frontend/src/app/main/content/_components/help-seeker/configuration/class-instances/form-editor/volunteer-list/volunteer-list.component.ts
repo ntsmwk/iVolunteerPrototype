@@ -11,7 +11,11 @@ import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ImageService } from "app/main/content/_service/image.service";
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { LoginGuard } from "app/main/content/_guard/login.guard";
+import { LoginService } from "app/main/content/_service/login.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "app-instance-creation-volunteer-list",
@@ -23,8 +27,7 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
   @Input() helpseeker: User;
   @Output() selectedVolunteers: EventEmitter<User[]> = new EventEmitter();
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-
+  tenant: Tenant;
   datasource = new MatTableDataSource<User>();
   displayedColumns = ["checkbox", "image", "name", "nickname", "username"];
   selection = new SelectionModel<User>(true, []);
@@ -32,22 +35,26 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
 
   loaded: boolean;
 
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+
   constructor(
     private coreUserService: CoreUserService,
-    private imageService: ImageService
-  ) { }
+    private imageService: ImageService,
+    private loginService: LoginService
+  ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.volunteers = [];
     this.datasource = new MatTableDataSource();
 
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
+
     Promise.all([
       this.coreUserService
-        .findAllByRoleAndTenantId(
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId, UserRole.VOLUNTEER
-        )
+        .findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER)
         .toPromise()
         .then((volunteers: User[]) => {
           this.volunteers = volunteers;

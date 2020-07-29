@@ -11,7 +11,7 @@ import { ClassInstanceDTO } from "../../../_model/meta/class";
 import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
 import { MatPaginator, MatSort } from "@angular/material";
 import { TenantService } from "../../../_service/core-tenant.service";
-import { UserService } from 'app/main/content/_service/user.service';
+import { UserService } from "app/main/content/_service/user.service";
 
 @Component({
   selector: "recruit-view",
@@ -25,8 +25,8 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     private marketplaceService: MarketplaceService,
     private classInstanceService: ClassInstanceService,
     private coreTenantService: TenantService,
-    private userService: UserService,
-  ) { }
+    private userService: UserService
+  ) {}
   private tableDataSource = new MatTableDataSource<ClassInstanceDTO>([]);
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -39,7 +39,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     "verificationStatus",
   ];
   marketplace: Marketplace;
-  participant: User;
+  user: User;
   duringVerify: boolean;
   verifyStage: number;
   charts: StoredChart[];
@@ -73,7 +73,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   verify3 = false;
   verify5 = false;
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
     Promise.all([
@@ -88,8 +88,8 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       this.loginService
         .getLoggedIn()
         .toPromise()
-        .then((participant: User) => {
-          this.participant = participant;
+        .then((user: User) => {
+          this.user = user;
         }),
     ]).then(() => {
       this.loadStoredCharts();

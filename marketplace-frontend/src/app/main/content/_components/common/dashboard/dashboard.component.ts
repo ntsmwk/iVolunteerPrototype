@@ -14,18 +14,16 @@ export class DashboardComponent implements OnInit {
 
   constructor(private loginService: LoginService, private router: Router) {}
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedInUserRole()
-      .toPromise()
-      .then((role: UserRole) => {
-        this.role = role;
-        if (this.role === UserRole.RECRUITER) {
-          this.router.navigate(["main/recruitment"]);
-        }
-        if (this.role === UserRole.ADMIN) {
-          this.router.navigate(["main/marketplace/all"]);
-        }
-      });
+  async ngOnInit() {
+    this.role = <UserRole>(
+      await this.loginService.getLoggedInUserRole().toPromise()
+    );
+
+    if (this.role === UserRole.RECRUITER) {
+      this.router.navigate(["main/recruitment"]);
+    }
+    if (this.role === UserRole.ADMIN) {
+      this.router.navigate(["main/marketplace/all"]);
+    }
   }
 }

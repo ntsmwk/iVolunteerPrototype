@@ -6,7 +6,7 @@
 
 <div class="page-layout blank p-24" fusePerfectScrollbar>
   <!-- HEADER -->
-  <div *ngIf="this.participant && isFF()">
+  <div *ngIf="this.helpseeker && isFF()">
     <div
       class="header-ff p-16 p-sm-24"
       fxLayout="row"
@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div *ngIf="this.participant && isMV()">
+  <div *ngIf="this.helpseeker && isMV()">
     <div
       class="header-mv p-16 p-sm-24"
       fxLayout="row"
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <div *ngIf="this.participant && isOther()">
+  <div *ngIf="this.helpseeker && isOther()">
     <div
       class="header p-16 p-sm-24"
       fxLayout="row"
