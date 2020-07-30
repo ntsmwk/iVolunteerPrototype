@@ -35,16 +35,19 @@ public class MatchingService {
 			ClassProperty<Object> leftClassProperty = null;
 			ClassProperty<Object> rightClassProperty = null;
 
-			
 			final ClassDefinition leftClassDefinition = handleLeftEntity(classDefinitions, relationship);
-			
 			final ClassDefinition rightClassDefinition = handleRightEntity(classDefinitions, relationship);
-			
-			
-			classInstances.stream().filter(ci -> ci.getClassDefinitionId().equals(leftClassDefinition.getId())).collect(Collectors.toList());
-			
-			
-		
+
+			List<ClassInstance> leftClassInstances = classInstances.stream()
+					.filter(ci -> ci.getClassDefinitionId().equals(leftClassDefinition.getId()))
+					.collect(Collectors.toList());
+			List<ClassInstance> rightClassInstances = classInstances.stream()
+					.filter(ci -> ci.getClassDefinitionId().equals(rightClassDefinition.getId()))
+					.collect(Collectors.toList());
+
+			for (ClassInstance ci : leftClassInstances) {
+				this.match(ci, leftClassProperty, rightClassInstances, rightClassProperty, relationship);
+			}
 
 		}
 
@@ -100,13 +103,8 @@ public class MatchingService {
 		return rightClassDefinition;
 	}
 
-	public float match(List<ClassInstance> classInstances, ClassInstance ci) {
-//		5) compare CDs with left/right matchingEntity
-//		6) calculate match
-
-//		WHAT DO WE WANT: find MMRelationshipOperator between 2 CDs
-
-//		matchingConfigurationService.getMatchingConfiguratorByClassConfigurationIds(producerClassConfigurationId, consumerClassConfigurationId)
+	public float match(ClassInstance ci, ClassProperty<Object> leftClassProperty, List<ClassInstance> classInstances,
+			ClassProperty<Object> rightClassProperty, MatchingOperatorRelationship relationship) {
 
 		float sum = 0;
 		for (ClassInstance outer : classInstances) {
