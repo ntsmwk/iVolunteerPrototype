@@ -1,21 +1,11 @@
-<div
-  #contentDiv
-  id="contentDiv"
-  class="page-layout blank p-20 pl-0"
-  fusePerfectScrollbar
-  *ngIf="loaded"
->
+<div #contentDiv id="contentDiv" class="page-layout blank p-20 pl-0" fusePerfectScrollbar *ngIf="loaded">
   <div *ngIf="!showResultPage">
     <div>
       <mat-accordion multi="true" displayMode="flat">
-        <app-form-entry-view
-          [formEntry]="currentFormConfiguration.formEntry"
-          [formConfiguration]="currentFormConfiguration"
-          [finishClicked]="finishClicked"
-          expanded="true"
-          (result)="handleResultEvent($event)"
-          (tupleSelected)="handleTupleSelection($event)"
-        >
+        <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
+          [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked" expanded="true"
+          (result)="handleResultEvent($event)" (tupleSelected)="handleTupleSelection($event)"
+          (errorEvent)="handleErrorEvent($event)">
         </app-form-entry-view>
       </mat-accordion>
     </div>
@@ -31,40 +21,24 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <app-instance-creation-volunteer-list
-            [tenantAdmin]="tenantAdmin"
-            (selectedVolunteers)="selectedVolunteers = $event"
-            *ngIf="volunteerPanel.expanded"
-          >
+          <app-instance-creation-volunteer-list [tenantAdmin]="tenantAdmin"
+            (selectedVolunteers)="selectedVolunteers = $event" *ngIf="volunteerPanel.expanded">
           </app-instance-creation-volunteer-list>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
 
-    <div
-      fxLayout="row"
-      fxLayoutAlign="space-between center"
-      class="mt-20 mb-20"
-    >
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-20 mb-20">
       <div></div>
       <div fxLayout="row">
-        <button
-          class="primary-button-dark"
-          mat-stroked-button
-          type="button"
-          (click)="handleFinishClick()"
-        >
+        <button [disabled]="!canSubmitForm" class="primary-button-dark" mat-stroked-button type="button"
+          (click)="handleFinishClick()">
           Fertig
         </button>
 
         <div class="pr-8"></div>
 
-        <button
-          class="secondary-button-dark"
-          mat-stroked-button
-          type="button"
-          (click)="navigateBack()"
-        >
+        <button class="secondary-button-dark" mat-stroked-button type="button" (click)="navigateBack()">
           Abbrechen
         </button>
       </div>
@@ -73,8 +47,6 @@
   </div>
 
   <div *ngIf="showResultPage">
-    <app-instance-creation-result
-      [resultClassInstance]="resultClassInstance"
-    ></app-instance-creation-result>
+    <app-instance-creation-result [resultClassInstance]="resultClassInstance"></app-instance-creation-result>
   </div>
 </div>

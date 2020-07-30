@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { QuestionBase } from '../../../../_model/dynamic-forms/questions';
 import { QuestionControlService } from '../../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
-import { FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
+import { FormEntryReturnEventData, FormConfiguration } from 'app/main/content/_model/meta/form';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import 'jquery';
@@ -38,15 +38,16 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() hideButtons: boolean;
-  @Input() formConfigurationId: string;
+  @Input() formConfiguration: FormConfiguration;
   @Input() form: FormGroup;
   @Input() finishClicked: boolean;
 
   submitPressed: boolean;
 
-  @Output() resultEvent: EventEmitter<any> = new EventEmitter();
+  @Output() resultEvent: EventEmitter<FormEntryReturnEventData> = new EventEmitter();
   @Output() cancelEvent: EventEmitter<any> = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
+  @Output() errorEvent: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private qcs: QuestionControlService,
     private classDefinitionService: ClassDefinitionService) { }
@@ -62,6 +63,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
   ngOnChanges() {
     if (this.finishClicked) {
       this.onSubmit();
+      this.finishClicked = false;
     }
   }
 
@@ -71,11 +73,17 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
 
     if (this.form.valid) {
       // this.form.disable();
+      // console.log(this.form);
+      // this.errorEvent.emit(false);
       this.fireResultEvent();
 
     } else {
       // Mark errornous Fields
       this.markFormAsTouched(this.questions, this.form);
+
+      console.log("emitting error event");
+      this.errorEvent.emit(true);
+
 
 
       // focus on first error using jQuery
@@ -84,6 +92,8 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
     }
     this.submitPressed = false;
   }
+
+
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: FormGroup) {
     for (const q of questions) {
@@ -96,7 +106,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
   }
 
   fireResultEvent() {
-    this.resultEvent.emit(new FormEntryReturnEventData(this.form, this.formConfigurationId));
+    this.resultEvent.emit(new FormEntryReturnEventData(this.formConfiguration.id, this.form.value));
   }
 
   handleCancel() {
@@ -109,7 +119,5 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
 
   handleTupleSelection(evt: { selection: { id: any, label: any }, formGroup: FormGroup }) {
     this.tupleSelected.emit(evt);
-
-
   }
 }

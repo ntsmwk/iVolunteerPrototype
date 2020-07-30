@@ -40,11 +40,11 @@ export class FormConfigurationPreviewRequest {
 }
 
 export class FormEntryReturnEventData {
-    formGroup: FormGroup;
+    value: any;
     formConfigurationId: string;
 
-    constructor(formGroup: FormGroup, formConfigurationId: string) {
-        this.formGroup = formGroup;
+    constructor(formConfigurationId: string, value: any[]) {
+        this.value = value;
         this.formConfigurationId = formConfigurationId;
     }
 }

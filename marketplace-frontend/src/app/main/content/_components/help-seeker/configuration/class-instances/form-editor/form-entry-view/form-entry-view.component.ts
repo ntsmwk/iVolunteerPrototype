@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormConfiguration, FormEntry } from 'app/main/content/_model/meta/form';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
+import { FormConfiguration, FormEntry, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 
@@ -16,8 +16,15 @@ export class FormEntryViewComponent implements OnInit {
   @Input() finishClicked: boolean;
   @Input() expanded: boolean;
   @Input() subEntry: boolean;
-  @Output() result = new EventEmitter();
+  @Output() result: EventEmitter<FormEntryReturnEventData> = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
+  @Output() errorEvent: EventEmitter<boolean> = new EventEmitter();
+
+  localExpanded: boolean;
+
+
+  arrayIndex = 0;
+  values: any[] = [];
 
   constructor(
     private qcs: QuestionControlService
@@ -25,10 +32,36 @@ export class FormEntryViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.localExpanded = this.expanded;
+    // console.log(this.formEntry.formGroup.controls['entries']);
+    // console.log(this.formEntry.formGroup.controls['entries'].get(this.arrayIndex + ''));
   }
 
-  handleResultEvent(event) {
-    this.result.emit(event);
+  handleResultEvent(event: FormEntryReturnEventData) {
+    this.values.push(event.value);
+    this.arrayIndex++;
+
+    if (this.arrayIndex === (this.formEntry.formGroup.controls['entries'] as FormArray).length) {
+      let retValue: any = this.values;
+      let valueKey = Object.keys(event.value)[0];
+      const split = valueKey.split('.');
+      valueKey = valueKey.substr(0, valueKey.length - split[0].length - 1);
+
+      retValue = {};
+      retValue[valueKey] = this.values;
+
+      Promise.all([this.result.emit({ formConfigurationId: event.formConfigurationId, value: retValue })]).then(() => {
+        this.arrayIndex = 0;
+        this.values = [];
+      });
+    }
+  }
+
+  handleErrorEvent(evt: boolean) {
+    // console.log(event);
+    this.expanded = true;
+    this.localExpanded = true;
+    this.errorEvent.emit(evt);
   }
 
   navigateBack() {
@@ -49,5 +82,17 @@ export class FormEntryViewComponent implements OnInit {
   onRemoveSubEntryClicked(index: number) {
     const formArray = this.formEntry.formGroup.controls['entries'] as FormArray;
     formArray.removeAt(index);
+  }
+
+  handlePanelOpened() {
+    this.localExpanded = true;
+  }
+
+  handlePanelClosed() {
+    this.localExpanded = false;
+  }
+
+  getPanelExpandedState() {
+    return this.localExpanded;
   }
 }
