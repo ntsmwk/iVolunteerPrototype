@@ -1,8 +1,6 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
+package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.Date;
-
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 
 public class ClassInstanceDTO {
 	private String name;
