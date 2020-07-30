@@ -3,18 +3,14 @@ package at.jku.cis.iVolunteer.model.user;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 public class User {
-	@Id
-	private String id;
+	@Id private String id;
 	private String username;
 	private String password;
 
@@ -217,16 +213,15 @@ public class User {
 		}
 		return this.subscribedTenants;
 	}
-	
-	  private TenantUserSubscription findTenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
-    	return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId) && st.getTenantId().equals(tenantId) && st.getRole().equals(role))
-    			.findFirst().map(f -> f).orElse(null);
-    }
-	
-	
+
+	private TenantUserSubscription findTenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
+		return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId)
+				&& st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().map(f -> f).orElse(null);
+	}
 
 	public List<TenantUserSubscription> removeSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
-		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId) && s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));
+		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId)
+				&& s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));
 		return this.subscribedTenants;
 	}
 }

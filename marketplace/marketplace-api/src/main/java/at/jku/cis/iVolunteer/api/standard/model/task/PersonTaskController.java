@@ -16,7 +16,6 @@ public class PersonTaskController {
 	
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
-	private static final String RKWILHERING = "RK Wilhering";
 	
 	@Autowired private PersonTaskService personTaskService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
