@@ -1,11 +1,13 @@
 package at.jku.cis.iVolunteer.marketplace.configuration.matching;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
@@ -13,6 +15,7 @@ import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelat
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Service
 public class MatchingService {
@@ -21,6 +24,7 @@ public class MatchingService {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private MatchingPreparationService matchingPreparationService;
+	@Autowired private DateTimeService dateTimeService;
 
 	public float match(String volunteerId, String tenantId) {
 		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
@@ -103,14 +107,48 @@ public class MatchingService {
 			ClassInstance rightClassInstance, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
 
-		switch(leftClassProperty.getType()) {
+		if (leftClassProperty.getType() != rightClassProperty.getType()) {
+			throw new UnsupportedOperationException("cannot compare two properties with different types");
+		}
+
+		// @formatter:off
+		PropertyInstance<Object> leftPropertyInstance = 
+				leftClassInstance
+					.getProperties()
+					.stream()
+					.filter(p -> p.getId().equals(leftClassProperty.getId()))
+					.findFirst()
+					.orElse(null);
+		
+		PropertyInstance<Object> rightPropertyInstance = 
+				rightClassInstance
+					.getProperties()
+					.stream()
+					.filter(p -> p.getId().equals(rightClassProperty.getId()))
+					.findFirst()
+					.orElse(null);
+		// @formatter:on
+
+		if (leftPropertyInstance.getValues().size() != 1 || rightPropertyInstance.getValues().size() != 1) {
+			throw new UnsupportedOperationException("property value is either not set or multiple are set.");
+		}
+
+		switch (leftClassProperty.getType()) {
 		case BOOL:
-			break;
+			boolean leftBoolean = Boolean.parseBoolean((String) leftPropertyInstance.getValues().get(0));
+			boolean rightBoolean = Boolean.parseBoolean((String) rightPropertyInstance.getValues().get(0));
+			return leftBoolean == rightBoolean ? 1 : 0;
 		case DATE:
-			break;
+			Date leftDate = this.dateTimeService
+					.parseMultipleDateFormats((String) leftPropertyInstance.getValues().get(0));
+			Date rightDate = this.dateTimeService
+					.parseMultipleDateFormats((String) rightPropertyInstance.getValues().get(0));
+			return leftDate.compareTo(rightDate) == 0 ? 1 : 0;
 		case ENUM:
-			break;
+//			TODO
+			return 0;
 		case FLOAT_NUMBER:
+
 			break;
 		case LONG_TEXT:
 			break;
@@ -122,9 +160,9 @@ public class MatchingService {
 			break;
 		default:
 			break;
-		
+
 		}
-		
+
 		System.out.println(leftClassInstance);
 		System.out.println(leftClassProperty);
 		System.out.println(rightClassInstance);
