@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 

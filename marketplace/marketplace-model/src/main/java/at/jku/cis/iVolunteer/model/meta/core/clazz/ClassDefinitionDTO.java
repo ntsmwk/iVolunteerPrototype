@@ -1,10 +1,9 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
+package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 public class ClassDefinitionDTO extends IVolunteerObject{

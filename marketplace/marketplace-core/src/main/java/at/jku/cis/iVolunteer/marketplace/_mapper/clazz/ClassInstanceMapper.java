@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
+package at.jku.cis.iVolunteer.marketplace._mapper.clazz;
 
 import java.time.Instant;
 import java.util.Date;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.marketplace.hash.Hasher;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Service
@@ -21,7 +22,7 @@ public class ClassInstanceMapper {
 	@Autowired
 	private DateTimeService dateTimeService;
 
-	List<ClassInstanceDTO> mapToDTO(List<ClassInstance> classInstances) {
+	public List<ClassInstanceDTO> mapToDTO(List<ClassInstance> classInstances) {
 		List<ClassInstanceDTO> classInstanceDTOs = classInstances.stream().map(ci -> {
 			ClassInstanceDTO dto = new ClassInstanceDTO();
 
