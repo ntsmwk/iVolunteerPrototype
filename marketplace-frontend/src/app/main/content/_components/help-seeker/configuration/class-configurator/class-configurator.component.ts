@@ -9,7 +9,7 @@ import {
   HostListener,
 } from "@angular/core";
 import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory/dialog-factory.component";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { ObjectIdService } from "app/main/content/_service/objectid.service.";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { User, UserRole } from "app/main/content/_model/user";
@@ -22,7 +22,7 @@ import {
   RelationshipType,
   AssociationCardinality,
 } from "app/main/content/_model/meta/relationship";
-import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
+import { ClassConfiguration, ClassConfigurationDTO } from "app/main/content/_model/meta/configurations";
 import { EditorPopupMenu } from "./popup-menu";
 import { TopMenuResponse } from "./top-menu-bar/top-menu-bar.component";
 import { MyMxCell, MyMxCellType } from "../myMxCell";
@@ -36,6 +36,7 @@ import { OptionsOverlayContentData } from "./options-overlay/options-overlay-con
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LoginService } from "app/main/content/_service/login.service";
 import { Tenant } from "app/main/content/_model/tenant";
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 
 declare var require: any;
 
@@ -55,11 +56,13 @@ const mx: typeof mxgraph = require("mxgraph")({
 })
 export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private objectIdService: ObjectIdService,
     private dialogFactory: DialogFactoryDirective,
-    private loginService: LoginService
-  ) {}
+    private loginService: LoginService,
+    private classConfigurationService: ClassConfigurationService,
+  ) { }
 
   @Input() marketplace: Marketplace;
   @Input() tenantAdmin: User;
@@ -250,14 +253,30 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         outer.handleMXGraphDoubleClickEvent(evt);
       });
 
-      this.loadServerContent();
+      // this.loadServerContent();
       // this.collapseGraph();
+
+      this.openPreviousClassConfiguration()
     }
   }
 
   private createPopupMenu(graph) {
     this.popupMenu = new EditorPopupMenu(graph, this);
     return this.popupMenu.createPopupMenuHandler(graph);
+  }
+
+  private openPreviousClassConfiguration() {
+    let classConfigurationId: string;
+    this.route.queryParams.subscribe(params => {
+      classConfigurationId = params['ccId'];
+    });
+    if (!isNullOrUndefined(classConfigurationId)) {
+      this.classConfigurationService.getAllForClassConfigurationInOne(this.marketplace, classConfigurationId).toPromise().then((dto: ClassConfigurationDTO) => {
+        if (!isNullOrUndefined(dto)) {
+          this.openGraph(dto.classConfiguration, dto.classDefinitions, dto.relationships);
+        }
+      });
+    }
   }
 
   /**
@@ -1026,7 +1045,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (
       !this.quickEditMode &&
       classDefinition.properties.length !==
-        existingClassDefinition.properties.length
+      existingClassDefinition.properties.length
     ) {
       return cell;
     }
@@ -1255,6 +1274,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(classConfiguration)) {
       this.loadServerContent();
     }
+
     // this.collapseGraph();
   }
 
@@ -1342,7 +1362,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.router.navigate(
       [`main/configurator/instance-editor/${this.marketplace.id}`],
       {
-        queryParams: [this.currentSelectedCell.id],
+        // queryParams: {0: this.currentSelectedCell.id}, {ccId: this.currentClassConfiguration.id},
+        queryParams: { 0: this.currentSelectedCell.id, returnTo: 'classConfigurator' }
       }
     );
   }
@@ -1352,7 +1373,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(rootCell)) {
       this.dialogFactory
         .openPreviewExportDialog(this.marketplace, [rootCell.id])
-        .then(() => {});
+        .then(() => { });
     }
   }
 
@@ -1366,6 +1387,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.deleteCells(cells);
     }
   }
+
 
   /**
    * ******DEBUGGING******

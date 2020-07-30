@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ClassInstance } from 'app/main/content/_model/meta/class';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -12,10 +12,13 @@ import { Router } from '@angular/router';
 export class InstanceCreationResultComponent implements OnInit {
 
   @Input() resultClassInstance: ClassInstance;
+  @Output() navigateBack: EventEmitter<boolean> = new EventEmitter();
   jsonString: string;
+  queryParams: any;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
 
   ) {
     // console.log('extras');
@@ -23,13 +26,18 @@ export class InstanceCreationResultComponent implements OnInit {
   }
 
   ngOnInit() {
+    let queryParams: any;
+    this.route.queryParams.subscribe(params => {
+      queryParams = params;
+    });
+
     this.jsonString = JSON.stringify(this.resultClassInstance);
   }
 
   handleAnotherClick() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([`main/configurator/instance-editor/${this.resultClassInstance.marketplaceId}`], { queryParams: [this.resultClassInstance.classDefinitionId] });
+    this.router.navigate([`main/configurator/instance-editor/${this.resultClassInstance.marketplaceId}`], { queryParams: this.queryParams });
   }
 
 
@@ -38,8 +46,9 @@ export class InstanceCreationResultComponent implements OnInit {
   }
 
 
-  navigateBack() {
-    window.history.back();
+  handleFinishedClick() {
+    this.navigateBack.emit(true);
   }
+
 
 }

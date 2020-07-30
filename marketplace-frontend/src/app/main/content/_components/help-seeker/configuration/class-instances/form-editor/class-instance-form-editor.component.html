@@ -38,7 +38,7 @@
 
         <div class="pr-8"></div>
 
-        <button class="secondary-button-dark" mat-stroked-button type="button" (click)="navigateBack()">
+        <button class="secondary-button-dark" mat-stroked-button type="button" (click)="handleCancelEvent()">
           Abbrechen
         </button>
       </div>
@@ -47,6 +47,7 @@
   </div>
 
   <div *ngIf="showResultPage">
-    <app-instance-creation-result [resultClassInstance]="resultClassInstance"></app-instance-creation-result>
+    <app-instance-creation-result [resultClassInstance]="resultClassInstance" (navigateBack)="handleCancelEvent()">
+    </app-instance-creation-result>
   </div>
 </div>

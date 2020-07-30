@@ -15,6 +15,6 @@ export const navigation_flexprod = [
     id: "configurator",
     title: "Configurator",
     type: "item",
-    url: "/main/configurator",
+    url: "/main/configurator/class",
   },
 ];

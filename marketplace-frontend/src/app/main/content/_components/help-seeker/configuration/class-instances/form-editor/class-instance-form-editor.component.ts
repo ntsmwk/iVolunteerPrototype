@@ -65,7 +65,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
     private objectIdService: ObjectIdService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     const globalInfo = <GlobalInfo>(
@@ -451,7 +451,18 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   // }
 
   handleCancelEvent() {
-    this.navigateBack();
+
+    let returnParam: string;
+    this.route.queryParams.subscribe(params => {
+      returnParam = params['returnTo'];
+    });
+    if (!isNullOrUndefined(returnParam)) {
+      if (returnParam === 'classConfigurator') {
+        this.router.navigate([`main/configurator/class-configurator`], { queryParams: { ccId: this.currentFormConfiguration.formEntry.classDefinitions[0].configurationId } });
+      }
+    } else {
+      history.back();
+    }
   }
 
   printAnything(anything: any) {
@@ -465,7 +476,4 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     console.log(this.currentFormConfiguration.formEntry.subEntries);
   }
 
-  navigateBack() {
-    window.history.back();
-  }
 }
