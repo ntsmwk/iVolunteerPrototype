@@ -30,7 +30,7 @@ public class MatchingService {
 
 //	TODO need to return list with <CI, score>
 //	here only overall similarity is calculated
-	
+
 	public float match(String volunteerId, String tenantId) {
 		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
 				.findByTenantId(tenantId);
@@ -185,6 +185,7 @@ public class MatchingService {
 
 	private float compareDate(PropertyInstance<Object> leftPropertyInstance,
 			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
+//		TODO calculate fuzzyness???
 		Date leftDate = this.dateTimeService.parseMultipleDateFormats((String) leftPropertyInstance.getValues().get(0));
 		Date rightDate = this.dateTimeService
 				.parseMultipleDateFormats((String) rightPropertyInstance.getValues().get(0));
@@ -215,21 +216,23 @@ public class MatchingService {
 		case EXISTS:
 			logger.warn("Matching Operator not supported for float!");
 		case EQUAL:
-			return leftDouble == rightDouble ? 1 : 0;
+			return calculateFuzzynessLower(leftDouble, relationship.getFuzzyness()) <= rightDouble
+					&& rightDouble >= calculateFuzzynessUpper(leftDouble, relationship.getFuzzyness()) ? 1 : 0;
 		case GREATER:
-			return leftDouble > rightDouble ? 1 : 0;
+			return calculateFuzzynessUpper(leftDouble, relationship.getFuzzyness()) > rightDouble ? 1 : 0;
 		case GREATER_EQUAL:
-			return leftDouble >= rightDouble ? 1 : 0;
+			return calculateFuzzynessUpper(leftDouble, relationship.getFuzzyness())  >= rightDouble ? 1 : 0;
 		case LESS:
-			return leftDouble < rightDouble ? 1 : 0;
+			return calculateFuzzynessLower(leftDouble, relationship.getFuzzyness()) < rightDouble ? 1 : 0;
 		case LESS_EQUAL:
-			return leftDouble <= rightDouble ? 1 : 0;
+			return calculateFuzzynessLower(leftDouble, relationship.getFuzzyness()) <= rightDouble ? 1 : 0;
 		}
 		return 0;
 	}
 
 	private float CompareText(PropertyInstance<Object> leftPropertyInstance,
 			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
+//		TODO implement fuzzyness??
 		String leftString = (String) leftPropertyInstance.getValues().get(0);
 		String rightString = (String) rightPropertyInstance.getValues().get(0);
 		switch (relationship.getMatchingOperatorType()) {
@@ -256,17 +259,26 @@ public class MatchingService {
 		case EXISTS:
 			logger.warn("Matching Operator not supported for whole number!");
 		case EQUAL:
-			return leftLong == rightLong ? 1 : 0;
+			return calculateFuzzynessLower(leftLong, relationship.getFuzzyness()) <= rightLong
+					&& rightLong >= calculateFuzzynessUpper(leftLong, relationship.getFuzzyness()) ? 1 : 0;
 		case GREATER:
-			return leftLong > rightLong ? 1 : 0;
+			return calculateFuzzynessUpper(leftLong, relationship.getFuzzyness()) > rightLong ? 1 : 0;
 		case GREATER_EQUAL:
-			return leftLong >= rightLong ? 1 : 0;
+			return calculateFuzzynessUpper(leftLong, relationship.getFuzzyness())  >= rightLong ? 1 : 0;
 		case LESS:
-			return leftLong < rightLong ? 1 : 0;
+			return calculateFuzzynessLower(leftLong, relationship.getFuzzyness()) < rightLong ? 1 : 0;
 		case LESS_EQUAL:
-			return leftLong <= rightLong ? 1 : 0;
+			return calculateFuzzynessLower(leftLong, relationship.getFuzzyness()) <= rightLong ? 1 : 0;
 		}
 		return 0;
 	}
 
+	private double calculateFuzzynessLower(double value, float weighting) {
+		return value - value * weighting / 100;
+	}
+
+	private double calculateFuzzynessUpper(double value, float weighting) {
+		return value + value * weighting / 100;
+	}
+	
 }
