@@ -77,7 +77,7 @@ public class MatchingService {
 		// @formatter:on
 
 		System.out.println("Matching Score: " + sum);
-		
+
 		return sum;
 	}
 
@@ -137,36 +137,61 @@ public class MatchingService {
 
 		switch (leftClassProperty.getType()) {
 		case BOOL:
-			boolean leftBoolean = Boolean.parseBoolean((String) leftPropertyInstance.getValues().get(0));
-			boolean rightBoolean = Boolean.parseBoolean((String) rightPropertyInstance.getValues().get(0));
-			return leftBoolean == rightBoolean ? 1 : 0;
+			return compareBoolean(leftPropertyInstance, rightPropertyInstance);
 		case DATE:
-			Date leftDate = this.dateTimeService
-					.parseMultipleDateFormats((String) leftPropertyInstance.getValues().get(0));
-			Date rightDate = this.dateTimeService
-					.parseMultipleDateFormats((String) rightPropertyInstance.getValues().get(0));
-			return leftDate.compareTo(rightDate) == 0 ? 1 : 0;
+			return compareDate(leftPropertyInstance, rightPropertyInstance);
 		case ENUM:
 //			TODO
 			return 0;
 		case FLOAT_NUMBER:
-			double leftDouble = Double.parseDouble((String) leftPropertyInstance.getValues().get(0));
-			double rightDouble = Double.parseDouble((String) rightPropertyInstance.getValues().get(0));
-			return leftDouble == rightDouble ? 1 : 0;
+			return compareFloat(leftPropertyInstance, rightPropertyInstance);
 		case LONG_TEXT:
 		case TEXT:
-			String leftString = (String) leftPropertyInstance.getValues().get(0);
-			String rightString = (String) rightPropertyInstance.getValues().get(0);
-			return leftString.equals(rightString) ? 1 : 0;
+			return CompareText(leftPropertyInstance, rightPropertyInstance);
 		case TUPLE:
 //			TODO
 			return 0;
 		case WHOLE_NUMBER:
-			long leftLong = Long.parseLong((String) leftPropertyInstance.getValues().get(0));
-			long rightLong = Long.parseLong((String) rightPropertyInstance.getValues().get(0));
-			return leftLong == rightLong ? 1 : 0;
+			return compareWholeNumber(leftPropertyInstance, rightPropertyInstance);
 		default:
 			return 0;
 		}
 	}
+
+	private float compareBoolean(PropertyInstance<Object> leftPropertyInstance,
+			PropertyInstance<Object> rightPropertyInstance) {
+		boolean leftBoolean = Boolean.parseBoolean((String) leftPropertyInstance.getValues().get(0));
+		boolean rightBoolean = Boolean.parseBoolean((String) rightPropertyInstance.getValues().get(0));
+		return leftBoolean == rightBoolean ? 1 : 0;
+	}
+
+	private float compareDate(PropertyInstance<Object> leftPropertyInstance,
+			PropertyInstance<Object> rightPropertyInstance) {
+		Date leftDate = this.dateTimeService.parseMultipleDateFormats((String) leftPropertyInstance.getValues().get(0));
+		Date rightDate = this.dateTimeService
+				.parseMultipleDateFormats((String) rightPropertyInstance.getValues().get(0));
+		return leftDate.compareTo(rightDate) == 0 ? 1 : 0;
+	}
+
+	private float compareFloat(PropertyInstance<Object> leftPropertyInstance,
+			PropertyInstance<Object> rightPropertyInstance) {
+		double leftDouble = Double.parseDouble((String) leftPropertyInstance.getValues().get(0));
+		double rightDouble = Double.parseDouble((String) rightPropertyInstance.getValues().get(0));
+		return leftDouble == rightDouble ? 1 : 0;
+	}
+
+	private float CompareText(PropertyInstance<Object> leftPropertyInstance,
+			PropertyInstance<Object> rightPropertyInstance) {
+		String leftString = (String) leftPropertyInstance.getValues().get(0);
+		String rightString = (String) rightPropertyInstance.getValues().get(0);
+		return leftString.equals(rightString) ? 1 : 0;
+	}
+
+	private float compareWholeNumber(PropertyInstance<Object> leftPropertyInstance,
+			PropertyInstance<Object> rightPropertyInstance) {
+		long leftLong = Long.parseLong((String) leftPropertyInstance.getValues().get(0));
+		long rightLong = Long.parseLong((String) rightPropertyInstance.getValues().get(0));
+		return leftLong == rightLong ? 1 : 0;
+	}
+
 }
