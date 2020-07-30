@@ -47,6 +47,7 @@
   </div>
 
   <div *ngIf="showResultPage">
-    <app-instance-creation-result [resultClassInstance]="resultClassInstance"></app-instance-creation-result>
+    <app-instance-creation-result [resultClassInstance]="resultClassInstance" (navigateBack)="handleCancelEvent()">
+    </app-instance-creation-result>
   </div>
 </div>

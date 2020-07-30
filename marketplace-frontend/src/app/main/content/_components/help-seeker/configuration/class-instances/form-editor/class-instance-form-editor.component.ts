@@ -65,7 +65,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
     private objectIdService: ObjectIdService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     const globalInfo = <GlobalInfo>(
@@ -456,8 +456,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       returnParam = params['returnTo'];
     });
-
-
     if (!isNullOrUndefined(returnParam)) {
       if (returnParam === 'classConfigurator') {
         this.router.navigate([`main/configurator/class-configurator`], { queryParams: { ccId: this.currentFormConfiguration.formEntry.classDefinitions[0].configurationId } });
@@ -465,15 +463,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     } else {
       history.back();
     }
-
-
-
-
-
-
-    // console.log(this.router.)
-
-    // this.navigateBack();
   }
 
   printAnything(anything: any) {
