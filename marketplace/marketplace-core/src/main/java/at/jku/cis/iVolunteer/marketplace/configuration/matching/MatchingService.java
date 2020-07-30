@@ -137,61 +137,129 @@ public class MatchingService {
 
 		switch (leftClassProperty.getType()) {
 		case BOOL:
-			return compareBoolean(leftPropertyInstance, rightPropertyInstance);
+			return compareBoolean(leftPropertyInstance, rightPropertyInstance, relationship);
 		case DATE:
-			return compareDate(leftPropertyInstance, rightPropertyInstance);
+			return compareDate(leftPropertyInstance, rightPropertyInstance, relationship);
 		case ENUM:
 //			TODO
 			return 0;
 		case FLOAT_NUMBER:
-			return compareFloat(leftPropertyInstance, rightPropertyInstance);
+			return compareFloat(leftPropertyInstance, rightPropertyInstance, relationship);
 		case LONG_TEXT:
 		case TEXT:
-			return CompareText(leftPropertyInstance, rightPropertyInstance);
+			return CompareText(leftPropertyInstance, rightPropertyInstance, relationship);
 		case TUPLE:
 //			TODO
 			return 0;
 		case WHOLE_NUMBER:
-			return compareWholeNumber(leftPropertyInstance, rightPropertyInstance);
+			return compareWholeNumber(leftPropertyInstance, rightPropertyInstance, relationship);
 		default:
 			return 0;
 		}
 	}
 
 	private float compareBoolean(PropertyInstance<Object> leftPropertyInstance,
-			PropertyInstance<Object> rightPropertyInstance) {
+			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
 		boolean leftBoolean = Boolean.parseBoolean((String) leftPropertyInstance.getValues().get(0));
 		boolean rightBoolean = Boolean.parseBoolean((String) rightPropertyInstance.getValues().get(0));
-		return leftBoolean == rightBoolean ? 1 : 0;
+		switch (relationship.getMatchingOperatorType()) {
+		case ALL:
+		case EXISTS:
+		case GREATER:
+		case GREATER_EQUAL:
+		case LESS:
+		case LESS_EQUAL:
+			throw new UnsupportedOperationException("Matching Operator not supported for boolean!");
+		case EQUAL:
+			return leftBoolean == rightBoolean ? 1 : 0;
+		}
+		return 0;
 	}
 
 	private float compareDate(PropertyInstance<Object> leftPropertyInstance,
-			PropertyInstance<Object> rightPropertyInstance) {
+			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
 		Date leftDate = this.dateTimeService.parseMultipleDateFormats((String) leftPropertyInstance.getValues().get(0));
 		Date rightDate = this.dateTimeService
 				.parseMultipleDateFormats((String) rightPropertyInstance.getValues().get(0));
-		return leftDate.compareTo(rightDate) == 0 ? 1 : 0;
+		switch (relationship.getMatchingOperatorType()) {
+		case ALL:
+		case EXISTS:
+			throw new UnsupportedOperationException("Matching Operator not supported for date!");
+		case GREATER:
+			return leftDate.compareTo(rightDate) > 0 ? 1 : 0;
+		case GREATER_EQUAL:
+			return leftDate.compareTo(rightDate) >= 0 ? 1 : 0;
+		case LESS:
+			return leftDate.compareTo(rightDate) < 0 ? 1 : 0;
+		case LESS_EQUAL:
+			return leftDate.compareTo(rightDate) <= 0 ? 1 : 0;
+		case EQUAL:
+			return leftDate.compareTo(rightDate) == 0 ? 1 : 0;
+		}
+		return 0;
 	}
 
 	private float compareFloat(PropertyInstance<Object> leftPropertyInstance,
-			PropertyInstance<Object> rightPropertyInstance) {
+			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
 		double leftDouble = Double.parseDouble((String) leftPropertyInstance.getValues().get(0));
 		double rightDouble = Double.parseDouble((String) rightPropertyInstance.getValues().get(0));
-		return leftDouble == rightDouble ? 1 : 0;
+		switch (relationship.getMatchingOperatorType()) {
+		case ALL:
+		case EXISTS:
+			throw new UnsupportedOperationException("Matching Operator not supported for float!");
+		case EQUAL:
+			return leftDouble == rightDouble ? 1 : 0;
+		case GREATER:
+			return leftDouble > rightDouble ? 1 : 0;
+		case GREATER_EQUAL:
+			return leftDouble >= rightDouble ? 1 : 0;
+		case LESS:
+			return leftDouble < rightDouble ? 1 : 0;
+		case LESS_EQUAL:
+			return leftDouble <= rightDouble ? 1 : 0;
+		}
+		return 0;
 	}
 
 	private float CompareText(PropertyInstance<Object> leftPropertyInstance,
-			PropertyInstance<Object> rightPropertyInstance) {
+			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
 		String leftString = (String) leftPropertyInstance.getValues().get(0);
 		String rightString = (String) rightPropertyInstance.getValues().get(0);
-		return leftString.equals(rightString) ? 1 : 0;
+		switch (relationship.getMatchingOperatorType()) {
+		case ALL:
+		case EXISTS:
+		case GREATER:
+		case GREATER_EQUAL:
+		case LESS:
+		case LESS_EQUAL:
+			throw new UnsupportedOperationException("Matching Operator not supported for text!");
+		case EQUAL:
+			return leftString.equals(rightString) ? 1 : 0;
+		}
+		return 0;
+
 	}
 
 	private float compareWholeNumber(PropertyInstance<Object> leftPropertyInstance,
-			PropertyInstance<Object> rightPropertyInstance) {
+			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
 		long leftLong = Long.parseLong((String) leftPropertyInstance.getValues().get(0));
 		long rightLong = Long.parseLong((String) rightPropertyInstance.getValues().get(0));
-		return leftLong == rightLong ? 1 : 0;
+		switch (relationship.getMatchingOperatorType()) {
+		case ALL:
+		case EXISTS:
+			throw new UnsupportedOperationException("Matching Operator not supported for whole number!");
+		case EQUAL:
+			return leftLong == rightLong ? 1 : 0;
+		case GREATER:
+			return leftLong > rightLong ? 1 : 0;
+		case GREATER_EQUAL:
+			return leftLong >= rightLong ? 1 : 0;
+		case LESS:
+			return leftLong < rightLong ? 1 : 0;
+		case LESS_EQUAL:
+			return leftLong <= rightLong ? 1 : 0;
+		}
+		return 0;
 	}
 
 }
