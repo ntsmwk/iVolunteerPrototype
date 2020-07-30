@@ -6,14 +6,12 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
@@ -49,12 +47,11 @@ public class ClassConfigurationController {
 	List<ClassConfiguration> getAllClassConfigurations() {
 		return classConfigurationRepository.findAll();
 	}
-	
+
 	@GetMapping("class-configuration/all/tenant/{tenantId}")
-	private List<ClassConfiguration> getClassConfigurationsByTenantId(@PathVariable("tenantId") String tenantId)  {
+	private List<ClassConfiguration> getClassConfigurationsByTenantId(@PathVariable("tenantId") String tenantId) {
 		return classConfigurationRepository.findByTenantId(tenantId);
 	}
-
 
 	@GetMapping("class-configuration/{id}")
 	public ClassConfiguration getClassConfigurationById(@PathVariable("id") String id) {
@@ -119,16 +116,18 @@ public class ClassConfigurationController {
 		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
 		return classConfiguration;
 	}
-	
+
 	@PutMapping("class-configuration/{id}/save-meta")
 	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
-		
-		if (params.length != 2) {return null;}
-		
+
+		if (params.length != 2) {
+			return null;
+		}
+
 		classConfiguration.setName(params[0]);
 		classConfiguration.setDescription(params[1]);
-		
+
 		return classConfigurationRepository.save(classConfiguration);
 	}
 

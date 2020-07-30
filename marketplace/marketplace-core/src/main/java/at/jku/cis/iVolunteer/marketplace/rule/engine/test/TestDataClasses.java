@@ -1,16 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.rule.engine.test;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,30 +41,18 @@ import at.jku.cis.iVolunteer.model.user.User;
 @Service
 public class TestDataClasses {
 
-	@Autowired
-	private ClassConfigurationController classConfigurationController;
-	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassPropertyService classPropertyService;
-	@Autowired
-	private RelationshipRepository relationshipRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceService classInstanceService;
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
-	@Autowired
-	private UserRepository userRepository;
+	@Autowired private ClassConfigurationController classConfigurationController;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassPropertyService classPropertyService;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceService classInstanceService;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired private UserRepository userRepository;
 
 	public static final String ROOT_FREIWILLIGENPASS_EINTRAG = "Freiwilligenpass-\nEintrag";
 	public static final String CERTIFICATE_HEAD_AUSBILDUNG = "Ausbildung";
@@ -246,7 +227,7 @@ public class TestDataClasses {
 			propertyDefinitionRepository.save(pdAlter);
 		}
 	}
-	
+
 	protected void deleteInstances(User volunteer, String tenantId, String className) {
 		// System.out.println("Volunteer: " + volunteer + " tenant: " + tenantId + "
 		// className " + className);
@@ -658,24 +639,24 @@ public class TestDataClasses {
 	protected ClassDefinition newClassDefinition(ClassDefinition parent) {
 		ClassDefinition cd = null;
 		switch (parent.getClassArchetype()) {
-			case ACHIEVEMENT:
-				cd = new AchievementClassDefinition();
-				cd.setClassArchetype(ClassArchetype.ACHIEVEMENT);
-				break;
-			case COMPETENCE:
-				cd = new CompetenceClassDefinition();
-				cd.setClassArchetype(ClassArchetype.COMPETENCE);
-				break;
-			case TASK:
-				cd = new TaskClassDefinition();
-				cd.setClassArchetype(ClassArchetype.TASK);
-				break;
-			case FUNCTION:
-				cd = new FunctionClassDefinition();
-				cd.setClassArchetype(ClassArchetype.FUNCTION);
-				break;
-			default:
-				break;
+		case ACHIEVEMENT:
+			cd = new AchievementClassDefinition();
+			cd.setClassArchetype(ClassArchetype.ACHIEVEMENT);
+			break;
+		case COMPETENCE:
+			cd = new CompetenceClassDefinition();
+			cd.setClassArchetype(ClassArchetype.COMPETENCE);
+			break;
+		case TASK:
+			cd = new TaskClassDefinition();
+			cd.setClassArchetype(ClassArchetype.TASK);
+			break;
+		case FUNCTION:
+			cd = new FunctionClassDefinition();
+			cd.setClassArchetype(ClassArchetype.FUNCTION);
+			break;
+		default:
+			break;
 		}
 		return cd;
 	}

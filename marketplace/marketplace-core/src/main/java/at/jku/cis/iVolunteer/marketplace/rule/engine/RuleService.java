@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
-import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.NoSuchContainerException;
@@ -39,18 +38,12 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @Service
 public class RuleService {
 
-	@Autowired
-	private ContainerRuleEntryRepository containerRuleEntryRepository;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
-	@Autowired
-	private ClassInstanceService classInstanceService;
-	@Autowired
-	private RuleEngineMapper ruleEngineMapper;
-	@Autowired
-	private UserService userService;
+	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
+	@Autowired private UserRepository userRepository;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired private ClassInstanceService classInstanceService;
+	@Autowired private RuleEngineMapper ruleEngineMapper;
+	@Autowired private UserService userService;
 
 	private ConcurrentHashMap<String, ConcurrentHashMap<String, KieContainer>> tenant2ContainerMap;
 
@@ -63,10 +56,7 @@ public class RuleService {
 	public List<String> getContainerNames(String tenantId) {
 		List<ContainerRuleEntry> rules = containerRuleEntryRepository.findByTenantId(tenantId);
 		// obtain containers with rules
-		List<String> containerNames = rules.stream()
-				.map(x -> x.getContainer())
-				.distinct()
-				.collect(Collectors.toList());
+		List<String> containerNames = rules.stream().map(x -> x.getContainer()).distinct().collect(Collectors.toList());
 		return containerNames;
 	}
 
@@ -84,10 +74,8 @@ public class RuleService {
 	}
 
 	public void refreshContainer(String tenantId, String container) {
-		List<ContainerRuleEntry> containerEntries = 
-				containerRuleEntryRepository.getByTenantIdAndContainer(tenantId, container)
-				.stream()
-				.filter(rule -> rule.isActivated())
+		List<ContainerRuleEntry> containerEntries = containerRuleEntryRepository
+				.getByTenantIdAndContainer(tenantId, container).stream().filter(rule -> rule.isActivated())
 				.collect(Collectors.toList());
 
 		ReleaseId releaseId = RuleEngineUtil.generateReleaseId(tenantId, container);

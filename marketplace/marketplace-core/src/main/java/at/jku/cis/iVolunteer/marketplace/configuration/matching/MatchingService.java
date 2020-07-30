@@ -103,7 +103,27 @@ public class MatchingService {
 			ClassInstance rightClassInstance, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
 
+		switch(leftClassProperty.getType()) {
+		case BOOL:
+			break;
+		case DATE:
+			break;
+		case ENUM:
+			break;
+		case FLOAT_NUMBER:
+			break;
+		case LONG_TEXT:
+			break;
+		case TEXT:
+			break;
+		case TUPLE:
+			break;
+		case WHOLE_NUMBER:
+			break;
+		default:
+			break;
 		
+		}
 		
 		System.out.println(leftClassInstance);
 		System.out.println(leftClassProperty);

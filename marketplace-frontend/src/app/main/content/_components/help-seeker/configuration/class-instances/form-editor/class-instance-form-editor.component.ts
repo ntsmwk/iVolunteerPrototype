@@ -264,13 +264,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       t => t.role === UserRole.TENANT_ADMIN
     ).tenantId;
 
-    // console.log(allControls);
-    // console.log(this.currentFormConfiguration);
-    // console.log(result);
-    // console.log(classInstances);
-
-    // console.log(result.value[this.currentFormConfiguration.formEntry.id]);
-
     if (isNullOrUndefined(this.selectedVolunteers)) {
       const classInstance = this.createClassInstance(
         this.currentFormConfiguration.formEntry,
@@ -278,7 +271,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       );
       classInstance.tenantId = tenantId;
       classInstance.issuerId = tenantId;
-      // console.log(classInstance);
       classInstances.push(classInstance);
     } else {
       for (const volunteer of this.selectedVolunteers) {
