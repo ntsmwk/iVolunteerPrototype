@@ -13,8 +13,7 @@ import { isNullOrUndefined } from "util";
 import { RemoveDialogData } from "app/main/content/_components/_shared/dialogs/remove-dialog/remove-dialog.component";
 import { DialogFactoryDirective } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { User } from "app/main/content/_model/user";
-import { OptionsOverlayContentData } from '../options-overlay-control/options-overlay-control.component';
-
+import { OptionsOverlayContentData } from "../options-overlay-control/options-overlay-control.component";
 
 export interface PropertyOrEnumEntry {
   name: string;
@@ -38,7 +37,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
   constructor(
     private dialogFactory: DialogFactoryDirective,
     private _sanitizer: DomSanitizer
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.updatePropertiesAndEnumsList();
@@ -92,7 +91,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     this.dialogFactory
       .openAddPropertyDialog(
         this.inputData.marketplace,
-        this.inputData.helpseeker,
+        this.inputData.tenantAdmin,
         this.inputData.classDefinition,
         this.inputData.allClassDefinitions,
         this.inputData.allRelationships
@@ -129,7 +128,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         this.inputData.allRelationships,
         this.inputData.classDefinition
       )
-      .then(() => { });
+      .then(() => {});
   }
 
   updatePropertiesAndEnumsList() {

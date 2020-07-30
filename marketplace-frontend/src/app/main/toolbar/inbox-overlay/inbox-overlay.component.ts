@@ -74,8 +74,8 @@ export class InboxOverlayComponent implements OnInit {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
-                .then((helpseeker: User) => {
-                  this.user = helpseeker;
+                .then((user: User) => {
+                  this.user = user;
                 });
             }
 

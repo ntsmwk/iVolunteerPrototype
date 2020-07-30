@@ -20,6 +20,7 @@ public interface ClassInstanceRepository extends HasTenantRepository<ClassInstan
 	
 	List<ClassInstance> getByUserIdAndClassArchetypeAndTenantId(String userId, ClassArchetype classArchetype, String tenantId);
 
+	List<ClassInstance> getByUserIdAndTenantId(String userId, String tenantId);
 	
 //	List<ClassInstance> getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(String userId, boolean inUserRepository, boolean inIssuerInbox, String tenantId);
 //

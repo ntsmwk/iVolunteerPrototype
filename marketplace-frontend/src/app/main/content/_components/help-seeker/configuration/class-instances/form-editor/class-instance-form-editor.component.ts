@@ -22,6 +22,8 @@ import {
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { User, UserRole } from 'app/main/content/_model/user';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { Tenant } from 'app/main/content/_model/tenant';
 
 @Component({
   selector: "app-class-instance-form-editor",
@@ -31,7 +33,8 @@ import { User, UserRole } from 'app/main/content/_model/user';
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
   marketplace: Marketplace;
-  helpseeker: User;
+  tenantAdmin: User;
+  tenant: Tenant;
 
   formConfigurations: FormConfiguration[];
   currentFormConfiguration: FormConfiguration;
@@ -64,7 +67,14 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private objectIdService: ObjectIdService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenantAdmin = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
+    this.marketplace = globalInfo.marketplace;
+
     let marketplaceId: string;
     const childClassIds: string[] = [];
 
@@ -82,26 +92,37 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       }
     }),
     ]).then(() => {
-      this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
-        this.marketplace = marketplace;
+      this.marketplaceService
+        .findById(marketplaceId)
+        .toPromise()
+        .then((marketplace: Marketplace) => {
+          this.marketplace = marketplace;
 
-        Promise.all([
-          this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds)
-            .toPromise().then((formConfigurations: FormConfiguration[]) => {
-              this.formConfigurations = formConfigurations;
-              for (const config of this.formConfigurations) {
-                config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.id);
-              }
-            }),
+          Promise.all([
+            this.classDefinitionService
+              .getFormConfigurations(this.marketplace, childClassIds)
+              .toPromise()
+              .then((formConfigurations: FormConfiguration[]) => {
+                this.formConfigurations = formConfigurations;
+                for (const config of this.formConfigurations) {
+                  config.formEntry = this.addQuestionsAndFormGroup(
+                    config.formEntry,
+                    config.formEntry.id
+                  );
+                }
+              }),
 
-          this.loginService.getLoggedIn().toPromise().then((helpseeker: User) => {
-            this.helpseeker = helpseeker;
-          }),
-        ]).then(() => {
-          this.currentFormConfiguration = this.formConfigurations.pop();
-          this.loaded = true;
+            this.loginService
+              .getLoggedIn()
+              .toPromise()
+              .then((tenantAdmin: User) => {
+                this.tenantAdmin = tenantAdmin;
+              }),
+          ]).then(() => {
+            this.currentFormConfiguration = this.formConfigurations.pop();
+            this.loaded = true;
+          });
         });
-      });
     });
   }
 
@@ -233,7 +254,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     // const allControls = this.getAllControlsFromResults();
 
     const classInstances: ClassInstance[] = [];
-    const tenantId = this.helpseeker.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId;
+    const tenantId = this.tenantAdmin.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId;
 
     // console.log(allControls);
     // console.log(this.currentFormConfiguration);
@@ -425,5 +446,4 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   navigateBack() {
     window.history.back();
   }
-
 }

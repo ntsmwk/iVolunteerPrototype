@@ -2,6 +2,9 @@
   <volunteer-profile> </volunteer-profile>
 </div>
 
-<div *ngIf="role === 'HELP_SEEKER'" style="overflow: scroll; width: 100%;">
+<div
+  *ngIf="role === 'HELP_SEEKER' || role === 'TENANT_ADMIN'"
+  style="overflow: scroll; width: 100%;"
+>
   <helpseeker-profile> </helpseeker-profile>
 </div>

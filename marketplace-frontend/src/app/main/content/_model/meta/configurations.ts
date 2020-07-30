@@ -9,21 +9,19 @@ export class ClassConfiguration {
   timestamp: Date;
   userId: string;
   tenantId: string;
-
 }
 
 export class MatchingConfiguration {
   id: string;
   name: string;
   timestamp: Date;
+  tenantId: string;
 
   leftClassConfigurationId: string;
   leftClassConfigurationName: string;
 
   rightClassConfigurationId: string;
   rightClassConfigurationName: string;
-
-  relationships: MatchingOperatorRelationship[];
 }
 
 export class MatchingCollectorConfiguration {

@@ -1,13 +1,25 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 
 import { LoginService } from "../../../../../_service/login.service";
-import { FormGroup, FormBuilder, FormControl, ControlContainer, FormGroupDirective, FormArray, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  ControlContainer,
+  FormGroupDirective,
+  FormArray,
+  Validators,
+} from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ComparisonOperatorType, GeneralCondition } from "app/main/content/_model/derivation-rule";
+import {
+  ComparisonOperatorType,
+  GeneralCondition,
+} from "app/main/content/_model/derivation-rule";
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
-import { PropertyDefinition, } from "app/main/content/_model/meta/property";
+import { PropertyDefinition } from "app/main/content/_model/meta/property";
 import { User, UserRole } from "../../../../../_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 var output = console.log;
 
@@ -15,7 +27,9 @@ var output = console.log;
   selector: "general-precondition",
   templateUrl: "./general-precondition-configurator.component.html",
   styleUrls: ["../rule-configurator.component.scss"],
-  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
+  viewProviders: [
+    { provide: ControlContainer, useExisting: FormGroupDirective },
+  ],
 })
 export class GeneralPreconditionConfiguratorComponent implements OnInit {
   @Input("generalCondition")
@@ -25,9 +39,9 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     GeneralCondition
   >();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
-  role: UserRole;
+  tenant: Tenant;
   rulePreconditionForm: FormGroup;
   genConditionForms: FormArray;
   comparisonOperators: any;
@@ -42,13 +56,14 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     this.rulePreconditionForm = formBuilder.group({
       propertyDefinitionId: new FormControl(undefined, [Validators.required]),
       comparisonOperatorType: new FormControl(undefined, Validators.required),
-      value: new FormControl(undefined, [Validators.required]) 
+      value: new FormControl(undefined, [Validators.required]),
     });
   }
 
-
   async ngOnInit() {
-    this.genConditionForms = <FormArray>this.parentForm.form.controls['genConditionForms'];  
+    this.genConditionForms = <FormArray>(
+      this.parentForm.form.controls["genConditionForms"]
+    );
     this.genConditionForms.push(this.rulePreconditionForm);
 
     this.rulePreconditionForm.setValue({
@@ -57,9 +72,8 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
           ? this.generalCondition.propertyDefinition.id
           : "") || "",
       comparisonOperatorType:
-        this.generalCondition.comparisonOperatorType ||
-          "",
-        // ComparisonOperatorType.GE,
+        this.generalCondition.comparisonOperatorType || "",
+      // ComparisonOperatorType.GE,
       value: this.generalCondition.value || "",
     });
 
@@ -69,15 +83,11 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
+    this.tenant = globalInfo.tenants[0];
 
     this.derivationRuleService
-      .getGeneralProperties(
-        this.marketplace,
-        this.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
-      )
+      .getGeneralProperties(this.marketplace, this.tenant.id)
       .toPromise()
       .then((genProperties: PropertyDefinition<any>[]) => {
         this.generalAttributes = genProperties;
@@ -85,13 +95,16 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
   }
 
   onPropertyChange(propertyDefinition: PropertyDefinition<any>, $event) {
-    if ($event.isUserInput && ( 
-           !this.generalCondition.propertyDefinition ||
-            this.generalCondition.propertyDefinition.id != propertyDefinition.id)) {
-        this.generalCondition.propertyDefinition = propertyDefinition;
-        this.rulePreconditionForm.value.propertyDefinitionId = propertyDefinition.id;
-        this.generalConditionChange.emit(this.generalCondition);
-        }
+    if (
+      $event.isUserInput &&
+      (!this.generalCondition.propertyDefinition ||
+        this.generalCondition.propertyDefinition.id != propertyDefinition.id)
+    ) {
+      this.generalCondition.propertyDefinition = propertyDefinition;
+      this.rulePreconditionForm.value.propertyDefinitionId =
+        propertyDefinition.id;
+      this.generalConditionChange.emit(this.generalCondition);
+    }
   }
 
   onOperatorChange(comparisonOperatorType, $event) {
@@ -99,16 +112,16 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
       // ignore on deselection of the previous option
       this.generalCondition.comparisonOperatorType = comparisonOperatorType;
       this.generalConditionChange.emit(this.generalCondition);
-    }    
+    }
   }
 
   onChange($event) {
-          /* this.generalCondition.propertyDefinition = this.generalAttributes.find(
+    /* this.generalCondition.propertyDefinition = this.generalAttributes.find(
         (pd) => pd.id === this.rulePreconditionForm.value.propertyDefinitionId
       );*/
-     // this.generalCondition.comparisonOperatorType = this.rulePreconditionForm.value.comparisonOperatorType;
-      this.generalCondition.value = this.rulePreconditionForm.value.value;
-      this.generalConditionChange.emit(this.generalCondition);
+    // this.generalCondition.comparisonOperatorType = this.rulePreconditionForm.value.comparisonOperatorType;
+    this.generalCondition.value = this.rulePreconditionForm.value.value;
+    this.generalConditionChange.emit(this.generalCondition);
   }
 
   private retrieveComparisonOperatorValueOf(op) {

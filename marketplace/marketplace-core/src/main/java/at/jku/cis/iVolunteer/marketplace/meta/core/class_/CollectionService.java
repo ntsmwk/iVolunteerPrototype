@@ -36,7 +36,7 @@ import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 @Service
 public class CollectionService {
 
-	private static final String PATH_DELIMITER = Character.toString((char) 28);
+	public static final String PATH_DELIMITER = Character.toString((char) 28);
 
 	@Autowired ClassConfigurationRepository classConfigurationRepository;
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
@@ -210,9 +210,6 @@ public class CollectionService {
 
 		// Collect Properties
 		currentFormEntry.getClassProperties().addAll(0, currentClassDefinition.getProperties());
-
-		// Collect EnumDefnitions
-		currentFormEntry.getEnumDefinitions().addAll(0, currentClassDefinition.getEnums());
 
 		// grab target-side Relationships
 		List<Relationship> targetRelationships = allRelationships.stream()

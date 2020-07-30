@@ -21,7 +21,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <app-instance-creation-volunteer-list [helpseeker]="helpseeker"
+          <app-instance-creation-volunteer-list [tenantAdmin]="tenantAdmin"
             (selectedVolunteers)="selectedVolunteers = $event" *ngIf="volunteerPanel.expanded">
           </app-instance-creation-volunteer-list>
         </mat-expansion-panel>

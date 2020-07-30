@@ -8,9 +8,11 @@ import { MatchingConfigurationService } from "app/main/content/_service/configur
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import {
   ClassConfiguration,
-  MatchingConfiguration
+  MatchingConfiguration,
 } from "app/main/content/_model/meta/configurations";
 import { ClassBrowseSubDialogData } from "../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface NewMatchingDialogData {
   leftClassConfiguration: ClassConfiguration;
@@ -22,7 +24,7 @@ export interface NewMatchingDialogData {
 @Component({
   selector: "new-matching-dialog",
   templateUrl: "./new-dialog.component.html",
-  styleUrls: ["./new-dialog.component.scss"]
+  styleUrls: ["./new-dialog.component.scss"],
 })
 export class NewMatchingDialogComponent implements OnInit {
   constructor(
@@ -31,7 +33,7 @@ export class NewMatchingDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private matchingConfigurationService: MatchingConfigurationService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   allClassConfigurations: ClassConfiguration[];
   recentClassConfigurations: ClassConfiguration[];
@@ -43,35 +45,37 @@ export class NewMatchingDialogComponent implements OnInit {
   browseMode: boolean;
   browseDialogData: ClassBrowseSubDialogData;
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
+  tenant: Tenant;
+
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
+
+    this.classConfigurationService
+      .getClassConfigurationsByTenantId(this.data.marketplace, this.tenant.id)
       .toPromise()
-      .then((helpseeker: User) => {
-        this.classConfigurationService
-          .getClassConfigurationsByTenantId(this.data.marketplace, helpseeker.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId)
-          .toPromise()
-          .then((classConfigurations: ClassConfiguration[]) => {
-            this.recentClassConfigurations = classConfigurations;
-            this.allClassConfigurations = classConfigurations;
+      .then((classConfigurations: ClassConfiguration[]) => {
+        this.recentClassConfigurations = classConfigurations;
+        this.allClassConfigurations = classConfigurations;
 
-            //----DEBUG
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            //----
-            this.recentClassConfigurations = this.recentClassConfigurations.sort(
-              (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
-            );
+        //----DEBUG
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        //----
+        this.recentClassConfigurations = this.recentClassConfigurations.sort(
+          (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+        );
 
-            if (this.recentClassConfigurations.length > 4) {
-              this.recentClassConfigurations = this.recentClassConfigurations.slice(
-                0,
-                4
-              );
-            }
+        if (this.recentClassConfigurations.length > 4) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(
+            0,
+            4
+          );
+        }
 
-            this.loaded = true;
-          });
+        this.loaded = true;
       });
   }
 
@@ -126,7 +130,7 @@ export class NewMatchingDialogComponent implements OnInit {
       this.browseDialogData.entries.push({
         id: classConfiguration.id,
         name: classConfiguration.name,
-        date: new Date(classConfiguration.timestamp)
+        date: new Date(classConfiguration.timestamp),
       });
     }
 
@@ -147,7 +151,7 @@ export class NewMatchingDialogComponent implements OnInit {
 
     if (!event.cancelled) {
       const classConfiguration = this.allClassConfigurations.find(
-        c => c.id === event.entryId
+        (c) => c.id === event.entryId
       );
 
       if (event.sourceReference === "LEFT") {

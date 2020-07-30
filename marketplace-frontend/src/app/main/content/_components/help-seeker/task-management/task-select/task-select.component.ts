@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatTableDataSource } from "@angular/material";
-import {
-  ClassArchetype,
-} from "app/main/content/_model/meta/class";
+import { ClassArchetype } from "app/main/content/_model/meta/class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -22,34 +20,28 @@ export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<ClassDefinitionDTO>();
   displayedColumns = ["name", "configuration"];
-  helpseeker: User;
+  user: User;
   tenant: Tenant;
 
   constructor(
     formBuilder: FormBuilder,
     private router: Router,
     private loginService: LoginService,
-    private classDefinitionService: ClassDefinitionService,
-  ) { }
+    private classDefinitionService: ClassDefinitionService
+  ) {}
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    this.helpseeker = globalInfo.user;
+    this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
     this.marketplace = globalInfo.marketplace;
 
     if (!isNullOrUndefined(this.marketplace)) {
       let tasks = <ClassDefinitionDTO[]>(
         await this.classDefinitionService
-          .getByArchetype(
-            this.marketplace,
-            ClassArchetype.TASK,
-            this.helpseeker.subscribedTenants.find(
-              (t) => t.role === UserRole.HELP_SEEKER
-            ).tenantId
-          )
+          .getByArchetype(this.marketplace, ClassArchetype.TASK, this.tenant.id)
           .toPromise()
       );
 
@@ -67,11 +59,11 @@ export class FuseTaskSelectComponent implements OnInit {
   }
 
   private isFF() {
-    return this.tenant.name == "FF Eidenberg";
+    return this.tenant.name === "FF Eidenberg";
   }
 
   private isMV() {
-    return this.tenant.name === "Musikverein_Schwertberg";
+    return this.tenant.name === "MV Schwertberg";
   }
   private isOther() {
     return !this.isFF() && !this.isMV();

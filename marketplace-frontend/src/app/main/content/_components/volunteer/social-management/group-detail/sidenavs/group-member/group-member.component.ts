@@ -25,8 +25,8 @@ export class FuseGroupMemberComponent implements OnInit {
     this.loginService
       .getLoggedIn()
       .toPromise()
-      .then((participant: User) => {
-        this.group.members[0].avatar = `assets/images/avatars/${participant.username}.jpg`;
+      .then((user: User) => {
+        this.group.members[0].avatar = `assets/images/avatars/${user.username}.jpg`;
       });
   }
 }

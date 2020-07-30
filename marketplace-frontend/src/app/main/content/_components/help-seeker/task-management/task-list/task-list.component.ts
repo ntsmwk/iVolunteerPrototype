@@ -34,24 +34,23 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     "verified",
   ];
 
-  private participant: User;
-
+  private user: User;
   private tenant: Tenant;
 
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private classInstanceService: ClassInstanceService,
-  ) { }
+    private classInstanceService: ClassInstanceService
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   async ngAfterViewInit() {
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
 
-    this.participant = globalInfo.user;
+    this.user = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
 

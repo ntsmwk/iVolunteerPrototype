@@ -8,7 +8,7 @@ import { Marketplace } from "app/main/content/_model/marketplace";
 
 export interface PropertyOrEnumCreationDialogData {
   marketplace: Marketplace;
-  helpseeker: User;
+  tenantAdmin: User;
   allPropertyDefinitions: PropertyDefinition<any>[];
 
   propertyDefinition: PropertyDefinition<any>;

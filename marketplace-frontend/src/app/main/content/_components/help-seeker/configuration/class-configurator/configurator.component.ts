@@ -9,25 +9,23 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 @Component({
   selector: "app-configurator",
   templateUrl: "./configurator.component.html",
-  styleUrls: ["./configurator.component.scss"],
+  styleUrls: ["./configurator.component.scss"]
 })
 export class ConfiguratorComponent implements OnInit {
   marketplace: Marketplace;
   configurableClasses: ClassDefinition[];
   relationships: Relationship[];
-  helpseeker: User;
+  tenantAdmin: User;
   isLoaded = false;
 
-  constructor(
-    private loginService: LoginService,
-  ) { }
+  constructor(private loginService: LoginService) {}
 
   async ngOnInit() {
     const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
 
     this.isLoaded = true;
   }

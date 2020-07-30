@@ -6,7 +6,7 @@ import { UserRole } from "../_model/user";
 @Injectable({
   providedIn: "root",
 })
-export class FlexProdOrHelpseekerGuard implements CanActivate {
+export class FlexProdOrTenantAdminGuard implements CanActivate {
   constructor(private loginService: LoginService) {}
 
   canActivate(): Promise<boolean> {
@@ -15,7 +15,7 @@ export class FlexProdOrHelpseekerGuard implements CanActivate {
         .getLoggedInUserRole()
         .toPromise()
         .then((role: UserRole) =>
-          resolve(role == UserRole.FLEXPROD || role == UserRole.HELP_SEEKER)
+          resolve(role == UserRole.FLEXPROD || role == UserRole.TENANT_ADMIN)
         );
     });
   }
