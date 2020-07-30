@@ -32,39 +32,46 @@ public class MatchingService {
 
 		// @formatter:off
 		for (MatchingOperatorRelationship relationship : relationships) {
-			ClassDefinition leftClassDefinition = 
+			List<ClassDefinition> leftClassDefinitions = 
 					matchingPreparationService
 						.retriveLeftClassDefinition(classDefinitions, relationship);
 			
 			ClassProperty<Object> leftClassProperty = 
 					matchingPreparationService
-						.retrieveLeftClassProperty(leftClassDefinition, relationship);
+						.retrieveLeftClassProperty(leftClassDefinitions, relationship);
 			
-			ClassDefinition rightClassDefinition = 
+			List<ClassDefinition> rightClassDefinitions = 
 					matchingPreparationService
 						.retrieveRightClassDefinitionEntity(classDefinitions, relationship);
 			
 			ClassProperty<Object> rightClassProperty = 
 					matchingPreparationService
-						.retrieveRightClassProperty(rightClassDefinition, relationship);
+						.retrieveRightClassProperty(rightClassDefinitions, relationship);
 
 			List<ClassInstance> leftClassInstances = 
 					classInstances
 					.stream()
-					.filter(ci -> ci.getClassDefinitionId().equals(leftClassDefinition.getId()))
+					.filter(
+							ci -> leftClassDefinitions
+								.stream()
+								.anyMatch(lcd -> lcd.getId().equals(ci.getClassDefinitionId())))
 					.collect(Collectors.toList());
 			
 			List<ClassInstance> rightClassInstances = 
 					classInstances
 					.stream()
-					.filter(ci -> ci.getClassDefinitionId().equals(rightClassDefinition.getId()))
+					.filter(
+							ci -> rightClassDefinitions
+								.stream()
+								.anyMatch(rcd -> rcd.getId().equals(ci.getClassDefinitionId())))
 					.collect(Collectors.toList());
-			 
-			// @formatter:on
 
 			sum += this.matchListAndList(leftClassInstances, leftClassProperty, rightClassInstances, rightClassProperty,
 					relationship);
 		}
+		 
+		// @formatter:on
+
 		return sum;
 	}
 
@@ -85,7 +92,8 @@ public class MatchingService {
 
 		float sum = 0;
 		for (ClassInstance rightClassInstance : classInstances) {
-			sum += matchSingleAndSingle(leftClassInstance, leftClassProperty, rightClassInstance, rightClassProperty, relationship);
+			sum += matchSingleAndSingle(leftClassInstance, leftClassProperty, rightClassInstance, rightClassProperty,
+					relationship);
 		}
 
 		return sum;
@@ -94,17 +102,14 @@ public class MatchingService {
 	private float matchSingleAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
 			ClassInstance rightClassInstance, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
-		
+
 		System.out.println(leftClassInstance);
 		System.out.println(leftClassProperty);
 		System.out.println(rightClassInstance);
 		System.out.println(rightClassProperty);
 		System.out.println(relationship);
-		
-		
+
 		return 0;
 	}
-
-	
 
 }
