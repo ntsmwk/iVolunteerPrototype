@@ -23,11 +23,6 @@
 		</dependency>
 		<dependency>
 			<groupId>at.jku.cis</groupId>
-			<artifactId>marketplace-mapper</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>at.jku.cis</groupId>
 			<artifactId>marketplace-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
