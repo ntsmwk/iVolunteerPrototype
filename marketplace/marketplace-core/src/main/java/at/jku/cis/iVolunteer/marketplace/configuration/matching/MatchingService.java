@@ -26,7 +26,7 @@ public class MatchingService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private MatchingPreparationService matchingPreparationService;
 	@Autowired private DateTimeService dateTimeService;
-	@Autowired private Logger logger = Logger.getLogger(MatchingService.class);
+	private static final Logger logger = Logger.getLogger(MatchingService.class);
 
 //	TODO need to return list with <CI, score>
 //	here only overall similarity is calculated
@@ -77,6 +77,10 @@ public class MatchingService {
 
 			sum += this.matchListAndList(leftClassInstances, leftClassProperty, rightClassInstances, rightClassProperty,
 					relationship);
+			
+			System.out.println("Fuzzyness" + relationship.getFuzzyness());
+			System.out.println("Weight" + relationship.getWeighting());
+			System.out.println("Necessary" + relationship.isNecessary());
 		}
 		 
 		// @formatter:on
