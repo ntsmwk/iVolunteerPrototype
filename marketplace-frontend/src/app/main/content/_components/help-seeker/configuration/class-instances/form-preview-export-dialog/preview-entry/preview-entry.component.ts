@@ -31,7 +31,7 @@ export class FormPreviewEntryComponent implements OnInit {
 
   handleResultEvent() {
     if (this.formEntry.formGroup.valid) {
-      this.result.emit(new FormEntryReturnEventData(this.formEntry.formGroup, this.formConfiguration.id));
+      this.result.emit(new FormEntryReturnEventData(this.formConfiguration.id, this.formEntry.formGroup.value));
     } else {
       console.log('invalid');
       //   const invalidKeys: string[] = [];

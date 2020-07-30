@@ -4,7 +4,8 @@
       <mat-accordion multi="true" displayMode="flat">
         <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
           [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked" expanded="true"
-          (result)="handleResultEvent($event)" (tupleSelected)="handleTupleSelection($event)">
+          (result)="handleResultEvent($event)" (tupleSelected)="handleTupleSelection($event)"
+          (errorEvent)="handleErrorEvent($event)">
         </app-form-entry-view>
       </mat-accordion>
     </div>
@@ -30,7 +31,8 @@
     <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-20 mb-20">
       <div></div>
       <div fxLayout="row">
-        <button class="primary-button-dark" mat-stroked-button type="button" (click)="handleFinishClick()">
+        <button [disabled]="!canSubmitForm" class="primary-button-dark" mat-stroked-button type="button"
+          (click)="handleFinishClick()">
           Fertig
         </button>
 

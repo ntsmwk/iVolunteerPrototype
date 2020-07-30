@@ -15,7 +15,8 @@
   <div *ngIf="formEntry.questions.length > 0" fxLayout="row" fxLayoutAlign="center center" class="m-12">
     <!-- <mat-icon>chevron_right</mat-icon> -->
 
-    <mat-expansion-panel [expanded]="expanded" style="width: 100%;">
+    <mat-expansion-panel [expanded]="getPanelExpandedState()" style="width: 100%;" (opened)="handlePanelOpened()"
+      (closed)="handlePanelClosed()">
       <mat-expansion-panel-header expandedHeight="40px">
         <mat-panel-title>
           {{ formEntry.classDefinitions[0].name }}
@@ -30,13 +31,14 @@
         <!-- <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0" -->
 
         <div *ngFor="let formArrayEntry of formEntry.formGroup.controls['entries'].controls; let i = index">
-          <div [ngClass]="{'form-with-border': subEntry}">
+          <div [ngClass]="{'form-with-border': subEntry && formEntry.multipleAllowed}">
 
-            <div *ngIf="!subEntry">
+            <div *ngIf="!subEntry || !formEntry.multipleAllowed">
               <ng-container *ngTemplateOutlet="questionForm"></ng-container>
             </div>
 
-            <div class="sub-entry" *ngIf="subEntry" fxLayout="row" fxLayoutAlign="start center">
+            <div class="sub-entry" *ngIf="subEntry && formEntry.multipleAllowed" fxLayout="row"
+              fxLayoutAlign="start center">
               <div class="pr-12 pl-12 sub-entry-row sub-entry-label">{{i+1}}</div>
               <ng-container class="sub-entry-row" *ngTemplateOutlet="questionForm">
               </ng-container>
@@ -47,9 +49,9 @@
 
             <ng-template #questionForm>
               <app-dynamic-class-instance-creation-form [questions]="formEntry.questions" hideButtons="true"
-                [formConfigurationId]="formConfiguration.id" [form]="formArrayEntry" [finishClicked]="finishClicked"
+                [formConfiguration]="formConfiguration" [form]="formArrayEntry" [finishClicked]="finishClicked"
                 (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()"
-                (tupleSelected)="handleTupleSelection($event)">
+                (tupleSelected)="handleTupleSelection($event)" (errorEvent)="handleErrorEvent($event)">
               </app-dynamic-class-instance-creation-form>
             </ng-template>
           </div>
@@ -72,7 +74,7 @@
 
         <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
           expanded="false" subEntry="true" (result)="handleResultEvent($event)"
-          (tupleSelected)="handleTupleSelection($event)">
+          (tupleSelected)="handleTupleSelection($event)" (errorEvent)="handleErrorEvent($event)">
         </app-form-entry-view>
       </div>
     </mat-expansion-panel>
