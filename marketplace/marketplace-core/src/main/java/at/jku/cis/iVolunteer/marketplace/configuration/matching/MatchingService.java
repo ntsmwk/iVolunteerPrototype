@@ -95,6 +95,12 @@ public class MatchingService {
 			ClassInstance rightClassInstance, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
 		
+		System.out.println(leftClassInstance);
+		System.out.println(leftClassProperty);
+		System.out.println(rightClassInstance);
+		System.out.println(rightClassProperty);
+		System.out.println(relationship);
+		
 		
 		return 0;
 	}
