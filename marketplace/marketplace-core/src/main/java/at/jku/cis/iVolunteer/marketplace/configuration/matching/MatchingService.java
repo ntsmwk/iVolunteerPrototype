@@ -22,48 +22,83 @@ public class MatchingService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private MatchingPreparationService matchingPreparationService;
 
-	public void match(String volunteerId, String tenantId) {
+	public float match(String volunteerId, String tenantId) {
 		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
 				.findByTenantId(tenantId);
 		List<ClassInstance> classInstances = classInstanceRepository.getByUserIdAndTenantId(volunteerId, tenantId);
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.findByTenantId(tenantId);
 
+		float sum = 0;
+
+		// @formatter:off
 		for (MatchingOperatorRelationship relationship : relationships) {
-			ClassProperty<Object> leftClassProperty = null;
-			ClassProperty<Object> rightClassProperty = null;
+			ClassDefinition leftClassDefinition = 
+					matchingPreparationService
+						.retriveLeftClassDefinition(classDefinitions, relationship);
+			
+			ClassProperty<Object> leftClassProperty = 
+					matchingPreparationService
+						.retrieveLeftClassProperty(leftClassDefinition, relationship);
+			
+			ClassDefinition rightClassDefinition = 
+					matchingPreparationService
+						.retrieveRightClassDefinitionEntity(classDefinitions, relationship);
+			
+			ClassProperty<Object> rightClassProperty = 
+					matchingPreparationService
+						.retrieveRightClassProperty(rightClassDefinition, relationship);
 
-			final ClassDefinition leftClassDefinition = matchingPreparationService.handleLeftEntity(classDefinitions,
-					relationship);
-			final ClassDefinition rightClassDefinition = matchingPreparationService.handleRightEntity(classDefinitions,
-					relationship);
-
-			List<ClassInstance> leftClassInstances = classInstances.stream()
+			List<ClassInstance> leftClassInstances = 
+					classInstances
+					.stream()
 					.filter(ci -> ci.getClassDefinitionId().equals(leftClassDefinition.getId()))
 					.collect(Collectors.toList());
-			List<ClassInstance> rightClassInstances = classInstances.stream()
+			
+			List<ClassInstance> rightClassInstances = 
+					classInstances
+					.stream()
 					.filter(ci -> ci.getClassDefinitionId().equals(rightClassDefinition.getId()))
 					.collect(Collectors.toList());
+			 
+			// @formatter:on
 
-			for (ClassInstance ci : leftClassInstances) {
-				this.match(ci, leftClassProperty, rightClassInstances, rightClassProperty, relationship);
-			}
+			sum += this.matchListAndList(leftClassInstances, leftClassProperty, rightClassInstances, rightClassProperty,
+					relationship);
 		}
+		return sum;
 	}
 
-	public float match(ClassInstance ci, ClassProperty<Object> leftClassProperty, List<ClassInstance> classInstances,
-			ClassProperty<Object> rightClassProperty, MatchingOperatorRelationship relationship) {
+	private float matchListAndList(List<ClassInstance> leftClassInstances, ClassProperty<Object> leftClassProperty,
+			List<ClassInstance> rightClassInstances, ClassProperty<Object> rightClassProperty,
+			MatchingOperatorRelationship relationship) {
+		float sum = 0;
+		for (ClassInstance ci : leftClassInstances) {
+			sum += this.matchListAndSingle(ci, leftClassProperty, rightClassInstances, rightClassProperty,
+					relationship);
+		}
+		return sum;
+	}
+
+	public float matchListAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
+			List<ClassInstance> classInstances, ClassProperty<Object> rightClassProperty,
+			MatchingOperatorRelationship relationship) {
 
 		float sum = 0;
-		for (ClassInstance outer : classInstances) {
-			sum += matchClassInstance(outer, ci);
+		for (ClassInstance rightClassInstance : classInstances) {
+			sum += matchSingleAndSingle(leftClassInstance, leftClassProperty, rightClassInstance, rightClassProperty, relationship);
 		}
 
 		return sum;
 	}
 
-	public float matchClassInstance(ClassInstance ci1, ClassInstance ci2) {
-
-		return 1f;
+	private float matchSingleAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
+			ClassInstance rightClassInstance, ClassProperty<Object> rightClassProperty,
+			MatchingOperatorRelationship relationship) {
+		
+		
+		return 0;
 	}
+
+	
 
 }
