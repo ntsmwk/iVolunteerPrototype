@@ -23,6 +23,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurationDTO;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingCollectorConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -66,6 +67,20 @@ public class ClassConfigurationController {
 		return classConfigurationRepository.findByName(name);
 	}
 
+	@GetMapping("class-configuration/all-in-one/{id}")
+	public ClassConfigurationDTO getAllForClassConfigurationInOne(@PathVariable("id") String id) {
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
+		
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);;
+		
+		List<Relationship> relationships = new ArrayList<>();
+		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+		
+		ClassConfigurationDTO dto = new ClassConfigurationDTO(classConfiguration, classDefinitions, relationships);
+		return dto;
+	}
+	
 	@PostMapping("class-configuration/new-empty")
 	public ClassConfiguration createNewEmptyClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 2) {

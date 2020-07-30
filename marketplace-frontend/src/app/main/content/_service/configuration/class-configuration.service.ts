@@ -29,14 +29,9 @@ export class ClassConfigurationService {
 
   }
 
-  // getAllClassConfigurationsSortedAsc(marketplace: Marketplace) {
-  //   return this.http.get(`${marketplace.url}/class-configuration/all?sorted=asc`);
-  // }
-
-  // getAllClassConfigurationsSortedDesc(marketplace: Marketplace) {
-  //   return this.http.get(`${marketplace.url}/class-configuration/all?sorted=desc`);
-
-  // }
+  getAllForClassConfigurationInOne(marketplace: Marketplace, id: string) {
+    return this.http.get(`${marketplace.url}/class-configuration/all-in-one/${id}`);
+  }
 
   createNewEmptyClassConfiguration(marketplace: Marketplace, name: string, description: string) {
     return this.http.post(`${marketplace.url}/class-configuration/new-empty`, [name, description]);

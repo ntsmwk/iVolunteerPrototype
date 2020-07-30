@@ -5,6 +5,7 @@ import { Relationship } from "app/main/content/_model/meta/relationship";
 import { LoginService } from "app/main/content/_service/login.service";
 import { User } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: "app-configurator",
@@ -18,7 +19,9 @@ export class ConfiguratorComponent implements OnInit {
   tenantAdmin: User;
   isLoaded = false;
 
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   async ngOnInit() {
     const globalInfo = <GlobalInfo>(
