@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class MatchingService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private MatchingPreparationService matchingPreparationService;
 	@Autowired private DateTimeService dateTimeService;
+	@Autowired private Logger logger = Logger.getLogger(MatchingService.class);
 
 	public float match(String volunteerId, String tenantId) {
 		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
@@ -75,9 +77,7 @@ public class MatchingService {
 		}
 		 
 		// @formatter:on
-
 		System.out.println("Matching Score: " + sum);
-
 		return sum;
 	}
 
@@ -110,7 +110,7 @@ public class MatchingService {
 			MatchingOperatorRelationship relationship) {
 
 		if (leftClassProperty.getType() != rightClassProperty.getType()) {
-			throw new UnsupportedOperationException("cannot compare two properties with different types");
+			logger.warn("cannot compare two properties with different types");
 		}
 
 		// @formatter:off
@@ -132,7 +132,7 @@ public class MatchingService {
 		// @formatter:on
 
 		if (leftPropertyInstance.getValues().size() != 1 || rightPropertyInstance.getValues().size() != 1) {
-			throw new UnsupportedOperationException("property value is either not set or multiple are set.");
+			logger.warn("property value is either not set or multiple are set.");
 		}
 
 		switch (leftClassProperty.getType()) {
@@ -169,7 +169,7 @@ public class MatchingService {
 		case GREATER_EQUAL:
 		case LESS:
 		case LESS_EQUAL:
-			throw new UnsupportedOperationException("Matching Operator not supported for boolean!");
+			logger.warn("Matching Operator not supported for boolean!");
 		case EQUAL:
 			return leftBoolean == rightBoolean ? 1 : 0;
 		}
@@ -184,7 +184,7 @@ public class MatchingService {
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
-			throw new UnsupportedOperationException("Matching Operator not supported for date!");
+			logger.warn("Matching Operator not supported for date!");
 		case GREATER:
 			return leftDate.compareTo(rightDate) > 0 ? 1 : 0;
 		case GREATER_EQUAL:
@@ -206,7 +206,7 @@ public class MatchingService {
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
-			throw new UnsupportedOperationException("Matching Operator not supported for float!");
+			logger.warn("Matching Operator not supported for float!");
 		case EQUAL:
 			return leftDouble == rightDouble ? 1 : 0;
 		case GREATER:
@@ -232,7 +232,7 @@ public class MatchingService {
 		case GREATER_EQUAL:
 		case LESS:
 		case LESS_EQUAL:
-			throw new UnsupportedOperationException("Matching Operator not supported for text!");
+			logger.warn("Matching Operator not supported for text!");
 		case EQUAL:
 			return leftString.equals(rightString) ? 1 : 0;
 		}
@@ -247,7 +247,7 @@ public class MatchingService {
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
-			throw new UnsupportedOperationException("Matching Operator not supported for whole number!");
+			logger.warn("Matching Operator not supported for whole number!");
 		case EQUAL:
 			return leftLong == rightLong ? 1 : 0;
 		case GREATER:
