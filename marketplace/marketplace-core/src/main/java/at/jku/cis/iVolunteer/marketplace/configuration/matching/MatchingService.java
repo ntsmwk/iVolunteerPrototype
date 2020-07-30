@@ -76,6 +76,8 @@ public class MatchingService {
 		 
 		// @formatter:on
 
+		System.out.println("Matching Score: " + sum);
+		
 		return sum;
 	}
 
@@ -148,28 +150,23 @@ public class MatchingService {
 //			TODO
 			return 0;
 		case FLOAT_NUMBER:
-
-			break;
+			double leftDouble = Double.parseDouble((String) leftPropertyInstance.getValues().get(0));
+			double rightDouble = Double.parseDouble((String) rightPropertyInstance.getValues().get(0));
+			return leftDouble == rightDouble ? 1 : 0;
 		case LONG_TEXT:
-			break;
 		case TEXT:
-			break;
+			String leftString = (String) leftPropertyInstance.getValues().get(0);
+			String rightString = (String) rightPropertyInstance.getValues().get(0);
+			return leftString.equals(rightString) ? 1 : 0;
 		case TUPLE:
-			break;
+//			TODO
+			return 0;
 		case WHOLE_NUMBER:
-			break;
+			long leftLong = Long.parseLong((String) leftPropertyInstance.getValues().get(0));
+			long rightLong = Long.parseLong((String) rightPropertyInstance.getValues().get(0));
+			return leftLong == rightLong ? 1 : 0;
 		default:
-			break;
-
+			return 0;
 		}
-
-		System.out.println(leftClassInstance);
-		System.out.println(leftClassProperty);
-		System.out.println(rightClassInstance);
-		System.out.println(rightClassProperty);
-		System.out.println(relationship);
-
-		return 0;
 	}
-
 }
