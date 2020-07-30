@@ -28,6 +28,9 @@ public class MatchingService {
 	@Autowired private DateTimeService dateTimeService;
 	@Autowired private Logger logger = Logger.getLogger(MatchingService.class);
 
+//	TODO need to return list with <CI, score>
+//	here only overall similarity is calculated
+	
 	public float match(String volunteerId, String tenantId) {
 		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
 				.findByTenantId(tenantId);
