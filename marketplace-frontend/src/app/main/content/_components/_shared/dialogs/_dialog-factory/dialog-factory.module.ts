@@ -8,9 +8,9 @@ import { OpenClassConfigurationDialogModule } from '../../../help-seeker/configu
 import { ConfirmClassConfigurationSaveDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/confirm-save-dialog/confirm-save-dialog.module';
 import { SaveClassConfigurationAsDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/save-as-dialog/save-as-dialog.module';
 import { DeleteClassConfigurationDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/delete-dialog/delete-dialog.module';
-import { ClassInstanceFormPreviewDialogModule } from '../../../help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.module';
+import { ClassInstanceFormPreviewDialogModule } from '../../../help-seeker/configuration/class-instance-configurator/form-preview-dialog/form-preview-dialog.module';
 import { ChangeIconDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.module';
-import { ClassInstanceFormPreviewExportDialogModule } from '../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.module';
+import { ClassInstanceFormPreviewExportDialogModule } from '../../../help-seeker/configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.module';
 import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dialog.module';
 import { RemovePropertyDialogModule } from '../remove-dialog/remove-dialog.module';
 import { PropertyOrEnumCreationDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.module';
@@ -25,10 +25,10 @@ import { NewClassConfigurationDialogComponent } from '../../../help-seeker/confi
 import { OpenClassConfigurationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/open-dialog/open-dialog.component';
 import { ConfirmClassConfigurationSaveDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/confirm-save-dialog/confirm-save-dialog.component';
 import { SaveClassConfigurationAsDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/save-as-dialog/save-as-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent } from '../../../help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent } from '../../../help-seeker/configuration/class-instance-configurator/form-preview-dialog/form-preview-dialog.component';
 import { DeleteClassConfigurationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/delete-dialog/delete-dialog.component';
 import { ChangeIconDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component';
-import { ClassInstanceFormPreviewExportDialogComponent } from '../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import { ClassInstanceFormPreviewExportDialogComponent } from '../../../help-seeker/configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.component';
 import { AddPropertyDialogComponent } from '../add-property-dialog/add-property-dialog.component';
 import { RemovePropertyDialogComponent } from '../remove-dialog/remove-dialog.component';
 import { PropertyOrEnumCreationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component';

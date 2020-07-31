@@ -26,11 +26,11 @@ import {
 import {
   ClassInstanceFormPreviewDialogComponent,
   ClassInstanceFormPreviewDialogData,
-} from '../../../help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component';
+} from '../../../help-seeker/configuration/class-instance-configurator/form-preview-dialog/form-preview-dialog.component';
 import {
   ClassInstanceFormPreviewExportDialogComponent,
   ClassInstanceFormPreviewExportDialogData,
-} from '../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+} from '../../../help-seeker/configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.component';
 import {
   ChangeIconDialogComponent,
   ChangeIconDialogData,
