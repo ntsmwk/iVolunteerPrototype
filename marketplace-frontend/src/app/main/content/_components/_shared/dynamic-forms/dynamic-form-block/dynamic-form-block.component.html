@@ -1,8 +1,8 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
   <div *ngFor="let question of questions" class="form-row" [@simpleFadeAnimation]="'in'">
-    <app-form-unit [question]="question" [form]="form" [submitPressed]="submitPressed"
-      (tupleSelected)="handleTupleSelection($event)"></app-form-unit>
+    <app-form-item [question]="question" [form]="form" [submitPressed]="submitPressed"
+      (tupleSelected)="handleTupleSelection($event)"></app-form-item>
   </div>
 
   <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center" class="pt-8">

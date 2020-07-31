@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FuseSharedModule } from '@fuse/shared.module';
-import { DynamicFormUnitComponent } from './dynamic-form-unit.component';
+import { DynamicFormItemComponent } from './dynamic-form-item.component';
 import { GermanDateAdapter } from '../../../../_adapter/german-date-adapter';
 /*prettier-ignore*/
 import {
@@ -28,10 +28,10 @@ import { SingleEnumModule } from './single-enum/single-enum.module';
 
     FuseSharedModule,
   ],
-  declarations: [DynamicFormUnitComponent],
-  exports: [DynamicFormUnitComponent],
+  declarations: [DynamicFormItemComponent],
+  exports: [DynamicFormItemComponent],
   providers: [
     { provide: DateAdapter, useClass: GermanDateAdapter },
   ]
 })
-export class DynamicFormUnitModule { }
+export class DynamicFormItemModule { }

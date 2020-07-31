@@ -89,9 +89,9 @@
       <div *ngSwitchCase="'multiple'" class="nested-border" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
         <!--Display question label (name of property)-->
         <h2>{{ question.label }}</h2>
-        <!--Iterate though sub-units, for every question call <app-form-unit> -->
+        <!--Iterate though sub-items, for every question call <app-form-item> -->
         <div *ngFor="let q of question.subQuestions">
-          <app-form-unit [question]="q" [form]="getNestedFormGroups()" [submitPressed]="submitPressed"></app-form-unit>
+          <app-form-item [question]="q" [form]="getNestedFormGroups()" [submitPressed]="submitPressed"></app-form-item>
         </div>
         <mat-error *ngIf="submitPressed && form.controls[question.key].invalid ">{{ displayErrorMessage() }}</mat-error>
 
