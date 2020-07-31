@@ -28,7 +28,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private router: Router,
     private loginService: LoginService,
     private classDefinitionService: ClassDefinitionService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
@@ -53,7 +53,7 @@ export class FuseTaskSelectComponent implements OnInit {
 
   onRowSelect(row) {
     this.router.navigate(
-      [`main/configurator/instance-editor/${this.marketplace.id}`],
+      [`main/instance-editor/${this.marketplace.id}`],
       { queryParams: [row.id] }
     );
   }

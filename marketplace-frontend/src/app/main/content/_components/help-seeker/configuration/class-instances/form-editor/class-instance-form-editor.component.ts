@@ -458,7 +458,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     });
     if (!isNullOrUndefined(returnParam)) {
       if (returnParam === 'classConfigurator') {
-        this.router.navigate([`main/configurator/class-configurator`], { queryParams: { ccId: this.currentFormConfiguration.formEntry.classDefinitions[0].configurationId } });
+        this.router.navigate([`main/class-configurator`], { queryParams: { ccId: this.currentFormConfiguration.formEntry.classDefinitions[0].configurationId } });
       }
     } else {
       history.back();

@@ -153,7 +153,7 @@ const routes: Route[] = [
     canActivate: [TokenGuard, TenantAdminGuard],
   },
   {
-    path: "main/configurator/class-configurator",
+    path: "main/class-configurator",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/class-configurator/configurator.module"
@@ -162,7 +162,7 @@ const routes: Route[] = [
   },
 
   {
-    path: "main/configurator/instance-editor",
+    path: "main/instance-editor",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/class-instances/form-editor/class-instance-form-editor.module"

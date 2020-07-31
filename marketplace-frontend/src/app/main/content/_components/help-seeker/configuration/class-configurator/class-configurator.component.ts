@@ -24,9 +24,7 @@ import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/proper
 import { isNullOrUndefined } from 'util';
 import { OptionsOverlayContentData } from './options-overlay/options-overlay-control/options-overlay-control.component';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';
-import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 
 declare var require: any;
 
@@ -54,8 +52,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     private router: Router,
     private objectIdService: ObjectIdService,
     private dialogFactory: DialogFactoryDirective,
-    private loginService: LoginService,
-    private classConfigurationService: ClassConfigurationService,
   ) { }
 
   @Input() globalInfo: GlobalInfo;
@@ -1141,7 +1137,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.currentSelectedCell = this.rootCell;
     }
 
-    this.router.navigate([`main/configurator/instance-editor/${this.globalInfo.marketplace.id}`],
+    this.router.navigate([`main/instance-editor/${this.globalInfo.marketplace.id}`],
       {
         queryParams: {
           0: this.currentSelectedCell.id, returnTo: 'classConfigurator'

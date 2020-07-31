@@ -34,7 +34,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   selected: string;
   allClassConfigurations: ClassConfiguration[];

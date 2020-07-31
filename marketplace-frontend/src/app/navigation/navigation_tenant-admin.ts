@@ -42,7 +42,7 @@ export const navigation_tenantAdmin = [
     title: "Klassen konfigurieren",
     type: "item",
     icon: "cogs",
-    url: "/main/configurator/class-configurator"
+    url: "/main/class-configurator"
   },
   {
     id: "matching-configurator",

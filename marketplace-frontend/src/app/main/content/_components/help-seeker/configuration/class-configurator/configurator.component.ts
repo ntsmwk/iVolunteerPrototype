@@ -19,6 +19,7 @@ export class ConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
 
+    console.log(this.globalInfo);
     this.loaded = true;
   }
 
