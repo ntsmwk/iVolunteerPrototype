@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FuseSharedModule } from '@fuse/shared.module';
-import { SingleEnumComponent } from './single-enum.component';
+import { SingleEnumItemComponent } from './single-enum-item.component';
 import { MatCommonModule } from '@angular/material/core';
 import { MatFormFieldModule, MatListModule, MatInputModule, MatButtonModule, MatIconModule } from '@angular/material';
 
@@ -14,8 +14,8 @@ import { MatFormFieldModule, MatListModule, MatInputModule, MatButtonModule, Mat
     MatListModule, MatInputModule, MatButtonModule, MatIconModule,
 
   ],
-  declarations: [SingleEnumComponent],
-  exports: [SingleEnumComponent]
+  declarations: [SingleEnumItemComponent],
+  exports: [SingleEnumItemComponent]
 
 })
-export class SingleEnumModule { }
+export class SingleEnumItemModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
-import { QuestionBase, SingleSelectionEnumQuestion } from 'app/main/content/_model/dynamic-forms/questions';
+import { SingleSelectionEnumQuestion } from 'app/main/content/_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 import { FormGroup } from '@angular/forms';
 import { EnumEntry } from 'app/main/content/_model/meta/enum';
@@ -9,12 +9,12 @@ import { MatTableDataSource } from '@angular/material';
 declare var $: JQueryStatic;
 
 @Component({
-  selector: 'app-single-enum',
-  templateUrl: './single-enum.component.html',
-  styleUrls: ['./single-enum.component.scss'],
+  selector: 'app-single-enum-item',
+  templateUrl: './single-enum-item.component.html',
+  styleUrls: ['./single-enum-item.component.scss'],
 
 })
-export class SingleEnumComponent implements OnInit, AfterViewInit {
+export class SingleEnumItemComponent implements OnInit, AfterViewInit {
 
   @Input() question: SingleSelectionEnumQuestion;
   @Input() form: FormGroup;

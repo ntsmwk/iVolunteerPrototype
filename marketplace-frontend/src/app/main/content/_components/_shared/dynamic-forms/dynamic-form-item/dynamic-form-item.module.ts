@@ -12,7 +12,7 @@ import {
   MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, DateAdapter, MatListModule,
 } from '@angular/material';
 import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
-import { SingleEnumModule } from './single-enum/single-enum.module';
+import { SingleEnumItemModule } from './single-enum-item/single-enum-item.module';
 
 @NgModule({
   imports: [
@@ -24,7 +24,7 @@ import { SingleEnumModule } from './single-enum/single-enum.module';
     MatListModule,
 
     MultipleEnumModule,
-    SingleEnumModule,
+    SingleEnumItemModule,
 
     FuseSharedModule,
   ],
