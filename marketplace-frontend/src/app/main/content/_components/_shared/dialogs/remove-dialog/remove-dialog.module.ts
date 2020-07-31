@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RemoveDialogComponent } from './remove-dialog.component';
+import { RemovePropertyDialogComponent } from './remove-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCommonModule } from '@angular/material/core';
@@ -27,7 +27,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
     FuseSharedModule,
 
   ],
-  declarations: [RemoveDialogComponent],
-  exports: [RemoveDialogComponent]
+  declarations: [RemovePropertyDialogComponent],
+  exports: [RemovePropertyDialogComponent]
 })
-export class RemoveDialogModule { }
+export class RemovePropertyDialogModule { }

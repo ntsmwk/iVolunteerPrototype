@@ -1,13 +1,6 @@
+/*prettier-ignore*/
 import {
-  ViewChild,
-  ElementRef,
-  Component,
-  ChangeDetectorRef,
-  Input,
-  EventEmitter,
-  Output,
-  OnInit,
-  OnChanges,
+  ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output, OnInit, OnChanges
 } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { User } from "app/main/content/_model/user";
@@ -45,7 +38,7 @@ export class ClassOptionsOverlayControlComponent implements OnInit, OnChanges {
 
   model: OptionsOverlayContentData = new OptionsOverlayContentData();
 
-  constructor(private changeDetector: ChangeDetectorRef) {}
+  constructor(private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.model = $.extend(true, {}, this.overlayContent);

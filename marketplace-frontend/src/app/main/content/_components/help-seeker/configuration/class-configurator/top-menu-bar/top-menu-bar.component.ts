@@ -184,7 +184,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   private performNew() {
-    this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret: NewClassConfigurationDialogData) => {
+    this.dialogFactory.openNewClassConfigurationDialog().then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
@@ -200,7 +200,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   private performEdit() {
-    this.dialogFactory.openNewClassConfigurationDialog(this.marketplace, this.currentClassConfiguration).then((ret: NewClassConfigurationDialogData) => {
+    this.dialogFactory.openNewClassConfigurationDialog(this.currentClassConfiguration).then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_meta_edit', payload: { name: ret.classConfiguration.name, description: ret.classConfiguration.description } });
@@ -220,7 +220,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   private performOpen() {
 
-    this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: OpenClassConfigurationDialogData) => {
+    this.dialogFactory.openOpenClassConfigurationDialog().then((ret: OpenClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
@@ -255,7 +255,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[], actionAfter: string) {
 
     this.dialogFactory
-      .openSaveConfirmationDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
+      .openSaveClassConfigurationConfirmationDialog(classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
       .then((ret) => {
 
         if (isNullOrUndefined(ret)) {
@@ -271,7 +271,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   deleteClicked() {
-    this.dialogFactory.openDeleteClassConfiguratorDialog(this.marketplace).then((ret: DeleteClassConfigurationDialogData) => {
+    this.dialogFactory.openDeleteClassConfigurationDialog().then((ret: DeleteClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
       } else {

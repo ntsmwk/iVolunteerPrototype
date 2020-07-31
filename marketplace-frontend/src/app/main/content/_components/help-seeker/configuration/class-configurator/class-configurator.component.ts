@@ -1148,7 +1148,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   showExportDialog() {
     const rootCell = this.graph.getSelectionCell() as MyMxCell;
     if (!isNullOrUndefined(rootCell)) {
-      this.dialogFactory.openPreviewExportDialog(this.globalInfo.marketplace, [rootCell.id]).then(() => { });
+      this.dialogFactory.openPreviewExportDialog([rootCell.id]).then(() => { });
     }
   }
 

@@ -12,7 +12,7 @@ import { ClassInstanceFormPreviewDialogModule } from '../../../help-seeker/confi
 import { ChangeIconDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.module';
 import { ClassInstanceFormPreviewExportDialogModule } from '../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.module';
 import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dialog.module';
-import { RemoveDialogModule } from '../remove-dialog/remove-dialog.module';
+import { RemovePropertyDialogModule } from '../remove-dialog/remove-dialog.module';
 import { PropertyOrEnumCreationDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.module';
 import { NewMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.module';
 import { OpenMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.module';
@@ -30,7 +30,7 @@ import { DeleteClassConfigurationDialogComponent } from '../../../help-seeker/co
 import { ChangeIconDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component';
 import { ClassInstanceFormPreviewExportDialogComponent } from '../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 import { AddPropertyDialogComponent } from '../add-property-dialog/add-property-dialog.component';
-import { RemoveDialogComponent } from '../remove-dialog/remove-dialog.component';
+import { RemovePropertyDialogComponent } from '../remove-dialog/remove-dialog.component';
 import { PropertyOrEnumCreationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component';
 import { NewMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
@@ -55,7 +55,7 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     ClassInstanceFormPreviewExportDialogModule,
 
     AddPropertyDialogModule,
-    RemoveDialogModule,
+    RemovePropertyDialogModule,
 
     PropertyOrEnumCreationDialogModule,
 
@@ -84,7 +84,7 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     ClassInstanceFormPreviewExportDialogComponent,
 
     AddPropertyDialogComponent,
-    RemoveDialogComponent,
+    RemovePropertyDialogComponent,
 
     PropertyOrEnumCreationDialogComponent,
 
