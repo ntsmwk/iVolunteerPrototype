@@ -2,11 +2,11 @@
   <div *ngIf="!showResultPage">
     <div>
       <mat-accordion multi="true" displayMode="flat">
-        <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
+        <app-form-container [formEntry]="currentFormConfiguration.formEntry"
           [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked" expanded="true"
           (result)="handleResultEvent($event)" (tupleSelected)="handleTupleSelection($event)"
           (errorEvent)="handleErrorEvent($event)">
-        </app-form-entry-view>
+        </app-form-container>
       </mat-accordion>
     </div>
 

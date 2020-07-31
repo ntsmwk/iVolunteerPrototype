@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { FormConfiguration, FormEntry, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 
 @Component({
-  selector: 'app-form-entry-view',
-  templateUrl: './form-entry-view.component.html',
-  styleUrls: ['./form-entry-view.component.scss'],
+  selector: 'app-form-container',
+  templateUrl: './form-container.component.html',
+  styleUrls: ['./form-container.component.scss'],
   providers: []
 })
-export class FormEntryViewComponent implements OnInit {
+export class FormContainerComponent implements OnInit {
 
   @Input() formEntry: FormEntry;
   @Input() formConfiguration: FormConfiguration;

@@ -12,8 +12,9 @@ import 'jquery';
 declare var $: JQueryStatic;
 
 @Component({
-  selector: 'app-dynamic-class-instance-creation-form',
-  templateUrl: './dynamic-class-instance-creation-form.component.html',
+  selector: 'app-dynamic-form-block',
+  templateUrl: './dynamic-form-block.component.html',
+  styleUrls: ['./dynamic-form-block.component.scss'],
   providers: [QuestionControlService],
   animations: [
     // the fade-in/fade-out animation.
@@ -34,7 +35,7 @@ declare var $: JQueryStatic;
     ])
   ]
 })
-export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChanges {
+export class DynamicFormBlockComponent implements OnInit, OnChanges {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() hideButtons: boolean;

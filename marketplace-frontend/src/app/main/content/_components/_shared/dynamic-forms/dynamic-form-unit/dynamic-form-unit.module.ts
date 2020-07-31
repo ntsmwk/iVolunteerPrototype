@@ -3,27 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FuseSharedModule } from '@fuse/shared.module';
-import { DynamicFormQuestionComponent } from './dynamic-form-question.component';
+import { DynamicFormUnitComponent } from './dynamic-form-unit.component';
 import { GermanDateAdapter } from '../../../../_adapter/german-date-adapter';
+/*prettier-ignore*/
 import {
-  MatButtonModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDividerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatSidenavModule,
-  MatTableModule,
-  MatSelectModule,
-  MatOptionModule,
-  MatRadioModule,
-  MatSlideToggleModule,
-  MatCardModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  DateAdapter,
-  MatListModule,
+  MatButtonModule, MatCheckboxModule, MatChipsModule, MatDividerModule, MatFormFieldModule, MatIconModule,
+  MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule, MatOptionModule, MatRadioModule,
+  MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, DateAdapter, MatListModule,
 } from '@angular/material';
 import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
 import { SingleEnumModule } from './single-enum/single-enum.module';
@@ -42,10 +28,10 @@ import { SingleEnumModule } from './single-enum/single-enum.module';
 
     FuseSharedModule,
   ],
-  declarations: [DynamicFormQuestionComponent],
-  exports: [DynamicFormQuestionComponent],
+  declarations: [DynamicFormUnitComponent],
+  exports: [DynamicFormUnitComponent],
   providers: [
     { provide: DateAdapter, useClass: GermanDateAdapter },
   ]
 })
-export class DynamicFormQuestionModule { }
+export class DynamicFormUnitModule { }

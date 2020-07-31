@@ -6,7 +6,7 @@ import {
   MatButtonModule
 } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { FormEntryViewModule } from '../form-editor/form-entry-view/form-entry-view.module';
+import { FormContainerModule } from '../form-editor/form-container/form-container.module';
 
 
 @NgModule({
@@ -21,7 +21,7 @@ import { FormEntryViewModule } from '../form-editor/form-entry-view/form-entry-v
     MatButtonModule,
 
     FuseSharedModule,
-    FormEntryViewModule,
+    FormContainerModule,
   ],
   declarations: [ClassInstanceFormPreviewDialogComponent],
   exports: [ClassInstanceFormPreviewDialogComponent]

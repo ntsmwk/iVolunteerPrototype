@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ClassInstanceFormPreviewExportDialogComponent } from './form-preview-export-dialog.component';
 import { FuseSharedModule } from '@fuse/shared.module';
 import {
-    DynamicClassInstanceCreationFormModule
-} from 'app/main/content/_components/_shared/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
+    DynamicFormBlockModule
+} from 'app/main/content/_components/_shared/dynamic-forms/dynamic-form-block/dynamic-form-block.module';
 import { MatExpansionModule, MatButtonModule } from '@angular/material';
-import { FormEntryViewModule } from '../form-editor/form-entry-view/form-entry-view.module';
 import { FormPreviewEntryModule } from './preview-entry/preview-entry.module';
 
 // const routes = [
@@ -17,10 +16,9 @@ import { FormPreviewEntryModule } from './preview-entry/preview-entry.module';
     imports: [
         CommonModule,
         FuseSharedModule,
-        DynamicClassInstanceCreationFormModule,
+        DynamicFormBlockModule,
         MatExpansionModule,
         MatButtonModule,
-        // FormEntryViewModule,
         FormPreviewEntryModule,
     ],
     declarations: [ClassInstanceFormPreviewExportDialogComponent],

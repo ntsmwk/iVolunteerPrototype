@@ -7,8 +7,9 @@
       </h1>
     </div>
     <div *ngFor="let entry of formEntry.subEntries">
-      <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
-        (result)="handleResultEvent($event)"></app-form-entry-view>
+      <app-form-container [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
+        (result)="handleResultEvent($event)">
+      </app-form-container>
     </div>
   </div>
 
@@ -21,14 +22,9 @@
         <mat-panel-title>
           {{ formEntry.classDefinitions[0].name }}
         </mat-panel-title>
-
-        <!-- <mat-panel-description style="width: 80%; text-align: start">
-                {{demoClassPaths[0]}}
-            </mat-panel-description> -->
       </mat-expansion-panel-header>
 
       <div class="m-12">
-        <!-- <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0" -->
 
         <div *ngFor="let formArrayEntry of formEntry.formGroup.controls['entries'].controls; let i = index">
           <div [ngClass]="{'form-with-border': subEntry && formEntry.multipleAllowed}">
@@ -48,11 +44,11 @@
             </div>
 
             <ng-template #questionForm>
-              <app-dynamic-class-instance-creation-form [questions]="formEntry.questions" hideButtons="true"
+              <app-dynamic-form-block [questions]="formEntry.questions" hideButtons="true"
                 [formConfiguration]="formConfiguration" [form]="formArrayEntry" [finishClicked]="finishClicked"
                 (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()"
                 (tupleSelected)="handleTupleSelection($event)" (errorEvent)="handleErrorEvent($event)">
-              </app-dynamic-class-instance-creation-form>
+              </app-dynamic-form-block>
             </ng-template>
           </div>
 
@@ -72,10 +68,10 @@
           test for multiple
         </div>
 
-        <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
+        <app-form-container [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
           expanded="false" subEntry="true" (result)="handleResultEvent($event)"
           (tupleSelected)="handleTupleSelection($event)" (errorEvent)="handleErrorEvent($event)">
-        </app-form-entry-view>
+        </app-form-container>
       </div>
     </mat-expansion-panel>
   </div>

@@ -4,11 +4,11 @@ import { QuestionBase } from '../../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: 'app-question',
-  templateUrl: './dynamic-form-question.component.html',
-  styleUrls: ['./dynamic-form-question.component.scss'],
+  selector: 'app-form-unit',
+  templateUrl: './dynamic-form-unit.component.html',
+  styleUrls: ['./dynamic-form-unit.component.scss'],
 })
-export class DynamicFormQuestionComponent implements OnInit {
+export class DynamicFormUnitComponent implements OnInit {
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
   @Input() submitPressed: boolean;
