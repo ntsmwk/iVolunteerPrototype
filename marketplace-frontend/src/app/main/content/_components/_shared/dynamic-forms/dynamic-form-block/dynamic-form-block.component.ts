@@ -8,6 +8,7 @@ import { FormEntryReturnEventData, FormConfiguration } from 'app/main/content/_m
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import 'jquery';
+import { isNgTemplate } from '@angular/compiler';
 
 declare var $: JQueryStatic;
 
@@ -73,9 +74,13 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
     this.form.updateValueAndValidity();
 
     if (this.form.valid) {
-      // this.form.disable();
-      // console.log(this.form);
-      // this.errorEvent.emit(false);
+
+      for (const item of this.formItems) {
+        if (item.controlType.startsWith('enum')) {
+          this.form.controls[item.key].setValue(item.value);
+        }
+      }
+
       this.fireResultEvent();
 
     } else {
@@ -105,6 +110,7 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
   }
 
   fireResultEvent() {
+    console.log(this.form.value);
     this.resultEvent.emit(new FormEntryReturnEventData(this.formConfiguration.id, this.form.value));
   }
 
