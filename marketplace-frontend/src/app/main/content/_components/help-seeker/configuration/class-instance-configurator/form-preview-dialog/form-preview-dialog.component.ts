@@ -2,8 +2,8 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinition, ClassInstance } from 'app/main/content/_model/meta/class';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { Component, OnInit, Inject } from '@angular/core';
-import { QuestionService } from 'app/main/content/_service/question.service';
-import { QuestionControlService } from 'app/main/content/_service/question-control.service';
+import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
+import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
 import { FormConfiguration, FormEntry, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
@@ -20,7 +20,7 @@ export interface ClassInstanceFormPreviewDialogData {
     selector: 'class-instance-form-preview-dialog',
     templateUrl: './form-preview-dialog.component.html',
     styleUrls: ['./form-preview-dialog.component.scss'],
-    providers: [QuestionService, QuestionControlService]
+    providers: [DynamicFormItemService, DynamicFormItemControlService]
 })
 export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
@@ -40,8 +40,8 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: ClassInstanceFormPreviewDialogData,
 
         private classDefinitionService: ClassDefinitionService,
-        private questionService: QuestionService,
-        private questionControlService: QuestionControlService,
+        private formItemService: DynamicFormItemService,
+        private formItemControlService: DynamicFormItemControlService,
     ) {
     }
 
@@ -68,8 +68,8 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
     }
 
     private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
-        formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties, idPrefix);
-        formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
+        formEntry.formItems = this.formItemService.getFormItemsFromProperties(formEntry.classProperties, idPrefix);
+        formEntry.formGroup = this.formItemControlService.toFormGroup(formEntry.formItems);
 
         if (!isNullOrUndefined(formEntry.subEntries)) {
             for (let subEntry of formEntry.subEntries) {

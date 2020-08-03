@@ -11,7 +11,7 @@ import {
   MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule, MatOptionModule, MatRadioModule,
   MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, DateAdapter, MatListModule,
 } from '@angular/material';
-import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
+import { MultipleEnumModule } from './multiple-enum-item/multiple-enum.module';
 import { SingleEnumItemModule } from './single-enum-item/single-enum-item.module';
 
 @NgModule({

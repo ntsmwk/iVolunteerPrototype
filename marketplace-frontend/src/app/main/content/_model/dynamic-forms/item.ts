@@ -1,7 +1,7 @@
 import { ValidatorFn } from '@angular/forms';
 import { EnumEntry } from '../meta/enum';
 
-export class QuestionBase<T> {
+export class DynamicFormItemBase<T> {
   value: T;
   key: string;
   label: string;
@@ -14,7 +14,7 @@ export class QuestionBase<T> {
   validators?: ValidatorFn[];
   messages: Map<string, string>;
 
-  subQuestions?: QuestionBase<T>[];
+  subItems?: DynamicFormItemBase<T>[];
 
   constructor(options: {
     value?: T,
@@ -27,7 +27,7 @@ export class QuestionBase<T> {
 
     validators?: ValidatorFn[],
     messages?: Map<string, string>
-    subQuestions?: QuestionBase<T>[]
+    subItems?: DynamicFormItemBase<T>[]
   } = {}) {
     this.value = options.value;
     this.key = options.key || '';
@@ -38,12 +38,12 @@ export class QuestionBase<T> {
     this.validators = options.validators || undefined;
     this.required = options.required || false;
     this.messages = options.messages || undefined;
-    this.subQuestions = options.subQuestions || undefined;
+    this.subItems = options.subItems || undefined;
   }
 }
 
 
-export class TextboxQuestion extends QuestionBase<string> {
+export class TextboxFormItem extends DynamicFormItemBase<string> {
   controlType = 'textbox';
   type: string;
 
@@ -53,7 +53,7 @@ export class TextboxQuestion extends QuestionBase<string> {
   }
 }
 
-export class TextAreaQuestion extends QuestionBase<string> {
+export class TextAreaFormItem extends DynamicFormItemBase<string> {
   controlType = 'textarea';
   type: string;
 
@@ -63,7 +63,7 @@ export class TextAreaQuestion extends QuestionBase<string> {
   }
 }
 
-export class NumberBoxQuestion extends QuestionBase<number> {
+export class NumberBoxFormItem extends DynamicFormItemBase<number> {
   controlType = 'numberbox';
   type = 'number';
   constructor(options: {} = {}) {
@@ -72,7 +72,7 @@ export class NumberBoxQuestion extends QuestionBase<number> {
   }
 }
 
-export class DropdownQuestion extends QuestionBase<string> {
+export class DropdownFormItem extends DynamicFormItemBase<string> {
   controlType = 'dropdown';
   options: { key: string, value: string }[] = [];
   constructor(options: {} = {}) {
@@ -81,7 +81,7 @@ export class DropdownQuestion extends QuestionBase<string> {
   }
 }
 
-export class NumberDropdownQuestion extends QuestionBase<number> {
+export class NumberDropdownFormItem extends DynamicFormItemBase<number> {
   controlType = 'numberdropdown';
   options: { key: number, value: number }[] = [];
   constructor(options: {} = {}) {
@@ -90,7 +90,7 @@ export class NumberDropdownQuestion extends QuestionBase<number> {
   }
 }
 
-export class RadioButtonQuestion extends QuestionBase<string> {
+export class RadioButtonFormItem extends DynamicFormItemBase<string> {
   controlType = 'radiobutton';
   options: { key: string, value: string }[] = [];
   constructor(options: {} = {}) {
@@ -99,7 +99,7 @@ export class RadioButtonQuestion extends QuestionBase<string> {
   }
 }
 
-export class DatepickerQuestion extends QuestionBase<Date> {
+export class DatepickerFormItem extends DynamicFormItemBase<Date> {
   controlType = 'datepicker';
   options: {}[] = [];
   constructor(options: {} = {}) {
@@ -108,7 +108,7 @@ export class DatepickerQuestion extends QuestionBase<Date> {
   }
 }
 
-export class SliderQuestion extends QuestionBase<number> {
+export class SliderFormItem extends DynamicFormItemBase<number> {
   controlType = 'slider';
   options: {}[] = [];
   min: number;
@@ -120,7 +120,7 @@ export class SliderQuestion extends QuestionBase<number> {
   }
 }
 
-export class SlideToggleQuestion extends QuestionBase<boolean> {
+export class SlideToggleFormItem extends DynamicFormItemBase<boolean> {
   controlType = 'slidetoggle';
   options: {}[] = [];
 
@@ -130,7 +130,7 @@ export class SlideToggleQuestion extends QuestionBase<boolean> {
   }
 }
 
-export class DropdownMultipleQuestion extends QuestionBase<string> {
+export class DropdownMultipleFormItem extends DynamicFormItemBase<string> {
   controlType = 'dropdown-multiple';
   options: { key: string, value: string }[] = [];
   values: any[] = [];
@@ -142,11 +142,11 @@ export class DropdownMultipleQuestion extends QuestionBase<string> {
   }
 }
 
-export class MultipleQuestion extends QuestionBase<string> {
+export class MultipleFormItem extends DynamicFormItemBase<string> {
   controlType = 'multiple';
   options: { key: string, value: string }[] = [];
   // values: {key: string, value: string}[] = [];
-  // subQuestions: QuestionBase<any>[] = [];
+  // subQuestions: DynamicFormItemBase<any>[] = [];
 
   constructor(options: {} = {}) {
     super(options);
@@ -156,7 +156,7 @@ export class MultipleQuestion extends QuestionBase<string> {
   }
 }
 
-export class GenericQuestion extends QuestionBase<string> {
+export class GenericFormItem extends DynamicFormItemBase<string> {
   controlType = 'generic';
   options: { key: string, value: string }[] = [];
 
@@ -166,7 +166,7 @@ export class GenericQuestion extends QuestionBase<string> {
   }
 }
 
-export class SingleSelectionEnumQuestion extends QuestionBase<any> {
+export class SingleSelectionEnumFormItem extends DynamicFormItemBase<any> {
   controlType = 'enum-single';
   options: EnumEntry[] = [];
 
@@ -177,7 +177,7 @@ export class SingleSelectionEnumQuestion extends QuestionBase<any> {
   }
 }
 
-export class MultipleSelectionEnumQuestion extends QuestionBase<any> {
+export class MultipleSelectionEnumFormItem extends DynamicFormItemBase<any> {
   controlType = 'enum-multiple';
   options: EnumEntry[] = [];
 
@@ -188,7 +188,7 @@ export class MultipleSelectionEnumQuestion extends QuestionBase<any> {
   }
 }
 
-export class TupleDropdownQuestion extends QuestionBase<any> {
+export class TupleDropdownFormItem extends DynamicFormItemBase<any> {
   controlType = 'tuple';
   options: { id: any, label: any }[] = [];
 

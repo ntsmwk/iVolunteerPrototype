@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { QuestionService } from "app/main/content/_service/question.service";
-import { QuestionControlService } from "app/main/content/_service/question-control.service";
+import { DynamicFormItemService } from "app/main/content/_service/dynamic-form-item.service";
+import { DynamicFormItemControlService } from "app/main/content/_service/dynamic-form-item-control.service";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   FormConfiguration,
@@ -29,7 +29,7 @@ import { Tenant } from "app/main/content/_model/tenant";
   selector: "app-class-instance-form-editor",
   templateUrl: "./class-instance-form-editor.component.html",
   styleUrls: ["./class-instance-form-editor.component.scss"],
-  providers: [QuestionService, QuestionControlService]
+  providers: [DynamicFormItemService, DynamicFormItemControlService]
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
   marketplace: Marketplace;
@@ -62,8 +62,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private marketplaceService: MarketplaceService,
     private classDefinitionService: ClassDefinitionService,
     private classInstanceService: ClassInstanceService,
-    private questionService: QuestionService,
-    private questionControlService: QuestionControlService,
+    private formItemService: DynamicFormItemService,
+    private formItemControlService: DynamicFormItemControlService,
     private objectIdService: ObjectIdService
   ) { }
 
@@ -105,10 +105,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
               .then((formConfigurations: FormConfiguration[]) => {
                 this.formConfigurations = formConfigurations;
                 for (const config of this.formConfigurations) {
-                  config.formEntry = this.addQuestionsAndFormGroup(
-                    config.formEntry,
-                    config.formEntry.id
-                  );
+                  config.formEntry = this.addFormItemsAndFormGroup(config.formEntry, config.formEntry.id);
                 }
               }),
 
@@ -126,27 +123,19 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     });
   }
 
-  private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
-    // formEntry.questions = this.questionService.getQuestionsFromProperties(
-    //   formEntry.classProperties,
-    //   idPrefix
-    // );
-    formEntry.questions = this.questionService.getQuestionsFromProperties(
+  private addFormItemsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
+    formEntry.formItems = this.formItemService.getFormItemsFromProperties(
       formEntry.classProperties,
       idPrefix
     );
-    formEntry.formGroup = this.questionControlService.toFormGroup(
-      formEntry.questions
+    formEntry.formGroup = this.formItemControlService.toFormGroup(
+      formEntry.formItems
     );
-
-    // if (!isNullOrUndefined(formEntry.questions) && formEntry.questions.length > 0) {
-    //   this.expectedNumberOfResults++;
-    // }
 
     if (!isNullOrUndefined(formEntry.subEntries)) {
       for (let subEntry of formEntry.subEntries) {
         const newIdPrefix = subEntry.id;
-        subEntry = this.addQuestionsAndFormGroup(subEntry, newIdPrefix);
+        subEntry = this.addFormItemsAndFormGroup(subEntry, newIdPrefix);
       }
     }
     return formEntry;
@@ -178,13 +167,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           this.currentFormConfiguration.formEntry
         );
 
-        retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
+        retFormEntry = this.addFormItemsAndFormGroup(retFormEntry, pathPrefix);
 
         currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
         currentFormEntry.classProperties = retFormEntry.classProperties;
         currentFormEntry.formGroup = retFormEntry.formGroup;
         currentFormEntry.imagePath = retFormEntry.imagePath;
-        currentFormEntry.questions = retFormEntry.questions;
+        currentFormEntry.formItems = retFormEntry.formItems;
         currentFormEntry.subEntries = retFormEntry.subEntries;
 
         // this.expectedNumberOfResults = 0;
@@ -472,7 +461,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   printDebug() {
     console.log(this.currentFormConfiguration);
     console.log(this.currentFormConfiguration.formEntry.formGroup);
-    console.log(this.currentFormConfiguration.formEntry.questions);
+    console.log(this.currentFormConfiguration.formEntry.formItems);
     console.log(this.currentFormConfiguration.formEntry.subEntries);
   }
 

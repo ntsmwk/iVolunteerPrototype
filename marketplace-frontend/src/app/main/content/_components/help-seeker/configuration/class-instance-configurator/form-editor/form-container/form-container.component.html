@@ -1,5 +1,5 @@
 <div style="width: 100%;" class="pb-4 pr-4">
-  <div *ngIf="formEntry.questions.length <= 0">
+  <div *ngIf="formEntry.formItems.length <= 0">
     <div fxLayout="row" fxLayoutAlign="start center">
       <mat-icon>subdirectory_arrow_right</mat-icon>
       <h1 class="no-padding-margin pl-4">
@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <div *ngIf="formEntry.questions.length > 0" fxLayout="row" fxLayoutAlign="center center" class="m-12">
+  <div *ngIf="formEntry.formItems.length > 0" fxLayout="row" fxLayoutAlign="center center" class="m-12">
     <!-- <mat-icon>chevron_right</mat-icon> -->
 
     <mat-expansion-panel [expanded]="getPanelExpandedState()" style="width: 100%;" (opened)="handlePanelOpened()"
@@ -44,7 +44,7 @@
             </div>
 
             <ng-template #questionForm>
-              <app-dynamic-form-block [questions]="formEntry.questions" hideButtons="true"
+              <app-dynamic-form-block [formItems]="formEntry.formItems" hideButtons="true"
                 [formConfiguration]="formConfiguration" [form]="formArrayEntry" [finishClicked]="finishClicked"
                 (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()"
                 (tupleSelected)="handleTupleSelection($event)" (errorEvent)="handleErrorEvent($event)">

@@ -1,5 +1,5 @@
 import { ClassDefinition } from './class';
-import { QuestionBase } from '../dynamic-forms/questions';
+import { DynamicFormItemBase } from '../dynamic-forms/item';
 import { FormGroup } from '@angular/forms';
 import { ClassProperty } from './property';
 import { Relationship } from './relationship';
@@ -13,7 +13,7 @@ export class FormEntry {
 
     subEntries: FormEntry[];
 
-    questions: QuestionBase<any>[] = [];
+    formItems: DynamicFormItemBase<any>[] = [];
     formGroup: FormGroup;
 
     imagePath: string;

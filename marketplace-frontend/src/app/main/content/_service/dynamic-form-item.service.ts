@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-  DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion,
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, TupleDropdownQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion
-} from '../_model/dynamic-forms/questions';
 import { PropertyType, ClassProperty } from '../_model/meta/property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
-import { FormEntry } from '../_model/meta/form';
+import {
+  TextboxFormItem, DropdownMultipleFormItem, DropdownFormItem, DynamicFormItemBase, NumberBoxFormItem,
+  SingleSelectionEnumFormItem, DatepickerFormItem, TupleDropdownFormItem, GenericFormItem,
+  MultipleSelectionEnumFormItem, SlideToggleFormItem, TextAreaFormItem, NumberDropdownFormItem
+} from '../_model/dynamic-forms/item';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
@@ -22,62 +22,61 @@ export interface SingleValidatorData {
 @Injectable({
   providedIn: 'root',
 })
-export class QuestionService {
+export class DynamicFormItemService {
   key = 0;
 
-  public getQuestionsFromProperties(classProperties: ClassProperty<any>[], idPrefix?: string): QuestionBase<any>[] {
-    let questions: QuestionBase<any>[] = [];
-    questions = this.createQuestionsFromProperties(classProperties, idPrefix);
+  public getFormItemsFromProperties(classProperties: ClassProperty<any>[], idPrefix?: string): DynamicFormItemBase<any>[] {
+    const formItems: DynamicFormItemBase<any>[] = this.createFormItemsFromProperties(classProperties, idPrefix);
 
-    return questions.sort((a, b) => a.order - b.order);
+    return formItems.sort((a, b) => a.order - b.order);
   }
 
-  private createQuestionsFromProperties(classProperties: ClassProperty<any>[], idPrefix?: string) {
-    const questions: QuestionBase<any>[] = [];
+  private createFormItemsFromProperties(classProperties: ClassProperty<any>[], idPrefix?: string) {
+    const formItems: DynamicFormItemBase<any>[] = [];
     for (const property of classProperties) {
 
-      const question = this.createQuestionFromProperty(property);
+      const formItem = this.createFormItemFromProperty(property);
 
       if (!isNullOrUndefined(idPrefix)) {
-        question.key = idPrefix + '.' + property.id;
+        formItem.key = idPrefix + '.' + property.id;
       } else {
-        question.key = property.id;
+        formItem.key = property.id;
       }
-      question.label = property.name;
-      question.order = property.position;
+      formItem.label = property.name;
+      formItem.order = property.position;
 
       const validatorData = this.getValidatorData(property.propertyConstraints, property.type);
 
       if (!isNullOrUndefined(validatorData)) {
-        question.validators = validatorData.validators;
-        question.messages = validatorData.messages;
+        formItem.validators = validatorData.validators;
+        formItem.messages = validatorData.messages;
       }
-      question.required = property.required;
+      formItem.required = property.required;
 
       if (property.required) {
-        question.validators.push(Validators.required);
+        formItem.validators.push(Validators.required);
       }
 
-      questions.push(question);
+      formItems.push(formItem);
     }
-    return questions;
+    return formItems;
   }
 
-  private createQuestionFromProperty(property: ClassProperty<any>): QuestionBase<any> {
-    let question;
+  private createFormItemFromProperty(property: ClassProperty<any>): DynamicFormItemBase<any> {
+    let formItem;
     if (property.type === PropertyType.TEXT) {
       if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
-        question = new TextboxQuestion({
+        formItem = new TextboxFormItem({
           value: ClassProperty.getDefaultValue(property),
         });
       } else {
         if (property.multiple) {
-          question = new DropdownMultipleQuestion({
+          formItem = new DropdownMultipleFormItem({
             values: property.defaultValues,
             options: this.setAsListValues(property.allowedValues)
           });
         } else {
-          question = new DropdownQuestion({
+          formItem = new DropdownFormItem({
             value: ClassProperty.getDefaultValue(property),
             options: property.allowedValues
           });
@@ -87,19 +86,19 @@ export class QuestionService {
     } else if (property.type === PropertyType.WHOLE_NUMBER || property.type === PropertyType.FLOAT_NUMBER) {
 
       if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
-        question = new NumberBoxQuestion({
+        formItem = new NumberBoxFormItem({
           value: ClassProperty.getDefaultValue(property),
         });
 
       } else {
         if (property.multiple) {
-          question = new DropdownMultipleQuestion({
+          formItem = new DropdownMultipleFormItem({
             values: property.defaultValues,
             options: property.allowedValues
 
           });
         } else {
-          question = new NumberDropdownQuestion({
+          formItem = new NumberDropdownFormItem({
             value: ClassProperty.getDefaultValue(property),
             options: property.allowedValues
           });
@@ -107,46 +106,46 @@ export class QuestionService {
       }
 
     } else if (property.type === PropertyType.LONG_TEXT) {
-      question = new TextAreaQuestion({
+      formItem = new TextAreaFormItem({
         value: ClassProperty.getDefaultValue(property),
       });
 
     } else if (property.type === PropertyType.BOOL) {
-      question = new SlideToggleQuestion({
+      formItem = new SlideToggleFormItem({
         value: ClassProperty.getDefaultValue(property),
       });
 
     } else if (property.type === PropertyType.ENUM) {
       if (property.multiple) {
-        question = new MultipleSelectionEnumQuestion({
+        formItem = new MultipleSelectionEnumFormItem({
           values: property.defaultValues,
           options: property.allowedValues
         });
       } else {
-        question = new SingleSelectionEnumQuestion({
+        formItem = new SingleSelectionEnumFormItem({
           values: property.defaultValues,
           value: ClassProperty.getDefaultValue(property),
           options: property.allowedValues
         });
       }
     } else if (property.type === PropertyType.DATE) {
-      question = new DatepickerQuestion({
+      formItem = new DatepickerFormItem({
         value: this.setDateValue(ClassProperty.getDefaultValue(property)),
       });
 
     } else if (property.type === PropertyType.TUPLE) {
       if (!isNullOrUndefined(property.allowedValues) && property.allowedValues.length > 0) {
-        question = new TupleDropdownQuestion({
+        formItem = new TupleDropdownFormItem({
           options: property.allowedValues,
           value: ClassProperty.getDefaultValue(property)
         });
       }
     } else {
       console.log('property kind not implemented: ' + property.type);
-      question = new GenericQuestion({
+      formItem = new GenericFormItem({
       });
     }
-    return question;
+    return formItem;
   }
 
   private setAsListValues(values: any[]): { key: any, value: any }[] {

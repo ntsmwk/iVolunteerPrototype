@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { FormConfiguration, FormEntry, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { FormGroup, FormArray } from '@angular/forms';
-import { QuestionControlService } from 'app/main/content/_service/question-control.service';
+import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
 
 @Component({
   selector: 'app-form-container',
@@ -27,7 +27,7 @@ export class FormContainerComponent implements OnInit {
   values: any[] = [];
 
   constructor(
-    private qcs: QuestionControlService
+    private formItemControlService: DynamicFormItemControlService
   ) {
   }
 
@@ -75,7 +75,7 @@ export class FormContainerComponent implements OnInit {
 
   onAddSubEntryClicked() {
     const formArray = this.formEntry.formGroup.controls['entries'] as FormArray;
-    formArray.push(this.qcs.getControlForSubEntry(this.formEntry.questions));
+    formArray.push(this.formItemControlService.getControlForSubEntry(this.formEntry.formItems));
 
   }
 

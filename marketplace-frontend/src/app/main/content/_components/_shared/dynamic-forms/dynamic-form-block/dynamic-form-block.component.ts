@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { QuestionBase } from '../../../../_model/dynamic-forms/questions';
-import { QuestionControlService } from '../../../../_service/question-control.service';
+import { DynamicFormItemBase } from '../../../../_model/dynamic-forms/item';
+import { DynamicFormItemControlService } from '../../../../_service/dynamic-form-item-control.service';
 import { isNullOrUndefined } from 'util';
 import { FormEntryReturnEventData, FormConfiguration } from 'app/main/content/_model/meta/form';
 import { trigger, state, transition, style, animate } from '@angular/animations';
@@ -15,7 +15,7 @@ declare var $: JQueryStatic;
   selector: 'app-dynamic-form-block',
   templateUrl: './dynamic-form-block.component.html',
   styleUrls: ['./dynamic-form-block.component.scss'],
-  providers: [QuestionControlService],
+  providers: [DynamicFormItemControlService],
   animations: [
     // the fade-in/fade-out animation.
     trigger('simpleFadeAnimation', [
@@ -37,7 +37,7 @@ declare var $: JQueryStatic;
 })
 export class DynamicFormBlockComponent implements OnInit, OnChanges {
 
-  @Input() questions: QuestionBase<any>[] = [];
+  @Input() formItems: DynamicFormItemBase<any>[] = [];
   @Input() hideButtons: boolean;
   @Input() formConfiguration: FormConfiguration;
   @Input() form: FormGroup;
@@ -50,12 +50,12 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
   @Output() errorEvent: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private qcs: QuestionControlService,
+  constructor(private formItemControlService: DynamicFormItemControlService,
     private classDefinitionService: ClassDefinitionService) { }
 
   ngOnInit() {
     if (isNullOrUndefined(this.form)) {
-      this.form = this.qcs.toFormGroup(this.questions);
+      this.form = this.formItemControlService.toFormGroup(this.formItems);
     }
 
     this.submitPressed = false;
@@ -80,7 +80,7 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
 
     } else {
       // Mark errornous Fields
-      this.markFormAsTouched(this.questions, this.form);
+      this.markFormAsTouched(this.formItems, this.form);
 
       console.log("emitting error event");
       this.errorEvent.emit(true);
@@ -96,12 +96,10 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
 
 
 
-  private markFormAsTouched(questions: QuestionBase<any>[], control: FormGroup) {
-    for (const q of questions) {
-      control.controls[q.key].markAsTouched();
-      // if (q.controlType === 'multiple' && !isNullOrUndefined(q.subQuestions)) {
-      //   this.markFormAsTouched(q.subQuestions, control.get(q.key));
-      // }
+  private markFormAsTouched(formItem: DynamicFormItemBase<any>[], control: FormGroup) {
+    for (const item of formItem) {
+      control.controls[item.key].markAsTouched();
+
     }
 
   }

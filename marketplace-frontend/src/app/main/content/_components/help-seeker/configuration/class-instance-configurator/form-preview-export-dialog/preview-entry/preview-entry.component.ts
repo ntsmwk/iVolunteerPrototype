@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { FormConfiguration, FormEntry, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { FormGroup, FormControl } from '@angular/forms';
-import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
+import { DynamicFormItemBase } from 'app/main/content/_model/dynamic-forms/item';
 
 @Component({
   selector: 'app-form-preview-entry',
@@ -23,9 +23,6 @@ export class FormPreviewEntryComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // for (const question of this.formEntry.questions) {
-    //   question.controlType === 'tuple' ? this.tupleQuestions.push(question) : this.normalQuestions.push(question);
-    // }
 
   }
 
@@ -71,12 +68,12 @@ export class FormPreviewEntryComponent implements OnInit {
     }
   }
 
-  addQuestionEntry(question: QuestionBase<any>) {
+  addFormItemEntry(formItem: DynamicFormItemBase<any>) {
 
-    if (question.controlType === 'tuple') {
+    if (formItem.controlType === 'tuple') {
       this.hasUnableToContinueProperty = true;
     } else {
-      return '- ' + question.label;
+      return '- ' + formItem.label;
     }
   }
 

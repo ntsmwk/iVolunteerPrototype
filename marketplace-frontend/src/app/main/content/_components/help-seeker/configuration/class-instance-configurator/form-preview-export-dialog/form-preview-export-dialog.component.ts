@@ -1,24 +1,24 @@
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { Component, OnInit, Inject } from "@angular/core";
-import { QuestionService } from "app/main/content/_service/question.service";
-import { QuestionControlService } from "app/main/content/_service/question-control.service";
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Component, OnInit, Inject } from '@angular/core';
+import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
+import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
 import {
   FormConfiguration,
   FormEntryReturnEventData,
   FormEntry,
-} from "app/main/content/_model/meta/form";
-import { ClassInstance } from "app/main/content/_model/meta/class";
+} from 'app/main/content/_model/meta/form';
+import { ClassInstance } from 'app/main/content/_model/meta/class';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { LoginService } from "app/main/content/_service/login.service";
-import { ClassProperty } from "app/main/content/_model/meta/property";
-import { isNullOrUndefined } from "util";
-import { FormGroup, FormControl } from "@angular/forms";
-import { QuestionBase } from "app/main/content/_model/dynamic-forms/questions";
-import { User, UserRole } from "app/main/content/_model/user";
-import { GlobalInfo } from "app/main/content/_model/global-info";
-import { Tenant } from "app/main/content/_model/tenant";
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { ClassProperty } from 'app/main/content/_model/meta/property';
+import { isNullOrUndefined } from 'util';
+import { FormControl } from '@angular/forms';
+import { DynamicFormItemBase } from 'app/main/content/_model/dynamic-forms/item';
+import { User } from 'app/main/content/_model/user';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { Tenant } from 'app/main/content/_model/tenant';
 
 export interface ClassInstanceFormPreviewExportDialogData {
   marketplace: Marketplace;
@@ -27,9 +27,9 @@ export interface ClassInstanceFormPreviewExportDialogData {
 
 @Component({
   selector: "class-instance-form-preview-export-dialog",
-  templateUrl: "./form-preview-export-dialog.component.html",
-  styleUrls: ["./form-preview-export-dialog.component.scss"],
-  providers: [QuestionService, QuestionControlService],
+  templateUrl: './form-preview-export-dialog.component.html',
+  styleUrls: ['./form-preview-export-dialog.component.scss'],
+  providers: [DynamicFormItemService, DynamicFormItemControlService],
 })
 export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   formConfigurations: FormConfiguration[];
@@ -55,16 +55,16 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     public data: ClassInstanceFormPreviewExportDialogData,
 
     private classDefinitionService: ClassDefinitionService,
-    private questionService: QuestionService,
-    private questionControlService: QuestionControlService,
+    private formItemService: DynamicFormItemService,
+    private formItemControlService: DynamicFormItemControlService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.returnedClassInstances = [];
     this.expectedNumberOfResults = 0;
 
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.tenantAdmin = globalInfo.user;
@@ -90,43 +90,32 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
             config.formEntry.id
           );
 
-          // config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-          // config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
         }
       })
       .then(() => {
         this.currentFormConfiguration = this.formConfigurations.pop();
         this.isLoaded = true;
-
-        console.log(this.currentFormConfiguration);
-
-        // const returnData = new FormEntryReturnEventData(this.currentFormConfiguration.formEntry.formGroup, this.currentFormConfiguration.id);
-        // this.handleExportClick(returnData);
-        // this.handleCloseClick();
       });
   }
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
-    formEntry.questions = this.questionService.getQuestionsFromProperties(
+    formEntry.formItems = this.formItemService.getFormItemsFromProperties(
       formEntry.classProperties,
       idPrefix
     );
 
-    // clear validators for everything except the unableToContinue Property-Question
-    for (const question of formEntry.questions) {
-      if (question.controlType !== "tuple") {
-        question.validators = [];
+    // clear validators for everything except the unableToContinue Property-FormItem
+    for (const formItem of formEntry.formItems) {
+      if (formItem.controlType !== 'tuple') {
+        formItem.validators = [];
       }
     }
 
-    formEntry.formGroup = this.questionControlService.toFormGroup(
-      formEntry.questions
+    formEntry.formGroup = this.formItemControlService.toFormGroup(
+      formEntry.formItems
     );
 
-    if (
-      !isNullOrUndefined(formEntry.questions) &&
-      formEntry.questions.length > 0
-    ) {
+    if (!isNullOrUndefined(formEntry.formItems) && formEntry.formItems.length > 0) {
       this.expectedNumberOfResults++;
     }
 
@@ -143,49 +132,35 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     selection: { id: any; label: any };
     formEntry: FormEntry;
   }) {
-    console.log("handling selection");
+    console.log('handling selection');
     let unableToContinueControl: FormControl;
     // let unableToContinueControlKey: string;
-    let unableToContinueQuestion: QuestionBase<any>;
+    let unableToContinueQuestion: DynamicFormItemBase<any>;
     let pathPrefix: string;
     this.results = [];
 
     Object.keys(evt.formEntry.formGroup.controls).forEach((c) => {
-      if (c.endsWith("unableToContinue")) {
+      if (c.endsWith('unableToContinue')) {
         // unableToContinueControlKey = c;
         unableToContinueControl = evt.formEntry.formGroup.controls[
           c
         ] as FormControl;
-        pathPrefix = c.replace(/\.[^.]*unableToContinue/, "");
+        pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
       }
     });
 
-    unableToContinueQuestion = evt.formEntry.questions.find((q) =>
-      q.key.endsWith("unableToContinue")
-    );
+    unableToContinueQuestion = evt.formEntry.formItems.find((item) => item.key.endsWith('unableToContinue'));
     console.log(this.data.marketplace);
     console.log(pathPrefix);
     console.log(evt.selection.id);
 
-    this.classDefinitionService
-      .getFormConfigurationChunk(
-        this.data.marketplace,
-        pathPrefix,
-        evt.selection.id
-      )
+    this.classDefinitionService.getFormConfigurationChunk(this.data.marketplace, pathPrefix, evt.selection.id)
       .toPromise()
       .then((retFormEntry: FormEntry) => {
-        const currentFormEntry = this.getFormEntry(
-          pathPrefix,
-          this.currentFormConfiguration.formEntry.id,
-          this.currentFormConfiguration.formEntry
-        );
+        const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
 
-        const unableToContinueProperty = currentFormEntry.classProperties.find(
-          (p) => p.id.endsWith("unableToContinue")
-        );
+        const unableToContinueProperty = currentFormEntry.classProperties.find(p => p.id.endsWith('unableToContinue'));
 
-        console.log(unableToContinueProperty);
         unableToContinueProperty.defaultValues = [evt.selection];
         retFormEntry.classProperties.push(unableToContinueProperty);
 
@@ -201,7 +176,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
         currentFormEntry.imagePath = retFormEntry.imagePath;
 
-        currentFormEntry.questions = retFormEntry.questions;
+        currentFormEntry.formItems = retFormEntry.formItems;
 
         currentFormEntry.subEntries = retFormEntry.subEntries;
 
@@ -238,8 +213,8 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   handleResultEvent(event: FormEntryReturnEventData) {
     this.results.push(event);
-    console.log("actual vs expected");
-    console.log(this.results.length + "vs" + this.expectedNumberOfResults);
+    console.log('actual vs expected');
+    console.log(this.results.length + 'vs' + this.expectedNumberOfResults);
     // const unableToContinue = this.containsUnsetUnableToContinue(this.results.map(fg => fg.formGroup));
     if (
       this.results.length ===
@@ -274,8 +249,8 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   // }
 
   private doExport() {
-    const json = "{" + '"tenantId": "' + this.tenant.id;
-    '", ' + this.addClassToJSON(this.currentFormConfiguration.formEntry) + "}";
+    const json = '{' + '"tenantId": "' + this.tenant.id;
+    '", ' + this.addClassToJSON(this.currentFormConfiguration.formEntry) + '}';
 
     this.exportFile([json]);
   }
@@ -287,57 +262,57 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       '", ' +
       '"properties": [' +
       this.addPropertiesToJSON(formEntry) +
-      "]," +
+      '],' +
       '"subClassInstances": [' +
       this.addClassesToJSON(formEntry.subEntries) +
-      "]"
+      ']'
     );
   }
 
   private addClassesToJSON(formEntries: FormEntry[]) {
-    let returnString = "";
+    let returnString = '';
 
     for (let i = 0; i < formEntries.length; i++) {
-      returnString += "{";
+      returnString += '{';
       returnString += this.addClassToJSON(formEntries[i]);
-      returnString += "}";
+      returnString += '}';
 
       if (i < formEntries.length - 1) {
-        returnString += ",";
+        returnString += ',';
       }
     }
     return returnString;
   }
 
   private addPropertiesToJSON(formEntry: FormEntry) {
-    let returnString = "{";
+    let returnString = '{';
 
-    for (let i = 0; i < formEntry.questions.length; i++) {
-      if (formEntry.questions[i].controlType !== "tuple") {
-        returnString += ` "${formEntry.questions[i].label}": ""`;
-        if (i < formEntry.questions.length - 1) {
-          returnString += ",";
+    for (let i = 0; i < formEntry.formItems.length; i++) {
+      if (formEntry.formItems[i].controlType !== 'tuple') {
+        returnString += ` "${formEntry.formItems[i].label}": ""`;
+        if (i < formEntry.formItems.length - 1) {
+          returnString += ',';
         }
       } else {
         returnString = returnString.substring(0, returnString.length - 1);
       }
     }
 
-    returnString += "}";
+    returnString += '}';
 
     return returnString;
   }
 
   private exportFile(content: string[]) {
-    const blob = new Blob(content, { type: "application/json" });
+    const blob = new Blob(content, { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
-    link.download = "export.json";
+    link.download = 'export.json';
     // this is necessary as link.click() does not work on the latest firefox
     link.dispatchEvent(
-      new MouseEvent("click", { bubbles: true, cancelable: true, view: window })
+      new MouseEvent('click', { bubbles: true, cancelable: true, view: window })
     );
 
     setTimeout(() => {

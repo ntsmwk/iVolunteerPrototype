@@ -1,8 +1,8 @@
-<div #enumQuestionContainer class="question-container-closed">
+<div #enumformItemContainer class="form-item-container-closed">
 
   <mat-form-field class="form-field" [formGroup]="form" *ngIf="!showList">
-    <input matInput placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
-      [id]="question.key" [value]="getQuestionValue()" (click)="onShowList()" style="cursor: pointer" readonly />
+    <input matInput placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+      [id]="formItem.key" [value]="getFormItemValue()" (click)="onShowList()" style="cursor: pointer" readonly />
   </mat-form-field>
 
   <mat-form-field class="search-field" *ngIf="showList">

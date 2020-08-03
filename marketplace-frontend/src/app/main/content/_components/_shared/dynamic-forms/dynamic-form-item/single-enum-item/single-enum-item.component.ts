@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
-import { SingleSelectionEnumQuestion } from 'app/main/content/_model/dynamic-forms/questions';
+import { SingleSelectionEnumFormItem } from 'app/main/content/_model/dynamic-forms/item';
 import { isNullOrUndefined } from 'util';
 import { FormGroup } from '@angular/forms';
 import { EnumEntry } from 'app/main/content/_model/meta/enum';
@@ -16,7 +16,7 @@ declare var $: JQueryStatic;
 })
 export class SingleEnumItemComponent implements OnInit, AfterViewInit {
 
-  @Input() question: SingleSelectionEnumQuestion;
+  @Input() formItem: SingleSelectionEnumFormItem;
   @Input() form: FormGroup;
 
   listOptions: EnumEntry[];
@@ -26,13 +26,13 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
   constructor(private renderer: Renderer2) { }
 
   @ViewChild('enumListContainer', { static: true }) listContainerDom: ElementRef;
-  @ViewChild('enumQuestionContainer', { static: true }) questionContainerDom: ElementRef;
+  @ViewChild('enumFormItemContainer', { static: true }) formItemContainerDom: ElementRef;
 
 
 
   ngOnInit() {
     this.listOptions = [];
-    this.listOptions.push(...this.question.options);
+    this.listOptions.push(...this.formItem.options);
     this.datasource.data = this.listOptions;
   }
 
@@ -42,31 +42,31 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
 
   onShowList() {
     this.listContainerDom.nativeElement.style.display = '';
-    this.renderer.removeClass(this.questionContainerDom.nativeElement, 'question-container-closed');
-    this.renderer.addClass(this.questionContainerDom.nativeElement, 'question-container-open');
+    this.renderer.removeClass(this.formItemContainerDom.nativeElement, 'form-item-container-closed');
+    this.renderer.addClass(this.formItemContainerDom.nativeElement, 'form-item-container-open');
     this.showList = true;
   }
 
   onHideList() {
     this.listContainerDom.nativeElement.style.display = 'none';
-    this.renderer.removeClass(this.questionContainerDom.nativeElement, 'question-container-open');
-    this.renderer.addClass(this.questionContainerDom.nativeElement, 'question-container-closed');
+    this.renderer.removeClass(this.formItemContainerDom.nativeElement, 'form-item-container-open');
+    this.renderer.addClass(this.formItemContainerDom.nativeElement, 'form-item-container-closed');
 
     this.showList = false;
   }
 
   onSelectOption(option: EnumEntry) {
-    this.question.value = option;
+    this.formItem.value = option;
     this.onHideList();
   }
 
   onSelectClear() {
-    this.question.value = null;
+    this.formItem.value = null;
     this.onHideList();
   }
 
-  getQuestionValue() {
-    return isNullOrUndefined(this.question.value) ? null : this.question.value.value;
+  getFormItemValue() {
+    return isNullOrUndefined(this.formItem.value) ? null : this.formItem.value.value;
   }
 
   calculateSpaces(level: number) {
@@ -90,13 +90,13 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
     this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
-  // getMultipleValues(question: MultipleSelectionEnumQuestion) {
+  // getMultipleValues(formItem: MultipleSelectionEnumformItem) {
   //   let ret = '';
 
 
 
-  //   if (!isNullOrUndefined(question.values)) {
-  //     for (let val of question.values) {
+  //   if (!isNullOrUndefined(formItem.values)) {
+  //     for (let val of formItem.values) {
   //       ret = ret + ", " + val;
   //     }
   //   }
