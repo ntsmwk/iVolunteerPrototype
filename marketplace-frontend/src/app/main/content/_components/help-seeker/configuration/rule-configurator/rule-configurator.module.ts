@@ -23,8 +23,7 @@ import { GeneralPreconditionConfiguratorComponent } from './general-precondition
 import { TargetRuleConfiguratorComponent } from './target-rule-configurator/target-rule-configurator.component';
 import { TargetAttributeRuleConfiguratorComponent } from './target-attribute-rule-configurator/target-attribute-rule-configurator.component';
 import { TestRuleConfigurationComponent } from './test-rule-configuration/test-rule-configuration.component';
-import { DynamicFormQuestionModule } from '../../../_shared/dynamic-forms/dynamic-form-question/dynamic-form-question.module';
-
+import { DynamicFormItemModule } from '../../../_shared/dynamic-forms/dynamic-form-item/dynamic-form-item.module';
 const routes = [
   { path: "", component: FuseRuleConfiguratorComponent },
   { path: ":ruleId", component: FuseRuleConfiguratorComponent },
@@ -58,6 +57,6 @@ const routes = [
     MatCheckboxModule,
     HeaderModule,
     FuseSharedModule,
-    DynamicFormQuestionModule]
+    DynamicFormItemModule]
 })
 export class FuseRuleConfiguratorModule { }
