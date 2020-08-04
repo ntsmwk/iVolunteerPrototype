@@ -7,16 +7,16 @@ import { MatchingConfigurationService } from "app/main/content/_service/configur
 import { MatchingConfiguration } from "app/main/content/_model/meta/configurations";
 import { MatchingBrowseSubDialogData } from "app/main/content/_components/help-seeker/configuration/matching-configurator/browse-sub-dialog/browse-sub-dialog.component";
 import { User } from "app/main/content/_model/user";
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export interface OpenMatchingDialogData {
-  marketplace: Marketplace;
   matchingConfiguration: MatchingConfiguration;
 }
 
 @Component({
   selector: "open-matching-dialog",
   templateUrl: "./open-dialog.component.html",
-  styleUrls: ["./open-dialog.component.scss"]
+  styleUrls: ["./open-dialog.component.scss"],
 })
 export class OpenMatchingDialogComponent implements OnInit {
   constructor(
@@ -24,7 +24,7 @@ export class OpenMatchingDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: OpenMatchingDialogData,
     private matchingConfigurationService: MatchingConfigurationService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   allMatchingConfigurations: MatchingConfiguration[];
   browseDialogData: MatchingBrowseSubDialogData;
@@ -33,34 +33,36 @@ export class OpenMatchingDialogComponent implements OnInit {
   loaded: boolean;
   browseMode: boolean;
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
+  globalInfo: GlobalInfo;
+
+  async ngOnInit() {
+
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+
+    this.matchingConfigurationService
+      .getAllMatchingConfigurations(this.globalInfo.marketplace)
       .toPromise()
-      .then((helpseeker: User) => {
-        this.matchingConfigurationService
-          .getAllMatchingConfigurations(this.data.marketplace)
-          .toPromise()
-          .then((matchingConfigurations: MatchingConfiguration[]) => {
-            this.recentMatchingConfigurations = matchingConfigurations;
-            this.allMatchingConfigurations = matchingConfigurations;
+      .then((matchingConfigurations: MatchingConfiguration[]) => {
+        this.recentMatchingConfigurations = matchingConfigurations;
+        this.allMatchingConfigurations = matchingConfigurations;
 
-            // ----DEBUG
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            // ----
-            this.recentMatchingConfigurations = this.recentMatchingConfigurations.sort(
-              (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
-            );
+        // ----DEBUG
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        // ----
+        this.recentMatchingConfigurations = this.recentMatchingConfigurations.sort(
+          (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+        );
 
-            if (this.recentMatchingConfigurations.length > 5) {
-              this.recentMatchingConfigurations = this.recentMatchingConfigurations.slice(
-                0,
-                5
-              );
-            }
-            this.loaded = true;
-          });
+        if (this.recentMatchingConfigurations.length > 5) {
+          this.recentMatchingConfigurations = this.recentMatchingConfigurations.slice(
+            0,
+            5
+          );
+        }
+        this.loaded = true;
       });
   }
 
@@ -78,7 +80,7 @@ export class OpenMatchingDialogComponent implements OnInit {
 
     this.browseDialogData.title = "Durchsuchen";
     this.browseDialogData.entries = [];
-    this.browseDialogData.marketplace = this.data.marketplace;
+    this.browseDialogData.globalInfo = this.globalInfo;
 
     for (const matchingConfiguration of this.allMatchingConfigurations) {
       this.browseDialogData.entries.push({
@@ -86,7 +88,7 @@ export class OpenMatchingDialogComponent implements OnInit {
         name: matchingConfiguration.name,
         leftMatchingEntity: matchingConfiguration.leftClassConfigurationName,
         rightMatchingEntity: matchingConfiguration.rightClassConfigurationName,
-        date: matchingConfiguration.timestamp
+        date: matchingConfiguration.timestamp,
       });
     }
 
@@ -98,7 +100,7 @@ export class OpenMatchingDialogComponent implements OnInit {
 
     if (!event.cancelled) {
       this.data.matchingConfiguration = this.allMatchingConfigurations.find(
-        c => c.id === event.entryId
+        (c) => c.id === event.entryId
       );
       this.dialogRef.close(this.data);
     }

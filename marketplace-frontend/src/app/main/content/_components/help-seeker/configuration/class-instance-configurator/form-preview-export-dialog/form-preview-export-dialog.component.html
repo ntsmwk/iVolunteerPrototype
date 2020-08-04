@@ -1,0 +1,30 @@
+<div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
+
+    <div *ngIf="currentFormConfiguration">
+        <h1>Export von "{{currentFormConfiguration.name}}"</h1>
+
+
+        <mat-accordion multi=true displayMode="flat">
+            <app-form-preview-entry [formEntry]="currentFormConfiguration.formEntry"
+                [formConfiguration]="currentFormConfiguration" [exportClicked]="exportClicked" expanded="true"
+                (result)=handleResultEvent($event) (tupleSelected)="handleTupleSelection($event)">
+            </app-form-preview-entry>
+
+        </mat-accordion>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 10px">
+        <div></div>
+
+        <button class="primary-button-dark" mat-stroked-button type="button" (click)="handleExportClick()">
+            Exportieren
+        </button>
+
+        <button class="secondary-button-dark" mat-stroked-button type="button" (click)="handleCloseClick()">
+            Schließen
+        </button>
+
+        <div></div>
+    </div>
+
+</div>

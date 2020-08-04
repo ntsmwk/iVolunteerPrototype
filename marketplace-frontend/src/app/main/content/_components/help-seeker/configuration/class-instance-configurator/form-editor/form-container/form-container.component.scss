@@ -1,0 +1,48 @@
+@import "common";
+
+mat-expansion-panel {
+  box-shadow: none;
+  border: 2px black solid;
+}
+
+mat-expansion-panel-header:hover,
+mat-expansion-panel-header.mat-expanded {
+  background-color: rgb(4, 123, 202) !important;
+  border-radius: 0;
+
+  mat-panel-title {
+    color: white;
+  }
+
+  mat-panel-description {
+    color: white;
+  }
+}
+
+.form-with-border {
+  border: black 2px solid;
+  border-radius: 4px;
+  padding: 4px;
+  margin: 4px;
+
+  .sub-entry {
+    .sub-entry-row {
+      width: max-content;
+    }
+
+    .sub-entry.label {
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .sub-entry-button {
+      cursor: pointer;
+    }
+  }
+}
+
+app-dynamic-form-block {
+  width: 100%;
+}

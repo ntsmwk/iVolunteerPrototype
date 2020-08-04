@@ -8,7 +8,7 @@
   class="page-layout blank p-24"
   fusePerfectScrollbar
   style="overflow: scroll;"
-  *ngIf="tenantMap.size > 1"
+  *ngIf="roleTenantMappings.length > 1"
 >
   <div
     class="header p-24"
@@ -35,28 +35,25 @@
   </div>
 
   <div *ngIf="isLoaded" fxLayout="row" fxLayoutAlign="space-around start">
-    <div *ngFor="let entry of tenantMap | keyvalue" class="card-parent">
+    <div *ngFor="let mapping of roleTenantMappings" class="card-parent">
       <mat-card
         class="tenant-card mat-elevation-z8"
-        (click)="onRoleSelected(entry.key)"
+        (click)="onRoleSelected(mapping)"
         fusePerfectScrollbar
       >
         <mat-card-header>
-          <mat-card-title>{{ getRoleNameString(entry.key) }}</mat-card-title>
+          <mat-card-title>{{ getRoleNameString(mapping.role) }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div
-            *ngFor="let tenant of entry.value"
+            *ngFor="let tenantId of mapping.tenantIds"
             fxLayout="row"
             fxLayoutAlign="start center"
             style="margin-left: 40px;"
           >
-            <img
-              class="avatar"
-              src="{{ 'data:image/png;base64,' + getTenantImage(tenant) }}"
-            />
+            <img class="avatar" [src]="getTenantImage(tenantId)" />
             <p>
-              {{ getTenantNameString(tenant) }}
+              {{ getTenantNameString(tenantId) }}
             </p>
           </div>
         </mat-card-content>

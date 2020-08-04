@@ -1,4 +1,6 @@
 import { MatchingOperatorRelationship, MatchingCollector } from "../matching";
+import { Relationship } from './relationship';
+import { ClassDefinition } from './class';
 
 export class ClassConfiguration {
   id: string;
@@ -9,21 +11,25 @@ export class ClassConfiguration {
   timestamp: Date;
   userId: string;
   tenantId: string;
+}
 
+export class ClassConfigurationDTO {
+  classConfiguration: ClassConfiguration;
+  classDefinitions: ClassDefinition[];
+  relationships: Relationship[];
 }
 
 export class MatchingConfiguration {
   id: string;
   name: string;
   timestamp: Date;
+  tenantId: string;
 
   leftClassConfigurationId: string;
   leftClassConfigurationName: string;
 
   rightClassConfigurationId: string;
   rightClassConfigurationName: string;
-
-  relationships: MatchingOperatorRelationship[];
 }
 
 export class MatchingCollectorConfiguration {

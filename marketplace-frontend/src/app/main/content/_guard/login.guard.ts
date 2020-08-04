@@ -20,7 +20,8 @@ export class LoginGuard implements CanActivate {
               role == UserRole.VOLUNTEER ||
               role == UserRole.RECRUITER ||
               role == UserRole.FLEXPROD ||
-              role == UserRole.ADMIN
+              role == UserRole.ADMIN ||
+              role == UserRole.TENANT_ADMIN
           );
         });
     });

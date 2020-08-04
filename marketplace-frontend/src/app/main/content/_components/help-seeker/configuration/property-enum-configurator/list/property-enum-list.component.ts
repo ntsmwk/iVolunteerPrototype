@@ -16,6 +16,7 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface PropertyEnumEntry {
   id: string;
@@ -36,7 +37,8 @@ export class PropertyEnumListComponent implements OnInit {
   displayedColumns = ["type", "name", "filler", "actions"];
 
   marketplace: Marketplace;
-  helpseeker: User;
+  tenantAdmin: User;
+  tenants: Tenant[];
 
   propertyDefinitions: PropertyDefinition<any>[];
   enumDefinitions: EnumDefinition[];
@@ -54,7 +56,7 @@ export class PropertyEnumListComponent implements OnInit {
     private enumDefinitionService: EnumDefinitionService,
     private loginService: LoginService,
     private dialogFactory: DialogFactoryDirective
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.isLoaded = false;
@@ -82,27 +84,18 @@ export class PropertyEnumListComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
+    this.tenants = globalInfo.tenants;
 
     Promise.all([
       this.propertyDefinitionService
-        .getAllPropertyDefinitons(
-          this.marketplace,
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
-        )
+        .getAllPropertyDefinitons(this.marketplace, this.tenants[0].id)
         .toPromise()
         .then((propertyDefinitions: PropertyDefinition<any>[]) => {
           this.propertyDefinitions = propertyDefinitions;
         }),
       this.enumDefinitionService
-        .getAllEnumDefinitionsForTenant(
-          this.marketplace,
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
-        )
+        .getAllEnumDefinitionsForTenant(this.marketplace, this.tenants[0].id)
         .toPromise()
         .then((enumDefinitions: EnumDefinition[]) => {
           this.enumDefinitions = enumDefinitions;

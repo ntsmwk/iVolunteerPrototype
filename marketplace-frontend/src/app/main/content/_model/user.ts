@@ -1,3 +1,5 @@
+import { map } from "lodash";
+
 export class User {
   id: string;
   username: string;
@@ -27,6 +29,7 @@ export class User {
 export enum UserRole {
   VOLUNTEER = "VOLUNTEER",
   HELP_SEEKER = "HELP_SEEKER",
+  TENANT_ADMIN = "TENANT_ADMIN",
   ADMIN = "ADMIN",
   RECRUITER = "RECRUITER",
   FLEXPROD = "FLEXPROD",
@@ -36,4 +39,9 @@ export class TenantUserSubscription {
   marketplaceId: string;
   tenantId: string;
   role: UserRole;
+}
+
+export class roleTenantMapping {
+  role: UserRole;
+  tenantIds: string[];
 }

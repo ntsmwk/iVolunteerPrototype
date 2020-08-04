@@ -137,7 +137,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   newClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openNewMatchingDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openNewMatchingDialog().then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       }
@@ -145,7 +145,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   openClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openOpenMatchingDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openOpenMatchingDialog().then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
@@ -166,7 +166,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   deleteClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openDeleteMatchingDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openDeleteMatchingDialog().then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
       } else {

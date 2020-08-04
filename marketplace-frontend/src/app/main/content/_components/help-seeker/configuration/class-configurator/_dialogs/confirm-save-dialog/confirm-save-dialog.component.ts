@@ -7,6 +7,8 @@ import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { LoginService } from 'app/main/content/_service/login.service';
 
 export interface ConfirmClassConfigurationSaveDialogData {
   classConfiguration: ClassConfiguration;
@@ -16,7 +18,6 @@ export interface ConfirmClassConfigurationSaveDialogData {
   deletedClassDefintions: string[];
   deletedRelationships: string[];
 
-  marketplace: Marketplace;
 }
 
 @Component({
@@ -32,42 +33,47 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private relationshipService: RelationshipService,
     private classDefinitionService: ClassDefinitionService,
+    private loginService: LoginService
   ) {
   }
 
   loaded: boolean;
+  globalInfo: GlobalInfo;
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
   }
 
   onOKClick() {
     Promise.all([
       this.relationshipService
-        .addAndUpdateRelationships(this.data.marketplace, this.data.relationships)
+        .addAndUpdateRelationships(this.globalInfo.marketplace, this.data.relationships)
         .toPromise().then((ret: Relationship[]) => {
           this.data.relationships = ret;
         }),
 
       this.classDefinitionService
-        .addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions)
+        .addOrUpdateClassDefintions(this.globalInfo.marketplace, this.data.classDefinitions)
         .toPromise().then((ret: ClassDefinition[]) => {
           this.data.classDefinitions = ret;
         }),
 
       this.classDefinitionService
-        .deleteClassDefinitions(this.data.marketplace, this.data.deletedClassDefintions)
+        .deleteClassDefinitions(this.globalInfo.marketplace, this.data.deletedClassDefintions)
         .toPromise().then((ret: any) => {
           this.data.deletedClassDefintions = [];
         }),
 
       this.relationshipService
-        .deleteRelationships(this.data.marketplace, this.data.deletedRelationships)
+        .deleteRelationships(this.globalInfo.marketplace, this.data.deletedRelationships)
         .toPromise().then((ret: any) => {
           this.data.deletedRelationships = [];
         }),
     ]).then(() => {
       this.classConfigurationService
-        .saveClassConfiguration(this.data.marketplace, this.data.classConfiguration)
+        .saveClassConfiguration(this.globalInfo.marketplace, this.data.classConfiguration)
         .toPromise().then((ret: ClassConfiguration) => {
           this.data.classConfiguration = ret;
 

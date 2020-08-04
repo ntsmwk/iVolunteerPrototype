@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,12 @@ public class MatchingConfigurationService {
 			String classConfigurationId2) {
 		String id = createHashFromClassConfigurationIds(classConfigurationId1, classConfigurationId2);
 		return matchingConfigurationRepository.findOne(id);
+	}
+	
+	public List<MatchingConfiguration> getByTenantId(String tenantId){
+		
+		
+		return null;
 	}
 
 	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {

@@ -1,0 +1,78 @@
+<div style="width: 100%;" class="pb-4 pr-4">
+  <div *ngIf="formEntry.formItems.length <= 0">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon>subdirectory_arrow_right</mat-icon>
+      <h1 class="no-padding-margin pl-4">
+        {{ formEntry.classDefinitions[0].name }}
+      </h1>
+    </div>
+    <div *ngFor="let entry of formEntry.subEntries">
+      <app-form-container [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
+        (result)="handleResultEvent($event)">
+      </app-form-container>
+    </div>
+  </div>
+
+  <div *ngIf="formEntry.formItems.length > 0" fxLayout="row" fxLayoutAlign="center center" class="m-12">
+    <!-- <mat-icon>chevron_right</mat-icon> -->
+
+    <mat-expansion-panel [expanded]="getPanelExpandedState()" style="width: 100%;" (opened)="handlePanelOpened()"
+      (closed)="handlePanelClosed()">
+      <mat-expansion-panel-header expandedHeight="40px">
+        <mat-panel-title>
+          {{ formEntry.classDefinitions[0].name }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="m-12">
+
+        <div *ngFor="let formArrayEntry of formEntry.formGroup.controls['entries'].controls; let i = index">
+          <div [ngClass]="{'form-with-border': subEntry && formEntry.multipleAllowed}">
+
+            <div *ngIf="!subEntry || !formEntry.multipleAllowed">
+              <ng-container *ngTemplateOutlet="questionForm"></ng-container>
+            </div>
+
+            <div class="sub-entry" *ngIf="subEntry && formEntry.multipleAllowed" fxLayout="row"
+              fxLayoutAlign="start center">
+              <div class="pr-12 pl-12 sub-entry-row sub-entry-label">{{i+1}}</div>
+              <ng-container class="sub-entry-row" *ngTemplateOutlet="questionForm">
+              </ng-container>
+              <div class="sub-entry-row sub-entry-button">
+                <mat-icon (click)="onRemoveSubEntryClicked(i)">clear</mat-icon>
+              </div>
+            </div>
+
+            <ng-template #questionForm>
+              <app-dynamic-form-block [formItems]="formEntry.formItems" hideButtons="true"
+                [formConfiguration]="formConfiguration" [form]="formArrayEntry" [finishClicked]="finishClicked"
+                (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()"
+                (tupleSelected)="handleTupleSelection($event)" (errorEvent)="handleErrorEvent($event)">
+              </app-dynamic-form-block>
+            </ng-template>
+          </div>
+
+
+        </div>
+
+        <div *ngIf="formEntry.multipleAllowed" class="pl-4">
+          <button mat-stroked-button class="primary-button-light-small"
+            (click)="onAddSubEntryClicked()">Hinzufügen</button>
+        </div>
+
+      </div>
+
+      <div *ngFor="let entry of formEntry.subEntries">
+
+        <div *ngIf="entry.multipleAllowed">
+          test for multiple
+        </div>
+
+        <app-form-container [formEntry]="entry" [formConfiguration]="formConfiguration" [finishClicked]="finishClicked"
+          expanded="false" subEntry="true" (result)="handleResultEvent($event)"
+          (tupleSelected)="handleTupleSelection($event)" (errorEvent)="handleErrorEvent($event)">
+        </app-form-container>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

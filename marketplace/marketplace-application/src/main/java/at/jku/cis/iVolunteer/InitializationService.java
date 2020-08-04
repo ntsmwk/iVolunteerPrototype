@@ -1,19 +1,13 @@
 package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
-import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.enums.EnumDefinitionRepository;
@@ -23,26 +17,14 @@ import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataClasses;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 
 @Service
 public class InitializationService {
-	
+
 	@Autowired protected ClassDefinitionRepository classDefinitionRepository;
 	@Autowired protected RelationshipRepository relationshipRepository;
 	@Autowired protected PropertyDefinitionRepository propertyDefinitionRepository;
@@ -50,7 +32,7 @@ public class InitializationService {
 	@Autowired protected MatchingConfigurationRepository matchingConfigurationRepository;
 	@Autowired protected MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
 	@Autowired protected EnumDefinitionRepository enumDefinitionRepository;
-	
+
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
@@ -92,9 +74,9 @@ public class InitializationService {
 //		testDataInstances.createUserData();
 		// addTestClassInstances();
 	}
-	
-	private List<Tenant> getTenants(){
-		List<Tenant> tenants = new ArrayList<>();		
+
+	private List<Tenant> getTenants() {
+		List<Tenant> tenants = new ArrayList<>();
 		tenants = coreTenantRestClient.getAllTenants();
 
 		return tenants;
@@ -110,7 +92,7 @@ public class InitializationService {
 			}
 		});
 	}
-	
+
 	public void addFlexProdPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
@@ -121,7 +103,7 @@ public class InitializationService {
 			}
 		});
 	}
-	
+
 	public void addGenericPropertyDefintions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
@@ -132,7 +114,7 @@ public class InitializationService {
 			}
 		});
 	}
-	
+
 	public void addHeaderPropertyDefintions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
@@ -143,13 +125,14 @@ public class InitializationService {
 			}
 		});
 	}
-	
-	public void addClassConfigurations() {		
+
+	public void addClassConfigurations() {
 		List<Tenant> tenants = getTenants();
-		
+
 		for (Tenant t : tenants) {
 			for (int i = 1; i <= 5; i++) {
-				this.classConfigurationController.createNewClassConfiguration(new String[]{t.getId(), "slot"+i, ""});
+				this.classConfigurationController
+						.createNewClassConfiguration(new String[] { t.getId(), "slot" + i, "" });
 			}
 		}
 	}
@@ -315,32 +298,30 @@ public class InitializationService {
 //
 //		this.classConfigurationController.saveClassConfiguration(configurator);
 //	}
-	
+
 	public void addRuleTestConfiguration() {
-		 testDataClasses.createClassConfigurations();
+		testDataClasses.createClassConfigurations();
 	}
-	
+
 	public void addRuleTestUserData() {
 		testDataInstances.createUserData();
 	}
-	
+
 	public void deleteClassDefinitions() {
 		classDefinitionRepository.deleteAll();
 	}
-	
+
 	public void deleteRelationships() {
 		relationshipRepository.deleteAll();
 	}
-	
+
 	public void deleteClassConfigurations() {
 		classConfigurationRepository.deleteAll();
 	}
-	
+
 	public void deleteMatchingConfigurations() {
 		matchingConfigurationRepository.deleteAll();
 	}
-	
-	
 
 	/*
 	 * private void addTestRuleEngine() { /****** load rules into database

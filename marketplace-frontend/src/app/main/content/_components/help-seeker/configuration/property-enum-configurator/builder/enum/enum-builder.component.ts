@@ -16,6 +16,9 @@ import {
 } from "./enum-graph-editor/delete-enum-definition-dialog/delete-enum-definition-dialog.component";
 import { ActivatedRoute } from "@angular/router";
 import { User, UserRole } from "app/main/content/_model/user";
+import { LoginService } from "app/main/content/_service/login.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "app-enum-builder",
@@ -29,11 +32,12 @@ export class EnumBuilderComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     // private dialogFactory: DialogFactoryDirective,
-    private enumDefinitionService: EnumDefinitionService
+    private enumDefinitionService: EnumDefinitionService,
+    private loginService: LoginService
   ) {}
 
   @Input() marketplace: Marketplace;
-  @Input() helpseeker: User;
+  @Input() tenantAdmin: User;
   @Input() entryId: string;
   @Input() sourceString: string;
   @Output() result: EventEmitter<{
@@ -49,7 +53,14 @@ export class EnumBuilderComponent implements OnInit {
 
   loaded: boolean;
 
-  ngOnInit() {
+  tenant: Tenant;
+
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
+
     this.form = this.formBuilder.group({
       name: this.formBuilder.control("", Validators.required),
       description: this.formBuilder.control(""),
@@ -91,9 +102,7 @@ export class EnumBuilderComponent implements OnInit {
           this.form.controls["name"].value,
           this.form.controls["description"].value,
           this.multipleToggled,
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
+          this.tenant.id
         )
         .toPromise()
         .then((enumDefinition: EnumDefinition) => {

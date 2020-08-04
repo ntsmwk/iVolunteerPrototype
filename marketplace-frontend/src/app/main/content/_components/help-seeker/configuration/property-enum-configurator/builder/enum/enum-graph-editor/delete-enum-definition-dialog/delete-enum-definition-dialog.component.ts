@@ -13,9 +13,13 @@ import { EnumDefinitionService } from "app/main/content/_service/meta/core/enum/
 
 import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { LoginGuard } from "app/main/content/_guard/login.guard";
+import { LoginService } from "app/main/content/_service/login.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export class DeleteEnumDefinitionDialogData {
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   idsToDelete: string[];
 }
@@ -29,23 +33,24 @@ export class DeleteEnumDefinitionDialogComponent implements OnInit {
   enumDefinitions: EnumDefinition[];
   loaded: boolean;
   checkboxStates: boolean[];
+  tenant: Tenant;
 
   constructor(
     public dialogRef: MatDialogRef<DeleteEnumDefinitionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DeleteEnumDefinitionDialogData,
-    private enumDefinitionService: EnumDefinitionService
+    private enumDefinitionService: EnumDefinitionService,
+    private loginService: LoginService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = globalInfo.tenants[0];
     this.data.idsToDelete = [];
 
     this.enumDefinitionService
-      .getAllEnumDefinitionsForTenant(
-        this.data.marketplace,
-        this.data.helpseeker.subscribedTenants.find(
-          (t) => t.role === UserRole.HELP_SEEKER
-        ).tenantId
-      )
+      .getAllEnumDefinitionsForTenant(this.data.marketplace, this.tenant.id)
       .toPromise()
       .then((enumDefinitions: EnumDefinition[]) => {
         if (!isNullOrUndefined(enumDefinitions)) {

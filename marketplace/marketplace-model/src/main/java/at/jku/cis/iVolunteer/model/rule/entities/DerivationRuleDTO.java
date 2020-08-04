@@ -4,15 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-//import at.jku.cis.iVolunteer.model.rule.archive.SourceRuleEntryDTO;
-//import at.jku.cis.iVolunteer.model.rule.archive.TargetRuleEntryDTO;
-import at.jku.cis.iVolunteer.model.rule.Action;
-import at.jku.cis.iVolunteer.model.rule.ClassAction;
-import at.jku.cis.iVolunteer.model.rule.ClassCondition;
-import at.jku.cis.iVolunteer.model.rule.Condition;
-import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
-
 public class DerivationRuleDTO {
 
 	private String id;
@@ -27,9 +18,9 @@ public class DerivationRuleDTO {
 	private boolean active;
 
 	public DerivationRuleDTO() {
-		
+
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -69,19 +60,19 @@ public class DerivationRuleDTO {
 	public void setContainer(String container) {
 		this.container = container;
 	}
-	
-	public List<GeneralConditionDTO> getGeneralConditions(){
+
+	public List<GeneralConditionDTO> getGeneralConditions() {
 		return generalConditions;
 	}
-	
+
 	public void setGeneralConditions(List<GeneralConditionDTO> list) {
 		this.generalConditions = list;
 	}
-	
+
 	public void addGeneralCondition(GeneralConditionDTO generalCondition) {
 		generalConditions.add(generalCondition);
 	}
-	
+
 	public List<ClassConditionDTO> getConditions() {
 		return conditions;
 	}
@@ -89,11 +80,11 @@ public class DerivationRuleDTO {
 	public void setConditions(List<ClassConditionDTO> conditions) {
 		this.conditions = conditions;
 	}
-	
+
 	public void addCondition(ClassConditionDTO condition) {
 		conditions.add(condition);
 	}
-	
+
 	public List<ClassActionDTO> getClassActions() {
 		return classActions;
 	}
@@ -101,11 +92,11 @@ public class DerivationRuleDTO {
 	public void setClassActions(List<ClassActionDTO> actions) {
 		this.classActions = actions;
 	}
-	
+
 	public void addClassAction(ClassActionDTO action) {
 		classActions.add(action);
 	}
-	
+
 	public String getTenantId() {
 		return tenantId;
 	}
@@ -113,11 +104,11 @@ public class DerivationRuleDTO {
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
 	}
-	
+
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
 	public boolean getActive() {
 		return active;
 	}

@@ -1,20 +1,16 @@
 package at.jku.cis.iVolunteer.initialize;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -27,7 +23,6 @@ import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -38,25 +33,16 @@ public class CoreVolunteerInitializationService {
 	private static final String MWEISSENBEK = "mweissenbek";
 	private static final String MWEIXLBAUMER = "mweixlbaumer";
 
-	private static final String TENANT_FF = "FF Eidenberg";
-	private static final String TENANT_MV = "MV Schwertberg";
-	private static final String TENANT_RK = "RK Wilhering";
-
 	private static final String RAW_PASSWORD = "passme";
 
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreUserRepository coreUserRepository;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private TenantRepository coreTenantRepository;
-	@Autowired
-	private CoreUserService coreUserService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreUserRepository coreUserRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private TenantRepository coreTenantRepository;
+	@Autowired private CoreUserService coreUserService;
 
 	public void initVolunteers() {
 
@@ -99,7 +85,7 @@ public class CoreVolunteerInitializationService {
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
 			volunteer = coreUserRepository.insert(volunteer);
-			
+
 			coreUserService.addNewUser(volunteer, "", false);
 
 			// List<String> tenantIds = new ArrayList<String>();
@@ -144,8 +130,9 @@ public class CoreVolunteerInitializationService {
 
 	protected void registerVolunteers() {
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-		
-		this.coreUserService.getAllByUserRole(UserRole.VOLUNTEER).forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
+
+		this.coreUserService.getAllByUserRole(UserRole.VOLUNTEER)
+				.forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
 	}
 
 //	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {

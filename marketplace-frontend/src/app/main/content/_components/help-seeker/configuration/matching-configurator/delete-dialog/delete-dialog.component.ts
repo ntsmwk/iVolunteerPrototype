@@ -7,11 +7,10 @@ import { MatchingConfigurationService } from "app/main/content/_service/configur
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { isNullOrUndefined } from "util";
 import { User } from "app/main/content/_model/user";
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export class DeleteMatchingDialogData {
   idsToDelete: string[];
-
-  marketplace: Marketplace;
 }
 
 @Component({
@@ -23,6 +22,8 @@ export class DeleteMatchingDialogComponent implements OnInit {
   allMatchingConfigurations: MatchingConfiguration[];
   checkboxStates: boolean[];
 
+  globalInfo: GlobalInfo;
+
   loaded: boolean;
 
   constructor(
@@ -30,23 +31,20 @@ export class DeleteMatchingDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DeleteMatchingDialogData,
     private loginService: LoginService,
     private matchingConfigurationService: MatchingConfigurationService
-  ) {}
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.data.idsToDelete = [];
-    this.loginService
-      .getLoggedIn()
+    this.globalInfo = <GlobalInfo>(await this.loginService.getGlobalInfo().toPromise());
+
+
+    this.matchingConfigurationService.getAllMatchingConfigurations(this.globalInfo.marketplace)
       .toPromise()
-      .then((helpseeker: User) => {
-        this.matchingConfigurationService
-          .getAllMatchingConfigurations(this.data.marketplace)
-          .toPromise()
-          .then((matchingConfigurations: MatchingConfiguration[]) => {
-            this.allMatchingConfigurations = matchingConfigurations;
-            this.checkboxStates = Array(matchingConfigurations.length);
-            this.checkboxStates.fill(false);
-            this.loaded = true;
-          });
+      .then((matchingConfigurations: MatchingConfiguration[]) => {
+        this.allMatchingConfigurations = matchingConfigurations;
+        this.checkboxStates = Array(matchingConfigurations.length);
+        this.checkboxStates.fill(false);
+        this.loaded = true;
       });
   }
 
@@ -81,11 +79,11 @@ export class DeleteMatchingDialogComponent implements OnInit {
   onSubmit() {
     this.matchingConfigurationService
       .deleteMatchingConfigurations(
-        this.data.marketplace,
+        this.globalInfo.marketplace,
         this.data.idsToDelete
       )
       .toPromise()
-      .then((ret) => {});
+      .then((ret) => { });
 
     this.dialogRef.close(this.data);
   }

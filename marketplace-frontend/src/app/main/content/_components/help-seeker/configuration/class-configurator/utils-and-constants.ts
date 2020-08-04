@@ -2,7 +2,6 @@ import { ClassDefinition, ClassArchetype, AchievementClassInstance } from '../..
 import {
   Relationship,
   RelationshipType,
-  Inheritance,
 } from '../../../../_model/meta/relationship';
 import { ObjectIdService } from '../../../../_service/objectid.service.';
 import { isNullOrUndefined } from 'util';
@@ -19,7 +18,7 @@ const relationshipPalettes = {
         RelationshipType.INHERITANCE
       ),
       imgPath: '/assets/icons/class_editor/relationships/inheritance.png',
-      type: 'inheritance',
+      type: RelationshipType.INHERITANCE,
       shape: undefined,
     },
     {
@@ -27,28 +26,19 @@ const relationshipPalettes = {
       label: RelationshipType.getLabelFromRelationshipType(
         RelationshipType.ASSOCIATION
       ),
-      imgPath: '/assets/icons/class_editor/relationships/',
-      type: 'association',
-      shape: undefined,
-    },
-    {
-      id: RelationshipType.AGGREGATION,
-      label: RelationshipType.getLabelFromRelationshipType(
-        RelationshipType.AGGREGATION
-      ),
       imgPath: '/assets/icons/class_editor/relationships/aggregation.png',
-      type: 'aggregation',
+      type: RelationshipType.ASSOCIATION,
       shape: undefined,
     },
-    {
-      id: RelationshipType.COMPOSITION,
-      label: RelationshipType.getLabelFromRelationshipType(
-        RelationshipType.COMPOSITION
-      ),
-      imgPath: '/assets/icons/class_editor/relationships/composition.png',
-      type: 'composition',
-      shape: undefined,
-    },
+    // {
+    //   id: RelationshipType.AGGREGATION,
+    //   label: RelationshipType.getLabelFromRelationshipType(
+    //     RelationshipType.AGGREGATION
+    //   ),
+    //   imgPath: '/assets/icons/class_editor/relationships/aggregation.png',
+    //   type: 'aggregation',
+    //   shape: undefined,
+    // },
   ],
 };
 
@@ -218,7 +208,7 @@ const mxStyles = {
     'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
   associationCell:
     'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',
-  aggregation:
+  aggregationAssocation:
     'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=0;exitPerimeter=1;' +
     'strokeColor=#000e8a;' +
     'curved=1;' +

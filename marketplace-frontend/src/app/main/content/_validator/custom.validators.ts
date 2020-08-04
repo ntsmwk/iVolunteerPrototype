@@ -1,6 +1,6 @@
 import { ValidatorFn, AbstractControl, ValidationErrors, FormGroup, FormControl } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
-import { QuestionBase } from '../_model/dynamic-forms/questions';
+import { DynamicFormItemBase } from '../_model/dynamic-forms/item';
 
 
 /**
@@ -55,7 +55,7 @@ export function requiredOther(keyThis: string, keyOther: string): ValidatorFn {
  * 
  * @returns An error map with the `minother` property if the validation check fails, otherwise `null`.
  */
-export function minDate(minQuestion: QuestionBase<Date>): ValidatorFn {
+export function minDate(minQuestion: DynamicFormItemBase<Date>): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
 
         if (isNullOrUndefined(minQuestion)) {

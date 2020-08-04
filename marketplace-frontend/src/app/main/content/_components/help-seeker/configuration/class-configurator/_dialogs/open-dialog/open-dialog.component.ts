@@ -11,13 +11,13 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
 import { ClassBrowseSubDialogData } from "../browse-sub-dialog/browse-sub-dialog.component";
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface OpenClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
   classDefinitions: ClassDefinition[];
   relationships: Relationship[];
-  marketplace: Marketplace;
 }
 
 @Component({
@@ -32,7 +32,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
-    private loginService: LoginService,
+    private loginService: LoginService
   ) { }
 
   selected: string;
@@ -43,35 +43,34 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   browseMode: boolean;
   browseDialogData: ClassBrowseSubDialogData;
 
-  ngOnInit() {
+  globalInfo: GlobalInfo;
+  tenant: Tenant;
 
-    this.loginService.getGlobalInfo().toPromise().then((globalInfo: GlobalInfo) => {
-      const tenantId = globalInfo.user.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId;
+  async ngOnInit() {
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
 
+    this.tenant = this.globalInfo.tenants[0];
 
-
-      this.classConfigurationService
-        .getClassConfigurationsByTenantId(this.data.marketplace, tenantId)
-        .toPromise()
-        .then((classConfigurations: ClassConfiguration[]) => {
-          this.allClassConfigurations = classConfigurations.filter((c) => {
-            return c.tenantId === tenantId;
-          });
-
-          this.recentClassConfigurations = this.allClassConfigurations;
-          this.recentClassConfigurations = this.recentClassConfigurations.sort(
-            (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
-          );
-
-          if (this.recentClassConfigurations.length > 6) {
-            this.recentClassConfigurations = this.recentClassConfigurations.slice(
-              0,
-              6
-            );
-          }
-          this.loaded = true;
+    this.classConfigurationService
+      .getClassConfigurationsByTenantId(this.globalInfo.marketplace, this.tenant.id)
+      .toPromise()
+      .then((classConfigurations: ClassConfiguration[]) => {
+        this.allClassConfigurations = classConfigurations.filter((c) => {
+          return c.tenantId === this.tenant.id;
         });
-    });
+
+        this.recentClassConfigurations = this.allClassConfigurations;
+        this.recentClassConfigurations = this.recentClassConfigurations.sort(
+          (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+        );
+
+        if (this.recentClassConfigurations.length > 6) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 6);
+        }
+        this.loaded = true;
+      });
   }
 
   handleRowClick(c: ClassConfiguration) {
@@ -82,18 +81,17 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     Promise.all([
       this.classDefinitionService
         .getClassDefinitionsById(
-          this.data.marketplace,
+          this.globalInfo.marketplace,
           c.classDefinitionIds,
           undefined
         )
-        .toPromise()
-        .then((classDefinitions: ClassDefinition[]) => {
+        .toPromise().then((classDefinitions: ClassDefinition[]) => {
           if (!isNullOrUndefined(classDefinitions)) {
             this.data.classDefinitions = classDefinitions;
           }
         }),
       this.relationshipService
-        .getRelationshipsById(this.data.marketplace, c.relationshipIds)
+        .getRelationshipsById(this.globalInfo.marketplace, c.relationshipIds)
         .toPromise()
         .then((relationships: Relationship[]) => {
           if (!isNullOrUndefined(relationships)) {
@@ -107,7 +105,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
 
   handleBrowseClick() {
     this.browseDialogData = new ClassBrowseSubDialogData();
-    this.browseDialogData.marketplace = this.data.marketplace;
+    this.browseDialogData.globalInfo = this.globalInfo;
     this.browseDialogData.sourceReference = undefined;
     this.browseDialogData.title = "Klassen-Konfigurationen durchsuchen";
 
@@ -129,7 +127,6 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   }
 
   handleReturnFromBrowse(event: { cancelled: boolean; entryId: string }) {
-    console.log(event);
     if (!event.cancelled) {
       const selectedClassConfiguration = this.allClassConfigurations.find(
         (c) => c.id === event.entryId

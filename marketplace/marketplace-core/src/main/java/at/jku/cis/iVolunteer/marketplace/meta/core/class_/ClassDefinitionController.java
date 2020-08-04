@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinitionDTO;
 //import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfigurationPreviewRequest;
@@ -22,7 +23,6 @@ public class ClassDefinitionController {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private CollectionService collectionService;
 	@Autowired private ClassDefinitionMapper classDefinitionMapper;
 
 	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")

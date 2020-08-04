@@ -1,6 +1,14 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import { LoginService } from "../../../../../_service/login.service";
-import { FormGroup, FormBuilder, FormControl, ControlContainer, FormGroupDirective, Validators, FormArray } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  ControlContainer,
+  FormGroupDirective,
+  Validators,
+  FormArray,
+} from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { AttributeCondition } from "app/main/content/_model/derivation-rule";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
@@ -11,20 +19,20 @@ import {
 } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { User, UserRole } from "app/main/content/_model/user";
-import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
+import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { QuestionBase, SingleSelectionEnumQuestion } from 'app/main/content/_model/dynamic-forms/questions';
-import { QuestionService } from 'app/main/content/_service/question.service';
-import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 import { isNullOrUndefined } from 'util';
-import { FormEntry } from 'app/main/content/_model/meta/form';
+import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
+import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
+import { Tenant } from "app/main/content/_model/tenant";
+import { DynamicFormItemBase } from 'app/main/content/_model/dynamic-forms/item';
 
 @Component({
   selector: "target-attribute-rule-configurator",
   templateUrl: "./target-attribute-rule-configurator.component.html",
   styleUrls: ["./target-attribute-rule-configurator.component.scss"],
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
-  providers: [QuestionService, QuestionControlService]
+  providers: [DynamicFormItemService, DynamicFormItemControlService]
 })
 export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   @Input("attributeTarget")
@@ -34,13 +42,14 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     AttributeCondition
   >();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   role: UserRole;
+  tenants: Tenant[];
   ruleTargetAttributeForm: FormGroup;
   ruleQuestionForm: FormGroup;
-  questions: QuestionBase<any>[] = [];
-  question: QuestionBase<any>;
+  questions: DynamicFormItemBase<any>[] = [];
+  question: DynamicFormItemBase<any>;
   classProperties: ClassProperty<any>[] = [];
 
   attributeForms: FormArray;
@@ -56,20 +65,21 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private questionService: QuestionService,
-    private questionControlService: QuestionControlService,
+    private dynamicFormItemService: DynamicFormItemService,
+    private dynamicFormItemControlService: DynamicFormItemControlService,
     private parent: FormGroupDirective
-  ) {
-  }
+  ) {}
 
   async ngOnInit() {
-    this.attributeForms = <FormArray>this.parent.form.controls['targetAttributes'];  
-    
+    this.attributeForms = <FormArray>(
+      this.parent.form.controls["targetAttributes"]
+    );
+
     this.ruleTargetAttributeForm = this.formBuilder.group({
       classPropertyId: new FormControl(undefined, [Validators.required]),
-      value: new FormControl(undefined, [Validators.required])
+      value: new FormControl(undefined, [Validators.required]),
     });
-    
+
     this.attributeForms.push(this.ruleTargetAttributeForm);
 
     this.ruleTargetAttributeForm.setValue({
@@ -84,7 +94,8 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
+    this.tenants = globalInfo.tenants;
 
     this.loadClassProperties(null);
     if (!isNullOrUndefined(this.attributeTarget.classProperty)){
@@ -109,15 +120,14 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   private addQuestionAndFormGroup(classProperty: ClassProperty<any>){
     let myArr: ClassProperty<any>[] = new Array();
     myArr.push(classProperty);
-    this.questions = this.questionService.getQuestionsFromProperties(myArr);
-    this.question = this.questions[0] as SingleSelectionEnumQuestion;
+    this.questions = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
     
     // set question value in case of existing rule
     if (this.attributeTarget.value){
         this.question.value = this.attributeTarget.value;
     }
      
-    this.ruleQuestionForm = this.questionControlService.toFormGroup(this.questions);
+    this.ruleQuestionForm = this.dynamicFormItemControlService.toFormGroup(this.questions);
     this.ruleTargetAttributeForm.addControl('questionForm', this.ruleQuestionForm);
 
     // detect change in question form

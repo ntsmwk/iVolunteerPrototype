@@ -6,14 +6,12 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
@@ -23,6 +21,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurationDTO;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingCollectorConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -49,12 +48,11 @@ public class ClassConfigurationController {
 	List<ClassConfiguration> getAllClassConfigurations() {
 		return classConfigurationRepository.findAll();
 	}
-	
+
 	@GetMapping("class-configuration/all/tenant/{tenantId}")
-	private List<ClassConfiguration> getClassConfigurationsByTenantId(@PathVariable("tenantId") String tenantId)  {
+	private List<ClassConfiguration> getClassConfigurationsByTenantId(@PathVariable("tenantId") String tenantId) {
 		return classConfigurationRepository.findByTenantId(tenantId);
 	}
-
 
 	@GetMapping("class-configuration/{id}")
 	public ClassConfiguration getClassConfigurationById(@PathVariable("id") String id) {
@@ -66,6 +64,20 @@ public class ClassConfigurationController {
 		return classConfigurationRepository.findByName(name);
 	}
 
+	@GetMapping("class-configuration/all-in-one/{id}")
+	public ClassConfigurationDTO getAllForClassConfigurationInOne(@PathVariable("id") String id) {
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
+		
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);;
+		
+		List<Relationship> relationships = new ArrayList<>();
+		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+		
+		ClassConfigurationDTO dto = new ClassConfigurationDTO(classConfiguration, classDefinitions, relationships);
+		return dto;
+	}
+	
 	@PostMapping("class-configuration/new-empty")
 	public ClassConfiguration createNewEmptyClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 2) {
@@ -119,16 +131,18 @@ public class ClassConfigurationController {
 		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
 		return classConfiguration;
 	}
-	
+
 	@PutMapping("class-configuration/{id}/save-meta")
 	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
-		
-		if (params.length != 2) {return null;}
-		
+
+		if (params.length != 2) {
+			return null;
+		}
+
 		classConfiguration.setName(params[0]);
 		classConfiguration.setDescription(params[1]);
-		
+
 		return classConfigurationRepository.save(classConfiguration);
 	}
 

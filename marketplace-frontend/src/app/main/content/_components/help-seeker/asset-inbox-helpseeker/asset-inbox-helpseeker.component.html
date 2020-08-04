@@ -6,7 +6,7 @@
 
 <div class="page-layout blank p-24" fusePerfectScrollbar>
   <!-- HEADER -->
-  <div *ngIf="this.participant && isFF()">
+  <div *ngIf="user && isFF()">
     <div
       class="header-ff p-16 p-sm-24"
       fxLayout="row"
@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div *ngIf="this.participant && isMV()">
+  <div *ngIf="user && isMV()">
     <div
       class="header-mv p-16 p-sm-24"
       fxLayout="row"
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <div *ngIf="this.participant && isOther()">
+  <div *ngIf="user && isOther()">
     <div
       class="header p-16 p-sm-24"
       fxLayout="row"
@@ -54,7 +54,7 @@
     <app-asset-inbox
       [classInstanceDTOs]="classInstanceDTOs"
       [marketplace]="marketplace"
-      inboxOwner="helpseeker"
+      inboxOwner="user"
       (submit)="onAssetInboxSubmit($event)"
     ></app-asset-inbox>
   </div>

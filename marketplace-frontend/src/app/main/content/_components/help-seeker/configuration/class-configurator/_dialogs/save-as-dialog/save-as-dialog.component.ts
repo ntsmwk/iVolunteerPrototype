@@ -17,9 +17,6 @@ export interface SaveClassConfigurationAsDialogData {
 
   deletedClassDefinitions: string[];
   deletedRelationships: string[];
-
-  marketplace: Marketplace;
-
 }
 
 @Component({

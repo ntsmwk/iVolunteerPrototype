@@ -3,26 +3,26 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
-import { User, UserRole } from "app/main/content/_model/user";
 import { MatchingConfigurationService } from "app/main/content/_service/configuration/matching-configuration.service";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import {
   ClassConfiguration,
-  MatchingConfiguration
+  MatchingConfiguration,
 } from "app/main/content/_model/meta/configurations";
 import { ClassBrowseSubDialogData } from "../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface NewMatchingDialogData {
   leftClassConfiguration: ClassConfiguration;
   rightClassConfiguration: ClassConfiguration;
   label: string;
-  marketplace: Marketplace;
 }
 
 @Component({
   selector: "new-matching-dialog",
   templateUrl: "./new-dialog.component.html",
-  styleUrls: ["./new-dialog.component.scss"]
+  styleUrls: ["./new-dialog.component.scss"],
 })
 export class NewMatchingDialogComponent implements OnInit {
   constructor(
@@ -43,35 +43,38 @@ export class NewMatchingDialogComponent implements OnInit {
   browseMode: boolean;
   browseDialogData: ClassBrowseSubDialogData;
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
+  tenant: Tenant;
+  globalInfo: GlobalInfo;
+
+  async ngOnInit() {
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.tenant = this.globalInfo.tenants[0];
+
+    this.classConfigurationService
+      .getClassConfigurationsByTenantId(this.globalInfo.marketplace, this.tenant.id)
       .toPromise()
-      .then((helpseeker: User) => {
-        this.classConfigurationService
-          .getClassConfigurationsByTenantId(this.data.marketplace, helpseeker.subscribedTenants.find(t => t.role === UserRole.HELP_SEEKER).tenantId)
-          .toPromise()
-          .then((classConfigurations: ClassConfiguration[]) => {
-            this.recentClassConfigurations = classConfigurations;
-            this.allClassConfigurations = classConfigurations;
+      .then((classConfigurations: ClassConfiguration[]) => {
+        this.recentClassConfigurations = classConfigurations;
+        this.allClassConfigurations = classConfigurations;
 
-            //----DEBUG
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-            //----
-            this.recentClassConfigurations = this.recentClassConfigurations.sort(
-              (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
-            );
+        //----DEBUG
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        //----
+        this.recentClassConfigurations = this.recentClassConfigurations.sort(
+          (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+        );
 
-            if (this.recentClassConfigurations.length > 4) {
-              this.recentClassConfigurations = this.recentClassConfigurations.slice(
-                0,
-                4
-              );
-            }
+        if (this.recentClassConfigurations.length > 4) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(
+            0,
+            4
+          );
+        }
 
-            this.loaded = true;
-          });
+        this.loaded = true;
       });
   }
 
@@ -97,7 +100,7 @@ export class NewMatchingDialogComponent implements OnInit {
     ) {
       this.matchingConfigurationService
         .getMatchingConfigurationByUnorderedClassConfigurationIds(
-          this.data.marketplace,
+          this.globalInfo.marketplace,
           this.data.leftClassConfiguration.id,
           this.data.rightClassConfiguration.id
         )
@@ -118,7 +121,7 @@ export class NewMatchingDialogComponent implements OnInit {
   handleBrowseClick(sourceReference: "LEFT" | "RIGHT") {
     this.browseDialogData = new ClassBrowseSubDialogData();
     this.browseDialogData.title = "Durchsuchen";
-    this.browseDialogData.marketplace = this.data.marketplace;
+    this.browseDialogData.globalInfo = this.globalInfo;
     this.browseDialogData.sourceReference = sourceReference;
 
     this.browseDialogData.entries = [];
@@ -126,7 +129,7 @@ export class NewMatchingDialogComponent implements OnInit {
       this.browseDialogData.entries.push({
         id: classConfiguration.id,
         name: classConfiguration.name,
-        date: new Date(classConfiguration.timestamp)
+        date: new Date(classConfiguration.timestamp),
       });
     }
 
@@ -147,7 +150,7 @@ export class NewMatchingDialogComponent implements OnInit {
 
     if (!event.cancelled) {
       const classConfiguration = this.allClassConfigurations.find(
-        c => c.id === event.entryId
+        (c) => c.id === event.entryId
       );
 
       if (event.sourceReference === "LEFT") {

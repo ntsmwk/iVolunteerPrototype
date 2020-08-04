@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +20,9 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @RestController
 @RequestMapping("/login")
 public class CoreLoginController {
-	@Autowired
-	private TenantService tenantService;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreLoginService loginService;
+	@Autowired private TenantService tenantService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreLoginService loginService;
 
 	@GetMapping
 	public CoreUser getLoggedInUser() {
@@ -32,8 +31,8 @@ public class CoreLoginController {
 		return user;
 	}
 
-	@GetMapping("/globalInfo/{role}")
-	public GlobalInfo getGlobalInfo(@PathVariable("role") UserRole role) {
+	@PutMapping("/globalInfo/role/{role}")
+	public GlobalInfo getGlobalInfo(@PathVariable("role") UserRole role, @RequestBody List<String> tenantIds) {
 		GlobalInfo globalInfo = new GlobalInfo();
 
 		CoreUser user = loginService.getLoggedInUser();
@@ -46,8 +45,8 @@ public class CoreLoginController {
 			globalInfo.setMarketplace(this.marketplaceRepository.findOne(registeredMarketplaceIds.get(0)));
 		}
 
-		globalInfo.setTenants(user.getSubscribedTenants().stream().filter(s -> s.getRole() == role)
-				.map(s -> this.tenantService.getTenantById(s.getTenantId())).collect(Collectors.toList()));
+		globalInfo.setTenants(
+				tenantIds.stream().map(id -> this.tenantService.getTenantById(id)).collect(Collectors.toList()));
 
 		return globalInfo;
 	}

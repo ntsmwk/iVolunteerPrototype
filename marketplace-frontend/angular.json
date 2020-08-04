@@ -23,21 +23,15 @@
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": [
-                            "src/favicon.ico",
-                            "src/assets",
-                            "src/assets/mxgraph_resources/",
-                            {"glob":"**/*", "input":"src/assets/mxgraph_resources/", "output": "./"}
-
+                            "src/favicon.ico", "src/assets", "src/assets/mxgraph_resources/",
+                            {
+                                "glob": "**/*",
+                                "input": "src/assets/mxgraph_resources/",
+                                "output": "./"
+                            }
                         ],
-                        "styles": [
-                            "src/styles.scss"
-                        ],
-                        "scripts": [
-                            "src/assets/periodpicker/jquery.min.js",
-                            "src/assets/periodpicker/build/jquery.periodpicker.full.min.js",
-                            "node_modules/mxgraph/javascript/mxClient.js"
-
-                        ]
+                        "styles": ["src/styles.scss"],
+                        "scripts": ["src/assets/periodpicker/jquery.min.js", "src/assets/periodpicker/build/jquery.periodpicker.full.min.js", "node_modules/mxgraph/javascript/mxClient.js"]
                     },
                     "configurations": {
                         "production": {
@@ -49,7 +43,7 @@
                             ],
                             "optimization": true,
                             "outputHashing": "all",
-                            "sourceMap": false,
+                            "sourceMap": true,
                             "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
@@ -92,29 +86,20 @@
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "src/tsconfig.spec.json",
                         "karmaConfig": "src/karma.conf.js",
-                        "styles": [
-                            "styles.scss"
-                        ],
+                        "styles": ["styles.scss"],
                         "scripts": [
-                            "src/assets/periodpicker/jquery.min.js",
-                            "src/assets/periodpicker/build/jquery.periodpicker.full.min.js"
+                            "src/assets/periodpicker/jquery.min.js", "src/assets/periodpicker/build/jquery.periodpicker.full.min.js"
                         ],
-                        "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
-                        ]
+                        "assets": ["src/favicon.ico", "src/assets"]
                     }
                 },
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": [
-                            "src/tsconfig.app.json",
-                            "src/tsconfig.spec.json"
+                            "src/tsconfig.app.json", "src/tsconfig.spec.json"
                         ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
@@ -134,9 +119,7 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": "e2e/tsconfig.e2e.json",
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }

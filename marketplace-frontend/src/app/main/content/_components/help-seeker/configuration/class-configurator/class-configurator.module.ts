@@ -14,6 +14,7 @@ import { ClassOptionsOverlayControlModule } from './options-overlay/options-over
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material';
 import { DialogFactoryModule } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.module';
+import { RouterModule, Route } from '@angular/router';
 
 
 
@@ -41,6 +42,7 @@ import { DialogFactoryModule } from '../../../_shared/dialogs/_dialog-factory/di
     EditorTreeViewModule,
 
     ClassOptionsOverlayControlModule,
+
   ],
   declarations: [ClassConfiguratorComponent],
   exports: [ClassConfiguratorComponent],

@@ -26,6 +26,8 @@ import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 //import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
@@ -34,7 +36,7 @@ import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 @Service
 public class CollectionService {
 
-	private static final String PATH_DELIMITER = Character.toString((char) 28);
+	public static final String PATH_DELIMITER = Character.toString((char) 28);
 
 	@Autowired ClassConfigurationRepository classConfigurationRepository;
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
@@ -101,7 +103,7 @@ public class CollectionService {
 			List<Relationship> relationships = this.relationshipRepository.findByTarget(classDefinition.getId());
 
 			relationships = relationships.stream()
-					.filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION)
+					.filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
 							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
 					.collect(Collectors.toList());
 
@@ -144,7 +146,7 @@ public class CollectionService {
 			List<MatchingCollectorEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
-		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION)
+		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
 				| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
 
 		Collections.reverse(relationships);
@@ -209,9 +211,6 @@ public class CollectionService {
 		// Collect Properties
 		currentFormEntry.getClassProperties().addAll(0, currentClassDefinition.getProperties());
 
-		// Collect EnumDefnitions
-		currentFormEntry.getEnumDefinitions().addAll(0, currentClassDefinition.getEnums());
-
 		// grab target-side Relationships
 		List<Relationship> targetRelationships = allRelationships.stream()
 				.filter(r -> r.getTarget().equals(currentClassDefinition.getId())).collect(Collectors.toList());
@@ -245,11 +244,13 @@ public class CollectionService {
 		while (!sourceStack.isEmpty()) {
 			Relationship relationship = sourceStack.pop();
 
-			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
+			if (relationship.getRelationshipType().equals(RelationshipType.ASSOCIATION)) {
 				ClassDefinition classDefinition = allClassDefinitions.stream()
 						.filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
 				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()),
 						allClassDefinitions, allRelationships, false);
+				subFormEntry.setMultipleAllowed(((Association) relationship).getTargetCardinality() == AssociationCardinality.N);
+				
 				subFormEntries.add(subFormEntry);
 
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
