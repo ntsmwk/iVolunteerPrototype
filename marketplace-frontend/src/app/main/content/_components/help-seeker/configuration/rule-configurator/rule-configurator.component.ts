@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { UserRole, User } from "app/main/content/_model/user";
-import { FormGroup, FormBuilder, FormControl, Validators, FormArrayName, FormArray } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, Validators, FormArrayName, FormArray, AbstractControl } from "@angular/forms";
 import {
   DerivationRule,
   GeneralCondition,
@@ -18,6 +18,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
 import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   templateUrl: "./rule-configurator.component.html",
@@ -172,14 +173,15 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   save() {
     this.ruleForm.markAllAsTouched();
+    this.ruleForm.updateValueAndValidity();
     
-    if (this.ruleForm.valid) {     
+    if (this.ruleForm.valid) { 
       this.derivationRule.name = this.ruleForm.value.name;
-       this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
+      this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
         ).tenantId;
       this.derivationRule.container = "Test-Frontend";
-      
+     
       if (this.derivationRule.id){
         this.derivationRuleService
           .save(this.marketplace, this.derivationRule)
@@ -193,7 +195,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             .toPromise()
             .then((rule:DerivationRule) => { 
               this.derivationRule = rule;
-              // this.router.navigate(["/main/rule/" + this.derivationRule.id])
+              this.router.navigate(["/main/rule/" + this.derivationRule.id])
             });
       }
       this.showSuccessMsg = true;

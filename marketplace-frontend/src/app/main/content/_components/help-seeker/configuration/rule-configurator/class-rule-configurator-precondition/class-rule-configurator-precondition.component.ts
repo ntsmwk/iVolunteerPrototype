@@ -100,10 +100,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       });
   }
 
-  /*ngOnChanges(changes: SimpleChanges) {
-    console.log('in child changes with: ', changes);
-  }*/
-
   onClassChange(classDefinition: ClassDefinition, $event) {
     if ($event.isUserInput) {
       if (!this.classCondition.classDefinition) {
@@ -113,6 +109,8 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.classCondition.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
         (t) => t.role === UserRole.HELP_SEEKER
       ).tenantId;
+      this.classCondition.attributeConditions = new Array();
+      this.rulePreconditionForm.setControl('classAttributeForms', this.formBuilder.array([]));
       this.classConditionChange.emit(this.classCondition);
     }
   }

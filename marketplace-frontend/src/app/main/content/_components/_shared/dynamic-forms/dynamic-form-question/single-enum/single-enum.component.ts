@@ -57,6 +57,7 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
 
   onSelectOption(option: EnumEntry) {
     this.question.value = option;
+    this.form.controls[this.question.key].setValue(option); 
     this.onHideList();
   }
 

@@ -13,16 +13,20 @@ import at.jku.cis.iVolunteer.marketplace._mapper.property.EnumDefinitionToClassP
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.enums.EnumDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 
 @Service
 public class ClassPropertyService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 	@Autowired private EnumDefinitionRepository enumDefinitionRepository;
 	@Autowired private EnumDefinitionToClassPropertyMapper enumDefinitionToClassPropertyMapper;
@@ -30,10 +34,24 @@ public class ClassPropertyService {
 	
 	public List<ClassProperty<Object>> getAllClassPropertiesFromClass(String classDefinitionId) {
 		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
+		List<ClassProperty<Object>> properties = new ArrayList<ClassProperty<Object>>();
 		if (classDefinition != null) {
-			return classDefinition.getProperties();
+			properties.addAll(classDefinition.getProperties());
+
+			// add class properties from parent
+			List<Relationship> relationships = relationshipRepository.
+					  findByTargetAndRelationshipType(classDefinitionId, RelationshipType.INHERITANCE);
+			relationships.stream().
+			        forEach(r -> properties.addAll(getAllClassPropertiesFromClass(r.getSource())));	      
+		
+			// add class properties via aggregation, composition
+			relationships = relationshipRepository.
+					       findBySource(classDefinitionId);	
+			relationships.stream()
+			             .filter(t -> t.getRelationshipType().equals(RelationshipType.ASSOCIATION))
+			             .forEach(r -> properties.addAll(getAllClassPropertiesFromClass(r.getTarget())));
 		}
-		return null;
+		return properties;
 	}
 
 	public ClassProperty<Object> getClassPropertyById(String classDefinitionId, String classPropertyId) {

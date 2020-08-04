@@ -13,15 +13,20 @@ import { ClassPropertyService } from "app/main/content/_service/meta/core/proper
 import { User, UserRole } from "app/main/content/_model/user";
 import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { QuestionBase, SingleSelectionEnumQuestion } from 'app/main/content/_model/dynamic-forms/questions';
+import { QuestionService } from 'app/main/content/_service/question.service';
+import { QuestionControlService } from 'app/main/content/_service/question-control.service';
+import { isNullOrUndefined } from 'util';
+import { FormEntry } from 'app/main/content/_model/meta/form';
 
 @Component({
   selector: "target-attribute-rule-configurator",
   templateUrl: "./target-attribute-rule-configurator.component.html",
   styleUrls: ["./target-attribute-rule-configurator.component.scss"],
-  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
+  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
+  providers: [QuestionService, QuestionControlService]
 })
 export class TargetAttributeRuleConfiguratorComponent implements OnInit {
- // @Input("parentFormArray") parentFormArray: FormArray;
   @Input("attributeTarget")
   attributeTarget: AttributeCondition;
   @Output("attributeTargetChange")
@@ -33,11 +38,12 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   marketplace: Marketplace;
   role: UserRole;
   ruleTargetAttributeForm: FormGroup;
+  ruleQuestionForm: FormGroup;
+  questions: QuestionBase<any>[] = [];
+  question: QuestionBase<any>;
   classProperties: ClassProperty<any>[] = [];
 
   attributeForms: FormArray;
-
-  enumValues = [];
 
   propertyDefinition: PropertyDefinition<any>;
 
@@ -50,6 +56,8 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
+    private questionService: QuestionService,
+    private questionControlService: QuestionControlService,
     private parent: FormGroupDirective
   ) {
   }
@@ -79,15 +87,9 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     this.helpseeker = globalInfo.user;
 
     this.loadClassProperties(null);
-  }
-
-  onPropertyChange($event) {
-    if (!this.attributeTarget.classProperty) {
-      this.attributeTarget.classProperty = new ClassProperty();
+    if (!isNullOrUndefined(this.attributeTarget.classProperty)){
+      this.addQuestionAndFormGroup(this.attributeTarget.classProperty);
     }
-    this.attributeTarget.classProperty.id = $event.source.value;
-    this.ruleTargetAttributeForm.value.classPropertyId = $event.source.value;
-    this.onChange($event);
   }
 
   private loadClassProperties($event) {
@@ -100,32 +102,54 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
         .toPromise()
         .then((props: ClassProperty<any>[]) => {
           this.classProperties = props;
-          this.enumValues = [];
-          // this.onChange($event);
         });
     }
   }
 
-  findEnumValues() {
-    if (
-      this.attributeTarget.classProperty.type === "ENUM" &&
-      this.enumValues.length == 0
-    ) {
-      this.classDefinitionService
-        .getEnumValuesFromEnumHeadClassDefinition(
-          this.marketplace,
-          this.attributeTarget.classProperty.allowedValues[0].enumClassId,
-          this.helpseeker.subscribedTenants.find(
-            (t) => t.role === UserRole.HELP_SEEKER
-          ).tenantId
-        )
-        .toPromise()
-        .then((list: any[]) => {
-          this.enumValues = list.map((e) => e.value);
-        });
+  private addQuestionAndFormGroup(classProperty: ClassProperty<any>){
+    let myArr: ClassProperty<any>[] = new Array();
+    myArr.push(classProperty);
+    this.questions = this.questionService.getQuestionsFromProperties(myArr);
+    this.question = this.questions[0] as SingleSelectionEnumQuestion;
+    
+    // set question value in case of existing rule
+    if (this.attributeTarget.value){
+        this.question.value = this.attributeTarget.value;
     }
-    return this.enumValues;
+     
+    this.ruleQuestionForm = this.questionControlService.toFormGroup(this.questions);
+    this.ruleTargetAttributeForm.addControl('questionForm', this.ruleQuestionForm);
+
+    // detect change in question form
+    this.ruleTargetAttributeForm.get('questionForm').valueChanges.subscribe((change) => {
+      this.ruleTargetAttributeForm.patchValue({
+          value: this.ruleTargetAttributeForm.get('questionForm').get(this.question.key).value});
+       
+      this.attributeTarget.value = this.ruleTargetAttributeForm.get('questionForm').get(this.question.key).value;
+    });
   }
+
+  private initAttributeTarget() {
+    this.attributeTarget.classProperty = new ClassProperty();
+    this.attributeTarget.value = "";
+    this.ruleTargetAttributeForm.reset();
+  }
+
+  onPropertyChange(classProperty: ClassProperty<any>, $event) {
+    if (
+      $event.isUserInput &&
+      (!this.attributeTarget.classProperty ||
+        this.attributeTarget.classProperty.id != classProperty.id)
+    ) {
+      this.initAttributeTarget();
+      this.attributeTarget.classProperty = classProperty;
+      // create new form for value
+      this.addQuestionAndFormGroup(classProperty);
+      
+      this.attributeTargetChange.emit(this.attributeTarget);
+    }
+  }
+
 
   onChange($event) {
     if (this.classProperties.length > 0) {
@@ -133,6 +157,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
         this.classProperties.find(
           (cp) => cp.id === this.ruleTargetAttributeForm.value.classPropertyId
         ) || new ClassProperty();
+      this.addQuestionAndFormGroup(this.attributeTarget.classProperty);
       this.attributeTargetChange.emit(this.attributeTarget);
     }
   }
@@ -143,6 +168,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
         this.classProperties.find(
           (cp) => cp.id === this.ruleTargetAttributeForm.value.classPropertyId
         ) || new ClassProperty();
+        this.addQuestionAndFormGroup(this.attributeTarget.classProperty);
       this.attributeTarget.value = this.ruleTargetAttributeForm.value.value;
       this.attributeTargetChange.emit(this.attributeTarget);
     }
