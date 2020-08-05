@@ -48,8 +48,8 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   tenants: Tenant[];
   ruleTargetAttributeForm: FormGroup;
   ruleQuestionForm: FormGroup;
-  questions: DynamicFormItemBase<any>[] = [];
-  question: DynamicFormItemBase<any>;
+  formItems: DynamicFormItemBase<any>[] = [];
+  formItem: DynamicFormItemBase<any>;
   classProperties: ClassProperty<any>[] = [];
 
   attributeForms: FormArray;
@@ -118,24 +118,41 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   private addQuestionAndFormGroup(classProperty: ClassProperty<any>){
+    console.log(" .... add question and form group .... ");
     let myArr: ClassProperty<any>[] = new Array();
     myArr.push(classProperty);
-    this.questions = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
+    this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
+    this.formItem = this.formItems[0];
     
     // set question value in case of existing rule
     if (this.attributeTarget.value){
-        this.question.value = this.attributeTarget.value;
+        this.formItem.value = this.attributeTarget.value;
     }
      
-    this.ruleQuestionForm = this.dynamicFormItemControlService.toFormGroup(this.questions);
+    this.ruleQuestionForm = this.dynamicFormItemControlService.toFormGroup(this.formItems);
     this.ruleTargetAttributeForm.addControl('questionForm', this.ruleQuestionForm);
+
+    console.log("DISPLAYING FORMGROUP: ");
+    console.log("RAW: ");
+    console.log(this.ruleQuestionForm);
+
+    console.log("CONTROLS: ");
+    console.log(this.ruleQuestionForm.controls);
+
+    console.log("VALUES");
+    console.log(this.ruleQuestionForm.value);
+    //const formArray = this.ruleQuestionForm.controls['entries'] as FormArray;
+    //console.log(formArray.controls[0].get(this.formItem.key));
 
     // detect change in question form
     this.ruleTargetAttributeForm.get('questionForm').valueChanges.subscribe((change) => {
+     // const formArray = this.ruleQuestionForm.controls['entries'] as FormArray;
       this.ruleTargetAttributeForm.patchValue({
-          value: this.ruleTargetAttributeForm.get('questionForm').get(this.question.key).value});
+       // value: formArray.controls[0].get(this.formItem.key).value});
+      value: this.ruleTargetAttributeForm.get('questionForm').get(this.formItem.key).value});
        
-      this.attributeTarget.value = this.ruleTargetAttributeForm.get('questionForm').get(this.question.key).value;
+      this.attributeTarget.value = this.ruleTargetAttributeForm.get('questionForm').get(this.formItem.key).value;
+      //this.attributeTarget.value = formArray.controls[0].get(this.formItem.key).value;
     });
   }
 
@@ -146,13 +163,13 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   onPropertyChange(classProperty: ClassProperty<any>, $event) {
-    if (
-      $event.isUserInput &&
-      (!this.attributeTarget.classProperty ||
-        this.attributeTarget.classProperty.id != classProperty.id)
+    if ( $event.isUserInput &&
+          (!this.attributeTarget.classProperty ||
+          this.attributeTarget.classProperty.id != classProperty.id)
     ) {
       this.initAttributeTarget();
       this.attributeTarget.classProperty = classProperty;
+      console.log(" property changed!!!!!");
       // create new form for value
       this.addQuestionAndFormGroup(classProperty);
       

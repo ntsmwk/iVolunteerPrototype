@@ -33,9 +33,7 @@
         formControlName="value" />
     </mat-form-field>
     </div>
-    <div *ngIf="question">
-      <app-question [question]="question" [form]="ruleQuestionForm" 
-         (tupleSelected)="handleTupleSelection($event)"></app-question>
+    <div *ngIf="formItem">
+      <app-form-item [formItem]="formItem" [form]="ruleQuestionForm" 
+         (tupleSelected)="handleTupleSelection($event)"></app-form-item>
     </div>
-  </div>
-</form>

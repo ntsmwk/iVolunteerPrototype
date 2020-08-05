@@ -55,7 +55,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
-    private classPropertyService: ClassPropertyService,
     private parentForm: FormGroupDirective
   ) {
     this.rulePreconditionForm = formBuilder.group({

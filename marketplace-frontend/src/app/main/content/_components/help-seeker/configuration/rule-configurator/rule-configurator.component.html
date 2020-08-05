@@ -5,7 +5,7 @@
     [displayNavigateBack]="true"
     headerText="Einträge ableiten"
   ></customizable-header>
-  <div *ngIf="tenantAdmin && isFF()">
+  <!--<div *ngIf="tenantAdmin && isFF()">
     <div
       class="header-ff p-16 p-sm-24"
       fxLayout="row"
@@ -55,15 +55,15 @@
         >keyboard_return
       </mat-icon>
 
-      <h1 class="l-heading">Einträge ableiten</h1>
+      <h1 class="l-heading">Einträge ableiten</h1>-->
       <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
-    </div>
-  </div>
-
+    <!--</div>
+  </div>-->
+ <!--
   <p *ngIf="inputMissingError" class="alert alert-warn mt-10">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Bitte geben Sie Voluntär
     und Export-Datei an.
-  </p>
+  </p>-->
 
   <form
     *ngIf="derivationRule"
@@ -253,6 +253,3 @@
     </test-rule-configuration>
   </div>
 </div>
-<!--(change)="onChange($event)"-->
-<!-- (classConditionChange)="onChangeClassCondition($event)"-->
-<!-- [(ruleActionForm)] = "ruleActionForm[i]"-->

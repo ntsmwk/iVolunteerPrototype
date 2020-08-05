@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { DynamicFormItemBase } from '../../../../_model/dynamic-forms/item';
 import { isNullOrUndefined } from 'util';
 
@@ -25,6 +25,7 @@ export class DynamicFormItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.form.controls);
     if (this.formItem.required) {
       this.requiredMarker = '*';
     }

@@ -25,6 +25,7 @@ import { User, UserRole } from "app/main/content/_model/user";
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
+import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
 
 @Component({
   selector: "target-rule-configurator",
@@ -57,6 +58,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
+    private classPropertyService: ClassPropertyService,
     private parent: FormGroupDirective
   ) {
     //this.actionForm = this.parent.form;
@@ -128,6 +130,15 @@ export class TargetRuleConfiguratorComponent implements OnInit {
           (cd) => cd.id === this.parent.form.get('ruleActionForm').get('classDefinitionId').value
         );*/
         this.classAction.classDefinition = classDefinition;
+        this.classPropertyService
+        .getAllClassPropertiesFromClass(
+          this.marketplace,
+          classDefinition.id
+        )
+        .toPromise()
+        .then((props: ClassProperty<any>[]) => {
+          this.classProperties = props;
+        });
         this.classAction.attributes = new Array();
         this.classActionChange.emit(this.classAction);
       }

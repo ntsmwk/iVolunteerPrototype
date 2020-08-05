@@ -84,11 +84,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.tenantAdmin = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
+    console.log("tenant = " + this.tenant.id);
 
     this.route.params.subscribe((params) => {
       this.loadDerivationRule(this.marketplace, params["ruleId"]);
     });
 
+    console.log("tenant: " + this.tenant.id);
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
         .getAllClassDefinitionsWithoutHeadAndEnums(
@@ -97,6 +99,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
         )
         .toPromise()
     );
+    console.log("class definitions loaded!!!! --> " + this.classDefinitions.length);
 
     this.tenant = <Tenant>(
       await this.tenantService.findById(this.tenant.id).toPromise()
@@ -225,5 +228,17 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   addClassCondition() {
     this.derivationRule.conditions.push(new ClassCondition());
     this.deactivateSubmit = false;
+  }
+
+  private isFF() {
+    console.log("this.tenant.id: " + this.tenant.id + ", name: " + this.tenant.name);
+    return this.tenant.name === "FF Eidenberg";
+  }
+
+  private isMV() {
+    return this.tenant.name === "MV Schwertberg";
+  }
+  private isOther() {
+    return !this.isFF() && !this.isMV();
   }
 }

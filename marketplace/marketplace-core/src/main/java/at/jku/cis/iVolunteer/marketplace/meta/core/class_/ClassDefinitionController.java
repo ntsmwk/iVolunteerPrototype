@@ -37,6 +37,7 @@ public class ClassDefinitionController {
 
 	@GetMapping("meta/core/class/definition/all/no-enum-no-head/tenant/{tenantId}")
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(@PathVariable("tenantId") String tenantId) {
+		System.out.println(" ---> get all class definitions for tenant: " + tenantId);
 		return classDefinitionService.getAllClassDefinitionsWithoutEnumsAndHeads(tenantId);
 	}
 

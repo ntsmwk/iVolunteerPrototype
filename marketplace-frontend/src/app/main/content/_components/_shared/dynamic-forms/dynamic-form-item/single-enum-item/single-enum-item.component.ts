@@ -31,6 +31,9 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    console.log("init single enum item!!!!!!");
+    console.log(this.formItem);
+    console.log(this.form);
     this.listOptions = [];
     this.listOptions.push(...this.formItem.options);
     this.datasource.data = this.listOptions;

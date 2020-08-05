@@ -9,6 +9,13 @@ export class DynamicFormItemControlService {
   constructor() { }
 
   toFormGroup(formItems: DynamicFormItemBase<any>[]) {
+    /*const fb: FormBuilder = new FormBuilder();
+    const parent = fb.group({});
+    const ret = this.addChildToGroup(fb, formItems, parent);
+
+    // console.log(ret.controls);
+    return ret; <--- alte version */ 
+    
     const fb: FormBuilder = new FormBuilder();
     const outerGroup = fb.group({});
     const array = fb.array([]);

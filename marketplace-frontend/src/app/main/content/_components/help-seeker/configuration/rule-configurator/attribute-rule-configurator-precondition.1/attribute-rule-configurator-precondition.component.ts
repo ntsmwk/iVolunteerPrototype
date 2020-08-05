@@ -57,8 +57,8 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   classProperties: ClassProperty<any>[] = [];
   comparisonOperators: any;
 
-  questions: DynamicFormItemBase<any>[] = [];
-  question: DynamicFormItemBase<any>;
+  formItems: DynamicFormItemBase<any>[] = [];
+  formItem: DynamicFormItemBase<any>;
 
   propertyDefinition: PropertyDefinition<any>;
 
@@ -160,22 +160,23 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   private addQuestionAndFormGroup(classProperty: ClassProperty<any>){
       let myArr: ClassProperty<any>[] = new Array();
       myArr.push(classProperty);
-      this.questions = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
+      this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
+      // this.formItem = this.formItems[0]; XXX brauche ich das?
       
       if (this.attributeCondition.value){
-        this.question.value = this.attributeCondition.value;
+        this.formItem.value = this.attributeCondition.value;
       } 
       
       // add question form to parent form
-      this.ruleQuestionForm = this.questionControlService.toFormGroup(this.questions);
+      this.ruleQuestionForm = this.questionControlService.toFormGroup(this.formItems);
       this.rulePreconditionForm.addControl('questionForm', this.ruleQuestionForm);
       // detect change in question form
       this.rulePreconditionForm.get('questionForm').valueChanges.subscribe((change) => {
         // update value in form with selection from question form
         this.rulePreconditionForm.patchValue({
-            value: this.rulePreconditionForm.get('questionForm').get(this.question.key).value
+            value: this.rulePreconditionForm.get('questionForm').get(this.formItem.key).value
         });
-        this.attributeCondition.value = this.rulePreconditionForm.get('questionForm').get(this.question.key).value;
+        this.attributeCondition.value = this.rulePreconditionForm.get('questionForm').get(this.formItem.key).value;
       });
   }
 
