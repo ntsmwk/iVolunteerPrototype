@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace._mapper.relationship.RelationshipMapper;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinitionDTO;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 //import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfigurationPreviewRequest;
@@ -22,8 +25,10 @@ import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 public class ClassDefinitionController {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipMapper relationshipMapper;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassDefinitionMapper classDefinitionMapper;
+	
 
 	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")
 	private List<ClassDefinition> getAllClassDefinitions(@PathVariable("tenantId") String tenantId) {
@@ -116,8 +121,11 @@ public class ClassDefinitionController {
 
 	@PutMapping("meta/core/class/definition/form-configuration-preview")
 	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
+		
+		List<Relationship> relationships = relationshipMapper.toSources(request.getRelationships());
+		
 		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(),
-				request.getRelationships(), request.getRootClassDefinition());
+				relationships, request.getRootClassDefinition());
 		return ret;
 	}
 	

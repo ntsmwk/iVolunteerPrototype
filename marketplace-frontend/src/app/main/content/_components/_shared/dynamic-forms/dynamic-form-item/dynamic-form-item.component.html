@@ -48,7 +48,6 @@
           <mat-option *ngFor="let opt of formItem.options" [value]="opt">{{opt}}</mat-option>
         </mat-select>
         <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
-        <!-- {{ formItem.value }} - {{ formItem.values }} -->
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'radiobutton'" floatPlaceholder="always">
@@ -115,21 +114,6 @@
         <app-single-enum-item [formItem]="formItem" [form]="form"></app-single-enum-item>
       </div>
 
-      <!-- <mat-form-field class="form-field" *ngSwitchCase="'level-dropdown-multiple'">
-        <mat-select placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
-          [id]="formItem.key" [value]="formItem.value" multiple>
-          <div *ngFor="let opt of formItem.options">
-            <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">
-              <mat-option *ngIf="opt.selectable" [value]="opt.value">
-                {{opt.value}}
-              </mat-option>
-
-              <label class="mat-menu-item" disabled style="color: black" *ngIf="!opt.selectable">{{opt.value}}</label>
-            </div>
-          </div>
-        </mat-select>
-        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
-      </mat-form-field> -->
       <div *ngSwitchCase="'enum-multiple'">
         <app-multiple-enum [formItem]="formItem"></app-multiple-enum>
       </div>

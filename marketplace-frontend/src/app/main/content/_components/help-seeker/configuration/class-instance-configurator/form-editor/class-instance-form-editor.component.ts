@@ -1,34 +1,34 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { DynamicFormItemService } from "app/main/content/_service/dynamic-form-item.service";
-import { DynamicFormItemControlService } from "app/main/content/_service/dynamic-form-item-control.service";
-import { Marketplace } from "app/main/content/_model/marketplace";
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
+import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
+import { Marketplace } from 'app/main/content/_model/marketplace';
 import {
   FormConfiguration,
   FormEntryReturnEventData,
   FormEntry
-} from "app/main/content/_model/meta/form";
-import { ClassInstance } from "app/main/content/_model/meta/class";
-import { Router, ActivatedRoute } from "@angular/router";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { ObjectIdService } from "app/main/content/_service/objectid.service.";
-import { FormGroup, FormControl } from "@angular/forms";
+} from 'app/main/content/_model/meta/form';
+import { ClassInstance } from 'app/main/content/_model/meta/class';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
+import { FormGroup, FormControl } from '@angular/forms';
 import {
   PropertyInstance,
   PropertyType,
   ClassProperty
-} from "app/main/content/_model/meta/property";
-import { isNullOrUndefined } from "util";
-import { LoginService } from "app/main/content/_service/login.service";
-import { User, UserRole } from "app/main/content/_model/user";
-import { GlobalInfo } from "app/main/content/_model/global-info";
-import { Tenant } from "app/main/content/_model/tenant";
+} from 'app/main/content/_model/meta/property';
+import { isNullOrUndefined } from 'util';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { User, UserRole } from 'app/main/content/_model/user';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { Tenant } from 'app/main/content/_model/tenant';
 
 @Component({
   selector: "app-class-instance-form-editor",
-  templateUrl: "./class-instance-form-editor.component.html",
-  styleUrls: ["./class-instance-form-editor.component.scss"],
+  templateUrl: './class-instance-form-editor.component.html',
+  styleUrls: ['./class-instance-form-editor.component.scss'],
   providers: [DynamicFormItemService, DynamicFormItemControlService]
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
@@ -46,13 +46,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   finishClicked = false;
   showResultPage = false;
 
-  //
   canSubmitForm = true;
   errorOccurredInForm = false;
 
-  // results: FormEntryReturnEventData[];
 
-  @ViewChild("contentDiv", { static: false }) contentDiv: ElementRef;
+  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
   resultClassInstance: ClassInstance;
 
   constructor(
@@ -82,7 +80,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     Promise.all([
       this.route.params.subscribe(params => {
-        marketplaceId = params["marketplaceId"];
+        marketplaceId = params['marketplaceId'];
       }),
       this.route.queryParams.subscribe(queryParams => {
         let i = 0;
@@ -150,10 +148,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let pathPrefix: string;
 
     Object.keys(evt.formGroup.controls).forEach(c => {
-      if (c.endsWith("unableToContinue")) {
+      if (c.endsWith('unableToContinue')) {
         unableToContinueControlKey = c;
         unableToContinueControl = evt.formGroup.controls[c] as FormControl;
-        pathPrefix = c.replace(/\.[^.]*unableToContinue/, "");
+        pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
       }
     });
 
@@ -175,9 +173,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         currentFormEntry.imagePath = retFormEntry.imagePath;
         currentFormEntry.formItems = retFormEntry.formItems;
         currentFormEntry.subEntries = retFormEntry.subEntries;
-
-        // this.expectedNumberOfResults = 0;
-        // this.calculateExpectedResults(this.currentFormConfiguration.formEntry);
       });
   }
 
@@ -196,13 +191,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return this.getFormEntry(pathString, currentFormEntry.id, currentFormEntry);
   }
 
-  // private calculateExpectedResults(formEntry: FormEntry) {
-  //   this.expectedNumberOfResults++;
-  //   for (const subFormEntry of formEntry.subEntries) {
-  //     this.calculateExpectedResults(subFormEntry);
-  //   }
-  // }
-
   handleFinishClick() {
     this.canSubmitForm = false;
     this.errorOccurredInForm = false;
@@ -216,38 +204,18 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   handleErrorEvent(event: boolean) {
     this.errorOccurredInForm = this.errorOccurredInForm || event;
-    // console.log(this.errorOccurred);
-    // console.log(event);
-    // console.log(this.errorOccurredInForm);
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
-    // this.results.push(event);
-    // console.log(event);
-
     setTimeout(() => {
       if (!this.errorOccurredInForm) {
         this.createInstanceFromResults(event);
       }
       this.finishClicked = false;
     });
-
-    // if (this.results.length === this.expectedNumberOfResults) {
-    //   this.createInstanceFromResults();
-    //   // this.printDebug();
-
-    //   setTimeout(() => {
-    //     this.finishClicked = false;
-    //   });
-    // } else {
-    //   this.finishClicked = false;
-    //   console.log("not create yet")
-    // }
   }
 
   private createInstanceFromResults(result: FormEntryReturnEventData) {
-    // const allControls = this.getAllControlsFromResults();
-
     const classInstances: ClassInstance[] = [];
     const tenantId = this.tenantAdmin.subscribedTenants.find(
       t => t.role === UserRole.TENANT_ADMIN
@@ -284,19 +252,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         this.showResultPage = true;
       });
   }
-
-  // private getAllControlsFromResults() {
-  //   const allControls: { id: string; control: AbstractControl }[] = [];
-
-  //   for (const result of this.results) {
-  //     const ids = Object.keys(result.formGroup.controls);
-  //     for (const id of ids) {
-  //       allControls.push({ id: id, control: result.formGroup.controls[id] });
-  //     }
-  //   }
-
-  //   return allControls;
-  // }
 
   private createClassInstance(
     formEntry: FormEntry,
@@ -348,7 +303,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           subEntry,
           next[subEntry.id]
         );
-        // this.findSubEntryResult(subEntry.id, result);
         classInstance.childClassInstances.push(subClassInstance);
       }
     }
@@ -363,7 +317,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const propertyInstances: PropertyInstance<any>[] = [];
     for (const classProperty of classProperties) {
       // skip "unableToContinue" Properties
-      if (classProperty.id.endsWith("unableToContinue")) {
+      if (classProperty.id.endsWith('unableToContinue')) {
         continue;
       }
 
@@ -378,7 +332,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         new PropertyInstance(classProperty, [value])
       );
 
-      // console.log(propertyInstances[l - 1]);
     }
     return propertyInstances;
   }
@@ -386,58 +339,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   private findSubEntryResult(subEntryId: string, result: any[]) {
     return result.find(r => Object.keys(r)[0] === subEntryId);
   }
-
-  // private createClassInstance(parentEntry: FormEntry, currentPath: string, controls: { id: string; control: AbstractControl }[]) {
-  //   const propertyInstances: PropertyInstance<any>[] = [];
-  //   for (const classProperty of parentEntry.classProperties) {
-  //     // skip "unableToContinue" Properties
-  //     if (classProperty.id.endsWith('unableToContinue')) {
-  //       continue;
-  //     }
-
-  //     const control = controls.find(c => c.id === currentPath + '.' + classProperty.id);
-
-  //     let value: any;
-  //     if (classProperty.type === PropertyType.FLOAT_NUMBER) {
-  //       value = Number(control.control.value);
-  //     } else if (classProperty.type === PropertyType.WHOLE_NUMBER) {
-  //       value = Number.parseInt(control.control.value, 10);
-  //     } else {
-  //       value = control.control.value;
-  //     }
-  //     // const l = propertyInstances.push(
-  //     //   new PropertyInstance(classProperty, [value])
-  //     // );
-
-  //     // if (classProperty.type === PropertyType.ENUM) {
-  //     //   let i = propertyInstances[l - 1].allowedValues.findIndex(a => a.id === value.id);
-  //     //   let currentLevel = value.level;
-  //     //   for (i; i >= 0; i--) {
-  //     //     if (propertyInstances[l - 1].allowedValues[i].level < currentLevel) {
-  //     //       propertyInstances[l - 1].values.push(propertyInstances[l - 1].allowedValues[i]);
-  //     //       currentLevel--;
-  //     //     }
-  //     //   }
-  //     // }
-
-  //     // console.log(propertyInstances[l - 1]);
-  //   }
-
-  //   const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
-  //   classInstance.childClassInstances = [];
-  //   classInstance.id = this.objectIdService.getNewObjectId();
-  //   classInstance.marketplaceId = this.marketplace.id;
-
-  //   if (!isNullOrUndefined(parentEntry.subEntries)) {
-  //     console.log(parentEntry);
-  //     for (const subEntry of parentEntry.subEntries) {
-  //       const subClassInstance = this.createClassInstance(subEntry, subEntry.id, controls);
-
-  //       classInstance.childClassInstances.push(subClassInstance);
-  //     }
-  //   }
-  //   return classInstance;
-  // }
 
   handleCancelEvent() {
 

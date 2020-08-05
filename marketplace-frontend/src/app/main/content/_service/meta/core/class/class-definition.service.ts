@@ -128,7 +128,7 @@ export class ClassDefinitionService {
     return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration`, ids);
   }
 
-  getFromConfigurationPreview(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
+  getFormConfigurationPreview(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
     const formConfigurationPreviewRequest = new FormConfigurationPreviewRequest(classDefinitions, relationships, rootClassDefinition);
     return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration-preview`, formConfigurationPreviewRequest);
   }

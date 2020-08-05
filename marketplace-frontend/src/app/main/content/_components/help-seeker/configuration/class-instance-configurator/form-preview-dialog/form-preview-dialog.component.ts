@@ -8,9 +8,10 @@ import { FormConfiguration, FormEntry, FormEntryReturnEventData } from 'app/main
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { isNullOrUndefined } from 'util';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export interface ClassInstanceFormPreviewDialogData {
-    marketplace: Marketplace;
     classDefinitions: ClassDefinition[];
     relationships: Relationship[];
     rootClassDefinition: ClassDefinition;
@@ -31,6 +32,7 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
     expectedNumberOfResults: number;
 
+    marketplace: Marketplace;
 
     isLoaded = false;
 
@@ -42,17 +44,18 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
         private classDefinitionService: ClassDefinitionService,
         private formItemService: DynamicFormItemService,
         private formItemControlService: DynamicFormItemControlService,
+        private loginService: LoginService,
     ) {
     }
 
-    ngOnInit() {
+    async ngOnInit() {
 
-        console.log(this.data);
+        const globalInfo = <GlobalInfo>(await this.loginService.getGlobalInfo().toPromise());
 
         this.returnedClassInstances = [];
 
         this.classDefinitionService
-            .getFromConfigurationPreview(this.data.marketplace, this.data.classDefinitions, this.data.relationships, this.data.rootClassDefinition)
+            .getFormConfigurationPreview(globalInfo.marketplace, this.data.classDefinitions, this.data.relationships, this.data.rootClassDefinition)
             .toPromise()
             .then((ret: FormConfiguration[]) => {
                 this.formConfigurations = ret;

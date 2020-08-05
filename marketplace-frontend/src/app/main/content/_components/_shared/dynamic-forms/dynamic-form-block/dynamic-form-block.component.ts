@@ -51,8 +51,9 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
   @Output() errorEvent: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private formItemControlService: DynamicFormItemControlService,
-    private classDefinitionService: ClassDefinitionService) { }
+  constructor(
+    private formItemControlService: DynamicFormItemControlService
+  ) { }
 
   ngOnInit() {
     if (isNullOrUndefined(this.form)) {
@@ -90,8 +91,6 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
       console.log("emitting error event");
       this.errorEvent.emit(true);
 
-
-
       // focus on first error using jQuery
       $('input.ng-invalid').first().focus();
 
@@ -104,13 +103,10 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
   private markFormAsTouched(formItem: DynamicFormItemBase<any>[], control: FormGroup) {
     for (const item of formItem) {
       control.controls[item.key].markAsTouched();
-
     }
-
   }
 
   fireResultEvent() {
-    console.log(this.form.value);
     this.resultEvent.emit(new FormEntryReturnEventData(this.formConfiguration.id, this.form.value));
   }
 
