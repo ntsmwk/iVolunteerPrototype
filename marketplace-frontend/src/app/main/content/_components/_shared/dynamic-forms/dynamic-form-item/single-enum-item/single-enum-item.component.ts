@@ -28,8 +28,6 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
   @ViewChild('enumListContainer', { static: true }) listContainerDom: ElementRef;
   @ViewChild('enumFormItemContainer', { static: true }) formItemContainerDom: ElementRef;
 
-
-
   ngOnInit() {
     this.listOptions = [];
     this.listOptions.push(...this.formItem.options);
@@ -56,6 +54,7 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
   }
 
   onSelectOption(option: EnumEntry) {
+    this.form.controls[this.formItem.key].setValue(option);
     this.formItem.value = option;
     this.onHideList();
   }
