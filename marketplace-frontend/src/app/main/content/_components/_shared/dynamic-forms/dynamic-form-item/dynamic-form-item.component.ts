@@ -25,7 +25,9 @@ export class DynamicFormItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.form.controls);
+    console.log(this.formItem);
+    console.log(this.form);
+
     if (this.formItem.required) {
       this.requiredMarker = '*';
     }
