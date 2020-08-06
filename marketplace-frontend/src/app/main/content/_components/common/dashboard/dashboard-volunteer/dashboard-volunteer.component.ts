@@ -207,10 +207,6 @@ export class DashboardVolunteerComponent implements OnInit {
     this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
   }
 
-  navigateToTenantOverview() {
-    this.router.navigate(["/main/dashboard/tenants"]);
-  }
-
   navigateToClassInstanceDetails(row) {
     this.router.navigate(["main/details/" + row.id]);
   }

@@ -37,16 +37,29 @@ public class CoreLoginController {
 
 		CoreUser user = loginService.getLoggedInUser();
 
-		globalInfo.setUser(user);
-		globalInfo.setUserRole(role);
+		if (user != null) {
+			globalInfo.setUser(user);
+		}
+
+		if (role != null) {
+			globalInfo.setUserRole(role);
+		}
+
+		if (tenantIds.size() > 0) {
+			if (role == UserRole.VOLUNTEER) {
+				globalInfo.setTenants(user.getSubscribedTenants().stream()
+						.filter(s -> s.getRole() == UserRole.VOLUNTEER).map(s -> s.getTenantId())
+						.map(id -> this.tenantService.getTenantById(id)).collect((Collectors.toList())));
+			} else {
+				globalInfo.setTenants(tenantIds.stream().map(id -> this.tenantService.getTenantById(id))
+						.collect(Collectors.toList()));
+			}
+		}
 
 		final List<String> registeredMarketplaceIds = user.getRegisteredMarketplaceIds();
 		if (registeredMarketplaceIds.size() > 0) {
 			globalInfo.setMarketplace(this.marketplaceRepository.findOne(registeredMarketplaceIds.get(0)));
 		}
-
-		globalInfo.setTenants(
-				tenantIds.stream().map(id -> this.tenantService.getTenantById(id)).collect(Collectors.toList()));
 
 		return globalInfo;
 	}

@@ -28,8 +28,6 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
   @ViewChild('enumListContainer', { static: true }) listContainerDom: ElementRef;
   @ViewChild('enumFormItemContainer', { static: true }) formItemContainerDom: ElementRef;
 
-
-
   ngOnInit() {
     this.listOptions = [];
     this.listOptions.push(...this.formItem.options);
@@ -91,17 +89,4 @@ export class SingleEnumItemComponent implements OnInit, AfterViewInit {
     this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
-  // getMultipleValues(formItem: MultipleSelectionEnumformItem) {
-  //   let ret = '';
-
-
-
-  //   if (!isNullOrUndefined(formItem.values)) {
-  //     for (let val of formItem.values) {
-  //       ret = ret + ", " + val;
-  //     }
-  //   }
-
-  //   return ret;
-  // }
 }

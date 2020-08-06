@@ -21,7 +21,6 @@ import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { Tenant } from 'app/main/content/_model/tenant';
 
 export interface ClassInstanceFormPreviewExportDialogData {
-  marketplace: Marketplace;
   classConfigurationIds: string[];
 }
 
@@ -47,6 +46,8 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   tenantAdmin: User;
   tenant: Tenant;
 
+  globalInfo: GlobalInfo;
+
   constructor(
     public dialogRef: MatDialogRef<
       ClassInstanceFormPreviewExportDialogComponent
@@ -64,15 +65,15 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     this.returnedClassInstances = [];
     this.expectedNumberOfResults = 0;
 
-    const globalInfo = <GlobalInfo>(
+    this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    this.tenantAdmin = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
+    this.tenantAdmin = this.globalInfo.user;
+    this.tenant = this.globalInfo.tenants[0];
 
     this.classDefinitionService
       .getFormConfigurations(
-        this.data.marketplace,
+        this.globalInfo.marketplace,
         this.data.classConfigurationIds
       )
       .toPromise()
@@ -150,11 +151,11 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     });
 
     unableToContinueQuestion = evt.formEntry.formItems.find((item) => item.key.endsWith('unableToContinue'));
-    console.log(this.data.marketplace);
+    console.log(this.globalInfo.marketplace);
     console.log(pathPrefix);
     console.log(evt.selection.id);
 
-    this.classDefinitionService.getFormConfigurationChunk(this.data.marketplace, pathPrefix, evt.selection.id)
+    this.classDefinitionService.getFormConfigurationChunk(this.globalInfo.marketplace, pathPrefix, evt.selection.id)
       .toPromise()
       .then((retFormEntry: FormEntry) => {
         const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);

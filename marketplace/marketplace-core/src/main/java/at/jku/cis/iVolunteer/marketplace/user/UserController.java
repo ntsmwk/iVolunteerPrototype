@@ -16,7 +16,8 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @RestController
 public class UserController {
-	@Autowired private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@GetMapping("/user/{id}")
 	private User findUserById(@PathVariable("id") String id) {
