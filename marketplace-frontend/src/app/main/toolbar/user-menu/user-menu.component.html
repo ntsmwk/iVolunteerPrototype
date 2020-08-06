@@ -10,7 +10,11 @@
   </button>
 
   <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
-    <button mat-menu-item routerLink="/main/dashboard/tenants">
+    <button
+      *ngIf="role == 'VOLUNTEER' || role == 'HELP_SEEKER'"
+      mat-menu-item
+      routerLink="/main/dashboard/tenants"
+    >
       <mat-icon>account_balance</mat-icon>
       <span>Organisationen verwalten</span>
     </button>
