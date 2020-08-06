@@ -29,6 +29,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
   possibleRoleTenantMappings: roleTenantMapping[] = [];
 
   onRoleChanged: Subscription;
+  onUpdate: Subscription;
   isLoaded: boolean = false;
 
   constructor(
@@ -39,9 +40,11 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private imageService: ImageService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
-      if (!this.isLoaded) {
-        this.ngOnInit();
-      }
+      this.ngOnInit();
+    });
+
+    this.onUpdate = this.roleChangeService.onUpdate.subscribe(() => {
+      this.ngOnInit();
     });
   }
 
@@ -89,6 +92,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.onRoleChanged.unsubscribe();
+    this.onUpdate.unsubscribe();
   }
 
   getCurrentRoleNameString() {

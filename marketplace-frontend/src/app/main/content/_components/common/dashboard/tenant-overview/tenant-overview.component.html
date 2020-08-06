@@ -1,4 +1,5 @@
 <div
+  *ngIf="isLoaded"
   class="page-layout blank p-24"
   fusePerfectScrollbar
   style="overflow: scroll;"
@@ -11,6 +12,7 @@
     fxLayoutAlign="space-between center"
   >
     <mat-icon
+      *ngIf="user.subscribedTenants.length != 0"
       class="iconButton"
       (click)="navigateBack()"
       style="margin-left: 20px; color: white;"
@@ -19,29 +21,14 @@
 
     <h1>Organisationen</h1>
   </div>
-  <!-- 
-  <div
-    fxLayout="row"
-    fxLayoutAlign="center stretch"
-    style="overflow: hidden;"
-    class="p-20"
-  >
-    <div *ngFor="let t of tenants" class="mat-card org-card p-10 m-30">
-      <img
-        mat-card-image
-        [src]="getTenantImage(t)"
-        class="org-card-img"
-        style="object-fit: contain; max-width: 100%; max-height: 100%;"
-      />
-      <div class="mat-card-header"></div>
-      <div class="mat-card-content">
-        <strong>{{ t.name | truncate: [15] }}</strong>
-      </div>
-    </div>
-  </div> -->
 
-  <div fxLayout="row" fxLayoutAlign="space-around stretch">
-    <mat-card *ngFor="let t of tenants" class="org-card p-10">
+  <p *ngIf="user.subscribedTenants.length == 0" class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Du bist noch keiner
+    Organisation beigetreten!
+  </p>
+
+  <div fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+    <mat-card *ngFor="let t of allTenants" class="org-card p-10">
       <div style="height: 160px;">
         <img
           mat-card-image
@@ -55,24 +42,60 @@
           <strong>{{ t.name | truncate: [20] }}</strong>
         </p>
       </div>
-      <div *ngIf="isSubscribed(t)">
+      <div
+        *ngIf="isSubscribed(t, 'VOLUNTEER')"
+        fxLayout="column"
+        fxLayoutAlign="space-around center"
+      >
         <button
           class="subscribeBtn"
           mat-raised-button
           color="warn"
-          (click)="unsubscribe(t)"
+          (click)="unsubscribe(t, 'VOLUNTEER')"
         >
-          Abmelden
+          Als Freiwilliger abmelden
         </button>
       </div>
-      <div *ngIf="!isSubscribed(t)">
+      <div
+        *ngIf="!isSubscribed(t, 'VOLUNTEER')"
+        fxLayout="column"
+        fxLayoutAlign="space-around center"
+      >
         <button
           class="subscribeBtn"
           mat-raised-button
           color="primary"
-          (click)="subscribe(t)"
+          (click)="subscribe(t, 'VOLUNTEER')"
         >
-          Beitreten
+          Als Freiwilliger beitreten
+        </button>
+      </div>
+      <div
+        *ngIf="isSubscribed(t, 'HELP_SEEKER')"
+        fxLayout="column"
+        fxLayoutAlign="space-around center"
+      >
+        <button
+          class="subscribeBtn"
+          mat-raised-button
+          color="warn"
+          (click)="unsubscribe(t, 'HELP_SEEKER')"
+        >
+          Als Hilfesuchender abmelden
+        </button>
+      </div>
+      <div
+        *ngIf="!isSubscribed(t, 'HELP_SEEKER')"
+        fxLayout="column"
+        fxLayoutAlign="space-around center"
+      >
+        <button
+          class="subscribeBtn"
+          mat-raised-button
+          color="primary"
+          (click)="subscribe(t, 'HELP_SEEKER')"
+        >
+          Als Hilfesuchender beitreten
         </button>
       </div>
     </mat-card>

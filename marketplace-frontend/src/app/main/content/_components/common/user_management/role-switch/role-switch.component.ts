@@ -41,6 +41,12 @@ export class RoleSwitchComponent implements OnInit {
       this.user
     );
 
+    if (this.roleTenantMappings.length === 0) {
+      this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
+        this.router.navigate(["/main/dashboard/tenants"]);
+      });
+    }
+
     if (this.roleTenantMappings.length === 1) {
       this.onRoleSelected(this.roleTenantMappings[0]);
     }
