@@ -1,14 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.rule.engine.test;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -16,61 +11,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
-import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances.RolesAmbulanceService;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
-import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
 import at.jku.cis.iVolunteer.model.user.User;
 
 @Service
 public class TestDataInstances {
 
-	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private ClassInstanceService classInstanceService;
-	@Autowired
-	private ClassPropertyService classPropertyService;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private ClassInstanceService classInstanceService;
+	@Autowired private ClassPropertyService classPropertyService;
 
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
-	@Autowired
-	private UserRepository userRepository;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired private UserRepository userRepository;
 
-	@Autowired
-	private TestDataClasses testDataClasses;
+	@Autowired private TestDataClasses testDataClasses;
 
 	public static final String CERTIFICATE_SEF_MODUL1 = "SEF-Modul 1";
 	public static final String CERTIFICATE_SEF_MODUL2 = "SEF-Modul 2";

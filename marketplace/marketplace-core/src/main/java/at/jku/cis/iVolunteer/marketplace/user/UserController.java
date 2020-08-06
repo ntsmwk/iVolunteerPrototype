@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.user;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
-import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.UserRole;
-
-import javax.ws.rs.BadRequestException;
 
 @RestController
 public class UserController {

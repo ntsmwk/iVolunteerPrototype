@@ -3,6 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { LoginService } from 'app/main/content/_service/login.service';
 
 export interface ChangeIconDialogData {
   marketplace: Marketplace;
@@ -19,6 +21,7 @@ export class ChangeIconDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ChangeIconDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ChangeIconDialogData,
+    private loginService: LoginService,
   ) {
   }
 
@@ -47,13 +50,21 @@ export class ChangeIconDialogComponent implements OnInit {
   ];
 
   prevTile = undefined;
+  globalInfo: GlobalInfo;
 
-  ngOnInit() {
+
+  async ngOnInit() {
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+
     this.numbers = [];
 
     for (let i = 0; i < 36; i++) {
       this.numbers.push(i);
     }
+
+
 
   }
   onSelectionClick(event: any, tile: any, imagePath: any) {

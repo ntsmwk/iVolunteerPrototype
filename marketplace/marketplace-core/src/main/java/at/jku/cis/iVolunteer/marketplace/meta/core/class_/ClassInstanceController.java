@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -19,28 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @RestController
 public class ClassInstanceController {
 
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceMapper classInstanceMapper;
-	@Autowired
-	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
-	@Autowired
-	private DateTimeService dateTimeService;
-	@Autowired
-	private MarketplaceService marketplaceService;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceMapper classInstanceMapper;
+	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired private DateTimeService dateTimeService;
+	@Autowired private MarketplaceService marketplaceService;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,

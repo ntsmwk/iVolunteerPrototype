@@ -1,11 +1,7 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
-  <customizable-header
-    *ngIf="tenant"
-    [tenant]="tenant"
-    [displayNavigateBack]="true"
-    headerText="Einträge ableiten"
-  ></customizable-header>
-  <div *ngIf="tenantAdmin && isFF()">
+  <customizable-header *ngIf="tenant" [tenant]="tenant" [displayNavigateBack]="true" headerText="Einträge ableiten">
+  </customizable-header>
+  <!--<div *ngIf="tenantAdmin && isFF()">
     <div
       class="header-ff p-16 p-sm-24"
       fxLayout="row"
@@ -55,46 +51,27 @@
         >keyboard_return
       </mat-icon>
 
-      <h1 class="l-heading">Einträge ableiten</h1>
-      <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
-    </div>
-  </div>
-
+      <h1 class="l-heading">Einträge ableiten</h1>-->
+  <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
+  <!--</div>
+  </div>-->
+  <!--
   <p *ngIf="inputMissingError" class="alert alert-warn mt-10">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Bitte geben Sie Voluntär
     und Export-Datei an.
-  </p>
+  </p>-->
 
-  <form
-    *ngIf="derivationRule"
-    form
-    style="padding-top: 12px; padding-left: 40px;"
-    name="form"
-    fxLayout="column"
-    fxLayoutGap="20px"
-    fxLayoutAlign="start"
-    (change)="onChange($event)"
-    (submit)="save()"
-    [formGroup]="ruleForm"
-  >
+  <form *ngIf="derivationRule" form style="padding-top: 12px; padding-left: 40px;" name="form" fxLayout="column"
+    fxLayoutGap="20px" fxLayoutAlign="start" (change)="onChange($event)" (submit)="save()" [formGroup]="ruleForm">
     <div fxLayout="row">
       <mat-form-field class="nameInput">
-        <input
-          matInput
-          placeholder="Regelname"
-          (change)="onChangeName($event)"
-          formControlName="name"
-        />
+        <input matInput placeholder="Regelname" (change)="onChangeName($event)" formControlName="name" />
         <mat-error *ngFor="let validation of ruleValidationMessages.name">
-          <mat-error
-            class="error-message"
-            *ngIf="
+          <mat-error class="error-message" *ngIf="
               ruleForm.get('name').hasError(validation.type) &&
               (ruleForm.get('name').dirty || ruleForm.get('name').touched)
-            "
-          >
-            {{ validation.message }}</mat-error
-          >
+            ">
+            {{ validation.message }}</mat-error>
         </mat-error>
       </mat-form-field>
     </div>
@@ -103,13 +80,8 @@
       <mat-divider></mat-divider>
       <div fxFlex fxLayout="row" fxLayoutAlign="start start">
         <div fxLayout="column" fxLayoutAlign="space-between center">
-          <div
-            style="z-index: 255; position: relative; width: 35px; height: 35px;"
-          >
-            <img
-              style="object-fit: contain; max-width: 100%; max-height: 100%;"
-              src="../../../assets/competence.jpg"
-            />
+          <div style="z-index: 255; position: relative; width: 35px; height: 35px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/competence.jpg" />
           </div>
         </div>
         <div style="padding-top: 3px; padding-left: 5px;">
@@ -120,10 +92,8 @@
     </div>
     <div fxLayout="row" fxLayoutAlign="start start">
       <div *ngFor="let entry of derivationRule.classActions">
-        <target-rule-configurator
-          [(classAction)]="entry"
-          (classActionChange)="onChangeClassAction($event)"
-        ></target-rule-configurator>
+        <target-rule-configurator [(classAction)]="entry" (classActionChange)="onChangeClassAction($event)">
+        </target-rule-configurator>
       </div>
     </div>
     <!--<div>
@@ -140,13 +110,8 @@
       <mat-divider></mat-divider>
       <div fxFlex fxLayout="row" fxLayoutAlign="start start">
         <div fxLayout="column" fxLayoutAlign="space-between center">
-          <div
-            style="z-index: 255; position: relative; width: 35px; height: 35px;"
-          >
-            <img
-              style="object-fit: contain; max-width: 100%; max-height: 100%;"
-              src="../../../assets/checklist.jpg"
-            />
+          <div style="z-index: 255; position: relative; width: 35px; height: 35px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/checklist.jpg" />
           </div>
         </div>
         <div style="padding-top: 3px; padding-left: 5px;">
@@ -157,19 +122,12 @@
     </div>
     <div formArrayName="genConditionForms">
       <div *ngFor="let entry of derivationRule.generalConditions">
-        <general-precondition
-          [(generalCondition)]="entry"
-          (onChangeGeneralCondition)="onChangeGeneralCondition($event)"
-        ></general-precondition>
+        <general-precondition [(generalCondition)]="entry"
+          (onChangeGeneralCondition)="onChangeGeneralCondition($event)"></general-precondition>
       </div>
     </div>
     <div>
-      <button
-        type="button"
-        mat-raised-button
-        color="secondary"
-        (click)="addGeneralCondition()"
-      >
+      <button type="button" mat-raised-button color="secondary" (click)="addGeneralCondition()">
         Allgemeine Bedingung hinzufügen
       </button>
     </div>
@@ -178,21 +136,14 @@
       <mat-divider></mat-divider>
       <div formArrayName="classConditionForms">
         <div *ngFor="let entry of derivationRule.conditions">
-          <class-rule-precondition
-            [(classCondition)]="entry"
-            (classConditionChange)="onChangeClassCondition($event)"
-          ></class-rule-precondition>
+          <class-rule-precondition [(classCondition)]="entry" (classConditionChange)="onChangeClassCondition($event)">
+          </class-rule-precondition>
         </div>
       </div>
     </div>
 
     <div>
-      <button
-        type="button"
-        mat-raised-button
-        color="secondary"
-        (click)="addClassCondition()"
-      >
+      <button type="button" mat-raised-button color="secondary" (click)="addClassCondition()">
         Klassenbedingung hinzufügen
       </button>
     </div>
@@ -208,21 +159,11 @@
       <div style="padding-right: 5px;"></div>
     </div>-->
     <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">
-      <button
-        mat-raised-button
-        type="button"
-        color="secondary"
-        (click)="test()"
-      >
+      <button mat-raised-button type="button" color="secondary" (click)="test()">
         Regelbedingungen testen
       </button>
       <div style="padding-right: 5px;"></div>
-      <button
-        mat-raised-button
-        type="submit"
-        [disabled]="deactivateSubmit"
-        color="primary"
-      >
+      <button mat-raised-button type="submit" [disabled]="deactivateSubmit" color="primary">
         Speichern
       </button>
       <div style="padding-right: 5px;"></div>
@@ -235,24 +176,13 @@
       </div>
     </div>
   </form>
-  <div
-    fxLayout="row"
-    fxLayoutAlign="end start"
-    style="padding-top: 25px;"
-  ></div>
+  <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;"></div>
   <div *ngIf="testConditions">
     <div style="padding-top: 3px; padding-left: 5px;">
       Testen der Regelbedingungen:
     </div>
-    <div
-      fxLayout="row"
-      fxLayoutAlign="end start"
-      style="padding-top: 25px;"
-    ></div>
+    <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;"></div>
     <test-rule-configuration [derivationRule]="derivationRule">
     </test-rule-configuration>
   </div>
 </div>
-<!--(change)="onChange($event)"-->
-<!-- (classConditionChange)="onChangeClassCondition($event)"-->
-<!-- [(ruleActionForm)] = "ruleActionForm[i]"-->

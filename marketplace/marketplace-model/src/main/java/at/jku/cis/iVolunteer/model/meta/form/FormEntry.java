@@ -12,7 +12,6 @@ public class FormEntry {
 	private String id;
 	private List<ClassProperty<Object>> classProperties = new ArrayList<>();
 	private List<ClassDefinition> classDefinitions = new ArrayList<>();	
-	private List<EnumDefinition> enumDefinitions = new ArrayList<>();
 	
 	private List<FormEntry> subEntries = new ArrayList<>();
 
@@ -48,14 +47,6 @@ public class FormEntry {
 
 	public void setClassDefinitions(List<ClassDefinition> classDefinitions) {
 		this.classDefinitions = classDefinitions;
-	}
-
-	public List<EnumDefinition> getEnumDefinitions() {
-		return enumDefinitions;
-	}
-
-	public void setEnumDefinitions(List<EnumDefinition> enumDefinitions) {
-		this.enumDefinitions = enumDefinitions;
 	}
 
 	public List<FormEntry> getSubEntries() {

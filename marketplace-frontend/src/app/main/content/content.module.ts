@@ -153,7 +153,7 @@ const routes: Route[] = [
     canActivate: [TokenGuard, TenantAdminGuard],
   },
   {
-    path: "main/configurator",
+    path: "main/class-configurator",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/class-configurator/configurator.module"
@@ -162,10 +162,10 @@ const routes: Route[] = [
   },
 
   {
-    path: "main/configurator/instance-editor",
+    path: "main/instance-editor",
     loadChildren: () =>
       import(
-        "./_components/help-seeker/configuration/class-instances/form-editor/class-instance-form-editor.module"
+        "./_components/help-seeker/configuration/class-instance-configurator/form-editor/class-instance-form-editor.module"
       ).then((m) => m.ClassInstanceFormEditorModule),
     canActivate: [TokenGuard, TenantAdminGuard],
   },
@@ -260,4 +260,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent],
 })
-export class FuseContentModule {}
+export class FuseContentModule { }

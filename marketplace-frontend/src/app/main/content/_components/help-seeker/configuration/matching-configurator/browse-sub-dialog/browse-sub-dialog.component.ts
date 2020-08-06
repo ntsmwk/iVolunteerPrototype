@@ -1,5 +1,6 @@
 import { OnInit, Component, Input, Output, EventEmitter } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export class MatchingBrowseSubDialogData {
   title: string;
@@ -12,7 +13,7 @@ export class MatchingBrowseSubDialogData {
     date: Date;
   }[];
 
-  marketplace: Marketplace;
+  globalInfo: GlobalInfo;
 }
 
 @Component({
@@ -23,12 +24,9 @@ export class MatchingBrowseSubDialogData {
 export class BrowseMatchingSubDialogComponent implements OnInit {
   @Input() data: MatchingBrowseSubDialogData;
   @Input() browseMode: boolean;
-  @Output() subDialogReturn: EventEmitter<{
-    cancelled: boolean;
-    entryId: string;
-  }> = new EventEmitter<{ cancelled: boolean; entryId: string }>();
+  @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string }> = new EventEmitter();
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     // DEBUG

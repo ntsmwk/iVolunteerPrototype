@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.core.security;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,12 +20,9 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @RestController
 @RequestMapping("/login")
 public class CoreLoginController {
-	@Autowired
-	private TenantService tenantService;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreLoginService loginService;
+	@Autowired private TenantService tenantService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreLoginService loginService;
 
 	@GetMapping
 	public CoreUser getLoggedInUser() {

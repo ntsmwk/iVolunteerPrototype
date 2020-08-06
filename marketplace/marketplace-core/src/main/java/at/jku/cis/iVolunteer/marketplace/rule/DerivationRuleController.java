@@ -1,8 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.rule;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +25,15 @@ public class DerivationRuleController {
 	public List<DerivationRuleDTO> getRules(@PathVariable String tenantId) {
 		return derivationRuleService.getRules(tenantId);
 	}
-	
+
 	@GetMapping("/{ruleId}")
 	public DerivationRuleDTO getRule(@PathVariable String ruleId) {
 		return derivationRuleService.getRule(ruleId);
 	}
 
 	@GetMapping("/tenant/{tenantId}/container/{container}/rule/{ruleName}")
-	public DerivationRuleDTO getRule(@PathVariable String tenantId, @PathVariable String container, @PathVariable String ruleName) {
+	public DerivationRuleDTO getRule(@PathVariable String tenantId, @PathVariable String container,
+			@PathVariable String ruleName) {
 		DerivationRuleDTO dto = derivationRuleService.getRuleByContainerAndName(tenantId, container, ruleName);
 		return dto;
 	}
@@ -43,8 +42,8 @@ public class DerivationRuleController {
 	public DerivationRuleDTO createDerivationRule(@RequestBody DerivationRuleDTO derivationRule) {
 		return derivationRuleService.createRule(derivationRule);
 	}
-	
-	@PostMapping(path= "/test")
+
+	@PostMapping(path = "/test")
 	public List<RuleExecution> testDerivationRule(@RequestBody DerivationRuleDTO derivationRule) {
 		return derivationRuleService.testRule(derivationRule);
 	}
@@ -53,9 +52,9 @@ public class DerivationRuleController {
 	public void updateRule(@PathVariable String ruleId, @RequestBody DerivationRuleDTO derivationRule) {
 		derivationRuleService.updateRule(ruleId, derivationRule);
 	}
-	
+
 	@GetMapping("/tenant/{tenantId}/general/properties")
-	public List<PropertyDefinition<Object>> getGeneralProperties(@PathVariable String tenantId){
+	public List<PropertyDefinition<Object>> getGeneralProperties(@PathVariable String tenantId) {
 		return derivationRuleService.getGeneralProperties(tenantId);
 	}
 }

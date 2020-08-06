@@ -34,11 +34,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>at.jku.cis</groupId>
-			<artifactId>marketplace-mapper</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>

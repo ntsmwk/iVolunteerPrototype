@@ -32,6 +32,7 @@ import { DialogFactoryDirective } from "../../../_shared/dialogs/_dialog-factory
 import { MyMxCell, MyMxCellType } from "../myMxCell";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { MatchingOperatorRelationshipService } from "app/main/content/_service/configuration/matching-operator-relationship.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 declare var require: any;
 
@@ -86,6 +87,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   displayOverlay: boolean;
   overlayRelationship: MatchingOperatorRelationship;
   overlayEvent: PointerEvent;
+  tenant: Tenant;
 
   // Delete Mode
   confirmDelete: boolean;
@@ -98,6 +100,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
+    this.tenant = globalInfo.tenants[0];
   }
 
   async loadClassesAndRelationships(
@@ -657,6 +660,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
                 : MatchingEntityType.CLASS;
             rightSet = true;
             relationship.matchingConfigurationId = this.matchingConfiguration.id;
+            relationship.tenantId = this.tenant.id;
           }
         }
 
@@ -696,7 +700,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       rightClassConfiguration.id;
     matchingConfiguration.leftClassConfigurationId = leftClassConfiguration.id;
     matchingConfiguration.name = name;
-
+    matchingConfiguration.tenantId = this.tenant.id;
     this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, matchingConfiguration)
       .toPromise()

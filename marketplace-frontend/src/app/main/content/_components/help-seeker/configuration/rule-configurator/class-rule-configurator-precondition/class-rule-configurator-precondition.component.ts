@@ -55,7 +55,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
-    private classPropertyService: ClassPropertyService,
     private parentForm: FormGroupDirective
   ) {
     this.rulePreconditionForm = formBuilder.group({
@@ -108,10 +107,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       });
   }
 
-  /*ngOnChanges(changes: SimpleChanges) {
-    console.log('in child changes with: ', changes);
-  }*/
-
   onClassChange(classDefinition: ClassDefinition, $event) {
     if ($event.isUserInput) {
       if (!this.classCondition.classDefinition) {
@@ -119,6 +114,8 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       }
       this.classCondition.classDefinition = classDefinition;
       this.classCondition.classDefinition.tenantId = this.tenant.id;
+      this.classCondition.attributeConditions = new Array();
+      this.rulePreconditionForm.setControl('classAttributeForms', this.formBuilder.array([]));
       this.classConditionChange.emit(this.classCondition);
     }
   }

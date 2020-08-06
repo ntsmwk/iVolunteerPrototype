@@ -92,8 +92,10 @@ public class ClassDefinitionService {
 	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(String tenantId) {
+		System.out.println("all class definitions for tenant: " + classDefinitionRepository.getByTenantId(tenantId).size());
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
 				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
+		System.out.println("all class definitions for tenant: " + classDefinitions.size());
 		return classDefinitions;
 	}
 

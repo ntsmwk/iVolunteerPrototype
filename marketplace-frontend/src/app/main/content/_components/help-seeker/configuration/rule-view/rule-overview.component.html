@@ -63,7 +63,7 @@
           <span *ngFor="let source of rule.conditions; let last = last">
             {{ source.classDefinition.name }} 
             {{retrieveAggregationOperatorValueOf(source.aggregationOperatorType)}} 
-            {{source.value}} <span *ngIf="!last">, &nbsp; </span>
+            {{source.value}} <span *ngIf="!last">| &nbsp;<br> </span>
           </span>
         </mat-cell>
       </ng-container>

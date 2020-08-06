@@ -27,11 +27,11 @@ import {
   PropertyOrEnumCreationDialogComponent,
   PropertyOrEnumCreationDialogData,
 } from "../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component";
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { Tenant } from 'app/main/content/_model/tenant';
 
 export interface AddPropertyDialogData {
-  marketplace: Marketplace;
-  tenantAdmin: User;
-
   classDefinition: ClassDefinition;
 
   allClassDefinitions: ClassDefinition[];
@@ -51,8 +51,9 @@ export class AddPropertyDialogComponent implements OnInit {
     private propertyDefinitionService: PropertyDefinitionService,
     private classPropertyService: ClassPropertyService,
     private enumDefinitionService: EnumDefinitionService,
-    public dialog: MatDialog
-  ) {}
+    public dialog: MatDialog,
+    private loginService: LoginService,
+  ) { }
 
   propertyDatasource = new MatTableDataSource<PropertyItem>();
   enumDataSource = new MatTableDataSource<EnumDefinition>();
@@ -73,25 +74,28 @@ export class AddPropertyDialogComponent implements OnInit {
   loaded: boolean;
   tabIndex: number;
 
+  globalInfo: GlobalInfo;
+  tenant: Tenant;
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  ngOnInit() {
+  async ngOnInit() {
     this.tabIndex = 0;
-    console.log(this.data.marketplace);
-    console.log(this.data.classDefinition);
+
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+
+    this.tenant = this.globalInfo.tenants[0];
+
 
     Promise.all([
-      this.propertyDefinitionService
-        .getAllPropertyDefinitons(
-          this.data.marketplace,
-          this.data.classDefinition.tenantId
-        )
+      this.propertyDefinitionService.getAllPropertyDefinitons(this.globalInfo.marketplace, this.tenant.id)
         .toPromise()
         .then((ret: PropertyDefinition<any>[]) => {
           this.propertyDatasource.data = ret;
           this.allPropertyDefinitions = ret;
 
-          console.log(this.allPropertyDefinitions);
           this.initialProperties = ret.filter((p) =>
             this.data.classDefinition.properties.find((q) => q.id === p.id)
           );
@@ -102,18 +106,12 @@ export class AddPropertyDialogComponent implements OnInit {
           );
 
           this.disabledProperties = [];
-          this.disabledProperties.push(
-            ...this.initialProperties,
-            ...parentProperties
-          );
+          this.disabledProperties.push(...this.initialProperties, ...parentProperties);
 
           this.propertySelection.select(...this.initialProperties);
         }),
       this.enumDefinitionService
-        .getAllEnumDefinitionsForTenant(
-          this.data.marketplace,
-          this.data.classDefinition.tenantId
-        )
+        .getAllEnumDefinitionsForTenant(this.globalInfo.marketplace, this.tenant.id)
         .toPromise()
         .then((ret: EnumDefinition[]) => {
           this.enumDataSource.data = ret;
@@ -208,7 +206,7 @@ export class AddPropertyDialogComponent implements OnInit {
 
     this.classPropertyService
       .getClassPropertyFromDefinitionById(
-        this.data.marketplace,
+        this.globalInfo.marketplace,
         addedProperties.map((p) => p.id),
         addedEnums.map((e) => e.id)
       )
@@ -226,8 +224,7 @@ export class AddPropertyDialogComponent implements OnInit {
       height: "90vh",
       minHeight: "90vh",
       data: {
-        marketplace: this.data.marketplace,
-        tenantAdmin: this.data.tenantAdmin,
+        marketplace: this.globalInfo.marketplace,
         allPropertyDefinitions: this.propertyDatasource.data,
         builderType: type,
       },
