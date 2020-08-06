@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
+import at.jku.cis.iVolunteer.model.rule.entities.AttributeConditionDTO;
 import at.jku.cis.iVolunteer.model.rule.entities.DerivationRuleDTO;
 
 @RestController
