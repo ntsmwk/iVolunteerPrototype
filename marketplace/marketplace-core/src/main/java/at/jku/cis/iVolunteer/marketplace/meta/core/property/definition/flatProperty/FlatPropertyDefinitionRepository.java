@@ -1,20 +1,20 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.property;
+package at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty;
 
 import java.util.List;
 import org.springframework.stereotype.Repository;
 import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 
 @Repository
-public interface PropertyDefinitionRepository extends HasTenantRepository<PropertyDefinition<Object>, String> {
+public interface FlatPropertyDefinitionRepository extends HasTenantRepository<FlatPropertyDefinition<Object>, String> {
 
-	List<PropertyDefinition<Object>> getByNameAndTenantId(String name, String tenantId);
+	List<FlatPropertyDefinition<Object>> getByNameAndTenantId(String name, String tenantId);
 
-	PropertyDefinition<Object> getByIdAndTenantId(String id, String tenantId);
+	FlatPropertyDefinition<Object> getByIdAndTenantId(String id, String tenantId);
 	
-	List<PropertyDefinition<Object>> getByIdAndTenantId(List<String> propertyIds, String tenantId);
+	List<FlatPropertyDefinition<Object>> getByIdAndTenantId(List<String> propertyIds, String tenantId);
 
-	List<PropertyDefinition<Object>> getAllByTenantId(String tenantId);
+	List<FlatPropertyDefinition<Object>> getAllByTenantId(String tenantId);
 	
 	
 

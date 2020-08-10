@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.configurations.enums;
+package at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty;
 
 import java.util.List;
 
@@ -11,61 +11,61 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
 @RestController
-public class EnumDefinitionController {
+public class TreePropertyDefinitionController {
 
-	@Autowired EnumDefinitionRepository enumDefinitionRepository;
+	@Autowired TreePropertyDefinitionRepository enumDefinitionRepository;
 
-	@GetMapping("enum-definition/all")
-	private List<EnumDefinition> getAllEnumConfigurations() {
+	@GetMapping("/meta/core/property-definition/tree/all")
+	private List<TreePropertyDefinition> getAllEnumConfigurations() {
 
 		return enumDefinitionRepository.findAll();
 	}
 
-	@GetMapping("enum-definition/all/{tenantId}")
-	private List<EnumDefinition> getAllEnumDefinitionssForTenant(@PathVariable("tenantId") String tenantId) {
+	@GetMapping("/meta/core/property-definition/tree/all/{tenantId}")
+	private List<TreePropertyDefinition> getAllEnumDefinitionssForTenant(@PathVariable("tenantId") String tenantId) {
 		return enumDefinitionRepository.findByTenantId(tenantId);
 	}
 
-	@GetMapping("enum-definition/{id}")
-	private EnumDefinition getEnumDefinitionById(@PathVariable("id") String id) {
+	@GetMapping("/meta/core/property-definition/tree/{id}")
+	private TreePropertyDefinition getEnumDefinitionById(@PathVariable("id") String id) {
 		return enumDefinitionRepository.findOne(id);
 	}
 
-	@GetMapping("enum-definition/by-name/{name}")
-	private EnumDefinition getEnumDefinitionByName(@PathVariable("name") String name) {
+	@GetMapping("/meta/core/property-definition/tree/by-name/{name}")
+	private TreePropertyDefinition getEnumDefinitionByName(@PathVariable("name") String name) {
 		return enumDefinitionRepository.findByName(name);
 	}
 
-	@PostMapping("enum-configuration/new")
-	private EnumDefinition newEnumDefinition(@RequestBody EnumDefinition enumConfiguration) {
+	@PostMapping("/meta/core/property-configuration/tree/new")
+	private TreePropertyDefinition newEnumDefinition(@RequestBody TreePropertyDefinition enumConfiguration) {
 		return enumDefinitionRepository.save(enumConfiguration);
 	}
 
-	@PostMapping("enum-definition/new-empty")
-	private EnumDefinition newEmptyEnumDefinition(@RequestBody String[] params) {
+	@PostMapping("/meta/core/property-definition/tree/new-empty")
+	private TreePropertyDefinition newEmptyEnumDefinition(@RequestBody String[] params) {
 		if (params.length != 4) {
 			return null;
 		}
-		EnumDefinition enumDefinition = new EnumDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
+		TreePropertyDefinition enumDefinition = new TreePropertyDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
 		return enumDefinitionRepository.save(enumDefinition);
 	}
 
-	@PutMapping("enum-definition/save")
-	private EnumDefinition replaceEnumDefinition(@RequestBody EnumDefinition enumDefinition) {
+	@PutMapping("/meta/core/property-definition/tree/save")
+	private TreePropertyDefinition replaceEnumDefinition(@RequestBody TreePropertyDefinition enumDefinition) {
 		
 		return enumDefinitionRepository.save(enumDefinition);
 	}
 
-	@DeleteMapping("enum-definition/{id}/delete")
+	@DeleteMapping("/meta/core/property-definition/tree/{id}/delete")
 	private void deleteEnumDefinition(@PathVariable("id") String id) {
 		enumDefinitionRepository.delete(id);
 	}
 
-	@PutMapping("enum-definition/delete-multiple")
-	private List<EnumDefinition> deleteMultipleMatchingConfigurations(@RequestBody List<String> ids) {
+	@PutMapping("/meta/core/enum-definition/tree/delete-multiple")
+	private List<TreePropertyDefinition> deleteMultipleMatchingConfigurations(@RequestBody List<String> ids) {
 		ids.forEach(this.enumDefinitionRepository::delete);
 		return this.enumDefinitionRepository.findAll();
 	}

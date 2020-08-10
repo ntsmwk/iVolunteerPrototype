@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { HttpClient } from '@angular/common/http';
-import { PropertyInstance } from 'app/main/content/_model/meta/property';
+import { PropertyInstance } from 'app/main/content/_model/meta/property/property';
 
 
 @Injectable({

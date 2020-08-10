@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.meta.core.property.definition;
+package at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty;
 
 import java.util.Date;
 
@@ -6,41 +6,41 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 //import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 
-public class PropertyDefinitionTypes {
+public class FlatPropertyDefinitionTypes {
 
-	public static class TextPropertyDefinition extends PropertyDefinition<String> {
+	public static class TextPropertyDefinition extends FlatPropertyDefinition<String> {
 
 		public TextPropertyDefinition() {
 			this.type = PropertyType.TEXT;
 		}
 	}
 
-	public static class LongTextPropertyDefinition extends PropertyDefinition<String> {
+	public static class LongTextPropertyDefinition extends FlatPropertyDefinition<String> {
 		public LongTextPropertyDefinition() {
 			this.type = PropertyType.LONG_TEXT;
 		}
 	}
 
-	public static class LongPropertyDefinition extends PropertyDefinition<Long> {
+	public static class LongPropertyDefinition extends FlatPropertyDefinition<Long> {
 		public LongPropertyDefinition() {
 			this.type = PropertyType.WHOLE_NUMBER;
 		}
 	}
 
-	public static class DoublePropertyDefinition extends PropertyDefinition<Double> {
+	public static class DoublePropertyDefinition extends FlatPropertyDefinition<Double> {
 		public DoublePropertyDefinition() {
 			this.type = PropertyType.FLOAT_NUMBER;
 		}
 	}
 
-	public static class BooleanPropertyDefinition extends PropertyDefinition<Boolean> {
+	public static class BooleanPropertyDefinition extends FlatPropertyDefinition<Boolean> {
 
 		public BooleanPropertyDefinition() {
 			this.type = PropertyType.BOOL;
 		}
 	}
 
-	public static class DatePropertyDefinition extends PropertyDefinition<Date> {
+	public static class DatePropertyDefinition extends FlatPropertyDefinition<Date> {
 		public DatePropertyDefinition() {
 			this.type = PropertyType.DATE;
 		}
@@ -52,7 +52,7 @@ public class PropertyDefinitionTypes {
 //		}
 //	}
 	
-	public static class TuplePropertyDefinition<X, Y> extends PropertyDefinition<Tuple<X, Y>> {
+	public static class TuplePropertyDefinition<X, Y> extends FlatPropertyDefinition<Tuple<X, Y>> {
 		public TuplePropertyDefinition() {
 			this.type = PropertyType.TUPLE;
 		}

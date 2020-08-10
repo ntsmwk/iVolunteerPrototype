@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.meta.core.property.definition;
+package at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Document
-public class PropertyDefinition<T> extends IVolunteerObject {
+public class FlatPropertyDefinition<T> extends IVolunteerObject {
 
 	// @Id
 	// private String id;
@@ -28,10 +28,10 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 	private boolean required;
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
-	public PropertyDefinition() {
+	public FlatPropertyDefinition() {
 	}
 
-	public PropertyDefinition(String name, PropertyType type, String tenantId) {
+	public FlatPropertyDefinition(String name, PropertyType type, String tenantId) {
 		this.name = name;
 		this.type = type;
 		this.tenantId = tenantId;

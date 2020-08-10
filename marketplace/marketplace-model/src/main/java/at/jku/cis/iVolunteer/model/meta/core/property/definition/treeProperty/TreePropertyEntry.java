@@ -1,33 +1,33 @@
-package at.jku.cis.iVolunteer.model.meta.core.enums;
+package at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnumEntry {
+public class TreePropertyEntry {
 	String id;
 	String value;
 	boolean selectable;
 	int level;
 	int[] position;
 	
-	List<EnumEntry> parents;
+	List<TreePropertyEntry> parents;
 
-	public EnumEntry() {
+	public TreePropertyEntry() {
 	}
 
-	public EnumEntry(String value) {
+	public TreePropertyEntry(String value) {
 		this.value = value;
 		this.selectable = true;
 		this.parents = new ArrayList<>();
 	}
 
-	public EnumEntry(String value, boolean selectable) {
+	public TreePropertyEntry(String value, boolean selectable) {
 		this.value = value;
 		this.selectable = selectable;
 		this.parents = new ArrayList<>();
 	}
 
-	public EnumEntry(String value, boolean selectable, int level) {
+	public TreePropertyEntry(String value, boolean selectable, int level) {
 		this.value = value;
 		this.selectable = selectable;
 		this.level = level;
@@ -74,11 +74,11 @@ public class EnumEntry {
 		this.position = position;
 	}
 
-	public List<EnumEntry> getParents() {
+	public List<TreePropertyEntry> getParents() {
 		return parents;
 	}
 
-	public void setParents(List<EnumEntry> parents) {
+	public void setParents(List<TreePropertyEntry> parents) {
 		this.parents = parents;
 	}
 	

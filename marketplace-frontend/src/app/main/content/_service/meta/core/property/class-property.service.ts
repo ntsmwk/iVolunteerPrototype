@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassProperty, PropertyDefinition } from 'app/main/content/_model/meta/property';
+import { ClassProperty, FlatPropertyDefinition } from 'app/main/content/_model/meta/property/property';
 
 
 @Injectable({
@@ -33,7 +33,7 @@ export class ClassPropertyService {
     return this.http.put(`${marketplace.url}/meta/core/property/class/${id}/add-properties-by-id`, propIds);
   }
 
-  addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: PropertyDefinition<any>[]) {
+  addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: FlatPropertyDefinition<any>[]) {
     return this.http.put(`${marketplace.url}/meta/core/property/class/${id}/add-properties`, propsToAdd);
   }
 

@@ -20,7 +20,7 @@ import {
   ClassArchetype,
 } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassProperty } from "app/main/content/_model/meta/property";
+import { ClassProperty } from "app/main/content/_model/meta/property/property";
 import { User, UserRole } from "app/main/content/_model/user";
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
@@ -131,14 +131,14 @@ export class TargetRuleConfiguratorComponent implements OnInit {
         );*/
         this.classAction.classDefinition = classDefinition;
         this.classPropertyService
-        .getAllClassPropertiesFromClass(
-          this.marketplace,
-          classDefinition.id
-        )
-        .toPromise()
-        .then((props: ClassProperty<any>[]) => {
-          this.classProperties = props;
-        });
+          .getAllClassPropertiesFromClass(
+            this.marketplace,
+            classDefinition.id
+          )
+          .toPromise()
+          .then((props: ClassProperty<any>[]) => {
+            this.classProperties = props;
+          });
         this.classAction.attributes = new Array();
         this.classActionChange.emit(this.classAction);
       }

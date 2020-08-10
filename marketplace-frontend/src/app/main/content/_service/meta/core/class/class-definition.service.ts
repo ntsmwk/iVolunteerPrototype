@@ -6,7 +6,6 @@ import { isNullOrUndefined } from 'util';
 import { of } from 'rxjs';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { FormConfigurationPreviewRequest } from 'app/main/content/_model/meta/form';
-import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 
 @Injectable({
   providedIn: "root",

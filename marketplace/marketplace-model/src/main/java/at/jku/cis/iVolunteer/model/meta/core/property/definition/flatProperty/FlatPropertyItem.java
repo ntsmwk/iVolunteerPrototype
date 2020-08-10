@@ -1,6 +1,6 @@
-package at.jku.cis.iVolunteer.model.meta.core.property.definition;
+package at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty;
 
-public class PropertyItem {
+public class FlatPropertyItem {
 	private String id;
 	private String name;
 
@@ -22,10 +22,10 @@ public class PropertyItem {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof PropertyItem)) {
+		if (!(obj instanceof FlatPropertyItem)) {
 			return false;
 		}
-		return ((PropertyItem) obj).id.equals(id);
+		return ((FlatPropertyItem) obj).id.equals(id);
 
 	}
 

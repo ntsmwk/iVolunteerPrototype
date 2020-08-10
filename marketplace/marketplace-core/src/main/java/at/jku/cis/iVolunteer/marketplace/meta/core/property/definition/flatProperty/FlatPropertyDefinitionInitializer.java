@@ -1,16 +1,16 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.property;
+package at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty;
 
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 
 @Component
-public class PropertyDefinitionInitializer {
+public class FlatPropertyDefinitionInitializer {
 
 	
-	public <T> PropertyDefinition<T> createPropertyDefinition(String name, PropertyType type, String tenantId){
-		return new PropertyDefinition<>(name, type, tenantId);
+	public <T> FlatPropertyDefinition<T> createPropertyDefinition(String name, PropertyType type, String tenantId){
+		return new FlatPropertyDefinition<>(name, type, tenantId);
 	}
 	
 }

@@ -20,8 +20,8 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
   ClassProperty,
-  PropertyDefinition,
-} from "app/main/content/_model/meta/property";
+  FlatPropertyDefinition,
+} from "app/main/content/_model/meta/property/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
@@ -60,7 +60,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   formItems: DynamicFormItemBase<any>[] = [];
   formItem: DynamicFormItemBase<any>;
 
-  propertyDefinition: PropertyDefinition<any>;
+  propertyDefinition: FlatPropertyDefinition<any>;
 
   classDefinitionCache: ClassDefinition[] = [];
   attributeForms: FormArray;
@@ -117,9 +117,9 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
         this.classDefinitions = definitions;
         this.loadClassProperties(null);
       });
-      if (!isNullOrUndefined(this.attributeCondition.classProperty)){
-        this.addQuestionAndFormGroup(this.attributeCondition.classProperty);
-      }
+    if (!isNullOrUndefined(this.attributeCondition.classProperty)) {
+      this.addQuestionAndFormGroup(this.attributeCondition.classProperty);
+    }
   }
 
   onPropertyChange(classProperty: ClassProperty<any>, $event) {
@@ -157,27 +157,27 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     }
   }
 
-  private addQuestionAndFormGroup(classProperty: ClassProperty<any>){
-      let myArr: ClassProperty<any>[] = new Array();
-      myArr.push(classProperty);
-      this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
-      // this.formItem = this.formItems[0]; XXX brauche ich das?
-      
-      if (this.attributeCondition.value){
-        this.formItem.value = this.attributeCondition.value;
-      } 
-      
-      // add question form to parent form
-      this.ruleQuestionForm = this.questionControlService.toFormGroup(this.formItems);
-      this.rulePreconditionForm.addControl('questionForm', this.ruleQuestionForm);
-      // detect change in question form
-      this.rulePreconditionForm.get('questionForm').valueChanges.subscribe((change) => {
-        // update value in form with selection from question form
-        this.rulePreconditionForm.patchValue({
-            value: this.rulePreconditionForm.get('questionForm').get(this.formItem.key).value
-        });
-        this.attributeCondition.value = this.rulePreconditionForm.get('questionForm').get(this.formItem.key).value;
+  private addQuestionAndFormGroup(classProperty: ClassProperty<any>) {
+    let myArr: ClassProperty<any>[] = new Array();
+    myArr.push(classProperty);
+    this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
+    // this.formItem = this.formItems[0]; XXX brauche ich das?
+
+    if (this.attributeCondition.value) {
+      this.formItem.value = this.attributeCondition.value;
+    }
+
+    // add question form to parent form
+    this.ruleQuestionForm = this.questionControlService.toFormGroup(this.formItems);
+    this.rulePreconditionForm.addControl('questionForm', this.ruleQuestionForm);
+    // detect change in question form
+    this.rulePreconditionForm.get('questionForm').valueChanges.subscribe((change) => {
+      // update value in form with selection from question form
+      this.rulePreconditionForm.patchValue({
+        value: this.rulePreconditionForm.get('questionForm').get(this.formItem.key).value
       });
+      this.attributeCondition.value = this.rulePreconditionForm.get('questionForm').get(this.formItem.key).value;
+    });
   }
 
   onOperatorChange(op, $event) {

@@ -11,8 +11,6 @@ import {
 import { DialogFactoryDirective } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { User } from 'app/main/content/_model/user';
 import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/class';
 import { Relationship, RelationshipType, AssociationCardinality } from 'app/main/content/_model/meta/relationship';
 import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
@@ -20,7 +18,7 @@ import { EditorPopupMenu } from './popup-menu';
 import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { CConstants } from './utils-and-constants';
-import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property';
+import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { OptionsOverlayContentData } from './options-overlay/options-overlay-control/options-overlay-control.component';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
@@ -379,27 +377,27 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
  */
   private addPropertiesToCell(cell: MyMxCell, properties: ClassProperty<any>[], yLocation: number): number {
     if (!isNullOrUndefined(properties)) {
-      let propertyEntry: MyMxCell;
+      let propertyCell: MyMxCell;
       for (const p of properties) {
-        if (p.type !== PropertyType.ENUM) {
-          propertyEntry = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
-          propertyEntry.cellType = MyMxCellType.PROPERTY;
-          propertyEntry.property = true;
-          propertyEntry.propertyId = p.id;
+        if (p.type !== PropertyType.TREE) {
+          propertyCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
+          propertyCell.cellType = MyMxCellType.PROPERTY;
+          propertyCell.propertyClass = 'FLAT';
+          propertyCell.propertyId = p.id;
         }
         else {
-          propertyEntry = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
-          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
-          propertyEntry.enum = true;
-          propertyEntry.enumId = p.id;
-        } propertyEntry.setConnectable(false);
+          propertyCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
+          propertyCell.cellType = MyMxCellType.TREE_PROPERTY;
+          propertyCell.propertyClass = 'TREE';
+          propertyCell.propertyId = p.id;
+        } propertyCell.setConnectable(false);
         yLocation += 20;
       }
     }
     return yLocation;
   }
 
-  // private addEnumsToCell(cell: MyMxCell, enums: EnumDefinition[], yLocation: number): number {
+  // private addEnumsToCell(cell: MyMxCell, enums: TreePropertyDefinition[], yLocation: number): number {
   // if (!isNullOrUndefined(enums)) {
   //     for (const e of enums) {
   //       const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
@@ -910,7 +908,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     let children = this.graph.getChildCells(cell) as MyMxCell[];
-    children = children.filter((c) => c.cellType === MyMxCellType.ENUM_PROPERTY);
+    children = children.filter((c) => c.cellType === MyMxCellType.TREE_PROPERTY);
 
     for (const child of children) {
       const childEdges = this.graph.getOutgoingEdges(child);
@@ -940,7 +938,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.getModel().setVisible(edge.target, true);
 
       let children = this.graph.getChildCells(cell) as MyMxCell[];
-      children = children.filter((c) => c.cellType === MyMxCellType.ENUM_PROPERTY);
+      children = children.filter((c) => c.cellType === MyMxCellType.TREE_PROPERTY);
 
       for (const child of children) {
         const childEdges = this.graph.getOutgoingEdges(child);

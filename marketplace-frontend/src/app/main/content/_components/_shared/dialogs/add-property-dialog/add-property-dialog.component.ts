@@ -1,32 +1,24 @@
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-  MatDialog,
-} from "@angular/material/dialog";
+  MatDialogRef, MAT_DIALOG_DATA, MatDialog,
+} from '@angular/material/dialog';
 import {
-  PropertyItem,
-  ClassProperty,
-  PropertyDefinition,
-} from "../../../../_model/meta/property";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassDefinition } from "app/main/content/_model/meta/class";
-import { MatTableDataSource, MatSort } from "@angular/material";
-import { PropertyDefinitionService } from "app/main/content/_service/meta/core/property/property-definition.service";
-import { SelectionModel } from "@angular/cdk/collections";
-import { isNullOrUndefined } from "util";
+  PropertyItem, ClassProperty, FlatPropertyDefinition,
+} from '../../../../_model/meta/property/property';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { MatTableDataSource, MatSort } from '@angular/material';
+import { FlatPropertyDefinitionService } from 'app/main/content/_service/meta/core/property/flat-property-definition.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { isNullOrUndefined } from 'util';
 import {
-  Relationship,
-  RelationshipType,
-} from "app/main/content/_model/meta/relationship";
-import { User } from "app/main/content/_model/user";
-import { EnumDefinitionService } from "app/main/content/_service/meta/core/enum/enum-configuration.service";
-import { EnumDefinition } from "app/main/content/_model/meta/enum";
-import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
+  Relationship, RelationshipType,
+} from 'app/main/content/_model/meta/relationship';
+import { TreePropertyDefinitionService } from 'app/main/content/_service/meta/core/property/tree-property-definition.service';
+import { TreePropertyDefinition } from 'app/main/content/_model/meta/property/tree-property';
+import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
 import {
-  PropertyOrEnumCreationDialogComponent,
-  PropertyOrEnumCreationDialogData,
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component";
+  PropertyCreationDialogComponent, PropertyCreationDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.component';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';
@@ -40,36 +32,36 @@ export interface AddPropertyDialogData {
 
 @Component({
   selector: "add-property-dialog",
-  templateUrl: "./add-property-dialog.component.html",
-  styleUrls: ["./add-property-dialog.component.scss"],
+  templateUrl: './add-property-dialog.component.html',
+  styleUrls: ['./add-property-dialog.component.scss'],
 })
 export class AddPropertyDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddPropertyDialogData>,
     @Inject(MAT_DIALOG_DATA)
     public data: AddPropertyDialogData,
-    private propertyDefinitionService: PropertyDefinitionService,
+    private propertyDefinitionService: FlatPropertyDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private enumDefinitionService: EnumDefinitionService,
+    private enumDefinitionService: TreePropertyDefinitionService,
     public dialog: MatDialog,
     private loginService: LoginService,
   ) { }
 
   propertyDatasource = new MatTableDataSource<PropertyItem>();
-  enumDataSource = new MatTableDataSource<EnumDefinition>();
-  displayedColumns = ["checkbox", "label", "type"];
+  enumDataSource = new MatTableDataSource<TreePropertyDefinition>();
+  displayedColumns = ['checkbox', 'label', 'type'];
 
-  allPropertyDefinitions: PropertyDefinition<any>[];
-  allEnumDefinitions: EnumDefinition[];
+  allPropertyDefinitions: FlatPropertyDefinition<any>[];
+  allEnumDefinitions: TreePropertyDefinition[];
 
   propertySelection = new SelectionModel<PropertyItem>(true, []);
-  enumSelection = new SelectionModel<EnumDefinition>(true, []);
+  enumSelection = new SelectionModel<TreePropertyDefinition>(true, []);
 
-  initialProperties: PropertyDefinition<any>[];
-  disabledProperties: PropertyDefinition<any>[];
+  initialProperties: FlatPropertyDefinition<any>[];
+  disabledProperties: FlatPropertyDefinition<any>[];
 
-  initialEnums: EnumDefinition[];
-  disabledEnums: EnumDefinition[];
+  initialEnums: TreePropertyDefinition[];
+  disabledEnums: TreePropertyDefinition[];
 
   loaded: boolean;
   tabIndex: number;
@@ -92,7 +84,7 @@ export class AddPropertyDialogComponent implements OnInit {
     Promise.all([
       this.propertyDefinitionService.getAllPropertyDefinitons(this.globalInfo.marketplace, this.tenant.id)
         .toPromise()
-        .then((ret: PropertyDefinition<any>[]) => {
+        .then((ret: FlatPropertyDefinition<any>[]) => {
           this.propertyDatasource.data = ret;
           this.allPropertyDefinitions = ret;
 
@@ -111,9 +103,9 @@ export class AddPropertyDialogComponent implements OnInit {
           this.propertySelection.select(...this.initialProperties);
         }),
       this.enumDefinitionService
-        .getAllEnumDefinitionsForTenant(this.globalInfo.marketplace, this.tenant.id)
+        .getAllPropertyDefinitionsForTenant(this.globalInfo.marketplace, this.tenant.id)
         .toPromise()
-        .then((ret: EnumDefinition[]) => {
+        .then((ret: TreePropertyDefinition[]) => {
           this.enumDataSource.data = ret;
           this.allEnumDefinitions = ret;
 
@@ -149,13 +141,13 @@ export class AddPropertyDialogComponent implements OnInit {
     return parentProperties;
   }
 
-  isPropertyRowDisabled(propertyDefinition: PropertyDefinition<any>) {
+  isPropertyRowDisabled(propertyDefinition: FlatPropertyDefinition<any>) {
     return !isNullOrUndefined(
       this.disabledProperties.find((p) => p.id === propertyDefinition.id)
     );
   }
 
-  isEnumRowDisabled(enumDefinition: EnumDefinition) {
+  isEnumRowDisabled(enumDefinition: TreePropertyDefinition) {
     return !isNullOrUndefined(
       this.disabledEnums.find((p) => p.id === enumDefinition.id)
     );
@@ -171,7 +163,7 @@ export class AddPropertyDialogComponent implements OnInit {
     this.enumDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onRowClick(row: PropertyDefinition<any>) {
+  onRowClick(row: FlatPropertyDefinition<any>) {
     if (this.isPropertyRowDisabled(row)) {
       return;
     }
@@ -181,7 +173,7 @@ export class AddPropertyDialogComponent implements OnInit {
       : this.propertySelection.select(row);
   }
 
-  onEnumRowClick(row: EnumDefinition) {
+  onEnumRowClick(row: TreePropertyDefinition) {
     if (this.isEnumRowDisabled(row)) {
       return;
     }
@@ -218,11 +210,11 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   createNewClicked(type: string) {
-    const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
-      width: "70vw",
-      minWidth: "70vw",
-      height: "90vh",
-      minHeight: "90vh",
+    const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
+      width: '70vw',
+      minWidth: '70vw',
+      height: '90vh',
+      minHeight: '90vh',
       data: {
         marketplace: this.globalInfo.marketplace,
         allPropertyDefinitions: this.propertyDatasource.data,
@@ -234,7 +226,7 @@ export class AddPropertyDialogComponent implements OnInit {
     dialogRef
       .beforeClose()
       .toPromise()
-      .then((result: PropertyOrEnumCreationDialogData) => {
+      .then((result: PropertyCreationDialogData) => {
         if (!isNullOrUndefined(result)) {
           if (!isNullOrUndefined(result.propertyDefinition)) {
             this.allPropertyDefinitions.push(result.propertyDefinition);

@@ -11,8 +11,8 @@ import {
   MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule, MatOptionModule, MatRadioModule,
   MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, DateAdapter, MatListModule,
 } from '@angular/material';
-import { MultipleEnumModule } from './multiple-enum-item/multiple-enum.module';
-import { SingleEnumItemModule } from './single-enum-item/single-enum-item.module';
+import { MultipleSelectTreeItemModule } from './multiple-select-tree-item/multiple-select-tree-item.module';
+import { SingleSelectTreeItemModule } from './single-select-tree-item/single-select-tree-item.module';
 
 @NgModule({
   imports: [
@@ -23,8 +23,8 @@ import { SingleEnumItemModule } from './single-enum-item/single-enum-item.module
     MatOptionModule, MatRadioModule, MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule,
     MatListModule,
 
-    MultipleEnumModule,
-    SingleEnumItemModule,
+    MultipleSelectTreeItemModule,
+    SingleSelectTreeItemModule,
 
     FuseSharedModule,
   ],

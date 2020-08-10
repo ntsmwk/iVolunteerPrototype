@@ -16,8 +16,8 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
   ClassProperty,
-  PropertyDefinition,
-} from "app/main/content/_model/meta/property";
+  FlatPropertyDefinition,
+} from "app/main/content/_model/meta/property/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import { User, UserRole } from "app/main/content/_model/user";
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
@@ -55,7 +55,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
 
   attributeForms: FormArray;
 
-  propertyDefinition: PropertyDefinition<any>;
+  propertyDefinition: FlatPropertyDefinition<any>;
 
   classDefinitionCache: ClassDefinition[] = [];
 

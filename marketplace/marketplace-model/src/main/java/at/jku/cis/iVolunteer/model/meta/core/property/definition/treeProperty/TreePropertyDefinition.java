@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.meta.core.enums;
+package at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,36 +9,36 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
 
 @Document
-public class EnumDefinition extends IVolunteerObject {
+public class TreePropertyDefinition extends IVolunteerObject {
 
 	private String name;
 
-	private List<EnumEntry> enumEntries;
-	private List<EnumRelationship> enumRelationships;
+	private List<TreePropertyEntry> enumEntries;
+	private List<TreePropertyRelationship> enumRelationships;
 	
 	private boolean multiple;
 	private boolean required;
 
-	public EnumDefinition() {
-		this.enumEntries = new ArrayList<EnumEntry>();
-		this.enumRelationships = new ArrayList<EnumRelationship>();
+	public TreePropertyDefinition() {
+		this.enumEntries = new ArrayList<TreePropertyEntry>();
+		this.enumRelationships = new ArrayList<TreePropertyRelationship>();
 		this.setTimestamp(new Date());
 	}
 
-	public EnumDefinition(String name, String tenantId) {
+	public TreePropertyDefinition(String name, String tenantId) {
 		this.name = name;
-		this.enumEntries = new ArrayList<EnumEntry>();
-		this.enumRelationships = new ArrayList<EnumRelationship>();
+		this.enumEntries = new ArrayList<TreePropertyEntry>();
+		this.enumRelationships = new ArrayList<TreePropertyRelationship>();
 		this.setTenantId(tenantId);
 		this.setTimestamp(new Date());
 	}
 
-	public EnumDefinition(String name, String description, boolean multiple, String tenantId) {
+	public TreePropertyDefinition(String name, String description, boolean multiple, String tenantId) {
 		this.name = name;
 		this.description = description;
 		this.multiple = multiple;
-		this.enumEntries = new ArrayList<EnumEntry>();
-		this.enumRelationships = new ArrayList<EnumRelationship>();
+		this.enumEntries = new ArrayList<TreePropertyEntry>();
+		this.enumRelationships = new ArrayList<TreePropertyRelationship>();
 		this.setTenantId(tenantId);
 		this.setTimestamp(new Date());
 	}
@@ -52,19 +52,19 @@ public class EnumDefinition extends IVolunteerObject {
 		this.name = name;
 	}
 
-	public List<EnumEntry> getEnumEntries() {
+	public List<TreePropertyEntry> getEnumEntries() {
 		return enumEntries;
 	}
 
-	public void setEnumEntries(List<EnumEntry> enumEntries) {
+	public void setEnumEntries(List<TreePropertyEntry> enumEntries) {
 		this.enumEntries = enumEntries;
 	}
 
-	public List<EnumRelationship> getEnumRelationships() {
+	public List<TreePropertyRelationship> getEnumRelationships() {
 		return enumRelationships;
 	}
 
-	public void setEnumRelationships(List<EnumRelationship> enumRelationships) {
+	public void setEnumRelationships(List<TreePropertyRelationship> enumRelationships) {
 		this.enumRelationships = enumRelationships;
 	}
 
@@ -99,10 +99,10 @@ public class EnumDefinition extends IVolunteerObject {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof EnumDefinition)) {
+		if (!(obj instanceof TreePropertyDefinition)) {
 			return false;
 		}
-		return ((EnumDefinition) obj).id.equals(id);
+		return ((TreePropertyDefinition) obj).id.equals(id);
 	}
 
 }

@@ -1,10 +1,10 @@
-package at.jku.cis.iVolunteer.marketplace.configurations.enums;
+package at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty;
 
 import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;
-import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
-public interface EnumDefinitionRepository extends HasTenantRepository<EnumDefinition, String> {
+public interface TreePropertyDefinitionRepository extends HasTenantRepository<TreePropertyDefinition, String> {
 
-	public EnumDefinition findByName(String name);
+	public TreePropertyDefinition findByName(String name);
 
 }

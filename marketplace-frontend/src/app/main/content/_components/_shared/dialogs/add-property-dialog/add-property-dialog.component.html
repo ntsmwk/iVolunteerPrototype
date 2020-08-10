@@ -5,7 +5,7 @@
         <mat-icon>add</mat-icon>
       </td>
       <td>
-        <h1>Property / Enum hinzufügen</h1>
+        <h1>Property hinzufügen</h1>
       </td>
     </tr>
   </table>
@@ -105,12 +105,12 @@
   <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">OK</button>
 
   <button *ngIf="tabIndex === 0" class="primary-button-light" mat-stroked-button type="button"
-    (click)="createNewClicked('property')">
+    (click)="createNewClicked('flat')">
     Neues Property
   </button>
 
   <button *ngIf="tabIndex === 1" class="primary-button-light" mat-stroked-button type="button"
-    (click)="createNewClicked('enum')">
+    (click)="createNewClicked('tree')">
     Neues Enum
   </button>
 

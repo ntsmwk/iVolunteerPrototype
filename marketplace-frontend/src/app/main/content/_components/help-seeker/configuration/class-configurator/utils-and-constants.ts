@@ -6,7 +6,7 @@ import {
 import { ObjectIdService } from '../../../../_service/objectid.service.';
 import { isNullOrUndefined } from 'util';
 import { MatchingOperatorType } from '../../../../_model/matching';
-import { PropertyType, ClassProperty } from '../../../../_model/meta/property';
+import { PropertyType, ClassProperty } from '../../../../_model/meta/property/property';
 
 const relationshipPalettes = {
   id: 'relationships',
@@ -153,8 +153,8 @@ const propertyTypePalettes = [
     imgPath: '/assets/icons/datatypes/o.png',
   },
   {
-    id: PropertyType.ENUM,
-    label: PropertyType.getLabelForPropertyType(PropertyType.ENUM),
+    id: PropertyType.TREE,
+    label: PropertyType.getLabelForPropertyType(PropertyType.TREE),
     imgPath: '/assets/icons/datatypes/null.png',
   },
 ];

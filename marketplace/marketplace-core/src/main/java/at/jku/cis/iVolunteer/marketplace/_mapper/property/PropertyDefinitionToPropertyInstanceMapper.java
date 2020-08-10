@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Component
-public class PropertyDefinitionToPropertyInstanceMapper implements OneWayMapper<PropertyDefinition<Object>, PropertyInstance<Object>> {
+public class PropertyDefinitionToPropertyInstanceMapper implements OneWayMapper<FlatPropertyDefinition<Object>, PropertyInstance<Object>> {
 	
 	@Override
-	public PropertyInstance<Object> toTarget(PropertyDefinition<Object> source) {
+	public PropertyInstance<Object> toTarget(FlatPropertyDefinition<Object> source) {
 		if (source == null) {
 			return null;
 		}
@@ -35,13 +35,13 @@ public class PropertyDefinitionToPropertyInstanceMapper implements OneWayMapper<
 	}
 
 	@Override
-	public List<PropertyInstance<Object>> toTargets(List<PropertyDefinition<Object>> sources) {
+	public List<PropertyInstance<Object>> toTargets(List<FlatPropertyDefinition<Object>> sources) {
 		if (sources == null) {
 			return null;
 		}
 		
 		List<PropertyInstance<Object>> targets = new ArrayList<PropertyInstance<Object>>();
-		for (PropertyDefinition<Object> definition : sources) {
+		for (FlatPropertyDefinition<Object> definition : sources) {
 			targets.add(toTarget(definition));
 		}
 		

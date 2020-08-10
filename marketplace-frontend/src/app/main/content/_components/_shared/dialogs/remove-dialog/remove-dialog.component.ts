@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PropertyDefinition, PropertyType } from '../../../../_model/meta/property';
+import { FlatPropertyDefinition, PropertyType } from '../../../../_model/meta/property/property';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { MatTableDataSource, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -46,7 +46,7 @@ export class RemovePropertyDialogComponent implements OnInit {
     this.loaded = true;
   }
 
-  isDisabled(propertyDefinition: PropertyDefinition<any>) {
+  isDisabled(propertyDefinition: FlatPropertyDefinition<any>) {
     return false;
   }
 

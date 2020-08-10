@@ -110,12 +110,12 @@
         generic - formItem controlType not yet implemented: {{ formItem.label }}
       </div>
 
-      <div *ngSwitchCase="'enum-single'">
-        <app-single-enum-item [formItem]="formItem" [form]="form"></app-single-enum-item>
+      <div *ngSwitchCase="'tree-single-select'">
+        <app-single-select-tree-item [formItem]="formItem" [form]="form"></app-single-select-tree-item>
       </div>
 
-      <div *ngSwitchCase="'enum-multiple'">
-        <app-multiple-enum [formItem]="formItem"></app-multiple-enum>
+      <div *ngSwitchCase="'tree-multiple-select'">
+        <app-multiple-select-tree-item [formItem]="formItem"></app-multiple-select-tree-item>
       </div>
 
 

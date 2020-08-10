@@ -18,7 +18,7 @@ import {
   PropertyInstance,
   PropertyType,
   ClassProperty
-} from 'app/main/content/_model/meta/property';
+} from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { User, UserRole } from 'app/main/content/_model/user';

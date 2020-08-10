@@ -1,21 +1,21 @@
-package at.jku.cis.iVolunteer.model.meta.core.enums;
+package at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty;
 
-public class EnumRelationship {
+public class TreePropertyRelationship {
 	
 	String id;
 	String sourceEnumEntryId;
 	String targetEnumEntryId;
 	
-	public EnumRelationship() {
+	public TreePropertyRelationship() {
 	
 	}
 	
-	public EnumRelationship(String sourceEnumEntryId, String targetEnumEntryId) {
+	public TreePropertyRelationship(String sourceEnumEntryId, String targetEnumEntryId) {
 		this.sourceEnumEntryId = sourceEnumEntryId;
 		this.targetEnumEntryId = targetEnumEntryId;
 	}
 	
-	public EnumRelationship(EnumEntry sourceEnumEntry, EnumEntry targetEnumEntry) {
+	public TreePropertyRelationship(TreePropertyEntry sourceEnumEntry, TreePropertyEntry targetEnumEntry) {
 		this.sourceEnumEntryId = sourceEnumEntry.getId();
 		this.targetEnumEntryId = targetEnumEntry.getId();
 	}
