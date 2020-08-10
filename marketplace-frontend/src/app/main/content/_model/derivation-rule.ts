@@ -1,5 +1,6 @@
 import { ClassDefinition } from "./meta/class";
 import { ClassProperty, PropertyDefinition } from "./meta/property";
+import { User } from './user';
 
 export class DerivationRule {
   id: string;

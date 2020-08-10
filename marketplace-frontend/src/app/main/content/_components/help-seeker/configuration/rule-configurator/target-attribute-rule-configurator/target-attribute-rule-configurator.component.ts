@@ -125,17 +125,19 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
 
     // AK war vorher hier ---> 143
     // this.formItem = this.formItems[0];
+    this.formItem = this.formItems[0];
+    // set question value in case of existing rule
+    if (this.attributeTarget.value) {
+      this.formItem.value = this.attributeTarget.value;
+      //this.ruleQuestionForm.get(this.formItem.key).setValue(this.attributeTarget.value);
+    }
 
     // AK QuestionForm zeicgt jetzt auf dieselbe control wie vorher - muss für 1:N Beziehungen möglichwerweise angepasst werden
     this.ruleQuestionForm = (this.dynamicFormItemControlService.toFormGroup(this.formItems).controls['entries'] as FormArray).controls[0] as FormControl;
 
     this.ruleTargetAttributeForm.addControl('questionForm', (this.ruleQuestionForm));
    
-    this.formItem = this.formItems[0];
-    // set question value in case of existing rule
-    if (this.attributeTarget.value) {
-      this.formItem.value = this.attributeTarget.value;
-    }
+    
 /*
     console.log("DISPLAYING FORMGROUP: ");
     console.log("RAW: ");

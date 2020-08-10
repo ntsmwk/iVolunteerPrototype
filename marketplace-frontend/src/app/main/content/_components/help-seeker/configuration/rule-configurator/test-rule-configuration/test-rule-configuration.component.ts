@@ -41,6 +41,8 @@ export class TestRuleConfigurationComponent implements OnInit {
     );
     this.marketplace = globalInfo.marketplace;
     this.tenantAdmin = globalInfo.user;
+
+    this.testRule();
   }
 
   private testRule() {

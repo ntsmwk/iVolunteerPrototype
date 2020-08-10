@@ -22,10 +22,10 @@ import { DerivationRuleService } from "app/main/content/_service/derivation-rule
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
 import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { isNullOrUndefined } from 'util';
+import { RuleExecution } from 'app/main/content/_model/derivation-rule-execution';
 
 @Component({
   templateUrl: "./rule-configurator.component.html",

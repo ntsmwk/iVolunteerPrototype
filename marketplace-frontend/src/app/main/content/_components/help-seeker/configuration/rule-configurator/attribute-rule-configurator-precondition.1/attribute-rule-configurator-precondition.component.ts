@@ -101,7 +101,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
         this.attributeCondition.comparisonOperatorType || ComparisonOperatorType.EQ,
       value: this.attributeCondition.value || "",
     });
-   
+    
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
     const globalInfo = <GlobalInfo>(
@@ -129,8 +129,8 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   onPropertyChange(classProperty: ClassProperty<any>, $event) {
     if (
       $event.isUserInput &&
-      (!this.attributeCondition.classProperty ||
-        this.attributeCondition.classProperty.id != classProperty.id)
+      (isNullOrUndefined(this.attributeCondition.classProperty) ||
+       this.attributeCondition.classProperty.id != classProperty.id)
     ) {
       this.initAttributeCondition();
       this.attributeCondition.classProperty = classProperty;
@@ -167,15 +167,16 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
       // this.formItem = this.formItems[0]; XXX brauche ich das?
       
+      this.formItem = this.formItems[0];
+      if (this.attributeCondition.value){
+        this.formItem.value = this.attributeCondition.value;
+        // this.ruleQuestionForm.get(this.formItem.key).setValue(this.attributeCondition.value);
+      } 
+
       // add question form to parent form
       this.ruleQuestionForm = (this.dynamicFormItemControlService.toFormGroup(this.formItems).controls['entries'] as FormArray).controls[0] as FormControl;
      // this.ruleQuestionForm = this.questionControlService.toFormGroup(this.formItems);
       this.rulePreconditionForm.addControl('questionForm', this.ruleQuestionForm);
-
-      this.formItem = this.formItems[0];
-      if (this.attributeCondition.value){
-        this.formItem.value = this.attributeCondition.value;
-      } 
 
       // detect change in question form
       this.rulePreconditionForm.get('questionForm').valueChanges.subscribe((change) => {
