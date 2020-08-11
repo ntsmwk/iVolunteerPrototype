@@ -41,7 +41,7 @@ public class ClassPropertyController {
 	@PutMapping("meta/core/property/class/get-classproperty-from-definition-by-id")
 	private List<ClassProperty<Object>> getClassPropertyFromPropertyDefinitionById(
 			@RequestBody ClassPropertyRequestObject requestObject) {
-		return classPropertyService.getClassPropertyFromDefinitionById(requestObject.getPropertyDefinitionIds(), requestObject.getEnumDefinitionIds());
+		return classPropertyService.getClassPropertyFromDefinitionById(requestObject.getFlatPropertyDefinitionIds(), requestObject.getTreePropertyDefinitionIds());
 	}
 
 	@PutMapping("meta/core/property/class/{id}/add-properties-by-id")

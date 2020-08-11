@@ -34,19 +34,18 @@ const mx: typeof mxgraph = require('mxgraph')({
 export class TreePropertyGraphEditorComponent implements AfterContentInit {
   constructor(
     private objectIdService: ObjectIdService,
-    private enumDefinitionService: TreePropertyDefinitionService
   ) { }
 
   @Input() marketplace: Marketplace;
   @Input() tenantAdmin: User;
-  @Input() enumDefinition: TreePropertyDefinition;
+  @Input() treePropertyDefinition: TreePropertyDefinition;
   @Output() result: EventEmitter<{
     type: string;
     payload: TreePropertyDefinition;
   }> = new EventEmitter();
   @Output() management: EventEmitter<String> = new EventEmitter();
 
-  @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
+  @ViewChild('treePropertyGraphContainer', { static: true }) graphContainer: ElementRef;
   graph: mxgraph.mxGraph;
   rootCell: MyMxCell;
   layout: any;
@@ -131,21 +130,21 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
   createGraph() {
     this.graph.getModel().beginUpdate();
     this.createRootCell();
-    this.createEntryCells(this.enumDefinition.enumEntries);
-    this.createRelationshipCells(this.enumDefinition.enumRelationships);
+    this.createEntryCells(this.treePropertyDefinition.entries);
+    this.createRelationshipCells(this.treePropertyDefinition.relationships);
     this.graph.getModel().endUpdate();
   }
 
   private createRootCell() {
     const rootCell = this.graph.insertVertex(
       this.graph.getDefaultParent(),
-      this.enumDefinition.id,
-      this.enumDefinition.name,
+      this.treePropertyDefinition.id,
+      this.treePropertyDefinition.name,
       0,
       0,
       ENTRY_CELL_WIDTH,
       ENTRY_CELL_HEIGHT,
-      CConstants.mxStyles.classEnum
+      CConstants.mxStyles.classTree
     ) as MyMxCell;
     rootCell.root = true;
     rootCell.cellType = MyMxCellType.TREE_HEAD;
@@ -190,7 +189,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
       position.y,
       ENTRY_CELL_WIDTH,
       ENTRY_CELL_HEIGHT,
-      CConstants.mxStyles.classEnum
+      CConstants.mxStyles.classTree
     ) as MyMxCell;
     cell.root = false;
     cell.cellType = MyMxCellType.TREE_ENTRY;
@@ -242,16 +241,16 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     enumEntry.id = this.objectIdService.getNewObjectId();
     enumEntry.selectable = true;
     enumEntry.value = 'neuer Eintrag';
-    this.enumDefinition.enumEntries.push(enumEntry);
+    this.treePropertyDefinition.entries.push(enumEntry);
     return enumEntry;
   }
 
   private createRelationship(sourceId: string, targetId: string) {
     const relationship = new TreePropertyRelationship();
     relationship.id = this.objectIdService.getNewObjectId();
-    relationship.sourceEnumEntryId = sourceId;
-    relationship.targetEnumEntryId = targetId;
-    this.enumDefinition.enumRelationships.push(relationship);
+    relationship.sourceId = sourceId;
+    relationship.targetId = targetId;
+    this.treePropertyDefinition.relationships.push(relationship);
     return relationship;
   }
 
@@ -266,10 +265,10 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
   ): MyMxCell {
     const source: MyMxCell = this.graph
       .getModel()
-      .getCell(enumRelationship.sourceEnumEntryId) as MyMxCell;
+      .getCell(enumRelationship.sourceId) as MyMxCell;
     const target: MyMxCell = this.graph
       .getModel()
-      .getCell(enumRelationship.targetEnumEntryId) as MyMxCell;
+      .getCell(enumRelationship.targetId) as MyMxCell;
 
     return this.createRelationshipCell(enumRelationship.id, source, target);
   }
@@ -329,7 +328,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   onSaveClick() {
     this.updateModel();
-    this.result.emit({ type: 'save', payload: this.enumDefinition });
+    this.result.emit({ type: 'save', payload: this.treePropertyDefinition });
   }
 
   updateModel() {
@@ -341,7 +340,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
       .getChildEdges(this.graph.getDefaultParent());
 
     // update head
-    this.enumDefinition.name = this.rootCell.value;
+    this.treePropertyDefinition.name = this.rootCell.value;
 
     // update entries
     const newEnumEntries: TreePropertyEntry[] = [];
@@ -349,24 +348,24 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
       if (vertice.id === this.rootCell.id) {
         continue;
       }
-      const enumEntry = this.enumDefinition.enumEntries.find(
+      const enumEntry = this.treePropertyDefinition.entries.find(
         (e) => e.id === vertice.id
       );
       enumEntry.value = vertice.value;
       newEnumEntries.push(enumEntry);
     }
-    this.enumDefinition.enumEntries = newEnumEntries;
+    this.treePropertyDefinition.entries = newEnumEntries;
 
     const newEnumRelationships: TreePropertyRelationship[] = [];
     for (const edge of edges) {
-      const relationship = this.enumDefinition.enumRelationships.find(
+      const relationship = this.treePropertyDefinition.relationships.find(
         (r) => r.id === edge.id
       );
-      relationship.sourceEnumEntryId = edge.source.id;
-      relationship.targetEnumEntryId = edge.target.id;
+      relationship.sourceId = edge.source.id;
+      relationship.targetId = edge.target.id;
       newEnumRelationships.push(relationship);
     }
-    this.enumDefinition.enumRelationships = newEnumRelationships;
+    this.treePropertyDefinition.relationships = newEnumRelationships;
   }
 
   onBackClick() {
@@ -375,7 +374,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   onSaveAndBackClick() {
     this.updateModel();
-    this.result.emit({ type: 'saveAndBack', payload: this.enumDefinition });
+    this.result.emit({ type: 'saveAndBack', payload: this.treePropertyDefinition });
   }
 
   private setLayout() {
@@ -421,7 +420,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
   private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
     this.overlayEvent = event;
     this.overlayContent = new TreePropertyOptionsOverlayContentData();
-    this.overlayContent.enumEntry = this.enumDefinition.enumEntries.find(
+    this.overlayContent.enumEntry = this.treePropertyDefinition.entries.find(
       (e) => e.id === cell.id
     );
     this.management.emit('disableScroll');
@@ -433,10 +432,10 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   handleOverlayClosed(event?: TreePropertyEntry) {
     if (!isNullOrUndefined(event)) {
-      const i = this.enumDefinition.enumEntries.findIndex(
+      const i = this.treePropertyDefinition.entries.findIndex(
         (e) => e.id === event.id
       );
-      this.enumDefinition.enumEntries[i] = event;
+      this.treePropertyDefinition.entries[i] = event;
     }
     this.overlayContent = undefined;
     this.overlayEvent = undefined;

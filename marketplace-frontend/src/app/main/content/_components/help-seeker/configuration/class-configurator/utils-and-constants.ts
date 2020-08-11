@@ -165,7 +165,7 @@ const mxStyles = {
     'editable=0;' +
     'shape=swimlane;resizable=0;' +
     'fillColor=#000e8a;strokeColor=#000e8a;fontColor=#FFFFFF;fontSize=14;',
-  classEnum:
+  classTree:
     'shape=swimlane;resizable=0;foldable=0;' +
     'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#B05800;fontSize=14;' +
     'portConstraint=north;',
@@ -177,7 +177,7 @@ const mxStyles = {
   property:
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
     'fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;',
-  propertyEnum:
+  propertyTree:
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
     'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#FFFFFF;fontSize=14;align=left;html=1;overflow=hidden;' +
     'portConstraint=eastwest',
@@ -197,7 +197,7 @@ const mxStyles = {
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
   // Relationships
-  inheritanceEnum:
+  inheritanceTree:
     'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
   inheritance:
     'sideToSideEdgeStyle=1;endArrow=none;startArrow=block;startSize=16;startFill=0;curved=1;html=1;strokeColor=#000e8a;',

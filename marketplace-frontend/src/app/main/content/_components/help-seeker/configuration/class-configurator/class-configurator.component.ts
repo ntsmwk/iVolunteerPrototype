@@ -386,7 +386,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
           propertyCell.propertyId = p.id;
         }
         else {
-          propertyCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
+          propertyCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyTree) as MyMxCell;
           propertyCell.cellType = MyMxCellType.TREE_PROPERTY;
           propertyCell.propertyClass = 'TREE';
           propertyCell.propertyId = p.id;
@@ -400,7 +400,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   // private addEnumsToCell(cell: MyMxCell, enums: TreePropertyDefinition[], yLocation: number): number {
   // if (!isNullOrUndefined(enums)) {
   //     for (const e of enums) {
-  //       const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
+  //       const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyTree) as MyMxCell;
 
   //       enumEntry.cellType = MyMxCellType.ENUM_PROPERTY;
 

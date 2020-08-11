@@ -15,8 +15,8 @@ export class TreePropertyEntry {
 
 export class TreePropertyRelationship {
     id: string;
-    sourceEnumEntryId: string;
-    targetEnumEntryId: string;
+    sourceId: string;
+    targetId: string;
 }
 
 export class TreePropertyDefinition {
@@ -30,6 +30,6 @@ export class TreePropertyDefinition {
     timestamp: Date;
     tenantId: string;
 
-    enumEntries: TreePropertyEntry[];
-    enumRelationships: TreePropertyRelationship[];
+    entries: TreePropertyEntry[];
+    relationships: TreePropertyRelationship[];
 }

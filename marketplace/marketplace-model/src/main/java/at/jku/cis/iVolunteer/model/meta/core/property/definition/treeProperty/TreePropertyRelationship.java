@@ -3,21 +3,21 @@ package at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty;
 public class TreePropertyRelationship {
 	
 	String id;
-	String sourceEnumEntryId;
-	String targetEnumEntryId;
+	String sourceId;
+	String targetId;
 	
 	public TreePropertyRelationship() {
 	
 	}
 	
-	public TreePropertyRelationship(String sourceEnumEntryId, String targetEnumEntryId) {
-		this.sourceEnumEntryId = sourceEnumEntryId;
-		this.targetEnumEntryId = targetEnumEntryId;
+	public TreePropertyRelationship(String sourceId, String targetId) {
+		this.sourceId = sourceId;
+		this.targetId = targetId;
 	}
 	
-	public TreePropertyRelationship(TreePropertyEntry sourceEnumEntry, TreePropertyEntry targetEnumEntry) {
-		this.sourceEnumEntryId = sourceEnumEntry.getId();
-		this.targetEnumEntryId = targetEnumEntry.getId();
+	public TreePropertyRelationship(TreePropertyEntry sourceEntry, TreePropertyEntry targetEntry) {
+		this.sourceId = sourceEntry.getId();
+		this.targetId = targetEntry.getId();
 	}
 
 	public String getId() {
@@ -28,21 +28,7 @@ public class TreePropertyRelationship {
 		this.id = id;
 	}
 
-	public String getSourceEnumEntryId() {
-		return sourceEnumEntryId;
-	}
 
-	public void setSourceEnumEntryId(String sourceEnumEntryId) {
-		this.sourceEnumEntryId = sourceEnumEntryId;
-	}
-
-	public String getTargetEnumEntryId() {
-		return targetEnumEntryId;
-	}
-
-	public void setTargetEnumEntryId(String targetEnumEntryId) {
-		this.targetEnumEntryId = targetEnumEntryId;
-	}
 
 	
 }

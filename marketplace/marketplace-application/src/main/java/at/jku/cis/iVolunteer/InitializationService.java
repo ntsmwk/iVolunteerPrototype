@@ -31,7 +31,7 @@ public class InitializationService {
 	@Autowired protected ClassConfigurationRepository classConfigurationRepository;
 	@Autowired protected MatchingConfigurationRepository matchingConfigurationRepository;
 	@Autowired protected MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
-	@Autowired protected TreePropertyDefinitionRepository enumDefinitionRepository;
+	@Autowired protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 

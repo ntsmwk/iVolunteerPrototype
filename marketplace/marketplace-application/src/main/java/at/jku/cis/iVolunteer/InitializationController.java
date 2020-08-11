@@ -74,7 +74,7 @@ public class InitializationController {
 	
 	@PutMapping("/init/delete-enumdefinitions")
 	public void deleteEnumDefinitions() {
-		initializationService.enumDefinitionRepository.deleteAll();
+		initializationService.treePropertyDefinitionRepository.deleteAll();
 	}
 	
 	/**

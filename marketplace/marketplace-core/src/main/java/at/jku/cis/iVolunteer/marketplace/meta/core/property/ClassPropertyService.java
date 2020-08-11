@@ -29,7 +29,7 @@ public class ClassPropertyService {
 	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired private TreePropertyDefinitionRepository enumDefinitionRepository;
+	@Autowired private TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 	@Autowired private TreePropertyDefinitionToClassPropertyMapper enumDefinitionToClassPropertyMapper;
 
 	
@@ -115,22 +115,22 @@ public class ClassPropertyService {
 	}
 	
 	
-	List<ClassProperty<Object>> getClassPropertyFromDefinitionById(List<String> propertyIds, List<String> enumIds) {
-		List<FlatPropertyDefinition<Object>> properties = new ArrayList<>();
-		List<TreePropertyDefinition> enums = new ArrayList<>();
+	List<ClassProperty<Object>> getClassPropertyFromDefinitionById(List<String> flatPropertyIds, List<String> treePropertyIds) {
+		List<FlatPropertyDefinition<Object>> flatProperties = new ArrayList<>();
+		List<TreePropertyDefinition> treeProperties = new ArrayList<>();
 		
-		if (propertyIds != null) {
-			propertyDefinitionRepository.findAll(propertyIds).forEach(properties::add);
+		if (flatPropertyIds != null) {
+			propertyDefinitionRepository.findAll(flatPropertyIds).forEach(flatProperties::add);
 		}
-		if (enumIds != null) {
-			enumDefinitionRepository.findAll(enumIds).forEach(enums::add);
+		if (treePropertyIds != null) {
+			treePropertyDefinitionRepository.findAll(treePropertyIds).forEach(treeProperties::add);
 		}
 		
-		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(properties);
-		List<ClassProperty<Object>> enumProperties = createClassPropertiesFromEnumDefinitions(enums);
+		List<ClassProperty<Object>> flatClassProperties = createClassPropertiesFromDefinitions(flatProperties);
+		List<ClassProperty<Object>> treeClassProperties = createClassPropertiesFromEnumDefinitions(treeProperties);
 		
-		classProperties.addAll(enumProperties);
-		return classProperties;
+		flatClassProperties.addAll(treeClassProperties);
+		return flatClassProperties;
 	}
 
 	// TODO: Philipp: tenantId check required?

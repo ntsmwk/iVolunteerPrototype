@@ -373,7 +373,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       cell = new mx.mxCell(
         collector.classDefinition.name,
         geometry,
-        CConstants.mxStyles.classEnum
+        CConstants.mxStyles.classTree
       ) as MyMxCell;
     } else if (collector.classDefinition.collector) {
       cell = new mx.mxCell(
@@ -470,7 +470,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
         if (p.type === PropertyType.TREE) {
           propertyEntry.cellType = MyMxCellType.TREE_PROPERTY;
-          propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
+          propertyEntry.setStyle(CConstants.mxStyles.propertyTree);
         } else {
           propertyEntry.cellType = MyMxCellType.PROPERTY;
         }

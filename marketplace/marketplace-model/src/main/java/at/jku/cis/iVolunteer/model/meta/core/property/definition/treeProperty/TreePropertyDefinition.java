@@ -13,22 +13,22 @@ public class TreePropertyDefinition extends IVolunteerObject {
 
 	private String name;
 
-	private List<TreePropertyEntry> enumEntries;
-	private List<TreePropertyRelationship> enumRelationships;
+	private List<TreePropertyEntry> entries;
+	private List<TreePropertyRelationship> relationships;
 	
 	private boolean multiple;
 	private boolean required;
 
 	public TreePropertyDefinition() {
-		this.enumEntries = new ArrayList<TreePropertyEntry>();
-		this.enumRelationships = new ArrayList<TreePropertyRelationship>();
+		this.entries = new ArrayList<TreePropertyEntry>();
+		this.relationships = new ArrayList<TreePropertyRelationship>();
 		this.setTimestamp(new Date());
 	}
 
 	public TreePropertyDefinition(String name, String tenantId) {
 		this.name = name;
-		this.enumEntries = new ArrayList<TreePropertyEntry>();
-		this.enumRelationships = new ArrayList<TreePropertyRelationship>();
+		this.entries = new ArrayList<TreePropertyEntry>();
+		this.relationships = new ArrayList<TreePropertyRelationship>();
 		this.setTenantId(tenantId);
 		this.setTimestamp(new Date());
 	}
@@ -37,8 +37,8 @@ public class TreePropertyDefinition extends IVolunteerObject {
 		this.name = name;
 		this.description = description;
 		this.multiple = multiple;
-		this.enumEntries = new ArrayList<TreePropertyEntry>();
-		this.enumRelationships = new ArrayList<TreePropertyRelationship>();
+		this.entries = new ArrayList<TreePropertyEntry>();
+		this.relationships = new ArrayList<TreePropertyRelationship>();
 		this.setTenantId(tenantId);
 		this.setTimestamp(new Date());
 	}
@@ -52,20 +52,20 @@ public class TreePropertyDefinition extends IVolunteerObject {
 		this.name = name;
 	}
 
-	public List<TreePropertyEntry> getEnumEntries() {
-		return enumEntries;
+	public List<TreePropertyEntry> getEntries() {
+		return entries;
 	}
 
-	public void setEnumEntries(List<TreePropertyEntry> enumEntries) {
-		this.enumEntries = enumEntries;
+	public void setEntries(List<TreePropertyEntry> entries) {
+		this.entries = entries;
 	}
 
-	public List<TreePropertyRelationship> getEnumRelationships() {
-		return enumRelationships;
+	public List<TreePropertyRelationship> getRelationships() {
+		return relationships;
 	}
 
-	public void setEnumRelationships(List<TreePropertyRelationship> enumRelationships) {
-		this.enumRelationships = enumRelationships;
+	public void setRelationships(List<TreePropertyRelationship> relationships) {
+		this.relationships = relationships;
 	}
 
 	public Date getTimestamp() {

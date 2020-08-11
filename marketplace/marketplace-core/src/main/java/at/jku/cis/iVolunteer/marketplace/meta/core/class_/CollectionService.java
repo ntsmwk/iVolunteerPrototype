@@ -175,7 +175,7 @@ public class CollectionService {
 	private List<TreePropertyEntry> aggregateAllEnumEntriesDFS(String rootId, int level, List<TreePropertyEntry> list,
 			TreePropertyDefinition enumDefinition) {
 		Stack<TreePropertyRelationship> stack = new Stack<>();
-		List<TreePropertyRelationship> relationships = enumDefinition.getEnumRelationships().stream()
+		List<TreePropertyRelationship> relationships = enumDefinition.getRelationships().stream()
 				.filter(r -> r.getSourceEnumEntryId().equals(rootId)).collect(Collectors.toList());
 
 		Collections.reverse(relationships);
@@ -187,7 +187,7 @@ public class CollectionService {
 
 		while (!stack.isEmpty()) {
 			TreePropertyRelationship relationship = stack.pop();
-			TreePropertyEntry enumEntry = enumDefinition.getEnumEntries().stream()
+			TreePropertyEntry enumEntry = enumDefinition.getEntries().stream()
 					.filter(e -> e.getId().equals(relationship.getTargetEnumEntryId())).findFirst().get();
 			enumEntry.setPosition(new int[level + 1]);
 			enumEntry.setLevel(level);
@@ -249,8 +249,9 @@ public class CollectionService {
 						.filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
 				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()),
 						allClassDefinitions, allRelationships, false);
-				subFormEntry.setMultipleAllowed(((Association) relationship).getTargetCardinality() == AssociationCardinality.N);
-				
+				subFormEntry.setMultipleAllowed(
+						((Association) relationship).getTargetCardinality() == AssociationCardinality.N);
+
 				subFormEntries.add(subFormEntry);
 
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {

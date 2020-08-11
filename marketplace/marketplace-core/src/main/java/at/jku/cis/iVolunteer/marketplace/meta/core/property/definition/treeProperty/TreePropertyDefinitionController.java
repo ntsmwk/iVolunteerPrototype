@@ -16,58 +16,58 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.Tr
 @RestController
 public class TreePropertyDefinitionController {
 
-	@Autowired TreePropertyDefinitionRepository enumDefinitionRepository;
+	@Autowired TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 
 	@GetMapping("/meta/core/property-definition/tree/all")
-	private List<TreePropertyDefinition> getAllEnumConfigurations() {
+	private List<TreePropertyDefinition> getAllTreePropertyDefinitions() {
 
-		return enumDefinitionRepository.findAll();
+		return treePropertyDefinitionRepository.findAll();
 	}
 
 	@GetMapping("/meta/core/property-definition/tree/all/{tenantId}")
-	private List<TreePropertyDefinition> getAllEnumDefinitionssForTenant(@PathVariable("tenantId") String tenantId) {
-		return enumDefinitionRepository.findByTenantId(tenantId);
+	private List<TreePropertyDefinition> getAllTreePropertyDefinitionssForTenant(@PathVariable("tenantId") String tenantId) {
+		return treePropertyDefinitionRepository.findByTenantId(tenantId);
 	}
 
 	@GetMapping("/meta/core/property-definition/tree/{id}")
-	private TreePropertyDefinition getEnumDefinitionById(@PathVariable("id") String id) {
-		return enumDefinitionRepository.findOne(id);
+	private TreePropertyDefinition getTreePropertyDefinitionById(@PathVariable("id") String id) {
+		return treePropertyDefinitionRepository.findOne(id);
 	}
 
 	@GetMapping("/meta/core/property-definition/tree/by-name/{name}")
-	private TreePropertyDefinition getEnumDefinitionByName(@PathVariable("name") String name) {
-		return enumDefinitionRepository.findByName(name);
+	private TreePropertyDefinition getTreePropertyDefinitionByName(@PathVariable("name") String name) {
+		return treePropertyDefinitionRepository.findByName(name);
 	}
 
 	@PostMapping("/meta/core/property-configuration/tree/new")
-	private TreePropertyDefinition newEnumDefinition(@RequestBody TreePropertyDefinition enumConfiguration) {
-		return enumDefinitionRepository.save(enumConfiguration);
+	private TreePropertyDefinition newTreePropertyDefinition(@RequestBody TreePropertyDefinition treePropertyDefinition) {
+		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 
 	@PostMapping("/meta/core/property-definition/tree/new-empty")
-	private TreePropertyDefinition newEmptyEnumDefinition(@RequestBody String[] params) {
+	private TreePropertyDefinition newEmptyTreePropertyDefinition(@RequestBody String[] params) {
 		if (params.length != 4) {
 			return null;
 		}
-		TreePropertyDefinition enumDefinition = new TreePropertyDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
-		return enumDefinitionRepository.save(enumDefinition);
+		TreePropertyDefinition treePropertyDefinition = new TreePropertyDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
+		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 
 	@PutMapping("/meta/core/property-definition/tree/save")
-	private TreePropertyDefinition replaceEnumDefinition(@RequestBody TreePropertyDefinition enumDefinition) {
+	private TreePropertyDefinition replaceTreePropertyDefinition(@RequestBody TreePropertyDefinition treePropertyDefinition) {
 		
-		return enumDefinitionRepository.save(enumDefinition);
+		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 
 	@DeleteMapping("/meta/core/property-definition/tree/{id}/delete")
-	private void deleteEnumDefinition(@PathVariable("id") String id) {
-		enumDefinitionRepository.delete(id);
+	private void deleteTreePropertyDefinition(@PathVariable("id") String id) {
+		treePropertyDefinitionRepository.delete(id);
 	}
 
 	@PutMapping("/meta/core/enum-definition/tree/delete-multiple")
 	private List<TreePropertyDefinition> deleteMultipleMatchingConfigurations(@RequestBody List<String> ids) {
-		ids.forEach(this.enumDefinitionRepository::delete);
-		return this.enumDefinitionRepository.findAll();
+		ids.forEach(this.treePropertyDefinitionRepository::delete);
+		return this.treePropertyDefinitionRepository.findAll();
 	}
 
 }
