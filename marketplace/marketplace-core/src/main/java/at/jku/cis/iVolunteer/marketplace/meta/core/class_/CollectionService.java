@@ -89,6 +89,7 @@ public class CollectionService {
 			for (MatchingCollectorEntry entry : collection.getCollectorEntries()) {
 				collection.setNumberOfProperties(
 						collection.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
+
 			}
 			collection.setNumberOfDefinitions(collection.getCollectorEntries().size());
 		}
@@ -146,8 +147,9 @@ public class CollectionService {
 			List<MatchingCollectorEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
+		System.out.println("a");
 		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
-				| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
+				|| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
 
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
@@ -155,8 +157,12 @@ public class CollectionService {
 		if (stack == null || stack.size() <= 0) {
 			return list;
 		}
+		System.out.println("b");
+
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
+			System.out.println("c");
+
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 			if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
 				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(),

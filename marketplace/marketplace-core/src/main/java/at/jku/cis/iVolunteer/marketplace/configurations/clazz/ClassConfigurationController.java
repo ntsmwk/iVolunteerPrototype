@@ -105,6 +105,7 @@ public class ClassConfigurationController {
 
 	@PutMapping("class-configuration/save")
 	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
+		
 		updatedClassConfiguration.setTimestamp(new Date());
 
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
@@ -117,8 +118,8 @@ public class ClassConfigurationController {
 				cd.setConfigurationId(classConfiguration.getId());
 			}
 		}
-		classDefinitionRepository.save(classDefinitions);
-
+		classDefinitionRepository.save(classDefinitions);		
+		
 		// Build MatchingCollector
 		List<MatchingCollector> collectors = collectionService
 				.collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(classConfiguration.getId());

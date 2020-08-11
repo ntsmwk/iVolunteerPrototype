@@ -136,7 +136,8 @@ export class AddPropertyDialogComponent implements OnInit {
       const relationship = this.data.allRelationships.find(
         (r) => r.target === currentClassDefinition.id
       );
-      if (relationship.relationshipType === RelationshipType.AGGREGATION) {
+
+      if (isNullOrUndefined(relationship) || relationship.relationshipType === RelationshipType.ASSOCIATION) {
         break;
       }
 

@@ -51,24 +51,28 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
       this.relationshipService
         .addAndUpdateRelationships(this.globalInfo.marketplace, this.data.relationships)
         .toPromise().then((ret: Relationship[]) => {
+          console.log("rel done");
           this.data.relationships = ret;
         }),
 
       this.classDefinitionService
         .addOrUpdateClassDefintions(this.globalInfo.marketplace, this.data.classDefinitions)
         .toPromise().then((ret: ClassDefinition[]) => {
+          console.log("cd done");
           this.data.classDefinitions = ret;
         }),
 
       this.classDefinitionService
         .deleteClassDefinitions(this.globalInfo.marketplace, this.data.deletedClassDefintions)
         .toPromise().then((ret: any) => {
+          console.log("deleted cds done");
           this.data.deletedClassDefintions = [];
         }),
 
       this.relationshipService
         .deleteRelationships(this.globalInfo.marketplace, this.data.deletedRelationships)
         .toPromise().then((ret: any) => {
+          console.log("deleted rels done");
           this.data.deletedRelationships = [];
         }),
     ]).then(() => {
@@ -76,8 +80,9 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
         .saveClassConfiguration(this.globalInfo.marketplace, this.data.classConfiguration)
         .toPromise().then((ret: ClassConfiguration) => {
           this.data.classConfiguration = ret;
-
+          console.log("classConfig done");
         }).then(() => {
+          console.log("should close");
           this.dialogRef.close(this.data);
         });
     });
