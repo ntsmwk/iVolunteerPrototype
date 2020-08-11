@@ -108,7 +108,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     this.tenant = globalInfo.tenants[0];
 
     this.classDefinitionService
-      .getAllClassDefinitionsWithoutHeadAndEnums(
+      .getAllClassDefinitions(
         this.marketplace,
         this.tenant.id
       )

@@ -24,7 +24,7 @@ export class TreePropertyBuilderComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     // private dialogFactory: DialogFactoryDirective,
-    private enumDefinitionService: TreePropertyDefinitionService,
+    private treePropertyDefinitionService: TreePropertyDefinitionService,
     private loginService: LoginService
   ) { }
 
@@ -39,7 +39,7 @@ export class TreePropertyBuilderComponent implements OnInit {
   @Output() management: EventEmitter<String> = new EventEmitter();
 
   form: FormGroup;
-  enumDefinition: TreePropertyDefinition;
+  treePropertyDefinition: TreePropertyDefinition;
   showEditor: boolean;
   multipleToggled: boolean;
 
@@ -59,16 +59,16 @@ export class TreePropertyBuilderComponent implements OnInit {
     });
 
     if (!isNullOrUndefined(this.entryId)) {
-      this.enumDefinitionService
+      this.treePropertyDefinitionService
         .getPropertyDefinitionById(this.marketplace, this.entryId)
         .toPromise()
         .then((ret: TreePropertyDefinition) => {
-          this.enumDefinition = ret;
-          this.form.get('name').setValue(this.enumDefinition.name);
+          this.treePropertyDefinition = ret;
+          this.form.get('name').setValue(this.treePropertyDefinition.name);
           this.form
             .get('description')
-            .setValue(this.enumDefinition.description);
-          this.multipleToggled = this.enumDefinition.multiple;
+            .setValue(this.treePropertyDefinition.description);
+          this.multipleToggled = this.treePropertyDefinition.multiple;
           this.showEditor = true;
           this.loaded = true;
         });
@@ -88,7 +88,7 @@ export class TreePropertyBuilderComponent implements OnInit {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
     } else {
-      this.enumDefinitionService
+      this.treePropertyDefinitionService
         .newEmptyPropertyDefinition(
           this.marketplace,
           this.form.controls['name'].value,
@@ -97,9 +97,9 @@ export class TreePropertyBuilderComponent implements OnInit {
           this.tenant.id
         )
         .toPromise()
-        .then((enumDefinition: TreePropertyDefinition) => {
-          if (!isNullOrUndefined(enumDefinition)) {
-            this.enumDefinition = enumDefinition;
+        .then((treePropertyDefinition: TreePropertyDefinition) => {
+          if (!isNullOrUndefined(treePropertyDefinition)) {
+            this.treePropertyDefinition = treePropertyDefinition;
             this.showEditor = true;
           }
         });
@@ -115,7 +115,7 @@ export class TreePropertyBuilderComponent implements OnInit {
       event.payload.description = this.form.controls['description'].value;
       event.payload.multiple = this.multipleToggled;
 
-      this.enumDefinitionService
+      this.treePropertyDefinitionService
         .savePropertyDefinition(this.marketplace, event.payload)
         .toPromise()
         .then((ret: TreePropertyDefinition) => { });
@@ -125,7 +125,7 @@ export class TreePropertyBuilderComponent implements OnInit {
       event.payload.description = this.form.controls['description'].value;
       event.payload.multiple = this.multipleToggled;
 
-      this.enumDefinitionService
+      this.treePropertyDefinitionService
         .savePropertyDefinition(this.marketplace, event.payload)
         .toPromise()
         .then((ret: TreePropertyDefinition) => {
@@ -141,9 +141,9 @@ export class TreePropertyBuilderComponent implements OnInit {
   // openClicked() {
   //     // this.form.controls['name'].markAsPending();
 
-  //     this.openOpenEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: OpenEnumDefinitionDialogData) => {
+  //     this.openOpentreePropertyDefinitionDialog(this.marketplace, this.helpseeker).then((result: OpentreePropertyDefinitionDialogData) => {
   //         if (!isNullOrUndefined(result)) {
-  //             this.enumDefinition = result.enumDefinition;
+  //             this.treePropertyDefinition = result.treePropertyDefinition;
   //             this.showEditor = true;
   //         }
   //     });
@@ -152,15 +152,15 @@ export class TreePropertyBuilderComponent implements OnInit {
 
   // deleteClicked() {
   //     // this.form.controls['name'].markAsPending();
-  //     this.openDeleteEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: DeleteEnumDefinitionDialogData) => {
+  //     this.openDeletetreePropertyDefinitionDialog(this.marketplace, this.helpseeker).then((result: DeletetreePropertyDefinitionDialogData) => {
   //         if (!isNullOrUndefined(result)) {
   //             console.log('TODO');
   //         }
   //     });
   // }
 
-  // openOpenEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
-  //     const dialogRef = this.dialog.open(OpenEnumDefinitionDialogComponent, {
+  // openOpentreePropertyDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+  //     const dialogRef = this.dialog.open(OpentreePropertyDefinitionDialogComponent, {
   //         width: '500px',
   //         minWidth: '500px',
   //         height: '400px',
@@ -168,9 +168,9 @@ export class TreePropertyBuilderComponent implements OnInit {
   //         data: { marketplace: marketplace, helpseeker: helpseeker }
   //     });
 
-  //     let returnValue: OpenEnumDefinitionDialogData;
+  //     let returnValue: OpentreePropertyDefinitionDialogData;
 
-  //     dialogRef.beforeClose().toPromise().then((result: OpenEnumDefinitionDialogData) => {
+  //     dialogRef.beforeClose().toPromise().then((result: OpentreePropertyDefinitionDialogData) => {
   //         returnValue = result;
   //     });
 
@@ -179,8 +179,8 @@ export class TreePropertyBuilderComponent implements OnInit {
   //     });
   // }
 
-  // openDeleteEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
-  //     const dialogRef = this.dialog.open(DeleteEnumDefinitionDialogComponent, {
+  // openDeletetreePropertyDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+  //     const dialogRef = this.dialog.open(DeletetreePropertyDefinitionDialogComponent, {
   //         width: '500px',
   //         minWidth: '500px',
   //         height: '400px',
@@ -188,9 +188,9 @@ export class TreePropertyBuilderComponent implements OnInit {
   //         data: { marketplace: marketplace, helpseeker: helpseeker }
   //     });
 
-  //     let returnValue: DeleteEnumDefinitionDialogData;
+  //     let returnValue: DeletetreePropertyDefinitionDialogData;
 
-  //     dialogRef.beforeClose().toPromise().then((result: DeleteEnumDefinitionDialogData) => {
+  //     dialogRef.beforeClose().toPromise().then((result: DeletetreePropertyDefinitionDialogData) => {
   //         returnValue = result;
   //     });
 

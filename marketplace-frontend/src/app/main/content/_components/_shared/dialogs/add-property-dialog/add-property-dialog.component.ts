@@ -40,28 +40,28 @@ export class AddPropertyDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddPropertyDialogData>,
     @Inject(MAT_DIALOG_DATA)
     public data: AddPropertyDialogData,
-    private propertyDefinitionService: FlatPropertyDefinitionService,
+    private flatPropertyDefinitionService: FlatPropertyDefinitionService,
     private classPropertyService: ClassPropertyService,
-    private enumDefinitionService: TreePropertyDefinitionService,
+    private treePropertyDefinitionService: TreePropertyDefinitionService,
     public dialog: MatDialog,
     private loginService: LoginService,
   ) { }
 
-  propertyDatasource = new MatTableDataSource<PropertyItem>();
-  enumDataSource = new MatTableDataSource<TreePropertyDefinition>();
+  flatPropertyDataSource = new MatTableDataSource<PropertyItem>();
+  treePropertyDataSource = new MatTableDataSource<TreePropertyDefinition>();
   displayedColumns = ['checkbox', 'label', 'type'];
 
-  allPropertyDefinitions: FlatPropertyDefinition<any>[];
-  allEnumDefinitions: TreePropertyDefinition[];
+  allFlatPropertyDefinitions: FlatPropertyDefinition<any>[];
+  allTreePropertyDefinitions: TreePropertyDefinition[];
 
-  propertySelection = new SelectionModel<PropertyItem>(true, []);
-  enumSelection = new SelectionModel<TreePropertyDefinition>(true, []);
+  flatPropertySelection = new SelectionModel<PropertyItem>(true, []);
+  treePropertySelection = new SelectionModel<TreePropertyDefinition>(true, []);
 
-  initialProperties: FlatPropertyDefinition<any>[];
-  disabledProperties: FlatPropertyDefinition<any>[];
+  initialFlatPropertyDefinitions: FlatPropertyDefinition<any>[];
+  disabledFlatPropertyDefinitions: FlatPropertyDefinition<any>[];
 
-  initialEnums: TreePropertyDefinition[];
-  disabledEnums: TreePropertyDefinition[];
+  initialTreePropertyDefinitions: TreePropertyDefinition[];
+  disabledTreePropertyDefinitions: TreePropertyDefinition[];
 
   loaded: boolean;
   tabIndex: number;
@@ -82,13 +82,13 @@ export class AddPropertyDialogComponent implements OnInit {
 
 
     Promise.all([
-      this.propertyDefinitionService.getAllPropertyDefinitons(this.globalInfo.marketplace, this.tenant.id)
+      this.flatPropertyDefinitionService.getAllPropertyDefinitons(this.globalInfo.marketplace, this.tenant.id)
         .toPromise()
         .then((ret: FlatPropertyDefinition<any>[]) => {
-          this.propertyDatasource.data = ret;
-          this.allPropertyDefinitions = ret;
+          this.flatPropertyDataSource.data = ret;
+          this.allFlatPropertyDefinitions = ret;
 
-          this.initialProperties = ret.filter((p) =>
+          this.initialFlatPropertyDefinitions = ret.filter((p) =>
             this.data.classDefinition.properties.find((q) => q.id === p.id)
           );
 
@@ -97,24 +97,25 @@ export class AddPropertyDialogComponent implements OnInit {
             parentClassProperties.find((q) => q.id === p.id)
           );
 
-          this.disabledProperties = [];
-          this.disabledProperties.push(...this.initialProperties, ...parentProperties);
+          this.disabledFlatPropertyDefinitions = [];
+          this.disabledFlatPropertyDefinitions.push(...this.initialFlatPropertyDefinitions, ...parentProperties);
 
-          this.propertySelection.select(...this.initialProperties);
+          this.flatPropertySelection.select(...this.initialFlatPropertyDefinitions);
         }),
-      this.enumDefinitionService
+      this.treePropertyDefinitionService
         .getAllPropertyDefinitionsForTenant(this.globalInfo.marketplace, this.tenant.id)
         .toPromise()
         .then((ret: TreePropertyDefinition[]) => {
-          this.enumDataSource.data = ret;
-          this.allEnumDefinitions = ret;
+          this.treePropertyDataSource.data = ret;
+          this.allTreePropertyDefinitions = ret;
 
-          this.initialEnums = ret.filter((e) =>
+          this.initialTreePropertyDefinitions = ret.filter((e) =>
             this.data.classDefinition.properties.find((f) => f.id === e.id)
           );
-          this.disabledEnums = [];
-          this.disabledEnums.push(...this.initialEnums);
-          this.enumSelection.select(...this.initialEnums);
+          this.disabledTreePropertyDefinitions = [];
+          this.disabledTreePropertyDefinitions.push(...this.initialTreePropertyDefinitions);
+          this.treePropertySelection
+            .select(...this.initialTreePropertyDefinitions);
         }),
     ]).then(() => {
       this.loaded = true;
@@ -128,7 +129,7 @@ export class AddPropertyDialogComponent implements OnInit {
       const relationship = this.data.allRelationships.find(
         (r) => r.target === currentClassDefinition.id
       );
-      if (relationship.relationshipType === RelationshipType.AGGREGATION) {
+      if (isNullOrUndefined(relationship) || relationship.relationshipType === RelationshipType.ASSOCIATION) {
         break;
       }
 
@@ -141,60 +142,58 @@ export class AddPropertyDialogComponent implements OnInit {
     return parentProperties;
   }
 
-  isPropertyRowDisabled(propertyDefinition: FlatPropertyDefinition<any>) {
+  isFlatPropertyRowDisabled(flatPropertyDefinition: FlatPropertyDefinition<any>) {
     return !isNullOrUndefined(
-      this.disabledProperties.find((p) => p.id === propertyDefinition.id)
+      this.disabledFlatPropertyDefinitions.find((p) => p.id === flatPropertyDefinition.id)
     );
   }
 
-  isEnumRowDisabled(enumDefinition: TreePropertyDefinition) {
+  isTreePropertyRowDisabled(treePropertyDefinition: TreePropertyDefinition) {
     return !isNullOrUndefined(
-      this.disabledEnums.find((p) => p.id === enumDefinition.id)
+      this.disabledTreePropertyDefinitions.find((p) => p.id === treePropertyDefinition.id)
     );
   }
 
-  applyFilter(event: Event) {
+  applyFlatPropertyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.propertyDatasource.filter = filterValue.trim().toLowerCase();
+    this.flatPropertyDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  applyEnumFilter(event: Event) {
+  applyTreePropertyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.enumDataSource.filter = filterValue.trim().toLowerCase();
+    this.treePropertyDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onRowClick(row: FlatPropertyDefinition<any>) {
-    if (this.isPropertyRowDisabled(row)) {
+  onFlatRowClick(row: FlatPropertyDefinition<any>) {
+    if (this.isFlatPropertyRowDisabled(row)) {
       return;
     }
 
-    this.propertySelection.isSelected(row)
-      ? this.propertySelection.deselect(row)
-      : this.propertySelection.select(row);
+    this.flatPropertySelection.isSelected(row) ? this.flatPropertySelection.deselect(row) : this.flatPropertySelection.select(row);
   }
 
-  onEnumRowClick(row: TreePropertyDefinition) {
-    if (this.isEnumRowDisabled(row)) {
+  onTreeRowClick(row: TreePropertyDefinition) {
+    if (this.isTreePropertyRowDisabled(row)) {
       return;
     }
 
-    this.enumSelection.isSelected(row)
-      ? this.enumSelection.deselect(row)
-      : this.enumSelection.select(row);
+    this.treePropertySelection.isSelected(row) ? this.treePropertySelection.deselect(row)
+      : this.treePropertySelection.select(row);
   }
 
   onSubmit() {
     // Add selected, but filter out existing ones
-    const addedProperties = this.propertySelection.selected.filter(
+    const addedProperties = this.flatPropertySelection.selected.filter(
       (p) =>
         this.data.classDefinition.properties.findIndex((q) => p.id === q.id) ===
         -1
     );
-    const addedEnums = this.enumSelection.selected.filter(
-      (e) =>
-        this.data.classDefinition.properties.findIndex((q) => e.id === q.id) ===
-        -1
-    );
+    const addedEnums = this.treePropertySelection
+      .selected.filter(
+        (e) =>
+          this.data.classDefinition.properties.findIndex((q) => e.id === q.id) ===
+          -1
+      );
 
     this.classPropertyService
       .getClassPropertyFromDefinitionById(
@@ -217,23 +216,21 @@ export class AddPropertyDialogComponent implements OnInit {
       minHeight: '90vh',
       data: {
         marketplace: this.globalInfo.marketplace,
-        allPropertyDefinitions: this.propertyDatasource.data,
+        allFlatPropertyDefinitions: this.flatPropertyDataSource.data,
         builderType: type,
       },
       disableClose: true,
     });
 
-    dialogRef
-      .beforeClose()
-      .toPromise()
+    dialogRef.beforeClose().toPromise()
       .then((result: PropertyCreationDialogData) => {
         if (!isNullOrUndefined(result)) {
-          if (!isNullOrUndefined(result.propertyDefinition)) {
-            this.allPropertyDefinitions.push(result.propertyDefinition);
-            this.propertyDatasource.data = this.allPropertyDefinitions;
-          } else if (!isNullOrUndefined(result.enumDefinition)) {
-            this.allEnumDefinitions.push(result.enumDefinition);
-            this.enumDataSource.data = this.allEnumDefinitions;
+          if (!isNullOrUndefined(result.flatPropertyDefinition)) {
+            this.allFlatPropertyDefinitions.push(result.flatPropertyDefinition);
+            this.flatPropertyDataSource.data = this.allFlatPropertyDefinitions;
+          } else if (!isNullOrUndefined(result.treePropertyDefinition)) {
+            this.allTreePropertyDefinitions.push(result.treePropertyDefinition);
+            this.treePropertyDataSource.data = this.allTreePropertyDefinitions;
           }
         }
       });

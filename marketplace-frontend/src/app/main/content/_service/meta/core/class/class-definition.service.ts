@@ -19,24 +19,6 @@ export class ClassDefinitionService {
     );
   }
 
-  getAllClassDefinitionsWithoutHeadAndEnums(
-    marketplace: Marketplace,
-    tenantId: string
-  ) {
-    return this.http.get(
-      `${marketplace.url}/meta/core/class/definition/all/no-enum-no-head/tenant/${tenantId}`
-    );
-  }
-
-  getAllClassDefinitionsWithoutRootAndEnums(
-    marketplace: Marketplace,
-    tenantId: string
-  ) {
-    return this.http.get(
-      `${marketplace.url}/meta/core/class/definition/all/no-enum/tenant/${tenantId}`
-    );
-  }
-
   getClassDefinitionById(
     marketplace: Marketplace,
     id: string,

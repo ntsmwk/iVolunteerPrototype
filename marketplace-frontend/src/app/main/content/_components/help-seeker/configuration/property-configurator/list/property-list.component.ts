@@ -41,9 +41,9 @@ export class PropertyListComponent implements OnInit {
   tenants: Tenant[];
 
   propertyDefinitions: FlatPropertyDefinition<any>[];
-  enumDefinitions: TreePropertyDefinition[];
+  treePropertyDefinitions: TreePropertyDefinition[];
 
-  propertyEnumEntries: PropertyEntry[];
+  propertyEntries: PropertyEntry[];
 
   dropdownFilterValue: string;
   textSearchValue: string;
@@ -52,8 +52,8 @@ export class PropertyListComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private propertyDefinitionService: FlatPropertyDefinitionService,
-    private enumDefinitionService: TreePropertyDefinitionService,
+    private flatPropertyDefinitionService: FlatPropertyDefinitionService,
+    private treePropertyDefinitionService: TreePropertyDefinitionService,
     private loginService: LoginService,
     private dialogFactory: DialogFactoryDirective
   ) { }
@@ -88,17 +88,17 @@ export class PropertyListComponent implements OnInit {
     this.tenants = globalInfo.tenants;
 
     Promise.all([
-      this.propertyDefinitionService
+      this.flatPropertyDefinitionService
         .getAllPropertyDefinitons(this.marketplace, this.tenants[0].id)
         .toPromise()
         .then((propertyDefinitions: FlatPropertyDefinition<any>[]) => {
           this.propertyDefinitions = propertyDefinitions;
         }),
-      this.enumDefinitionService
+      this.treePropertyDefinitionService
         .getAllPropertyDefinitionsForTenant(this.marketplace, this.tenants[0].id)
         .toPromise()
-        .then((enumDefinitions: TreePropertyDefinition[]) => {
-          this.enumDefinitions = enumDefinitions;
+        .then((treePropertyDefinitions: TreePropertyDefinition[]) => {
+          this.treePropertyDefinitions = treePropertyDefinitions;
         }),
     ]).then(() => {
       this.updatePropertyAndEnumEntryList();
@@ -108,31 +108,31 @@ export class PropertyListComponent implements OnInit {
   }
 
   private updatePropertyAndEnumEntryList() {
-    this.propertyEnumEntries = [];
-    this.propertyEnumEntries.push(...this.propertyDefinitions);
-    this.propertyEnumEntries.push(
-      ...this.enumDefinitions.map((e) => ({
+    this.propertyEntries = [];
+    this.propertyEntries.push(...this.propertyDefinitions);
+    this.propertyEntries.push(
+      ...this.treePropertyDefinitions.map((e) => ({
         id: e.id,
         name: e.name,
         type: PropertyType.TREE,
         timestamp: e.timestamp,
       }))
     );
-    this.dataSource.data = this.propertyEnumEntries;
+    this.dataSource.data = this.propertyEntries;
   }
 
   applyTypeFilter() {
     switch (this.dropdownFilterValue) {
       case 'all':
-        this.dataSource.data = this.propertyEnumEntries;
+        this.dataSource.data = this.propertyEntries;
         break;
-      case 'properties':
-        this.dataSource.data = this.propertyEnumEntries.filter(
+      case 'flat':
+        this.dataSource.data = this.propertyEntries.filter(
           (entry: PropertyEntry) => entry.type !== PropertyType.TREE
         );
         break;
-      case 'enums':
-        this.dataSource.data = this.propertyEnumEntries.filter(
+      case 'tree':
+        this.dataSource.data = this.propertyEntries.filter(
           (entry: PropertyEntry) => entry.type === PropertyType.TREE
         );
         break;
@@ -205,17 +205,17 @@ export class PropertyListComponent implements OnInit {
       )
       .then((ret) => {
         if (ret && entry.type !== PropertyType.TREE) {
-          this.propertyDefinitionService
+          this.flatPropertyDefinitionService
             .deletePropertyDefinition(this.marketplace, entry.id)
             .toPromise()
-            .then((innerret) => {
+            .then(() => {
               this.deleteFromLists('flat', entry.id);
             });
         } else if (ret && entry.type === PropertyType.TREE) {
-          this.enumDefinitionService
+          this.treePropertyDefinitionService
             .deletePropertyDefinition(this.marketplace, entry.id)
             .toPromise()
-            .then((innerret) => {
+            .then(() => {
               this.deleteFromLists('tree', entry.id);
             });
         }
@@ -224,9 +224,9 @@ export class PropertyListComponent implements OnInit {
 
   deleteFromLists(key: 'tree' | 'flat', id: string) {
     key === 'tree'
-      ? this.enumDefinitions.filter((e) => e.id !== id)
+      ? this.treePropertyDefinitions.filter((e) => e.id !== id)
       : this.propertyDefinitions.filter((e) => e.id !== id);
-    this.propertyEnumEntries = this.propertyEnumEntries.filter(
+    this.propertyEntries = this.propertyEntries.filter(
       (e) => e.id !== id
     );
     this.dataSource.data = this.dataSource.data.filter((e) => e.id !== id);

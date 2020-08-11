@@ -176,7 +176,7 @@ public class CollectionService {
 			TreePropertyDefinition enumDefinition) {
 		Stack<TreePropertyRelationship> stack = new Stack<>();
 		List<TreePropertyRelationship> relationships = enumDefinition.getRelationships().stream()
-				.filter(r -> r.getSourceEnumEntryId().equals(rootId)).collect(Collectors.toList());
+				.filter(r -> r.getSourceId().equals(rootId)).collect(Collectors.toList());
 
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
@@ -188,7 +188,7 @@ public class CollectionService {
 		while (!stack.isEmpty()) {
 			TreePropertyRelationship relationship = stack.pop();
 			TreePropertyEntry enumEntry = enumDefinition.getEntries().stream()
-					.filter(e -> e.getId().equals(relationship.getTargetEnumEntryId())).findFirst().get();
+					.filter(e -> e.getId().equals(relationship.getTargetId())).findFirst().get();
 			enumEntry.setPosition(new int[level + 1]);
 			enumEntry.setLevel(level);
 			list.add(enumEntry);

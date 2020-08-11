@@ -13,7 +13,7 @@ export class OpenTreePropertyDefinitionDialogData {
   tenantAdmin: User;
   marketplace: Marketplace;
 
-  enumDefinition: TreePropertyDefinition;
+  treePropertyDefinitions: TreePropertyDefinition;
 }
 
 @Component({
@@ -22,14 +22,14 @@ export class OpenTreePropertyDefinitionDialogData {
   styleUrls: ['./open-tree-property-definition-dialog.component.scss'],
 })
 export class OpenTreePropertyDefinitionDialogComponent implements OnInit {
-  enumDefinitions: TreePropertyDefinition[];
+  treePropertyDefinitions: TreePropertyDefinition[];
   loaded: boolean;
   tenant: Tenant;
 
   constructor(
     public dialogRef: MatDialogRef<OpenTreePropertyDefinitionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OpenTreePropertyDefinitionDialogData,
-    private enumDefinitionService: TreePropertyDefinitionService,
+    private treePropertyDefinitionService: TreePropertyDefinitionService,
     private loginService: LoginService
   ) { }
 
@@ -38,19 +38,19 @@ export class OpenTreePropertyDefinitionDialogComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.tenant = globalInfo.tenants[0];
-    this.enumDefinitionService
+    this.treePropertyDefinitionService
       .getAllPropertyDefinitionsForTenant(this.data.marketplace, this.tenant.id)
       .toPromise()
-      .then((enumDefinitions: TreePropertyDefinition[]) => {
-        if (!isNullOrUndefined(enumDefinitions)) {
-          this.enumDefinitions = enumDefinitions;
+      .then((treePropertyDefinitions: TreePropertyDefinition[]) => {
+        if (!isNullOrUndefined(treePropertyDefinitions)) {
+          this.treePropertyDefinitions = treePropertyDefinitions;
           this.loaded = true;
         }
       });
   }
 
   handleRowClick(entry: TreePropertyDefinition) {
-    this.data.enumDefinition = entry;
+    this.data.treePropertyDefinitions = entry;
     this.dialogRef.close(this.data);
   }
 
@@ -60,8 +60,8 @@ export class OpenTreePropertyDefinitionDialogComponent implements OnInit {
 
   hasNoEnumDefinitions() {
     return (
-      isNullOrUndefined(this.enumDefinitions) ||
-      this.enumDefinitions.length <= 0
+      isNullOrUndefined(this.treePropertyDefinitions) ||
+      this.treePropertyDefinitions.length <= 0
     );
   }
 }

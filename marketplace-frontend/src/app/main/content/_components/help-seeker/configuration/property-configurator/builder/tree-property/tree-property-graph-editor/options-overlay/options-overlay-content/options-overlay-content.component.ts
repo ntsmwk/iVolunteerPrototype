@@ -1,15 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
-import { TreePropertyEntry } from "app/main/content/_model/meta/property/tree-property";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { TreePropertyEntry } from 'app/main/content/_model/meta/property/tree-property';
 
 export class TreePropertyOptionsOverlayContentData {
-  enumEntry: TreePropertyEntry;
+  treePropertyEntry: TreePropertyEntry;
 }
 
 @Component({
   selector: "tree-property-options-overlay-content",
-  templateUrl: "./options-overlay-content.component.html",
-  styleUrls: ["./options-overlay-content.component.scss"],
+  templateUrl: './options-overlay-content.component.html',
+  styleUrls: ['./options-overlay-content.component.scss'],
 })
 export class TreePropertyOptionsOverlayContentComponent implements OnInit {
   @Input() inputData: TreePropertyOptionsOverlayContentData;
@@ -17,16 +16,16 @@ export class TreePropertyOptionsOverlayContentComponent implements OnInit {
 
   typeSelection: string;
 
-  constructor(private _sanitizer: DomSanitizer) { }
+  constructor() { }
 
   ngOnInit() {
-    this.inputData.enumEntry.selectable
-      ? (this.typeSelection = "selector")
-      : (this.typeSelection = "label");
+    this.inputData.treePropertyEntry.selectable
+      ? (this.typeSelection = 'selector')
+      : (this.typeSelection = 'label');
   }
 
   onSubmit() {
-    this.inputData.enumEntry.selectable = this.typeSelection === "selector";
+    this.inputData.treePropertyEntry.selectable = this.typeSelection === 'selector';
 
     const outer = this;
     window.setTimeout(function () {

@@ -12,13 +12,7 @@
 </div>
 
 <mat-dialog-content *ngIf="loaded">
-  <app-builder-container
-    class="m-4"
-    [marketplace]="data.marketplace"
-    [tenantAdmin]="data.tenantAdmin"
-    [builderType]="data.builderType"
-    sourceString="dialog"
-    (result)="handleResultEvent($event)"
-  >
+  <app-builder-container class="m-4" [marketplace]="data.marketplace" [tenantAdmin]="data.tenantAdmin"
+    [builderType]="data.builderType" sourceString="dialog" (result)="handleResultEvent($event)">
   </app-builder-container>
 </mat-dialog-content>

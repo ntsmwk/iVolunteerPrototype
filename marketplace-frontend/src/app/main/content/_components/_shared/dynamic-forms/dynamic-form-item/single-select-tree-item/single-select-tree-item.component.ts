@@ -25,8 +25,8 @@ export class SingleSelectTreeItemComponent implements OnInit, AfterViewInit {
 
   constructor(private renderer: Renderer2) { }
 
-  @ViewChild('enumListContainer', { static: true }) listContainerDom: ElementRef;
-  @ViewChild('enumFormItemContainer', { static: true }) formItemContainerDom: ElementRef;
+  @ViewChild('treePropertyListContainer', { static: true }) listContainerDom: ElementRef;
+  @ViewChild('treePropertyFormItemContainer', { static: true }) formItemContainerDom: ElementRef;
 
   ngOnInit() {
     this.listOptions = [];

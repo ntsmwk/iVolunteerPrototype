@@ -26,7 +26,7 @@ export class DeleteTreePropertyDefinitionDialogData {
   styleUrls: ["./delete-tree-property-definition-dialog.component.scss"],
 })
 export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
-  enumDefinitions: TreePropertyDefinition[];
+  treePropertyDefinitions: TreePropertyDefinition[];
   loaded: boolean;
   checkboxStates: boolean[];
   tenant: Tenant;
@@ -34,7 +34,7 @@ export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DeleteTreePropertyDefinitionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DeleteTreePropertyDefinitionDialogData,
-    private enumDefinitionService: TreePropertyDefinitionService,
+    private treePropertyDefinitionService: TreePropertyDefinitionService,
     private loginService: LoginService
   ) { }
 
@@ -45,13 +45,13 @@ export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
     this.tenant = globalInfo.tenants[0];
     this.data.idsToDelete = [];
 
-    this.enumDefinitionService
+    this.treePropertyDefinitionService
       .getAllPropertyDefinitionsForTenant(this.data.marketplace, this.tenant.id)
       .toPromise()
-      .then((enumDefinitions: TreePropertyDefinition[]) => {
-        if (!isNullOrUndefined(enumDefinitions)) {
-          this.enumDefinitions = enumDefinitions;
-          this.checkboxStates = Array(enumDefinitions.length);
+      .then((treePropertyDefinitions: TreePropertyDefinition[]) => {
+        if (!isNullOrUndefined(treePropertyDefinitions)) {
+          this.treePropertyDefinitions = treePropertyDefinitions;
+          this.checkboxStates = Array(treePropertyDefinitions.length);
           this.checkboxStates.fill(false);
           this.loaded = true;
         }
@@ -64,7 +64,7 @@ export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
 
   onSubmit() {
     console.log(this.data.idsToDelete);
-    this.enumDefinitionService
+    this.treePropertyDefinitionService
       .deletePropertyDefinitions(this.data.marketplace, this.data.idsToDelete)
       .toPromise()
       .then(() => {
@@ -74,10 +74,10 @@ export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
 
   handleCancelClick() { }
 
-  hasNoEnumDefinitions() {
+  hasNoTreePropertyDefinitions() {
     return (
-      isNullOrUndefined(this.enumDefinitions) ||
-      this.enumDefinitions.length <= 0
+      isNullOrUndefined(this.treePropertyDefinitions) ||
+      this.treePropertyDefinitions.length <= 0
     );
   }
 

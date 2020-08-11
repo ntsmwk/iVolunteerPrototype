@@ -222,10 +222,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
         outer.handleMXGraphDoubleClickEvent(evt);
       });
-
-      // this.loadServerContent();
-      // this.collapseGraph();
-
       this.openPreviousClassConfiguration();
     }
   }
@@ -239,7 +235,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
  * ******CONTENT-RELATED FUNCTIONS******
  */
 
-  loadServerContent() { // this.clearEditor();
+  loadServerContent() {
     this.parseGraphContent();
     if (isNullOrUndefined(this.layout)) {
       this.setLayout();
@@ -252,7 +248,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.graph.getModel().beginUpdate();
     try {
       this.graph.getModel().clear();
-      // this.hiddenEdges = [];
     } finally {
       this.graph.getModel().endUpdate();
     }
@@ -337,10 +332,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     } cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 50);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 80);
 
-    // create properties TODO @Alex Refactor
+    // create properties TODO
     let yLocation = 5;
     yLocation = this.addPropertiesToCell(cell, classDefinition.properties, yLocation);
-    // yLocation = this.addEnumsToCell(cell, classDefinition.enums, yLocation);
 
     // next icon
     if (cell.classArchetype !== ClassArchetype.ROOT && cell.classArchetype && !cell.classArchetype.endsWith('_HEAD')) {
@@ -396,23 +390,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
     return yLocation;
   }
-
-  // private addEnumsToCell(cell: MyMxCell, enums: TreePropertyDefinition[], yLocation: number): number {
-  // if (!isNullOrUndefined(enums)) {
-  //     for (const e of enums) {
-  //       const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyTree) as MyMxCell;
-
-  //       enumEntry.cellType = MyMxCellType.ENUM_PROPERTY;
-
-  //       enumEntry.setConnectable(false);
-
-  //       enumEntry.enum = true;
-  //       enumEntry.enumId = e.id;
-  //       yLocation += 20;
-  //     }
-  // }
-  // return yLocation;
-  // }
 
   /**
  * ******RELATIONSHIPS******

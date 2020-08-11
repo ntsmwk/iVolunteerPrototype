@@ -22,12 +22,12 @@
         <th style="text-align: start" class="table-header-cell">Geändert</th>
 
       </tr>
-      <tr *ngFor="let entry of enumDefinitions" class="table-row" (click)="handleRowClick(entry)">
+      <tr *ngFor="let entry of treePropertyDefinitions" class="table-row" (click)="handleRowClick(entry)">
         <td style="overflow: hidden">{{entry.name}}</td>
         <td style="overflow: hidden; font-size: 12px">{{entry.date | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
       </tr>
-      <div *ngIf="hasNoEnumDefinitions()" style="text-align: center">
-        keine Enum-Definitionen verfügbar
+      <div *ngIf="hasNoTreePropertyDefinitions()" style="text-align: center">
+        keine Tree-Properties verfügbar
       </div>
 
     </table>

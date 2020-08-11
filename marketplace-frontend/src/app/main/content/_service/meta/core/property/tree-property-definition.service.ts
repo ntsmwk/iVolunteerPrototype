@@ -26,16 +26,16 @@ export class TreePropertyDefinitionService {
         return this.http.get(`${marketplace.url}/meta/core/property-definition/tree/by-name/${name}`);
     }
 
-    newPropertyDefinition(marketplace: Marketplace, enumDefinition: TreePropertyDefinition) {
-        return this.http.post(`${marketplace.url}/meta/core/property-definition/tree/new`, enumDefinition);
+    newPropertyDefinition(marketplace: Marketplace, treePropertyDefinition: TreePropertyDefinition) {
+        return this.http.post(`${marketplace.url}/meta/core/property-definition/tree/new`, treePropertyDefinition);
     }
 
     newEmptyPropertyDefinition(marketplace: Marketplace, name: string, description: string, multipleToggled: boolean, tenantId: string) {
         return this.http.post(`${marketplace.url}/meta/core/property-definition/tree/new-empty`, [name, description, multipleToggled, tenantId]);
     }
 
-    savePropertyDefinition(marketplace: Marketplace, enumDefinition: TreePropertyDefinition) {
-        return this.http.put(`${marketplace.url}/meta/core/property-definition/tree/save`, enumDefinition);
+    savePropertyDefinition(marketplace: Marketplace, treePropertyDefinition: TreePropertyDefinition) {
+        return this.http.put(`${marketplace.url}/meta/core/property-definition/tree/save`, treePropertyDefinition);
     }
 
     deletePropertyDefinition(marketplace: Marketplace, id: string) {

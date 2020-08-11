@@ -164,18 +164,15 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     nextIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
   }
 
-  private createEntryCells(enumEntries: TreePropertyEntry[]) {
-    for (const entry of enumEntries) {
+  private createEntryCells(treePropertyEntries: TreePropertyEntry[]) {
+    for (const entry of treePropertyEntries) {
       const cell = this.createEntryCell(entry);
     }
   }
 
-  private createEntryCell(
-    enumEntry?: TreePropertyEntry,
-    position?: { x: number; y: number }
-  ): MyMxCell {
-    if (isNullOrUndefined(enumEntry)) {
-      enumEntry = this.createNewEnumEntry();
+  private createEntryCell(treePropertyEntry?: TreePropertyEntry, position?: { x: number; y: number }): MyMxCell {
+    if (isNullOrUndefined(treePropertyEntry)) {
+      treePropertyEntry = this.createNewEnumEntry();
     }
     if (isNullOrUndefined(position)) {
       position = { x: 0, y: 0 };
@@ -183,8 +180,8 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
     const cell = this.graph.insertVertex(
       this.graph.getDefaultParent(),
-      enumEntry.id,
-      enumEntry.value,
+      treePropertyEntry.id,
+      treePropertyEntry.value,
       position.x,
       position.y,
       ENTRY_CELL_WIDTH,
@@ -194,41 +191,20 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     cell.root = false;
     cell.cellType = MyMxCellType.TREE_ENTRY;
 
-    const nextIcon: MyMxCell = this.graph.insertVertex(
-      cell,
-      'add_class_next_level_icon',
-      'Eintrag hinzufügen',
-      85,
-      45,
-      20,
-      20,
-      CConstants.mxStyles.addClassNewLevelIcon
+    const nextIcon: MyMxCell = this.graph.insertVertex(cell, 'add_class_next_level_icon', 'Eintrag hinzufügen',
+      85, 45, 20, 20, CConstants.mxStyles.addClassNewLevelIcon
     ) as MyMxCell;
     nextIcon.setConnectable(false);
     nextIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
 
-    const sameIcon: MyMxCell = this.graph.insertVertex(
-      cell,
-      'add_class_same_level_icon',
-      'Eintrag hinzufügen',
-      65,
-      45,
-      20,
-      20,
-      CConstants.mxStyles.addClassSameLevelIcon
+    const sameIcon: MyMxCell = this.graph.insertVertex(cell, 'add_class_same_level_icon', 'Eintrag hinzufügen',
+      65, 45, 20, 20, CConstants.mxStyles.addClassSameLevelIcon
     ) as MyMxCell;
     sameIcon.setConnectable(false);
     sameIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
 
-    const optionsIcon: MyMxCell = this.graph.insertVertex(
-      cell,
-      'options',
-      'options',
-      5,
-      45,
-      20,
-      20,
-      CConstants.mxStyles.optionsIcon
+    const optionsIcon: MyMxCell = this.graph.insertVertex(cell, 'options', 'options',
+      5, 45, 20, 20, CConstants.mxStyles.optionsIcon
     ) as MyMxCell;
     optionsIcon.setConnectable(false);
     optionsIcon.cellType = MyMxCellType.OPTIONS_ICON;
@@ -237,12 +213,12 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
   }
 
   private createNewEnumEntry() {
-    const enumEntry = new TreePropertyEntry();
-    enumEntry.id = this.objectIdService.getNewObjectId();
-    enumEntry.selectable = true;
-    enumEntry.value = 'neuer Eintrag';
-    this.treePropertyDefinition.entries.push(enumEntry);
-    return enumEntry;
+    const treePropertyEntry = new TreePropertyEntry();
+    treePropertyEntry.id = this.objectIdService.getNewObjectId();
+    treePropertyEntry.selectable = true;
+    treePropertyEntry.value = 'neuer Eintrag';
+    this.treePropertyDefinition.entries.push(treePropertyEntry);
+    return treePropertyEntry;
   }
 
   private createRelationship(sourceId: string, targetId: string) {
@@ -254,23 +230,21 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     return relationship;
   }
 
-  private createRelationshipCells(enumRelationships: TreePropertyRelationship[]) {
-    for (const relationship of enumRelationships) {
+  private createRelationshipCells(treePropertyRelationships: TreePropertyRelationship[]) {
+    for (const relationship of treePropertyRelationships) {
       const cell = this.createRelationshipCellById(relationship);
     }
   }
 
-  private createRelationshipCellById(
-    enumRelationship: TreePropertyRelationship
-  ): MyMxCell {
+  private createRelationshipCellById(treePropertyRelationships: TreePropertyRelationship): MyMxCell {
     const source: MyMxCell = this.graph
       .getModel()
-      .getCell(enumRelationship.sourceId) as MyMxCell;
+      .getCell(treePropertyRelationships.sourceId) as MyMxCell;
     const target: MyMxCell = this.graph
       .getModel()
-      .getCell(enumRelationship.targetId) as MyMxCell;
+      .getCell(treePropertyRelationships.targetId) as MyMxCell;
 
-    return this.createRelationshipCell(enumRelationship.id, source, target);
+    return this.createRelationshipCell(treePropertyRelationships.id, source, target);
   }
 
   private createRelationshipCell(
@@ -348,11 +322,11 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
       if (vertice.id === this.rootCell.id) {
         continue;
       }
-      const enumEntry = this.treePropertyDefinition.entries.find(
+      const treePropertyEntry = this.treePropertyDefinition.entries.find(
         (e) => e.id === vertice.id
       );
-      enumEntry.value = vertice.value;
-      newEnumEntries.push(enumEntry);
+      treePropertyEntry.value = vertice.value;
+      newEnumEntries.push(treePropertyEntry);
     }
     this.treePropertyDefinition.entries = newEnumEntries;
 
@@ -420,7 +394,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
   private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
     this.overlayEvent = event;
     this.overlayContent = new TreePropertyOptionsOverlayContentData();
-    this.overlayContent.enumEntry = this.treePropertyDefinition.entries.find(
+    this.overlayContent.treePropertyEntry = this.treePropertyDefinition.entries.find(
       (e) => e.id === cell.id
     );
     this.management.emit('disableScroll');

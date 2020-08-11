@@ -168,17 +168,10 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
         retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
 
         currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
-
         currentFormEntry.classProperties = retFormEntry.classProperties;
-
-        // currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
-
         currentFormEntry.formGroup = retFormEntry.formGroup;
-
         currentFormEntry.imagePath = retFormEntry.imagePath;
-
         currentFormEntry.formItems = retFormEntry.formItems;
-
         currentFormEntry.subEntries = retFormEntry.subEntries;
 
         this.expectedNumberOfResults = 0;

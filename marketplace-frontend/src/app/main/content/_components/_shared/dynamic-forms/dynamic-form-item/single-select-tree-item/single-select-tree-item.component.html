@@ -1,4 +1,4 @@
-<div #enumFormItemContainer class="form-item-container-closed">
+<div #treePropertyFormItemContainer class="form-item-container-closed">
 
   <mat-form-field class="form-field" [formGroup]="form" *ngIf="!showList">
     <input matInput placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
@@ -9,8 +9,8 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
   </mat-form-field>
 
-  <div #enumListContainer class="list-container">
-    <mat-action-list #enumList>
+  <div #treePropertyListContainer class="list-container">
+    <mat-action-list #treePropertyList>
 
       <div *ngFor="let opt of datasource.filteredData">
         <mat-list-item (click)=" onSelectOption(opt)" *ngIf="opt.selectable">

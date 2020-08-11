@@ -5,10 +5,10 @@ import { isNullOrUndefined } from 'util';
 import { TreePropertyDefinition } from 'app/main/content/_model/meta/property/tree-property';
 
 export interface PropertyCreationDialogData {
-  allPropertyDefinitions: FlatPropertyDefinition<any>[];
+  // allFlatPropertyDefinitions: FlatPropertyDefinition<any>[];
 
-  propertyDefinition: FlatPropertyDefinition<any>;
-  enumDefinition: TreePropertyDefinition;
+  flatPropertyDefinition: FlatPropertyDefinition<any>;
+  treePropertyDefinition: TreePropertyDefinition;
   builderType: 'flat' | 'tree';
 }
 
@@ -34,9 +34,9 @@ export class PropertyCreationDialogComponent implements OnInit {
       this.handleCloseClick();
     } else {
       if (event.builderType === 'tree') {
-        this.data.enumDefinition = event.value;
+        this.data.treePropertyDefinition = event.value;
       } else if (event.builderType === 'flat') {
-        this.data.propertyDefinition = event.value;
+        this.data.flatPropertyDefinition = event.value;
       }
       this.dialogRef.close(this.data);
     }

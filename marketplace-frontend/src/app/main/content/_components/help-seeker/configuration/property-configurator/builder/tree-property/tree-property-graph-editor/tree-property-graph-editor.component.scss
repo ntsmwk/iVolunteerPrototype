@@ -1,21 +1,19 @@
-
 .add-table {
-    height: 400px;
-    overflow: auto;
+  height: 400px;
+  overflow: auto;
 }
-  
+
 table {
-    width: 100%;
+  width: 100%;
 }
 
-.mat-header-row{
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: white;
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: white;
 }
 
-div#enumGraphContainer {
-    z-index: 1;
-  }
-
+div#treePropertyGraphContainer {
+  z-index: 1;
+}
