@@ -179,6 +179,7 @@ public class RuleService {
 
 	public void addRule(DerivationRule derivationRule) {
 		String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(derivationRule);
+		System.out.println(ruleContent);
 		ContainerRuleEntry containerRule;
 		
 		if (derivationRule.getContainerRuleEntryId() == null) {
@@ -230,4 +231,5 @@ public class RuleService {
 
 		return ruleExecutionList;
 	}
+	
 }

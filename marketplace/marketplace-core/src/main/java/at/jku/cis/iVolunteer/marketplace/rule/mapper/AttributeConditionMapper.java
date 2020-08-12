@@ -22,7 +22,7 @@ public class AttributeConditionMapper {
 
 	public AttributeConditionDTO toTarget(AttributeCondition source, String tenantId, String classDefinitionId) {
 		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId, tenantId);
-		ClassProperty<Object> classProperty = getClassProperty(classDefinitionId, source.getClassPropertyId());
+		ClassProperty<Object> classProperty = classPropertyService.getClassPropertyFromAllClassProperties(classDefinitionId, source.getClassPropertyId());
 		
 		AttributeConditionDTO dto = new AttributeConditionDTO(classDefinition, classProperty, source.getValue(),
 				(ComparisonOperatorType) source.getOperatorType());
@@ -45,11 +45,4 @@ public class AttributeConditionMapper {
 		return targets.stream().map(target -> toSource(target)).collect(Collectors.toList());
 	}
 	
-	private ClassProperty<Object> getClassProperty(String classDefinitionId, String classPropertyId){
-		List<ClassProperty<Object>> classProperties = classPropertyService.getAllClassPropertiesFromClass(classDefinitionId);
-		return classProperties.stream()
-		               .filter(entry -> entry.getId().equals(classPropertyId))
-		               .findFirst().orElse(null);
-		
-	}
 }

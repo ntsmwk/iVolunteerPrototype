@@ -50,6 +50,7 @@ export class ClassCondition {
   attributeConditions: AttributeCondition[] = [];
   aggregationOperatorType: AggregationOperatorType;
   value: any;
+  classProperty: ClassProperty<any>;
 }
 
 /*export class AttributeTarget{
@@ -87,7 +88,8 @@ export enum AggregationOperatorType {
   EXISTS = "Existiert", 
   NOT_EXISTS = "Existiert nicht",
   MIN = "Min",
-  MAX = "Max"
+  MAX = "Max",
+  SUM = "Summe"
 }
 
 export enum ActionType {

@@ -113,6 +113,14 @@ public class ClassPropertyService {
 		// @formatter:on		
 	}
 	
+	// search class property in all inherited properties up the hierarchy
+	public ClassProperty<Object> getClassPropertyFromAllClassProperties(String classDefinitionId, String classPropertyId){
+		List<ClassProperty<Object>> classProperties = getAllClassPropertiesFromClass(classDefinitionId);
+		return classProperties.stream()
+		               .filter(entry -> entry.getId().equals(classPropertyId))
+		               .findFirst().orElse(null);
+		
+	}
 	
 	List<ClassProperty<Object>> getClassPropertyFromDefinitionById(List<String> propertyIds, List<String> enumIds) {
 		List<PropertyDefinition<Object>> properties = new ArrayList<>();

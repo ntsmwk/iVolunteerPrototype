@@ -25,7 +25,7 @@ import { DerivationRuleValidators } from "app/main/content/_validator/derivation
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
 import { isNullOrUndefined } from 'util';
-import { ClassProperty } from 'app/main/content/_model/meta/property';
+import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property';
 
 @Component({
   selector: "class-rule-precondition",
@@ -48,6 +48,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
+  filteredSumClassProperties: ClassProperty<any>[] = [];
   attributes: AttributeCondition[] = [];
   aggregationOperators: any;
 
@@ -68,6 +69,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         Validators.required,
       ]),
       value: new FormControl(undefined),
+      classPropertyId: new FormControl(undefined),
       classAttributeForms: new FormArray([]),
     });
   }
@@ -86,6 +88,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       aggregationOperatorType:
         this.classCondition.aggregationOperatorType || "",
       value: this.classCondition.value || "",
+      classPropertyId: (this.classCondition.classProperty ? this.classCondition.classProperty.id : "") || ""
     });
 
     this.classCondition.attributeConditions = this.classCondition
@@ -122,6 +125,14 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     }
   }
 
+  onPropertyChange(classProperty: ClassProperty<any>, $event){
+    if ($event.isUserInput && 
+        ( isNullOrUndefined(this.classCondition.classProperty) ||
+          this.classCondition.classProperty.id != classProperty.id)){
+            this.classCondition.classProperty = classProperty;
+        }
+  }
+
   private loadClassDefinitions(){
     this.classDefinitionService
       .getAllClassDefinitionsWithoutHeadAndEnums(
@@ -143,7 +154,16 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     .toPromise()
     .then((props: ClassProperty<any>[]) => {
       this.classProperties = props;
+      this.filteredSumClassProperties.push(... this.filterPropertiesByType(PropertyType.FLOAT_NUMBER));
+      this.filteredSumClassProperties.push(... this.filterPropertiesByType(PropertyType.WHOLE_NUMBER));
     });
+  }
+
+  private filterPropertiesByType(propertyType: PropertyType){
+    /*this.classProperties.forEach(cp => {
+      console.log(cp.name + " " + cp.type);
+    });*/
+    return this.classProperties.filter(cp => cp.type === propertyType);
   }
 
   onOperatorChange(aggregationOperatorType: AggregationOperatorType, $event) {

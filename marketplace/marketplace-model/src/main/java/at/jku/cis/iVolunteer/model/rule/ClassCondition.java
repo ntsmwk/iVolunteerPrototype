@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.model.rule;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
 
 public class ClassCondition extends Condition {
@@ -11,6 +12,7 @@ public class ClassCondition extends Condition {
 	private Object value;
 	private List<AttributeCondition> attributeConditions = new ArrayList<AttributeCondition>();
 	private AggregationOperatorType operatorType;
+	private String classPropertyId;
 
 	public ClassCondition(String classDefinitionId, Object value, AggregationOperatorType aggregationOperator) {
 		this.operatorType = aggregationOperator;
@@ -44,6 +46,14 @@ public class ClassCondition extends Condition {
 
 	public void setValue(Object value) {
 		this.value = value;
+	}
+	
+	public String getClassPropertyId() {
+		return classPropertyId;
+	}
+	
+	public void setClassPropertyId(String classPropertyId) {
+		this.classPropertyId = classPropertyId;
 	}
 
 	public List<AttributeCondition> getAttributeConditions() {
