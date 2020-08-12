@@ -1,5 +1,5 @@
 import { ClassDefinition } from "./meta/class";
-import { ClassProperty, FlatPropertyDefinition } from "./meta/property/property";
+import { FlatPropertyDefinition, ClassProperty } from './meta/property/property';
 
 export class DerivationRule {
   id: string;

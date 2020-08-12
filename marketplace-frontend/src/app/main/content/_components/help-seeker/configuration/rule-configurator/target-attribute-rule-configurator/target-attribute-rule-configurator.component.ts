@@ -119,53 +119,48 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   private addQuestionAndFormGroup(classProperty: ClassProperty<any>) {
-    console.log(" .... add question and form group .... ");
     let myArr: ClassProperty<any>[] = new Array();
     myArr.push(classProperty);
     this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
 
     // AK war vorher hier ---> 143
     // this.formItem = this.formItems[0];
-
-
+    this.formItem = this.formItems[0];
     // set question value in case of existing rule
     if (this.attributeTarget.value) {
       this.formItem.value = this.attributeTarget.value;
+      //this.ruleQuestionForm.get(this.formItem.key).setValue(this.attributeTarget.value);
     }
 
     // AK QuestionForm zeicgt jetzt auf dieselbe control wie vorher - muss für 1:N Beziehungen möglichwerweise angepasst werden
     this.ruleQuestionForm = (this.dynamicFormItemControlService.toFormGroup(this.formItems).controls['entries'] as FormArray).controls[0] as FormControl;
 
     this.ruleTargetAttributeForm.addControl('questionForm', (this.ruleQuestionForm));
-    console.log(this.ruleTargetAttributeForm);
+   
+    
+/*
+    console.log("DISPLAYING FORMGROUP: ");
+    console.log("RAW: ");
     console.log(this.ruleQuestionForm);
 
-    this.formItem = this.formItems[0];
+    console.log("CONTROLS: ");
+    //console.log(this.ruleQuestionForm.controls);
 
-    // console.log("DISPLAYING FORMGROUP: ");
-    // console.log("RAW: ");
-    // console.log(this.ruleQuestionForm);
-
-    // console.log("CONTROLS: ");
-    // console.log(this.ruleQuestionForm.controls);
-
-    // console.log("VALUES");
-    // console.log(this.ruleQuestionForm.value);
-    // console.log(this.ruleTargetAttributeForm);
+    console.log("VALUES");
+    console.log(this.ruleQuestionForm.value);
+    console.log(this.ruleTargetAttributeForm);*/
     // const formArray = this.ruleQuestionForm.controls['entries'] as FormArray;
     // console.log(formArray.controls[0].get(this.formItem.key));
 
     // detect change in question form
     // AK hier hab ich auch was verändert - weiß aber nicht mehr was...
+    //value: this.ruleQuestionForm.get(this.formItem.key).value
+
     this.ruleTargetAttributeForm.get('questionForm').valueChanges.subscribe((change) => {
       this.ruleTargetAttributeForm.patchValue({
         value: this.ruleQuestionForm.get(this.formItem.key).value
       });
-      // value: this.ruleTargetAttributeForm.get('questionForm').get(this.formItem.key).value
-      // });
-
-      this.attributeTarget.value = this.ruleTargetAttributeForm.get('questionForm').get(this.formItem.key).value;
-      //this.attributeTarget.value = formArray.controls[0].get(this.formItem.key).value;
+      this.attributeTarget.value = this.ruleQuestionForm.get(this.formItem.key).value;
     });
   }
 
@@ -177,12 +172,10 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
 
   onPropertyChange(classProperty: ClassProperty<any>, $event) {
     if ($event.isUserInput &&
-      (!this.attributeTarget.classProperty ||
-        this.attributeTarget.classProperty.id != classProperty.id)
-    ) {
+         (isNullOrUndefined(this.attributeTarget.classProperty) ||
+          this.attributeTarget.classProperty.id != classProperty.id)){
       this.initAttributeTarget();
       this.attributeTarget.classProperty = classProperty;
-      console.log(" property changed!!!!!");
       // create new form for value
       this.addQuestionAndFormGroup(classProperty);
 

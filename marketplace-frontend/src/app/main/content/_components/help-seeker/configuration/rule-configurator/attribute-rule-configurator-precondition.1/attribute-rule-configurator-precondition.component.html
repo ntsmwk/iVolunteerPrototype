@@ -1,5 +1,5 @@
 <form *ngIf="attributeCondition" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
-  (change)="onChange($event)" [formGroup]="rulePreconditionForm">
+  (change)="onChange($event)" [formGroup]="rulePreconditionForm"> 
   <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
     <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 225px">
       <mat-label>Attribut</mat-label>

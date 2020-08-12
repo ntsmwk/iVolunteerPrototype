@@ -34,11 +34,11 @@
     <div formArrayName="classAttributeForms">
     <div *ngFor="let attribute of classCondition.attributeConditions">
         <attribute-rule-precondition
-          [(attributeCondition)]="attribute"
+          [attributeCondition]="attribute"
         ></attribute-rule-precondition>
     </div>
     </div>
-    <div *ngIf="classCondition?.classDefinition?.properties.length > 0">
+    <div *ngIf="classProperties.length > 0">
         <button
           type="button"
           mat-raised-button
@@ -51,3 +51,4 @@
 </form> 
 <!--(change)="onChange($event)"-->
 <!--(onSelectionChange)="onOperatorChange(op)"-->
+ <!--</attribute-rule-precondition>   (attributeConditionChange) = "onChangeAttribute($event)"-->

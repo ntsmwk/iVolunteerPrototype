@@ -38,29 +38,20 @@ public class DerivationRuleService {
 
 	public DerivationRuleDTO createRule(DerivationRuleDTO derivationRuleDTO) {
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		ruleService.addRule(derivationRule, false);
+		ruleService.addRule(derivationRule);
 		derivationRuleRepository.save(derivationRule);
 		//ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
 		return derivationRuleMapper.toTarget(derivationRule);
 	}
 	
 	public List<RuleExecution> testRule(DerivationRuleDTO derivationRuleDTO) {
-		// reset possible actions --> we are only testing the conditions!
-		derivationRuleDTO.setClassActions(new ArrayList<ClassActionDTO>());
-		
 	    DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		// add rule to container in testing mode
-		ruleService.addRule(derivationRule, true);
-		// only for test --> execute rule 
-		List<RuleExecution> ruleExecution = ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
-		// remove container rule again
-		ruleService.deleteRule(derivationRule.getTenantId(), derivationRule.getContainer(), derivationRule.getName());
-		return ruleExecution;
+		return ruleService.testRule(derivationRule);
 	}
 
 	public void updateRule(String id, DerivationRuleDTO derivationRuleDTO) {
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		ruleService.addRule(derivationRule, false);
+		ruleService.addRule(derivationRule);
 		derivationRuleRepository.save(derivationRule);
 	}
 	

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { UserRole, User, roleTenantMapping } from "../_model/user";
 
 @Injectable({
@@ -7,13 +7,19 @@ import { UserRole, User, roleTenantMapping } from "../_model/user";
 })
 export class RoleChangeService {
   onRoleChanged: BehaviorSubject<any>;
+  onUpdate: Subject<any>;
 
   constructor() {
     this.onRoleChanged = new BehaviorSubject(UserRole.NONE);
+    this.onUpdate = new Subject();
   }
 
   changeRole(role: UserRole) {
     this.onRoleChanged.next(role);
+  }
+
+  update() {
+    this.onUpdate.next();
   }
 
   getRoleTenantMappings(user: User) {

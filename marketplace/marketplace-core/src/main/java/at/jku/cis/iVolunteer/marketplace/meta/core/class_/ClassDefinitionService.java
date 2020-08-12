@@ -92,10 +92,8 @@ public class ClassDefinitionService {
 	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(String tenantId) {
-		System.out.println("all class definitions for tenant: " + classDefinitionRepository.getByTenantId(tenantId).size());
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
 				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
-		System.out.println("all class definitions for tenant: " + classDefinitions.size());
 		return classDefinitions;
 	}
 
@@ -125,7 +123,6 @@ public class ClassDefinitionService {
 
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 		for (ClassDefinition startClassDefinition : startClassDefintions) {
-
 			List<ClassDefinition> classDefinitions = new ArrayList<>();
 			List<Relationship> relationships = new ArrayList<>();
 			ClassConfiguration classConfiguration = classConfigurationRepository

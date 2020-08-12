@@ -55,17 +55,6 @@
           <h2 *ngIf="subscribedTenants.length == 0">
             Du bist noch keiner Organisation beigetreten:
           </h2>
-
-          <!-- Find new Organisation button -->
-          <button
-            class="mt-20"
-            style="height: 60px; margin: 3px; margin-left: 10px;"
-            mat-raised-button
-            color="primary"
-            (click)="navigateToTenantOverview(row)"
-          >
-            Organisationen verwalten
-          </button>
         </div>
         <div
           fxLayout="column"

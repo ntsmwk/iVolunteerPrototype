@@ -44,7 +44,8 @@ public class RuleEngineMapper {
 	}
 
 	private String newPackage() {
-		return "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n " + "\r\n";
+		return "package " + this.getClass().getPackage().getName() + ";\r\n";
+		//return "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n " + "\r\n";
 	}
 
 	private String newGeneralImports() {
@@ -124,6 +125,7 @@ public class RuleEngineMapper {
 	private String rhs(DerivationRule derivationRule) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("then\r\n ");
+		// stringBuilder.append("System.out.println(\"Hello\");\r\n");
 		stringBuilder.append("  re.setStatus(RuleStatus.FIRED);\r\n");
 		for (Action action : derivationRule.getActions()) {
 			if (action instanceof ClassAction)
