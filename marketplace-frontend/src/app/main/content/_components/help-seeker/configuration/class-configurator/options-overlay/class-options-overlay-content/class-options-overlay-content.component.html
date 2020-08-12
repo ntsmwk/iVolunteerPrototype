@@ -42,11 +42,11 @@
             <div fxLayout="row" fxLayoutAlign="start start">
 
                 <div style="width: 65%;" class="mt-4 mr-4">
-                    <div class="normal-label">Properties und Enums</div>
+                    <div class="normal-label">Properties</div>
                     <div class="pl-12 outline-border properties-section">
 
                         <div *ngIf="entryList.length <= 0" class="pt-12" style="text-align: center">
-                            Keine Enums oder Properties vorhanden
+                            Keine Properties vorhanden
                         </div>
 
                         <div *ngFor="let entry of entryList; let i = index" [style]="getEntryStyle(i)"

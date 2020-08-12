@@ -81,20 +81,6 @@ export class ClassDefinitionService {
     );
   }
 
-
-
-
-
-  getEnumValuesFromEnumHeadClassDefinition(
-    marketplace: Marketplace,
-    classDefinitionId: string,
-    tenantId: string
-  ) {
-    return this.http.get(
-      `${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}/tenant/${tenantId}`
-    );
-  }
-
   getByArchetype(
     marketplace: Marketplace,
     archetype: ClassArchetype,

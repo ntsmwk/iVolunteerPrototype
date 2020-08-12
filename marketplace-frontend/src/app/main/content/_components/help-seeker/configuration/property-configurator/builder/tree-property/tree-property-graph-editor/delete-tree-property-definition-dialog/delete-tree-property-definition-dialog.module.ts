@@ -25,4 +25,4 @@ import { DeleteTreePropertyDefinitionDialogComponent } from './delete-tree-prope
 
 
 
-export class DeleteEnumDefinitionDialogModule { }
+export class DeleteTreePropertyDefinitionDialogModule { }

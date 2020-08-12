@@ -172,7 +172,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   private createEntryCell(treePropertyEntry?: TreePropertyEntry, position?: { x: number; y: number }): MyMxCell {
     if (isNullOrUndefined(treePropertyEntry)) {
-      treePropertyEntry = this.createNewEnumEntry();
+      treePropertyEntry = this.createNewTreePropertyEntry();
     }
     if (isNullOrUndefined(position)) {
       position = { x: 0, y: 0 };
@@ -212,7 +212,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     return cell;
   }
 
-  private createNewEnumEntry() {
+  private createNewTreePropertyEntry() {
     const treePropertyEntry = new TreePropertyEntry();
     treePropertyEntry.id = this.objectIdService.getNewObjectId();
     treePropertyEntry.selectable = true;
@@ -317,7 +317,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     this.treePropertyDefinition.name = this.rootCell.value;
 
     // update entries
-    const newEnumEntries: TreePropertyEntry[] = [];
+    const newTreePropertyEntries: TreePropertyEntry[] = [];
     for (const vertice of vertices) {
       if (vertice.id === this.rootCell.id) {
         continue;
@@ -326,20 +326,20 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
         (e) => e.id === vertice.id
       );
       treePropertyEntry.value = vertice.value;
-      newEnumEntries.push(treePropertyEntry);
+      newTreePropertyEntries.push(treePropertyEntry);
     }
-    this.treePropertyDefinition.entries = newEnumEntries;
+    this.treePropertyDefinition.entries = newTreePropertyEntries;
 
-    const newEnumRelationships: TreePropertyRelationship[] = [];
+    const newTreePropertyRelationships: TreePropertyRelationship[] = [];
     for (const edge of edges) {
       const relationship = this.treePropertyDefinition.relationships.find(
         (r) => r.id === edge.id
       );
       relationship.sourceId = edge.source.id;
       relationship.targetId = edge.target.id;
-      newEnumRelationships.push(relationship);
+      newTreePropertyRelationships.push(relationship);
     }
-    this.treePropertyDefinition.relationships = newEnumRelationships;
+    this.treePropertyDefinition.relationships = newTreePropertyRelationships;
   }
 
   onBackClick() {

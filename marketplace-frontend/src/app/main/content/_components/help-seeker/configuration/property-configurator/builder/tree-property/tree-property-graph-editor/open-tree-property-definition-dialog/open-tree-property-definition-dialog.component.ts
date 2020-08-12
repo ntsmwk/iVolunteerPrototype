@@ -58,7 +58,7 @@ export class OpenTreePropertyDefinitionDialogComponent implements OnInit {
     this.dialogRef.close(undefined);
   }
 
-  hasNoEnumDefinitions() {
+  hasNoTreePropertyDefinitions() {
     return (
       isNullOrUndefined(this.treePropertyDefinitions) ||
       this.treePropertyDefinitions.length <= 0

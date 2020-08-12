@@ -1,7 +1,7 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
     <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-        <h1>Properties & Enums</h1>
+        <h1>Properties</h1>
     </div>
 
     <div class="center-div" *ngIf="!isLoaded">
@@ -35,8 +35,8 @@
                         <mat-select placeholder="Filter" style="width: 300px" [(ngModel)]="dropdownFilterValue"
                             (selectionChange)="applyTypeFilter()">
                             <mat-option value="all">Alle</mat-option>
-                            <mat-option value="flat">Nur Properties</mat-option>
-                            <mat-option value="tree">Nur Enums</mat-option>
+                            <mat-option value="flat">Nur Flat-Properties</mat-option>
+                            <mat-option value="tree">Nur Tree-Properties</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -46,10 +46,10 @@
                 <div>
                     <button class="secondary-button-dark-small ml-24" mat-stroked-button type="button"
                         (click)="newAction('flat')">Neues
-                        Property</button>
+                        Flat-Property</button>
                     <button class="secondary-button-dark-small ml-8" mat-stroked-button type="button"
                         (click)="newAction('tree')">Neues
-                        Enum</button>
+                        Tree.Property</button>
                 </div>
             </div>
             <div></div>

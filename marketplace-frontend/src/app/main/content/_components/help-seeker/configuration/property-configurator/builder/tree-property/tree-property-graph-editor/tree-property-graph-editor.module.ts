@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCommonModule, MatButtonModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { TreePropertyGraphEditorComponent } from './tree-property-graph-editor.component';
-import { EnumOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
+import { TreePropertyOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
 
 @NgModule({
     imports: [
@@ -11,7 +11,7 @@ import { EnumOptionsOverlayControlModule } from './options-overlay/options-overl
         MatCommonModule,
         FuseSharedModule,
         MatButtonModule,
-        EnumOptionsOverlayControlModule,
+        TreePropertyOptionsOverlayControlModule,
     ],
     declarations: [TreePropertyGraphEditorComponent],
     exports: [TreePropertyGraphEditorComponent]

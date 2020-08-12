@@ -183,12 +183,12 @@ export class AddPropertyDialogComponent implements OnInit {
 
   onSubmit() {
     // Add selected, but filter out existing ones
-    const addedProperties = this.flatPropertySelection.selected.filter(
+    const addedFlatProperties = this.flatPropertySelection.selected.filter(
       (p) =>
         this.data.classDefinition.properties.findIndex((q) => p.id === q.id) ===
         -1
     );
-    const addedEnums = this.treePropertySelection
+    const addedTreeProperties = this.treePropertySelection
       .selected.filter(
         (e) =>
           this.data.classDefinition.properties.findIndex((q) => e.id === q.id) ===
@@ -198,8 +198,8 @@ export class AddPropertyDialogComponent implements OnInit {
     this.classPropertyService
       .getClassPropertyFromDefinitionById(
         this.globalInfo.marketplace,
-        addedProperties.map((p) => p.id),
-        addedEnums.map((e) => e.id)
+        addedFlatProperties.map((p) => p.id),
+        addedTreeProperties.map((e) => e.id)
       )
       .toPromise()
       .then((ret: ClassProperty<any>[]) => {

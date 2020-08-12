@@ -7,7 +7,7 @@ import { TreePropertyGraphEditorModule } from './tree-property-graph-editor/tree
 import { OpenTreePropertyDefinitionDialogComponent } from './tree-property-graph-editor/open-tree-property-definition-dialog/open-tree-property-definition-dialog.component';
 import { OpenTreePropertyDefinitionDialogModule } from './tree-property-graph-editor/open-tree-property-definition-dialog/open-tree-property-definition-dialog.module';
 import { DeleteTreePropertyDefinitionDialogComponent } from './tree-property-graph-editor/delete-tree-property-definition-dialog/delete-tree-property-definition-dialog.component';
-import { DeleteEnumDefinitionDialogModule } from './tree-property-graph-editor/delete-tree-property-definition-dialog/delete-tree-property-definition-dialog.module';
+import { DeleteTreePropertyDefinitionDialogModule } from './tree-property-graph-editor/delete-tree-property-definition-dialog/delete-tree-property-definition-dialog.module';
 
 @NgModule({
     imports: [
@@ -23,7 +23,7 @@ import { DeleteEnumDefinitionDialogModule } from './tree-property-graph-editor/d
         TreePropertyGraphEditorModule,
 
         OpenTreePropertyDefinitionDialogModule,
-        DeleteEnumDefinitionDialogModule,
+        DeleteTreePropertyDefinitionDialogModule,
 
     ],
     entryComponents: [

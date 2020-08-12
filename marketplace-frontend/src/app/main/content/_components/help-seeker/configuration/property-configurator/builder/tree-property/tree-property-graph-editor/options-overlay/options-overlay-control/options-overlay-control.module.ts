@@ -19,4 +19,4 @@ import { TreePropertyOptionsOverlayControlComponent } from './options-overlay-co
     declarations: [TreePropertyOptionsOverlayControlComponent],
     exports: [TreePropertyOptionsOverlayControlComponent]
 })
-export class EnumOptionsOverlayControlModule { }
+export class TreePropertyOptionsOverlayControlModule { }

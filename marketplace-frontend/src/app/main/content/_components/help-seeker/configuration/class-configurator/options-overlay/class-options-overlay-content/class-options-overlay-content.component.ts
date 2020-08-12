@@ -9,7 +9,7 @@ import { RemovePropertyDialogData } from 'app/main/content/_components/_shared/d
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { OptionsOverlayContentData } from '../options-overlay-control/options-overlay-control.component';
 
-export interface PropertyOrEnumEntry {
+export interface PropertyEntry {
   name: string;
   type: PropertyType;
 }
@@ -26,7 +26,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
   relationshipPalettes = CConstants.relationshipPalettes;
   propertyTypePalettes = CConstants.propertyTypePalettes;
 
-  entryList: PropertyOrEnumEntry[];
+  entryList: PropertyEntry[];
 
   constructor(
     private dialogFactory: DialogFactoryDirective,
@@ -34,7 +34,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.updatePropertiesAndEnumsList();
+    this.updatePropertiesList();
   }
 
   onSubmit() {
@@ -91,7 +91,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         if (!isNullOrUndefined(ret)) {
           this.inputData.classDefinition.properties =
             ret.classDefinition.properties;
-          this.updatePropertiesAndEnumsList();
+          this.updatePropertiesList();
         }
       });
   }
@@ -105,7 +105,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         if (!isNullOrUndefined(ret)) {
           this.inputData.classDefinition.properties =
             ret.classDefinition.properties;
-          this.updatePropertiesAndEnumsList();
+          this.updatePropertiesList();
         }
       });
   }
@@ -120,7 +120,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
       .then(() => { });
   }
 
-  updatePropertiesAndEnumsList() {
+  updatePropertiesList() {
     this.entryList = [];
     this.entryList.push(...this.inputData.classDefinition.properties);
   }

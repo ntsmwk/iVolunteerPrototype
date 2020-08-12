@@ -101,13 +101,13 @@ export class PropertyListComponent implements OnInit {
           this.treePropertyDefinitions = treePropertyDefinitions;
         }),
     ]).then(() => {
-      this.updatePropertyAndEnumEntryList();
+      this.updatePropertyEntryList();
       this.applyFiltersFromParams();
       this.isLoaded = true;
     });
   }
 
-  private updatePropertyAndEnumEntryList() {
+  private updatePropertyEntryList() {
     this.propertyEntries = [];
     this.propertyEntries.push(...this.propertyDefinitions);
     this.propertyEntries.push(
