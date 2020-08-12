@@ -1,5 +1,5 @@
 import { ValidatorFn } from '@angular/forms';
-import { EnumEntry } from '../meta/enum';
+import { TreePropertyEntry } from '../meta/property/tree-property';
 
 export class DynamicFormItemBase<T> {
   value: T;
@@ -166,9 +166,9 @@ export class GenericFormItem extends DynamicFormItemBase<string> {
   }
 }
 
-export class SingleSelectionEnumFormItem extends DynamicFormItemBase<any> {
-  controlType = 'enum-single';
-  options: EnumEntry[] = [];
+export class SingleSelectionTreeFormItem extends DynamicFormItemBase<any> {
+  controlType = 'tree-single-select';
+  options: TreePropertyEntry[] = [];
 
   // +++ TODO
   constructor(options: {} = {}) {
@@ -177,9 +177,9 @@ export class SingleSelectionEnumFormItem extends DynamicFormItemBase<any> {
   }
 }
 
-export class MultipleSelectionEnumFormItem extends DynamicFormItemBase<any> {
-  controlType = 'enum-multiple';
-  options: EnumEntry[] = [];
+export class MultipleSelectionTreeFormItem extends DynamicFormItemBase<any> {
+  controlType = 'tree-multiple-select';
+  options: TreePropertyEntry[] = [];
 
   // +++ TODO
   constructor(options: {} = {}) {

@@ -6,7 +6,6 @@ import { isNullOrUndefined } from 'util';
 import { of } from 'rxjs';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { FormConfigurationPreviewRequest } from 'app/main/content/_model/meta/form';
-import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 
 @Injectable({
   providedIn: "root",
@@ -17,24 +16,6 @@ export class ClassDefinitionService {
   getAllClassDefinitions(marketplace: Marketplace, tenantId: string) {
     return this.http.get(
       `${marketplace.url}/meta/core/class/definition/all/tenant/${tenantId}`
-    );
-  }
-
-  getAllClassDefinitionsWithoutHeadAndEnums(
-    marketplace: Marketplace,
-    tenantId: string
-  ) {
-    return this.http.get(
-      `${marketplace.url}/meta/core/class/definition/all/no-enum-no-head/tenant/${tenantId}`
-    );
-  }
-
-  getAllClassDefinitionsWithoutRootAndEnums(
-    marketplace: Marketplace,
-    tenantId: string
-  ) {
-    return this.http.get(
-      `${marketplace.url}/meta/core/class/definition/all/no-enum/tenant/${tenantId}`
     );
   }
 
@@ -97,20 +78,6 @@ export class ClassDefinitionService {
     return this.http.put(
       `${marketplace.url}/meta/core/class/definition/delete`,
       ids
-    );
-  }
-
-
-
-
-
-  getEnumValuesFromEnumHeadClassDefinition(
-    marketplace: Marketplace,
-    classDefinitionId: string,
-    tenantId: string
-  ) {
-    return this.http.get(
-      `${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}/tenant/${tenantId}`
     );
   }
 

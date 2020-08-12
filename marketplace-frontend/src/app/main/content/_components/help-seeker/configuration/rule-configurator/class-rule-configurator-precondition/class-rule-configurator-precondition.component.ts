@@ -25,7 +25,7 @@ import { DerivationRuleValidators } from "app/main/content/_validator/derivation
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
 import { isNullOrUndefined } from 'util';
-import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property';
+import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property/property';
 
 @Component({
   selector: "class-rule-precondition",
@@ -105,15 +105,15 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     this.tenant = globalInfo.tenants[0];
 
     this.loadClassDefinitions();
-    if (this.classCondition.classDefinition){
+    if (this.classCondition.classDefinition) {
       this.loadClassProperties(this.classCondition.classDefinition);
     }
   }
 
   onClassChange(classDefinition: ClassDefinition, $event) {
-    if ($event.isUserInput && 
-       ( isNullOrUndefined(this.classCondition.classDefinition) ||       // no class chosen
-         this.classCondition.classDefinition.name != classDefinition.name)) {    // class selection changed
+    if ($event.isUserInput &&
+      (isNullOrUndefined(this.classCondition.classDefinition) ||       // no class chosen
+        this.classCondition.classDefinition.name != classDefinition.name)) {    // class selection changed
       /*if (!this.classCondition.classDefinition) {
         this.classCondition.classDefinition = new ClassDefinition();
       }*/
@@ -135,7 +135,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
 
   private loadClassDefinitions(){
     this.classDefinitionService
-      .getAllClassDefinitionsWithoutHeadAndEnums(
+      .getAllClassDefinitions(
         this.marketplace,
         this.tenant.id
       )
@@ -145,7 +145,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       });
   }
 
-  private loadClassProperties(classDefinition: ClassDefinition){
+  private loadClassProperties(classDefinition: ClassDefinition) {
     this.classPropertyService
     .getAllClassPropertiesFromClass(
       this.marketplace,

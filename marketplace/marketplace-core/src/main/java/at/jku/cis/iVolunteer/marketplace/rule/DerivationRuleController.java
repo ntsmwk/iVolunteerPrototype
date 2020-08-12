@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
 import at.jku.cis.iVolunteer.model.rule.entities.AttributeConditionDTO;
 import at.jku.cis.iVolunteer.model.rule.entities.DerivationRuleDTO;
@@ -55,7 +55,7 @@ public class DerivationRuleController {
 	}
 
 	@GetMapping("/tenant/{tenantId}/general/properties")
-	public List<PropertyDefinition<Object>> getGeneralProperties(@PathVariable String tenantId) {
+	public List<FlatPropertyDefinition<Object>> getGeneralProperties(@PathVariable String tenantId) {
 		return derivationRuleService.getGeneralProperties(tenantId);
 	}
 }

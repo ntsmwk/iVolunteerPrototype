@@ -1,11 +1,11 @@
 package at.jku.cis.iVolunteer.model.rule.entities;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 
 public class GeneralConditionDTO{
 	
-	private PropertyDefinition<Object> propertyDefinition;
+	private FlatPropertyDefinition<Object> propertyDefinition;
 	private ComparisonOperatorType comparisonOperatorType;
 	private Object value;
 
@@ -13,17 +13,17 @@ public class GeneralConditionDTO{
 		
 	}
 	
-	public GeneralConditionDTO(PropertyDefinition<Object> propertyDefinition, Object value, ComparisonOperatorType comparisonOperatorType) {
+	public GeneralConditionDTO(FlatPropertyDefinition<Object> propertyDefinition, Object value, ComparisonOperatorType comparisonOperatorType) {
 		this.propertyDefinition = propertyDefinition;
 		this.comparisonOperatorType = comparisonOperatorType;
 		this.value = value;
 	}
     
-    public PropertyDefinition<Object> getPropertyDefinition() {
+    public FlatPropertyDefinition<Object> getPropertyDefinition() {
     	return propertyDefinition;
     }
     
-    public void setPropertyDefinition(PropertyDefinition<Object> propertyDefinition) {
+    public void setPropertyDefinition(FlatPropertyDefinition<Object> propertyDefinition) {
     	this.propertyDefinition = propertyDefinition;
     }
     

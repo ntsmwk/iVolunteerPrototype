@@ -12,7 +12,7 @@ import { ClassInstance } from 'app/main/content/_model/meta/class';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { LoginService } from 'app/main/content/_service/login.service';
-import { ClassProperty } from 'app/main/content/_model/meta/property';
+import { ClassProperty } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { FormControl } from '@angular/forms';
 import { DynamicFormItemBase } from 'app/main/content/_model/dynamic-forms/item';
@@ -168,17 +168,10 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
         retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
 
         currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
-
         currentFormEntry.classProperties = retFormEntry.classProperties;
-
-        // currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
-
         currentFormEntry.formGroup = retFormEntry.formGroup;
-
         currentFormEntry.imagePath = retFormEntry.imagePath;
-
         currentFormEntry.formItems = retFormEntry.formItems;
-
         currentFormEntry.subEntries = retFormEntry.subEntries;
 
         this.expectedNumberOfResults = 0;

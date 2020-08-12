@@ -2,7 +2,7 @@
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { RelationshipType, AssociationCardinality } from 'app/main/content/_model/meta/relationship';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PropertyOrEnumEntry } from '../class-options-overlay-content/class-options-overlay-content.component';
+import { PropertyEntry } from '../class-options-overlay-content/class-options-overlay-content.component';
 import { CConstants } from '../../utils-and-constants';
 import { OptionsOverlayContentData } from '../options-overlay-control/options-overlay-control.component';
 
@@ -19,7 +19,7 @@ export class RelationshipOptionsOverlayContentComponent implements OnInit {
 
   relationshipPalettes = CConstants.relationshipPalettes;
 
-  entryList: PropertyOrEnumEntry[];
+  entryList: PropertyEntry[];
   sourceClass: ClassDefinition;
   targetClass: ClassDefinition;
 

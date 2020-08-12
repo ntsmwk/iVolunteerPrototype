@@ -1,6 +1,6 @@
 import { ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
-import { PropertyItem } from '../_model/meta/property';
+import { PropertyItem } from '../_model/meta/property/property';
 
 // validation function
 export function propertyNameUniqueValidator(properties: PropertyItem[], currentProperty: PropertyItem): ValidatorFn {

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { PropertyType, ClassProperty } from '../_model/meta/property';
+import { PropertyType, ClassProperty } from '../_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
 import {
   TextboxFormItem, DropdownMultipleFormItem, DropdownFormItem, DynamicFormItemBase, NumberBoxFormItem,
-  SingleSelectionEnumFormItem, DatepickerFormItem, TupleDropdownFormItem, GenericFormItem,
-  MultipleSelectionEnumFormItem, SlideToggleFormItem, TextAreaFormItem, NumberDropdownFormItem
+  SingleSelectionTreeFormItem, DatepickerFormItem, TupleDropdownFormItem, GenericFormItem,
+  MultipleSelectionTreeFormItem, SlideToggleFormItem, TextAreaFormItem, NumberDropdownFormItem
 } from '../_model/dynamic-forms/item';
 
 export interface ValidatorData {
@@ -115,14 +115,14 @@ export class DynamicFormItemService {
         value: ClassProperty.getDefaultValue(property),
       });
 
-    } else if (property.type === PropertyType.ENUM) {
+    } else if (property.type === PropertyType.TREE) {
       if (property.multiple) {
-        formItem = new MultipleSelectionEnumFormItem({
+        formItem = new MultipleSelectionTreeFormItem({
           values: property.defaultValues,
           options: property.allowedValues
         });
       } else {
-        formItem = new SingleSelectionEnumFormItem({
+        formItem = new SingleSelectionTreeFormItem({
           values: property.defaultValues,
           value: ClassProperty.getDefaultValue(property),
           options: property.allowedValues

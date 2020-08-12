@@ -1,6 +1,5 @@
 import { ClassDefinition } from "./meta/class";
-import { ClassProperty, PropertyDefinition } from "./meta/property";
-import { User } from './user';
+import { FlatPropertyDefinition, ClassProperty } from './meta/property/property';
 
 export class DerivationRule {
   id: string;
@@ -14,8 +13,8 @@ export class DerivationRule {
   active: boolean;
 }
 
-export class GeneralCondition{
-  propertyDefinition: PropertyDefinition<any>;
+export class GeneralCondition {
+  propertyDefinition: FlatPropertyDefinition<any>;
   comparisonOperatorType: ComparisonOperatorType;
   value: any;
 
@@ -68,7 +67,7 @@ export class ClassAction {
   classDefinition: ClassDefinition;
   attributes: AttributeCondition[] = [];
 
-  constructor(classDefinition: ClassDefinition){
+  constructor(classDefinition: ClassDefinition) {
     //this.classDefinition = classDefinition;
     this.actionType = ActionType.NEW;
   }
@@ -85,7 +84,7 @@ export enum ComparisonOperatorType {
 
 export enum AggregationOperatorType {
   COUNT = "Anzahl",
-  EXISTS = "Existiert", 
+  EXISTS = "Existiert",
   NOT_EXISTS = "Existiert nicht",
   MIN = "Min",
   MAX = "Max",

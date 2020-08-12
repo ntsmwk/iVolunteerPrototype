@@ -91,7 +91,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
-        .getAllClassDefinitionsWithoutHeadAndEnums(
+        .getAllClassDefinitions(
           this.marketplace,
           this.tenant.id
         )
@@ -167,13 +167,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             this.loadDerivationRule(this.marketplace, this.derivationRule.id);
           });
       } else {
-          this.derivationRuleService
-            .save(this.marketplace, this.derivationRule)
-            .toPromise()
-            .then((rule:DerivationRule) => { 
-              this.derivationRule = rule;
-              this.router.navigate(["/main/rule/" + this.derivationRule.id])
-            });
+        this.derivationRuleService
+          .save(this.marketplace, this.derivationRule)
+          .toPromise()
+          .then((rule: DerivationRule) => {
+            this.derivationRule = rule;
+            this.router.navigate(["/main/rule/" + this.derivationRule.id])
+          });
       }
       this.showSuccessMsg = true;
       this.testConditions = false;

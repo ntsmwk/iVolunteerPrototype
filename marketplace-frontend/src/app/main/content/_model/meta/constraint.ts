@@ -1,4 +1,4 @@
-import { PropertyType } from './property';
+import { PropertyType } from './property/property';
 
 export class PropertyConstraint<T> {
     id: string;

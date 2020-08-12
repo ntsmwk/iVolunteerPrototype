@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
 import at.jku.cis.iVolunteer.model.rule.entities.GeneralConditionDTO;
 import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
@@ -15,10 +15,10 @@ import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 @Component
 public class GeneralConditionMapper {
 
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
 
 	public GeneralConditionDTO toTarget(GeneralCondition source, String tenantId) {
-		PropertyDefinition<Object> propertyDefinition = (PropertyDefinition<Object>) propertyDefinitionRepository
+		FlatPropertyDefinition<Object> propertyDefinition = (FlatPropertyDefinition<Object>) propertyDefinitionRepository
 				.getByNameAndTenantId(source.getAttributeName(), tenantId).get(0);
 		GeneralConditionDTO dto = new GeneralConditionDTO(propertyDefinition, source.getValue(),
 				(ComparisonOperatorType) source.getOperatorType());

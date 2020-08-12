@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassProperty, PropertyDefinition } from 'app/main/content/_model/meta/property';
+import { ClassProperty, FlatPropertyDefinition } from 'app/main/content/_model/meta/property/property';
 
+export class ClassPropertyRequestObject {
+  flatPropertyDefinitionIds: string[];
+  treePropertyDefinitionIds: string[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +28,8 @@ export class ClassPropertyService {
     return this.http.put(`${marketplace.url}/meta/core/property/class/${classDefintionId}/update`, classProperty);
   }
 
-  getClassPropertyFromDefinitionById(marketplace: Marketplace, propIds: string[], enumIds: string[]) {
-    const requestObject = { propertyDefinitionIds: propIds, enumDefinitionIds: enumIds };
+  getClassPropertyFromDefinitionById(marketplace: Marketplace, flatPropertyDefinitionIds: string[], treePropertyDefinitionIds: string[]) {
+    const requestObject: ClassPropertyRequestObject = { flatPropertyDefinitionIds: flatPropertyDefinitionIds, treePropertyDefinitionIds: treePropertyDefinitionIds };
     return this.http.put(`${marketplace.url}/meta/core/property/class/get-classproperty-from-definition-by-id/`, requestObject);
   }
 
@@ -33,7 +37,7 @@ export class ClassPropertyService {
     return this.http.put(`${marketplace.url}/meta/core/property/class/${id}/add-properties-by-id`, propIds);
   }
 
-  addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: PropertyDefinition<any>[]) {
+  addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: FlatPropertyDefinition<any>[]) {
     return this.http.put(`${marketplace.url}/meta/core/property/class/${id}/add-properties`, propsToAdd);
   }
 

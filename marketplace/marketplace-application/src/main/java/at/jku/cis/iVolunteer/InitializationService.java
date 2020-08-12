@@ -10,28 +10,28 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
-import at.jku.cis.iVolunteer.marketplace.configurations.enums.EnumDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingCollectorConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataClasses;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 
 @Service
 public class InitializationService {
 
 	@Autowired protected ClassDefinitionRepository classDefinitionRepository;
 	@Autowired protected RelationshipRepository relationshipRepository;
-	@Autowired protected PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired protected FlatPropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired protected ClassConfigurationRepository classConfigurationRepository;
 	@Autowired protected MatchingConfigurationRepository matchingConfigurationRepository;
 	@Autowired protected MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
-	@Autowired protected EnumDefinitionRepository enumDefinitionRepository;
+	@Autowired protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
@@ -85,7 +85,7 @@ public class InitializationService {
 	public void addiVolunteerPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
@@ -96,7 +96,7 @@ public class InitializationService {
 	public void addFlexProdPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllFlexProdProperties(tenant.getId())) {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllFlexProdProperties(tenant.getId())) {
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
@@ -107,7 +107,7 @@ public class InitializationService {
 	public void addGenericPropertyDefintions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllGeneric(tenant.getId())) {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllGeneric(tenant.getId())) {
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
@@ -118,7 +118,7 @@ public class InitializationService {
 	public void addHeaderPropertyDefintions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAllHeader(tenant.getId())) {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllHeader(tenant.getId())) {
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
