@@ -6,6 +6,9 @@ public class TreePropertyRelationship {
 	String sourceId;
 	String targetId;
 	
+	String sourceEnumEntryId;
+	String targetEnumEntryId;
+	
 	public TreePropertyRelationship() {
 	
 	}
@@ -43,6 +46,23 @@ public class TreePropertyRelationship {
 	public void setTargetId(String targetId) {
 		this.targetId = targetId;
 	}
+
+	public String getSourceEnumEntryId() {
+		return sourceEnumEntryId;
+	}
+
+	public void setSourceEnumEntryId(String sourceEnumEntryId) {
+		this.sourceEnumEntryId = sourceEnumEntryId;
+	}
+
+	public String getTargetEnumEntryId() {
+		return targetEnumEntryId;
+	}
+
+	public void setTargetEnumEntryId(String targetEnumEntryId) {
+		this.targetEnumEntryId = targetEnumEntryId;
+	}
+	
 	
 	
 	
