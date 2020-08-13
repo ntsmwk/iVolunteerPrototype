@@ -40,6 +40,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
   dropdownToggled: boolean;
 
   propertyTypeOptions: PropertyTypeOption[];
+  availablePropertyTypes = [PropertyType.TEXT, PropertyType.LONG_TEXT, PropertyType.WHOLE_NUMBER, PropertyType.FLOAT_NUMBER, PropertyType.BOOL, PropertyType.DATE];
 
   form: FormGroup;
 
@@ -82,7 +83,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
     }
   }
 
-  getAllPropertyDefinitions() {
+  private getAllPropertyDefinitions() {
     return this.propertyDefinitionService
       .getAllPropertyDefinitons(this.marketplace, this.tenant.id)
       .toPromise()
@@ -91,7 +92,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
       });
   }
 
-  getCurrentPropertyDefinition() {
+  private getCurrentPropertyDefinition() {
     return this.propertyDefinitionService
       .getPropertyDefinitionById(this.marketplace, this.entryId, this.tenant.id)
       .toPromise()
@@ -104,36 +105,14 @@ export class FlatPropertyBuilderComponent implements OnInit {
 
   private preparePropertyTypeOptions() {
     this.propertyTypeOptions = [];
-    this.propertyTypeOptions.push({
-      type: PropertyType.TEXT,
-      label: PropertyType.getLabelForPropertyType(PropertyType.TEXT),
-      display: true,
-    });
-    this.propertyTypeOptions.push({
-      type: PropertyType.LONG_TEXT,
-      label: PropertyType.getLabelForPropertyType(PropertyType.LONG_TEXT),
-      display: true,
-    });
-    this.propertyTypeOptions.push({
-      type: PropertyType.WHOLE_NUMBER,
-      label: PropertyType.getLabelForPropertyType(PropertyType.WHOLE_NUMBER),
-      display: true,
-    });
-    this.propertyTypeOptions.push({
-      type: PropertyType.FLOAT_NUMBER,
-      label: PropertyType.getLabelForPropertyType(PropertyType.FLOAT_NUMBER),
-      display: true,
-    });
-    this.propertyTypeOptions.push({
-      type: PropertyType.BOOL,
-      label: PropertyType.getLabelForPropertyType(PropertyType.BOOL),
-      display: true,
-    });
-    this.propertyTypeOptions.push({
-      type: PropertyType.DATE,
-      label: PropertyType.getLabelForPropertyType(PropertyType.DATE),
-      display: true,
-    });
+
+    for (const propertyType of this.availablePropertyTypes) {
+      this.propertyTypeOptions.push({
+        type: propertyType,
+        label: PropertyType.getLabelForPropertyType(propertyType),
+        display: true
+      });
+    }
   }
 
   clearForm() {
@@ -226,6 +205,12 @@ export class FlatPropertyBuilderComponent implements OnInit {
   isDropdownListDisplayed() {
     return this.dropdownToggled && this.form.get('type').value !== '';
   }
+
+  // ----------------------------------------------------
+  // ------------------CONSTRAINTS-----------------------
+  // ----------------------------------------------------
+
+
 
   // ---
 
