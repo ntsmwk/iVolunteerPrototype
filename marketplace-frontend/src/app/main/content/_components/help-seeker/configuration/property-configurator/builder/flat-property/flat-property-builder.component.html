@@ -20,8 +20,8 @@
 
     <div class="pl-24"></div>
 
-    <mat-slide-toggle [(ngModel)]="dropdownToggled" (change)="clearAllowedValues()"
-      [ngModelOptions]="{ standalone: true }" labelPosition="after">
+    <mat-slide-toggle [(ngModel)]="dropdownToggled" (change)="clearFormArrays()" [ngModelOptions]="{ standalone: true }"
+      labelPosition="after">
       Dropdown
     </mat-slide-toggle>
   </div>
@@ -78,8 +78,7 @@
             <mat-form-field fxFlex class="allowed-value-field" *ngIf="form.get('type').value == 'BOOL'">
               <mat-label>Boolean Value {{ i + 1 }}</mat-label>
 
-              <mat-select formControlName="value" [value]="value.get('value').value"
-                (change)="allowedValuesDirty = true" required>
+              <mat-select formControlName="value" [value]="value.get('value').value" required>
                 <mat-option value="true" type="boolean">true</mat-option>
                 <mat-option value="false" type="boolean">false</mat-option>
               </mat-select>
@@ -120,7 +119,7 @@
   <!-------------Constraints-------------->
   <!-------------------------------------->
 
-  <mat-accordion>
+  <mat-accordion *ngIf="form.get('type').value != ''">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -134,18 +133,62 @@
           Pflicht-Property
         </mat-slide-toggle>
 
-        <div class="mt-16" style="height: 150px; background-color: aqua">
-          constraint array area
-
+        <div class="mt-16" *ngIf="!dropdownToggled">
           <fieldset [formGroup]="form" class="fieldset-container">
             <div class="fieldset-empty" *ngIf="form.get('constraints').controls.length <= 0">
               keine Einträge vorhanden
             </div>
 
-            <div formArrayName="constraints" *ngFor="let value of form.get('constraints').controls; let i = index">
+            <div formArrayName="constraints" *ngFor="let entry of form.get('constraints').controls; let i = index">
               <div [formGroupName]="i">
                 <div class="allowed-value-row" fxLayout="row">
-                  Form Array Entry {{i}}
+
+                  <div fxLayout="column" fxFlex>
+                    <div fxLayout="row">
+                      <mat-form-field fxFlex>
+                        <mat-label>Constraint Typ</mat-label>
+
+                        <mat-select formControlName="type" [value]="entry.get('type').value" required>
+                          <mat-option *ngFor="let option of currentConstraintOptions" [value]="option.type">
+                            {{ option.label }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="entry.get('value').hasError('required')">Pflichtfeld - Ausfüllen oder
+                          Entfernen
+                        </mat-error>
+                      </mat-form-field>
+
+                      <mat-form-field fxFlex class="allowed-value-field" *ngIf="entry.get('type').value != 'pattern'">
+                        <input matInput placeholder="Wert" formControlName="value" [value]="entry.get('value').value"
+                          type="number" required />
+                        <mat-error *ngIf="entry.get('value').hasError('required')">Pflichtfeld - Ausfüllen oder
+                          Entfernen
+                        </mat-error>
+                      </mat-form-field>
+
+
+                      <mat-form-field fxFlex class="allowed-value-field" *ngIf="entry.get('type').value == 'pattern'">
+                        <input matInput placeholder="Pattern" formControlName="value" [value]="entry.get('value').value"
+                          required />
+                        <mat-error *ngIf="entry.get('value').hasError('required')">Pflichtfeld - Ausfüllen oder
+                          Entfernen
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <mat-form-field fxFlex class="allowed-value-field">
+                      <textarea matInput placeholder="Benutzerdefinition Fehlermeldung" formControlName="message"
+                        [value]="entry.get('message').value" matTextareaAutosize matAutosizeMinRows="1"
+                        matAutosizeMaxRows="3"></textarea>
+
+                    </mat-form-field>
+                  </div>
+                  <!--Buttons-->
+                  <div fxFlex="nogrow" fxFlexAlign="center" class="allowed-value-icon">
+                    <mat-icon class="iconButton" (click)="removeConstraint(i)" matTooltip="Entfernen"
+                      matTooltipPosition="above" aria-label="Remove Value">delete</mat-icon>
+                  </div>
                 </div>
               </div>
 

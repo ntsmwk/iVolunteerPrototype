@@ -36,7 +36,7 @@ const availableConstraints = [
   { type: PropertyType.FLOAT_NUMBER, constraints: [ConstraintType.MAX, ConstraintType.MIN] },
   { type: PropertyType.BOOL, constraints: [] },
   { type: PropertyType.DATE, constraints: [ConstraintType.MAX, ConstraintType.MIN] }
-]
+];
 
 
 @Component({
@@ -208,10 +208,10 @@ export class FlatPropertyBuilderComponent implements OnInit {
     }
   }
 
-  createFormArrayValue(): FormGroup {
-    return this.formBuilder.group({
-      value: [undefined, Validators.required],
-    });
+
+  clearFormArrays() {
+    this.clearAllowedValues();
+    this.clearConstraints();
   }
 
   // ----------------------------------------------------
@@ -220,7 +220,14 @@ export class FlatPropertyBuilderComponent implements OnInit {
 
   addAllowedValue() {
     this.allowedValues = this.form.get('allowedValues') as FormArray;
-    this.allowedValues.push(this.createFormArrayValue());
+    this.allowedValues.push(this.createAllowedValue());
+  }
+
+
+  createAllowedValue(): FormGroup {
+    return this.formBuilder.group({
+      value: [undefined, Validators.required],
+    });
   }
 
   markAllowedValuesAsTouched() {
@@ -251,7 +258,16 @@ export class FlatPropertyBuilderComponent implements OnInit {
 
   addConstraint() {
     this.constraints = this.form.get('constraints') as FormArray;
-    this.constraints.push(this.createFormArrayValue());
+    this.constraints.push(this.createConstraintValue());
+    console.log(this.form.get('constraints'));
+  }
+
+  createConstraintValue(): FormGroup {
+    return this.formBuilder.group({
+      type: [undefined, Validators.required],
+      value: ['', Validators.required],
+      message: ['']
+    });
   }
 
   removeConstraint(i: number) {
