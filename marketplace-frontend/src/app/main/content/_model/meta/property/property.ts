@@ -128,18 +128,26 @@ export enum PropertyType {
 }
 
 export namespace PropertyType {
-    export function getLabelForPropertyType(propertyType: string) {
-        switch (propertyType) {
-            case PropertyType.TEXT: return 'Text';
-            case PropertyType.LONG_TEXT: return 'Text Field';
-            case PropertyType.WHOLE_NUMBER: return 'Number';
-            case PropertyType.FLOAT_NUMBER: return 'Float';
-            case PropertyType.BOOL: return 'Boolean';
-            case PropertyType.DATE: return 'Date';
-            case PropertyType.LIST: return 'List';
-            case PropertyType.TUPLE: return 'Tuple';
-            case PropertyType.TREE: return 'Tree';
+    const labelAssignment = [
+        { type: PropertyType.TEXT, label: 'Text' },
+        { type: PropertyType.LONG_TEXT, label: 'Textfeld' },
+        { type: PropertyType.WHOLE_NUMBER, label: 'Ganze Zahl' },
+        { type: PropertyType.FLOAT_NUMBER, label: 'Kommazahl' },
+        { type: PropertyType.BOOL, label: 'Boolean' },
+        { type: PropertyType.DATE, label: 'Datum' },
+        { type: PropertyType.TUPLE, label: 'Tupel' },
+        { type: PropertyType.TREE, label: 'Tree-Property' },
 
+
+    ];
+
+
+    export function getLabelForPropertyType(propertyType: string) {
+        const assignment = labelAssignment.find(la => la.type === propertyType);
+        if (assignment === undefined) {
+            return propertyType;
+        } else {
+            return assignment.label;
         }
     }
 }

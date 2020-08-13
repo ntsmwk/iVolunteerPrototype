@@ -16,6 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatNativeDateModule,
     MatTooltipModule,
     MatButtonModule,
+    MatExpansionModule,
 
     ReactiveFormsModule,
 

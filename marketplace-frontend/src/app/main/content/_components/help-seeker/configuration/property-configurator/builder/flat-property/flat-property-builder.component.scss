@@ -1,67 +1,87 @@
 @import "src/@fuse/scss/fuse";
 
 .content-layout {
+  // min-height: 300px;
+  // position: relative;
 
-    // min-height: 300px;
-    // position: relative;
+  h2 {
+    margin: 0;
+    padding: 0;
+  }
 
-    h2 {
-        margin: 0;
-        padding: 0;
+  .fieldset-title {
+    margin-left: 5%;
+  }
+
+  .fieldset-container {
+    margin-left: 5%;
+    margin-right: 5%;
+
+    border: 1px solid black;
+    border-radius: 2px;
+
+    .fieldset-empty {
+      text-align: center;
     }
 
-    .fieldset-title {
-        margin-left: 5%; 
-    }
+    .allowed-value-row {
+      .allowed-value-field {
+        margin-left: 8px;
+      }
 
-
-    .fieldset-container {
-        margin-left: 5%; 
-        margin-right: 5%; 
-        
-        border: 1px solid black; 
-        border-radius: 2px;
-
-        .fieldset-empty {
-            text-align: center;
-        }
-
-        .allowed-value-row {
-            .allowed-value-field {
-               margin-left: 8px;
-            }
-
-            .allowed-value-icon {
-                cursor: pointer;
-                margin-left: 8px;
-            }
-        }
-    }
-
-    .fieldset-action{
-        margin-left: 20px; 
-        border: 1px solid rgb(62, 125, 219);
-        border-radius: 4px;
-
-        color: rgb(62, 125, 219);
-
+      .allowed-value-icon {
         cursor: pointer;
-        width: fit-content;
+        margin-left: 8px;
+      }
+    }
+  }
 
-        padding: 2px 4px 2px 2px;
+  .fieldset-action {
+    margin-left: 20px;
+    border: 1px solid rgb(62, 125, 219);
+    border-radius: 4px;
+
+    color: rgb(62, 125, 219);
+
+    cursor: pointer;
+    width: fit-content;
+
+    padding: 2px 4px 2px 2px;
+  }
+
+  .fieldset-action:hover {
+    background: rgb(62, 125, 219);
+    color: white;
+  }
+
+  mat-expansion-panel {
+    box-shadow: none;
+    border: 1px rgba(0, 0, 0, 0.12) solid;
+  }
+
+  mat-expansion-panel-header {
+    height: max-content !important;
+    padding: 0 8px;
+
+    mat-panel-title {
+      color: rgba(0, 0, 0, 0.38);
+      padding: 8px 0;
+      font: 400 16px/1.125 Roboto, "Helvetica Neue", sans-serif;
+    }
+  }
+
+  mat-expansion-panel-header:hover,
+  mat-expansion-panel-header.mat-expanded {
+    background-color: rgb(62, 125, 219) !important;
+    border-radius: 0;
+    height: max-content !important;
+
+    mat-panel-title {
+      color: white;
     }
 
-    .fieldset-action:hover {
-        background: rgb(62, 125, 219);
-        color: white;
+    mat-panel-description {
+      color: white;
     }
-    
-
-    // .action-button-row {
-    //     position: absolute;
-
-    //     bottom: 0;
-    //     left: 0;
-    //     right: 0;
-    // }
+  }
 }

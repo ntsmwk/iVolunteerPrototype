@@ -14,12 +14,30 @@ import { User } from 'app/main/content/_model/user';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { Tenant } from 'app/main/content/_model/tenant';
+import { ConstraintType } from 'app/main/content/_model/meta/constraint';
 
 export interface PropertyTypeOption {
   type: PropertyType;
   label: string;
   display: boolean;
 }
+
+export interface ConstraintOption {
+  type: ConstraintType;
+  label: string;
+  display: boolean;
+}
+
+const availablePropertyTypes = [PropertyType.TEXT, PropertyType.LONG_TEXT, PropertyType.WHOLE_NUMBER, PropertyType.FLOAT_NUMBER, PropertyType.BOOL, PropertyType.DATE];
+const availableConstraints = [
+  { type: PropertyType.TEXT, constraints: [ConstraintType.MAX_LENGTH, ConstraintType.MIN_LENGTH, ConstraintType.PATTERN] },
+  { type: PropertyType.LONG_TEXT, constraints: [ConstraintType.MAX_LENGTH, ConstraintType.MIN_LENGTH, ConstraintType.PATTERN] },
+  { type: PropertyType.WHOLE_NUMBER, constraints: [ConstraintType.MAX, ConstraintType.MIN, ConstraintType.MAX_LENGTH, ConstraintType.MIN_LENGTH] },
+  { type: PropertyType.FLOAT_NUMBER, constraints: [ConstraintType.MAX, ConstraintType.MIN] },
+  { type: PropertyType.BOOL, constraints: [] },
+  { type: PropertyType.DATE, constraints: [ConstraintType.MAX, ConstraintType.MIN] }
+]
+
 
 @Component({
   selector: "app-flat-property-builder",
@@ -40,7 +58,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
   dropdownToggled: boolean;
 
   propertyTypeOptions: PropertyTypeOption[];
-  availablePropertyTypes = [PropertyType.TEXT, PropertyType.LONG_TEXT, PropertyType.WHOLE_NUMBER, PropertyType.FLOAT_NUMBER, PropertyType.BOOL, PropertyType.DATE];
+  currentConstraintOptions: ConstraintOption[];
 
   form: FormGroup;
 
@@ -106,13 +124,40 @@ export class FlatPropertyBuilderComponent implements OnInit {
   private preparePropertyTypeOptions() {
     this.propertyTypeOptions = [];
 
-    for (const propertyType of this.availablePropertyTypes) {
+    for (const propertyType of availablePropertyTypes) {
       this.propertyTypeOptions.push({
         type: propertyType,
         label: PropertyType.getLabelForPropertyType(propertyType),
         display: true
       });
     }
+  }
+
+  prepareConstraintTypeOptions(propertyType: PropertyType) {
+    this.currentConstraintOptions = [];
+
+    if (isNullOrUndefined(propertyType)) {
+      return;
+    }
+    console.log(propertyType);
+
+    const constraintsForType = availableConstraints.find(c => c.type === propertyType);
+
+    for (const constraint of constraintsForType.constraints) {
+      this.currentConstraintOptions.push({
+        type: constraint,
+        label: ConstraintType.getLabelForConstraintType(constraint),
+        display: true
+      });
+    }
+
+    console.log(this.currentConstraintOptions);
+
+  }
+
+  handleTypeSelectionChange() {
+    this.clearAllowedValues();
+    this.prepareConstraintTypeOptions(this.form.controls['type'].value);
   }
 
   clearForm() {

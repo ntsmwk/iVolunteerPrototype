@@ -12,7 +12,8 @@
     <div class="pl-20"></div>
 
     <mat-form-field style="width: 250px;">
-      <mat-select placeholder="Property-Type" formControlName="type" (selectionChange)="clearAllowedValues()" required>
+      <mat-select placeholder="Property-Type" formControlName="type" (selectionChange)="handleTypeSelectionChange()"
+        required>
         <mat-option *ngFor="let opt of propertyTypeOptions" [value]="opt.type">{{ opt.label }}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -111,7 +112,21 @@
   </mat-form-field>
 
 
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Constraints hinzufügen
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
+
+      <div style="height: 100px; background-color: aqua">
+
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
 
   <div class="mt-8" fxLayout="row" fxLayoutAlign="start end">
     <button class="primary-button-dark" mat-stroked-button type="submit">
