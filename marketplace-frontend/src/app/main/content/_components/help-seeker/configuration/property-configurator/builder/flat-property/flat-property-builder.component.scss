@@ -13,25 +13,32 @@
     margin-left: 5%;
   }
 
-  .fieldset-container {
+  .allowed-values-fieldset-container {
     margin-left: 5%;
     margin-right: 5%;
 
-    border: 1px solid black;
+    border: 1px rgba(0, 0, 0, 0.404) solid;
     border-radius: 2px;
-
-    .fieldset-empty {
-      text-align: center;
-    }
 
     .allowed-value-row {
       .allowed-value-field {
         margin-left: 8px;
       }
+    }
+  }
 
-      .allowed-value-icon {
-        cursor: pointer;
-        margin-left: 8px;
+  .constraint-fieldset-container {
+    border: none;
+
+    border: 1px rgba(0, 0, 0, 0.404) solid;
+
+    .constraint-entry {
+      border: 1px rgba(0, 0, 0, 0.12) solid;
+      border-radius: 4px;
+      margin-bottom: 4px;
+
+      .constraint-entry-field {
+        margin: 0 4px;
       }
     }
   }
@@ -52,6 +59,15 @@
   .fieldset-action:hover {
     background: rgb(62, 125, 219);
     color: white;
+  }
+
+  .fieldset-entry-icon {
+    cursor: pointer;
+    margin-left: 8px;
+  }
+
+  .fieldset-empty {
+    text-align: center;
   }
 
   mat-expansion-panel {
