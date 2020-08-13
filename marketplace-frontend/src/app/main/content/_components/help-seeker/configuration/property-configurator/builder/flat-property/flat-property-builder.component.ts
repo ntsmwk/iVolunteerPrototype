@@ -63,6 +63,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
   form: FormGroup;
 
   allowedValues: FormArray;
+  constraints: FormArray;
 
   allPropertyDefinitions: FlatPropertyDefinition<any>[];
   propertyDefinition: FlatPropertyDefinition<any>;
@@ -157,6 +158,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
 
   handleTypeSelectionChange() {
     this.clearAllowedValues();
+    this.clearConstraints();
     this.prepareConstraintTypeOptions(this.form.controls['type'].value);
   }
 
@@ -171,7 +173,11 @@ export class FlatPropertyBuilderComponent implements OnInit {
       ]),
       type: this.formBuilder.control('', Validators.required),
       allowedValues: this.formBuilder.array([]),
+
       description: this.formBuilder.control(''),
+
+      required: this.formBuilder.control(''),
+      constraints: this.formBuilder.array([])
     });
 
     if (!isNullOrUndefined(this.propertyDefinition)) {
@@ -202,19 +208,19 @@ export class FlatPropertyBuilderComponent implements OnInit {
     }
   }
 
-  // ----------------------------------------------------
-  // -----------------Allowed Values-----------------------
-  // ----------------------------------------------------
-
-  createAllowedValue(): FormGroup {
+  createFormArrayValue(): FormGroup {
     return this.formBuilder.group({
       value: [undefined, Validators.required],
     });
   }
 
+  // ----------------------------------------------------
+  // --------------Allowed Values Array------------------
+  // ----------------------------------------------------
+
   addAllowedValue() {
     this.allowedValues = this.form.get('allowedValues') as FormArray;
-    this.allowedValues.push(this.createAllowedValue());
+    this.allowedValues.push(this.createFormArrayValue());
   }
 
   markAllowedValuesAsTouched() {
@@ -236,6 +242,25 @@ export class FlatPropertyBuilderComponent implements OnInit {
   clearAllowedValues() {
     this.form.removeControl('allowedValues');
     this.form.addControl('allowedValues', this.formBuilder.array([]));
+  }
+
+  // ----------------------------------------------------
+  // -----------------Constraint Array-------------------
+  // ----------------------------------------------------
+
+
+  addConstraint() {
+    this.constraints = this.form.get('constraints') as FormArray;
+    this.constraints.push(this.createFormArrayValue());
+  }
+
+  removeConstraint(i: number) {
+    this.constraints.removeAt(i);
+  }
+
+  clearConstraints() {
+    this.form.removeControl('constraints');
+    this.form.addControl('constraints', this.formBuilder.array([]));
   }
 
   // --Validity Checks and Queries

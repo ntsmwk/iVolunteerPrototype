@@ -105,12 +105,20 @@
     </fieldset>
   </div>
 
+  <!-------------------------------------->
+  <!-------------Description-------------->
+  <!-------------------------------------->
+
   <mat-form-field class="mt-8" style="width: 100%;" appearance="outline">
     <mat-label>Beschreibung</mat-label>
     <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
       matAutosizeMaxRows="3"></textarea>
   </mat-form-field>
 
+
+  <!-------------------------------------->
+  <!-------------Constraints-------------->
+  <!-------------------------------------->
 
   <mat-accordion>
     <mat-expansion-panel>
@@ -121,12 +129,45 @@
       </mat-expansion-panel-header>
 
 
-      <div style="height: 100px; background-color: aqua">
+      <div class="m-8">
+        <mat-slide-toggle formControlName="required" labelPosition="after">
+          Pflicht-Property
+        </mat-slide-toggle>
+
+        <div class="mt-16" style="height: 150px; background-color: aqua">
+          constraint array area
+
+          <fieldset [formGroup]="form" class="fieldset-container">
+            <div class="fieldset-empty" *ngIf="form.get('constraints').controls.length <= 0">
+              keine Einträge vorhanden
+            </div>
+
+            <div formArrayName="constraints" *ngFor="let value of form.get('constraints').controls; let i = index">
+              <div [formGroupName]="i">
+                <div class="allowed-value-row" fxLayout="row">
+                  Form Array Entry {{i}}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="mt-4 fieldset-action" fxLayout="row" fxLayoutAlign="start center" (click)="addConstraint()"
+              matTooltip="Add Value">
+              <mat-icon>add</mat-icon>
+              <div>Hinzufügen</div>
+            </div>
+          </fieldset>
+        </div>
 
       </div>
     </mat-expansion-panel>
 
   </mat-accordion>
+
+
+  <!-------------------------------------->
+  <!-----------Action Buttons------------->
+  <!-------------------------------------->
 
   <div class="mt-8" fxLayout="row" fxLayoutAlign="start end">
     <button class="primary-button-dark" mat-stroked-button type="submit">
