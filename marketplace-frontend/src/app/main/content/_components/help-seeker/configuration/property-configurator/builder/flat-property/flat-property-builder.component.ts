@@ -141,7 +141,6 @@ export class FlatPropertyBuilderComponent implements OnInit {
     if (isNullOrUndefined(propertyType)) {
       return;
     }
-    console.log(propertyType);
 
     const constraintsForType = availableConstraints.find(c => c.type === propertyType);
 
@@ -152,9 +151,6 @@ export class FlatPropertyBuilderComponent implements OnInit {
         display: true
       });
     }
-
-    console.log(this.currentConstraintOptions);
-
   }
 
   handleTypeSelectionChange() {
@@ -188,7 +184,6 @@ export class FlatPropertyBuilderComponent implements OnInit {
   }
 
   populateForm() {
-    console.log(this.propertyDefinition);
     this.form.get('name').setValue(this.propertyDefinition.name);
     this.form.get('type').setValue(this.propertyDefinition.type);
     this.form.get('description').setValue(this.propertyDefinition.description);
@@ -272,7 +267,6 @@ export class FlatPropertyBuilderComponent implements OnInit {
   addConstraint() {
     this.constraints = this.form.get('constraints') as FormArray;
     this.constraints.push(this.createConstraintValue());
-    console.log(this.form.get('constraints'));
   }
 
   createConstraintValue(): FormGroup {
