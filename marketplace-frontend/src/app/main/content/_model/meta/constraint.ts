@@ -1,7 +1,6 @@
 import { PropertyType } from './property/property';
 
 export class PropertyConstraint<T> {
-    id: string;
     constraintType: ConstraintType;
 
     value: T;
@@ -11,7 +10,7 @@ export class PropertyConstraint<T> {
 }
 
 export enum ConstraintType {
-    MIN = 'min', MAX = 'max', MIN_LENGTH = 'min_length', MAX_LENGTH = 'max_length', PATTERN = 'pattern'
+    MIN = 'MIN', MAX = 'MAX', MIN_LENGTH = 'MIN_LENGTH', MAX_LENGTH = 'MAX_LENGTH', PATTERN = 'PATTERN'
 }
 
 export namespace ConstraintType {

@@ -19,6 +19,7 @@ export class FlatPropertyDefinition<T> {
     unit: string;
 
     required: boolean;
+    requiredMessage: string;
     propertyConstraints: PropertyConstraint<T>[];
 
     timestamp: Date;

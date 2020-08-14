@@ -120,7 +120,7 @@
   <!-------------------------------------->
 
   <mat-accordion *ngIf="form.get('type').value != ''">
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="constraintsToggled">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Constraints hinzufügen
@@ -129,9 +129,18 @@
 
 
       <div class="m-8">
-        <mat-slide-toggle formControlName="required" labelPosition="after">
-          Pflicht-Property
-        </mat-slide-toggle>
+        <fieldset [formGroup]="form" class="constraint-fieldset-container required-constraint-fieldset-container">
+          <mat-slide-toggle formControlName="required" labelPosition="after">
+            Pflicht-Property
+          </mat-slide-toggle>
+
+          <mat-form-field *ngIf="form.get('required').value" class="constraint-entry-field">
+            <textarea matInput placeholder="Benutzerdefinierte Fehlermeldung" formControlName="requiredMessage"
+              [value]="" [value]="form.get('requiredMessage').value" matTextareaAutosize matAutosizeMinRows="1"
+              matAutosizeMaxRows="3"></textarea>
+
+          </mat-form-field>
+        </fieldset>
 
         <div class="mt-16" *ngIf="!dropdownToggled">
           <fieldset [formGroup]="form" class="constraint-fieldset-container">
@@ -149,7 +158,8 @@
                         <mat-label>Constraint Typ</mat-label>
 
                         <mat-select formControlName="type" [value]="entry.get('type').value" required>
-                          <mat-option *ngFor="let option of currentConstraintOptions" [value]="option.type">
+                          <mat-option *ngFor="let option of currentConstraintOptions" [value]="option.type"
+                            [disabled]="checkConstraintTypeVisiblity(option.type)">
                             {{ option.label }}
                           </mat-option>
                         </mat-select>
@@ -180,7 +190,7 @@
                     </div>
 
                     <mat-form-field fxFlex class="constraint-entry-field">
-                      <textarea matInput placeholder="Benutzerdefinition Fehlermeldung" formControlName="message"
+                      <textarea matInput placeholder="Benutzerdefinierte Fehlermeldung" formControlName="message"
                         [value]="entry.get('message').value" matTextareaAutosize matAutosizeMinRows="1"
                         matAutosizeMaxRows="3"></textarea>
 

@@ -35,12 +35,18 @@
     .constraint-entry {
       border: 1px rgba(0, 0, 0, 0.12) solid;
       border-radius: 4px;
+      background: rgb(250, 250, 250);
       margin-bottom: 4px;
 
       .constraint-entry-field {
         margin: 0 4px;
       }
     }
+  }
+
+  .required-constraint-fieldset-container {
+    display: flex;
+    flex-direction: column;
   }
 
   .fieldset-action {

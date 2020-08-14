@@ -14,17 +14,5 @@ public class MinimumDate extends DatePropertyConstraint<Date> {
 		setConstraintType(ConstraintType.MIN);
 		this.setValue(value);
 	}
-	
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof MinimumDate)) {
-			return false;
-		}
-		return ((MinimumDate) obj).getId().equals(getId());
-	}
+
 }
