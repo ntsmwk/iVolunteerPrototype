@@ -391,7 +391,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
         const propertyConstraint = new PropertyConstraint<any>();
         propertyConstraint.constraintType = control.get('type').value;
         propertyConstraint.value = control.get('value').value;
-        if (control.get('message').value.length > 0) {
+        if (!isNullOrUndefined(control.get('message').value) && control.get('message').value.length > 0) {
           propertyConstraint.message = control.get('message').value;
         }
         propertyConstraint.propertyType = property.type;

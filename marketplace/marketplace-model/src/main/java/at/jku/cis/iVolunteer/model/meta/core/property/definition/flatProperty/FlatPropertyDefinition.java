@@ -26,6 +26,7 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	protected PropertyType type;
 
 	private boolean required;
+	private String requiredMessage;
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
 	public FlatPropertyDefinition() {
@@ -98,6 +99,14 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 
 	public void setRequired(boolean required) {
 		this.required = required;
+	}
+
+	public String getRequiredMessage() {
+		return requiredMessage;
+	}
+
+	public void setRequiredMessage(String requiredMessage) {
+		this.requiredMessage = requiredMessage;
 	}
 
 	public List<PropertyConstraint<Object>> getPropertyConstraints() {
