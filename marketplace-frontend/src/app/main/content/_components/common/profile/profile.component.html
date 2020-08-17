@@ -1,4 +1,4 @@
-<div id="profile" class="page-layout simple tabbed">
+<div id="profile" class="page-layout simple tabbed" *ngIf="isLoaded">
   <div
     class="header p-24"
     fxLayout="column"
@@ -114,7 +114,7 @@
             <button
               type="submit"
               mat-raised-button
-              color="accent"
+              color="primary"
               class="submit-button"
               aria-label="SUBMIT"
               [disabled]="profileForm.invalid"
@@ -125,5 +125,9 @@
         </mat-card-content>
       </mat-card>
     </div>
+
+    <app-local-repository-location-switch
+      *ngIf="hasVolunteerRole()"
+    ></app-local-repository-location-switch>
   </div>
 </div>

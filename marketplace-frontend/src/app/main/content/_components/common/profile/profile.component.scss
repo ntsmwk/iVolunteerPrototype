@@ -2,9 +2,9 @@
 
 #profile {
   .header {
-    height: 320px;
-    min-height: 320px;
-    max-height: 320px;
+    height: 230px;
+    min-height: 230px;
+    max-height: 230px;
     background: url("/assets/images/backgrounds/dark-material-bg.jpg") no-repeat
       0 45%;
     background-size: cover;
@@ -46,4 +46,9 @@
   //     }
   //   }
   // }
+}
+
+mat-divider {
+  margin-top: 25px;
+  margin-bottom: 25px;
 }

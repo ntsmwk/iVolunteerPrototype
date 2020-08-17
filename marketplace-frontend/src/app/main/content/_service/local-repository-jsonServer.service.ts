@@ -9,13 +9,13 @@ import { User } from "../_model/user";
 @Injectable({
   providedIn: "root",
 })
-export class LocalRepositoryService {
+export class LocalRepositoryJsonServerService {
   private apiUrl = "http://localhost:3000/repository";
   // private apiUrl = "http://140.78.92.57:3000/repository";
 
   constructor(private http: HttpClient) {}
 
-  findByVolunteer(volunteer: User) {
+  private findByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
       const successFunction = (localRepository: LocalRepository) => {
         subscriber.next(localRepository);
@@ -48,7 +48,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  findClassInstancesByVolunteer(volunteer: User) {
+  public findClassInstancesByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -75,7 +75,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  synchronizeSingleClassInstance(
+  public synchronizeSingleClassInstance(
     volunteer: User,
     classInstance: ClassInstance
   ) {
@@ -88,7 +88,6 @@ export class LocalRepositoryService {
       this.findByVolunteer(volunteer)
         .toPromise()
         .then((localRepository: LocalRepository) => {
-          // TODO: prevent double insertion, currently handled in calling method
           localRepository.classInstances.push(classInstance);
 
           this.http
@@ -105,7 +104,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  getSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public getSingleClassInstance(volunteer: User, classInstanceId: string) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -127,7 +126,10 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  synchronizeClassInstances(volunteer: User, classInstances: ClassInstance[]) {
+  public synchronizeClassInstances(
+    volunteer: User,
+    classInstances: ClassInstance[]
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -137,7 +139,6 @@ export class LocalRepositoryService {
       this.findByVolunteer(volunteer)
         .toPromise()
         .then((localRepository: LocalRepository) => {
-          // TODO: prevent double insertion, currently handled in calling method
           localRepository.classInstances = [
             ...localRepository.classInstances,
             ...classInstances,
@@ -157,7 +158,36 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  removeSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public overrideClassInstances(
+    volunteer: User,
+    classInstances: ClassInstance[]
+  ) {
+    const observable = new Observable((subscriber) => {
+      const failureFunction = (error: any) => {
+        subscriber.error(error);
+        subscriber.complete();
+      };
+
+      this.findByVolunteer(volunteer)
+        .toPromise()
+        .then((localRepository: LocalRepository) => {
+          localRepository.classInstances = classInstances;
+
+          this.http
+            .put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+            .toPromise()
+            .then(() => subscriber.complete())
+            .catch((error: any) => failureFunction(error));
+
+          subscriber.next(localRepository.classInstances);
+        })
+        .catch((error: any) => failureFunction(error));
+    });
+
+    return observable;
+  }
+
+  public removeSingleClassInstance(volunteer: User, classInstanceId: string) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -187,7 +217,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  removeClassInstances(volunteer: User, classInstanceIds: string[]) {
+  public removeClassInstances(volunteer: User, classInstanceIds: string[]) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -215,25 +245,18 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  // async isConnected(volunteer: User) {
-  //   let isConnected;
+  async isConnected() {
+    let isConnected = false;
 
-  //   let localRepos = <LocalRepository[]>await this.http
-  //     .get(this.apiUrl)
-  //     .toPromise()
-  //     .catch(() => (isConnected = false));
+    let localRepos = <LocalRepository[]>await this.http
+      .get(this.apiUrl)
+      .toPromise()
+      .catch(() => (isConnected = false));
 
-  //   if (localRepos) {
-  //     isConnected = true;
-  //     if (localRepos.findIndex((l) => l.id === volunteer.id) === -1) {
-  //       let newRepo = new LocalRepository(volunteer.id, volunteer.username);
-  //       this.http
-  //         .post(this.apiUrl, newRepo)
-  //         .toPromise()
-  //         .catch((e) => console.log(e));
-  //     }
-  //   }
+    if (localRepos) {
+      isConnected = true;
+    }
 
-  //   return isConnected;
-  // }
+    return isConnected;
+  }
 }

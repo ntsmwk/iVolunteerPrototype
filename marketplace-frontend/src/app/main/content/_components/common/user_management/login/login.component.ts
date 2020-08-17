@@ -84,7 +84,7 @@ export class FuseLoginComponent implements OnInit {
           // this.router.navigate["/main/dashboard"];
         })
         .catch((e) => {
-          console.error("error");
+          console.error("login error");
           this.error = true;
         });
     }

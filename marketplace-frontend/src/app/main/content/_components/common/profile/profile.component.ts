@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { User } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { fuseAnimations } from "@fuse/animations";
 import { ImageService } from "app/main/content/_service/image.service";
@@ -10,6 +10,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "profile",
@@ -18,12 +19,14 @@ import { CoreUserService } from "app/main/content/_service/core-user.serivce";
   animations: fuseAnimations,
 })
 export class ProfileComponent implements OnInit {
+  globalInfo: GlobalInfo;
   user: User;
-
+  currentRoles: UserRole[] = [];
   profileForm: FormGroup;
   profileFormErrors: any;
 
   today = new Date();
+  isLoaded: boolean = false;
 
   constructor(
     private loginService: LoginService,
@@ -49,10 +52,18 @@ export class ProfileComponent implements OnInit {
       this.onProfileFormValuesChanged();
     });
     this.reload();
+
+    this.isLoaded = true;
   }
 
   async reload() {
-    this.user = <User>await this.loginService.getLoggedIn().toPromise();
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+
+    this.user = this.globalInfo.user;
+    this.currentRoles = this.user.subscribedTenants.map((s) => s.role);
+
     this.profileForm.setValue({
       firstName: this.user.firstname,
       lastName: this.user.lastname,
@@ -82,6 +93,12 @@ export class ProfileComponent implements OnInit {
     this.user.lastname = this.profileForm.value.lastName;
     this.user.birthday = this.profileForm.value.birthday;
     await this.coreUserService.updateUser(this.user, true).toPromise();
+
+    this.loginService.generateGlobalInfo(
+      this.globalInfo.userRole,
+      this.globalInfo.tenants.map((t) => t.id)
+    );
+
     this.reload();
   }
 
@@ -91,5 +108,9 @@ export class ProfileComponent implements OnInit {
     } else {
       return "/assets/images/avatars/profile.jpg";
     }
+  }
+
+  hasVolunteerRole() {
+    return this.currentRoles.indexOf(UserRole.VOLUNTEER) != -1;
   }
 }

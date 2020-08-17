@@ -260,4 +260,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent],
 })
-export class FuseContentModule { }
+export class FuseContentModule {}

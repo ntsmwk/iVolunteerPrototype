@@ -24,6 +24,9 @@ export class User {
   subscribedTenants: TenantUserSubscription[];
 
   image;
+
+  localRepositoryLocation: LocalRepositoryLocation;
+  dropboxToken: string;
 }
 
 export enum UserRole {
@@ -35,6 +38,12 @@ export enum UserRole {
   FLEXPROD = "FLEXPROD",
   NONE = "NONE",
 }
+
+export enum LocalRepositoryLocation {
+  LOCAL = "LOCAL",
+  DROPBOX = "DROPBOX",
+}
+
 export class TenantUserSubscription {
   marketplaceId: string;
   tenantId: string;
