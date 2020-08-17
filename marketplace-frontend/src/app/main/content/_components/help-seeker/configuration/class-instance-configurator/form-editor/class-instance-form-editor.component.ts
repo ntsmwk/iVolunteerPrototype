@@ -102,6 +102,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
               .toPromise()
               .then((formConfigurations: FormConfiguration[]) => {
                 this.formConfigurations = formConfigurations;
+
                 for (const config of this.formConfigurations) {
                   config.formEntry = this.addFormItemsAndFormGroup(config.formEntry, config.formEntry.id);
                 }
@@ -159,11 +160,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       .getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id)
       .toPromise()
       .then((retFormEntry: FormEntry) => {
+
         const currentFormEntry = this.getFormEntry(
           pathPrefix,
           this.currentFormConfiguration.formEntry.id,
           this.currentFormConfiguration.formEntry
         );
+
 
         retFormEntry = this.addFormItemsAndFormGroup(retFormEntry, pathPrefix);
 
