@@ -10,7 +10,8 @@ import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 public class User {
-	@Id private String id;
+	@Id
+	private String id;
 	private String username;
 	private String password;
 
@@ -34,10 +35,13 @@ public class User {
 
 	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
 
+	private LocalRepositoryLocation localRepositoryLocation;
+	private String dropboxToken;
+
 	public User() {
 	}
 
-	public User(CoreUser coreUser) {
+	public User(final CoreUser coreUser) {
 		this.id = coreUser.getId();
 		this.username = coreUser.getUsername();
 		this.password = coreUser.getPassword();
@@ -55,13 +59,15 @@ public class User {
 		this.emails = coreUser.getEmails();
 		this.image = coreUser.getImage();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
+		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
+		this.dropboxToken = coreUser.getDropboxToken();
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -69,7 +75,7 @@ public class User {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public void setUsername(final String username) {
 		this.username = username;
 	}
 
@@ -77,7 +83,7 @@ public class User {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -85,7 +91,7 @@ public class User {
 		return firstname;
 	}
 
-	public void setFirstname(String firstname) {
+	public void setFirstname(final String firstname) {
 		this.firstname = firstname;
 	}
 
@@ -93,7 +99,7 @@ public class User {
 		return middlename;
 	}
 
-	public void setMiddlename(String middlename) {
+	public void setMiddlename(final String middlename) {
 		this.middlename = middlename;
 	}
 
@@ -101,7 +107,7 @@ public class User {
 		return lastname;
 	}
 
-	public void setLastname(String lastname) {
+	public void setLastname(final String lastname) {
 		this.lastname = lastname;
 	}
 
@@ -109,7 +115,7 @@ public class User {
 		return nickname;
 	}
 
-	public void setNickname(String nickname) {
+	public void setNickname(final String nickname) {
 		this.nickname = nickname;
 	}
 
@@ -117,7 +123,7 @@ public class User {
 		return position;
 	}
 
-	public void setPosition(String position) {
+	public void setPosition(final String position) {
 		this.position = position;
 	}
 
@@ -125,12 +131,12 @@ public class User {
 		return image;
 	}
 
-	public void setImage(byte[] image) {
+	public void setImage(final byte[] image) {
 		this.image = image;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (!(obj instanceof User)) {
 			return false;
 		}
@@ -146,7 +152,7 @@ public class User {
 		return locations;
 	}
 
-	public void setLocations(List<String> locations) {
+	public void setLocations(final List<String> locations) {
 		this.locations = locations;
 	}
 
@@ -154,7 +160,7 @@ public class User {
 		return about;
 	}
 
-	public void setAbout(String about) {
+	public void setAbout(final String about) {
 		this.about = about;
 	}
 
@@ -162,7 +168,7 @@ public class User {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(final String address) {
 		this.address = address;
 	}
 
@@ -170,7 +176,7 @@ public class User {
 		return phoneNumbers;
 	}
 
-	public void setPhoneNumbers(List<String> phoneNumbers) {
+	public void setPhoneNumbers(final List<String> phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
 	}
 
@@ -178,7 +184,7 @@ public class User {
 		return websites;
 	}
 
-	public void setWebsites(List<String> websites) {
+	public void setWebsites(final List<String> websites) {
 		this.websites = websites;
 	}
 
@@ -186,7 +192,7 @@ public class User {
 		return emails;
 	}
 
-	public void setEmails(List<String> emails) {
+	public void setEmails(final List<String> emails) {
 		this.emails = emails;
 	}
 
@@ -194,7 +200,7 @@ public class User {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(final Date birthday) {
 		this.birthday = birthday;
 	}
 
@@ -202,26 +208,45 @@ public class User {
 		return this.subscribedTenants;
 	}
 
-	public void setSubscribedTenants(List<TenantUserSubscription> subscribedTenants) {
+	public void setSubscribedTenants(final List<TenantUserSubscription> subscribedTenants) {
 		this.subscribedTenants = subscribedTenants;
 	}
 
-	public List<TenantUserSubscription> addSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
-		TenantUserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
+	public List<TenantUserSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
+			final UserRole role) {
+		final TenantUserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
 		if (tenantUserSubscription == null) {
 			this.subscribedTenants.add(new TenantUserSubscription(marketplaceId, tenantId, role));
 		}
 		return this.subscribedTenants;
 	}
 
-	private TenantUserSubscription findTenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
+	private TenantUserSubscription findTenantUserSubscription(final String marketplaceId, final String tenantId,
+			final UserRole role) {
 		return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId)
 				&& st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().map(f -> f).orElse(null);
 	}
 
-	public List<TenantUserSubscription> removeSubscribedTenant(String marketplaceId, String tenantId, UserRole role) {
+	public List<TenantUserSubscription> removeSubscribedTenant(final String marketplaceId, final String tenantId,
+			final UserRole role) {
 		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId)
 				&& s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));
 		return this.subscribedTenants;
+	}
+
+	public LocalRepositoryLocation getLocalRepositoryLocation() {
+		return this.localRepositoryLocation;
+	}
+
+	public void setLocalRepositoryLocation(LocalRepositoryLocation localRepositoryLocation) {
+		this.localRepositoryLocation = localRepositoryLocation;
+	}
+
+	public String getDropboxToken() {
+		return this.dropboxToken;
+	}
+
+	public void setDropboxToken(String dropboxToken) {
+		this.dropboxToken = dropboxToken;
 	}
 }

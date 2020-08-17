@@ -23,6 +23,7 @@ import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -38,11 +39,16 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private TenantRepository coreTenantRepository;
-	@Autowired private CoreUserService coreUserService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private TenantRepository coreTenantRepository;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	public void initVolunteers() {
 
@@ -80,12 +86,12 @@ public class CoreVolunteerInitializationService {
 			volunteer.setNickname(nickName);
 
 			setImage(fileName, volunteer);
-
 			volunteer.setRegisteredMarketplaceIds(
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
-			volunteer = coreUserRepository.insert(volunteer);
+			volunteer.setLocalRepositoryLocation(LocalRepositoryLocation.LOCAL);
 
+			volunteer = coreUserRepository.insert(volunteer);
 			coreUserService.addNewUser(volunteer, "", false);
 
 			// List<String> tenantIds = new ArrayList<String>();
@@ -135,11 +141,11 @@ public class CoreVolunteerInitializationService {
 				.forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
 	}
 
-//	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
-//		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-//
-//		if (mp != null) {
-//			coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
-//		}
-//	}
+	// private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
+	// Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+	//
+	// if (mp != null) {
+	// coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
+	// }
+	// }
 }

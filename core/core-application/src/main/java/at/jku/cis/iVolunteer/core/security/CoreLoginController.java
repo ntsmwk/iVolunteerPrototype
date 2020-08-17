@@ -20,9 +20,12 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @RestController
 @RequestMapping("/login")
 public class CoreLoginController {
-	@Autowired private TenantService tenantService;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreLoginService loginService;
+	@Autowired
+	private TenantService tenantService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreLoginService loginService;
 
 	@GetMapping
 	public CoreUser getLoggedInUser() {
