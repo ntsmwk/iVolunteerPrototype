@@ -18,6 +18,7 @@ public class TreePropertyDefinition extends IVolunteerObject {
 	
 	private boolean multiple;
 	private boolean required;
+	private String requiredMessage;
 
 	public TreePropertyDefinition() {
 		this.entries = new ArrayList<TreePropertyEntry>();
@@ -82,6 +83,14 @@ public class TreePropertyDefinition extends IVolunteerObject {
 
 	public void setMultiple(boolean multiple) {
 		this.multiple = multiple;
+	}
+
+	public String getRequiredMessage() {
+		return requiredMessage;
+	}
+
+	public void setRequiredMessage(String requiredMessage) {
+		this.requiredMessage = requiredMessage;
 	}
 
 	public boolean isRequired() {

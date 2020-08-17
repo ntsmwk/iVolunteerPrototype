@@ -40,17 +40,8 @@ public class TreePropertyDefinitionController {
 		return treePropertyDefinitionRepository.findByName(name);
 	}
 
-	@PostMapping("/meta/core/property-configuration/tree/new")
+	@PostMapping("/meta/core/property-definition/tree/new")
 	private TreePropertyDefinition newTreePropertyDefinition(@RequestBody TreePropertyDefinition treePropertyDefinition) {
-		return treePropertyDefinitionRepository.save(treePropertyDefinition);
-	}
-
-	@PostMapping("/meta/core/property-definition/tree/new-empty")
-	private TreePropertyDefinition newEmptyTreePropertyDefinition(@RequestBody String[] params) {
-		if (params.length != 4) {
-			return null;
-		}
-		TreePropertyDefinition treePropertyDefinition = new TreePropertyDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
 		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 

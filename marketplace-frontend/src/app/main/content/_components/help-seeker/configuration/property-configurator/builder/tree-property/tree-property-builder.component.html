@@ -11,6 +11,17 @@
         matAutosizeMaxRows="3"></textarea>
     </mat-form-field>
 
+    <div class="required-constraint-container">
+      <mat-slide-toggle formControlName="required" labelPosition="after">
+        Pflicht-Property
+      </mat-slide-toggle>
+
+      <mat-form-field *ngIf="form.get('required').value" class="constraint-entry-field">
+        <textarea matInput placeholder="Benutzerdefinierte Fehlermeldung" formControlName="requiredMessage" [value]=""
+          [value]="form.get('requiredMessage').value" matTextareaAutosize matAutosizeMinRows="1"
+          matAutosizeMaxRows="3"></textarea>
+      </mat-form-field>
+    </div>
     <!-- <mat-slide-toggle [(ngModel)]="multipleToggled" [ngModelOptions]="{standalone: true}" labelPosition="after">
       Mehrfachauswahl möglich
     </mat-slide-toggle> -->

@@ -27,9 +27,19 @@ export class TreePropertyDefinition {
     multiple: boolean;
     required: boolean;
 
+    requiredMessage: string;
+
     timestamp: Date;
     tenantId: string;
 
     entries: TreePropertyEntry[];
     relationships: TreePropertyRelationship[];
+
+    constructor(name: string, description: string, multiple: boolean, required: boolean, requiredMessage: string) {
+        this.name = name;
+        this.description = description;
+        this.multiple = multiple;
+        this.required = required;
+        this.requiredMessage = requiredMessage;
+    }
 }

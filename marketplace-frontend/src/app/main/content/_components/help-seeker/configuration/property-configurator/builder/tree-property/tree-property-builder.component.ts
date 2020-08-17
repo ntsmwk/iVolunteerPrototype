@@ -23,7 +23,6 @@ export class TreePropertyBuilderComponent implements OnInit {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    // private dialogFactory: DialogFactoryDirective,
     private treePropertyDefinitionService: TreePropertyDefinitionService,
     private loginService: LoginService
   ) { }
@@ -32,10 +31,7 @@ export class TreePropertyBuilderComponent implements OnInit {
   @Input() tenantAdmin: User;
   @Input() entryId: string;
   @Input() sourceString: string;
-  @Output() result: EventEmitter<{
-    builderType: string;
-    value: TreePropertyDefinition;
-  }> = new EventEmitter();
+  @Output() result: EventEmitter<{ builderType: string, value: TreePropertyDefinition }> = new EventEmitter();
   @Output() management: EventEmitter<String> = new EventEmitter();
 
   form: FormGroup;
@@ -56,6 +52,9 @@ export class TreePropertyBuilderComponent implements OnInit {
     this.form = this.formBuilder.group({
       name: this.formBuilder.control('', Validators.required),
       description: this.formBuilder.control(''),
+      multiple: this.formBuilder.control(''),
+      required: this.formBuilder.control(''),
+      requiredMessage: this.formBuilder.control(''),
     });
 
     if (!isNullOrUndefined(this.entryId)) {
@@ -68,6 +67,9 @@ export class TreePropertyBuilderComponent implements OnInit {
           this.form
             .get('description')
             .setValue(this.treePropertyDefinition.description);
+
+          this.form.get('required').setValue(this.treePropertyDefinition.required);
+          this.form.get('requiredMessage').setValue(this.treePropertyDefinition.requiredMessage);
           this.multipleToggled = this.treePropertyDefinition.multiple;
           this.showEditor = true;
           this.loaded = true;
@@ -88,14 +90,21 @@ export class TreePropertyBuilderComponent implements OnInit {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
     } else {
+
+      const newTreePropertyDefinition = new TreePropertyDefinition(
+        this.form.controls['name'].value,
+        this.form.controls['description'].value,
+        this.form.controls['multiple'].value,
+        this.form.controls['required'].value,
+        this.form.controls['requiredMessage'].value
+      );
+
+      if (!newTreePropertyDefinition.required) {
+        newTreePropertyDefinition.requiredMessage = null;
+      }
+
       this.treePropertyDefinitionService
-        .newEmptyPropertyDefinition(
-          this.marketplace,
-          this.form.controls['name'].value,
-          this.form.controls['description'].value,
-          this.multipleToggled,
-          this.tenant.id
-        )
+        .newPropertyDefinition(this.marketplace, newTreePropertyDefinition, this.tenant.id)
         .toPromise()
         .then((treePropertyDefinition: TreePropertyDefinition) => {
           if (!isNullOrUndefined(treePropertyDefinition)) {
@@ -111,16 +120,18 @@ export class TreePropertyBuilderComponent implements OnInit {
   }
 
   handleResult(event: { type: string; payload: TreePropertyDefinition }) {
+
     if (event.type === 'save') {
       event.payload.description = this.form.controls['description'].value;
       event.payload.multiple = this.multipleToggled;
-
       this.treePropertyDefinitionService
         .savePropertyDefinition(this.marketplace, event.payload)
         .toPromise()
         .then((ret: TreePropertyDefinition) => { });
+
     } else if (event.type === 'back') {
       this.result.emit({ builderType: 'tree', value: event.payload });
+
     } else if (event.type === 'saveAndBack') {
       event.payload.description = this.form.controls['description'].value;
       event.payload.multiple = this.multipleToggled;
