@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 import { LoginService } from "app/main/content/_service/login.service";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { isNullOrUndefined } from "util";
-import { ClassDefinitionDTO } from "app/main/content/_model/meta/class";
+import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { User, UserRole } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 
@@ -18,7 +18,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 })
 export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
-  dataSource = new MatTableDataSource<ClassDefinitionDTO>();
+  dataSource = new MatTableDataSource<ClassDefinition>();
   displayedColumns = ["name", "configuration"];
   user: User;
   tenant: Tenant;
@@ -39,7 +39,7 @@ export class FuseTaskSelectComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
 
     if (!isNullOrUndefined(this.marketplace)) {
-      let tasks = <ClassDefinitionDTO[]>(
+      let tasks = <ClassDefinition[]>(
         await this.classDefinitionService
           .getByArchetype(this.marketplace, ClassArchetype.TASK, this.tenant.id)
           .toPromise()

@@ -30,15 +30,26 @@
         <mat-form-field style="width: 150px">
             <input matInput placeholder="Wert" formControlName="value" />
         </mat-form-field>
+        <div *ngIf="classCondition.aggregationOperatorType && classCondition.aggregationOperatorType === 'SUM'">
+            <mat-form-field style="width: 150px">
+            <mat-label>Attribut</mat-label>
+            <mat-select placeholder="Attribut" formControlName="classPropertyId"
+                [value]="classCondition.classProperty?.id">
+                <mat-option *ngFor="let cp of filteredSumClassProperties" [value]="cp.id" (onSelectionChange)="onPropertyChange(cp, $event)">
+                         {{ cp.name}} 
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
     </div>
     <div formArrayName="classAttributeForms">
     <div *ngFor="let attribute of classCondition.attributeConditions">
         <attribute-rule-precondition
-          [(attributeCondition)]="attribute"
+          [attributeCondition]="attribute"
         ></attribute-rule-precondition>
     </div>
     </div>
-    <div *ngIf="classCondition?.classDefinition?.properties.length > 0">
+    <div *ngIf="classProperties.length > 0">
         <button
           type="button"
           mat-raised-button
@@ -51,3 +62,7 @@
 </form> 
 <!--(change)="onChange($event)"-->
 <!--(onSelectionChange)="onOperatorChange(op)"-->
+ <!--</attribute-rule-precondition>   (attributeConditionChange) = "onChangeAttribute($event)"-->
+ <!--
+      && classCondition.aggregationOperatorType === aggregationOperators.SUM"
+ -->

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
 public class FormEntry {
 

@@ -5,25 +5,23 @@ import java.util.List;
 
 public class ClassPropertyRequestObject {
 
-	List<String> propertyDefinitionIds;
-	List<String> enumDefinitionIds;
+	List<String> flatPropertyDefinitionIds;
+	List<String> treePropertyDefinitionIds;
+	
+	public List<String> getFlatPropertyDefinitionIds() {
+		return flatPropertyDefinitionIds;
+	}
+	public void setFlatPropertyDefinitionIds(List<String> flatPropertyDefinitionIds) {
+		this.flatPropertyDefinitionIds = flatPropertyDefinitionIds;
+	}
+	public List<String> getTreePropertyDefinitionIds() {
+		return treePropertyDefinitionIds;
+	}
+	public void setTreePropertyDefinitionIds(List<String> treePropertyDefinitionIds) {
+		this.treePropertyDefinitionIds = treePropertyDefinitionIds;
+	}
 	
 
-	public List<String> getPropertyDefinitionIds() {
-		return propertyDefinitionIds;
-	}
-	
-	public void setPropertyDefinitionIds(List<String> propertyDefinitionIds) {
-		this.propertyDefinitionIds = propertyDefinitionIds;
-	}
-	
-	public List<String> getEnumDefinitionIds() {
-		return enumDefinitionIds;
-	}
-	
-	public void setEnumDefinitionIds(List<String> enumDefinitionIds) {
-		this.enumDefinitionIds = enumDefinitionIds;
-	}
 
 	
 

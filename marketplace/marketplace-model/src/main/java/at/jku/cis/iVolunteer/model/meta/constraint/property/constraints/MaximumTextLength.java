@@ -12,17 +12,5 @@ public class MaximumTextLength extends TextPropertyConstraint<Integer> {
 		setConstraintType(ConstraintType.MAX_LENGTH);
 		this.setValue(value);
 	}
-	
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof MaximumTextLength)) {
-			return false;
-		}
-		return ((MaximumTextLength) obj).getId().equals(getId());
-	}
+
 }

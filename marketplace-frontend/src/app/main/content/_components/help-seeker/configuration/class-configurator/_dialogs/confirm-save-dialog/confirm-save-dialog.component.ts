@@ -76,7 +76,6 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
         .saveClassConfiguration(this.globalInfo.marketplace, this.data.classConfiguration)
         .toPromise().then((ret: ClassConfiguration) => {
           this.data.classConfiguration = ret;
-
         }).then(() => {
           this.dialogRef.close(this.data);
         });

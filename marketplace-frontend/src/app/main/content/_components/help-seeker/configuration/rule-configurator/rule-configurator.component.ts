@@ -22,10 +22,10 @@ import { DerivationRuleService } from "app/main/content/_service/derivation-rule
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
 import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { isNullOrUndefined } from 'util';
+import { RuleExecution } from 'app/main/content/_model/derivation-rule-execution';
 
 @Component({
   templateUrl: "./rule-configurator.component.html",
@@ -84,25 +84,18 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.tenantAdmin = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
-    console.log("tenant = " + this.tenant.id);
 
     this.route.params.subscribe((params) => {
       this.loadDerivationRule(this.marketplace, params["ruleId"]);
     });
 
-    console.log("tenant: " + this.tenant.id);
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
-        .getAllClassDefinitionsWithoutHeadAndEnums(
+        .getAllClassDefinitions(
           this.marketplace,
           this.tenant.id
         )
         .toPromise()
-    );
-    console.log("class definitions loaded!!!! --> " + this.classDefinitions.length);
-
-    this.tenant = <Tenant>(
-      await this.tenantService.findById(this.tenant.id).toPromise()
     );
   }
 
@@ -127,25 +120,6 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       this.derivationRule.classActions.push(new ClassAction(null));
       this.derivationRule.conditions = new Array();
     }
-  }
-
-  private loadDerivationRuleByName(
-    marketplace: Marketplace,
-    tenantId: string,
-    container: string,
-    ruleName: string
-  ) {
-    this.derivationRuleService
-      .findByContainerAndName(marketplace, tenantId, container, ruleName)
-      .toPromise()
-      .then((rule: DerivationRule) => {
-        this.derivationRule = rule;
-        this.router.navigate(["/main/rule/" + this.derivationRule.id]);
-        this.ruleForm.patchValue({
-          id: this.derivationRule.id,
-          name: this.derivationRule.name,
-        });
-      });
   }
 
   private initDerivationRule() {
@@ -193,13 +167,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             this.loadDerivationRule(this.marketplace, this.derivationRule.id);
           });
       } else {
-          this.derivationRuleService
-            .save(this.marketplace, this.derivationRule)
-            .toPromise()
-            .then((rule:DerivationRule) => { 
-              this.derivationRule = rule;
-              this.router.navigate(["/main/rule/" + this.derivationRule.id])
-            });
+        this.derivationRuleService
+          .save(this.marketplace, this.derivationRule)
+          .toPromise()
+          .then((rule: DerivationRule) => {
+            this.derivationRule = rule;
+            this.router.navigate(["/main/rule/" + this.derivationRule.id])
+          });
       }
       this.showSuccessMsg = true;
       this.testConditions = false;
@@ -229,7 +203,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.derivationRule.conditions.push(new ClassCondition());
     this.deactivateSubmit = false;
   }
-
+  
+  /*
   private isFF() {
     console.log("this.tenant.id: " + this.tenant.id + ", name: " + this.tenant.name);
     return this.tenant.name === "FF Eidenberg";
@@ -240,5 +215,5 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
   private isOther() {
     return !this.isFF() && !this.isMV();
-  }
+  }*/
 }

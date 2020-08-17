@@ -14,17 +14,5 @@ public class MaximumDate extends DatePropertyConstraint<Date> {
 		setConstraintType(ConstraintType.MAX);
 		this.setValue(value);
 	}
-	
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof MaximumDate)) {
-			return false;
-		}
-		return ((MaximumDate) obj).getId().equals(getId());
-	}
+
 }

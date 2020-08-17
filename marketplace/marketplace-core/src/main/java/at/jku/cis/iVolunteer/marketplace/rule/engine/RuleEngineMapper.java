@@ -10,6 +10,8 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.rule.Action;
 import at.jku.cis.iVolunteer.model.rule.AttributeCondition;
 import at.jku.cis.iVolunteer.model.rule.ClassAction;
@@ -44,7 +46,8 @@ public class RuleEngineMapper {
 	}
 
 	private String newPackage() {
-		return "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n " + "\r\n";
+		return "package " + this.getClass().getPackage().getName() + ";\r\n";
+		//return "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n " + "\r\n";
 	}
 
 	private String newGeneralImports() {
@@ -57,6 +60,7 @@ public class RuleEngineMapper {
 		stringBuilder.append(newImport(ClassInstance.class.getName()));
 		stringBuilder.append(newImport(RuleExecution.class.getName()));
 		stringBuilder.append(newImport(RuleStatus.class.getName()));
+		stringBuilder.append(newImport(PropertyType.class.getName()));
 		stringBuilder.append(newImport("java.util.List"));
 		return stringBuilder.toString();
 	}
@@ -124,6 +128,7 @@ public class RuleEngineMapper {
 	private String rhs(DerivationRule derivationRule) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("then\r\n ");
+		// stringBuilder.append("System.out.println(\"Hello\");\r\n");
 		stringBuilder.append("  re.setStatus(RuleStatus.FIRED);\r\n");
 		for (Action action : derivationRule.getActions()) {
 			if (action instanceof ClassAction)
@@ -174,16 +179,55 @@ public class RuleEngineMapper {
 
 	private String mapClassConditionToRuleConstraint(ClassCondition classCondition) {
 		StringBuilder stringBuilder = new StringBuilder();
+		//
+		if (classCondition.getOperatorType().equals(AggregationOperatorType.SUM)) {
+			stringBuilder.append(sumInstances(classCondition));
+		} else {
+			stringBuilder.append(countInstances(classCondition));
+		}
+
+		return stringBuilder.toString();
+	}
+	
+	private String sumInstances(ClassCondition classCondition) {
+		ClassProperty<Object> classProperty = classPropertyService.getClassPropertyFromAllClassProperties(
+				                            classCondition.getClassDefinitionId(), classCondition.getClassPropertyId());
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		if (classProperty.getType().equals(PropertyType.FLOAT_NUMBER)) {
+			stringBuilder.append(" (double) sum( ");
+			stringBuilder.append(buildConstraintsForInstances(classCondition));
+			stringBuilder.append(", new SumCriteria(\"" +classCondition.getClassPropertyId() + "\", \r\n " +
+					"		                   PropertyType.FLOAT_NUMBER )");
+		    stringBuilder.append("  ) >= " + classCondition.getValue()+"");
+		} else if (classProperty.getType().equals(PropertyType.WHOLE_NUMBER)) {
+			stringBuilder.append("(Integer) sum( ");
+			stringBuilder.append(buildConstraintsForInstances(classCondition));
+			stringBuilder.append(", new SumCriteria(\"" +classCondition.getClassPropertyId() + "\", \r\n " +
+					"		                   PropertyType.WHOLE_NUMBER )"); 
+			stringBuilder.append(" ) >= " + classCondition.getValue());
+		}
+		//stringBuilder.append(")");
+		return stringBuilder.toString();
+	}
+	
+	private String countInstances(ClassCondition classCondition) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(
+				   buildConstraintsForInstances(classCondition) + 
+				   decodeAggregationOperator(
+						   (AggregationOperatorType) classCondition.getOperatorType(), classCondition.getValue()));
+		return stringBuilder.toString();
+	}
+	
+	private String buildConstraintsForInstances(ClassCondition classCondition) {
 		String constraints = "getClassInstances(v, \"" + classCondition.getClassDefinitionId() + "\", t.getId())";
 		// get properties to filter for class instance
 		for (AttributeCondition attrCondition : classCondition.getAttributeConditions()) {
 			constraints = " filterInstancesByPropertyCriteria(" + constraints + ", "
 					+ decodeAttributeCondition(attrCondition) + ")";
 		}
-		stringBuilder.append(constraints + decodeAggregationOperator(
-				(AggregationOperatorType) classCondition.getOperatorType(), classCondition.getValue()));
-
-		return stringBuilder.toString();
+		return constraints;
 	}
 
 	private String mapGeneralConditionToRuleConstraint(GeneralCondition generalCondition) {

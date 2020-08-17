@@ -1,4 +1,4 @@
-import { ClassProperty, PropertyInstance } from "./property";
+import { ClassProperty, PropertyInstance } from './property/property';
 
 export class ClassDefinition {
   id: string;
@@ -25,30 +25,6 @@ export class ClassDefinition {
 }
 
 export class CompetenceClassDefinition extends ClassDefinition { }
-
-export class ClassDefinitionDTO {
-  id: string;
-  tenantId: string;
-  configurationId: string;
-  configurationName: string;
-  parentId: string;
-  root: boolean;
-  name: string;
-
-  classArchetype: ClassArchetype;
-
-  collector: boolean;
-  writeProtected: boolean;
-
-  properties: ClassProperty<any>[] = [];
-  marketplaceId: string;
-  timestamp: Date;
-
-  imagePath: string;
-
-  visible: boolean;
-  tabId: number;
-}
 
 export class ClassInstance {
   id: string;
@@ -158,40 +134,40 @@ export class AchievementClassInstance extends ClassInstance {
 }
 
 export enum ClassArchetype {
-  COMPETENCE = "COMPETENCE",
-  TASK = "TASK",
-  FUNCTION = "FUNCTION",
-  ACHIEVEMENT = "ACHIEVEMENT",
-  ENUM_HEAD = "ENUM_HEAD",
-  ENUM_ENTRY = "ENUM_ENTRY",
-  ROOT = "ROOT",
+  COMPETENCE = 'COMPETENCE',
+  TASK = 'TASK',
+  FUNCTION = 'FUNCTION',
+  ACHIEVEMENT = 'ACHIEVEMENT',
+  TREE_HEAD = 'TREE_HEAD',
+  TREE_ENTRY = 'TREE_ENTRY',
+  ROOT = 'ROOT',
   // COMPETENCE_HEAD = 'COMPETENCE_HEAD',
   // TASK_HEAD = 'TASK_HEAD',
   // FUNCTION_HEAD = 'FUNCTION_HEAD',
   // ACHIEVEMENT_HEAD = 'ACHIEVEMENT_HEAD',
 
-  FLEXPROD = "FLEXPROD",
+  FLEXPROD = 'FLEXPROD',
 }
 
 export namespace ClassArchetype {
   export function getClassArchetypeLabel(classArchetype: ClassArchetype) {
     switch (classArchetype) {
-      case "COMPETENCE":
-        return "Kompetenz";
-      case "TASK":
-        return "Tätigkeit";
-      case "FUNCTION":
-        return "Funktion";
-      case "ACHIEVEMENT":
-        return "Verdienst";
-      case "ENUM_HEAD":
-        return "Enum head";
-      case "ENUM_ENTRY":
-        return "Enum entry";
-      case "ROOT":
-        return "Root";
-      case "FLEXPROD":
-        return "Flexprod";
+      case 'COMPETENCE':
+        return 'Kompetenz';
+      case 'TASK':
+        return 'Tätigkeit';
+      case 'FUNCTION':
+        return 'Funktion';
+      case 'ACHIEVEMENT':
+        return 'Verdienst';
+      case 'TREE_HEAD':
+        return 'Tree head';
+      case 'TREE_ENTRY':
+        return 'Tree entry';
+      case 'ROOT':
+        return 'Root';
+      case 'FLEXPROD':
+        return 'Flexprod';
     }
   }
 }

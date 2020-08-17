@@ -13,16 +13,4 @@ public class TextPattern extends TextPropertyConstraint<String> {
 		this.setValue(value);
 	}
 
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof TextPattern)) {
-			return false;
-		}
-		return ((TextPattern) obj).getId().equals(getId());
-	}
 }

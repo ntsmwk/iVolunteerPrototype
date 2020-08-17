@@ -36,9 +36,9 @@ import {
   ChangeIconDialogData,
 } from '../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component';
 import {
-  PropertyOrEnumCreationDialogComponent,
-  PropertyOrEnumCreationDialogData,
-} from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component';
+  PropertyCreationDialogComponent,
+  PropertyCreationDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.component';
 import {
   NewMatchingDialogComponent,
   NewMatchingDialogData,
@@ -248,7 +248,7 @@ export class DialogFactoryDirective {
   }
 
   openPropertyCreationDialog(tenantAdmin: User) {
-    const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
+    const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
       width: '90vw',
       minWidth: '90vw',
       height: '90vh',
@@ -257,11 +257,11 @@ export class DialogFactoryDirective {
       disableClose: true,
     });
 
-    let returnValue: PropertyOrEnumCreationDialogData;
+    let returnValue: PropertyCreationDialogData;
     dialogRef
       .beforeClose()
       .toPromise()
-      .then((result: PropertyOrEnumCreationDialogData) => {
+      .then((result: PropertyCreationDialogData) => {
         returnValue = result;
       });
 

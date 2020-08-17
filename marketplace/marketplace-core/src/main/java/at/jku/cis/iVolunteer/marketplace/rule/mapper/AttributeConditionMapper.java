@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.rule.AttributeCondition;
@@ -17,12 +18,12 @@ import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 public class AttributeConditionMapper {
 
 	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassPropertyService classPropertyService;
 
 	public AttributeConditionDTO toTarget(AttributeCondition source, String tenantId, String classDefinitionId) {
 		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId, tenantId);
-		ClassProperty<Object> classProperty = (ClassProperty<Object>) classDefinition.getProperties().stream()
-				.filter(entry -> entry.getId().equals(source.getClassPropertyId())).findFirst().orElse(null);
-
+		ClassProperty<Object> classProperty = classPropertyService.getClassPropertyFromAllClassProperties(classDefinitionId, source.getClassPropertyId());
+		
 		AttributeConditionDTO dto = new AttributeConditionDTO(classDefinition, classProperty, source.getValue(),
 				(ComparisonOperatorType) source.getOperatorType());
 		return dto;
@@ -43,4 +44,5 @@ public class AttributeConditionMapper {
 	public List<AttributeCondition> toSources(List<AttributeConditionDTO> targets) {
 		return targets.stream().map(target -> toSource(target)).collect(Collectors.toList());
 	}
+	
 }

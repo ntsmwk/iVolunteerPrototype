@@ -26,9 +26,11 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.util.RuleEngineUtil;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.rule.ClassAction;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
+import at.jku.cis.iVolunteer.model.rule.entities.ClassActionDTO;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
@@ -175,9 +177,11 @@ public class RuleService {
 			containerRuleEntryRepository.delete(rule);
 	}
 
-	public void addRule(DerivationRule derivationRule, boolean isTest) {
+	public void addRule(DerivationRule derivationRule) {
 		String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(derivationRule);
+		System.out.println(ruleContent);
 		ContainerRuleEntry containerRule;
+		
 		if (derivationRule.getContainerRuleEntryId() == null) {
 			containerRule = new ContainerRuleEntry();
 			containerRule.setTenantId(derivationRule.getTenantId());
@@ -195,6 +199,28 @@ public class RuleService {
 		}
 		refreshContainer(derivationRule.getTenantId());
 	}
+	
+	public List<RuleExecution> testRule(DerivationRule derivationRule) {
+		derivationRule.setActions(new ArrayList<ClassAction>());
+		String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(derivationRule);
+		
+		ContainerRuleEntry containerRule = new ContainerRuleEntry();
+		containerRule.setTenantId(derivationRule.getTenantId());
+		containerRule.setMarketplaceId(derivationRule.getMarketplaceId());
+		containerRule.setContainer(derivationRule.getContainer());
+		containerRule.setName(derivationRule.getName());
+		containerRule.setContent(ruleContent);
+		containerRule.setActive(true);
+		containerRuleEntryRepository.save(containerRule);
+		
+		refreshContainer(derivationRule.getTenantId());
+		
+		List<RuleExecution> ruleExecutions = executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
+		
+		// remove container rule again
+		deleteRule(derivationRule.getTenantId(), derivationRule.getContainer(), derivationRule.getName());
+		return ruleExecutions;
+	}
 
 	public List<RuleExecution> executeRulesForAllVolunteers(String tenantId, String container) {
 		List<RuleExecution> ruleExecutionList = new ArrayList<RuleExecution>();
@@ -205,4 +231,5 @@ public class RuleService {
 
 		return ruleExecutionList;
 	}
+	
 }

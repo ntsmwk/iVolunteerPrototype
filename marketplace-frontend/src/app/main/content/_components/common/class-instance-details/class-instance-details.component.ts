@@ -17,7 +17,7 @@ import {
 } from "@angular/material";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { PropertyInstance } from "app/main/content/_model/meta/property";
+import { PropertyInstance } from "app/main/content/_model/meta/property/property";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { UserService } from "app/main/content/_service/user.service";
@@ -118,7 +118,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
       .values[0];
   }
 
-  getVolunteerName(userId: string) {}
+  getVolunteerName(userId: string) { }
 
   sortData(sort: Sort) {
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {

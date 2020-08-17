@@ -10,7 +10,7 @@ import {
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { mxgraph } from "mxgraph";
 import { isNullOrUndefined } from "util";
-import { PropertyType } from "app/main/content/_model/meta/property";
+import { PropertyType } from "app/main/content/_model/meta/property/property";
 import { CConstants } from "../class-configurator/utils-and-constants";
 import { LoginService } from "../../../../_service/login.service";
 import { MatchingConfiguratorPopupMenu } from "./popup-menu";
@@ -58,7 +58,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     private objectIdService: ObjectIdService,
     private renderer: Renderer2,
     private dialogFactory: DialogFactoryDirective
-  ) {}
+  ) { }
 
   marketplace: Marketplace;
 
@@ -186,7 +186,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     const outer = this;
 
-    this.graph.isCellSelectable = function(cell) {
+    this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
 
@@ -197,7 +197,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       );
     };
 
-    this.graph.getCursorForCell = function(cell: MyMxCell) {
+    this.graph.getCursorForCell = function (cell: MyMxCell) {
       if (
         cell.cellType === MyMxCellType.MATCHING_OPERATOR &&
         outer.deleteMode
@@ -209,7 +209,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     const modelGetStyle = this.graph.model.getStyle;
-    this.graph.model.getStyle = function(cell) {
+    this.graph.model.getStyle = function (cell) {
       if (cell != null) {
         let style = modelGetStyle.apply(this, arguments);
 
@@ -221,7 +221,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       return null;
     };
 
-    this.graph.getEdgeValidationError = function(
+    this.graph.getEdgeValidationError = function (
       edge: MyMxCell,
       source: MyMxCell,
       target: MyMxCell
@@ -280,19 +280,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.setPanning(true);
       this.graph.useScrollbarsForPanning = true;
 
-      this.graph.addListener(mx.mxEvent.CLICK, function(sender, evt) {
+      this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
         outer.handleClickEvent(evt);
       });
 
-      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function(sender, evt) {
+      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender, evt) {
         // Handle Double Click
         outer.handleDoubleClickEvent(evt);
       });
 
       this.graph
         .getSelectionModel()
-        .addListener(mx.mxEvent.CHANGE, function(sender, evt) {
+        .addListener(mx.mxEvent.CHANGE, function (sender, evt) {
           // Handle Select
         });
     }
@@ -373,7 +373,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       cell = new mx.mxCell(
         collector.classDefinition.name,
         geometry,
-        CConstants.mxStyles.classEnum
+        CConstants.mxStyles.classTree
       ) as MyMxCell;
     } else if (collector.classDefinition.collector) {
       cell = new mx.mxCell(
@@ -419,8 +419,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         entry.classDefinition.name,
         0,
         addPropertiesReturn.lastPropertyGeometry.y +
-          addPropertiesReturn.lastPropertyGeometry.height +
-          2,
+        addPropertiesReturn.lastPropertyGeometry.height +
+        2,
         200,
         boundaryHeight,
         CConstants.mxStyles.matchingClassSeparator
@@ -468,9 +468,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           CConstants.mxStyles.matchingProperty
         ) as MyMxCell;
 
-        if (p.type === PropertyType.ENUM) {
-          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
-          propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
+        if (p.type === PropertyType.TREE) {
+          propertyEntry.cellType = MyMxCellType.TREE_PROPERTY;
+          propertyEntry.setStyle(CConstants.mxStyles.propertyTree);
         } else {
           propertyEntry.cellType = MyMxCellType.PROPERTY;
         }
@@ -722,17 +722,17 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const outer = this;
     let positionEvent: MouseEvent;
 
-    const onDragstart = function(evt) {
+    const onDragstart = function (evt) {
       evt.dataTransfer.setData("text", item.id);
       evt.dataTransfer.effect = "move";
       evt.dataTransfer.effectAllowed = "move";
     };
 
-    const onDragOver = function(evt) {
+    const onDragOver = function (evt) {
       positionEvent = evt;
     };
 
-    const onDragend = function(evt) {
+    const onDragend = function (evt) {
       evt.dataTransfer.getData("text");
       try {
         addObjectToGraph(evt, item);
@@ -757,7 +757,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             50,
             50,
             `shape=image;image=${paletteItem.imgPath};` +
-              CConstants.mxStyles.matchingOperator
+            CConstants.mxStyles.matchingOperator
           ) as MyMxCell;
 
           cell.cellType = MyMxCellType.MATCHING_OPERATOR;
@@ -795,7 +795,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       }
     };
 
-    const onMouseUp = function(evt) {
+    const onMouseUp = function (evt) {
       removeEventListeners(outer);
     };
 

@@ -77,7 +77,7 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
     if (this.form.valid) {
 
       for (const item of this.formItems) {
-        if (item.controlType.startsWith('enum')) {
+        if (item.controlType.startsWith('tree')) {
           this.form.controls[item.key].setValue(item.value);
         }
       }

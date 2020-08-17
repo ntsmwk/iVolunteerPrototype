@@ -20,12 +20,13 @@ import {
   ClassArchetype,
 } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassProperty } from "app/main/content/_model/meta/property";
+import { ClassProperty } from "app/main/content/_model/meta/property/property";
 import { User, UserRole } from "app/main/content/_model/user";
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
 import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: "target-rule-configurator",
@@ -93,7 +94,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     this.tenant = globalInfo.tenants[0];
 
     this.classDefinitionService
-      .getAllClassDefinitionsWithoutHeadAndEnums(
+      .getAllClassDefinitions(
         this.marketplace,
         this.tenant.id
       )
@@ -120,29 +121,30 @@ export class TargetRuleConfiguratorComponent implements OnInit {
 
   onTargetChange(classDefinition, $event) {
     if ($event.isUserInput) {
-      if (
-        this.classDefinitions.length > 0 &&
-        (!this.classAction.classDefinition ||
-          (this.classAction.classDefinition &&
-            this.classAction.classDefinition.id != classDefinition.id))
-      ) {
+      if (isNullOrUndefined(this.classAction.classDefinition) ||
+        (this.classAction.classDefinition.id != classDefinition.id)) {
         /*this.classAction.classDefinition = this.classDefinitions.find(
           (cd) => cd.id === this.parent.form.get('ruleActionForm').get('classDefinitionId').value
         );*/
         this.classAction.classDefinition = classDefinition;
-        this.classPropertyService
-        .getAllClassPropertiesFromClass(
-          this.marketplace,
-          classDefinition.id
-        )
-        .toPromise()
-        .then((props: ClassProperty<any>[]) => {
-          this.classProperties = props;
-        });
         this.classAction.attributes = new Array();
+        this.loadClassProperties(classDefinition);
         this.classActionChange.emit(this.classAction);
       }
     }
+  }
+
+  private loadClassProperties(classDefinition: ClassDefinition) {
+    this.classPropertyService
+      .getAllClassPropertiesFromClass(
+        this.marketplace,
+        classDefinition.id
+      )
+      .toPromise()
+      .then((props: ClassProperty<any>[]) => {
+        this.classProperties = props;
+      });
+
   }
 
   private retrieveClassType(classArchetype: ClassArchetype) {

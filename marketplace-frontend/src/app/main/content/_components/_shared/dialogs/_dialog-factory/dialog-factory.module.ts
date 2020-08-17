@@ -13,7 +13,7 @@ import { ChangeIconDialogModule } from '../../../help-seeker/configuration/class
 import { ClassInstanceFormPreviewExportDialogModule } from '../../../help-seeker/configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.module';
 import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dialog.module';
 import { RemovePropertyDialogModule } from '../remove-dialog/remove-dialog.module';
-import { PropertyOrEnumCreationDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.module';
+import { PropertyCreationDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.module';
 import { NewMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.module';
 import { OpenMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.module';
 import { DeleteMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.module';
@@ -31,7 +31,7 @@ import { ChangeIconDialogComponent } from '../../../help-seeker/configuration/cl
 import { ClassInstanceFormPreviewExportDialogComponent } from '../../../help-seeker/configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.component';
 import { AddPropertyDialogComponent } from '../add-property-dialog/add-property-dialog.component';
 import { RemovePropertyDialogComponent } from '../remove-dialog/remove-dialog.component';
-import { PropertyOrEnumCreationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component';
+import { PropertyCreationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.component';
 import { NewMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
 import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
@@ -57,14 +57,14 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     AddPropertyDialogModule,
     RemovePropertyDialogModule,
 
-    PropertyOrEnumCreationDialogModule,
+    PropertyCreationDialogModule,
 
     // Matching Configurator
     NewMatchingDialogModule,
     OpenMatchingDialogModule,
     DeleteMatchingDialogModule,
 
-    // Enum Configurator
+    // Tree Property Configurator
   ],
   declarations: [DialogFactoryDirective],
   entryComponents: [
@@ -86,14 +86,14 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     AddPropertyDialogComponent,
     RemovePropertyDialogComponent,
 
-    PropertyOrEnumCreationDialogComponent,
+    PropertyCreationDialogComponent,
 
     // Matching Configurator
     NewMatchingDialogComponent,
     OpenMatchingDialogComponent,
     DeleteMatchingDialogComponent,
 
-    // Enum Configurator
+    // Tree Property Configurator
   ],
 })
 export class DialogFactoryModule { }

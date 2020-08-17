@@ -11,38 +11,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.BooleanPropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DatePropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DoublePropertyDefinition;
-//import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.EnumPropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongPropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongTextPropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.TextPropertyDefinition;
-//import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.BooleanPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.DatePropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.DoublePropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.LongPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.LongTextPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.TextPropertyDefinition;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @Component
 public class StandardPropertyDefinitions {
 
-	@Autowired public PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired public FlatPropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired public CoreTenantRestClient coreTenantRestClient;
 
 	public StandardPropertyDefinitions() {
 
 	}
 	
-	public List<PropertyDefinition<Object>> getAlliVolunteer(String tenantId) {
-		List<PropertyDefinition<Object>> properties = getAllHeader(tenantId);
+	public List<FlatPropertyDefinition<Object>> getAlliVolunteer(String tenantId) {
+		List<FlatPropertyDefinition<Object>> properties = getAllHeader(tenantId);
 		properties.addAll(getAllGeneric(tenantId));
 		
 		return properties;
 	}
 
-	public List<PropertyDefinition<Object>> getAllHeader(String tenantId) {
-		List<PropertyDefinition<?>> props = new LinkedList<>();
+	public List<FlatPropertyDefinition<Object>> getAllHeader(String tenantId) {
+		List<FlatPropertyDefinition<?>> props = new LinkedList<>();
 
 		props.add(new IDProperty(tenantId));
 		props.add(new EvidenzProperty(tenantId));
@@ -59,8 +57,8 @@ public class StandardPropertyDefinitions {
 
 	}
 
-	public List<PropertyDefinition<Object>> getAllGeneric(String tenantId) {
-		List<PropertyDefinition<?>> props = new LinkedList<>();
+	public List<FlatPropertyDefinition<Object>> getAllGeneric(String tenantId) {
+		List<FlatPropertyDefinition<?>> props = new LinkedList<>();
 
 		props.add(new NameProperty(tenantId));
 		props.add(new DescriptionProperty(tenantId));
@@ -93,8 +91,8 @@ public class StandardPropertyDefinitions {
 
 	}
 
-	public List<PropertyDefinition<Object>> getAllFlexProdProperties(String tenantId) {
-		List<PropertyDefinition<?>> list = new LinkedList<>();
+	public List<FlatPropertyDefinition<Object>> getAllFlexProdProperties(String tenantId) {
+		List<FlatPropertyDefinition<?>> list = new LinkedList<>();
 
 		list.add(new MaxGluehtemperaturProperty(tenantId));
 		list.add(new VerfuegbaresSchutzgasProperty(tenantId));

@@ -59,7 +59,7 @@ export class ImportComponent implements OnInit {
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
-        .getAllClassDefinitionsWithoutRootAndEnums(
+        .getAllClassDefinitions(
           this.marketplace,
           this.tenant.id
         )

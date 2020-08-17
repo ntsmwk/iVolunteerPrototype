@@ -12,17 +12,5 @@ public class MinimumTextLength extends TextPropertyConstraint<Integer> {
 		setConstraintType(ConstraintType.MIN_LENGTH);
 		this.setValue(value);
 	}
-	
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof MinimumTextLength)) {
-			return false;
-		}
-		return ((MinimumTextLength) obj).getId().equals(getId());
-	}
+
 }

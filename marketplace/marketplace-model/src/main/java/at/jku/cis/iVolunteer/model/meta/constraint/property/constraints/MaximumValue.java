@@ -12,17 +12,4 @@ public class MaximumValue extends LongNumberPropertyConstraint<Integer> {
 		setConstraintType(ConstraintType.MAX);
 		this.setValue(value);
 	}
-	
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof MaximumValue)) {
-			return false;
-		}
-		return ((MaximumValue) obj).getId().equals(getId());
-	}
 }
