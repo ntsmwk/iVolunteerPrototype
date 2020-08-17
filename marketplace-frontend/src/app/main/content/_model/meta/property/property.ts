@@ -105,6 +105,10 @@ export class PropertyInstance<T> {
             const rootValue = this.values[0] as unknown as TreePropertyEntry;
             console.log(rootValue);
 
+            if (isNullOrUndefined(rootValue)) {
+                return;
+            }
+
             let i = (classProperty as ClassProperty<unknown> as ClassProperty<TreePropertyEntry>)
                 .allowedValues.findIndex(a => a.id === rootValue.id);
             let currentLevel = rootValue.level;

@@ -127,7 +127,9 @@ export class TreePropertyBuilderComponent implements OnInit {
       this.treePropertyDefinitionService
         .savePropertyDefinition(this.marketplace, event.payload)
         .toPromise()
-        .then((ret: TreePropertyDefinition) => { });
+        .then((ret: TreePropertyDefinition) => {
+          return; // don't emit result
+        });
 
     } else if (event.type === 'back') {
       this.result.emit({ builderType: 'tree', value: event.payload });
@@ -148,65 +150,4 @@ export class TreePropertyBuilderComponent implements OnInit {
   handleManagementEvent(event: string) {
     this.management.emit(event);
   }
-
-  // openClicked() {
-  //     // this.form.controls['name'].markAsPending();
-
-  //     this.openOpentreePropertyDefinitionDialog(this.marketplace, this.helpseeker).then((result: OpentreePropertyDefinitionDialogData) => {
-  //         if (!isNullOrUndefined(result)) {
-  //             this.treePropertyDefinition = result.treePropertyDefinition;
-  //             this.showEditor = true;
-  //         }
-  //     });
-
-  // }
-
-  // deleteClicked() {
-  //     // this.form.controls['name'].markAsPending();
-  //     this.openDeletetreePropertyDefinitionDialog(this.marketplace, this.helpseeker).then((result: DeletetreePropertyDefinitionDialogData) => {
-  //         if (!isNullOrUndefined(result)) {
-  //             console.log('TODO');
-  //         }
-  //     });
-  // }
-
-  // openOpentreePropertyDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
-  //     const dialogRef = this.dialog.open(OpentreePropertyDefinitionDialogComponent, {
-  //         width: '500px',
-  //         minWidth: '500px',
-  //         height: '400px',
-  //         minHeight: '400px',
-  //         data: { marketplace: marketplace, helpseeker: helpseeker }
-  //     });
-
-  //     let returnValue: OpentreePropertyDefinitionDialogData;
-
-  //     dialogRef.beforeClose().toPromise().then((result: OpentreePropertyDefinitionDialogData) => {
-  //         returnValue = result;
-  //     });
-
-  //     return dialogRef.afterClosed().toPromise().then(() => {
-  //         return returnValue;
-  //     });
-  // }
-
-  // openDeletetreePropertyDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
-  //     const dialogRef = this.dialog.open(DeletetreePropertyDefinitionDialogComponent, {
-  //         width: '500px',
-  //         minWidth: '500px',
-  //         height: '400px',
-  //         minHeight: '400px',
-  //         data: { marketplace: marketplace, helpseeker: helpseeker }
-  //     });
-
-  //     let returnValue: DeletetreePropertyDefinitionDialogData;
-
-  //     dialogRef.beforeClose().toPromise().then((result: DeletetreePropertyDefinitionDialogData) => {
-  //         returnValue = result;
-  //     });
-
-  //     return dialogRef.afterClosed().toPromise().then(() => {
-  //         return returnValue;
-  //     });
-  // }
 }
