@@ -28,8 +28,12 @@ export class MatchingConfiguration {
   leftClassConfigurationId: string;
   leftClassConfigurationName: string;
 
+  leftAddedClassDefinitionIds: string[];
+
   rightClassConfigurationId: string;
   rightClassConfigurationName: string;
+
+  rightAddedClassDefinitionIds: string[];
 }
 
 export class MatchingCollectorConfiguration {

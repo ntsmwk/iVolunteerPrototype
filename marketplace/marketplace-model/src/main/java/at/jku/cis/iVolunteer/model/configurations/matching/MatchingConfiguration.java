@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
@@ -10,9 +12,11 @@ public class MatchingConfiguration extends IVolunteerObject {
 
 	private String leftClassConfigurationId;
 	private String leftClassConfigurationName;
+	private List<String> leftAddedClassDefinitionIds;
 
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
+	private List<String> rightAddedClassDefinitionIds;
 
 	public String getName() {
 		return name;
@@ -52,6 +56,22 @@ public class MatchingConfiguration extends IVolunteerObject {
 
 	public void setRightClassConfigurationName(String rightClassConfigurationName) {
 		this.rightClassConfigurationName = rightClassConfigurationName;
+	}
+
+	public List<String> getLeftAddedClassDefinitionIds() {
+		return leftAddedClassDefinitionIds;
+	}
+
+	public void setLeftAddedClassDefinitionIds(List<String> leftAddedClassDefinitionIds) {
+		this.leftAddedClassDefinitionIds = leftAddedClassDefinitionIds;
+	}
+
+	public List<String> getRightAddedClassDefinitionIds() {
+		return rightAddedClassDefinitionIds;
+	}
+
+	public void setRightAddedClassDefinitionIds(List<String> rightAddedClassDefinitionIds) {
+		this.rightAddedClassDefinitionIds = rightAddedClassDefinitionIds;
 	}
 
 	@Override
