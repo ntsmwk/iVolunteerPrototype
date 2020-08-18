@@ -42,15 +42,15 @@ import {
 import {
   NewMatchingDialogComponent,
   NewMatchingDialogData,
-} from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/new-dialog/new-dialog.component';
 import {
   OpenMatchingDialogComponent,
   OpenMatchingDialogData,
-} from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/open-dialog/open-dialog.component';
 import {
   DeleteMatchingDialogComponent,
   DeleteMatchingDialogData,
-} from '../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.component';
 import {
   AddPropertyDialogComponent,
   AddPropertyDialogData,

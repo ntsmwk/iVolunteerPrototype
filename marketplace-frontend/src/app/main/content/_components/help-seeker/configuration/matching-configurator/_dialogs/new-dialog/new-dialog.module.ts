@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material';
-import { BrowseClassSubDialogModule } from '../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.module';
+import { BrowseClassSubDialogModule } from '../../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.module';
 
 @NgModule({
   imports: [

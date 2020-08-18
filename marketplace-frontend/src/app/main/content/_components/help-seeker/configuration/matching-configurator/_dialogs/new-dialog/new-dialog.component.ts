@@ -9,7 +9,7 @@ import {
   ClassConfiguration,
   MatchingConfiguration,
 } from "app/main/content/_model/meta/configurations";
-import { ClassBrowseSubDialogData } from "../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
+import { ClassBrowseSubDialogData } from "../../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
 
