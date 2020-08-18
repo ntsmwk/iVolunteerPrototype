@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
-import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
+import at.jku.cis.iVolunteer.model.matching.MatchingEntityMappings;
 
-public class MatchingCollectorConfiguration {
+public class MatchingEntityMappingConfiguration {
 	@Id String id;
 
 	String classConfigurationId;
 
-	List<MatchingCollector> collectors;
+	MatchingEntityMappings mappings;
 
 	public String getId() {
 		return id;
@@ -29,12 +29,12 @@ public class MatchingCollectorConfiguration {
 		this.classConfigurationId = classConfigurationId;
 	}
 
-	public List<MatchingCollector> getCollectors() {
-		return collectors;
+	public MatchingEntityMappings getMappings() {
+		return mappings;
 	}
 
-	public void setCollectors(List<MatchingCollector> collectors) {
-		this.collectors = collectors;
+	public void setMappings(MatchingEntityMappings mappings) {
+		this.mappings = mappings;
 	}
 
 	@Override
@@ -44,10 +44,10 @@ public class MatchingCollectorConfiguration {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MatchingCollectorConfiguration)) {
+		if (!(obj instanceof MatchingEntityMappingConfiguration)) {
 			return false;
 		}
-		return ((MatchingCollectorConfiguration) obj).id.equals(id);
+		return ((MatchingEntityMappingConfiguration) obj).id.equals(id);
 	}
 
 }

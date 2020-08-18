@@ -16,7 +16,7 @@ import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfiguration
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
-import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
+import at.jku.cis.iVolunteer.model.matching.MatchingEntityMappings;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
@@ -30,7 +30,6 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
-//import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 
 @Service
@@ -62,38 +61,35 @@ public class CollectionService {
 		return collectors;
 	}
 
-	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(
-			String classConfigurationId) {
+	public MatchingEntityMappings collectAllClassDefinitionsWithPropertiesAsMatchingEntityMappings(String classConfigurationId) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(classConfigurationId);
 
 		if (classConfiguration == null) {
 			return null;
 		}
 
-		List<MatchingCollector> collections = new ArrayList<>();
+		MatchingEntityMappings mapping = new MatchingEntityMappings();
+		
 		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(c -> {
-			if (c.isCollector()) {
-				MatchingCollector collection = new MatchingCollector();
-				collection.setClassDefinition(c);
-				collection.setNumberOfProperties(c.getProperties().size());
-				collection.setPathDelimiter(PATH_DELIMITER);
-				collections.add(collection);
+			if (c.isRoot()) {
+				mapping.setClassDefinition(c);
+				mapping.setNumberOfProperties(c.getProperties().size());
+				mapping.setPathDelimiter(PATH_DELIMITER);
 			}
 		});
 
-		for (MatchingCollector collection : collections) {
-			collection.setPath(getPathFromRoot(collection.getClassDefinition()));
-			collection.setCollectorEntries(this.aggregateAllClassDefinitionsWithPropertiesDFS(
-					collection.getClassDefinition(), 0, new ArrayList<>(), collection.getPath()));
+		mapping.setPath(getPathFromRoot(mapping.getClassDefinition()));
+		mapping.setEntities(this.aggregateAllClassDefinitionsDFS(
+				mapping.getClassDefinition(), 0, new ArrayList<>(), mapping.getPath(), true));
 
-			for (MatchingCollectorEntry entry : collection.getCollectorEntries()) {
-				collection.setNumberOfProperties(
-						collection.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
+			for (MatchingCollectorEntry entry : mapping.getEntities()) {
+				mapping.setNumberOfProperties(
+						mapping.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
 
 			}
-			collection.setNumberOfDefinitions(collection.getCollectorEntries().size());
-		}
-		return collections;
+			mapping.setNumberOfDefinitions(mapping.getEntities().size());
+		
+		return mapping;
 	}
 
 	private String getPathFromRoot(ClassDefinition classDefinition) {
@@ -103,10 +99,10 @@ public class CollectionService {
 		while (!classDefinition.isRoot()) {
 			List<Relationship> relationships = this.relationshipRepository.findByTarget(classDefinition.getId());
 
-			relationships = relationships.stream()
-					.filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
-							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
-					.collect(Collectors.toList());
+//			relationships = relationships.stream()
+//					.filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
+//							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
+//					.collect(Collectors.toList());
 
 			if (relationships.size() >= 1) {
 				classDefinition = classDefinitionRepository.findOne(relationships.get(0).getSource());
@@ -118,8 +114,7 @@ public class CollectionService {
 		return String.join("", pathArray);
 	}
 
-	List<ClassProperty<Object>> aggregateAllPropertiesDFS(ClassDefinition root, int level,
-			List<ClassProperty<Object>> list) {
+	List<ClassProperty<Object>> aggregateAllPropertiesDFS(ClassDefinition root, int level, List<ClassProperty<Object>> list) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
 				RelationshipType.INHERITANCE);
@@ -143,13 +138,11 @@ public class CollectionService {
 		return list;
 	}
 
-	List<MatchingCollectorEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
-			List<MatchingCollectorEntry> list, String path) {
+	List<MatchingCollectorEntry> aggregateAllClassDefinitionsDFS(ClassDefinition root, int level, List<MatchingCollectorEntry> list, String path, boolean includeClassDefinitionsWithoutProperties) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
-		System.out.println("a");
-		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
-				|| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
+//		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
+//				|| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
 
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
@@ -157,31 +150,28 @@ public class CollectionService {
 		if (stack == null || stack.size() <= 0) {
 			return list;
 		}
-		System.out.println("b");
 
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
-			System.out.println("c");
-
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-			if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
+			if (includeClassDefinitionsWithoutProperties || (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0)) {
 				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(),
 						PATH_DELIMITER));
 			}
-			this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
-					path + PATH_DELIMITER + classDefinition.getId());
+			this.aggregateAllClassDefinitionsDFS(classDefinition, level + 1, list,
+					path + PATH_DELIMITER + classDefinition.getId(), includeClassDefinitionsWithoutProperties);
 		}
 		return list;
 	}
 
-	public List<TreePropertyEntry> collectEnumEntries(TreePropertyDefinition enumDefinition) {
-		return aggregateAllEnumEntriesDFS(enumDefinition.getId(), 0, new ArrayList<>(), enumDefinition);
+	public List<TreePropertyEntry> collectTreePropertyDefinitions(TreePropertyDefinition treePropertyDefinition) {
+		return aggregateAllTreePropertyEntriesDFS(treePropertyDefinition.getId(), 0, new ArrayList<>(), treePropertyDefinition);
 	}
 
-	private List<TreePropertyEntry> aggregateAllEnumEntriesDFS(String rootId, int level, List<TreePropertyEntry> list,
-			TreePropertyDefinition enumDefinition) {
+	private List<TreePropertyEntry> aggregateAllTreePropertyEntriesDFS(String rootId, int level, List<TreePropertyEntry> list,
+			TreePropertyDefinition treePropertyDefinition) {
 		Stack<TreePropertyRelationship> stack = new Stack<>();
-		List<TreePropertyRelationship> relationships = enumDefinition.getRelationships().stream()
+		List<TreePropertyRelationship> relationships = treePropertyDefinition.getRelationships().stream()
 				.filter(r -> r.getSourceId().equals(rootId)).collect(Collectors.toList());
 
 		Collections.reverse(relationships);
@@ -193,12 +183,12 @@ public class CollectionService {
 
 		while (!stack.isEmpty()) {
 			TreePropertyRelationship relationship = stack.pop();
-			TreePropertyEntry enumEntry = enumDefinition.getEntries().stream()
+			TreePropertyEntry enumEntry = treePropertyDefinition.getEntries().stream()
 					.filter(e -> e.getId().equals(relationship.getTargetId())).findFirst().get();
 			enumEntry.setPosition(new int[level + 1]);
 			enumEntry.setLevel(level);
 			list.add(enumEntry);
-			this.aggregateAllEnumEntriesDFS(enumEntry.getId(), level + 1, list, enumDefinition);
+			this.aggregateAllTreePropertyEntriesDFS(enumEntry.getId(), level + 1, list, treePropertyDefinition);
 		}
 
 		return list;

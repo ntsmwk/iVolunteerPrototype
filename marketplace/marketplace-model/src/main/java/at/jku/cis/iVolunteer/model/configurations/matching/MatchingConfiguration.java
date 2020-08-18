@@ -12,10 +12,12 @@ public class MatchingConfiguration extends IVolunteerObject {
 
 	private String leftClassConfigurationId;
 	private String leftClassConfigurationName;
+	
 	private List<String> leftAddedClassDefinitionIds;
 
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
+	
 	private List<String> rightAddedClassDefinitionIds;
 
 	public String getName() {

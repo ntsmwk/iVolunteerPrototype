@@ -4,13 +4,13 @@ import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
-public class MatchingCollector {
+public class MatchingEntityMappings {
 
 	ClassDefinition classDefinition;
 	String path;
 	String pathDelimiter;
 	
-	List<MatchingCollectorEntry> collectorEntries;
+	List<MatchingCollectorEntry> entities;
 	int numberOfProperties;
 	int numberOfDefinitions;
 
@@ -39,12 +39,12 @@ public class MatchingCollector {
 		this.pathDelimiter = pathDelimiter;
 	}
 
-	public List<MatchingCollectorEntry> getCollectorEntries() {
-		return collectorEntries;
+	public List<MatchingCollectorEntry> getEntities() {
+		return entities;
 	}
 
-	public void setCollectorEntries(List<MatchingCollectorEntry> collectorEntries) {
-		this.collectorEntries = collectorEntries;
+	public void setEntities(List<MatchingCollectorEntry> entities) {
+		this.entities = entities;
 	}
 
 	public int getNumberOfProperties() {

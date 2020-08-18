@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
-import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingCollectorConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurationDTO;
-import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingCollectorConfiguration;
-import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
+import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingEntityMappingConfiguration;
+import at.jku.cis.iVolunteer.model.matching.MatchingEntityMappings;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
@@ -38,7 +38,7 @@ public class ClassConfigurationController {
 	@Autowired private ClassConfigurationRepository classConfigurationRepository;
 	@Autowired private CollectionService collectionService;
 
-	@Autowired private MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired private MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
@@ -121,13 +121,13 @@ public class ClassConfigurationController {
 		classDefinitionRepository.save(classDefinitions);		
 		
 		// Build MatchingCollector
-		List<MatchingCollector> collectors = collectionService
-				.collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(classConfiguration.getId());
+		MatchingEntityMappings mappings = collectionService
+				.collectAllClassDefinitionsWithPropertiesAsMatchingEntityMappings(classConfiguration.getId());
 
-		MatchingCollectorConfiguration matchingCollectorConfiguration = new MatchingCollectorConfiguration();
+		MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
 		matchingCollectorConfiguration.setId(classConfiguration.getId());
 		matchingCollectorConfiguration.setClassConfigurationId(classConfiguration.getId());
-		matchingCollectorConfiguration.setCollectors(collectors);
+		matchingCollectorConfiguration.setMappings(mappings);
 
 		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
 		return classConfiguration;
