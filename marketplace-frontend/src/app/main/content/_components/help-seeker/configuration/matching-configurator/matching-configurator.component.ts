@@ -148,7 +148,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.graphContainer.nativeElement.style.position = 'absolute';
     this.graphContainer.nativeElement.style.overflow = 'scroll';
     this.graphContainer.nativeElement.style.left = '0px';
-    this.graphContainer.nativeElement.style.top = '60px';
+    this.graphContainer.nativeElement.style.top = '65px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
@@ -158,7 +158,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.paletteContainer.nativeElement.style.overflow = 'hidden';
     this.paletteContainer.nativeElement.style.padding = '2px';
     this.paletteContainer.nativeElement.style.right = '0px';
-    this.paletteContainer.nativeElement.style.top = '30px';
+    this.paletteContainer.nativeElement.style.top = '35px';
     this.paletteContainer.nativeElement.style.left = '0px';
     this.paletteContainer.nativeElement.style.height = '30px';
     this.paletteContainer.nativeElement.style.background = 'white';
@@ -205,7 +205,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     this.graph.getEdgeValidationError = function (edge: MyMxCell, source: MyMxCell, target: MyMxCell) {
-      if (!isNullOrUndefined(source) && isNullOrUndefined(source.edges) &&
+      if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) &&
         source.cellType === MyMxCellType.MATCHING_OPERATOR && !isNullOrUndefined(edge.target) && edge.target.id === target.id
       ) {
         if (source.edges.length >= 2) {

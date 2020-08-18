@@ -74,22 +74,22 @@ div#menubarContainer {
   
 }
 
-div#fileMenuItemContainer {
-  z-index: 240;
-  div.menuitem:hover {
-    background-color: rgb(62, 125, 219);
-    color: white;
-  }
+// div#fileMenuItemContainer {
+//   z-index: 240;
+//   div.menuitem:hover {
+//     background-color: rgb(62, 125, 219);
+//     color: white;
+//   }
 
-  div.menuitem {
-    cursor: pointer;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 5px;
-  }
-}
+//   div.menuitem {
+//     cursor: pointer;
+//     padding-top: 5px;
+//     padding-bottom: 5px;
+//     padding-left: 5px;
+//   }
+// }
 
 div#graphContainer {
-  z-index: 1;
+  z-index: 240;
 }
 
