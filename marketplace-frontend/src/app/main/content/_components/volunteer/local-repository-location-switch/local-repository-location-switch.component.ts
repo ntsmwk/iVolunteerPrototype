@@ -9,6 +9,7 @@ import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 import { ClassInstance } from "app/main/content/_model/meta/class";
+import { createClient } from "webdav/web";
 
 @Component({
   selector: "app-local-repository-location-switch",
@@ -16,8 +17,12 @@ import { ClassInstance } from "app/main/content/_model/meta/class";
   styleUrls: ["./local-repository-location-switch.component.scss"],
 })
 export class LocalRepositoryLocationSwitchComponent implements OnInit {
-  CLIENT_ID: string = "ky4bainncqhjjn8";
+  DROPBOX_CLIENT_ID: string = "ky4bainncqhjjn8";
+  REDIRECT_URI_DEV: string = "http://localhost:4200/main/profile";
+  REDIRECT_URI_PROD: string = "ivolunteer.cis.jku.at:4200/main/profile";
+
   FILE_NAME: string = "db.json";
+
   authUrl: string;
   isAuthenticated: boolean = false;
 
@@ -37,10 +42,8 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    var dbx = new Dropbox({ clientId: this.CLIENT_ID });
-    this.authUrl = dbx.getAuthenticationUrl(
-      "http://localhost:4200/main/profile"
-    );
+    var dbx = new Dropbox({ clientId: this.DROPBOX_CLIENT_ID });
+    this.authUrl = dbx.getAuthenticationUrl(this.REDIRECT_URI_DEV);
 
     this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
@@ -59,6 +62,34 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
         this.updateGlobalInfo();
       }
     }
+    // ---- webdav
+    // TODO: never user password here in code... either env variable, or better oauth (later)
+    let nextcloud = createClient(
+      "http://philstar.ddns.net:31415/remote.php/dav/files/Philipp/",
+      {
+        username: "Philipp",
+        password: "JcsBS-nTGXj-sG76N-fskTd-KeLdQ",
+      }
+    );
+
+    const directoryItems = await nextcloud.getDirectoryContents(
+      "/Apps/iVolunteer/"
+    );
+    console.error("directoryItems", directoryItems);
+
+    // if ((await nextcloud.exists("/Apps/iVolunteer/db.json")) === false) {
+    //   console.error("db.json does not exist");
+    // }
+
+    // await nextcloud.putFileContents("/Apps/iVolunteer/db.json", "hallo, test");
+    // // note, if file does not exist, it will be created
+
+    // const str = await nextcloud.getFileContents("/Apps/iVolunteer/db.json", {
+    //   format: "text",
+    // });
+    // console.error(str);
+    //console.error(JSON.stringify(str, null, 2))
+    // -----
 
     this.isLoaded = true;
 

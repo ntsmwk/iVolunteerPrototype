@@ -27,6 +27,7 @@ import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { ImageService } from "app/main/content/_service/image.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
+import { LocalRepositoryNextcloudService } from "app/main/content/_service/local-repository-nextcloud.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -96,6 +97,7 @@ export class DashboardVolunteerComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private lrDropboxService: LocalRepositoryDropboxService,
     private lrJsonServerService: LocalRepositoryJsonServerService,
+    private lrNextcloudService: LocalRepositoryNextcloudService,
     private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
@@ -139,13 +141,14 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    if (
-      this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
-    ) {
-      this.localRepositoryService = this.lrJsonServerService;
-    } else {
-      this.localRepositoryService = this.lrDropboxService;
-    }
+    // if (
+    //   this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
+    // ) {
+    //   this.localRepositoryService = this.lrJsonServerService;
+    // } else {
+    //   this.localRepositoryService = this.lrDropboxService;
+    // }
+    this.localRepositoryService = this.lrNextcloudService;
 
     let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
       await this.classInstanceService
