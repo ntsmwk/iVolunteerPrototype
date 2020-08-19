@@ -335,6 +335,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     cell.setVertex(true);
     cell.setId(id);
 
+    cell = this.addPropertiesToCell(cell, matchingEntity, 5, 45);
+
     return this.graph.addCell(cell) as MyMxCell;
   }
 
@@ -415,7 +417,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     entry: MatchingEntity,
     startX: number,
     startY: number
-  ) {
+  ): MyMxCell {
     const classDefinition = entry.classDefinition;
 
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);
@@ -448,8 +450,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         startY = lastPropertyGeometry.y;
       }
     }
+    return cell;
 
-    return { cell: cell, lastPropertyGeometry: lastPropertyGeometry };
+    // return { cell: cell, lastPropertyGeometry: lastPropertyGeometry };
   }
 
   private insertMatchingOperatorsAndRelationships() {
