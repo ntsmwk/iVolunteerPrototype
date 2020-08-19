@@ -16,7 +16,7 @@ import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
-import { isNull } from '@angular/compiler/src/output/output_ast';
+import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
 
 declare var require: any;
 
@@ -89,22 +89,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.tenant = globalInfo.tenants[0];
   }
 
-  async loadClassesAndRelationships(
-    leftClassConfigurationId: string,
-    rightClassConfigurationId: string
-  ) {
-    this.clearEditor();
+  async loadClassesAndRelationships(leftClassConfigurationId: string, rightClassConfigurationId: string) {
     this.matchingConfiguration = undefined;
     this.relationships = [];
 
-    // TODO MWE less requests to server....
     this.matchingCollectorConfigurationService.getMatchingData(this.marketplace, leftClassConfigurationId, rightClassConfigurationId).toPromise().then((data: MatchingDataRequestDTO) => {
       this.leftMatchingCollectorConfiguration = data.leftMappingConfigurations;
       this.rightMatchingCollectorConfiguration = data.rightMappingConfigurations;
-      // this.leftClassConfiguration = data.leftClassConfiguration;
-      // this.rightClassConfiguration = data.rightClassConfiguration;
+
       this.relationships = data.relationships;
       this.matchingConfiguration = data.matchingConfiguration;
+
+      console.log(data);
 
       if (isNullOrUndefined(data.matchingConfiguration)) {
         this.matchingConfiguration = new MatchingConfiguration();
@@ -113,12 +109,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         this.relationships = [];
       }
 
-      this.insertClassDefinitionsLeft();
-      this.insertClassDefinitionsRight();
-      this.insertMatchingOperatorsAndRelationships();
+      this.redrawContent();
     });
-
   }
+
 
   ngAfterContentInit() {
     this.graphContainer.nativeElement.style.position = 'absolute';
@@ -157,10 +151,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     this.graph.getCursorForCell = function (cell: MyMxCell) {
-      if (
-        cell.cellType === MyMxCellType.MATCHING_OPERATOR &&
-        outer.deleteMode
-      ) {
+
+      if (isNullOrUndefined(cell.cellType)) {
+        return 'default';
+      }
+
+      if ((cell.cellType === MyMxCellType.MATCHING_OPERATOR && outer.deleteMode)
+        || (cell.cellType.startsWith('ADD_CLASS_BUTTON') && !outer.deleteMode)) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       } else if (outer.deleteMode) {
         return 'default';
@@ -258,39 +255,37 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
+  redrawContent() {
+    this.clearEditor();
+    this.insertClassDefinitionsLeft();
+    this.insertClassDefinitionsRight();
+    this.insertMatchingOperatorsAndRelationships();
+  }
+
   private insertClassDefinitionsLeft() {
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(),
-      'left_header',
-      'Werkunternehmen',
-      20,
-      20,
-      400,
-      50,
-      CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'left_header', 'Werkunternehmen', 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
 
     let y = title.geometry.y + title.geometry.height + 20;
-
     // const cell = this.insertClassDefinitionCollectorIntoGraph(this.leftMatchingCollectorConfiguration.mappings, new mx.mxGeometry(120, y, 200, 0)) as MyMxCell;
-    const cell = this.insertClassDefinitionsIntoGraph(this.matchingConfiguration.leftAddedClassDefinitionIds, this.leftMatchingCollectorConfiguration.mappings, new mx.mxGeometry(120, y, 200, 0)) as MyMxCell;
+
+    let cell: MyMxCell;
+    if (!isNullOrUndefined(this.matchingConfiguration.rightAddedClassDefinitionPaths)) {
+      cell = this.insertClassDefinitionsIntoGraph(this.matchingConfiguration.leftAddedClassDefinitionPaths, this.leftMatchingCollectorConfiguration.mappings, new mx.mxGeometry(120, y, 200, 100)) as MyMxCell;
+    }
 
     if (!isNullOrUndefined(cell)) {
       y = cell.geometry.y + cell.geometry.height + 20;
     }
+
     const addButton = this.graph.insertVertex(
-      this.graph.getDefaultParent(),
-      'left_add',
-      'Hinzufügen',
-      120,
-      y,
-      200,
-      50,
-      CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'left_add', 'Hinzufügen', 120, y, 200, 50, CConstants.mxStyles.matchingRowHeader
     ) as MyMxCell;
+
     addButton.setConnectable(false);
-    addButton.cellType = MyMxCellType.ADD_CLASS_ICON;
+    addButton.cellType = MyMxCellType.ADD_CLASS_BUTTON_LEFT;
   }
 
   private insertClassDefinitionsRight() {
@@ -298,125 +293,126 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let y = 20;
 
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(),
-      'right_header',
-      'Werkbesteller',
-      x - 200,
-      y,
-      400,
-      50,
-      CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'right_header', 'Werkbesteller', x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
 
     y = title.geometry.y + title.geometry.height + 20;
 
     // const cell = this.insertClassDefinitionCollectorIntoGraph(this.rightMatchingCollectorConfiguration.mappings, new mx.mxGeometry(x - 100, y, 200, 0)) as MyMxCell;
-    const cell = this.insertClassDefinitionsIntoGraph(this.matchingConfiguration.rightAddedClassDefinitionIds, this.rightMatchingCollectorConfiguration.mappings, new mx.mxGeometry(x - 100, y, 200, 0)) as MyMxCell;
+    let cell: MyMxCell;
+    if (!isNullOrUndefined(this.matchingConfiguration.rightAddedClassDefinitionPaths)) {
+      cell = this.insertClassDefinitionsIntoGraph(this.matchingConfiguration.rightAddedClassDefinitionPaths, this.rightMatchingCollectorConfiguration.mappings, new mx.mxGeometry(x - 100, y, 200, 100)) as MyMxCell;
+    }
 
     if (!isNullOrUndefined(cell)) {
       y = cell.geometry.y + cell.geometry.height + 20;
     }
     const addButton = this.graph.insertVertex(
-      this.graph.getDefaultParent(),
-      'right_add',
-      'Hinzufügen',
-      x - 100,
-      y,
-      200,
-      50,
-      CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'right_add', 'Hinzufügen', x - 100, y, 200, 50, CConstants.mxStyles.matchingRowHeader
     ) as MyMxCell;
     addButton.setConnectable(false);
-    addButton.cellType = MyMxCellType.ADD_CLASS_ICON;
+    addButton.cellType = MyMxCellType.ADD_CLASS_BUTTON_RIGHT;
 
   }
 
 
   insertClassDefinitionsIntoGraph(ids: string[], mappings: MatchingEntityMappings, geometry: mxgraph.mxGeometry): MyMxCell {
-
-    return null;
-  }
-
-  insertClassDefinition(id: string, label: string, geometry: mxgraph.mxGeometry) {
-
-  }
-
-
-
-
-
-
-  private insertClassDefinitionCollectorIntoGraph(
-    collector: MatchingEntityMappings,
-    geometry: mxgraph.mxGeometry
-  ): MyMxCell {
-    // create class cell
     let cell: MyMxCell;
-    if (collector.classDefinition.collector) {
-      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as MyMxCell;
-    } else {
-      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
+
+    for (const id of ids) {
+      const mapping = mappings.entities.find(e => e.path === id);
+      cell = this.insertClassDefinition(id, mapping, geometry);
+      geometry.setRect(geometry.x, geometry.y + geometry.height + 20, geometry.width, geometry.height);
     }
-    cell.setCollapsed(false);
-    cell.classArchetype = collector.classDefinition.classArchetype;
-    // cell.newlyAdded = false;
-    cell.value = collector.classDefinition.name;
+    return cell;
+  }
+
+  insertClassDefinition(id: string, matchingEntity: MatchingEntity, geometry: mxgraph.mxGeometry): MyMxCell {
+    let cell: MyMxCell;
+
+    cell = new mx.mxCell(matchingEntity.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
     cell.setVertex(true);
-    cell.setConnectable(true);
+    cell.setId(id);
 
-    if (!isNullOrUndefined(collector.classDefinition.id)) {
-      cell.id = collector.path;
-    }
-
-    cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
-    cell.geometry.setRect(
-      cell.geometry.x,
-      cell.geometry.y,
-      cell.geometry.width,
-      20
-    );
-
-    let addPropertiesReturn = this.addPropertiesToCell(cell, collector, 5, 45);
-    cell = addPropertiesReturn.cell;
-
-    for (const entry of collector.entities) {
-      const boundaryHeight =
-        entry.classDefinition.name.split(/\r?\n/).length * 25;
-      const boundary = this.graph.insertVertex(
-        cell,
-        entry.path,
-        entry.classDefinition.name,
-        0,
-        addPropertiesReturn.lastPropertyGeometry.y +
-        addPropertiesReturn.lastPropertyGeometry.height +
-        2,
-        200,
-        boundaryHeight,
-        CConstants.mxStyles.matchingClassSeparator
-      );
-
-      boundary.setConnectable(true);
-      addPropertiesReturn = this.addPropertiesToCell(
-        cell,
-        entry,
-        boundary.geometry.x + 5,
-        boundary.geometry.y + boundary.geometry.height + 5
-      );
-    }
-
-    cell.geometry.setRect(
-      cell.geometry.x,
-      cell.geometry.y,
-      cell.geometry.width,
-      cell.geometry.height + 5
-    );
     return this.graph.addCell(cell) as MyMxCell;
   }
 
+
+
+
+
+
+  // private insertClassDefinitionCollectorIntoGraph(
+  //   collector: MatchingEntityMappings,
+  //   geometry: mxgraph.mxGeometry
+  // ): MyMxCell {
+  //   // create class cell
+  //   let cell: MyMxCell;
+  //   if (collector.classDefinition.collector) {
+  //     cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as MyMxCell;
+  //   } else {
+  //     cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
+  //   }
+  //   cell.setCollapsed(false);
+  //   cell.classArchetype = collector.classDefinition.classArchetype;
+  //   // cell.newlyAdded = false;
+  //   cell.value = collector.classDefinition.name;
+  //   cell.setVertex(true);
+  //   cell.setConnectable(true);
+
+  //   if (!isNullOrUndefined(collector.classDefinition.id)) {
+  //     cell.id = collector.path;
+  //   }
+
+  //   cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
+  //   cell.geometry.setRect(
+  //     cell.geometry.x,
+  //     cell.geometry.y,
+  //     cell.geometry.width,
+  //     20
+  //   );
+
+  //   let addPropertiesReturn = this.addPropertiesToCell(cell, collector, 5, 45);
+  //   cell = addPropertiesReturn.cell;
+
+  //   for (const entry of collector.entities) {
+  //     const boundaryHeight =
+  //       entry.classDefinition.name.split(/\r?\n/).length * 25;
+  //     const boundary = this.graph.insertVertex(
+  //       cell,
+  //       entry.path,
+  //       entry.classDefinition.name,
+  //       0,
+  //       addPropertiesReturn.lastPropertyGeometry.y +
+  //       addPropertiesReturn.lastPropertyGeometry.height +
+  //       2,
+  //       200,
+  //       boundaryHeight,
+  //       CConstants.mxStyles.matchingClassSeparator
+  //     );
+
+  //     boundary.setConnectable(true);
+  //     addPropertiesReturn = this.addPropertiesToCell(
+  //       cell,
+  //       entry,
+  //       boundary.geometry.x + 5,
+  //       boundary.geometry.y + boundary.geometry.height + 5
+  //     );
+  //   }
+
+  //   cell.geometry.setRect(
+  //     cell.geometry.x,
+  //     cell.geometry.y,
+  //     cell.geometry.width,
+  //     cell.geometry.height + 5
+  //   );
+  //   return this.graph.addCell(cell) as MyMxCell;
+  // }
+
   private addPropertiesToCell(
     cell: MyMxCell,
-    entry: MatchingEntity | MatchingEntityMappings,
+    entry: MatchingEntity,
     startX: number,
     startY: number
   ) {
@@ -801,6 +797,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   handleClickEvent(event: mxgraph.mxEventObject) {
     const cell = event.properties.cell as MyMxCell;
 
+    if (isNullOrUndefined(cell) || isNullOrUndefined(cell.cellType)) {
+      return;
+    }
+
     if (!isNullOrUndefined(cell) && !this.displayOverlay && event.properties.event.button === 0) {
 
 
@@ -821,8 +821,32 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         }
       }
 
-      if (cell.cellType === MyMxCellType.ADD_CLASS_ICON && !this.deleteMode) {
-        console.log("display add");
+      if (!this.deleteMode && cell.cellType.startsWith('ADD_CLASS_BUTTON')) {
+
+        let entityMappingConfiguration: MatchingEntityMappingConfiguration;
+        let existingEntityPaths: string[];
+
+        if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON_LEFT) {
+          entityMappingConfiguration = this.leftMatchingCollectorConfiguration;
+          existingEntityPaths = this.matchingConfiguration.leftAddedClassDefinitionPaths;
+        } else {
+          entityMappingConfiguration = this.rightMatchingCollectorConfiguration;
+          existingEntityPaths = this.matchingConfiguration.rightAddedClassDefinitionPaths;
+        }
+
+        this.dialogFactory.openAddClassDefinitionDialog(entityMappingConfiguration, existingEntityPaths).then((ret: AddClassDefinitionDialogData) => {
+
+          console.log(ret);
+
+          if (!isNullOrUndefined(ret.addedEntities)) {
+            if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON_LEFT) {
+              this.matchingConfiguration.leftAddedClassDefinitionPaths.push(...ret.addedEntities.map(e => e.path));
+            } else {
+              this.matchingConfiguration.rightAddedClassDefinitionPaths.push(...ret.addedEntities.map(e => e.path));
+            }
+          }
+          this.redrawContent();
+        });
       }
     }
   }

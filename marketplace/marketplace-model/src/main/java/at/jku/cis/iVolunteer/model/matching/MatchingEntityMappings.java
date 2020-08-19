@@ -6,30 +6,30 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
 public class MatchingEntityMappings {
 
-	ClassDefinition classDefinition;
-	String path;
+//	ClassDefinition classDefinition;
+//	String path;
 	String pathDelimiter;
 	
-	List<MatchingCollectorEntry> entities;
+	List<MatchingMappingEntry> entities;
 	int numberOfProperties;
 	int numberOfDefinitions;
 
 
-	public ClassDefinition getClassDefinition() {
-		return classDefinition;
-	}
-
-	public void setClassDefinition(ClassDefinition classDefinition) {
-		this.classDefinition = classDefinition;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
+//	public ClassDefinition getClassDefinition() {
+//		return classDefinition;
+//	}
+//
+//	public void setClassDefinition(ClassDefinition classDefinition) {
+//		this.classDefinition = classDefinition;
+//	}
+//
+//	public String getPath() {
+//		return path;
+//	}
+//
+//	public void setPath(String path) {
+//		this.path = path;
+//	}
 
 	public String getPathDelimiter() {
 		return pathDelimiter;
@@ -39,11 +39,11 @@ public class MatchingEntityMappings {
 		this.pathDelimiter = pathDelimiter;
 	}
 
-	public List<MatchingCollectorEntry> getEntities() {
+	public List<MatchingMappingEntry> getEntities() {
 		return entities;
 	}
 
-	public void setEntities(List<MatchingCollectorEntry> entities) {
+	public void setEntities(List<MatchingMappingEntry> entities) {
 		this.entities = entities;
 	}
 

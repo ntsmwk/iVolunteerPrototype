@@ -35,6 +35,8 @@ import { PropertyCreationDialogComponent } from '../../../help-seeker/configurat
 import { NewMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/open-dialog/open-dialog.component';
 import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.component';
+import { AddClassDefinitionDialogModule } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.module';
+import { AddClassDefinitionDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
 
 @NgModule({
   imports: [
@@ -63,6 +65,7 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     NewMatchingDialogModule,
     OpenMatchingDialogModule,
     DeleteMatchingDialogModule,
+    AddClassDefinitionDialogModule,
 
     // Tree Property Configurator
   ],
@@ -92,6 +95,7 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     NewMatchingDialogComponent,
     OpenMatchingDialogComponent,
     DeleteMatchingDialogComponent,
+    AddClassDefinitionDialogComponent,
 
     // Tree Property Configurator
   ],

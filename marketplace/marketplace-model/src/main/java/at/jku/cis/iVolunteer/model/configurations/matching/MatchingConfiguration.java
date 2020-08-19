@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,12 +14,12 @@ public class MatchingConfiguration extends IVolunteerObject {
 	private String leftClassConfigurationId;
 	private String leftClassConfigurationName;
 	
-	private List<String> leftAddedClassDefinitionIds;
+	private List<String> leftAddedClassDefinitionPaths = new ArrayList<>();
 
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
 	
-	private List<String> rightAddedClassDefinitionIds;
+	private List<String> rightAddedClassDefinitionPaths = new ArrayList<>();
 
 	public String getName() {
 		return name;
@@ -59,21 +60,21 @@ public class MatchingConfiguration extends IVolunteerObject {
 	public void setRightClassConfigurationName(String rightClassConfigurationName) {
 		this.rightClassConfigurationName = rightClassConfigurationName;
 	}
-
-	public List<String> getLeftAddedClassDefinitionIds() {
-		return leftAddedClassDefinitionIds;
+	
+	public List<String> getLeftAddedClassDefinitionPaths() {
+		return leftAddedClassDefinitionPaths;
 	}
 
-	public void setLeftAddedClassDefinitionIds(List<String> leftAddedClassDefinitionIds) {
-		this.leftAddedClassDefinitionIds = leftAddedClassDefinitionIds;
+	public void setLeftAddedClassDefinitionPaths(List<String> leftAddedClassDefinitionPaths) {
+		this.leftAddedClassDefinitionPaths = leftAddedClassDefinitionPaths;
 	}
 
-	public List<String> getRightAddedClassDefinitionIds() {
-		return rightAddedClassDefinitionIds;
+	public List<String> getRightAddedClassDefinitionPaths() {
+		return rightAddedClassDefinitionPaths;
 	}
 
-	public void setRightAddedClassDefinitionIds(List<String> rightAddedClassDefinitionIds) {
-		this.rightAddedClassDefinitionIds = rightAddedClassDefinitionIds;
+	public void setRightAddedClassDefinitionPaths(List<String> rightAddedClassDefinitionPaths) {
+		this.rightAddedClassDefinitionPaths = rightAddedClassDefinitionPaths;
 	}
 
 	@Override

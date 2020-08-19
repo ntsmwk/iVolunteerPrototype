@@ -17,7 +17,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatPrope
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingEntityMappings;
-import at.jku.cis.iVolunteer.model.matching.MatchingCollectorEntry;
+import at.jku.cis.iVolunteer.model.matching.MatchingMappingEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
@@ -70,24 +70,22 @@ public class CollectionService {
 
 		MatchingEntityMappings mapping = new MatchingEntityMappings();
 		
+		
+		
 		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(c -> {
 			if (c.isRoot()) {
-				mapping.setClassDefinition(c);
-				mapping.setNumberOfProperties(c.getProperties().size());
-				mapping.setPathDelimiter(PATH_DELIMITER);
+				mapping.setPathDelimiter(PATH_DELIMITER);	
+				mapping.setEntities(new ArrayList<MatchingMappingEntry>());
+				mapping.getEntities().add(new MatchingMappingEntry(c, c.getId(), PATH_DELIMITER));
+				mapping.getEntities().addAll(this.aggregateAllClassDefinitionsDFS(c, 0, new ArrayList<>(), c.getId()));				
 			}
 		});
 
-		mapping.setPath(getPathFromRoot(mapping.getClassDefinition()));
-		mapping.setEntities(this.aggregateAllClassDefinitionsDFS(
-				mapping.getClassDefinition(), 0, new ArrayList<>(), mapping.getPath(), true));
 
-			for (MatchingCollectorEntry entry : mapping.getEntities()) {
-				mapping.setNumberOfProperties(
-						mapping.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
-
-			}
-			mapping.setNumberOfDefinitions(mapping.getEntities().size());
+		for (MatchingMappingEntry entry : mapping.getEntities()) {
+			mapping.setNumberOfProperties(mapping.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
+		}
+		mapping.setNumberOfDefinitions(mapping.getEntities().size());
 		
 		return mapping;
 	}
@@ -138,7 +136,10 @@ public class CollectionService {
 		return list;
 	}
 
-	List<MatchingCollectorEntry> aggregateAllClassDefinitionsDFS(ClassDefinition root, int level, List<MatchingCollectorEntry> list, String path, boolean includeClassDefinitionsWithoutProperties) {
+	List<MatchingMappingEntry> aggregateAllClassDefinitionsDFS(ClassDefinition root, int level, List<MatchingMappingEntry> list, String path) {
+		
+		
+		
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
 //		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
@@ -154,12 +155,8 @@ public class CollectionService {
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-			if (includeClassDefinitionsWithoutProperties || (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0)) {
-				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(),
-						PATH_DELIMITER));
-			}
-			this.aggregateAllClassDefinitionsDFS(classDefinition, level + 1, list,
-					path + PATH_DELIMITER + classDefinition.getId(), includeClassDefinitionsWithoutProperties);
+				list.add(new MatchingMappingEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(), PATH_DELIMITER));
+			this.aggregateAllClassDefinitionsDFS(classDefinition, level + 1, list, path + PATH_DELIMITER + classDefinition.getId());
 		}
 		return list;
 	}

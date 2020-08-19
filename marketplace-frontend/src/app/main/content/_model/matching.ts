@@ -14,8 +14,8 @@ export class MatchingDataRequestDTO {
 }
 
 export class MatchingEntityMappings {
-  classDefinition: ClassDefinition;
-  path: string;
+  // classDefinition: ClassDefinition;
+  // path: string;
   pathDelimiter: string;
 
   entities: MatchingEntity[];
