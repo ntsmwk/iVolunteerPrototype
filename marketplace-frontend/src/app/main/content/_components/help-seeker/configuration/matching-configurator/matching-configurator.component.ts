@@ -17,6 +17,7 @@ import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 declare var require: any;
 
@@ -99,6 +100,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.relationships = data.relationships;
       this.matchingConfiguration = data.matchingConfiguration;
+
+      // this.leftClassConfiguration = data.leftClassConfiguration;
+      // this.rightClassConfiguration = data.rightClassConfiguration;
 
       console.log(data);
 
@@ -233,11 +237,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         outer.handleDoubleClickEvent(evt);
       });
 
-      this.graph
-        .getSelectionModel()
-        .addListener(mx.mxEvent.CHANGE, function (sender, evt) {
-          // Handle Select
-        });
+      this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, function (sender, evt) {
+        // Handle Select
+      });
     }
   }
 
@@ -264,7 +266,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private insertClassDefinitionsLeft() {
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'left_header', 'Werkunternehmen', 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'left_header', this.matchingConfiguration.leftClassConfigurationName, 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
 
@@ -273,7 +275,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     let cell: MyMxCell;
     if (!isNullOrUndefined(this.matchingConfiguration.rightAddedClassDefinitionPaths)) {
-      cell = this.insertClassDefinitionsIntoGraph(this.matchingConfiguration.leftAddedClassDefinitionPaths, this.leftMatchingCollectorConfiguration.mappings, new mx.mxGeometry(120, y, 200, 100)) as MyMxCell;
+      cell = this.insertClassDefinitionsIntoGraph(
+        this.matchingConfiguration.leftAddedClassDefinitionPaths,
+        this.leftMatchingCollectorConfiguration.mappings,
+        new mx.mxGeometry(120, y, 200, 50), 'left'
+      ) as MyMxCell;
     }
 
     if (!isNullOrUndefined(cell)) {
@@ -285,7 +291,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     ) as MyMxCell;
 
     addButton.setConnectable(false);
-    addButton.cellType = MyMxCellType.ADD_CLASS_BUTTON_LEFT;
+    addButton.cellType = MyMxCellType.ADD_CLASS_BUTTON;
   }
 
   private insertClassDefinitionsRight() {
@@ -293,7 +299,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let y = 20;
 
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'right_header', 'Werkbesteller', x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'right_header', this.matchingConfiguration.rightClassConfigurationName, x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
 
@@ -302,40 +308,54 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     // const cell = this.insertClassDefinitionCollectorIntoGraph(this.rightMatchingCollectorConfiguration.mappings, new mx.mxGeometry(x - 100, y, 200, 0)) as MyMxCell;
     let cell: MyMxCell;
     if (!isNullOrUndefined(this.matchingConfiguration.rightAddedClassDefinitionPaths)) {
-      cell = this.insertClassDefinitionsIntoGraph(this.matchingConfiguration.rightAddedClassDefinitionPaths, this.rightMatchingCollectorConfiguration.mappings, new mx.mxGeometry(x - 100, y, 200, 100)) as MyMxCell;
+      cell = this.insertClassDefinitionsIntoGraph(
+        this.matchingConfiguration.rightAddedClassDefinitionPaths, this.rightMatchingCollectorConfiguration.mappings,
+        new mx.mxGeometry(x - 100, y, 200, 50), 'right'
+      ) as MyMxCell;
     }
 
     if (!isNullOrUndefined(cell)) {
       y = cell.geometry.y + cell.geometry.height + 20;
     }
+
     const addButton = this.graph.insertVertex(
       this.graph.getDefaultParent(), 'right_add', 'Hinzufügen', x - 100, y, 200, 50, CConstants.mxStyles.matchingRowHeader
     ) as MyMxCell;
+
     addButton.setConnectable(false);
-    addButton.cellType = MyMxCellType.ADD_CLASS_BUTTON_RIGHT;
+    addButton.cellType = MyMxCellType.ADD_CLASS_BUTTON;
 
   }
 
 
-  insertClassDefinitionsIntoGraph(ids: string[], mappings: MatchingEntityMappings, geometry: mxgraph.mxGeometry): MyMxCell {
+  insertClassDefinitionsIntoGraph(ids: string[], mappings: MatchingEntityMappings, geometry: mxgraph.mxGeometry, pathPrefix?: 'right' | 'left'): MyMxCell {
     let cell: MyMxCell;
 
     for (const id of ids) {
       const mapping = mappings.entities.find(e => e.path === id);
-      cell = this.insertClassDefinition(id, mapping, geometry);
-      geometry.setRect(geometry.x, geometry.y + geometry.height + 20, geometry.width, geometry.height);
+      cell = this.insertClassDefinition(id, mapping, geometry, pathPrefix);
+      // geometry.setRect(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, cell.geometry.height);
+
+      const numberOfProperties = isNullOrUndefined(mapping.classDefinition.properties.length) || mapping.classDefinition.properties.length === 0
+        ? 0 : mapping.classDefinition.properties.length;
+      const rectHeight = numberOfProperties === 0 ? 10 : 5 + numberOfProperties * 20 + 5;
+
+      geometry = new mx.mxGeometry(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, rectHeight);
+      // geometry.setRect(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, rectHeight);
+
     }
+
     return cell;
   }
 
-  insertClassDefinition(id: string, matchingEntity: MatchingEntity, geometry: mxgraph.mxGeometry): MyMxCell {
-    let cell: MyMxCell;
-
-    cell = new mx.mxCell(matchingEntity.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
+  insertClassDefinition(id: string, matchingEntity: MatchingEntity, geometry: mxgraph.mxGeometry, pathPrefix?: 'right' | 'left'): MyMxCell {
+    let cell = new mx.mxCell(matchingEntity.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
     cell.setVertex(true);
     cell.setId(id);
 
-    cell = this.addPropertiesToCell(cell, matchingEntity, 5, 45);
+    cell = this.addPropertiesToCell(cell, matchingEntity, 5, 45, pathPrefix);
+    cell.geometry.height = cell.geometry.height + 5;
+
 
     return this.graph.addCell(cell) as MyMxCell;
   }
@@ -412,12 +432,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   //   return this.graph.addCell(cell) as MyMxCell;
   // }
 
-  private addPropertiesToCell(
-    cell: MyMxCell,
-    entry: MatchingEntity,
-    startX: number,
-    startY: number
-  ): MyMxCell {
+  private addPropertiesToCell(cell: MyMxCell, entry: MatchingEntity, startX: number, startY: number, pathPrefix?: 'right' | 'left') {
     const classDefinition = entry.classDefinition;
 
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);
@@ -425,14 +440,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
         // console.log("P: " + entry.path + entry.pathDelimiter + p.id);
+        let idPath = entry.path + entry.pathDelimiter + p.id;
+
+        if (!isNullOrUndefined(pathPrefix)) {
+          idPath = pathPrefix + entry.pathDelimiter + idPath;
+        }
+
         const propertyEntry: MyMxCell = this.graph.insertVertex(
-          cell,
-          entry.path + entry.pathDelimiter + p.id,
-          p.name,
-          startX,
-          startY + lastPropertyGeometry.height,
-          190,
-          20,
+          cell, idPath, p.name,
+          startX, startY + lastPropertyGeometry.height, 190, 20,
           CConstants.mxStyles.matchingProperty
         ) as MyMxCell;
 
@@ -824,12 +840,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         }
       }
 
-      if (!this.deleteMode && cell.cellType.startsWith('ADD_CLASS_BUTTON')) {
+      if (!this.deleteMode && cell.cellType === MyMxCellType.ADD_CLASS_BUTTON) {
 
         let entityMappingConfiguration: MatchingEntityMappingConfiguration;
         let existingEntityPaths: string[];
 
-        if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON_LEFT) {
+        if (cell.id === 'left_add') {
           entityMappingConfiguration = this.leftMatchingCollectorConfiguration;
           existingEntityPaths = this.matchingConfiguration.leftAddedClassDefinitionPaths;
         } else {
@@ -842,7 +858,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           console.log(ret);
 
           if (!isNullOrUndefined(ret.addedEntities)) {
-            if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON_LEFT) {
+            if (cell.id === 'left_add') {
               this.matchingConfiguration.leftAddedClassDefinitionPaths.push(...ret.addedEntities.map(e => e.path));
             } else {
               this.matchingConfiguration.rightAddedClassDefinitionPaths.push(...ret.addedEntities.map(e => e.path));

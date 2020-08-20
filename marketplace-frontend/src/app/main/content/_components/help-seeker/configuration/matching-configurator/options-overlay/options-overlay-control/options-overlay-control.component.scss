@@ -1,23 +1,20 @@
 .overlay-layout {
+  background: white;
+  border-color: rgb(62, 125, 219);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  z-index: 245;
 
-    background: white; 
-    border-color: rgb(62, 125, 219); 
-    border-style: solid; 
-    border-width: 2px; 
-    border-radius: 5px; 
-    z-index: 2;
-    
-    .overlay-title-bar {
-        background-color: rgb(62, 125, 219);
-        color: white;
-        
-        mat-icon {
-            color: white;
-            cursor: pointer;
-        }
+  .overlay-title-bar {
+    background-color: rgb(62, 125, 219);
+    color: white;
+
+    mat-icon {
+      color: white;
+      cursor: pointer;
     }
-    .overlay-control-content {
-    }
-       
+  }
+  .overlay-control-content {
+  }
 }
- 
