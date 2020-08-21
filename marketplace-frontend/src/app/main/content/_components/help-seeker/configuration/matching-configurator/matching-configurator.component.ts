@@ -336,12 +336,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       cell = this.insertClassDefinition(id, mapping, geometry, pathPrefix);
       // geometry.setRect(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, cell.geometry.height);
 
-      const numberOfProperties = isNullOrUndefined(mapping.classDefinition.properties.length) || mapping.classDefinition.properties.length === 0
-        ? 0 : mapping.classDefinition.properties.length;
-      const rectHeight = numberOfProperties === 0 ? 10 : 5 + numberOfProperties * 20 + 5;
 
-      geometry = new mx.mxGeometry(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, rectHeight);
-      // geometry.setRect(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, rectHeight);
+      geometry = new mx.mxGeometry(cell.geometry.x, cell.geometry.y + cell.geometry.height + 30, cell.geometry.width, cell.geometry.height);
+
+
+      // geometry.setRect(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, 0);
+
 
     }
 
@@ -354,8 +354,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     cell.setId(id);
 
     cell = this.addPropertiesToCell(cell, matchingEntity, 5, 45, pathPrefix);
-    cell.geometry.height = cell.geometry.height + 5;
+    // cell.geometry.height = cell.geometry.height + 5;
 
+
+    const numberOfProperties =
+      isNullOrUndefined(matchingEntity.classDefinition.properties.length) || matchingEntity.classDefinition.properties.length === 0
+        ? 0 : matchingEntity.classDefinition.properties.length;
+    const rectHeight = numberOfProperties === 0 ? 40 : 40 + 5 + (numberOfProperties * 20) + 5;
+
+    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, rectHeight);
 
     return this.graph.addCell(cell) as MyMxCell;
   }
