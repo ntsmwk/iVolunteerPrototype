@@ -368,7 +368,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   insertClassDefinition(id: string, matchingEntity: MatchingEntity, geometry: mxgraph.mxGeometry, pathPrefix?: 'right' | 'left'): MyMxCell {
     let cell = new mx.mxCell(matchingEntity.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
     cell.setVertex(true);
-    cell.setId(id);
+    cell.cellType = MyMxCellType.CLASS;
+
+    let idPath = id;
+    if (!isNullOrUndefined(pathPrefix)) {
+      idPath = pathPrefix + matchingEntity.pathDelimiter + idPath;
+    }
+    cell.setId(idPath);
 
     cell = this.addPropertiesToCell(cell, matchingEntity,
       PROPERTY_SPACE_X, CLASSDEFINITION_HEAD_HEIGHT + PROPERTY_SPACE_Y,
@@ -387,77 +393,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
 
-
-
-
-
-  // private insertClassDefinitionCollectorIntoGraph(
-  //   collector: MatchingEntityMappings,
-  //   geometry: mxgraph.mxGeometry
-  // ): MyMxCell {
-  //   // create class cell
-  //   let cell: MyMxCell;
-  //   if (collector.classDefinition.collector) {
-  //     cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as MyMxCell;
-  //   } else {
-  //     cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
-  //   }
-  //   cell.setCollapsed(false);
-  //   cell.classArchetype = collector.classDefinition.classArchetype;
-  //   // cell.newlyAdded = false;
-  //   cell.value = collector.classDefinition.name;
-  //   cell.setVertex(true);
-  //   cell.setConnectable(true);
-
-  //   if (!isNullOrUndefined(collector.classDefinition.id)) {
-  //     cell.id = collector.path;
-  //   }
-
-  //   cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
-  //   cell.geometry.setRect(
-  //     cell.geometry.x,
-  //     cell.geometry.y,
-  //     cell.geometry.width,
-  //     20
-  //   );
-
-  //   let addPropertiesReturn = this.addPropertiesToCell(cell, collector, 5, 45);
-  //   cell = addPropertiesReturn.cell;
-
-  //   for (const entry of collector.entities) {
-  //     const boundaryHeight =
-  //       entry.classDefinition.name.split(/\r?\n/).length * 25;
-  //     const boundary = this.graph.insertVertex(
-  //       cell,
-  //       entry.path,
-  //       entry.classDefinition.name,
-  //       0,
-  //       addPropertiesReturn.lastPropertyGeometry.y +
-  //       addPropertiesReturn.lastPropertyGeometry.height +
-  //       2,
-  //       200,
-  //       boundaryHeight,
-  //       CConstants.mxStyles.matchingClassSeparator
-  //     );
-
-  //     boundary.setConnectable(true);
-  //     addPropertiesReturn = this.addPropertiesToCell(
-  //       cell,
-  //       entry,
-  //       boundary.geometry.x + 5,
-  //       boundary.geometry.y + boundary.geometry.height + 5
-  //     );
-  //   }
-
-  //   cell.geometry.setRect(
-  //     cell.geometry.x,
-  //     cell.geometry.y,
-  //     cell.geometry.width,
-  //     cell.geometry.height + 5
-  //   );
-  //   return this.graph.addCell(cell) as MyMxCell;
-  // }
-
   private addPropertiesToCell(cell: MyMxCell, entry: MatchingEntity, startX: number, startY: number, pathPrefix?: 'right' | 'left') {
     const classDefinition = entry.classDefinition;
 
@@ -465,7 +400,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        // console.log("P: " + entry.path + entry.pathDelimiter + p.id);
         let idPath = entry.path + entry.pathDelimiter + p.id;
 
         if (!isNullOrUndefined(pathPrefix)) {
@@ -633,9 +567,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private async performSave() {
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
-    const matchingOperatorCells = cells.filter(
-      (cell: MyMxCell) => cell.cellType === MyMxCellType.MATCHING_OPERATOR
-    );
+    const matchingOperatorCells = cells.filter((cell: MyMxCell) => cell.cellType === MyMxCellType.MATCHING_OPERATOR);
+    const allClassDefinitionCells = cells.filter((cell: MyMxCell) => cell.cellType === MyMxCellType.CLASS);
+
+    const updatedRightClassDefinitionIds: string[] = [];
+    const updatedLeftClassDefinitionIds: string[] = [];
+
+    for (const classDefinitionCell of allClassDefinitionCells) {
+      if (classDefinitionCell.id.startsWith('right')) {
+        const newId = classDefinitionCell.id.substr(6);
+        updatedRightClassDefinitionIds.push(newId);
+      } else if (classDefinitionCell.id.startsWith('left')) {
+        const newId = classDefinitionCell.id.substr(5);
+        updatedLeftClassDefinitionIds.push(newId);
+      }
+    }
 
     const updatedRelationships: MatchingOperatorRelationship[] = [];
 
@@ -684,6 +630,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     this.relationships = updatedRelationships;
+    this.matchingConfiguration.leftAddedClassDefinitionPaths = updatedLeftClassDefinitionIds;
+    this.matchingConfiguration.rightAddedClassDefinitionPaths = updatedRightClassDefinitionIds;
+
     await this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, this.matchingConfiguration)
       .toPromise();
