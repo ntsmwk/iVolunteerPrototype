@@ -5,7 +5,7 @@ import { MatchingOperatorRelationship } from "../../_model/matching";
 
 @Injectable({ providedIn: "root" })
 export class MatchingOperatorRelationshipService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   getMatchingOperatorRelationshipByMatchingConfiguration(
     marketplace: Marketplace,
@@ -18,10 +18,10 @@ export class MatchingOperatorRelationshipService {
 
   saveMatchingOperatorRelationships(
     marketplace: Marketplace,
-    relationships: MatchingOperatorRelationship[]
+    relationships: MatchingOperatorRelationship[], matchingConfiguratorId: string
   ) {
     return this.httpClient.post(
-      `${marketplace.url}/matching-operator-relationship`,
+      `${marketplace.url}/matching-operator-relationship/${matchingConfiguratorId}`,
       relationships
     );
   }

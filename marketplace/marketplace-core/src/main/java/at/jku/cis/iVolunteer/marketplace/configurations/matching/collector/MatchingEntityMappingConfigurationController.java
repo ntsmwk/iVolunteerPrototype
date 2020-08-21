@@ -53,9 +53,7 @@ public class MatchingEntityMappingConfigurationController {
 
 		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(idLeft, idRight);
 		
-		ClassConfiguration leftClassConfiguration = classConfigurationRepository.findOne(idLeft);
-		ClassConfiguration rightClassConfiguration = classConfigurationRepository.findOne(idRight);
-
+		
 	
 		List<MatchingOperatorRelationship> matchingOperatorRelationships = new ArrayList<MatchingOperatorRelationship>();
 		matchingOperatorRelationshipRepository.findByMatchingConfigurationId(matchingConfiguration.getId()).forEach(matchingOperatorRelationships::add);
@@ -65,8 +63,8 @@ public class MatchingEntityMappingConfigurationController {
 		dto.setRightMappingConfigurations(rightMappings);
 		dto.setMatchingConfiguration(matchingConfiguration);
 		dto.setRelationships(matchingOperatorRelationships);
-//		dto.setLeftClassConfiguration(leftClassConfiguration);
-//		dto.setRightClassConfiguration(rightClassConfiguration);
+		dto.setPathDelimiter(CollectionService.PATH_DELIMITER);
+		
 		
 		return dto;
 	}

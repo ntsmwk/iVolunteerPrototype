@@ -119,6 +119,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.relationships = data.relationships;
       this.matchingConfiguration = data.matchingConfiguration;
 
+      this.matchingData = data;
+
       if (isNullOrUndefined(data.matchingConfiguration)) {
         this.matchingConfiguration = new MatchingConfiguration();
         this.matchingConfiguration.rightClassConfigurationId = rightClassConfigurationId;
@@ -430,15 +432,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       let leftCell: MyMxCell;
       if (!isNullOrUndefined(entry.leftMatchingEntityPath)) {
+
+        const leftCellId = 'l' + this.matchingData.pathDelimiter + entry.leftMatchingEntityPath;
         leftCell = this.graph
           .getModel()
-          .getCell(entry.leftMatchingEntityPath) as MyMxCell;
+          .getCell(leftCellId) as MyMxCell;
       }
       let rightCell: MyMxCell;
       if (!isNullOrUndefined(entry.rightMatchingEntityPath)) {
+        const rightCellId = 'r' + this.matchingData.pathDelimiter + entry.rightMatchingEntityPath;
         rightCell = this.graph
           .getModel()
-          .getCell(entry.rightMatchingEntityPath) as MyMxCell;
+          .getCell(rightCellId) as MyMxCell;
       }
 
       this.insertRelationship(leftCell, operatorCell);
@@ -493,39 +498,39 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     return paletteItem.imgPath;
   }
 
-  // Functions for Views/Viewing
-  zoomInEvent() {
-    this.graph.zoomIn();
-  }
+  // // Functions for Views/Viewing
+  // zoomInEvent() {
+  //   this.graph.zoomIn();
+  // }
 
-  zoomOutEvent() {
-    this.graph.zoomOut();
-  }
+  // zoomOutEvent() {
+  //   this.graph.zoomOut();
+  // }
 
-  zoomResetEvent() {
-    this.graph.zoomActual();
-    this.resetViewport();
-  }
+  // zoomResetEvent() {
+  //   this.graph.zoomActual();
+  //   this.resetViewport();
+  // }
 
-  resetViewport() {
-    const outer = this;
-    this.graph.scrollCellToVisible(
-      (function getLeftMostCell() {
-        return outer.graph
-          .getModel()
-          .getChildCells(outer.graph.getDefaultParent())
-          .find((c: MyMxCell) => c.root);
-      })(),
-      false
-    );
+  // resetViewport() {
+  //   const outer = this;
+  //   this.graph.scrollCellToVisible(
+  //     (function getLeftMostCell() {
+  //       return outer.graph
+  //         .getModel()
+  //         .getChildCells(outer.graph.getDefaultParent())
+  //         .find((c: MyMxCell) => c.root);
+  //     })(),
+  //     false
+  //   );
 
-    const translate = this.graph.view.getTranslate();
-    this.graph.view.setTranslate(translate.x + 10, translate.y + 10);
-  }
+  //   const translate = this.graph.view.getTranslate();
+  //   this.graph.view.setTranslate(translate.x + 10, translate.y + 10);
+  // }
 
-  navigateBack() {
-    window.history.back();
-  }
+  // navigateBack() {
+  //   window.history.back();
+  // }
 
   /*
    * .........Top Menu Bar Options..........
@@ -613,7 +618,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       .saveMatchingConfiguration(this.marketplace, this.matchingConfiguration)
       .toPromise();
     await this.matchingOperatorRelationshipService
-      .saveMatchingOperatorRelationships(this.marketplace, this.relationships)
+      .saveMatchingOperatorRelationships(this.marketplace, this.relationships, this.matchingConfiguration.id)
       .toPromise();
 
     // TODO save relationships!!!
@@ -805,9 +810,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         }
 
         this.dialogFactory.openAddClassDefinitionDialog(entityMappingConfiguration, existingEntityPaths).then((ret: AddClassDefinitionDialogData) => {
-
-          console.log(ret);
-
           if (!isNullOrUndefined(ret.addedEntities)) {
             if (cell.id === 'left_add') {
               this.matchingConfiguration.leftAddedClassDefinitionPaths.push(...ret.addedEntities.map(e => e.path));
@@ -832,7 +834,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     try {
       this.graph.getModel().beginUpdate();
-      this.graph.removeCells(cellsToRemove, true);
+      const removedCells = this.graph.removeCells(cellsToRemove, true);
       this.relationships = this.relationships.filter(
         r => cellsToRemove.findIndex(c => r.id === c.id) < 0
       );

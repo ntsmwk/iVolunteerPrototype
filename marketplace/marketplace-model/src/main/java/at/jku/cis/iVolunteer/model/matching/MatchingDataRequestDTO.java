@@ -16,6 +16,8 @@ public class MatchingDataRequestDTO {
 	MatchingEntityMappingConfiguration leftMappingConfigurations;
 	MatchingEntityMappingConfiguration rightMappingConfigurations;
 	
+	String pathDelimiter;
+	
 //	ClassConfiguration leftClassConfiguration;
 //	ClassConfiguration rightClassConfiguration;
 
@@ -52,9 +54,20 @@ public class MatchingDataRequestDTO {
 		this.rightMappingConfigurations = rightMappingConfigurations;
 	}
 
+	public String getPathDelimiter() {
+		return pathDelimiter;
+	}
+
+	public void setPathDelimiter(String pathDelimiter) {
+		this.pathDelimiter = pathDelimiter;
+	}
+	
+	
+
 //	public ClassConfiguration getLeftClassConfiguration() {
 //		return leftClassConfiguration;
 //	}
+	
 //
 //	public void setLeftClassConfiguration(ClassConfiguration leftClassConfiguration) {
 //		this.leftClassConfiguration = leftClassConfiguration;

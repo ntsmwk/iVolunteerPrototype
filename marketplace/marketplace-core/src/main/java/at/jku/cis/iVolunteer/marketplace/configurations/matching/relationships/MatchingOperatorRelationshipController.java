@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,15 @@ public class MatchingOperatorRelationshipController {
 		return matchingOperatorRelationshipRepository.findByMatchingConfigurationId(matchingConfigurationId);
 	}
 
-	@PostMapping("matching-operator-relationship")
-	public void saveMatchingOperatorRelationshipByMatchingConfiguration(
+	@PostMapping("matching-operator-relationship/{matchingConfigurationId}")
+	public List<MatchingOperatorRelationship> saveMatchingOperatorRelationshipByMatchingConfiguration(
+			@PathVariable("matchingConfigurationId") String matchingConfigurationId,
 			@RequestBody List<MatchingOperatorRelationship> relationships) {
-		this.matchingOperatorRelationshipRepository.save(relationships);
+		
+		List<MatchingOperatorRelationship> dbRelationships = new ArrayList<>();
+		this.matchingOperatorRelationshipRepository.findByMatchingConfigurationId(matchingConfigurationId).forEach(dbRelationships::add);;
+		this.matchingOperatorRelationshipRepository.delete(dbRelationships);
+		return this.matchingOperatorRelationshipRepository.save(relationships);
 	}
 
 }

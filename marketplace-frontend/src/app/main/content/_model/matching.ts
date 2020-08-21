@@ -9,6 +9,8 @@ export class MatchingDataRequestDTO {
   leftMappingConfigurations: MatchingEntityMappingConfiguration;
   rightMappingConfigurations: MatchingEntityMappingConfiguration;
 
+  pathDelimiter: string;
+
   // leftClassConfiguration: ClassConfiguration;
   // rightClassConfiguration: ClassConfiguration;
 }
