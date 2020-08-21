@@ -17,8 +17,6 @@ import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
-import { isNull } from '@angular/compiler/src/output/output_ast';
-import { ClassDefinition } from 'app/main/content/_model/meta/class';
 
 declare var require: any;
 
@@ -120,11 +118,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.relationships = data.relationships;
       this.matchingConfiguration = data.matchingConfiguration;
-
-      // this.leftClassConfiguration = data.leftClassConfiguration;
-      // this.rightClassConfiguration = data.rightClassConfiguration;
-
-      console.log(data);
 
       if (isNullOrUndefined(data.matchingConfiguration)) {
         this.matchingConfiguration = new MatchingConfiguration();
@@ -300,7 +293,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       cell = this.insertClassDefinitionsIntoGraph(
         this.matchingConfiguration.leftAddedClassDefinitionPaths,
         this.leftMatchingCollectorConfiguration.mappings,
-        new mx.mxGeometry(SPACE_X + CLASSDEFINTIION_OFFSET_X, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'left'
+        new mx.mxGeometry(SPACE_X + CLASSDEFINTIION_OFFSET_X, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'l'
       ) as MyMxCell;
     }
 
@@ -335,7 +328,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(this.matchingConfiguration.rightAddedClassDefinitionPaths)) {
       cell = this.insertClassDefinitionsIntoGraph(
         this.matchingConfiguration.rightAddedClassDefinitionPaths, this.rightMatchingCollectorConfiguration.mappings,
-        new mx.mxGeometry(xClassDefinition, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'right'
+        new mx.mxGeometry(xClassDefinition, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'r'
       ) as MyMxCell;
     }
 
@@ -353,7 +346,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
 
-  insertClassDefinitionsIntoGraph(ids: string[], mappings: MatchingEntityMappings, geometry: mxgraph.mxGeometry, pathPrefix?: 'right' | 'left'): MyMxCell {
+  insertClassDefinitionsIntoGraph(ids: string[], mappings: MatchingEntityMappings, geometry: mxgraph.mxGeometry, pathPrefix: 'r' | 'l'): MyMxCell {
     let cell: MyMxCell;
 
     for (const id of ids) {
@@ -365,7 +358,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     return cell;
   }
 
-  insertClassDefinition(id: string, matchingEntity: MatchingEntity, geometry: mxgraph.mxGeometry, pathPrefix?: 'right' | 'left'): MyMxCell {
+  insertClassDefinition(id: string, matchingEntity: MatchingEntity, geometry: mxgraph.mxGeometry, pathPrefix: 'r' | 'l'): MyMxCell {
     let cell = new mx.mxCell(matchingEntity.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
     cell.setVertex(true);
     cell.cellType = MyMxCellType.CLASS;
@@ -393,7 +386,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
 
-  private addPropertiesToCell(cell: MyMxCell, entry: MatchingEntity, startX: number, startY: number, pathPrefix?: 'right' | 'left') {
+  private addPropertiesToCell(cell: MyMxCell, entry: MatchingEntity, startX: number, startY: number, pathPrefix?: 'r' | 'l') {
     const classDefinition = entry.classDefinition;
 
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);
@@ -568,20 +561,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   private async performSave() {
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
     const matchingOperatorCells = cells.filter((cell: MyMxCell) => cell.cellType === MyMxCellType.MATCHING_OPERATOR);
-    const allClassDefinitionCells = cells.filter((cell: MyMxCell) => cell.cellType === MyMxCellType.CLASS);
-
-    const updatedRightClassDefinitionIds: string[] = [];
-    const updatedLeftClassDefinitionIds: string[] = [];
-
-    for (const classDefinitionCell of allClassDefinitionCells) {
-      if (classDefinitionCell.id.startsWith('right')) {
-        const newId = classDefinitionCell.id.substr(6);
-        updatedRightClassDefinitionIds.push(newId);
-      } else if (classDefinitionCell.id.startsWith('left')) {
-        const newId = classDefinitionCell.id.substr(5);
-        updatedLeftClassDefinitionIds.push(newId);
-      }
-    }
 
     const updatedRelationships: MatchingOperatorRelationship[] = [];
 
@@ -600,14 +579,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       for (const edge of operatorCell.edges) {
         if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
           if (edge.target.id === operatorCell.id) {
-            relationship.leftMatchingEntityPath = edge.source.id;
+            relationship.leftMatchingEntityPath = edge.source.id.substr(2);
+
             relationship.leftMatchingEntityType =
               (edge.source as MyMxCell).cellType === MyMxCellType.PROPERTY
                 ? MatchingEntityType.PROPERTY
                 : MatchingEntityType.CLASS;
             leftSet = true;
           } else if (edge.source.id === operatorCell.id) {
-            relationship.rightMatchingEntityPath = edge.target.id;
+            relationship.rightMatchingEntityPath = edge.target.id.substr(2);
+
             relationship.rightMatchingEntityType =
               (edge.target as MyMxCell).cellType === MyMxCellType.PROPERTY
                 ? MatchingEntityType.PROPERTY
@@ -627,8 +608,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     this.relationships = updatedRelationships;
-    this.matchingConfiguration.leftAddedClassDefinitionPaths = updatedLeftClassDefinitionIds;
-    this.matchingConfiguration.rightAddedClassDefinitionPaths = updatedRightClassDefinitionIds;
 
     await this.matchingConfigurationService
       .saveMatchingConfiguration(this.marketplace, this.matchingConfiguration)
