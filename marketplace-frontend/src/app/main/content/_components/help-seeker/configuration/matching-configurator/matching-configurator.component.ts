@@ -18,8 +18,28 @@ import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
 import { isNull } from '@angular/compiler/src/output/output_ast';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
 
 declare var require: any;
+
+const HEADER_WIDTH = 400;
+const HEADER_HEIGHT = 50;
+
+const HEADER_Y = 20;
+const SPACE_Y = 20;
+const SPACE_X = 20;
+
+const CLASSDEFINITION_HEAD_HEIGHT = 40;
+const CLASSDEFINITION_WIDTH = 200;
+const CLASSDEFINTIION_OFFSET_X = 100;
+const CLASSDEFINTIION_SPACE_Y = 10;
+
+const PROPERTY_HEIGHT = 20;
+const PROPERTY_SPACE_Y = 5;
+const PROPERTY_SPACE_X = 5;
+
+const BUTTON_WIDTH = 100;
+const Button_HEIGHT = 40;
 
 const mx: typeof mxgraph = require('mxgraph')({
   // mxDefaultLanguage: 'de',
@@ -266,11 +286,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private insertClassDefinitionsLeft() {
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'left_header', this.matchingConfiguration.leftClassConfigurationName, 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'left_header', this.matchingConfiguration.leftClassConfigurationName,
+      SPACE_X, HEADER_Y, HEADER_WIDTH, HEADER_HEIGHT,
+      CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
 
-    let y = title.geometry.y + title.geometry.height + 20;
+    let y = title.geometry.y + title.geometry.height + CLASSDEFINTIION_SPACE_Y;
     // const cell = this.insertClassDefinitionCollectorIntoGraph(this.leftMatchingCollectorConfiguration.mappings, new mx.mxGeometry(120, y, 200, 0)) as MyMxCell;
 
     let cell: MyMxCell;
@@ -278,16 +300,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       cell = this.insertClassDefinitionsIntoGraph(
         this.matchingConfiguration.leftAddedClassDefinitionPaths,
         this.leftMatchingCollectorConfiguration.mappings,
-        new mx.mxGeometry(120, y, 200, 50), 'left'
+        new mx.mxGeometry(SPACE_X + CLASSDEFINTIION_OFFSET_X, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'left'
       ) as MyMxCell;
     }
 
     if (!isNullOrUndefined(cell)) {
-      y = cell.geometry.y + cell.geometry.height + 20;
+      y = cell.geometry.y + cell.geometry.height + CLASSDEFINTIION_SPACE_Y;
     }
 
     const addButton = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'left_add', 'Hinzufügen', 120, y, 200, 50, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'left_add', 'Hinzufügen', SPACE_X + CLASSDEFINTIION_OFFSET_X, y, BUTTON_WIDTH, Button_HEIGHT, CConstants.mxStyles.matchingRowHeader
     ) as MyMxCell;
 
     addButton.setConnectable(false);
@@ -295,31 +317,34 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private insertClassDefinitionsRight() {
-    const x = this.graphContainer.nativeElement.offsetWidth - 220;
-    let y = 20;
+    const x = this.graphContainer.nativeElement.offsetWidth;
+    const xHeader = x - HEADER_WIDTH - SPACE_X;
+    const xClassDefinition = x - CLASSDEFINITION_WIDTH - CLASSDEFINTIION_OFFSET_X - SPACE_X;
+    let y = HEADER_Y;
 
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'right_header', this.matchingConfiguration.rightClassConfigurationName, x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'right_header', this.matchingConfiguration.rightClassConfigurationName,
+      xHeader, y, HEADER_WIDTH, HEADER_HEIGHT, CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
 
-    y = title.geometry.y + title.geometry.height + 20;
+    y = title.geometry.y + title.geometry.height + SPACE_Y;
 
     // const cell = this.insertClassDefinitionCollectorIntoGraph(this.rightMatchingCollectorConfiguration.mappings, new mx.mxGeometry(x - 100, y, 200, 0)) as MyMxCell;
     let cell: MyMxCell;
     if (!isNullOrUndefined(this.matchingConfiguration.rightAddedClassDefinitionPaths)) {
       cell = this.insertClassDefinitionsIntoGraph(
         this.matchingConfiguration.rightAddedClassDefinitionPaths, this.rightMatchingCollectorConfiguration.mappings,
-        new mx.mxGeometry(x - 100, y, 200, 50), 'right'
+        new mx.mxGeometry(xClassDefinition, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'right'
       ) as MyMxCell;
     }
 
     if (!isNullOrUndefined(cell)) {
-      y = cell.geometry.y + cell.geometry.height + 20;
+      y = cell.geometry.y + cell.geometry.height + SPACE_Y;
     }
 
     const addButton = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'right_add', 'Hinzufügen', x - 100, y, 200, 50, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'right_add', 'Hinzufügen', xClassDefinition, y, BUTTON_WIDTH, Button_HEIGHT, CConstants.mxStyles.matchingRowHeader
     ) as MyMxCell;
 
     addButton.setConnectable(false);
@@ -334,15 +359,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     for (const id of ids) {
       const mapping = mappings.entities.find(e => e.path === id);
       cell = this.insertClassDefinition(id, mapping, geometry, pathPrefix);
-      // geometry.setRect(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, cell.geometry.height);
-
-
-      geometry = new mx.mxGeometry(cell.geometry.x, cell.geometry.y + cell.geometry.height + 30, cell.geometry.width, cell.geometry.height);
-
-
-      // geometry.setRect(cell.geometry.x, cell.geometry.y + cell.geometry.height + 20, cell.geometry.width, 0);
-
-
+      geometry = new mx.mxGeometry(cell.geometry.x, cell.geometry.y + cell.geometry.height + CLASSDEFINTIION_SPACE_Y, cell.geometry.width, cell.geometry.height);
     }
 
     return cell;
@@ -353,14 +370,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     cell.setVertex(true);
     cell.setId(id);
 
-    cell = this.addPropertiesToCell(cell, matchingEntity, 5, 45, pathPrefix);
-    // cell.geometry.height = cell.geometry.height + 5;
-
+    cell = this.addPropertiesToCell(cell, matchingEntity,
+      PROPERTY_SPACE_X, CLASSDEFINITION_HEAD_HEIGHT + PROPERTY_SPACE_Y,
+      pathPrefix);
 
     const numberOfProperties =
       isNullOrUndefined(matchingEntity.classDefinition.properties.length) || matchingEntity.classDefinition.properties.length === 0
         ? 0 : matchingEntity.classDefinition.properties.length;
-    const rectHeight = numberOfProperties === 0 ? 40 : 40 + 5 + (numberOfProperties * 20) + 5;
+    const rectHeight = numberOfProperties === 0
+      ? CLASSDEFINITION_HEAD_HEIGHT
+      : CLASSDEFINITION_HEAD_HEIGHT + PROPERTY_SPACE_Y + (numberOfProperties * PROPERTY_HEIGHT) + PROPERTY_SPACE_Y;
 
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, rectHeight);
 
