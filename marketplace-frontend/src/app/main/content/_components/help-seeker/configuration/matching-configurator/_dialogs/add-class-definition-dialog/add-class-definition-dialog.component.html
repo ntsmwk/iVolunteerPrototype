@@ -60,7 +60,9 @@
 
 <mat-dialog-actions *ngIf="loaded">
 
-  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">Hinzufügen</button>
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit(true)">Alle Hinzufügen</button>
+
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit(false)">Hinzufügen</button>
 
   <button class="secondary-button-dark" mat-stroked-button type="button"
     [mat-dialog-close]="undefined">Abbrechen</button>

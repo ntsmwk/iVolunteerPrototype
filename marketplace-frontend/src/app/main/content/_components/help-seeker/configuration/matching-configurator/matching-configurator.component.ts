@@ -598,10 +598,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       let rightSet = false;
 
       for (const edge of operatorCell.edges) {
-        if (
-          !isNullOrUndefined(edge.source) &&
-          !isNullOrUndefined(edge.target)
-        ) {
+        if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
           if (edge.target.id === operatorCell.id) {
             relationship.leftMatchingEntityPath = edge.source.id;
             relationship.leftMatchingEntityType =

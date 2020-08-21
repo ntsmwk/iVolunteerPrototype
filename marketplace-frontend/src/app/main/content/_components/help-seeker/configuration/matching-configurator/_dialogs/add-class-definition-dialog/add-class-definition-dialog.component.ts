@@ -38,7 +38,6 @@ export class AddClassDefinitionDialogComponent implements OnInit {
 
   selection: SelectionModel<MatchingEntity>;
 
-  initialClassDefinitions: ClassDefinition[];
   disabledClassDefinitions: ClassDefinition[];
 
   loaded: boolean;
@@ -59,57 +58,20 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     this.tenant = this.globalInfo.tenants[0];
 
     this.dataSource.data = this.data.matchingEntityConfiguration.mappings.entities;
-    this.initialClassDefinitions = [];
-    this.disabledClassDefinitions = [];
+
     this.selection = new SelectionModel<MatchingEntity>(true, []);
 
+    const entities = this.dataSource.data.filter(e => this.data.existingEntityPaths.find(path => path === e.path));
 
-    console.log(this.dataSource.data);
+    if (!isNullOrUndefined(entities)) {
+      this.selection.select(...entities);
+    }
     this.loaded = true;
-    // Promise.all([
-    //   this.flatPropertyDefinitionService.getAllPropertyDefinitons(this.globalInfo.marketplace, this.tenant.id)
-    //     .toPromise()
-    //     .then((ret: FlatPropertyDefinition<any>[]) => {
-    //       this.flatPropertyDataSource.data = ret;
-    //       this.allFlatPropertyDefinitions = ret;
-
-    //       this.initialFlatPropertyDefinitions = ret.filter((p) =>
-    //         this.data.classDefinition.properties.find((q) => q.id === p.id)
-    //       );
-
-    //       const parentClassProperties = this.findParentProperties();
-    //       const parentProperties = ret.filter((p) =>
-    //         parentClassProperties.find((q) => q.id === p.id)
-    //       );
-
-    //       this.disabledFlatPropertyDefinitions = [];
-    //       this.disabledFlatPropertyDefinitions.push(...this.initialFlatPropertyDefinitions, ...parentProperties);
-
-    //       this.flatPropertySelection.select(...this.initialFlatPropertyDefinitions);
-    //     }),
-    //   this.treePropertyDefinitionService
-    //     .getAllPropertyDefinitionsForTenant(this.globalInfo.marketplace, this.tenant.id)
-    //     .toPromise()
-    //     .then((ret: TreePropertyDefinition[]) => {
-    //       this.treePropertyDataSource.data = ret;
-    //       this.allTreePropertyDefinitions = ret;
-
-    //       this.initialTreePropertyDefinitions = ret.filter((e) =>
-    //         this.data.classDefinition.properties.find((f) => f.id === e.id)
-    //       );
-    //       this.disabledTreePropertyDefinitions = [];
-    //       this.disabledTreePropertyDefinitions.push(...this.initialTreePropertyDefinitions);
-    //       this.treePropertySelection
-    //         .select(...this.initialTreePropertyDefinitions);
-    //     }),
-    // ]).then(() => {
-    //   this.loaded = true;
-    // });
   }
 
   isRowDisabled(row: MatchingEntity) {
     return !isNullOrUndefined(
-      this.disabledClassDefinitions.find((p) => p.id === row.classDefinition.id)
+      this.data.existingEntityPaths.find(path => path === row.path)
     );
   }
 
@@ -127,11 +89,14 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row);
   }
 
-  onSubmit() {
+  onSubmit(submitAll: boolean) {
     // Add selected, but filter out existing ones
 
-    let added: MatchingEntity[];
+    if (submitAll) {
+      this.selection.select(...this.dataSource.data);
+    }
 
+    let added: MatchingEntity[];
     if (isNullOrUndefined(this.data.existingEntityPaths)) {
       added = this.selection.selected;
     } else {
