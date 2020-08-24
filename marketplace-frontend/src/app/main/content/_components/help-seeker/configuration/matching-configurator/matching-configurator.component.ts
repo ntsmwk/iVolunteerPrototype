@@ -17,6 +17,7 @@ import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 declare var require: any;
 
@@ -96,7 +97,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   // Delete Mode
   confirmDelete: boolean;
-  deleteMode: boolean;
 
   async ngOnInit() {
     this.confirmDelete = true;
@@ -171,12 +171,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         return 'default';
       }
 
-      if ((cell.cellType === MyMxCellType.MATCHING_OPERATOR && outer.deleteMode)
-        || (cell.cellType.startsWith('ADD_CLASS_BUTTON') && !outer.deleteMode)) {
+      if (
+        // (cell.cellType === MyMxCellType.MATCHING_OPERATOR && outer.deleteMode)
+        // || 
+        // (
+        cell.cellType.startsWith('ADD_CLASS_BUTTON')
+        //  && !outer.deleteMode)
+      ) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
-      } else if (outer.deleteMode) {
-        return 'default';
       }
+      // else if (outer.deleteMode) {
+      //   return 'default';
+      // }
     };
 
     const modelGetStyle = this.graph.model.getStyle;
@@ -389,9 +395,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     );
     overlay.tooltip = 'entfernen';
     overlay.cursor = 'pointer';
+
     overlay.addListener(mx.mxEvent.CLICK, (sender: any, evt: mxgraph.mxEventObject) => {
-      const cell: MyMxCell = evt.properties['cell'];
-      this.deleteClassDefinitionCell(cell);
+      this.handleRemoveOverlayClickEvent(evt);
     });
     return overlay;
   }
@@ -500,9 +506,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   consumeMenuOptionClickedEvent(event: any) {
-    this.deleteMode = false;
 
-    this.deleteOperationContainer.nativeElement.style.background = 'none';
+    // this.deleteMode = false;
+    // this.deleteOperationContainer.nativeElement.style.background = 'none';
+
     this.graph.setEnabled(true);
 
     this.displayOverlay = false;
@@ -527,12 +534,24 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private async performSave() {
+    this.updateModel();
+    await this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, this.matchingConfiguration).toPromise();
+    await this.matchingOperatorRelationshipService.saveMatchingOperatorRelationships(this.marketplace, this.relationships, this.matchingConfiguration.id).toPromise();
+    this.redrawContent();
+  }
+
+  private updateModel() {
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
     const matchingOperatorCells = cells.filter((cell: MyMxCell) => cell.cellType === MyMxCellType.MATCHING_OPERATOR);
 
     const updatedRelationships: MatchingOperatorRelationship[] = [];
 
     for (const operatorCell of matchingOperatorCells) {
+
+      if (isNullOrUndefined(operatorCell.edges)) {
+        continue;
+      }
+
       const relationship = this.relationships.find(
         r => r.id === operatorCell.id
       );
@@ -544,27 +563,32 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       let leftSet = false;
       let rightSet = false;
 
+
       for (const edge of operatorCell.edges) {
-        if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
-          if (edge.target.id === operatorCell.id) {
-            relationship.leftMatchingEntityPath = edge.source.id.substr(2);
+        if (isNullOrUndefined(edge.source) || isNullOrUndefined(edge.target)) {
+          continue;
+        }
 
-            relationship.leftMatchingEntityType =
-              (edge.source as MyMxCell).cellType === MyMxCellType.PROPERTY
-                ? MatchingEntityType.PROPERTY
-                : MatchingEntityType.CLASS;
-            leftSet = true;
-          } else if (edge.source.id === operatorCell.id) {
-            relationship.rightMatchingEntityPath = edge.target.id.substr(2);
+        if (edge.target.id === operatorCell.id) {
+          relationship.leftMatchingEntityPath = edge.source.id.substr(2);
 
-            relationship.rightMatchingEntityType =
-              (edge.target as MyMxCell).cellType === MyMxCellType.PROPERTY
-                ? MatchingEntityType.PROPERTY
-                : MatchingEntityType.CLASS;
-            rightSet = true;
-            relationship.matchingConfigurationId = this.matchingConfiguration.id;
-            relationship.tenantId = this.tenant.id;
-          }
+          relationship.leftMatchingEntityType =
+            (edge.source as MyMxCell).cellType === MyMxCellType.PROPERTY
+              ? MatchingEntityType.PROPERTY
+              : MatchingEntityType.CLASS;
+
+          leftSet = true;
+        } else if (edge.source.id === operatorCell.id) {
+          relationship.rightMatchingEntityPath = edge.target.id.substr(2);
+
+          relationship.rightMatchingEntityType =
+            (edge.target as MyMxCell).cellType === MyMxCellType.PROPERTY
+              ? MatchingEntityType.PROPERTY
+              : MatchingEntityType.CLASS;
+
+          rightSet = true;
+          relationship.matchingConfigurationId = this.matchingConfiguration.id;
+          relationship.tenantId = this.tenant.id;
         }
 
         if (leftSet && rightSet) {
@@ -576,9 +600,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     this.relationships = updatedRelationships;
-
-    await this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, this.matchingConfiguration).toPromise();
-    await this.matchingOperatorRelationshipService.saveMatchingOperatorRelationships(this.marketplace, this.relationships, this.matchingConfiguration.id).toPromise();
   }
 
   performOpen(matchingConfiguration: MatchingConfiguration) {
@@ -698,8 +719,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       !isNullOrUndefined(cell) &&
       cell.cellType === MyMxCellType.MATCHING_OPERATOR &&
       !this.displayOverlay &&
-      event.properties.event.button === 0 &&
-      !this.deleteMode
+      event.properties.event.button === 0
+      // && !this.deleteMode
     ) {
       this.handleOverlayOpened(event, cell);
     }
@@ -713,21 +734,26 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     if (!isNullOrUndefined(cell) && !this.displayOverlay && event.properties.event.button === 0) {
-      if (cell.cellType === MyMxCellType.MATCHING_OPERATOR && this.deleteMode) {
-        if (this.confirmDelete) {
-          this.dialogFactory
-            .confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?')
-            .then((ret: boolean) => {
-              if (ret) {
-                this.deleteOperators([cell]);
-              }
-            });
-        } else {
-          this.deleteOperators([cell]);
-        }
-      }
+      // if (cell.cellType === MyMxCellType.MATCHING_OPERATOR 
+      //   && this.deleteMode
 
-      if (!this.deleteMode && cell.cellType === MyMxCellType.ADD_CLASS_BUTTON) {
+      //   ) {
+      // if (this.confirmDelete) {
+      //   this.dialogFactory
+      //     .confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?')
+      //     .then((ret: boolean) => {
+      //       if (ret) {
+      //         this.deleteOperators([cell]);
+      //       }
+      //     });
+      // } else {
+      //   this.deleteOperators([cell]);
+      // }
+      // }
+
+      if (
+        // !this.deleteMode && 
+        cell.cellType === MyMxCellType.ADD_CLASS_BUTTON) {
 
         let entityMappingConfiguration: MatchingEntityMappingConfiguration;
         let existingEntityPaths: string[];
@@ -754,6 +780,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
+  private handleRemoveOverlayClickEvent(event: mxgraph.mxEventObject) {
+    const cell: MyMxCell = event.properties['cell'];
+    if (this.confirmDelete) {
+      this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll die Klasse wirklich entfernt werden?').then((ret: boolean) => {
+        if (ret) {
+          this.deleteClassDefinitionCell(cell);
+        }
+      });
+    } else {
+      this.deleteClassDefinitionCell(cell);
+    }
+  }
+
   /**
    * ...........Delete Mode..............
    */
@@ -776,37 +815,46 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   deleteClassDefinitionCell(deleteCell: MyMxCell) {
-    console.log(deleteCell);
     try {
-      // this.graph.getModel().beginUpdate();
-      // const removeCells: MyMxCell[] = this.graph.removeCells([deleteCell], false);
-
+      this.graph.getModel().beginUpdate();
+      this.graph.removeCells([deleteCell], true);
       const actualId = deleteCell.id.substr(2);
       if (deleteCell.id.startsWith('l')) {
         this.matchingConfiguration.leftAddedClassDefinitionPaths = this.matchingConfiguration.leftAddedClassDefinitionPaths.filter(path => path !== actualId);
+        const i = this.relationships.find(r => r.leftMatchingEntityPath === actualId);
+        if (!isNullOrUndefined(i)) {
+          i.leftMatchingEntityPath = undefined;
+          i.leftMatchingEntityType = undefined;
+        }
       } else if (deleteCell.id.startsWith('r')) {
         this.matchingConfiguration.rightAddedClassDefinitionPaths = this.matchingConfiguration.rightAddedClassDefinitionPaths.filter(path => path !== actualId);
+        const i = this.relationships.find(r => r.rightMatchingEntityPath === actualId);
+        if (!isNullOrUndefined(i)) {
+          i.rightMatchingEntityPath = undefined;
+          i.rightMatchingEntityType = undefined;
+        }
       }
 
+      // this.updateModel();
       this.redrawContent();
 
     } finally {
-      // this.graph.getModel().endUpdate();
-
+      this.graph.getModel().endUpdate();
+      console.log(this.relationships);
     }
   }
 
-  handleDeleteClickedEvent(event: MouseEvent, item: any, graph: mxgraph.mxGraph) {
-    this.deleteMode = !this.deleteMode;
+  // handleDeleteClickedEvent(event: MouseEvent, item: any, graph: mxgraph.mxGraph) {
+  //   this.deleteMode = !this.deleteMode;
 
-    if (this.deleteMode) {
-      this.renderer.setStyle(event.target, 'background', 'skyblue');
-      this.graph.setEnabled(false);
-    } else {
-      this.renderer.setStyle(event.target, 'background', 'none');
-      this.graph.setEnabled(true);
-    }
-  }
+  //   if (this.deleteMode) {
+  //     this.renderer.setStyle(event.target, 'background', 'skyblue');
+  //     this.graph.setEnabled(false);
+  //   } else {
+  //     this.renderer.setStyle(event.target, 'background', 'none');
+  //     this.graph.setEnabled(true);
+  //   }
+  // }
 
   /**
    * ...........Overlay..............
@@ -854,7 +902,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Delete') {
       const cells = this.graph.getSelectionCells() as MyMxCell[];
-      this.deleteOperators(cells);
+      if (this.confirmDelete) {
+        this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?').then((ret: boolean) => {
+          if (ret) {
+            this.deleteOperators(cells);
+          }
+        });
+      } else {
+        this.deleteOperators(cells);
+      }
     }
   }
 }
