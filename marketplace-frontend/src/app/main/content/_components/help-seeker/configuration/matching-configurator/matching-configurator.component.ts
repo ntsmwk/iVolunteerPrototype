@@ -367,15 +367,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       PROPERTY_SPACE_X, CLASSDEFINITION_HEAD_HEIGHT + PROPERTY_SPACE_Y,
       pathPrefix);
 
-    const overlay = new mx.mxCellOverlay(
-      new mx.mxImage('/assets/icons/class_editor/times-solid_white.png', 14, 20),
-      'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP, new mx.mxPoint(-9, 10)
-    );
-    overlay.tooltip = 'entfernen';
-    overlay.cursor = 'pointer';
-    overlay.addListener(mx.mxEvent.CLICK, function (sender, evt) {
-      console.log(evt);
-    });
+    const overlay = this.constructRemoveOverlay();
     this.graph.addCellOverlay(cell, overlay);
 
     const numberOfProperties =
@@ -388,6 +380,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, rectHeight);
 
     return this.graph.addCell(cell) as MyMxCell;
+  }
+
+  private constructRemoveOverlay() {
+    const overlay = new mx.mxCellOverlay(
+      new mx.mxImage('/assets/icons/class_editor/times-solid_white.png', 14, 20),
+      'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP, new mx.mxPoint(-9, 10)
+    );
+    overlay.tooltip = 'entfernen';
+    overlay.cursor = 'pointer';
+    overlay.addListener(mx.mxEvent.CLICK, (sender: any, evt: mxgraph.mxEventObject) => {
+      const cell: MyMxCell = evt.properties['cell'];
+      this.deleteClassDefinitionCell(cell);
+    });
+    return overlay;
   }
 
 
@@ -458,8 +464,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const cell = this.graph.insertVertex(
       this.graph.getDefaultParent(),
       relationship.id, null, relationship.coordX, relationship.coordY, 50, 50,
-      `shape=image;image=
-      ${this.getPathForMatchingOperatorType(relationship.matchingOperatorType)};` + CConstants.mxStyles.matchingOperator
+      `shape=image;image=${this.getPathForMatchingOperatorType(relationship.matchingOperatorType)};` + CConstants.mxStyles.matchingOperator
     ) as MyMxCell;
 
     cell.cellType = MyMxCellType.MATCHING_OPERATOR;
@@ -767,6 +772,27 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       );
     } finally {
       this.graph.getModel().endUpdate();
+    }
+  }
+
+  deleteClassDefinitionCell(deleteCell: MyMxCell) {
+    console.log(deleteCell);
+    try {
+      // this.graph.getModel().beginUpdate();
+      // const removeCells: MyMxCell[] = this.graph.removeCells([deleteCell], false);
+
+      const actualId = deleteCell.id.substr(2);
+      if (deleteCell.id.startsWith('l')) {
+        this.matchingConfiguration.leftAddedClassDefinitionPaths = this.matchingConfiguration.leftAddedClassDefinitionPaths.filter(path => path !== actualId);
+      } else if (deleteCell.id.startsWith('r')) {
+        this.matchingConfiguration.rightAddedClassDefinitionPaths = this.matchingConfiguration.rightAddedClassDefinitionPaths.filter(path => path !== actualId);
+      }
+
+      this.redrawContent();
+
+    } finally {
+      // this.graph.getModel().endUpdate();
+
     }
   }
 
