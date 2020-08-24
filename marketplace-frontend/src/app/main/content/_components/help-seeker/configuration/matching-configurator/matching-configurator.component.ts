@@ -859,6 +859,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   deleteClassDefinitionCell(deleteCell: MyMxCell) {
+    this.updateModel();
     try {
       this.graph.getModel().beginUpdate();
       this.graph.removeCells([deleteCell], true);
@@ -866,7 +867,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       if (deleteCell.id.startsWith('l')) {
         this.matchingConfiguration.leftAddedClassDefinitionPaths = this.matchingConfiguration.leftAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const relationship = this.relationships.find(r => r.leftMatchingEntityPath.startsWith(actualId));
+        const relationship = this.relationships.find(r => /*!isNullOrUndefined(r.leftMatchingEntityPath) && */ r.leftMatchingEntityPath.startsWith(actualId));
 
         if (!isNullOrUndefined(relationship)) {
           relationship.leftMatchingEntityPath = undefined;
@@ -875,7 +876,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       } else if (deleteCell.id.startsWith('r')) {
         this.matchingConfiguration.rightAddedClassDefinitionPaths = this.matchingConfiguration.rightAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const relationship = this.relationships.find(r => r.rightMatchingEntityPath.startsWith(actualId));
+        const relationship = this.relationships.find(r => /*!isNullOrUndefined(r.rightMatchingEntityPath) && */ r.rightMatchingEntityPath.startsWith(actualId));
 
         if (!isNullOrUndefined(relationship)) {
           relationship.rightMatchingEntityPath = undefined;
