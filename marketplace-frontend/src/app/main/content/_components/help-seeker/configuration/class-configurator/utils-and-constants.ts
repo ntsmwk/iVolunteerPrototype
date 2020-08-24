@@ -1,12 +1,6 @@
-import { ClassDefinition, ClassArchetype, AchievementClassInstance } from '../../../../_model/meta/class';
-import {
-  Relationship,
-  RelationshipType,
-} from '../../../../_model/meta/relationship';
-import { ObjectIdService } from '../../../../_service/objectid.service.';
-import { isNullOrUndefined } from 'util';
-import { MatchingOperatorType } from '../../../../_model/matching';
-import { PropertyType, ClassProperty } from '../../../../_model/meta/property/property';
+import { RelationshipType } from 'app/main/content/_model/meta/relationship';
+import { MatchingOperatorType } from 'app/main/content/_model/matching';
+import { PropertyType } from 'app/main/content/_model/meta/property/property';
 
 const relationshipPalettes = {
   id: 'relationships',
@@ -30,15 +24,6 @@ const relationshipPalettes = {
       type: RelationshipType.ASSOCIATION,
       shape: undefined,
     },
-    // {
-    //   id: RelationshipType.AGGREGATION,
-    //   label: RelationshipType.getLabelFromRelationshipType(
-    //     RelationshipType.AGGREGATION
-    //   ),
-    //   imgPath: '/assets/icons/class_editor/relationships/aggregation.png',
-    //   type: 'aggregation',
-    //   shape: undefined,
-    // },
   ],
 };
 
@@ -116,6 +101,7 @@ const deleteOperationPalette = {
   imgPath: '/assets/mxgraph_resources/images/delete.gif',
   type: 'operation',
 };
+
 const propertyTypePalettes = [
   {
     id: PropertyType.TEXT,
