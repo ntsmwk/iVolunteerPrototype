@@ -665,33 +665,25 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         );
         graph.getModel().beginUpdate();
         if (paletteItem.type === 'matchingOperator') {
-          const cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50,
-            `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator
-          ) as MyMxCell;
+          // const cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50,
+          //   `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator
+          // ) as MyMxCell;
 
-          cell.cellType = MyMxCellType.MATCHING_OPERATOR;
-          cell.matchingOperatorType = paletteItem.id;
-          cell.id = outer.objectIdService.getNewObjectId();
+          // cell.cellType = MyMxCellType.MATCHING_OPERATOR;
+          // cell.matchingOperatorType = paletteItem.id;
+          // cell.id = outer.objectIdService.getNewObjectId();
 
-          if (outer.includeConnectors) {
-            const cell1 = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as MyMxCell;
-            cell1.cellType = MyMxCellType.MATCHING_CONNECTOR;
-            cell1.setEdge(true);
-            cell1.setVertex(false);
-            cell1.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y), true);
-            cell1.geometry.relative = true;
-            cell.insertEdge(cell1, false);
-            graph.addCell(cell1);
+          // if (outer.includeConnectors) {
+          //   const edge1 = outer.constructConnector(coords, -100, undefined);
+          //   cell.insertEdge(edge1, false);
+          //   graph.addCell(edge1);
 
-            const cell2 = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as MyMxCell;
-            cell2.cellType = MyMxCellType.MATCHING_CONNECTOR;
-            cell2.setEdge(true);
-            cell2.setVertex(false);
-            cell2.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 150, coords.y), false);
-            cell2.geometry.relative = true;
-            cell.insertEdge(cell2, true);
-            graph.addCell(cell2);
-          }
+          //   const edge2 = outer.constructConnector(coords, undefined, 150);
+          //   cell.insertEdge(edge2, true);
+          //   graph.addCell(edge2);
+          // }
+
+          const cell = outer.constructOperator(coords, paletteItem);
 
           const relationship = new MatchingOperatorRelationship();
           relationship.id = cell.id;
@@ -700,17 +692,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           relationship.matchingOperatorType = cell.matchingOperatorType;
 
           outer.relationships.push(relationship);
+
         } else if (paletteItem.type === 'connector') {
-
-          const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as MyMxCell;
-          cell.cellType = MyMxCellType.MATCHING_CONNECTOR;
-          cell.setEdge(true);
-          cell.setVertex(false);
-          cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
-          cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
-          cell.geometry.relative = true;
-
-          graph.addCell(cell);
+          graph.addCell(outer.constructConnector(coords, -100, 100));
         }
       }
     };
@@ -733,6 +717,44 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         onDragOver
       );
     }
+  }
+
+  private constructConnector(coords: mxgraph.mxPoint, sourceOffsetX: number, targetOffsetX: number) {
+    const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as MyMxCell;
+    cell.cellType = MyMxCellType.MATCHING_CONNECTOR;
+    cell.setEdge(true);
+    cell.setVertex(false);
+    if (!isNullOrUndefined(sourceOffsetX)) {
+      cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + sourceOffsetX, coords.y), true);
+    }
+    if (!isNullOrUndefined(targetOffsetX)) {
+      cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + targetOffsetX, coords.y), false);
+    }
+
+    cell.geometry.relative = true;
+    return cell;
+  }
+
+  private constructOperator(coords: mxgraph.mxPoint, paletteItem: any) {
+    const cell = this.graph.insertVertex(this.graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50,
+      `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator
+    ) as MyMxCell;
+
+    cell.cellType = MyMxCellType.MATCHING_OPERATOR;
+    cell.matchingOperatorType = paletteItem.id;
+    cell.id = this.objectIdService.getNewObjectId();
+
+    if (this.includeConnectors) {
+      const edge1 = this.constructConnector(coords, -100, undefined);
+      cell.insertEdge(edge1, false);
+      this.graph.addCell(edge1);
+
+      const edge2 = this.constructConnector(coords, undefined, 150);
+      cell.insertEdge(edge2, true);
+      this.graph.addCell(edge2);
+    }
+
+    return cell;
   }
 
   handleDoubleClickEvent(event: mxgraph.mxEventObject) {
@@ -844,7 +866,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       if (deleteCell.id.startsWith('l')) {
         this.matchingConfiguration.leftAddedClassDefinitionPaths = this.matchingConfiguration.leftAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const relationship = this.relationships.find(r => r.leftMatchingEntityPath === actualId);
+        const relationship = this.relationships.find(r => r.leftMatchingEntityPath.startsWith(actualId));
 
         if (!isNullOrUndefined(relationship)) {
           relationship.leftMatchingEntityPath = undefined;
@@ -853,7 +875,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       } else if (deleteCell.id.startsWith('r')) {
         this.matchingConfiguration.rightAddedClassDefinitionPaths = this.matchingConfiguration.rightAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const relationship = this.relationships.find(r => r.rightMatchingEntityPath === actualId);
+        const relationship = this.relationships.find(r => r.rightMatchingEntityPath.startsWith(actualId));
 
         if (!isNullOrUndefined(relationship)) {
           relationship.rightMatchingEntityPath = undefined;
