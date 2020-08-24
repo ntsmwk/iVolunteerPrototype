@@ -17,6 +17,13 @@
         <div class="pr-4"></div>
       </div>
 
+      <mat-checkbox labelPosition="after" [(ngModel)]="includeConnectors" class="pl-4">
+        <div fxLayout="row">
+          <div style="font-size: 14px" class="pr-4">-</div>
+          <div style="font-size: 14px">include Connectors</div>
+        </div>
+      </mat-checkbox>
+
       <div class="pr-8 pl-8">|</div>
 
       <div *ngFor="let item of matchingConnectorPalettes">

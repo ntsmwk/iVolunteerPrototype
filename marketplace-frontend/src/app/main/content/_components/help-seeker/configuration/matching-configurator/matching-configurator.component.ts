@@ -95,11 +95,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   overlayEvent: PointerEvent;
   tenant: Tenant;
 
-  // Delete Mode
+  // palette bar
   confirmDelete: boolean;
+  includeConnectors: boolean;
 
   async ngOnInit() {
     this.confirmDelete = true;
+    this.includeConnectors = true;
 
     const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
@@ -671,6 +673,26 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           cell.matchingOperatorType = paletteItem.id;
           cell.id = outer.objectIdService.getNewObjectId();
 
+          if (outer.includeConnectors) {
+            const cell1 = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as MyMxCell;
+            cell1.cellType = MyMxCellType.MATCHING_CONNECTOR;
+            cell1.setEdge(true);
+            cell1.setVertex(false);
+            cell1.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y), true);
+            cell1.geometry.relative = true;
+            cell.insertEdge(cell1, false);
+            graph.addCell(cell1);
+
+            const cell2 = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as MyMxCell;
+            cell2.cellType = MyMxCellType.MATCHING_CONNECTOR;
+            cell2.setEdge(true);
+            cell2.setVertex(false);
+            cell2.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 150, coords.y), false);
+            cell2.geometry.relative = true;
+            cell.insertEdge(cell2, true);
+            graph.addCell(cell2);
+          }
+
           const relationship = new MatchingOperatorRelationship();
           relationship.id = cell.id;
           relationship.coordX = cell.geometry.x;
@@ -819,28 +841,29 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.getModel().beginUpdate();
       this.graph.removeCells([deleteCell], true);
       const actualId = deleteCell.id.substr(2);
+
       if (deleteCell.id.startsWith('l')) {
         this.matchingConfiguration.leftAddedClassDefinitionPaths = this.matchingConfiguration.leftAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const i = this.relationships.find(r => r.leftMatchingEntityPath === actualId);
-        if (!isNullOrUndefined(i)) {
-          i.leftMatchingEntityPath = undefined;
-          i.leftMatchingEntityType = undefined;
+        const relationship = this.relationships.find(r => r.leftMatchingEntityPath === actualId);
+
+        if (!isNullOrUndefined(relationship)) {
+          relationship.leftMatchingEntityPath = undefined;
+          relationship.leftMatchingEntityType = undefined;
         }
+
       } else if (deleteCell.id.startsWith('r')) {
         this.matchingConfiguration.rightAddedClassDefinitionPaths = this.matchingConfiguration.rightAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const i = this.relationships.find(r => r.rightMatchingEntityPath === actualId);
-        if (!isNullOrUndefined(i)) {
-          i.rightMatchingEntityPath = undefined;
-          i.rightMatchingEntityType = undefined;
+        const relationship = this.relationships.find(r => r.rightMatchingEntityPath === actualId);
+
+        if (!isNullOrUndefined(relationship)) {
+          relationship.rightMatchingEntityPath = undefined;
+          relationship.rightMatchingEntityType = undefined;
         }
       }
-
-      // this.updateModel();
       this.redrawContent();
 
     } finally {
       this.graph.getModel().endUpdate();
-      console.log(this.relationships);
     }
   }
 
@@ -881,7 +904,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         this.graph.getModel().beginUpdate();
 
         let cell = this.graph.getModel().getCell(event.id) as MyMxCell;
-
         cell.matchingOperatorType = event.matchingOperatorType;
         this.graph.setCellStyle(
           `shape=image;image=${this.getPathForMatchingOperatorType(cell.matchingOperatorType)};` +
