@@ -8,7 +8,7 @@
 
   <div #paletteContainer id="paletteContainer" style="border-bottom: solid 1px rgb(160, 160, 160)">
 
-    <div *ngIf="matchingConfiguration" fxLayout="row" fxLayoutAlign="start center">
+    <div *ngIf="data" fxLayout="row" fxLayoutAlign="start center">
       <div class="pr-4 pl-4">Matching-Operatoren</div>
 
       <div *ngFor="let item of matchingOperatorPalettes">
