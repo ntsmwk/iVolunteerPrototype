@@ -30,9 +30,11 @@
         <th style="text-align: start" class="table-header-cell">Rechte Seite</th>
 
       </tr>
-      <tr *ngFor="let entry of allMatchingConfigurations; let i = index" class="table-row" (click)="handleCheckboxRowClicked($event, i, entry)">
+      <tr *ngFor="let entry of allMatchingConfigurations; let i = index" class="table-row"
+        (click)="handleCheckboxRowClicked($event, i, entry)">
         <td style="overflow: hidden">
-          <mat-checkbox [(ngModel)]="checkboxStates[i]" (change)="handleCheckboxClicked($event.checked, entry)" (click)="$event.stopPropagation();">
+          <mat-checkbox [(ngModel)]="checkboxStates[i]" (change)="handleCheckboxClicked($event.checked, entry)"
+            (click)="$event.stopPropagation();">
           </mat-checkbox>
         </td>
         <td style="overflow: hidden">{{entry.name}}</td>
@@ -47,6 +49,7 @@
 
 <mat-dialog-actions>
   <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">OK</button>
-  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>

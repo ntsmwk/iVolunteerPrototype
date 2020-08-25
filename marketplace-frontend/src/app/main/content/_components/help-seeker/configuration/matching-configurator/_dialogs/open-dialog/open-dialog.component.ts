@@ -5,7 +5,7 @@ import { LoginService } from "app/main/content/_service/login.service";
 
 import { MatchingConfigurationService } from "app/main/content/_service/configuration/matching-configuration.service";
 import { MatchingConfiguration } from "app/main/content/_model/meta/configurations";
-import { MatchingBrowseSubDialogData } from "app/main/content/_components/help-seeker/configuration/matching-configurator/browse-sub-dialog/browse-sub-dialog.component";
+import { MatchingBrowseSubDialogData } from "app/main/content/_components/help-seeker/configuration/matching-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
 import { User } from "app/main/content/_model/user";
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 
