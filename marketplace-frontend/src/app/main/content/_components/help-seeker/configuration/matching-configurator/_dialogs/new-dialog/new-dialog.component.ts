@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
@@ -11,6 +11,7 @@ import {
 import { ClassBrowseSubDialogData } from "../../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 export interface NewMatchingDialogData {
   leftClassConfiguration: ClassConfiguration;
@@ -29,7 +30,7 @@ export class NewMatchingDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: NewMatchingDialogData,
     private classConfigurationService: ClassConfigurationService,
     private matchingConfigurationService: MatchingConfigurationService,
-    private loginService: LoginService
+    private loginService: LoginService,
   ) { }
 
   allClassConfigurations: ClassConfiguration[];
@@ -37,10 +38,12 @@ export class NewMatchingDialogComponent implements OnInit {
   loaded = false;
   showErrors = false;
   showDuplicateError = false;
-  label: string;
 
   browseMode: boolean;
   browseDialogData: ClassBrowseSubDialogData;
+
+  dialogForm: FormGroup;
+
 
   tenant: Tenant;
   globalInfo: GlobalInfo;
@@ -50,6 +53,11 @@ export class NewMatchingDialogComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.tenant = this.globalInfo.tenants[0];
+
+    this.dialogForm = new FormGroup({
+      label: new FormControl('', Validators.required)
+    });
+
 
     this.classConfigurationService
       .getClassConfigurationsByTenantId(this.globalInfo.marketplace, this.tenant.id)
@@ -63,10 +71,7 @@ export class NewMatchingDialogComponent implements OnInit {
         );
 
         if (this.recentClassConfigurations.length > 4) {
-          this.recentClassConfigurations = this.recentClassConfigurations.slice(
-            0,
-            4
-          );
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 4);
         }
 
         this.loaded = true;
@@ -87,19 +92,15 @@ export class NewMatchingDialogComponent implements OnInit {
 
   onOKClick() {
     this.showDuplicateError = false;
+    this.data.label = this.dialogForm.controls['label'].value;
     if (
       !isNullOrUndefined(this.data.leftClassConfiguration) &&
       !isNullOrUndefined(this.data.rightClassConfiguration) &&
       !isNullOrUndefined(this.data.label)
     ) {
-      this.matchingConfigurationService
-        .getMatchingConfigurationByUnorderedClassConfigurationIds(
-          this.globalInfo.marketplace,
-          this.data.leftClassConfiguration.id,
-          this.data.rightClassConfiguration.id
-        )
-        .toPromise()
-        .then((ret: MatchingConfiguration) => {
+      this.matchingConfigurationService.getMatchingConfigurationByUnorderedClassConfigurationIds(
+        this.globalInfo.marketplace, this.data.leftClassConfiguration.id, this.data.rightClassConfiguration.id)
+        .toPromise().then((ret: MatchingConfiguration) => {
           if (isNullOrUndefined(ret)) {
             this.dialogRef.close(this.data);
           } else {
@@ -128,20 +129,15 @@ export class NewMatchingDialogComponent implements OnInit {
     }
 
     this.browseMode = true;
+    this.dialogForm.updateValueAndValidity();
   }
 
   handleBrowseBackClick() {
     this.browseMode = false;
   }
 
-  handleReturnFromBrowse(event: {
-    cancelled: boolean;
-    entryId: string;
-    sourceReference: "LEFT" | "RIGHT";
-  }) {
-    console.log("clicked browse");
-    console.log(event);
 
+  handleReturnFromBrowse(event: { cancelled: boolean; entryId: string; sourceReference: "LEFT" | "RIGHT"; }) {
     if (!event.cancelled) {
       const classConfiguration = this.allClassConfigurations.find(
         (c) => c.id === event.entryId

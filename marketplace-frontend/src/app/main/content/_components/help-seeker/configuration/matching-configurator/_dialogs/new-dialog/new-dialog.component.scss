@@ -1,8 +1,8 @@
 .mat-dialog-title {
-  margin: 0;
+  margin: 0 0 6px 0;
 
   h1 {
-    padding: 0 0 6px 0;
+    padding: 0;
     margin: 0;
   }
 }
@@ -26,6 +26,10 @@ mat-dialog-content {
     padding: 0 2px;
     left: 5px;
     z-index: 240;
+  }
+
+  .selection-container-title-error {
+    color: red;
   }
 
   .selection-container {
@@ -87,6 +91,10 @@ mat-dialog-content {
       align-items: center;
       padding-top: 8px;
     }
+  }
+
+  .selection-container-error {
+    border-color: red;
   }
 
   // tr.entry:hover, tr.findbutton:hover, tr.selected{
