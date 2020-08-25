@@ -66,7 +66,7 @@ export class OpenMatchingDialogComponent implements OnInit {
       });
   }
 
-  itemSelected(event: any, matchingConfiguration: MatchingConfiguration) {
+  handleRowClick(matchingConfiguration: MatchingConfiguration) {
     this.data.matchingConfiguration = matchingConfiguration;
     this.dialogRef.close(this.data);
   }

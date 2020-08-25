@@ -1,16 +1,16 @@
-import { Component, Inject, OnInit, ElementRef, ViewChild } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { isNullOrUndefined } from "util";
-import { LoginService } from "app/main/content/_service/login.service";
-import { MatchingConfigurationService } from "app/main/content/_service/configuration/matching-configuration.service";
-import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
+import { Component, Inject, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { isNullOrUndefined } from 'util';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import {
   ClassConfiguration,
   MatchingConfiguration,
-} from "app/main/content/_model/meta/configurations";
-import { ClassBrowseSubDialogData } from "../../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
-import { GlobalInfo } from "app/main/content/_model/global-info";
-import { Tenant } from "app/main/content/_model/tenant";
+} from 'app/main/content/_model/meta/configurations';
+import { ClassBrowseSubDialogData } from '../../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { Tenant } from 'app/main/content/_model/tenant';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 export interface NewMatchingDialogData {
@@ -21,8 +21,8 @@ export interface NewMatchingDialogData {
 
 @Component({
   selector: "new-matching-dialog",
-  templateUrl: "./new-dialog.component.html",
-  styleUrls: ["./new-dialog.component.scss"],
+  templateUrl: './new-dialog.component.html',
+  styleUrls: ['./new-dialog.component.scss'],
 })
 export class NewMatchingDialogComponent implements OnInit {
   constructor(
@@ -113,9 +113,9 @@ export class NewMatchingDialogComponent implements OnInit {
     }
   }
 
-  handleBrowseClick(sourceReference: "LEFT" | "RIGHT") {
+  handleBrowseClick(sourceReference: 'LEFT' | 'RIGHT') {
     this.browseDialogData = new ClassBrowseSubDialogData();
-    this.browseDialogData.title = "Durchsuchen";
+    this.browseDialogData.title = 'Durchsuchen';
     this.browseDialogData.globalInfo = this.globalInfo;
     this.browseDialogData.sourceReference = sourceReference;
 
@@ -137,15 +137,15 @@ export class NewMatchingDialogComponent implements OnInit {
   }
 
 
-  handleReturnFromBrowse(event: { cancelled: boolean; entryId: string; sourceReference: "LEFT" | "RIGHT"; }) {
+  handleReturnFromBrowse(event: { cancelled: boolean; entryId: string; sourceReference: 'LEFT' | 'RIGHT'; }) {
     if (!event.cancelled) {
       const classConfiguration = this.allClassConfigurations.find(
         (c) => c.id === event.entryId
       );
 
-      if (event.sourceReference === "LEFT") {
+      if (event.sourceReference === 'LEFT') {
         this.data.leftClassConfiguration = classConfiguration;
-      } else if (event.sourceReference === "RIGHT") {
+      } else if (event.sourceReference === 'RIGHT') {
         this.data.rightClassConfiguration = classConfiguration;
       }
     }
