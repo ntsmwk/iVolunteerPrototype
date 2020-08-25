@@ -1,12 +1,9 @@
-import { OnInit, Component, Inject } from "@angular/core";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { MatchingConfiguration } from "app/main/content/_model/meta/configurations";
-import { LoginService } from "app/main/content/_service/login.service";
-import { MatchingConfigurationService } from "app/main/content/_service/configuration/matching-configuration.service";
-
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { isNullOrUndefined } from "util";
-import { User } from "app/main/content/_model/user";
+import { OnInit, Component, Inject } from '@angular/core';
+import { MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { isNullOrUndefined } from 'util';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export class DeleteMatchingDialogData {
@@ -15,8 +12,8 @@ export class DeleteMatchingDialogData {
 
 @Component({
   selector: "delete-matching-dialog",
-  templateUrl: "./delete-dialog.component.html",
-  styleUrls: ["./delete-dialog.component.scss"],
+  templateUrl: './delete-dialog.component.html',
+  styleUrls: ['./delete-dialog.component.scss'],
 })
 export class DeleteMatchingDialogComponent implements OnInit {
   allMatchingConfigurations: MatchingConfiguration[];
@@ -48,11 +45,7 @@ export class DeleteMatchingDialogComponent implements OnInit {
       });
   }
 
-  handleCheckboxClicked(
-    checked: boolean,
-    entry: MatchingConfiguration,
-    index?: number
-  ) {
+  handleCheckboxClicked(checked: boolean, entry: MatchingConfiguration, index?: number) {
     if (!isNullOrUndefined(index)) {
       this.checkboxStates[index] = checked;
     }
@@ -67,11 +60,7 @@ export class DeleteMatchingDialogComponent implements OnInit {
     }
   }
 
-  handleCheckboxRowClicked(
-    event: any,
-    index: number,
-    entry: MatchingConfiguration
-  ) {
+  handleCheckboxRowClicked(event: any, index: number, entry: MatchingConfiguration) {
     event.stopPropagation();
     this.handleCheckboxClicked(!this.checkboxStates[index], entry, index);
   }

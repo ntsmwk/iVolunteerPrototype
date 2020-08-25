@@ -1,5 +1,4 @@
 import { OnInit, Component, Inject } from '@angular/core';
-import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
@@ -53,7 +52,6 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
   }
 
   handleCheckboxRowClicked(row: ClassConfiguration) {
-    console.log(row);
     if (this.data.idsToDelete.findIndex(id => row.id === id) === -1) {
       this.data.idsToDelete.push(row.id);
     } else {
@@ -67,7 +65,6 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
 
   onSubmit() {
     this.classConfigurationService.deleteClassConfigurations(this.globalInfo.marketplace, this.data.idsToDelete).toPromise().then((ret) => {
-      console.log(ret);
       this.dialogRef.close(this.data);
     });
   }
@@ -81,7 +78,7 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
     if (this.currentSortKey === sortKey) {
       this.switchSortType();
     } else {
-      this.currentSortType = 'az'
+      this.currentSortType = 'az';
     }
 
     if (sortKey === 'date') {
