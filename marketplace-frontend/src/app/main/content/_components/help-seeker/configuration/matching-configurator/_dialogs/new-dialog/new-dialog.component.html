@@ -16,53 +16,117 @@
       <input matInput placeholder=" Bezeichnung" [(ngModel)]="data.label" name="label" required />
     </mat-form-field>
 
-    <table>
-      <tr width="200px">
-        <td width="200px">
-          <h2>Werkunternehmen</h2>
-        </td>
-        <td style="padding-left: 50px;"></td>
-        <td>
-          <h2>Werkbesteller</h2>
-        </td>
-      </tr>
+    <div fxLayout="row" fxLayoutAlign="start start" class="pt-12">
 
-      <tr>
-        <td>
-          <table cellspacing="1" cellpadding="0" style="border-color: none;">
-            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="leftItemSelected($event, c)">
-              <td style="padding-left: 50px; padding-right: 50px;">
-                {{ c.name }}
-              </td>
-            </tr>
-          </table>
-        </td>
+      <div>
+        <!-- position: relative; top: 11px; left: 5px; -->
+        <div class="selection-container-title">
+          Werkunternehmen
+        </div>
 
-        <td style="padding-left: 50px;"></td>
+        <div class="selection-container" fxLayout="column" fxLayoutAlign="start start">
 
-        <td width="200px">
-          <table cellspacing="1" cellpadding="0" style="border-color: none;">
-            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="rightItemSelected($event, c)">
-              <td style="padding-left: 50px; padding-right: 50px;">
-                {{ c.name }}
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+          <div class="selection-container-subtitle">
+            Auswahl
+          </div>
 
-      <tr>
-        <td width="200px" *ngIf="data.leftClassConfiguration">
-          Gewählt:
+          <div class="configuration-no-selection" *ngIf="!data.leftClassConfiguration">
+            keine Auswahl
+          </div>
+
+          <div class="configuration-selection" *ngIf="data.leftClassConfiguration">
+            {{ data.leftClassConfiguration.name }}
+          </div>
+
+          <div class="selection-container-subtitle">
+            <div>Zuletzt Geändert</div>
+          </div>
+
+          <div class="recent-selection" *ngFor="let classConfiguration of recentClassConfigurations"
+            (click)="leftItemSelected(classConfiguration)">
+            <div class="recent-selection-item">
+              {{classConfiguration.name}}
+            </div>
+          </div>
+
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleBrowseClick('LEFT')">
+              Durchsuchen
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <div fxFlex></div>
+
+      <div>
+        <div class="selection-container-title">
+          Werkbesteller
+        </div>
+
+        <div class="selection-container" fxLayout="column" fxLayoutAlign="start start">
+
+          <div class="selection-container-subtitle">
+            Auswahl
+          </div>
+
+          <div class="configuration-no-selection" *ngIf="!data.rightClassConfiguration">
+            keine Auswahl
+          </div>
+
+          <div class="configuration-selection" *ngIf="data.rightClassConfiguration">
+            {{ data.rightClassConfiguration.name }}
+          </div>
+
+          <div class="selection-container-subtitle">
+            <div>Zuletzt Geändert</div>
+          </div>
+
+          <div class="recent-selection" *ngFor="let classConfiguration of recentClassConfigurations"
+            (click)="rightItemSelected(classConfiguration)">
+            <div class="recent-selection-item">
+              {{classConfiguration.name}}
+            </div>
+          </div>
+
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleBrowseClick('RIGHT')">
+              Durchsuchen
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+    <!-- <table>
+
+      <tr> -->
+    <!-- <td width="200px">
+          Auswahl:
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="selected">
-              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('LEFT')" matTooltip="Durchsuchen">
-                {{ data.leftClassConfiguration.name }}
+              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('LEFT')"
+                matTooltip="Durchsuchen">
+                <div *ngIf="!data.leftClassConfiguration">
+                  keine Auswahl
+                </div>
+
+                <div *ngIf="data.leftClassConfiguration">
+                  {{ data.leftClassConfiguration.name }}
+                </div>
               </td>
             </tr>
           </table>
-        </td>
-        <td width="200px" *ngIf="!data.leftClassConfiguration">
+        </td> -->
+    <!-- <td width="200px" *ngIf="!data.leftClassConfiguration">
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="findbutton">
               <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('LEFT')">
@@ -70,14 +134,15 @@
               </td>
             </tr>
           </table>
-        </td>
+        </td> -->
 
-        <td style="padding-left: 50px;"></td>
+    <!-- <td style="padding-left: 50px;"></td>
         <td *ngIf="data.rightClassConfiguration" width="200px">
           Gewählt
           <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="selected">
-              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('RIGHT')" matTooltip="Durchsuchen">
+              <td style="padding-left: 50px; padding-right: 50px;" (click)="handleBrowseClick('RIGHT')"
+                matTooltip="Durchsuchen">
                 {{ data.rightClassConfiguration.name }}
               </td>
             </tr>
@@ -95,7 +160,7 @@
       </tr>
 
       <tr></tr>
-    </table>
+    </table> -->
 
     <div *ngIf="showErrors" style="color: red;">
       <div *ngIf="!data.leftClassConfiguration">
@@ -104,11 +169,6 @@
       <div *ngIf="!data.rightClassConfiguration">
         Konfiguration für den Werkbesteller wählen
       </div>
-      <div *ngIf="
-          data.rightClassConfiguration === data.leftClassConfiguration
-        ">
-        Zwei verschiedene Konfigurationen wählen
-      </div>
       <div *ngIf="showDuplicateError">
         Matching existiert bereits für gewählte Konfigurationen
       </div>
@@ -116,7 +176,8 @@
   </div>
 
   <div *ngIf="browseMode">
-    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode" (subDialogReturn)="handleReturnFromBrowse($event)">
+    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)">
     </browse-class-sub-dialog>
   </div>
 </mat-dialog-content>
@@ -124,9 +185,11 @@
   <button class="primary-button-dark" mat-stroked-button type="button" [disabled]="browseMode" (click)="onOKClick()">
     OK
   </button>
-  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
 
-  <button *ngIf="browseMode" class="secondary-button-light" mat-stroked-button type="button" (click)="handleBrowseBackClick()">
+  <button *ngIf="browseMode" class="secondary-button-light" mat-stroked-button type="button"
+    (click)="handleBrowseBackClick()">
     Zurück
   </button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->

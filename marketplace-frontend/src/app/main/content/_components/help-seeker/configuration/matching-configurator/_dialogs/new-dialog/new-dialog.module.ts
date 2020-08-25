@@ -11,10 +11,12 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material';
 import { BrowseClassSubDialogModule } from '../../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.module';
+import { FuseSharedModule } from '@fuse/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    FuseSharedModule,
     FormsModule,
     MatCommonModule,
     MatDialogModule,

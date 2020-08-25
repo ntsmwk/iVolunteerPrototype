@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Marketplace } from "app/main/content/_model/marketplace";
 import { isNullOrUndefined } from "util";
 import { LoginService } from "app/main/content/_service/login.service";
 import { MatchingConfigurationService } from "app/main/content/_service/configuration/matching-configuration.service";
@@ -59,10 +58,6 @@ export class NewMatchingDialogComponent implements OnInit {
         this.recentClassConfigurations = classConfigurations;
         this.allClassConfigurations = classConfigurations;
 
-        //----DEBUG
-        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
-        //----
         this.recentClassConfigurations = this.recentClassConfigurations.sort(
           (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
         );
@@ -78,11 +73,11 @@ export class NewMatchingDialogComponent implements OnInit {
       });
   }
 
-  leftItemSelected(event: any, c: ClassConfiguration) {
+  leftItemSelected(c: ClassConfiguration) {
     this.data.leftClassConfiguration = c;
   }
 
-  rightItemSelected(event: any, c: ClassConfiguration) {
+  rightItemSelected(c: ClassConfiguration) {
     this.data.rightClassConfiguration = c;
   }
 
@@ -95,7 +90,6 @@ export class NewMatchingDialogComponent implements OnInit {
     if (
       !isNullOrUndefined(this.data.leftClassConfiguration) &&
       !isNullOrUndefined(this.data.rightClassConfiguration) &&
-      this.data.rightClassConfiguration !== this.data.leftClassConfiguration &&
       !isNullOrUndefined(this.data.label)
     ) {
       this.matchingConfigurationService

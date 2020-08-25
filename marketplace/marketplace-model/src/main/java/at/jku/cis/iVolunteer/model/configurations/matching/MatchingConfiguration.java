@@ -20,6 +20,8 @@ public class MatchingConfiguration extends IVolunteerObject {
 	private String rightClassConfigurationName;
 	
 	private List<String> rightAddedClassDefinitionPaths = new ArrayList<>();
+	
+	private String hash;
 
 	public String getName() {
 		return name;
@@ -75,6 +77,14 @@ public class MatchingConfiguration extends IVolunteerObject {
 
 	public void setRightAddedClassDefinitionPaths(List<String> rightAddedClassDefinitionPaths) {
 		this.rightAddedClassDefinitionPaths = rightAddedClassDefinitionPaths;
+	}
+	
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	@Override

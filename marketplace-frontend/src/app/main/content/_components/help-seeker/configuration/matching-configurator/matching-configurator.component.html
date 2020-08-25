@@ -17,10 +17,11 @@
         <div class="pr-4"></div>
       </div>
 
-      <mat-checkbox labelPosition="after" [(ngModel)]="includeConnectors" class="pl-4">
+      <mat-checkbox labelPosition="after" [(ngModel)]="includeConnectors" class="pl-4"
+        matTooltip="Operator mit bereits angedockten Verbindungen hinzufügen">
         <div fxLayout="row">
           <div style="font-size: 14px" class="pr-4">-</div>
-          <div style="font-size: 14px">include Connectors</div>
+          <div style="font-size: 14px">Operator mit Verbindungen</div>
         </div>
       </mat-checkbox>
 
@@ -40,7 +41,8 @@
       </div>
       <div class="pr-4"></div> -->
 
-      <mat-checkbox labelPosition="after" [(ngModel)]="confirmDelete" class="pl-4">
+      <mat-checkbox labelPosition="after" [(ngModel)]="confirmDelete" class="pl-4"
+        matTooltip="Bestätigungsdialog bei jedem Löschvorgang anzeigen">
         <div fxLayout="row">
           <div style="font-size: 14px" class="pr-4">-</div>
           <div style="font-size: 14px">Löschen bestätigen</div>

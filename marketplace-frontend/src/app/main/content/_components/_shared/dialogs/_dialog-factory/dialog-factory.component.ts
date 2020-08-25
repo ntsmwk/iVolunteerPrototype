@@ -360,8 +360,8 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(NewMatchingDialogComponent, {
       width: '500px',
       minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      height: '450px',
+      minHeight: '450px',
       data: {},
       disableClose: true,
     });
