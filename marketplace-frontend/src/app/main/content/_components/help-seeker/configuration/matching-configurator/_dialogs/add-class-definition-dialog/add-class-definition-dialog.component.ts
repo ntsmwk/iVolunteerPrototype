@@ -18,7 +18,6 @@ export interface AddClassDefinitionDialogData {
   matchingEntityConfiguration: MatchingEntityMappingConfiguration;
   existingEntityPaths: string[];
   addedEntities: MatchingEntity[];
-
 }
 
 @Component({
@@ -92,7 +91,7 @@ export class AddClassDefinitionDialogComponent implements OnInit {
 
   openGraphDialog() {
     console.log('opengraphdialog');
-    this.openAddClassDefinitionDialog().then((ret) => {
+    this.openAddClassDefinitionDialog(this.data).then((ret) => {
       console.log("returned");
       console.log(ret);
     })
@@ -119,13 +118,11 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     this.dialogRef.close(this.data);
   }
 
-  openAddClassDefinitionDialog() {
+  openAddClassDefinitionDialog(data: AddClassDefinitionGraphDialogData) {
     const dialogRef = this.dialog.open(AddClassDefinitionGraphDialogComponent, {
       width: '90vw',
       height: '90vh',
-      data: {
-
-      },
+      data: data,
     });
 
     let returnValue: AddClassDefinitionGraphDialogData;

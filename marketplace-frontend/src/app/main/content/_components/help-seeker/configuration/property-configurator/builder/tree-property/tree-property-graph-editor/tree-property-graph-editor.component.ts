@@ -11,7 +11,6 @@ import {
 } from 'app/main/content/_model/meta/property/tree-property';
 import { CConstants } from '../../../../class-configurator/utils-and-constants';
 import { isNullOrUndefined } from 'util';
-import { TreePropertyDefinitionService } from 'app/main/content/_service/meta/core/property/tree-property-definition.service';
 import { TreePropertyOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 import { User } from 'app/main/content/_model/user';
 

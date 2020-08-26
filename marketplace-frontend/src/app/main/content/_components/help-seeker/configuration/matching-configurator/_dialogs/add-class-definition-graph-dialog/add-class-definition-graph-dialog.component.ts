@@ -10,10 +10,13 @@ import { isNullOrUndefined } from 'util';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';
-import { MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
+import { MatchingEntityMappingConfiguration, ClassConfigurationDTO } from 'app/main/content/_model/meta/configurations';
 import { MatchingEntity } from 'app/main/content/_model/matching';
 import { mxgraph } from 'mxgraph';
-import { MyMxCell } from '../../../myMxCell';
+import { MyMxCell, MyMxCellType } from '../../../myMxCell';
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
+import { CConstants } from '../../../class-configurator/utils-and-constants';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
 
 declare var require: any;
 const mx: typeof mxgraph = require('mxgraph')({
@@ -21,9 +24,14 @@ const mx: typeof mxgraph = require('mxgraph')({
   // mxBasePath: './mxgraph_resources',
 });
 
+const CLASSDEFINITION_CELL_WIDTH = 110;
+const CLASSDEFINITION_CELL_HEIGHT = 70;
+
 
 export interface AddClassDefinitionGraphDialogData {
-
+  matchingEntityConfiguration: MatchingEntityMappingConfiguration;
+  existingEntityPaths: string[];
+  addedEntities: MatchingEntity[];
 }
 
 @Component({
@@ -31,30 +39,42 @@ export interface AddClassDefinitionGraphDialogData {
   templateUrl: './add-class-definition-graph-dialog.component.html',
   styleUrls: ['./add-class-definition-graph-dialog.component.scss'],
 })
-export class AddClassDefinitionGraphDialogComponent implements OnInit, AfterViewInit {
+export class AddClassDefinitionGraphDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddClassDefinitionGraphDialogData>,
-    @Inject(MAT_DIALOG_DATA) public data: AddClassDefinitionGraphDialogData,
+    @Inject(MAT_DIALOG_DATA) public dialogData: AddClassDefinitionGraphDialogData,
     private loginService: LoginService,
+    private classConfigurationServce: ClassConfigurationService,
   ) { }
 
-  loaded: boolean;
+
   globalInfo: GlobalInfo;
   tenant: Tenant;
+
   graph: mxgraph.mxGraph;
-
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
+  graphData: ClassConfigurationDTO;
 
+  loaded: boolean;
 
   async ngOnInit() {
     this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.tenant = this.globalInfo.tenants[0];
+
+    this.graphData = <ClassConfigurationDTO>(
+      await this.classConfigurationServce.getAllForClassConfigurationInOne(
+        this.globalInfo.marketplace, this.dialogData.matchingEntityConfiguration.classConfigurationId
+      ).toPromise()
+    );
+
+
     this.loaded = true;
+    this.initGraph();
   }
 
-  ngAfterViewInit() {
+  private initGraph() {
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);;
 
     this.graph.isCellSelectable = function (cell) {
@@ -99,7 +119,68 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit, AfterView
       this.graph.addListener(mx.mxEvent.CLICK, (sender: any, evt: mxgraph.mxEventObject) => {
         this.handleClickEvent(evt);
       });
+
+      this.createGraph();
     }
+  }
+
+  private createGraph() {
+    this.graph.getModel().beginUpdate();
+    this.addClassDefinitions(this.graphData.classDefinitions);
+    this.addRelationships(this.graphData.relationships);
+    this.graph.getModel().endUpdate();
+  }
+
+  private addClassDefinitions(classDefinitions: ClassDefinition[]) {
+    for (const classDefinition of classDefinitions) {
+      const cell = this.addClassDefinitionCell(classDefinition);
+    }
+  }
+
+  private addClassDefinitionCell(classDefinition: ClassDefinition): MyMxCell {
+    const cell = this.graph.insertVertex(
+      this.graph.getDefaultParent(),
+      classDefinition.id,
+      classDefinition.name,
+      0,
+      0,
+      CLASSDEFINITION_CELL_WIDTH,
+      CLASSDEFINITION_CELL_HEIGHT,
+      CConstants.mxStyles.classTree
+    ) as MyMxCell;
+    cell.root = false;
+    cell.cellType = MyMxCellType.TREE_ENTRY;
+
+    return cell;
+  }
+
+
+  private addRelationships(relationships: Relationship[]) {
+    for (const relationship of relationships) {
+      const cell = this.createRelationshipCellById(relationship);
+    }
+  }
+
+  private createRelationshipCellById(relationship: Relationship): MyMxCell {
+    const source: MyMxCell = this.graph
+      .getModel().getCell(relationship.source) as MyMxCell;
+    const target: MyMxCell = this.graph
+      .getModel().getCell(relationship.target) as MyMxCell;
+
+    return this.createRelationshipCell(relationship.id, source, target);
+  }
+
+  private createRelationshipCell(id: string, source: MyMxCell, target: MyMxCell): MyMxCell {
+    const cell = this.graph.insertEdge(
+      this.graph.getDefaultParent(),
+      id,
+      '',
+      source,
+      target,
+      CConstants.mxStyles.genericConnection
+    ) as MyMxCell;
+    cell.cellType = MyMxCellType.TREE_CONNECTOR;
+    return cell;
   }
 
   private handleClickEvent(evt) {
@@ -107,7 +188,7 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit, AfterView
   }
 
   onSubmit() {
-    this.dialogRef.close(this.data);
+    this.dialogRef.close(this.dialogData);
   }
 
 }
