@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {
-  MatDialogRef, MAT_DIALOG_DATA,
+  MatDialogRef, MAT_DIALOG_DATA, MatDialog,
 } from '@angular/material/dialog';
 
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
@@ -12,6 +12,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { MatchingEntity } from 'app/main/content/_model/matching';
+import { AddClassDefinitionGraphDialogComponent, AddClassDefinitionGraphDialogData } from '../add-class-definition-graph-dialog/add-class-definition-graph-dialog.component';
 
 export interface AddClassDefinitionDialogData {
   matchingEntityConfiguration: MatchingEntityMappingConfiguration;
@@ -28,9 +29,9 @@ export interface AddClassDefinitionDialogData {
 export class AddClassDefinitionDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddClassDefinitionDialogData>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: AddClassDefinitionDialogData,
+    @Inject(MAT_DIALOG_DATA) public data: AddClassDefinitionDialogData,
     private loginService: LoginService,
+    public dialog: MatDialog,
   ) { }
 
   dataSource = new MatTableDataSource<MatchingEntity>();
@@ -89,6 +90,14 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row);
   }
 
+  openGraphDialog() {
+    console.log('opengraphdialog');
+    this.openAddClassDefinitionDialog().then((ret) => {
+      console.log("returned");
+      console.log(ret);
+    })
+  }
+
   onSubmit(submitAll: boolean) {
     // Add selected, but filter out existing ones
 
@@ -108,6 +117,28 @@ export class AddClassDefinitionDialogComponent implements OnInit {
 
     this.data.addedEntities = added;
     this.dialogRef.close(this.data);
+  }
+
+  openAddClassDefinitionDialog() {
+    const dialogRef = this.dialog.open(AddClassDefinitionGraphDialogComponent, {
+      width: '90vw',
+      height: '90vh',
+      data: {
+
+      },
+    });
+
+    let returnValue: AddClassDefinitionGraphDialogData;
+
+    dialogRef.beforeClosed().toPromise()
+      .then((result: AddClassDefinitionGraphDialogData) => {
+        returnValue = result;
+      });
+
+    return dialogRef.afterClosed().toPromise()
+      .then(() => {
+        return returnValue;
+      });
   }
 
 }

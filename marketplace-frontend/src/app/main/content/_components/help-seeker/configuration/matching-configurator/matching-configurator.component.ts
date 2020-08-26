@@ -18,8 +18,6 @@ import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
 
-declare var require: any;
-
 const HEADER_WIDTH = 400;
 const HEADER_HEIGHT = 50;
 
@@ -39,6 +37,7 @@ const PROPERTY_SPACE_X = 5;
 const BUTTON_WIDTH = 100;
 const Button_HEIGHT = 40;
 
+declare var require: any;
 const mx: typeof mxgraph = require('mxgraph')({
   // mxDefaultLanguage: 'de',
   // mxBasePath: './mxgraph_resources',

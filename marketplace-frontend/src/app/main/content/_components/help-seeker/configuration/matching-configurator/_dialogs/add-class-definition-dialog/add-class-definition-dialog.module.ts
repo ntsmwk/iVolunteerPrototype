@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule, MatDialogModule } from '@angular/material';
 
 import { FuseSharedModule } from '@fuse/shared.module';
+import { AddClassDefinitionGraphDialogModule } from '../add-class-definition-graph-dialog/add-class-definition-graph-dialog.module';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
     MatInputModule,
 
     MatProgressSpinnerModule,
-
+    AddClassDefinitionGraphDialogModule,
 
     FuseSharedModule,
 
