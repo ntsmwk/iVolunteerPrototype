@@ -69,24 +69,18 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
   }
 
   private initGraph() {
-    this.graph = new mx.mxGraph(this.graphContainer.nativeElement);;
+    this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
-
       return (this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0);
     };
 
     this.graph.getCursorForCell = (cell: MyMxCell) => {
-      if (isNullOrUndefined(cell.cellType)) {
+      if (isNullOrUndefined(cell.cellType) || cell.getStyle() === CConstants.mxStyles.classDisabled) {
         return 'default';
       }
-
-      if (cell.getStyle() === CConstants.mxStyles.classDisabled) {
-        return 'default';
-      }
-
       if (cell.cellType === MyMxCellType.CLASS) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
@@ -98,75 +92,77 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
       // Disables the built-in context menu
       mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
       this.graph.setPanning(true);
-      this.graph.addListener(mx.mxEvent.CLICK, (sender: any, evt: mxgraph.mxEventObject) => {
-        this.handleClickEvent(evt);
-      });
 
-      const outer = this;
-
-      this.graph.addMouseListener({
-        highlightedCell: undefined,
-        deselectedCell: undefined,
-        mouseDown: function (evt, state) { },
-
-        mouseMove: function (evt, state) {
-          if (this.pointerOnClass(state)) {
-            const cell = state.state.cell as MyMxCell;
-            const { addedEntities } = outer.dialogData;
-
-            if (addedEntities.findIndex(e => e.classDefinition.id === cell.id) !== -1) {
-              return;
-            }
-
-            this.highlightedCell = cell;
-            outer.graph.setCellStyle(CConstants.mxStyles.classHighlighted, [cell]);
-
-          } else {
-            const { addedEntities } = outer.dialogData;
-
-            if ((!isNullOrUndefined(this.highlightedCell)
-              && addedEntities.findIndex(e => e.classDefinition.id === this.highlightedCell.id) === -1)
-              || !isNullOrUndefined(this.deselectedCell)) {
-
-              outer.graph.setCellStyle(CConstants.mxStyles.classNormal, [this.highlightedCell]);
-              this.deselectedCell = undefined;
-            }
-            this.highlightedCell = undefined;
-          }
-        },
-        mouseUp: function (evt, state) {
-          if (!this.pointerOnClass(state)) { return; }
-
-          const { entities } = outer.dialogData.matchingEntityConfiguration.mappings;
-          const cell = state.state.cell as MyMxCell;
-          if (cell.getStyle() === CConstants.mxStyles.classDisabled) { return; }
-
-
-          const entity = entities.find(e => e.classDefinition.id === cell.id);
-
-          if (outer.dialogData.addedEntities.findIndex(e => e.classDefinition.id === cell.id) === -1) {
-            outer.dialogData.addedEntities.push(entity);
-            outer.graph.setCellStyle(CConstants.mxStyles.classHighlighted, [cell]);
-            outer.addCheckedOverlay(cell);
-
-          } else {
-            outer.dialogData.addedEntities = outer.dialogData.addedEntities.filter(e => e.classDefinition.id !== cell.id);
-            outer.graph.setCellStyle(CConstants.mxStyles.classNormal, [cell]);
-            this.deselectedCell = cell;
-            outer.graph.removeCellOverlay(cell, undefined);
-          }
-        },
-
-        pointerOnClass: function (state) {
-          return !isNullOrUndefined(state) && !isNullOrUndefined(state.state) && !isNullOrUndefined(state.state.cell) && state.state.cell.cellType === MyMxCellType.CLASS;
-        },
-      });
+      this.addMouseListeners(this.graph);
 
       const rootCell = this.createGraph();
+
       this.setLayout();
       this.executeLayout(rootCell);
+
       this.graph.setEnabled(false);
     }
+  }
+
+  private addMouseListeners(graph: mxgraph.mxGraph) {
+    const outer = this;
+    graph.addMouseListener({
+      highlightedCell: undefined,
+      deselectedCell: undefined,
+
+      mouseDown: function (evt, state) { },
+
+      mouseMove: function (evt, state) {
+        if (this.pointerOnClass(state)) {
+          const cell = state.state.cell as MyMxCell;
+          const { addedEntities } = outer.dialogData;
+
+          if (addedEntities.findIndex(e => e.classDefinition.id === cell.id) !== -1) { return; }
+
+          this.highlightedCell = cell;
+          outer.graph.setCellStyle(CConstants.mxStyles.classHighlighted, [cell]);
+
+        } else {
+          const { addedEntities } = outer.dialogData;
+
+          if (
+            (!isNullOrUndefined(this.highlightedCell)
+              && addedEntities.findIndex(e => e.classDefinition.id === this.highlightedCell.id) === -1)
+            || !isNullOrUndefined(this.deselectedCell)
+          ) {
+            outer.graph.setCellStyle(CConstants.mxStyles.classNormal, [this.highlightedCell]);
+            this.deselectedCell = undefined;
+          }
+          this.highlightedCell = undefined;
+        }
+      },
+
+      mouseUp: function (evt, state) {
+        if (!this.pointerOnClass(state)) { return; }
+
+        const { entities } = outer.dialogData.matchingEntityConfiguration.mappings;
+        const cell = state.state.cell as MyMxCell;
+        if (cell.getStyle() === CConstants.mxStyles.classDisabled) { return; }
+
+        const entity = entities.find(e => e.classDefinition.id === cell.id);
+
+        if (outer.dialogData.addedEntities.findIndex(e => e.classDefinition.id === cell.id) === -1) {
+          outer.dialogData.addedEntities.push(entity);
+          outer.graph.setCellStyle(CConstants.mxStyles.classHighlighted, [cell]);
+          outer.addCheckedOverlay(cell);
+
+        } else {
+          outer.dialogData.addedEntities = outer.dialogData.addedEntities.filter(e => e.classDefinition.id !== cell.id);
+          outer.graph.setCellStyle(CConstants.mxStyles.classNormal, [cell]);
+          this.deselectedCell = cell;
+          outer.graph.removeCellOverlay(cell, undefined);
+        }
+      },
+
+      pointerOnClass: function (state) {
+        return !isNullOrUndefined(state) && !isNullOrUndefined(state.state) && !isNullOrUndefined(state.state.cell) && state.state.cell.cellType === MyMxCellType.CLASS;
+      },
+    });
   }
 
   private createGraph(): MyMxCell {
@@ -187,7 +183,6 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
   }
 
   private addClassDefinitionCell(classDefinition: ClassDefinition): MyMxCell {
-
     const mxStyle = this.dialogData.existingEntityPaths.findIndex(p => p.endsWith(classDefinition.id)) !== -1
       ? CConstants.mxStyles.classDisabled
       : this.dialogData.addedEntities.findIndex(e => e.classDefinition.id === classDefinition.id) !== -1
@@ -199,6 +194,7 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
       0, 0, CLASSDEFINITION_CELL_WIDTH, CLASSDEFINITION_CELL_HEIGHT,
       mxStyle
     ) as MyMxCell;
+
     cell.root = false;
     cell.cellType = MyMxCellType.CLASS;
 
@@ -214,7 +210,6 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
       new mx.mxImage('/assets/icons/class_editor/check-solid_white.png', 14, 14),
       'Overlay', mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP, new mx.mxPoint(9, 10)
     );
-
     this.graph.addCellOverlay(cell, overlay);
   }
 
@@ -241,10 +236,6 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
     return cell;
   }
 
-  private handleClickEvent(evt) {
-    console.log('click');
-  }
-
   private setLayout() {
     this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
     this.layout.levelDistance = 50;
@@ -259,10 +250,6 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
     if (!isNullOrUndefined(this.layout)) {
       this.layout.execute(this.graph.getDefaultParent(), rootCell);
     }
-  }
-
-  onSubmit() {
-    this.dialogRef.close(this.dialogData);
   }
 
 }
