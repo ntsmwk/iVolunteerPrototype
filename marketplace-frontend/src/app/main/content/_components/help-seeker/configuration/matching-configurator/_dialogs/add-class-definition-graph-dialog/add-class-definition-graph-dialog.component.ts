@@ -251,5 +251,4 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
       this.layout.execute(this.graph.getDefaultParent(), rootCell);
     }
   }
-
 }
