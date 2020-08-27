@@ -62,9 +62,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   marketplace: Marketplace;
   eventResponseAction: string;
 
-  @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
-  @ViewChild('paletteContainer', { static: true }) paletteContainer: ElementRef;
-  @ViewChild('deleteOperationIcon', { static: true }) deleteOperationContainer: ElementRef;
+  @ViewChild('graphContainer', { static: true }) private graphContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
   data: MatchingDataRequestDTO;
@@ -125,19 +123,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     };
-
-    // const modelGetStyle = this.graph.model.getStyle;
-    // this.graph.model.getStyle = function (cell) {
-    //   if (cell != null) {
-    //     let style = modelGetStyle.apply(this, arguments);
-
-    //     if (this.isCollapsed(cell)) {
-    //       style = style + ';shape=rectangle';
-    //     }
-    //     return style;
-    //   }
-    //   return null;
-    // };
 
     this.graph.getEdgeValidationError = (edge: MyMxCell, source: MyMxCell, target: MyMxCell) => {
       if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === MyMxCellType.MATCHING_OPERATOR &&
