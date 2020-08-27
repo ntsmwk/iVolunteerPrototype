@@ -452,6 +452,7 @@ export class DialogFactoryDirective {
       data: {
         matchingEntityConfiguration: matchingEntityConfiguration,
         existingEntityPaths: existingEntityPaths,
+        addedEntities: [],
       },
     });
 

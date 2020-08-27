@@ -159,6 +159,11 @@ const mxStyles = {
     'editable=0;' +
     'shape=swimlane;resizable=0;' +
     'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
+  classHighlighted:
+    'editable=0;resizable=0;selectable=0;foldable=0;' +
+    'shape=swimlane;' +
+    'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
+
 
   property:
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +

@@ -698,14 +698,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON) {
 
         let entityMappingConfiguration: MatchingEntityMappingConfiguration;
-        let existingEntityPaths: string[];
+        const existingEntityPaths: string[] = [];
 
         if (cell.id === 'left_add') {
           entityMappingConfiguration = this.data.leftMappingConfigurations;
-          existingEntityPaths = this.data.matchingConfiguration.leftAddedClassDefinitionPaths;
+          existingEntityPaths.push(...this.data.matchingConfiguration.leftAddedClassDefinitionPaths);
+
         } else {
           entityMappingConfiguration = this.data.rightMappingConfigurations;
-          existingEntityPaths = this.data.matchingConfiguration.rightAddedClassDefinitionPaths;
+          existingEntityPaths.push(...this.data.matchingConfiguration.rightAddedClassDefinitionPaths);
         }
 
         this.dialogFactory.openAddClassDefinitionDialog(entityMappingConfiguration, existingEntityPaths).then((ret: AddClassDefinitionDialogData) => {

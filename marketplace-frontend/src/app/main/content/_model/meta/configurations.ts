@@ -28,12 +28,12 @@ export class MatchingConfiguration {
   leftClassConfigurationId: string;
   leftClassConfigurationName: string;
 
-  leftAddedClassDefinitionPaths: string[];
+  leftAddedClassDefinitionPaths: string[] = [];
 
   rightClassConfigurationId: string;
   rightClassConfigurationName: string;
 
-  rightAddedClassDefinitionPaths: string[];
+  rightAddedClassDefinitionPaths: string[] = [];
 }
 
 export class MatchingEntityMappingConfiguration {

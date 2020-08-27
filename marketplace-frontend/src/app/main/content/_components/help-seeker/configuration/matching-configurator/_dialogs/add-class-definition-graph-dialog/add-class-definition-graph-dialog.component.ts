@@ -1,11 +1,6 @@
-import { Component, Inject, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import {
-  MatDialogRef, MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-
+import { Component, Inject, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { MatTableDataSource, MatSort } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { LoginService } from 'app/main/content/_service/login.service';
@@ -16,7 +11,9 @@ import { mxgraph } from 'mxgraph';
 import { MyMxCell, MyMxCellType } from '../../../myMxCell';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { CConstants } from '../../../class-configurator/utils-and-constants';
-import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { Relationship, RelationshipType } from 'app/main/content/_model/meta/relationship';
+import { RouterStateSnapshot } from '@angular/router';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 declare var require: any;
 const mx: typeof mxgraph = require('mxgraph')({
@@ -25,7 +22,7 @@ const mx: typeof mxgraph = require('mxgraph')({
 });
 
 const CLASSDEFINITION_CELL_WIDTH = 110;
-const CLASSDEFINITION_CELL_HEIGHT = 70;
+const CLASSDEFINITION_CELL_HEIGHT = 40;
 
 
 export interface AddClassDefinitionGraphDialogData {
@@ -54,6 +51,7 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
   graph: mxgraph.mxGraph;
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   graphData: ClassConfigurationDTO;
+  layout: any;
 
   loaded: boolean;
 
@@ -90,23 +88,10 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
         return 'default';
       }
 
-      if (cell.cellType.startsWith('ADD_CLASS_BUTTON')) {
+      if (cell.cellType === MyMxCellType.CLASS) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     };
-
-    // const modelGetStyle = this.graph.model.getStyle;
-    // this.graph.model.getStyle = function (cell) {
-    //   if (cell != null) {
-    //     let style = modelGetStyle.apply(this, arguments);
-
-    //     if (this.isCollapsed(cell)) {
-    //       style = style + ';shape=rectangle';
-    //     }
-    //     return style;
-    //   }
-    //   return null;
-    // };
 
     if (!mx.mxClient.isBrowserSupported()) {
       mx.mxUtils.error('Browser is not supported!', 200, false);
@@ -115,41 +100,102 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
       mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
 
       this.graph.setPanning(true);
-
       this.graph.addListener(mx.mxEvent.CLICK, (sender: any, evt: mxgraph.mxEventObject) => {
         this.handleClickEvent(evt);
       });
 
-      this.createGraph();
+      const outer = this;
+
+      this.graph.addMouseListener({
+        highlightedCell: undefined,
+        deselectedCell: undefined,
+
+        mouseDown: function (evt, state) { },
+
+        mouseMove: function (evt, state) {
+          if (this.pointerOnClass(state)) {
+            const cell = state.state.cell as MyMxCell;
+            const { addedEntities } = outer.dialogData;
+
+            if (addedEntities.findIndex(e => e.classDefinition.id === cell.id) !== -1) {
+              return;
+            }
+
+            this.highlightedCell = cell;
+            outer.graph.setCellStyle(CConstants.mxStyles.classHighlighted, [cell]);
+
+          } else {
+            const { addedEntities } = outer.dialogData;
+
+            if ((!isNullOrUndefined(this.highlightedCell) && addedEntities.findIndex(e => e.classDefinition.id === this.highlightedCell.id) === -1) || !isNullOrUndefined(this.deselectedCell)) {
+              outer.graph.setCellStyle(CConstants.mxStyles.classNormal, [this.highlightedCell]);
+              this.deselectedCell = undefined;
+            }
+
+            // if (!isNullOrUndefined(this.deselectedCell)) {
+            //   outer.graph.setCellStyle(CConstants.mxStyles.classNormal, [this.deselectedCell]);
+            //   this.deselectedCell = undefined;
+            // }
+            this.highlightedCell = undefined;
+          }
+        },
+        mouseUp: function (evt, state) {
+          if (!this.pointerOnClass(state)) { return; }
+
+          const { entities } = outer.dialogData.matchingEntityConfiguration.mappings;
+          const cell = state.state.cell as MyMxCell;
+          const entity = entities.find(e => e.classDefinition.id === cell.id);
+
+          if (outer.dialogData.addedEntities.findIndex(e => e.classDefinition.id === cell.id) === -1) {
+            outer.dialogData.addedEntities.push(entity);
+            outer.graph.setCellStyle(CConstants.mxStyles.classHighlighted, [cell]);
+
+          } else {
+            outer.dialogData.addedEntities = outer.dialogData.addedEntities.filter(e => e.classDefinition.id !== cell.id);
+            outer.graph.setCellStyle(CConstants.mxStyles.classNormal, [cell]);
+            this.deselectedCell = cell;
+          }
+        },
+
+        pointerOnClass: function (state) {
+          return !isNullOrUndefined(state) && !isNullOrUndefined(state.state) && !isNullOrUndefined(state.state.cell) && state.state.cell.cellType === MyMxCellType.CLASS;
+        },
+
+      });
+
+      const rootCell = this.createGraph();
+      this.setLayout();
+      this.executeLayout(rootCell);
+
+      this.graph.setEnabled(false);
     }
   }
 
-  private createGraph() {
+  private createGraph(): MyMxCell {
     this.graph.getModel().beginUpdate();
-    this.addClassDefinitions(this.graphData.classDefinitions);
+    const rootCell = this.addClassDefinitions(this.graphData.classDefinitions);
     this.addRelationships(this.graphData.relationships);
     this.graph.getModel().endUpdate();
+    return rootCell;
   }
 
   private addClassDefinitions(classDefinitions: ClassDefinition[]) {
+    let rootCell: MyMxCell;
     for (const classDefinition of classDefinitions) {
       const cell = this.addClassDefinitionCell(classDefinition);
+      if (cell.root) { rootCell = cell; }
     }
+    return rootCell;
   }
 
   private addClassDefinitionCell(classDefinition: ClassDefinition): MyMxCell {
     const cell = this.graph.insertVertex(
-      this.graph.getDefaultParent(),
-      classDefinition.id,
-      classDefinition.name,
-      0,
-      0,
-      CLASSDEFINITION_CELL_WIDTH,
-      CLASSDEFINITION_CELL_HEIGHT,
-      CConstants.mxStyles.classTree
+      this.graph.getDefaultParent(), classDefinition.id, classDefinition.name,
+      0, 0, CLASSDEFINITION_CELL_WIDTH, CLASSDEFINITION_CELL_HEIGHT,
+      CConstants.mxStyles.classNormal
     ) as MyMxCell;
     cell.root = false;
-    cell.cellType = MyMxCellType.TREE_ENTRY;
+    cell.cellType = MyMxCellType.CLASS;
 
     return cell;
   }
@@ -157,34 +203,44 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
 
   private addRelationships(relationships: Relationship[]) {
     for (const relationship of relationships) {
-      const cell = this.createRelationshipCellById(relationship);
+      this.createRelationshipCellById(relationship);
     }
   }
 
   private createRelationshipCellById(relationship: Relationship): MyMxCell {
-    const source: MyMxCell = this.graph
-      .getModel().getCell(relationship.source) as MyMxCell;
-    const target: MyMxCell = this.graph
-      .getModel().getCell(relationship.target) as MyMxCell;
+    const source: MyMxCell = this.graph.getModel().getCell(relationship.source) as MyMxCell;
+    const target: MyMxCell = this.graph.getModel().getCell(relationship.target) as MyMxCell;
 
-    return this.createRelationshipCell(relationship.id, source, target);
-  }
+    const style = relationship.relationshipType === RelationshipType.INHERITANCE ?
+      CConstants.mxStyles.inheritance : relationship.relationshipType === RelationshipType.ASSOCIATION ?
+        CConstants.mxStyles.association : CConstants.mxStyles.association;
 
-  private createRelationshipCell(id: string, source: MyMxCell, target: MyMxCell): MyMxCell {
     const cell = this.graph.insertEdge(
-      this.graph.getDefaultParent(),
-      id,
-      '',
-      source,
-      target,
-      CConstants.mxStyles.genericConnection
+      this.graph.getDefaultParent(), relationship.id, '', source, target, style
     ) as MyMxCell;
+
     cell.cellType = MyMxCellType.TREE_CONNECTOR;
     return cell;
   }
 
   private handleClickEvent(evt) {
     console.log('click');
+  }
+
+  private setLayout() {
+    this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
+    this.layout.levelDistance = 50;
+    this.layout.alignRanks = true;
+    this.layout.minEdgeJetty = 50;
+    this.layout.prefHozEdgeSep = 5;
+    this.layout.resetEdges = false;
+    this.layout.edgeRouting = true;
+  }
+
+  private executeLayout(rootCell: MyMxCell) {
+    if (!isNullOrUndefined(this.layout)) {
+      this.layout.execute(this.graph.getDefaultParent(), rootCell);
+    }
   }
 
   onSubmit() {
