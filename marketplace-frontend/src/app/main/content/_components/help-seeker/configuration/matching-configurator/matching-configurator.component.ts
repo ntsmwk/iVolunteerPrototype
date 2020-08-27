@@ -466,7 +466,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       let leftSet = false;
       let rightSet = false;
 
-
       for (const edge of operatorCell.edges) {
         if (isNullOrUndefined(edge.source) || isNullOrUndefined(edge.target)) {
           continue;
@@ -474,7 +473,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
         if (edge.target.id === operatorCell.id) {
           relationship.leftMatchingEntityPath = edge.source.id.substr(2);
-
           relationship.leftMatchingEntityType =
             (edge.source as MyMxCell).cellType === MyMxCellType.PROPERTY
               ? MatchingEntityType.PROPERTY
@@ -483,7 +481,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           leftSet = true;
         } else if (edge.source.id === operatorCell.id) {
           relationship.rightMatchingEntityPath = edge.target.id.substr(2);
-
           relationship.rightMatchingEntityType =
             (edge.target as MyMxCell).cellType === MyMxCellType.PROPERTY
               ? MatchingEntityType.PROPERTY
@@ -531,52 +528,55 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   handleMousedownEvent(event: any, item: any, graph: mxgraph.mxGraph) {
-    const outer = this;
+    // const outer = this;
     let positionEvent: MouseEvent;
 
-    const onDragstart = (evt) => {
+    const onDragstart = (evt: any) => {
       evt.dataTransfer.setData('text', item.id);
       evt.dataTransfer.effect = 'move';
-      evt.dataTransfer.effectAllowed = 'move';
     };
 
-    const onDragOver = (evt) => {
+    const onDragOver = (evt: any) => {
       positionEvent = evt;
+      evt.dataTransfer.dropEffect = 'none';
+
     };
 
-    const onDragend = (evt) => {
-      const addObjectToGraph = (dragEndEvent: MouseEvent, paletteItem: any) => {
+
+    const onDragend = (evt: any) => {
+      const addObjectToGraph = (paletteItem: any) => {
+
         const coords: mxgraph.mxPoint = graph.getPointForEvent(
           positionEvent,
           false
         );
         graph.getModel().beginUpdate();
         if (paletteItem.type === 'matchingOperator') {
-          const cell = outer.constructOperator(coords, paletteItem);
+          const cell = this.constructOperator(coords, paletteItem);
           const relationship = new MatchingOperatorRelationship();
           relationship.id = cell.id;
           relationship.coordX = cell.geometry.x;
           relationship.coordY = cell.geometry.y;
           relationship.matchingOperatorType = cell.matchingOperatorType;
 
-          outer.data.relationships.push(relationship);
+          this.data.relationships.push(relationship);
 
         } else if (paletteItem.type === 'connector') {
-          graph.addCell(outer.constructConnector(coords, -100, 100));
+          graph.addCell(this.constructConnector(coords, -100, 100));
         }
       };
 
       evt.dataTransfer.getData('text');
       try {
-        addObjectToGraph(evt, item);
+        addObjectToGraph(item);
       } finally {
         graph.getModel().endUpdate();
-        removeEventListeners(outer);
+        removeEventListeners();
       }
     };
 
-    const onMouseUp = (evt) => {
-      removeEventListeners(outer);
+    const onMouseUp = (evt: any) => {
+      removeEventListeners();
     };
 
     event.srcElement.addEventListener('dragend', onDragend);
@@ -584,14 +584,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     event.srcElement.addEventListener('dragstart', onDragstart);
     this.graphContainer.nativeElement.addEventListener('dragover', onDragOver);
 
-    const removeEventListeners = (outerScope: any) => {
+    const removeEventListeners = () => {
       event.srcElement.removeEventListener('dragend', onDragend);
       event.srcElement.removeEventListener('mouseup', onMouseUp);
       event.srcElement.removeEventListener('dragstart', onDragstart);
-      outerScope.graphContainer.nativeElement.removeEventListener(
-        'dragover',
-        onDragOver
-      );
+      this.graphContainer.nativeElement.removeEventListener('dragover', onDragOver);
     };
   }
 
