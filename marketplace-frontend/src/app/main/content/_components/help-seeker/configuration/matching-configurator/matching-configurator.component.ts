@@ -60,7 +60,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   ) { }
 
   marketplace: Marketplace;
-
   eventResponseAction: string;
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
@@ -68,7 +67,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   @ViewChild('deleteOperationIcon', { static: true }) deleteOperationContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
-
   data: MatchingDataRequestDTO;
 
   matchingOperatorPalettes = CConstants.matchingOperatorPalettes;
@@ -111,28 +109,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.graphContainer.nativeElement.style.position = 'absolute';
-    this.graphContainer.nativeElement.style.overflow = 'scroll';
-    this.graphContainer.nativeElement.style.left = '0px';
-    this.graphContainer.nativeElement.style.top = '65px';
-    this.graphContainer.nativeElement.style.right = '0px';
-    this.graphContainer.nativeElement.style.bottom = '0px';
-    this.graphContainer.nativeElement.style.background = 'white';
-    this.graphContainer.nativeElement.style.width = '100%';
-
-    this.paletteContainer.nativeElement.style.position = 'absolute';
-    this.paletteContainer.nativeElement.style.overflow = 'hidden';
-    this.paletteContainer.nativeElement.style.padding = '2px';
-    this.paletteContainer.nativeElement.style.right = '0px';
-    this.paletteContainer.nativeElement.style.top = '35px';
-    this.paletteContainer.nativeElement.style.left = '0px';
-    this.paletteContainer.nativeElement.style.height = '30px';
-    this.paletteContainer.nativeElement.style.background = 'white';
-    this.paletteContainer.nativeElement.style.font =
-      'Arial, Helvetica, sans-serif';
-
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
-
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
@@ -141,28 +118,26 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     this.graph.getCursorForCell = (cell: MyMxCell) => {
-
       if (isNullOrUndefined(cell.cellType)) {
         return 'default';
       }
-
       if (cell.cellType.startsWith('ADD_CLASS_BUTTON')) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     };
 
-    const modelGetStyle = this.graph.model.getStyle;
-    this.graph.model.getStyle = function (cell) {
-      if (cell != null) {
-        let style = modelGetStyle.apply(this, arguments);
+    // const modelGetStyle = this.graph.model.getStyle;
+    // this.graph.model.getStyle = function (cell) {
+    //   if (cell != null) {
+    //     let style = modelGetStyle.apply(this, arguments);
 
-        if (this.isCollapsed(cell)) {
-          style = style + ';shape=rectangle';
-        }
-        return style;
-      }
-      return null;
-    };
+    //     if (this.isCollapsed(cell)) {
+    //       style = style + ';shape=rectangle';
+    //     }
+    //     return style;
+    //   }
+    //   return null;
+    // };
 
     this.graph.getEdgeValidationError = (edge: MyMxCell, source: MyMxCell, target: MyMxCell) => {
       if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === MyMxCellType.MATCHING_OPERATOR &&
@@ -303,7 +278,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   }
 
-
   insertClassDefinitionsIntoGraph(ids: string[], mappings: MatchingEntityMappings, geometry: mxgraph.mxGeometry, pathPrefix: 'r' | 'l'): MyMxCell {
     let cell: MyMxCell;
 
@@ -359,7 +333,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     });
     return overlay;
   }
-
 
   private addPropertiesToCell(cell: MyMxCell, entry: MatchingEntity, startX: number, startY: number, pathPrefix?: 'r' | 'l') {
     const classDefinition = entry.classDefinition;
