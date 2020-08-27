@@ -91,10 +91,12 @@ export class AddClassDefinitionDialogComponent implements OnInit {
 
   openGraphDialog() {
     console.log('opengraphdialog');
-    this.openAddClassDefinitionDialog(this.data).then((ret) => {
-      console.log("returned");
-      console.log(ret);
-    })
+    this.openAddClassDefinitionDialog(this.data, this.selection.selected).then((ret: AddClassDefinitionGraphDialogData) => {
+      if (!isNullOrUndefined(ret)) {
+        this.selection.clear();
+        this.selection.select(...ret.addedEntities);
+      }
+    });
   }
 
   onSubmit(submitAll: boolean) {
@@ -118,11 +120,15 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     this.dialogRef.close(this.data);
   }
 
-  openAddClassDefinitionDialog(data: AddClassDefinitionGraphDialogData) {
+  openAddClassDefinitionDialog(data: AddClassDefinitionGraphDialogData, selected: MatchingEntity[]) {
     const dialogRef = this.dialog.open(AddClassDefinitionGraphDialogComponent, {
       width: '90vw',
       height: '90vh',
-      data: data,
+      data: {
+        matchingEntityConfiguration: data.matchingEntityConfiguration,
+        existingEntityPaths: data.existingEntityPaths,
+        addedEntities: selected,
+      },
     });
 
     let returnValue: AddClassDefinitionGraphDialogData;

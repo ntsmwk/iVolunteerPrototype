@@ -163,6 +163,10 @@ const mxStyles = {
     'editable=0;resizable=0;selectable=0;foldable=0;' +
     'shape=swimlane;' +
     'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
+  classDisabled:
+    'editable=0;resizable=0;selectable=0;foldable=0;' +
+    'shape=swimlane;' +
+    'fillColor=#707070;fontColor=#FFFFFF;strokeColor=#707070;fontSize=14;',
 
 
   property:

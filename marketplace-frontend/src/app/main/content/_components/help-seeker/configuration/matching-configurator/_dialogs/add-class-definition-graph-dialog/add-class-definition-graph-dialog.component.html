@@ -10,5 +10,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions *ngIf="loaded">
+  <button class="primary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="dialogData">Fertig</button>
+
   <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Zurück</button>
 </mat-dialog-actions>
