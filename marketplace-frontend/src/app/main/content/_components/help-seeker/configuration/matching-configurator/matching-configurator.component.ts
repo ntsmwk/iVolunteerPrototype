@@ -34,7 +34,7 @@ const PROPERTY_HEIGHT = 20;
 const PROPERTY_SPACE_Y = 5;
 const PROPERTY_SPACE_X = 5;
 
-const BUTTON_WIDTH = 100;
+const BUTTON_WIDTH = 40;
 const Button_HEIGHT = 40;
 
 declare var require: any;
@@ -207,20 +207,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let y = title.geometry.y + title.geometry.height + CLASSDEFINTIION_SPACE_Y;
 
     let cell: MyMxCell;
-    if (!isNullOrUndefined(this.data.matchingConfiguration.rightAddedClassDefinitionPaths)) {
-      cell = this.insertClassDefinitionsIntoGraph(
-        this.data.matchingConfiguration.leftAddedClassDefinitionPaths,
-        this.data.leftMappingConfigurations.mappings,
-        new mx.mxGeometry(SPACE_X + CLASSDEFINTIION_OFFSET_X, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'l'
-      ) as MyMxCell;
-    }
+    cell = this.insertClassDefinitionsIntoGraph(
+      this.data.matchingConfiguration.leftAddedClassDefinitionPaths,
+      this.data.leftMappingConfigurations.mappings,
+      new mx.mxGeometry(SPACE_X + CLASSDEFINTIION_OFFSET_X, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'l'
+    ) as MyMxCell;
 
     if (!isNullOrUndefined(cell)) {
       y = cell.geometry.y + cell.geometry.height + CLASSDEFINTIION_SPACE_Y;
     }
 
     const addButton = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'left_add', 'Hinzufügen', SPACE_X + CLASSDEFINTIION_OFFSET_X, y, BUTTON_WIDTH, Button_HEIGHT, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'left_add', '+',
+      SPACE_X + CLASSDEFINTIION_OFFSET_X + (CLASSDEFINITION_WIDTH / 2) - (BUTTON_WIDTH / 2), y, BUTTON_WIDTH, Button_HEIGHT,
+      CConstants.mxStyles.matchingAddButton
     ) as MyMxCell;
 
     addButton.setConnectable(false);
@@ -241,26 +241,24 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     y = title.geometry.y + title.geometry.height + SPACE_Y;
 
-    // const cell = this.insertClassDefinitionCollectorIntoGraph(this.rightMatchingCollectorConfiguration.mappings, new mx.mxGeometry(x - 100, y, 200, 0)) as MyMxCell;
     let cell: MyMxCell;
-    if (!isNullOrUndefined(this.data.matchingConfiguration.rightAddedClassDefinitionPaths)) {
-      cell = this.insertClassDefinitionsIntoGraph(
-        this.data.matchingConfiguration.rightAddedClassDefinitionPaths, this.data.rightMappingConfigurations.mappings,
-        new mx.mxGeometry(xClassDefinition, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'r'
-      ) as MyMxCell;
-    }
+    cell = this.insertClassDefinitionsIntoGraph(
+      this.data.matchingConfiguration.rightAddedClassDefinitionPaths, this.data.rightMappingConfigurations.mappings,
+      new mx.mxGeometry(xClassDefinition, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'r'
+    ) as MyMxCell;
 
     if (!isNullOrUndefined(cell)) {
       y = cell.geometry.y + cell.geometry.height + SPACE_Y;
     }
 
     const addButton = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'right_add', 'Hinzufügen', xClassDefinition, y, BUTTON_WIDTH, Button_HEIGHT, CConstants.mxStyles.matchingRowHeader
+      this.graph.getDefaultParent(), 'right_add', '+',
+      xClassDefinition + (CLASSDEFINITION_WIDTH / 2) - (BUTTON_WIDTH / 2), y, BUTTON_WIDTH, Button_HEIGHT,
+      CConstants.mxStyles.matchingAddButton
     ) as MyMxCell;
 
     addButton.setConnectable(false);
     addButton.cellType = MyMxCellType.ADD_CLASS_BUTTON;
-
   }
 
   insertClassDefinitionsIntoGraph(ids: string[], mappings: MatchingEntityMappings, geometry: mxgraph.mxGeometry, pathPrefix: 'r' | 'l'): MyMxCell {

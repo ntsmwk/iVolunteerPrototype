@@ -220,6 +220,11 @@ const mxStyles = {
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
     'fillColor=#000000;fontColor=#FFFFFF;strokeColor=#000000;' +
     'align=center;html=1;overflow=hidden;fontSize=30;fontFamily=roboto;fontStyle=bold;',
+  matchingAddButton:
+    'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
+    'fillColor=rgb(62,125,219);fontColor=#FFFFFF;strokeColor=rgb(62,125,219);' +
+    'align=center;verticalAlign=top;html=1;overflow=hidden;fontSize=30;fontFamily=roboto;fontStyle=bold;' +
+    'rounded=1;',
   matchingConnector:
     'endArrow=classic;startArrow=none;html=1;curved=1;' +
     'editable=0;selectable=1;deletable=1;' +
