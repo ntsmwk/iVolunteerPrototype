@@ -1,7 +1,5 @@
 import { mxgraph } from 'mxgraph';
-import {
-  Component, OnInit, AfterContentInit, Input, ViewChild, ElementRef, HostListener
-} from '@angular/core';
+import { Component, OnInit, AfterContentInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DialogFactoryDirective } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
@@ -20,23 +18,17 @@ import { Tenant } from 'app/main/content/_model/tenant';
 
 declare var require: any;
 
-//
-const mx: typeof mxgraph = require('mxgraph')(
-  {
-    // mxDefaultLanguage: 'de',
-    // mxBasePath: './mxgraph_resources',
-  }
-);
+const mx: typeof mxgraph = require('mxgraph')({
+  // mxDefaultLanguage: 'de',
+  // mxBasePath: './mxgraph_resources',
+});
 
-// tslint:disable-next-line: class-name
-
-@Component(
-  {
-    selector: "app-class-configurator",
-    templateUrl: './class-configurator.component.html',
-    styleUrls: ['./class-configurator.component.scss'],
-    providers: [DialogFactoryDirective]
-  }
+@Component({
+  selector: "app-class-configurator",
+  templateUrl: './class-configurator.component.html',
+  styleUrls: ['./class-configurator.component.scss'],
+  providers: [DialogFactoryDirective]
+}
 )
 export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   constructor(
@@ -52,7 +44,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   deletedClassIds: string[];
   relationships: Relationship[];
   deletedRelationshipIds: string[];
-  currentClassConfiguration: ClassConfiguration;
+  classConfiguration: ClassConfiguration;
 
   modelUpdated: boolean;
   currentSelectedCell: MyMxCell;
@@ -62,8 +54,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   eventResponse: TopMenuResponse;
 
   rightSidebarVisible: boolean;
-
-  // hiddenEdges: MyMxCell[];
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
@@ -202,8 +192,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private createPopupMenu(graph) {
-    this.popupMenu = new EditorPopupMenu(graph, this);
+  private createPopupMenu(graph: mxgraph.mxGraph) {
+    this.popupMenu = new EditorPopupMenu(this);
     return this.popupMenu.createPopupMenuHandler(graph);
   }
 
@@ -553,7 +543,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     relationship: Relationship;
   } {
     const addedClass = new ClassDefinition();
-    addedClass.configurationId = this.currentClassConfiguration.id;
+    addedClass.configurationId = this.classConfiguration.id;
 
     const parentClassArchetype = (iconCell.getParent() as MyMxCell).classArchetype;
 
@@ -857,7 +847,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         break;
       }
       case 'editor_delete': {
-        if (!isNullOrUndefined(event.payload.idsToDelete) && !isNullOrUndefined(this.currentClassConfiguration) && event.payload.idsToDelete.find((id: string) => id === this.currentClassConfiguration.id)) {
+        if (!isNullOrUndefined(event.payload.idsToDelete) && !isNullOrUndefined(this.classConfiguration) && event.payload.idsToDelete.find((id: string) => id === this.classConfiguration.id)) {
           this.openGraph(undefined, [], []);
         }
         break;
@@ -867,8 +857,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         break;
       }
       case 'editor_meta_edit': {
-        this.currentClassConfiguration.name = event.payload.name;
-        this.currentClassConfiguration.description = event.payload.description;
+        this.classConfiguration.name = event.payload.name;
+        this.classConfiguration.description = event.payload.description;
         break;
       }
       case 'cancelled': {
@@ -896,7 +886,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   private createSaveEvent(event: any) {
     this.eventResponse.action = 'save';
-    this.eventResponse.classConfiguration = this.currentClassConfiguration;
+    this.eventResponse.classConfiguration = this.classConfiguration;
     this.eventResponse.followingAction = event.followingAction;
     this.eventResponse.classDefintions = this.classDefinitions;
     this.eventResponse.relationships = this.relationships;
@@ -905,7 +895,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   openGraph(classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
-    this.currentClassConfiguration = classConfiguration;
+    this.classConfiguration = classConfiguration;
     this.relationships = relationships;
     this.classDefinitions = classDefinitions;
     this.deletedClassIds = [];
@@ -947,9 +937,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     // update the configurator save file
-    if (!isNullOrUndefined(this.currentClassConfiguration)) {
-      this.currentClassConfiguration.classDefinitionIds = this.classDefinitions.map((c) => c.id);
-      this.currentClassConfiguration.relationshipIds = this.relationships.map((r) => r.id);
+    if (!isNullOrUndefined(this.classConfiguration)) {
+      this.classConfiguration.classDefinitionIds = this.classDefinitions.map((c) => c.id);
+      this.classConfiguration.relationshipIds = this.relationships.map((r) => r.id);
     }
   }
 
@@ -1030,77 +1020,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   printModelToConsole() {
     console.log(this.classDefinitions);
     console.log(this.relationships);
-    console.log(this.currentClassConfiguration);
+    console.log(this.classConfiguration);
   }
 
-  // OLD STUFF - might still be needed later
-  // handleMousedownEvent(event: any, paletteItempaletteEntry: any, item: any, graph: mxgraph.mxGraph) {
-  // const outer = this;
-  // let positionEvent: MouseEvent;
-
-  // const onDragstart = function (evt) {
-  //     evt.dataTransfer.setData('text', item.id);
-  //     evt.dataTransfer.effect = 'move';
-  //     evt.dataTransfer.effectAllowed = 'move';
-  // };
-
-  // const onDragOver = function (evt) {
-  //     positionEvent = evt;
-  // };
-
-  // const onDragend = function (evt) {
-  //     evt.dataTransfer.getData('text');
-  //     try {
-  //       addObjectToGraph(evt, item);
-  //     } finally {
-  //       graph.getModel().endUpdate();
-  //       removeEventListeners(outer);
-  //     }
-
-  //     function addObjectToGraph(dragEndEvent: MouseEvent, paletteItem: any) {
-
-  //       const coords: mxgraph.mxPoint = graph.getPointForEvent(positionEvent, false);
-  //       graph.getModel().beginUpdate();
-
-  //       if (paletteItem.type === 'class') {
-  //         const addedClass = new ClassDefinition();
-  //         addedClass.name = paletteItem.label;
-  //         addedClass.properties = [];
-  //         addedClass.classArchetype = paletteItem.archetype;
-
-  //         const cell = outer.insertClassIntoGraph(addedClass, new mx.mxGeometry(coords.x, coords.y, 80, 30), true);
-  //         // cell.id = outer.objectIdService.getNewObjectId();
-  //         addedClass.id = cell.id;
-  //         outer.configurableClasses.push(addedClass);
-
-  //       } else {
-  //         const r = new Relationship();
-  //         r.relationshipType = paletteItem.id;
-  //         const cell = outer.insertRelationshipIntoGraph(r, coords, true);
-
-  //         cell.id = outer.objectIdService.getNewObjectId();
-  //         r.id = cell.id;
-  //         outer.relationships.push(r);
-
-  //       }
-  //     }
-  // };
-
-  // const onMouseUp = function (evt) {
-  //     removeEventListeners(outer);
-  // };
-
-  // event.srcElement.addEventListener('dragend', onDragend);
-  // event.srcElement.addEventListener('mouseup', onMouseUp);
-  // event.srcElement.addEventListener('dragstart', onDragstart);
-  // this.graphContainer.nativeElement.addEventListener('dragover', onDragOver);
-
-  // function removeEventListeners(outerScope: any) {
-  //     event.srcElement.removeEventListener('dragend', onDragend);
-  //     event.srcElement.removeEventListener('mouseup', onMouseUp);
-  //     event.srcElement.removeEventListener('dragstart', onDragstart);
-  //     outerScope.graphContainer.nativeElement.removeEventListener('dragover', onDragOver);
-
-  // }
-  // }
 }
