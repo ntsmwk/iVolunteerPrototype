@@ -73,10 +73,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   overlayEvent: PointerEvent;
 
   /**
- * ******INITIALIZATION******
- */
-
-  async ngOnInit() {
+   * ******INITIALIZATION******
+   */
+  ngOnInit() {
     this.classDefinitions = [];
     this.deletedClassIds = [];
     this.relationships = [];
@@ -91,6 +90,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
+    if (!mx.mxClient.isBrowserSupported()) {
+      mx.mxUtils.error('Browser is not supported!', 200, false);
+      return;
+    }
+
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
@@ -126,41 +130,37 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       return null;
     };
 
-    if (!mx.mxClient.isBrowserSupported()) {
-      mx.mxUtils.error('Browser is not supported!', 200, false);
-    }
-    else {
-      mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
-      // tslint:disable-next-line: no-unused-expression
-      new mx.mxRubberband(this.graph);
+    mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
+    // tslint:disable-next-line: no-unused-expression
+    new mx.mxRubberband(this.graph);
 
-      this.graph.setPanning(true);
-      this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
-      this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
+    this.graph.setPanning(true);
+    this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
+    this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
 
-      /**
-       * ******EVENT LISTENERS******
-       */
-      this.graph.addListener(mx.mxEvent.CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
-        const mouseEvent = evt.getProperty('event');
-        this.clickToDeleteMode && mouseEvent.button === 0 ? this.handleClickToDeleteEvent(evt)
-          : mouseEvent.button === 0 && this.graph.enabled ?
-            this.handleMXGraphLeftClickEvent(evt)
-            : '';
-      });
+    /**
+     * ******EVENT LISTENERS******
+     */
+    this.graph.addListener(mx.mxEvent.CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+      const mouseEvent = evt.getProperty('event');
+      this.clickToDeleteMode && mouseEvent.button === 0 ? this.handleClickToDeleteEvent(evt)
+        : mouseEvent.button === 0 && this.graph.enabled ?
+          this.handleMXGraphLeftClickEvent(evt)
+          : '';
+    });
 
-      this.graph.addListener(mx.mxEvent.FOLD_CELLS, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
-        const cells: MyMxCell[] = evt.getProperty('cells');
-        const cell = cells.pop();
-        this.handleMXGraphFoldEvent(cell);
-      });
+    this.graph.addListener(mx.mxEvent.FOLD_CELLS, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+      const cells: MyMxCell[] = evt.getProperty('cells');
+      const cell = cells.pop();
+      this.handleMXGraphFoldEvent(cell);
+    });
 
-      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
-        this.handleMXGraphDoubleClickEvent(evt);
-      });
+    this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+      this.handleMXGraphDoubleClickEvent(evt);
+    });
 
-      this.openPreviousClassConfiguration();
-    }
+    this.openPreviousClassConfiguration();
+
   }
 
   private createPopupMenu(graph: mxgraph.mxGraph) {
@@ -171,8 +171,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   /**
  * ******CONTENT-RELATED FUNCTIONS******
  */
-
-  loadServerContent() {
+  private loadServerContent() {
     this.parseGraphContent();
     if (isNullOrUndefined(this.layout)) {
       this.setLayout();
@@ -181,7 +180,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.modelUpdated = true;
   }
 
-  clearEditor() {
+  private clearEditor() {
     this.rootCellSet = false;
     this.rootCell = undefined;
     this.graph.getModel().beginUpdate();
@@ -863,5 +862,4 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     console.log(this.relationships);
     console.log(this.classConfiguration);
   }
-
 }
