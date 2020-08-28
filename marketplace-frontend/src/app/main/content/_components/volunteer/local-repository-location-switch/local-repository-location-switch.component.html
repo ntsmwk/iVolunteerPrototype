@@ -1,0 +1,54 @@
+<div *ngIf="isLoaded">
+  <mat-card style="margin: 20px;">
+    <mat-card-title>
+      Speicherort des lokalen Freiwilligenpasses
+    </mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-radio-group
+          aria-label="Select an option"
+          style="margin-left: 20px;"
+          (change)="localRepositoryLocationChange($event.value)"
+        >
+          <mat-radio-button
+            value="LOCAL"
+            [disabled]="!isJsonServerConnected"
+            [checked]="getChecked('LOCAL')"
+            >Lokal (json-server)</mat-radio-button
+          >
+          <mat-radio-button
+            value="DROPBOX"
+            [disabled]="!isAuthenticated"
+            [checked]="getChecked('DROPBOX')"
+            >Dropbox</mat-radio-button
+          >
+        </mat-radio-group>
+
+        <div fxLayout="column" style="margin-right: 50px;">
+          <img
+            style="margin-bottom: 5px;"
+            src="./assets/images/logos/Dropbox_logo.svg"
+          />
+
+          <a
+            mat-raised-button
+            *ngIf="!isAuthenticated"
+            color="primary"
+            href="{{ authUrl }}"
+          >
+            Dropbox Konto verknüpfen
+          </a>
+
+          <button
+            mat-raised-button
+            *ngIf="isAuthenticated"
+            color="primary"
+            (click)="removeToken()"
+          >
+            Verbindung zu Dropbox aufheben
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

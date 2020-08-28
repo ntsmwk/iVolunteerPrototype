@@ -3,7 +3,11 @@ import { ActivatedRoute } from "@angular/router";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { ClassInstance } from "app/main/content/_model/meta/class";
 import { LoginService } from "app/main/content/_service/login.service";
-import { User, UserRole } from "app/main/content/_model/user";
+import {
+  User,
+  UserRole,
+  LocalRepositoryLocation,
+} from "app/main/content/_model/user";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   MatTableDataSource,
@@ -15,8 +19,9 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { PropertyInstance } from "app/main/content/_model/meta/property/property";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { UserService } from "app/main/content/_service/user.service";
+import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 
 @Component({
   selector: "app-class-instance-details",
@@ -40,13 +45,17 @@ export class ClassInstanceDetailsComponent implements OnInit {
   tableDataSource = new MatTableDataSource<PropertyInstance<any>>();
   displayedColumns = ["name", "values", "type"];
 
+  localRepositoryService;
+
   constructor(
     private route: ActivatedRoute,
     private classInstanceService: ClassInstanceService,
     private tenantService: TenantService,
-    private localRepositoryService: LocalRepositoryService,
     private userService: UserService,
     private loginService: LoginService,
+    private lrDropboxService: LocalRepositoryDropboxService,
+    private lrJsonServerService: LocalRepositoryJsonServerService,
+
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.route.params.subscribe((params) => {
@@ -67,6 +76,12 @@ export class ClassInstanceDetailsComponent implements OnInit {
     this.role = globalInfo.userRole;
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
+
+    if (this.user.localRepositoryLocation == LocalRepositoryLocation.LOCAL) {
+      this.localRepositoryService = this.lrJsonServerService;
+    } else {
+      this.localRepositoryService = this.lrDropboxService;
+    }
 
     this.classInstance = <ClassInstance>(
       await this.classInstanceService

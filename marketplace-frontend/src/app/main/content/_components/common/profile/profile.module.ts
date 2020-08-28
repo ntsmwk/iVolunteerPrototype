@@ -22,6 +22,7 @@ import {
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseWidgetModule } from "@fuse/components";
+import { LocalRepositoryLocationSwitchModule } from "../../volunteer/local-repository-location-switch/local-repository-location-switch.module";
 
 const routes = [{ path: "", component: ProfileComponent }];
 
@@ -46,6 +47,8 @@ const routes = [{ path: "", component: ProfileComponent }];
     FuseSharedModule,
     MatCardModule,
     FuseWidgetModule,
+
+    LocalRepositoryLocationSwitchModule,
   ],
   exports: [],
   declarations: [ProfileComponent],

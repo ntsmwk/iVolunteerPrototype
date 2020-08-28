@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { UserRole } from "../_model/user";
 import { GlobalInfo } from "../_model/global-info";
 import { Observable, generate } from "rxjs";
+import { global } from "@angular/compiler/src/util";
 
 @Injectable({
   providedIn: "root",
@@ -67,6 +68,5 @@ export class LoginService {
     );
 
     localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
-    console.log(globalInfo);
   }
 }
