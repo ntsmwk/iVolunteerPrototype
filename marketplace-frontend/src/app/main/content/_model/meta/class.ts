@@ -10,7 +10,6 @@ export class ClassDefinition {
 
   classArchetype: ClassArchetype;
 
-  collector: boolean;
   writeProtected: boolean;
 
   properties: ClassProperty<any>[] = [];

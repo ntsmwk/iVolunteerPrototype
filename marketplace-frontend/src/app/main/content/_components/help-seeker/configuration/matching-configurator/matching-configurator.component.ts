@@ -335,11 +335,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           propertyEntry.setStyle(CConstants.mxStyles.propertyTree);
 
         } else {
-          propertyEntry.cellType = MyMxCellType.PROPERTY;
+          propertyEntry.cellType = MyMxCellType.FLAT_PROPERTY;
         }
         propertyEntry.setConnectable(true);
 
-        propertyEntry.propertyId = p.id;
+        // propertyEntry.propertyId = p.id;
         lastPropertyGeometry = propertyEntry.geometry;
         startX = lastPropertyGeometry.x;
         startY = lastPropertyGeometry.y;
@@ -463,7 +463,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         if (edge.target.id === operatorCell.id) {
           relationship.leftMatchingEntityPath = edge.source.id.substr(2);
           relationship.leftMatchingEntityType =
-            (edge.source as MyMxCell).cellType === MyMxCellType.PROPERTY
+            (edge.source as MyMxCell).cellType === MyMxCellType.FLAT_PROPERTY
               ? MatchingEntityType.PROPERTY
               : MatchingEntityType.CLASS;
 
@@ -471,7 +471,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         } else if (edge.source.id === operatorCell.id) {
           relationship.rightMatchingEntityPath = edge.target.id.substr(2);
           relationship.rightMatchingEntityType =
-            (edge.target as MyMxCell).cellType === MyMxCellType.PROPERTY
+            (edge.target as MyMxCell).cellType === MyMxCellType.FLAT_PROPERTY
               ? MatchingEntityType.PROPERTY
               : MatchingEntityType.CLASS;
 

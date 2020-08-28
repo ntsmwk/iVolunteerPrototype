@@ -18,8 +18,8 @@ export class MyMxCell extends mx.mxCell {
 
   root?: boolean;
 
-  propertyClass: 'FLAT' | 'TREE';
-  propertyId?: string;
+  // propertyClass: 'FLAT' | 'TREE';
+  // propertyId?: string;
 }
 
 export enum MyMxCellType {
@@ -30,7 +30,7 @@ export enum MyMxCellType {
 
   ASSOCIATION_LABEL = 'ASSOCIATION_LABEL',
 
-  PROPERTY = 'PROPERTY', TREE_PROPERTY = 'TREE_PROPERTY',
+  FLAT_PROPERTY = 'FLAT_PROPERTY', TREE_PROPERTY = 'TREE_PROPERTY',
 
   ADD_PROPERTY_ICON = 'ADD_PROPERTY_ICON', ADD_ASSOCIATION_ICON = 'ADD_ASSOCIATION_ICON',
   ADD_CLASS_SAME_LEVEL_ICON = 'ADD_CLASS_SAME_LEVEL_ICON', ADD_CLASS_NEXT_LEVEL_ICON = 'ADD_CLASS_NEXT_LEVEL_ICON',
