@@ -130,7 +130,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         if (source.edges.length >= 2) {
           return '';
         }
-
         for (const e of source.edges) {
           if (!isNullOrUndefined(e.source) && e.source.id === source.id) {
             return '';
@@ -142,11 +141,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         if (target.edges.length >= 2) {
           return '';
         }
-
         if (source.cellType === MyMxCellType.MATCHING_OPERATOR) {
           return '';
         }
-
         for (const e of target.edges) {
           if (!isNullOrUndefined(e.target) && e.target.id === target.id) {
             return '';
@@ -505,43 +502,30 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     matchingConfiguration.leftClassConfigurationId = leftClassConfiguration.id;
     matchingConfiguration.name = name;
     matchingConfiguration.tenantId = this.tenant.id;
-    this.matchingConfigurationService
-      .saveMatchingConfiguration(this.marketplace, matchingConfiguration)
-      .toPromise()
-      .then((ret: MatchingConfiguration) => {
-        // not doing anything further currently
+    this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration)
+      .toPromise().then((ret: MatchingConfiguration) => {
+        this.loadClassesAndRelationships(leftClassConfiguration.id, rightClassConfiguration.id);
       });
-
-    this.loadClassesAndRelationships(leftClassConfiguration.id, rightClassConfiguration.id);
   }
 
   /**
    * ...........Mouse Events..............
    */
-
   handleMousedownEvent(event: any, item: any, graph: mxgraph.mxGraph) {
-    // const outer = this;
     let positionEvent: MouseEvent;
 
     const onDragstart = (evt: any) => {
       evt.dataTransfer.setData('text', item.id);
       evt.dataTransfer.effect = 'move';
     };
-
     const onDragOver = (evt: any) => {
       positionEvent = evt;
       evt.dataTransfer.dropEffect = 'none';
-
     };
-
-
     const onDragend = (evt: any) => {
       const addObjectToGraph = (paletteItem: any) => {
+        const coords: mxgraph.mxPoint = graph.getPointForEvent(positionEvent, false);
 
-        const coords: mxgraph.mxPoint = graph.getPointForEvent(
-          positionEvent,
-          false
-        );
         graph.getModel().beginUpdate();
         if (paletteItem.type === 'matchingOperator') {
           const cell = this.constructOperator(coords, paletteItem);
@@ -566,7 +550,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         removeEventListeners();
       }
     };
-
     const onMouseUp = (evt: any) => {
       removeEventListeners();
     };
@@ -595,7 +578,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(targetOffsetX)) {
       cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + targetOffsetX, coords.y), false);
     }
-
     cell.geometry.relative = true;
     return cell;
   }
@@ -624,11 +606,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   handleDoubleClickEvent(event: mxgraph.mxEventObject) {
     const cell = event.properties.cell as MyMxCell;
-    if (
-      !isNullOrUndefined(cell) &&
-      cell.cellType === MyMxCellType.MATCHING_OPERATOR &&
-      !this.displayOverlay &&
-      event.properties.event.button === 0
+    if (!isNullOrUndefined(cell) && cell.cellType === MyMxCellType.MATCHING_OPERATOR &&
+      !this.displayOverlay && event.properties.event.button === 0
     ) {
       this.handleOverlayOpened(event, cell);
     }
@@ -637,11 +616,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   handleClickEvent(event: mxgraph.mxEventObject) {
     const cell = event.properties.cell as MyMxCell;
 
-    if (isNullOrUndefined(cell) || isNullOrUndefined(cell.cellType)) {
+    if (isNullOrUndefined(cell) || isNullOrUndefined(cell.cellType) || this.displayOverlay) {
       return;
     }
 
-    if (!isNullOrUndefined(cell) && !this.displayOverlay && event.properties.event.button === 0) {
+    if (event.properties.event.button === 0) {
       if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON) {
 
         let entityMappingConfiguration: MatchingEntityMappingConfiguration;
@@ -663,7 +642,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             } else {
               this.data.matchingConfiguration.rightAddedClassDefinitionPaths.push(...ret.addedEntities.map(e => e.path));
             }
-
             this.redrawContent();
           }
         });
@@ -674,7 +652,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   private handleRemoveOverlayClickEvent(event: mxgraph.mxEventObject) {
     const cell: MyMxCell = event.properties['cell'];
     if (this.confirmDelete) {
-      this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll die Klasse wirklich entfernt werden?').then((ret: boolean) => {
+      this.dialogFactory.confirmationDialog(
+        'Löschen bestätigen',
+        'Soll die Klasse wirklich entfernt werden?'
+      ).then((ret: boolean) => {
         if (ret) {
           this.deleteClassDefinitionCell(cell);
         }
@@ -714,7 +695,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       if (deleteCell.id.startsWith('l')) {
         this.data.matchingConfiguration.leftAddedClassDefinitionPaths = this.data.matchingConfiguration.leftAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const relationship = this.data.relationships.find(r => /*!isNullOrUndefined(r.leftMatchingEntityPath) && */ r.leftMatchingEntityPath.startsWith(actualId));
+        const relationship = this.data.relationships.find(r => r.leftMatchingEntityPath.startsWith(actualId));
 
         if (!isNullOrUndefined(relationship)) {
           relationship.leftMatchingEntityPath = undefined;
@@ -723,7 +704,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       } else if (deleteCell.id.startsWith('r')) {
         this.data.matchingConfiguration.rightAddedClassDefinitionPaths = this.data.matchingConfiguration.rightAddedClassDefinitionPaths.filter(path => path !== actualId);
-        const relationship = this.data.relationships.find(r => /*!isNullOrUndefined(r.rightMatchingEntityPath) && */ r.rightMatchingEntityPath.startsWith(actualId));
+        const relationship = this.data.relationships.find(r => r.rightMatchingEntityPath.startsWith(actualId));
 
         if (!isNullOrUndefined(relationship)) {
           relationship.rightMatchingEntityPath = undefined;
@@ -736,6 +717,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.getModel().endUpdate();
     }
   }
+
 
   /**
    * ...........Overlay..............
@@ -783,7 +765,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     if (event.key === 'Delete') {
       const cells = this.graph.getSelectionCells() as MyMxCell[];
       if (this.confirmDelete) {
-        this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?').then((ret: boolean) => {
+        this.dialogFactory.confirmationDialog(
+          'Löschen bestätigen',
+          'Soll der Operator wirklich gelöscht werden?'
+        ).then((ret: boolean) => {
           if (ret) {
             this.deleteOperators(cells);
           }
