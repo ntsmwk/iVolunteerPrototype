@@ -14,10 +14,8 @@ import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/proper
 import { isNullOrUndefined } from 'util';
 import { OptionsOverlayContentData } from './options-overlay/options-overlay-control/options-overlay-control.component';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { Tenant } from 'app/main/content/_model/tenant';
 
 declare var require: any;
-
 const mx: typeof mxgraph = require('mxgraph')({
   // mxDefaultLanguage: 'de',
   // mxBasePath: './mxgraph_resources',
@@ -28,8 +26,7 @@ const mx: typeof mxgraph = require('mxgraph')({
   templateUrl: './class-configurator.component.html',
   styleUrls: ['./class-configurator.component.scss'],
   providers: [DialogFactoryDirective]
-}
-)
+})
 export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   constructor(
     private route: ActivatedRoute,
@@ -50,24 +47,20 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   currentSelectedCell: MyMxCell;
 
   popupMenu: EditorPopupMenu;
-
   eventResponse: TopMenuResponse;
-
-  rightSidebarVisible: boolean;
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
 
   layout: any;
-
   graph: mxgraph.mxGraph;
-  folding: boolean;
 
   rootCell: MyMxCell;
   rootCellSet: boolean;
 
   relationshipType: RelationshipType;
 
+  rightSidebarVisible: boolean;
   quickEditMode: boolean;
   clickToDeleteMode: boolean;
   confirmDelete: boolean;
@@ -81,8 +74,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   overlayContent: OptionsOverlayContentData;
   overlayEvent: PointerEvent;
 
-  tenant: Tenant;
-
   /**
  * ******INITIALIZATION******
  */
@@ -93,16 +84,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.relationships = [];
     this.deletedRelationshipIds = [];
     this.rightSidebarVisible = true;
-    // this.hiddenEdges = [];
     this.eventResponse = new TopMenuResponse();
     this.relationshipType = RelationshipType.INHERITANCE;
     this.confirmDelete = true;
     this.deleteRelationships = true;
     this.clickToDeleteMode = false;
     this.quickEditMode = false;
-
-    this.tenant = this.globalInfo.tenants[0];
-
   }
 
   ngAfterContentInit() {
@@ -110,12 +97,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
-
       return (this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0);
     };
 
-    const outer = this;
-    this.graph.getCursorForCell = function (cell: MyMxCell) {
+    this.graph.getCursorForCell = (cell: MyMxCell) => {
       if (cell.cellType === MyMxCellType.PROPERTY ||
         cell.cellType === MyMxCellType.ADD_PROPERTY_ICON ||
         cell.cellType === MyMxCellType.REMOVE_ICON ||
@@ -123,15 +108,14 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON ||
         cell.cellType === MyMxCellType.ADD_ASSOCIATION_ICON ||
         cell.cellType === MyMxCellType.OPTIONS_ICON ||
-        (outer.clickToDeleteMode && cell.cellType === MyMxCellType.CLASS) ||
-        (outer.clickToDeleteMode && MyMxCellType.isRelationship(cell.cellType))) {
+        (this.clickToDeleteMode && cell.cellType === MyMxCellType.CLASS) ||
+        (this.clickToDeleteMode && MyMxCellType.isRelationship(cell.cellType))) {
 
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     };
 
     const modelGetStyle = this.graph.model.getStyle;
-
     this.graph.model.getStyle = function (cell) {
       if (cell != null) {
         let style = modelGetStyle.apply(this, arguments);
@@ -147,7 +131,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (!mx.mxClient.isBrowserSupported()) {
       mx.mxUtils.error('Browser is not supported!', 200, false);
     }
-    else { // Disables the built-in context menu
+    else {
       mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
 
       // Enables rubberband selection
@@ -163,30 +147,27 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
        * ******EVENT LISTENERS******
        */
 
-      this.graph.addListener(mx.mxEvent.CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
+      this.graph.addListener(mx.mxEvent.CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
         const mouseEvent = evt.getProperty('event');
 
-        if (outer.clickToDeleteMode && mouseEvent.button === 0) {
-          outer.handleClickToDeleteEvent(evt);
+        if (this.clickToDeleteMode && mouseEvent.button === 0) {
+          this.handleClickToDeleteEvent(evt);
+        } else if (mouseEvent.button === 0 && this.graph.enabled) {
+          this.handleMXGraphLeftClickEvent(evt);
+        } else if (mouseEvent.button === 2 && this.graph.enabled) {
+          this.handleMXGraphRightClickEvent(evt);
         }
-        else {
-          if (mouseEvent.button === 0 && outer.graph.enabled) {
-            outer.handleMXGraphLeftClickEvent(evt);
-          }
-          else if (mouseEvent.button === 2 && outer.graph.enabled) {
-            outer.handleMXGraphRightClickEvent(evt);
-          }
-        }
+
       });
 
-      this.graph.addListener(mx.mxEvent.FOLD_CELLS, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
+      this.graph.addListener(mx.mxEvent.FOLD_CELLS, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
         const cells: MyMxCell[] = evt.getProperty('cells');
         const cell = cells.pop();
-        outer.handleMXGraphFoldEvent(cell);
+        this.handleMXGraphFoldEvent(cell);
       });
 
-      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-        outer.handleMXGraphDoubleClickEvent(evt);
+      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+        this.handleMXGraphDoubleClickEvent(evt);
       });
       this.openPreviousClassConfiguration();
     }
@@ -399,6 +380,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     cell.geometry.relative = true;
     cell.edge = true;
     cell.cellType = type;
+    cell.writeProtected = target.writeProtected;
 
     return this.graph.addEdge(cell, parent, source, target);
   }
@@ -551,7 +533,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     addedClass.classArchetype = parentClassArchetype;
     addedClass.name = 'Neue Klasse\n(' + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ')';
-    addedClass.tenantId = this.tenant.id;
+    addedClass.tenantId = this.globalInfo.tenants[0].id;
     addedClass.properties = [];
 
     const addedRelationship = new Relationship();
