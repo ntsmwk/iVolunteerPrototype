@@ -116,24 +116,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.graphContainer.nativeElement.style.position = 'absolute';
-    this.graphContainer.nativeElement.style.overflow = 'hidden';
-    this.graphContainer.nativeElement.style.left = '0px';
-    this.graphContainer.nativeElement.style.top = '35px';
-    this.graphContainer.nativeElement.style.right = '0px';
-    this.graphContainer.nativeElement.style.bottom = '0px';
-    this.graphContainer.nativeElement.style.background = 'white';
-
-    this.rightSidebarContainer.nativeElement.style.position = 'absolute';
-    this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
-    this.rightSidebarContainer.nativeElement.style.right = '0px';
-    this.rightSidebarContainer.nativeElement.style.top = '35px';
-    this.rightSidebarContainer.nativeElement.style.width = '300px';
-    this.rightSidebarContainer.nativeElement.style.bottom = '0px';
-    this.rightSidebarContainer.nativeElement.style.background = 'rgba(255, 255, 255, 0.9)';
-    this.rightSidebarContainer.nativeElement.style.color = 'black';
-    this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 2px black';
-
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
