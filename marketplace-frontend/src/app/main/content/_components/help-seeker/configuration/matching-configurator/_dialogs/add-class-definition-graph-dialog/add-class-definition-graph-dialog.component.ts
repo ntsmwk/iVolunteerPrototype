@@ -213,7 +213,6 @@ export class AddClassDefinitionGraphDialogComponent implements OnInit {
     this.graph.addCellOverlay(cell, overlay);
   }
 
-
   private addRelationships(relationships: Relationship[]) {
     for (const relationship of relationships) {
       this.createRelationshipCellById(relationship);

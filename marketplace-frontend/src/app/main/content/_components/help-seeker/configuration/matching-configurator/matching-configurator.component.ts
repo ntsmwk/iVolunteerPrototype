@@ -1,5 +1,5 @@
 import { mxgraph } from 'mxgraph';
-import { Component, OnInit, AfterContentInit, Renderer2, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, AfterContentInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DialogFactoryDirective } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { MatchingEntityDataService } from 'app/main/content/_service/configuration/matching-collector-configuration.service';
 import { LoginService } from 'app/main/content/_service/login.service';
@@ -206,8 +206,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     let y = title.geometry.y + title.geometry.height + CLASSDEFINTIION_SPACE_Y;
 
-    let cell: MyMxCell;
-    cell = this.insertClassDefinitionsIntoGraph(
+    const cell = this.insertClassDefinitionsIntoGraph(
       this.data.matchingConfiguration.leftAddedClassDefinitionPaths,
       this.data.leftMappingConfigurations.mappings,
       new mx.mxGeometry(SPACE_X + CLASSDEFINTIION_OFFSET_X, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'l'
@@ -241,8 +240,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     y = title.geometry.y + title.geometry.height + SPACE_Y;
 
-    let cell: MyMxCell;
-    cell = this.insertClassDefinitionsIntoGraph(
+    const cell = this.insertClassDefinitionsIntoGraph(
       this.data.matchingConfiguration.rightAddedClassDefinitionPaths, this.data.rightMappingConfigurations.mappings,
       new mx.mxGeometry(xClassDefinition, y, CLASSDEFINITION_WIDTH, CLASSDEFINITION_HEAD_HEIGHT), 'r'
     ) as MyMxCell;
@@ -425,11 +423,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         this.performOpen(event.payload);
         break;
       case 'editor_new':
-        this.performNew(
-          event.payload.leftClassConfiguration,
-          event.payload.rightClassConfiguration,
-          event.payload.label
-        );
+        this.performNew(event.payload.leftClassConfiguration, event.payload.rightClassConfiguration, event.payload.label);
         break;
     }
   }
