@@ -10,12 +10,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailServiceImpl {
+public class CoreEmailService {
  
     @Autowired
     private JavaMailSender emailSender;
  
-    public void sendSimpleMessage(String to, String subject, String text) {
+    public void sendPlainMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage(); 
         message.setFrom("iVolunteerMail@gmx.at");
         message.setTo(to); 
@@ -34,7 +34,7 @@ public class EmailServiceImpl {
 	        helper.setText(text, true);
 	    	this.emailSender.send(mimeMessage);
     	} catch (MessagingException e) {
-    		System.out.println(e);
+    		e.printStackTrace();
     	}
     }
     
