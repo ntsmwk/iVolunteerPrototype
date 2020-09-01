@@ -28,7 +28,7 @@ const routes: Route[] = [
     canActivate: [AnonymGuard],
   },
   {
-    path: 'register',
+    path: 'register/volunteer',
     loadChildren: () =>
       import(
         './_components/common/user_management/registration/registration.module'
@@ -260,4 +260,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent],
 })
-export class FuseContentModule {}
+export class FuseContentModule { }

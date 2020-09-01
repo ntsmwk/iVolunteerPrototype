@@ -14,6 +14,7 @@ public class User {
 	private String id;
 	private String username;
 	private String password;
+	private boolean verified;
 
 	private String firstname;
 	private String middlename;
@@ -45,6 +46,7 @@ public class User {
 		this.id = coreUser.getId();
 		this.username = coreUser.getUsername();
 		this.password = coreUser.getPassword();
+		this.verified = coreUser.isVerified();
 		this.firstname = coreUser.getFirstname();
 		this.middlename = coreUser.getMiddlename();
 		this.lastname = coreUser.getLastname();
@@ -85,6 +87,14 @@ public class User {
 
 	public void setPassword(final String password) {
 		this.password = password;
+	}
+
+	public boolean isVerified() {
+		return verified;
+	}
+
+	public void setVerified(boolean verified) {
+		this.verified = verified;
 	}
 
 	public String getFirstname() {

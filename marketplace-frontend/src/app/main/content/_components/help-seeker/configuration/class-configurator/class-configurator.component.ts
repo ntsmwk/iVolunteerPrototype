@@ -36,6 +36,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   ) { }
 
   @Input() globalInfo: GlobalInfo;
+  @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
+  @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
 
   classDefinitions: ClassDefinition[];
   deletedClassIds: string[];
@@ -47,16 +49,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   currentSelectedCell: MyMxCell;
 
   popupMenu: EditorPopupMenu;
-  eventResponse: TopMenuResponse;
-
-  @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
-  @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
-
   layout: any;
   graph: mxgraph.mxGraph;
 
   rootCell: MyMxCell;
   rootCellSet: boolean;
+  eventResponse: TopMenuResponse;
 
   relationshipType: RelationshipType;
 
@@ -65,9 +63,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   clickToDeleteMode: boolean;
   confirmDelete: boolean;
   deleteRelationships: boolean;
-
-  // Overlay
   displayOverlay: boolean;
+
   overlayType: 'CLASS' | 'RELATIONSHIP';
   overlayContent: OptionsOverlayContentData;
   overlayEvent: PointerEvent;
@@ -119,15 +116,14 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     const modelGetStyle = this.graph.model.getStyle;
     this.graph.model.getStyle = function (cell) {
-      if (cell != null) {
-        let style = modelGetStyle.apply(this, arguments);
-
-        if (this.isCollapsed(cell)) {
-          style = style + ';shape=rectangle';
-        }
-        return style;
+      if (cell === null) {
+        return null;
       }
-      return null;
+      let style = modelGetStyle.apply(this, arguments);
+      if (this.isCollapsed(cell)) {
+        style = style + ';shape=rectangle';
+      }
+      return style;
     };
 
     mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);

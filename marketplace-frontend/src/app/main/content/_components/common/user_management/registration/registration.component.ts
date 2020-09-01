@@ -93,4 +93,8 @@ export class FuseRegistrationComponent implements OnInit {
         this.router.navigate(["/login"]);
       });
   }
+
+  handleBackClick() {
+    window.history.back();
+  }
 }
