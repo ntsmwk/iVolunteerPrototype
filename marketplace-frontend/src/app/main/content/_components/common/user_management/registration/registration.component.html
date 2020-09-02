@@ -9,10 +9,10 @@
     </div>
   </div>
 
-  <div id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
+  <div #loginFormWrapper id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
     [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
-    <div id="login-form">
-      <div class="title">Registrierung</div>
+    <div id="login-form" *ngIf="!displaySuccess">
+      <div class="title">Registrierung als Freiwilliger</div>
 
       <form name="registrationForm" (submit)="register()" [formGroup]="registrationForm" novalidate>
         <mat-form-field>
@@ -21,56 +21,90 @@
               registrationFormErrors.username &&
               registrationFormErrors.username.required
             ">
-            Username is required
+            Pflichtfeld
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-          <input matInput type="password" placeholder="Passwort" formControlName="password" />
-          <mat-error *ngIf="
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-form-field>
+            <input matInput type="password" placeholder="Passwort" formControlName="password" />
+            <mat-error *ngIf="
               registrationFormErrors.password &&
               registrationFormErrors.password.required
             ">
-            Password is required
+              Pflichtfeld
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="ml-8">
+            <input matInput type="password" placeholder="Bestätigen" formControlName="confirmPassword" />
+            <mat-error *ngIf="
+              registrationFormErrors.confirmPassword &&
+              registrationFormErrors.confirmPassword.required
+            ">
+              Pflichtfeld
+            </mat-error>
+            <mat-error *ngIf="
+              registrationFormErrors.confirmPassword &&
+              registrationFormErrors.confirmPassword.equals
+            ">
+              Passwörter müssen übereinstimmen
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field>
+          <input matInput placeholder="E-Mail Adresse" formControlName="email" />
+          <mat-error *ngIf="
+              registrationFormErrors.email &&
+              registrationFormErrors.email.required
+            ">
+            Pflichtfeld
+          </mat-error>
+          <mat-error *ngIf="
+          registrationFormErrors.email &&
+          registrationFormErrors.email.pattern
+        ">
+            Valide E-Mail-Adresse eingeben
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput type="text" placeholder="First Name" formControlName="firstName" />
+          <input matInput type="text" placeholder="Vorname" formControlName="firstName" />
           <mat-error *ngIf="
               registrationFormErrors.firstName &&
               registrationFormErrors.firstName.required
             ">
-            First Name is required
+            Pflichtfeld
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput type="text" placeholder="Last Name" formControlName="lastName" />
+          <input matInput type="text" placeholder="Nachname" formControlName="lastName" />
           <mat-error *ngIf="
               registrationFormErrors.lastName &&
               registrationFormErrors.lastName.required
             ">
-            Last Name is required
+            Pflichtfeld
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Geburtsdatum</mat-label>
-          <input matInput type="date" formControlName="birthday" [matDatepicker]="picker" [max]="today" />
+          <input matInput formControlName="birthday" [matDatepicker]="picker" [max]="today" />
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="
               registrationFormErrors.birthday &&
               registrationFormErrors.birthday.required
             ">
-            Birthday is required
+            Pflichtfeld
           </mat-error>
         </mat-form-field>
 
         <button type="submit" mat-raised-button color="accent" class="submit-button"
           [disabled]="registrationForm.invalid">
-          Register
+          Registrieren
         </button>
 
         <button type="button" mat-raised-button color="accent" class="submit-button" (click)="handleBackClick()">
@@ -78,5 +112,14 @@
         </button>
       </form>
     </div>
+
+    <div id="login-form" *ngIf="displaySuccess">
+      <div class="title">Registrierung erfolgreich!</div>
+      <div class="description">Eine Bestätigungs-E-Mail wurde an <b>{{registrationForm.value.email}}</b> gesendet.</div>
+      <div>
+        Zum Fortfahren folge bitte den Anweisungen in der E-Mail
+      </div>
+    </div>
+
   </div>
 </div>

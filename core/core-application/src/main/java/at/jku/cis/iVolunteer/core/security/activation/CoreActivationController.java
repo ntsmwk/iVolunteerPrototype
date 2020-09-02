@@ -11,11 +11,9 @@ import at.jku.cis.iVolunteer.model.user.ActivationLinkClickedResponse;
 
 @RestController
 public class CoreActivationController {
-
 	@Autowired private CoreActivationService activationService;
 	@Autowired private CoreUserRepository userRepository;
 
-	
 	@PutMapping("register/test/email")
 	private void testEmail() {
 		final CoreUser user = userRepository.findByUsername("AKop");
@@ -26,9 +24,5 @@ public class CoreActivationController {
 	private ActivationLinkClickedResponse activationLinkClicked(@PathVariable("activationId") String activationId) {
 		return activationService.handleActivationLinkClicked(activationId);
 	}
-	
-	
-	
-	
-	
+
 }
