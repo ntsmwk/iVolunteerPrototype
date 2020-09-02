@@ -19,6 +19,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.ActivationLinkClickedResponse;
 import at.jku.cis.iVolunteer.model.user.ActivationResponse;
@@ -29,6 +30,7 @@ public class CoreActivationService {
  
     @Autowired private JavaMailSender emailSender;
     @Autowired private CorePendingActivationRepository pendingActivationRepository;
+    @Autowired private CoreUserService userService;
 	@Value("${spring.data.websiteuri}") String uri;
 
  
@@ -41,17 +43,53 @@ public class CoreActivationService {
         emailSender.send(message);
     }
     
-    public PendingActivation createActivation(CoreUser user) {
+    public void createActivationAndSendLink(CoreUser user) {
+    	
+    	PendingActivation pendingActivation = findActivationByUserId(user.getId());
+    	if (pendingActivation != null) {
+    		deletePendingActivation(pendingActivation.getActivationId());
+    	}
+    	
+    	createActivation(user);
+    	sendMimeActivationMessage(user);
+    }
+    
+    public ActivationLinkClickedResponse handleActivationLinkClicked(String activationId) {
+    	PendingActivation pendingActivation = findActivationById(activationId);
+    	
+    	ActivationResponse activationResponse;
+    	CoreUser user = null;
+    	
+    	if (pendingActivation == null) {
+    		activationResponse = ActivationResponse.FAILED;
+    	} else {
+    		Date now = new Date();
+    		long delta = now.toInstant().toEpochMilli() - pendingActivation.getTimestamp().toInstant().toEpochMilli();
+    		if (delta >= 900000) { //15 minutes
+    			activationResponse = ActivationResponse.EXPIRED;
+    		} else {
+    			activationResponse = ActivationResponse.SUCCESS;
+    			user = userService.getByUserId(pendingActivation.getUserId());
+    			userService.updateUser(user, "", false);
+    		}	
+    		deletePendingActivation(activationId);
+    		
+    	}
+    	return new ActivationLinkClickedResponse(pendingActivation, activationResponse, user);
+    	
+    }
+    
+    private PendingActivation createActivation(CoreUser user) {
 		String md5 = RandomStringUtils.randomAlphanumeric(128);
 		PendingActivation pendingActivation = new PendingActivation(md5, user.getId());
 		return pendingActivationRepository.save(pendingActivation);
     }
     
-    public PendingActivation findActivationById(String activationId) {
+    private PendingActivation findActivationById(String activationId) {
     	return pendingActivationRepository.findOne(activationId);
     }
     
-    public PendingActivation findActivationByUserId(String userId) {
+    private PendingActivation findActivationByUserId(String userId) {
     	return pendingActivationRepository.findByUserId(userId);
     }
     
@@ -59,7 +97,7 @@ public class CoreActivationService {
     	pendingActivationRepository.delete(activationId);
     }
     
-    public void sendMimeActivationMessage(CoreUser user) {
+    private void sendMimeActivationMessage(CoreUser user) {
     	PendingActivation activation = createActivation(user);
 		String url = uri + "/register/activate/" + activation.getActivationId();
 		String msg = patchURL(getText(), url);
@@ -77,29 +115,7 @@ public class CoreActivationService {
     		e.printStackTrace();
     	}
     }
-    
-    public ActivationLinkClickedResponse handleActivationLinkClicked(String activationId) {
-    	PendingActivation pendingActivation = findActivationById(activationId);
-    	
-    	ActivationResponse activationResponse;
-    	
-    	if (pendingActivation == null) {
-    		activationResponse = ActivationResponse.FAILED;
-    	} else {
-    		Date now = new Date();
-    		long delta = now.toInstant().toEpochMilli() - pendingActivation.getTimestamp().toInstant().toEpochMilli();
-    		if (delta >= 900000) { //15 minutes
-    			activationResponse = ActivationResponse.EXPIRED;
-    		} else {
-    			activationResponse = ActivationResponse.SUCCESS;
-        		//TODO update user flag;
-    		}	
-    		deletePendingActivation(activationId);
-    		
-    	}
-    	return new ActivationLinkClickedResponse(pendingActivation, activationResponse);
-    	
-    }
+
     
     private String getText() {
 		Resource resource = new ClassPathResource("/eMailTemplate/template.html");

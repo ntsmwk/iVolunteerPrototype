@@ -2,16 +2,20 @@ package at.jku.cis.iVolunteer.model.user;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+
 @Document
 public class ActivationLinkClickedResponse {
 
 	private PendingActivation pendingActivation;
 	private ActivationResponse activationResponse;
+	private CoreUser user;
 	
 	public ActivationLinkClickedResponse() {}
-	public ActivationLinkClickedResponse(PendingActivation pendingActivation, ActivationResponse activationResponse) {
+	public ActivationLinkClickedResponse(PendingActivation pendingActivation, ActivationResponse activationResponse, CoreUser user) {
 		this.pendingActivation = pendingActivation;
 		this.activationResponse = activationResponse;
+		this.user = user;
 	}
 	
 	public PendingActivation getPendingActivation() {
@@ -26,6 +30,13 @@ public class ActivationLinkClickedResponse {
 	public void setActivationResponse(ActivationResponse activationResponse) {
 		this.activationResponse = activationResponse;
 	}
+	public CoreUser getUser() {
+		return user;
+	}
+	public void setUser(CoreUser user) {
+		this.user = user;
+	}
+	
 	
 	
 	
