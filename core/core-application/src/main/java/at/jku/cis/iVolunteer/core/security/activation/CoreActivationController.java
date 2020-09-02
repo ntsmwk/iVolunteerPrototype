@@ -20,7 +20,7 @@ public class CoreActivationController {
 		activationService.createActivationAndSendLink(user);
 	}
 	
-	@PutMapping("register/activation/{activationId}")
+	@PutMapping("register/activate/{activationId}")
 	private ActivationLinkClickedResponse activationLinkClicked(@PathVariable("activationId") String activationId) {
 		return activationService.handleActivationLinkClicked(activationId);
 	}

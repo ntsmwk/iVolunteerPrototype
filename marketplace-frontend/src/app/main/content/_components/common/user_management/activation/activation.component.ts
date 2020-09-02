@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
+import { ActivationService } from 'app/main/content/_service/activation.service';
+import { isNullOrUndefined } from 'util';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class ActivationComponent implements OnInit {
     private fuseConfig: FuseConfigService,
     private router: Router,
     private route: ActivatedRoute,
+    private activationService: ActivationService,
   ) {
     const layout = {
       navigation: 'none',
@@ -34,6 +36,12 @@ export class ActivationComponent implements OnInit {
     this.route.params.subscribe((param) => {
       this.activationId = param['activationId'];
     });
+
+    if (!isNullOrUndefined(this.activationId)) {
+      this.activationService.activate(this.activationId).toPromise().then((ret) => {
+        console.log(ret);
+      })
+    }
   }
 
 
