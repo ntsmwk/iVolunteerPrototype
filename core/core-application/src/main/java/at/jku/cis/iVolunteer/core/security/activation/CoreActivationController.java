@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.core.security;
+package at.jku.cis.iVolunteer.core.security.activation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CoreEmailController {
+public class CoreActivationController {
 
-	@Autowired private CoreEmailService emailService;
+	@Autowired private CoreActivationService activationService;
 	@Value("${spring.data.websiteuri}") String uri;
 
 	
@@ -26,7 +26,7 @@ public class CoreEmailController {
 		String md5 = RandomStringUtils.randomAlphanumeric(128);
 		String url = uri + "/register/activate/" + md5;
 		String msg = patchURL(getText(), url);
-		emailService.sendMimeMessage("alexander.kopp@gmx.at", "iVolunteer", msg);
+		activationService.sendMimeMessage("alexander.kopp@gmx.at", "iVolunteer", msg);
 	}
 	
 	private String getText() {

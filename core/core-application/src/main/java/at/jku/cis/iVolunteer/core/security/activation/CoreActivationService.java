@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.core.security;
+package at.jku.cis.iVolunteer.core.security.activation;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -10,10 +10,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CoreEmailService {
+public class CoreActivationService {
  
-    @Autowired
-    private JavaMailSender emailSender;
+    @Autowired private JavaMailSender emailSender;
  
     public void sendPlainMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage(); 

@@ -145,18 +145,6 @@ public class User {
 		this.image = image;
 	}
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (!(obj instanceof User)) {
-			return false;
-		}
-		return ((User) obj).id.equals(id);
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
 
 	public List<String> getLocations() {
 		return locations;
@@ -259,4 +247,18 @@ public class User {
 	public void setDropboxToken(String dropboxToken) {
 		this.dropboxToken = dropboxToken;
 	}
+	
+	@Override
+	public boolean equals(final Object obj) {
+		if (!(obj instanceof User)) {
+			return false;
+		}
+		return ((User) obj).id.equals(id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
 }
