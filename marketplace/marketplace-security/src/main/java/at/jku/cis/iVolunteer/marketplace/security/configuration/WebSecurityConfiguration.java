@@ -24,31 +24,32 @@ import at.jku.cis.marketplace.security.service.ParticipantDetailsService;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired private ParticipantDetailsService participantDetailsService;
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired
+	private ParticipantDetailsService participantDetailsService;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable();
-		http.authorizeRequests()
-		    .antMatchers("/api/**").permitAll()
-		    .antMatchers("/push-task-from-api").permitAll()
-		    .antMatchers("/fahrtenspange-fake").permitAll()
-		    .antMatchers("/reset").permitAll()
-		    .antMatchers("/create-reset-state").permitAll()
-		    .antMatchers("/init/**").permitAll()
-		    .antMatchers("/volunteer").permitAll()
-		    .antMatchers("/helpseeker").permitAll()
-		    .antMatchers("/user/**").permitAll()
-		    .antMatchers("/rule/engine/**").permitAll()
-		    .antMatchers("/matching/test").permitAll()
-			.anyRequest().authenticated();
+		http.authorizeRequests().antMatchers("/api/**").permitAll().antMatchers("/push-task-from-api").permitAll()
+				.antMatchers("/fahrtenspange-fake").permitAll().antMatchers("/reset").permitAll()
+				.antMatchers("/create-reset-state").permitAll().antMatchers("/init/**").permitAll()
+				.antMatchers("/volunteer").permitAll().antMatchers("/helpseeker").permitAll().antMatchers("/user/**")
+				.permitAll().antMatchers("/rule/engine/**").permitAll().antMatchers("/matching/test").permitAll()
+				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 	}
+
+	// @Override
+	// public void configure(WebSecurity web) throws Exception {
+	// web.ignoring().antMatchers("**/refreshToken");
+	// }
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
