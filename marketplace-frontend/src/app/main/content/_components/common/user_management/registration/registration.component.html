@@ -102,12 +102,13 @@
           </mat-error>
         </mat-form-field>
 
-        <button type="submit" mat-raised-button color="accent" class="submit-button"
+        <button type="submit" mat-stroked-button class="primary-button-dark full-width "
           [disabled]="registrationForm.invalid">
           Registrieren
         </button>
 
-        <button type="button" mat-raised-button color="accent" class="submit-button" (click)="handleBackClick()">
+        <button type="button" mat-stroked-button class="secondary-button-dark full-width mt-4"
+          (click)="handleBackClick()">
           Zurück
         </button>
       </form>
@@ -119,6 +120,11 @@
       <div>
         Zum Fortfahren folge bitte den Anweisungen in der E-Mail
       </div>
+
+      <button mat-stroked-button class="primary-button-dark mt-28" style="display:block; margin: 0 auto"
+        (click)="handleBackToLoginClick()">
+        Zurück zum Login
+      </button>
     </div>
 
   </div>

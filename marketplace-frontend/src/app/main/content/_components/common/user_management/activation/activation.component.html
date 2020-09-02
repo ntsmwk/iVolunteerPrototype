@@ -1,0 +1,21 @@
+<div id="login" fxLayout="row" fxLayoutAlign="start">
+  <div id="login-intro" fxFlex fxHide fxShow.gt-xs>
+    <div class="logo" *fuseIfOnDom [@animate]="{ value: '*', params: { scale: '0.2' } }">
+      <img src="assets/logo.png" />
+    </div>
+
+    <div class="title" *fuseIfOnDom [@animate]="{ value: '*', params: { delay: '50ms', y: '25px' } }">
+      Willkommen bei iVolunteer!
+    </div>
+  </div>
+
+  <div #loginFormWrapper id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
+    [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
+    <div id="login-form">
+      activation
+    </div>
+
+
+
+  </div>
+</div>

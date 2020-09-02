@@ -35,6 +35,15 @@ const routes: Route[] = [
       ).then((m) => m.FuseRegistrationModule),
     // canActivate: [AnonymGuard]
   },
+
+  {
+    path: 'register/activate',
+    loadChildren: () =>
+      import(
+        './_components/common/user_management/activation/activation.module'
+      ).then((m) => m.ActivationModule),
+    // canActivate: [AnonymGuard]
+  },
   {
     path: 'role',
     loadChildren: () =>
