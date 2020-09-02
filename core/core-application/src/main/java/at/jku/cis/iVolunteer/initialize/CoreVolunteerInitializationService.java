@@ -5,10 +5,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -90,6 +93,7 @@ public class CoreVolunteerInitializationService {
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
 			volunteer.setLocalRepositoryLocation(LocalRepositoryLocation.LOCAL);
+			volunteer.setEmails(Collections.singletonList("iVolunteerTest@gmx.at"));
 
 			volunteer = coreUserRepository.insert(volunteer);
 			coreUserService.addNewUser(volunteer, "", false);

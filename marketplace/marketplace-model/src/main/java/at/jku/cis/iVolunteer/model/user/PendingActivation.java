@@ -13,6 +13,13 @@ public class PendingActivation {
 	private String userId;
 	private Date timestamp;
 	
+	public PendingActivation() {}
+	public PendingActivation(String activationId, String userId) {
+		this.activationId = activationId;
+		this.userId = userId;
+		this.timestamp = new Date();
+	}
+	
 	public String getActivationId() {
 		return activationId;
 	}
