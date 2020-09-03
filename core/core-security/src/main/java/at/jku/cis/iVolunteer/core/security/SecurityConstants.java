@@ -4,7 +4,7 @@ public interface SecurityConstants {
 	public static final String ACCESS_SECRET = "SecretKeyToGenAccessJWTs";
 	public static final String REFRESH_SECRET = "SecretKeyToGenRefreshJWTs";
 
-	public static final long ACCES_EXPIRATION_TIME = 600_000; // 10 min
+	public static final long ACCES_EXPIRATION_TIME = 60_000; // 1 min
 	public static final long REFRESH_EXPIRATION_TIME = 864_000_000; // 10 days
 
 	public static final String TOKEN_PREFIX = "Bearer ";

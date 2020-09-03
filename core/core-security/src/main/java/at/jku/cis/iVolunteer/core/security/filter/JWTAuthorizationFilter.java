@@ -9,6 +9,7 @@ import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,7 +81,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private UsernamePasswordAuthenticationToken buildAuthentication(String token) {
 		String username = parseUsernameFromJWTToken(token);
-		Collection<? extends GrantedAuthority> authorities = parseAuthoritiesFromJWTToken(token);
+		// Collection<? extends GrantedAuthority> authorities =
+		// parseAuthoritiesFromJWTToken(token);
+		Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
 		if (username == null || authorities == null) {
 			return null;
 		}
