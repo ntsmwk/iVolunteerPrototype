@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { MatButtonModule, MatProgressSpinnerModule, MatInputModule, MatCommonModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
+import { ResendLinkModule } from './resend-link/resend-link.module';
 
 const routes = [{ path: ':activationId', component: ActivationComponent }];
 
@@ -16,7 +17,7 @@ const routes = [{ path: ':activationId', component: ActivationComponent }];
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-
+    ResendLinkModule,
 
     FuseSharedModule,
   ],

@@ -35,17 +35,9 @@
         <a (click)="resendActivationFlow = true">Aktivierung erneut senden</a>
       </div>
 
-      <div *ngIf="resendActivationFlow">
-
-        <form #emailForm="ngForm">
-          <mat-form-field>
-            <input matInput [(ngModel)]="emailAddress" placeholder="E-Mail-Adresse" name="E-Mail-Adresse" email />
-          </mat-form-field>
-          <button type="submit" mat-stroked-button class="primary-button-dark full-width "
-            [disabled]="emailForm.invalid">Anfordern</button>
-        </form>
-
-      </div>
+      <resend-link [emailAddress]="emailAddress" [username]="username" *ngIf="resendActivationFlow"
+        (submitForm)="handleResendLinkSubmit($event)">
+      </resend-link>
 
 
     </div>

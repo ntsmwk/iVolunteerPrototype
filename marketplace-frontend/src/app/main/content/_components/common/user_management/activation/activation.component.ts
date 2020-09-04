@@ -64,4 +64,10 @@ export class ActivationComponent implements OnInit {
     window.history.back();
   }
 
+  handleResendLinkSubmit(email: string) {
+    console.log("submit");
+    console.log(email);
+    this.emailAddress = email;
+  }
+
 }
