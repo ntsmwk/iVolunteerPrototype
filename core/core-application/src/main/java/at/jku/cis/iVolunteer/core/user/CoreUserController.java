@@ -50,6 +50,7 @@ public class CoreUserController {
 
 	@GetMapping("/user/name/{username}")
 	private CoreUser getByUserName(@PathVariable("username") String username) {
+		System.out.println(username);
 		return coreUserService.getByUserName(username);
 	}
 

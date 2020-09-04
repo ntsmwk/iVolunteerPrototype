@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { ActivationService } from 'app/main/content/_service/activation.service';
 import { isNullOrUndefined } from 'util';
+import { ActivationLinkClickedResponse } from 'app/main/content/_model/activation';
+import { User } from 'app/main/content/_model/user';
 
 
 @Component({
@@ -14,6 +16,12 @@ import { isNullOrUndefined } from 'util';
 })
 export class ActivationComponent implements OnInit {
   activationId: string;
+  response: ActivationLinkClickedResponse;
+  loaded: boolean;
+  resendActivationFlow: boolean;
+  lastUser: User;
+
+
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -38,9 +46,17 @@ export class ActivationComponent implements OnInit {
     });
 
     if (!isNullOrUndefined(this.activationId)) {
-      this.activationService.activate(this.activationId).toPromise().then((ret) => {
-        console.log(ret);
-      })
+      this.activationService.activate(this.activationId).toPromise().then((ret: ActivationLinkClickedResponse) => {
+        if (!isNullOrUndefined(ret)) {
+          this.response = ret;
+          if (!isNullOrUndefined(ret.user)) {
+            this.lastUser = { ...ret.user };
+          }
+          this.loaded = true;
+          console.log(ret);
+          console.log(this.lastUser);
+        }
+      });
     }
   }
 

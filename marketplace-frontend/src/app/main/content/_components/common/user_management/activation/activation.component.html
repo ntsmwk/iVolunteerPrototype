@@ -11,8 +11,39 @@
 
   <div #loginFormWrapper id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
     [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
-    <div id="login-form">
-      activation
+    <div id="login-form" *ngIf="loaded">
+      <div *ngIf="response.activationResponse === 'FAILED'">
+        Aktivierung fehlgeschlagen
+        <a routerLink="/login">
+          Zurück zum Login
+        </a>
+        <a routerLink="/register/volunteer">
+          Zurück zur Registrierung
+        </a>
+        <a (click)="resendActivationFlow = true">erneut Versuchen</a>
+      </div>
+
+      <div *ngIf="response.activationResponse === 'SUCCESS'">
+        Aktivierung erfolgreich
+        <a routerLink="/login">
+          Zum Login
+        </a>
+      </div>
+
+      <div *ngIf="response.activationResponse === 'EXPIRED'">
+        Aktivierungslink ist abgelaufen
+        <a (click)="resendLink">Erneut senden</a>
+      </div>
+
+      <div *ngIf="resendActivationFlow">
+
+      </div>
+
+
+    </div>
+
+    <div *ngIf="!loaded" style="height: 100%; display: flex; justify-content: center; align-items: center;">
+      <mat-spinner></mat-spinner>
     </div>
 
 

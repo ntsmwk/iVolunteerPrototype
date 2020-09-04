@@ -11,12 +11,14 @@ public class PendingActivation {
 	@Id
 	private String activationId;
 	private String userId;
+	private String email;
 	private Date timestamp;
 	
 	public PendingActivation() {}
-	public PendingActivation(String activationId, String userId) {
+	public PendingActivation(String activationId, String userId, String email) {
 		this.activationId = activationId;
 		this.userId = userId;
+		this.email = email;
 		this.timestamp = new Date();
 	}
 	
@@ -36,6 +38,12 @@ public class PendingActivation {
 		this.userId = userId;
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public Date getTimestamp() {
 		return timestamp;
 	}

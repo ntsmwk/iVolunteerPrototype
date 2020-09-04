@@ -70,7 +70,7 @@ public class CoreHelpSeekerInitializationService {
 			helpSeeker.setLastname(lastName);
 			helpSeeker.setNickname(nickName);
 			helpSeeker.setPosition(position);
-
+			helpSeeker.setActivated(true);
 			// helpSeeker = coreUserRepository.insert(helpSeeker);
 			coreUserService.addNewUser(helpSeeker, "", false);
 		}

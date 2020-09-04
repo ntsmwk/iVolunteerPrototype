@@ -20,11 +20,15 @@ public class CoreRegistrationService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public void registerUser(CoreUser user) {
-		encryptPassword(user);
-		this.coreUserRepository.save(user);
-		this.coreActivationService.createActivationAndSendLink(user);
+	public CoreUser registerUser(CoreUser user) {
 		
+		CoreUser existingUser = this.coreUserRepository.findByUsernameOrLoginEmail(user.getUsername(), user.getLoginEmail());
+		if (existingUser == null) {
+			encryptPassword(user);
+			this.coreUserRepository.save(user);
+			this.coreActivationService.createActivationAndSendLink(user);
+		}
+		return existingUser; 
 	}
 
 	// public void registerVolunteer(CoreVolunteer volunteer) {

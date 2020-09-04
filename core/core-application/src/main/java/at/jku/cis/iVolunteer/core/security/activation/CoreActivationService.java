@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -43,18 +44,25 @@ public class CoreActivationService {
         emailSender.send(message);
     }
     
-    public void createActivationAndSendLink(CoreUser user) {
+    public boolean createActivationAndSendLink(CoreUser user) {
     	
     	PendingActivation pendingActivation = findActivationByUserId(user.getId());
     	if (pendingActivation != null) {
     		deletePendingActivation(pendingActivation.getActivationId());
     	}
     	
-    	createActivation(user);
-    	sendMimeActivationMessage(user);
+    	pendingActivation = createActivation(user);
+    	boolean sendSuccessful = sendMimeActivationMessage(user, pendingActivation.getActivationId());
+    	if (sendSuccessful) {
+    		pendingActivationRepository.save(pendingActivation);
+    	}
+    	
+    	return sendSuccessful;
     }
     
     public ActivationLinkClickedResponse handleActivationLinkClicked(String activationId) {
+    	
+    	System.out.println(activationId);
     	PendingActivation pendingActivation = findActivationById(activationId);
     	
     	ActivationResponse activationResponse;
@@ -65,24 +73,27 @@ public class CoreActivationService {
     	} else {
     		Date now = new Date();
     		long delta = now.toInstant().toEpochMilli() - pendingActivation.getTimestamp().toInstant().toEpochMilli();
-    		if (delta >= 900000) { //15 minutes
+//    		if (delta >= 900000) { //15 minutes
+    		if (delta >= 100) {
     			activationResponse = ActivationResponse.EXPIRED;
     		} else {
     			activationResponse = ActivationResponse.SUCCESS;
     			user = userService.getByUserId(pendingActivation.getUserId());
+    			user.setActivated(true);
     			userService.updateUser(user, "", false);
     		}	
     		deletePendingActivation(activationId);
     		
     	}
+    	System.out.println(activationResponse);
     	return new ActivationLinkClickedResponse(pendingActivation, activationResponse, user);
     	
     }
     
     private PendingActivation createActivation(CoreUser user) {
 		String md5 = RandomStringUtils.randomAlphanumeric(128);
-		PendingActivation pendingActivation = new PendingActivation(md5, user.getId());
-		return pendingActivationRepository.save(pendingActivation);
+		PendingActivation pendingActivation = new PendingActivation(md5, user.getId(), user.getLoginEmail());
+		return pendingActivation;
     }
     
     private PendingActivation findActivationById(String activationId) {
@@ -97,9 +108,8 @@ public class CoreActivationService {
     	pendingActivationRepository.delete(activationId);
     }
     
-    private void sendMimeActivationMessage(CoreUser user) {
-    	PendingActivation activation = createActivation(user);
-		String url = uri + "/register/activate/" + activation.getActivationId();
+    private boolean sendMimeActivationMessage(CoreUser user, String activationId) {
+		String url = uri + "/register/activate/" + activationId;
 		String msg = patchURL(getText(), url);
     	
     	
@@ -111,8 +121,10 @@ public class CoreActivationService {
 	        helper.setFrom("iVolunteerMail@gmx.at");
 	        helper.setText(msg, true);
 	    	this.emailSender.send(mimeMessage);
-    	} catch (MessagingException e) {
+	    	return true;
+    	} catch (MessagingException | MailSendException e) {
     		e.printStackTrace();
+    		return false;
     	}
     }
 

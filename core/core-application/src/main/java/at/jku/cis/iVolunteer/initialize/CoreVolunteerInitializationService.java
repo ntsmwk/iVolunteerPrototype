@@ -95,6 +95,7 @@ public class CoreVolunteerInitializationService {
 			volunteer.setLocalRepositoryLocation(LocalRepositoryLocation.LOCAL);
 			volunteer.setEmails(Collections.singletonList("iVolunteerTest@gmx.at"));
 
+			volunteer.setActivated(true);
 			volunteer = coreUserRepository.insert(volunteer);
 			coreUserService.addNewUser(volunteer, "", false);
 

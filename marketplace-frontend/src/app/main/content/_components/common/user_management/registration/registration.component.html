@@ -23,6 +23,12 @@
             ">
             Pflichtfeld
           </mat-error>
+          <mat-error *ngIf="
+          registrationFormErrors.username &&
+          registrationFormErrors.username.stringsUnique
+        ">
+            Benutzername bereits verwendet
+          </mat-error>
         </mat-form-field>
 
         <div fxLayout="row" fxLayoutAlign="start center">
@@ -66,6 +72,12 @@
           registrationFormErrors.email.pattern
         ">
             Valide E-Mail-Adresse eingeben
+          </mat-error>
+          <mat-error *ngIf="
+          registrationFormErrors.email &&
+          registrationFormErrors.email.stringsUnique
+        ">
+            E-Mail Adresse bereits verwendet
           </mat-error>
         </mat-form-field>
 

@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
+import at.jku.cis.iVolunteer.core.security.activation.CorePendingActivationRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -21,14 +22,11 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	protected CoreUserRepository coreUserRepository;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private Environment environment;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired protected CoreUserRepository coreUserRepository;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired protected CorePendingActivationRepository pendingActivationRepository;
+	@Autowired private Environment environment;
 
 	public void init() {
 //		createMarketplace();
@@ -70,6 +68,7 @@ public class CoreInitializationService {
 			recruiter.setFirstname(firstName);
 			recruiter.setLastname(lastName);
 			recruiter.setPosition(position);
+			recruiter.setActivated(true);
 			recruiter = coreUserRepository.save(recruiter);
 		}
 	}
@@ -101,6 +100,7 @@ public class CoreInitializationService {
 			admin = new CoreUser();
 			admin.setUsername(username);
 			admin.setPassword(bCryptPasswordEncoder.encode(password));
+			admin.setActivated(true);
 			admin = coreUserRepository.save(admin);
 		}
 		return admin;

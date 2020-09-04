@@ -13,6 +13,7 @@ public class CoreUser extends User {
 	@DBRef
 	private List<CoreUser> follower = new ArrayList<>();
 	private List<String> registeredMarketplaceIds = new ArrayList<>();
+	private boolean activated;
 
 	public List<String> getRegisteredMarketplaceIds() {
 		return registeredMarketplaceIds;
@@ -21,4 +22,22 @@ public class CoreUser extends User {
 	public void setRegisteredMarketplaceIds(List<String> registeredMarketplaceIds) {
 		this.registeredMarketplaceIds = registeredMarketplaceIds;
 	}
+
+	public List<CoreUser> getFollower() {
+		return follower;
+	}
+
+	public void setFollower(List<CoreUser> follower) {
+		this.follower = follower;
+	}
+
+	public boolean isActivated() {
+		return activated;
+	}
+
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+	
+	
 }

@@ -12,6 +12,10 @@ import { HttpResponse } from "@angular/common/http";
 import { fuseAnimations } from "@fuse/animations";
 import { User } from "app/main/content/_model/user";
 import { equals } from 'app/main/content/_validator/equals.validator';
+import { isNullOrUndefined } from 'util';
+import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
+import { stringsUnique } from 'app/main/content/_validator/strings-unique.validator';
+
 
 @Component({
   selector: "registration",
@@ -29,7 +33,8 @@ export class FuseRegistrationComponent implements OnInit {
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+
   ) {
     const layout = {
       navigation: "none",
@@ -54,6 +59,8 @@ export class FuseRegistrationComponent implements OnInit {
 
 
   ngOnInit() {
+
+
     this.registrationForm = this.formBuilder.group({
       username: new FormControl("", Validators.required),
       password: new FormControl("", Validators.required),
@@ -79,15 +86,12 @@ export class FuseRegistrationComponent implements OnInit {
         continue;
       }
 
-
       // Clear previous errors
       this.registrationFormErrors[field] = {};
-
       // Get the control
       const control = this.registrationForm.get(field);
 
-
-      if (field === 'confirmPassword' || field === 'password') {
+      if (field === 'confirmPassword' || field === 'password' || field === 'email' || field === 'username') {
         control.updateValueAndValidity({ onlySelf: true });
       }
 
@@ -102,11 +106,10 @@ export class FuseRegistrationComponent implements OnInit {
       return;
     }
 
-    // TODO build volunteer object
     const volunteer = new User();
-
     volunteer.username = this.registrationForm.value.username;
     volunteer.password = this.registrationForm.value.password;
+    volunteer.loginEmail = this.registrationForm.value.email;
     volunteer.emails = [];
     volunteer.emails.push(this.registrationForm.value.email);
     volunteer.firstname = this.registrationForm.value.firstName;
@@ -115,9 +118,20 @@ export class FuseRegistrationComponent implements OnInit {
 
     this.registrationService.registerVolunteer(volunteer)
       .toPromise().then((response: HttpResponse<any>) => {
-        // this.router.navigate(["/login"]);
-        this.loginFormWrapper.nativeElement.scrollTo(0, 0);
-        this.displaySuccess = true;
+
+        const user: User = response.body;
+        if (isNullOrUndefined(user)) {
+          this.loginFormWrapper.nativeElement.scrollTo(0, 0);
+          this.displaySuccess = true;
+          return;
+        }
+        if (volunteer.loginEmail === user.loginEmail) {
+          this.registrationForm.controls['email'].setValidators([Validators.required, stringUniqueValidator([user.loginEmail])]);
+        }
+        if (volunteer.username === user.username) {
+          this.registrationForm.controls['username'].setValidators([Validators.required, stringUniqueValidator([user.username])]);
+        }
+        this.onRegistrationFormValuesChanged();
       });
   }
 
