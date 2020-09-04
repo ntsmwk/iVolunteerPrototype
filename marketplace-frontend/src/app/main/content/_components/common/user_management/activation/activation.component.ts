@@ -19,7 +19,9 @@ export class ActivationComponent implements OnInit {
   response: ActivationLinkClickedResponse;
   loaded: boolean;
   resendActivationFlow: boolean;
-  lastUser: User;
+
+  emailAddress: string;
+  username: string;
 
 
 
@@ -34,33 +36,29 @@ export class ActivationComponent implements OnInit {
       toolbar: 'none',
       footer: 'none',
     };
+
     this.fuseConfig.setConfig({ layout: layout });
-
   }
-
-
 
   ngOnInit() {
     this.route.params.subscribe((param) => {
       this.activationId = param['activationId'];
+    });
+    this.route.queryParams.subscribe((param) => {
+      this.username = param['username'];
+      this.emailAddress = param['email'];
+      console.log(param);
     });
 
     if (!isNullOrUndefined(this.activationId)) {
       this.activationService.activate(this.activationId).toPromise().then((ret: ActivationLinkClickedResponse) => {
         if (!isNullOrUndefined(ret)) {
           this.response = ret;
-          if (!isNullOrUndefined(ret.user)) {
-            this.lastUser = { ...ret.user };
-          }
           this.loaded = true;
-          console.log(ret);
-          console.log(this.lastUser);
         }
       });
     }
   }
-
-
 
   handleBackClick() {
     window.history.back();

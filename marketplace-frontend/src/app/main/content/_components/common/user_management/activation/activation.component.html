@@ -20,7 +20,7 @@
         <a routerLink="/register/volunteer">
           Zurück zur Registrierung
         </a>
-        <a (click)="resendActivationFlow = true">erneut Versuchen</a>
+        <a (click)="resendActivationFlow = true">Aktivierung erneut senden</a>
       </div>
 
       <div *ngIf="response.activationResponse === 'SUCCESS'">
@@ -32,10 +32,18 @@
 
       <div *ngIf="response.activationResponse === 'EXPIRED'">
         Aktivierungslink ist abgelaufen
-        <a (click)="resendLink">Erneut senden</a>
+        <a (click)="resendActivationFlow = true">Aktivierung erneut senden</a>
       </div>
 
       <div *ngIf="resendActivationFlow">
+
+        <form #emailForm="ngForm">
+          <mat-form-field>
+            <input matInput [(ngModel)]="emailAddress" placeholder="E-Mail-Adresse" name="E-Mail-Adresse" email />
+          </mat-form-field>
+          <button type="submit" mat-stroked-button class="primary-button-dark full-width "
+            [disabled]="emailForm.invalid">Anfordern</button>
+        </form>
 
       </div>
 

@@ -61,9 +61,7 @@ public class CoreActivationService {
     }
     
     public ActivationLinkClickedResponse handleActivationLinkClicked(String activationId) {
-    	
-    	System.out.println(activationId);
-    	PendingActivation pendingActivation = findActivationById(activationId);
+       	PendingActivation pendingActivation = findActivationById(activationId);
     	
     	ActivationResponse activationResponse;
     	CoreUser user = null;
@@ -85,7 +83,6 @@ public class CoreActivationService {
     		deletePendingActivation(activationId);
     		
     	}
-    	System.out.println(activationResponse);
     	return new ActivationLinkClickedResponse(pendingActivation, activationResponse, user);
     	
     }
@@ -109,7 +106,7 @@ public class CoreActivationService {
     }
     
     private boolean sendMimeActivationMessage(CoreUser user, String activationId) {
-		String url = uri + "/register/activate/" + activationId;
+		String url = uri + "/register/activate/" + activationId + "?username=" + user.getUsername() + "&email=" + user.getLoginEmail();
 		String msg = patchURL(getText(), url);
     	
     	
