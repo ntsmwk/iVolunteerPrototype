@@ -25,7 +25,7 @@ public class CoreActivationController {
 	@PostMapping("register/activate/generate-link/{username}")
 	private boolean generateActivationLink(@PathVariable("username") String username) {
 		CoreUser user = userRepository.findByUsername(username);
-		if (user == null) {
+		if (user == null || user.isActivated()) {
 			return false;
 		} 
 		return activationService.createActivationAndSendLink(user);
@@ -34,9 +34,12 @@ public class CoreActivationController {
 	@PostMapping("register/activate/generate-link/email")
 	private boolean generateActivationLinkViaEmail(@RequestBody String email) {
 		CoreUser user = userRepository.findByLoginEmail(email);
-		if (user == null) { return false; }
+		if (user == null || user.isActivated()) { 
+			return false; 
+		}
 		return activationService.createActivationAndSendLink(user);
 	}
+	
 	
 	@PostMapping("register/activate/{activationId}")
 	private ActivationLinkClickedResponse activationLinkClicked(@PathVariable("activationId") String activationId) {

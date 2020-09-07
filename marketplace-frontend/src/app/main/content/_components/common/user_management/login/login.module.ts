@@ -9,6 +9,7 @@ import { MatInputModule } from "@angular/material/input";
 import { FuseSharedModule } from "@fuse/shared.module";
 
 import { FuseLoginComponent } from "./login.component";
+import { ResendLinkModule } from '../activation/resend-link/resend-link.module';
 
 const routes = [{ path: "", component: FuseLoginComponent }];
 
@@ -21,8 +22,9 @@ const routes = [{ path: "", component: FuseLoginComponent }];
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
+    ResendLinkModule,
 
     FuseSharedModule
   ]
 })
-export class FuseLoginModule {}
+export class FuseLoginModule { }

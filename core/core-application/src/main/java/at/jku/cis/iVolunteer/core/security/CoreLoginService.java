@@ -13,6 +13,8 @@ public class CoreLoginService {
 
 	@Autowired
 	private CoreUserRepository coreUserRepository;
+	
+	
 
 	public CoreUser getLoggedInUser() {
 		Authentication authentication = determineAuthentication();

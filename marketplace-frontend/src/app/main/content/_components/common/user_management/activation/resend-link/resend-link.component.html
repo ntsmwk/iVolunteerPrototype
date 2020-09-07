@@ -1,5 +1,5 @@
 <form #emailForm="ngForm">
-  <div *ngIf="loading" style="height: 100%; display: flex; justify-content: center; align-items: center;">
+  <div *ngIf="loading" class="mt-20" style="height: 100%; display: flex; justify-content: center; align-items: center;">
     <mat-spinner></mat-spinner>
   </div>
   <div *ngIf="!loading && !showResultMessage">
@@ -11,7 +11,11 @@
   </div>
 
   <div *ngIf="showResultMessage" class="pt-32">
-    Eine Nachricht mit einem Aktivierungslink wurde an <b>{{emailAddress}}</b> gesendet, falls sich diese in unserem
-    System befindet. Falls du keine E-Mail im Posteingang findest, schaue auch im Spam-Ordner nach.
+    <p>Eine Nachricht mit einem Aktivierungslink wurde an <b>{{emailAddress}}</b> gesendet, falls sich diese in unserem
+      System befindet.
+    </p>
+    <p>
+      Falls du keine E-Mail im Posteingang findest, schaue auch im Spam-Ordner nach.
+    </p>
   </div>
 </form>

@@ -1,21 +1,21 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
-} from "@angular/forms";
-import { Router } from "@angular/router";
-import { HttpResponse } from "@angular/common/http";
+} from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
 
-import { FuseConfigService } from "@fuse/services/config.service";
-import { fuseAnimations } from "@fuse/animations";
-import { LoginService } from "../../../../_service/login.service";
-
+import { FuseConfigService } from '@fuse/services/config.service';
+import { fuseAnimations } from '@fuse/animations';
+import { LoginService } from '../../../../_service/login.service';
+import { isNullOrUndefined } from 'util';
 @Component({
-  selector: "fuse-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+  selector: 'fuse-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
   providers: [LoginService],
   animations: fuseAnimations,
 })
@@ -23,36 +23,43 @@ export class FuseLoginComponent implements OnInit {
   loginForm: FormGroup;
   loginFormErrors: any;
 
-  error: boolean = false;
+  error: boolean;
+  displayLoginForm: boolean;
+  resendActivationFlow: boolean;
+  layout: { navigation: string, toolbar: string, footer: string };
 
   constructor(
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
     private router: Router,
     private loginService: LoginService
-  ) {
-    const layout = {
-      navigation: "none",
-      toolbar: "none",
-      footer: "none",
-    };
-    this.fuseConfig.setConfig({ layout: layout });
-
-    this.loginFormErrors = {
-      username: {},
-      password: {},
-    };
-  }
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      username: new FormControl("", Validators.required),
-      password: new FormControl("", Validators.required),
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
     });
 
     this.loginForm.valueChanges.subscribe(() => {
       this.onLoginFormValuesChanged();
     });
+
+    this.error = false;
+    this.displayLoginForm = true;
+    this.resendActivationFlow = false;
+
+    this.layout = {
+      navigation: 'none',
+      toolbar: 'none',
+      footer: 'none',
+    };
+    this.fuseConfig.setConfig({ layout: this.layout });
+    this.loginFormErrors = {
+      username: {},
+      password: {},
+    };
+
   }
 
   onLoginFormValuesChanged() {
@@ -74,23 +81,23 @@ export class FuseLoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      this.loginService
-        .login(this.loginForm.value.username, this.loginForm.value.password)
-        .toPromise()
-        .then((response: HttpResponse<any>) => {
-          localStorage.setItem(
-            "accessToken",
-            response.headers.get("Authorization")
-          );
-          localStorage.setItem("refreshToken", response.headers.get("Refresh"));
-          this.router.navigate(["/role"]);
+      this.loginService.getActivationStatus(this.loginForm.value.username).toPromise().then((cont: boolean) => {
+        if (cont) {
+          this.loginService.login(this.loginForm.value.username, this.loginForm.value.password)
+            .toPromise().then((response: HttpResponse<any>) => {
+              localStorage.setItem('accessToken', response.headers.get('Authorization'));
+              localStorage.setItem('refreshToken', response.headers.get('Refresh'));
+              this.router.navigate(['/role']);
+            }).catch((e) => {
+              console.error('login error');
+              this.error = true;
+            });
+        } else {
+          this.displayLoginForm = false;
+        }
 
-          // this.router.navigate["/main/dashboard"];
-        })
-        .catch((e) => {
-          console.error("login error");
-          this.error = true;
-        });
+      });
+
     }
   }
 }

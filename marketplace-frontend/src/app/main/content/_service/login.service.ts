@@ -9,7 +9,7 @@ import { global } from "@angular/compiler/src/util";
   providedIn: "root",
 })
 export class LoginService {
-  constructor(private http: HttpClient, private httpClient: HttpClient) {}
+  constructor(private http: HttpClient, private httpClient: HttpClient) { }
 
   login(username: string, password: string) {
     return this.http.post(
@@ -17,6 +17,10 @@ export class LoginService {
       { username: username, password: password },
       { observe: "response" }
     );
+  }
+
+  getActivationStatus(username: string) {
+    return this.http.put("/core/login/activation-status", username);
   }
 
   getLoggedIn() {

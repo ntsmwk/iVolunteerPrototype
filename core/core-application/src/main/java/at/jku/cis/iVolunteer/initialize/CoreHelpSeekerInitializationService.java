@@ -165,7 +165,7 @@ public class CoreHelpSeekerInitializationService {
 			tenantAdmin.setId(username);
 			tenantAdmin.setFirstname(firstName);
 			tenantAdmin.setLastname(lastName);
-
+			tenantAdmin.setActivated(true);
 			coreUserService.addNewUser(tenantAdmin, "", false);
 		}
 		return tenantAdmin;
