@@ -67,12 +67,13 @@ public class CoreActivationService {
     	CoreUser user = null;
     	
     	if (pendingActivation == null) {
+//    		activationResponse = ActivationResponse.FAILED;
     		activationResponse = ActivationResponse.FAILED;
     	} else {
     		Date now = new Date();
     		long delta = now.toInstant().toEpochMilli() - pendingActivation.getTimestamp().toInstant().toEpochMilli();
-//    		if (delta >= 900000) { //15 minutes
-    		if (delta >= 100) {
+    		if (delta >= 900000) { //15 minutes
+//    		if (delta >= 100) {
     			activationResponse = ActivationResponse.EXPIRED;
     		} else {
     			activationResponse = ActivationResponse.SUCCESS;

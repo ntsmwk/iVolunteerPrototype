@@ -33,7 +33,7 @@ public class CoreActivationController {
 	
 	@PostMapping("register/activate/generate-link/email")
 	private boolean generateActivationLinkViaEmail(@RequestBody String email) {
-		CoreUser user = userRepository.findByUsernameOrLoginEmail("", email);
+		CoreUser user = userRepository.findByLoginEmail(email);
 		if (user == null) { return false; }
 		return activationService.createActivationAndSendLink(user);
 	}
