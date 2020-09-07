@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
@@ -30,9 +31,18 @@ public class CoreActivationController {
 		return activationService.createActivationAndSendLink(user);
 	}
 	
+	@PostMapping("register/activate/generate-link/email")
+	private boolean generateActivationLinkViaEmail(@RequestBody String email) {
+		CoreUser user = userRepository.findByUsernameOrLoginEmail("", email);
+		if (user == null) { return false; }
+		return activationService.createActivationAndSendLink(user);
+	}
+	
 	@PostMapping("register/activate/{activationId}")
 	private ActivationLinkClickedResponse activationLinkClicked(@PathVariable("activationId") String activationId) {
 		return activationService.handleActivationLinkClicked(activationId);
 	}
+	
+
 
 }

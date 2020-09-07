@@ -10,6 +10,11 @@ export class ActivationService {
   }
 
   createActivationLink(username: string) {
-    return this.http.post(`/core/register/activate/create-link/${username}`, '');
+    return this.http.post(`/core/register/activate/generate-link/${username}/user`, '');
+  }
+
+  createActivationLinkViaEmail(email: string) {
+    return this.http.post(`/core/register/activate/generate-link/email`, email);
+
   }
 }

@@ -1,5 +1,5 @@
-<div id="login" fxLayout="row" fxLayoutAlign="start">
-  <div id="login-intro" fxFlex fxHide fxShow.gt-xs>
+<div id="left-side" fxLayout="row" fxLayoutAlign="start">
+  <div id="intro" fxFlex fxHide fxShow.gt-xs>
     <div class="logo" *fuseIfOnDom [@animate]="{ value: '*', params: { scale: '0.2' } }">
       <img src="assets/logo.png" />
     </div>
@@ -9,34 +9,53 @@
     </div>
   </div>
 
-  <div #loginFormWrapper id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
+  <div #textWrapper id="textWrapper" fusePerfectScrollbar *fuseIfOnDom
     [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
     <div id="login-form" *ngIf="loaded">
       <div *ngIf="response.activationResponse === 'FAILED'">
-        Aktivierung fehlgeschlagen
-        <a routerLink="/login">
-          Zurück zum Login
-        </a>
-        <a routerLink="/register/volunteer">
-          Zurück zur Registrierung
-        </a>
-        <a (click)="resendActivationFlow = true">Aktivierung erneut senden</a>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <div>
+            <i class="fas fa-frown-open fa-3x red-fg"></i>
+          </div>
+          <h1 class="pl-24">Aktivierung fehlgeschlagen</h1>
+        </div>
+        <div class="mt-20">
+          Leider existiert die Aktivierung nicht mehr in unserem System.
+          Bist du dir sicher dass du dich bereits Registriert hast?
+          Wenn ja, kannst du dir einen neuen Link schicken lassen.
+          Alternativ kannst du dich neu Registrieren, oder dich mit einem bereits aktivierten Konto einloggen.
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" class="mt-36">
+          <button [disabled]="resendActivationFlow" mat-stroked-button class="primary-button-dark"
+            (click)="resendActivationFlow = true">
+            Aktivierung erneut senden
+          </button>
+          <button mat-stroked-button class="primary-button-light ml-8" routerLink="/login">
+            Zurück zum Login
+          </button>
+          <button mat-stroked-button class="primary-button-light ml-8" routerLink="/register/volunteer">
+            Zurück zur Registrierung
+          </button>
+        </div>
       </div>
 
       <div *ngIf="response.activationResponse === 'SUCCESS'">
-        Aktivierung erfolgreich
+        <div> <i class="fas fa-laugh-beam fa-2x green-fg"></i> Aktivierung erfolgreich</div>
         <a routerLink="/login">
           Zum Login
         </a>
       </div>
 
       <div *ngIf="response.activationResponse === 'EXPIRED'">
-        Aktivierungslink ist abgelaufen
+        <h1>
+          <i class="fas fa-frown-open red-fg"></i>
+          <span class="pl-4"> Aktivierungslink ist abgelaufen
+          </span>
+        </h1>
         <a (click)="resendActivationFlow = true">Aktivierung erneut senden</a>
       </div>
 
-      <resend-link [emailAddress]="emailAddress" [username]="username" *ngIf="resendActivationFlow"
-        (submitForm)="handleResendLinkSubmit($event)">
+      <resend-link [emailAddress]="emailAddress" [username]="username" *ngIf="resendActivationFlow">
       </resend-link>
 
 
