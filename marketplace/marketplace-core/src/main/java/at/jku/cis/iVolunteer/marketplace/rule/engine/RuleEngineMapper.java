@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.rule.engine;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +11,8 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.EQCriteria;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
@@ -20,6 +24,7 @@ import at.jku.cis.iVolunteer.model.rule.Condition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
 import at.jku.cis.iVolunteer.model.rule.MultipleConditions;
+import at.jku.cis.iVolunteer.model.rule.Action.ActionType;
 import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
 import at.jku.cis.iVolunteer.model.rule.engine.RuleStatus;
 import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
@@ -108,6 +113,8 @@ public class RuleEngineMapper {
 				stringBuilder.append(",\r\n");
 		}
 		stringBuilder.append(patternEnd());
+		// check whether target already exists for volunteer
+		
 		return stringBuilder.toString();
 	}
 
@@ -138,6 +145,27 @@ public class RuleEngineMapper {
 			}
 		}
 		stringBuilder.append("\r\n");
+		return stringBuilder.toString();
+	}
+	
+	private String preventDuplicateInstance(List<ClassAction> classActions) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (ClassAction classAction: classActions) {
+			if (classAction.getType() == ActionType.NEW) {
+				ClassDefinition cd = classDefinitionRepository.findOne(classAction.getClassDefinitionId());
+				if ( (cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT) ||
+					 (cd.getClassArchetype() == ClassArchetype.COMPETENCE) || 
+					 (cd.getClassArchetype() == ClassArchetype.FUNCTION)) {
+					// no duplicate assets allowed
+					stringBuilder.append("ClassInstanceService (");
+						
+					
+					stringBuilder.append(")");
+				}
+			}
+		}
+				
+		
 		return stringBuilder.toString();
 	}
 	/*
@@ -239,6 +267,17 @@ public class RuleEngineMapper {
 			default:
 				return null;
 		}
+	}
+	
+	// XXX to do
+	private String buildDuplicateCheck(ClassAction classAction) {
+		String constraints = " getClassInstances(v, \"" + classAction.getClassDefinitionId() + "\", t.getId())";
+			// get properties to filter for class instance
+			for (AttributeCondition attrCondition : classAction.getAttributes()) {
+				constraints = " filterInstancesByPropertyCriteria(" + constraints + ", "
+						+ decodeAttributeCondition(attrCondition) + ")";
+			}
+		return constraints;
 	}
 
 	private String mapClassActionToRuleAction(ClassAction classAction) {
