@@ -32,7 +32,7 @@ public class TreePropertyDefinitionToClassPropertyMapper implements OneWayMapper
 		classProperty.setId(source.getId());
 		classProperty.setName(source.getName());
 
-		classProperty.setAllowedValues(collectionService.collectEnumEntries(source));
+		classProperty.setAllowedValues(collectionService.collectTreePropertyDefinitions(source));
 
 		classProperty.setType(PropertyType.TREE);
 

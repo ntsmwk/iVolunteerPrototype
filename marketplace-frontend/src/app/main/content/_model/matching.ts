@@ -1,16 +1,29 @@
 import { ClassDefinition } from "./meta/class";
+import { MatchingConfiguration, MatchingEntityMappingConfiguration, ClassConfiguration } from './meta/configurations';
 
-export class MatchingCollector {
-  classDefinition: ClassDefinition;
-  path: string;
+export class MatchingDataRequestDTO {
+  matchingConfiguration: MatchingConfiguration;
+
+  relationships: MatchingOperatorRelationship[];
+
+  leftMappingConfigurations: MatchingEntityMappingConfiguration;
+  rightMappingConfigurations: MatchingEntityMappingConfiguration;
+
+  pathDelimiter: string;
+}
+
+export class MatchingEntityMappings {
+  // classDefinition: ClassDefinition;
+  // path: string;
   pathDelimiter: string;
 
-  collectorEntries: MatchingCollectorEntry[];
+  entities: MatchingEntity[];
+
   numberOfProperties: number;
   numberOfDefinitions: number;
 }
 
-export class MatchingCollectorEntry {
+export class MatchingEntity {
   classDefinition: ClassDefinition;
   path: string;
   pathDelimiter: string;

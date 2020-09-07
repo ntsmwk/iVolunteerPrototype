@@ -1,64 +1,34 @@
 <div id="login" fxLayout="row" fxLayoutAlign="start">
   <div id="login-intro" fxFlex fxHide fxShow.gt-xs>
-    <div
-      class="logo"
-      *fuseIfOnDom
-      [@animate]="{ value: '*', params: { scale: '0.2' } }"
-    >
+    <div class="logo" *fuseIfOnDom [@animate]="{ value: '*', params: { scale: '0.2' } }">
       <img src="assets/logo.png" />
     </div>
 
-    <div
-      class="title"
-      *fuseIfOnDom
-      [@animate]="{ value: '*', params: { delay: '50ms', y: '25px' } }"
-    >
+    <div class="title" *fuseIfOnDom [@animate]="{ value: '*', params: { delay: '50ms', y: '25px' } }">
       Willkommen bei iVolunteer!
     </div>
   </div>
 
-  <div
-    id="login-form-wrapper"
-    fusePerfectScrollbar
-    *fuseIfOnDom
-    [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }"
-  >
+  <div id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
+    [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
     <div id="login-form">
       <div class="title">Anmeldung</div>
 
-      <form
-        name="loginForm"
-        (submit)="login()"
-        [formGroup]="loginForm"
-        novalidate
-      >
+      <form name="loginForm" (submit)="login()" [formGroup]="loginForm" novalidate>
         <mat-form-field>
-          <input
-            matInput
-            placeholder="Benutzername"
-            formControlName="username"
-          />
-          <mat-error
-            *ngIf="
+          <input matInput placeholder="Benutzername" formControlName="username" />
+          <mat-error *ngIf="
               loginFormErrors.username && loginFormErrors.username.required
-            "
-          >
+            ">
             Username is required
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input
-            matInput
-            type="password"
-            placeholder="Passwort"
-            formControlName="password"
-          />
-          <mat-error
-            *ngIf="
+          <input matInput type="password" placeholder="Passwort" formControlName="password" />
+          <mat-error *ngIf="
               loginFormErrors.password && loginFormErrors.password.required
-            "
-          >
+            ">
             Password is required
           </mat-error>
         </mat-form-field>
@@ -66,21 +36,21 @@
           Username oder Passwort falsch!
         </p>
 
-        <button
-          type="submit"
-          mat-raised-button
-          color="accent"
-          class="submit-button"
-          aria-label="LOGIN"
-          [disabled]="loginForm.invalid"
-        >
+        <button type="submit" mat-raised-button color="accent" class="submit-button" aria-label="LOGIN"
+          [disabled]="loginForm.invalid">
           LOGIN
         </button>
       </form>
 
       <div class="register" fxLayout="column" fxLayoutAlign="center center">
-        <span class="text">Noch nicht registriert?</span>
-        <a class="link" href="register">Neues Konto erstellen</a>
+        <div class="text">
+          <div>Noch nicht registriert?</div>
+          <div class="pl-8">Hier neues Konto erstellen.</div>
+        </div>
+        <div fxLayout="column" class="pt-12">
+          <a class="link" routerLink="/register/volunteer">- Als Freiwilliger registrieren</a>
+          <a class="link" routerLink="/register/tenant">- Als Organisation registrieren</a>
+        </div>
       </div>
     </div>
   </div>

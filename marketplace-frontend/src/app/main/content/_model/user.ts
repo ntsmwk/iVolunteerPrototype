@@ -4,6 +4,7 @@ export class User {
   id: string;
   username: string;
   password: string;
+  loginEmail: string;
 
   firstname: string;
   lastname: string;
@@ -27,6 +28,7 @@ export class User {
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
+  activated: boolean;
 }
 
 export enum UserRole {

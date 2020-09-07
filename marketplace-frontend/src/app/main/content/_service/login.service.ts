@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { UserRole } from "../_model/user";
 import { GlobalInfo } from "../_model/global-info";
 import { Observable, generate } from "rxjs";
@@ -44,6 +44,24 @@ export class LoginService {
         subscriber.complete();
       });
     }
+  }
+
+  refreshAccessToken(refreshToken: string) {
+    return this.http.get("/core/login/refreshToken", {
+      headers: this.createTokenHeader(refreshToken),
+    });
+  }
+
+  private createTokenHeader(refreshToken: string): HttpHeaders {
+    let reqOptions = new HttpHeaders().set("Content-Type", "application/json");
+
+    if (refreshToken) {
+      reqOptions = new HttpHeaders()
+        .set("Content-Type", "application/json")
+        .set("Refresh", refreshToken);
+    }
+
+    return reqOptions;
   }
 
   getGlobalInfo() {

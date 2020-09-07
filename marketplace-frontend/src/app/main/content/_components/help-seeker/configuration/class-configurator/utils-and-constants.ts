@@ -1,12 +1,6 @@
-import { ClassDefinition, ClassArchetype, AchievementClassInstance } from '../../../../_model/meta/class';
-import {
-  Relationship,
-  RelationshipType,
-} from '../../../../_model/meta/relationship';
-import { ObjectIdService } from '../../../../_service/objectid.service.';
-import { isNullOrUndefined } from 'util';
-import { MatchingOperatorType } from '../../../../_model/matching';
-import { PropertyType, ClassProperty } from '../../../../_model/meta/property/property';
+import { RelationshipType } from 'app/main/content/_model/meta/relationship';
+import { MatchingOperatorType } from 'app/main/content/_model/matching';
+import { PropertyType } from 'app/main/content/_model/meta/property/property';
 
 const relationshipPalettes = {
   id: 'relationships',
@@ -30,15 +24,6 @@ const relationshipPalettes = {
       type: RelationshipType.ASSOCIATION,
       shape: undefined,
     },
-    // {
-    //   id: RelationshipType.AGGREGATION,
-    //   label: RelationshipType.getLabelFromRelationshipType(
-    //     RelationshipType.AGGREGATION
-    //   ),
-    //   imgPath: '/assets/icons/class_editor/relationships/aggregation.png',
-    //   type: 'aggregation',
-    //   shape: undefined,
-    // },
   ],
 };
 
@@ -116,6 +101,7 @@ const deleteOperationPalette = {
   imgPath: '/assets/mxgraph_resources/images/delete.gif',
   type: 'operation',
 };
+
 const propertyTypePalettes = [
   {
     id: PropertyType.TEXT,
@@ -173,6 +159,15 @@ const mxStyles = {
     'editable=0;' +
     'shape=swimlane;resizable=0;' +
     'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
+  classHighlighted:
+    'editable=0;resizable=0;selectable=0;foldable=0;' +
+    'shape=swimlane;' +
+    'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
+  classDisabled:
+    'editable=0;resizable=0;selectable=0;foldable=0;' +
+    'shape=swimlane;' +
+    'fillColor=#707070;fontColor=#FFFFFF;strokeColor=#707070;fontSize=14;',
+
 
   property:
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
@@ -225,6 +220,11 @@ const mxStyles = {
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
     'fillColor=#000000;fontColor=#FFFFFF;strokeColor=#000000;' +
     'align=center;html=1;overflow=hidden;fontSize=30;fontFamily=roboto;fontStyle=bold;',
+  matchingAddButton:
+    'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
+    'fillColor=rgb(62,125,219);fontColor=#FFFFFF;strokeColor=rgb(62,125,219);' +
+    'align=center;verticalAlign=top;html=1;overflow=hidden;fontSize=30;fontFamily=roboto;fontStyle=bold;' +
+    'rounded=1;',
   matchingConnector:
     'endArrow=classic;startArrow=none;html=1;curved=1;' +
     'editable=0;selectable=1;deletable=1;' +

@@ -12,6 +12,7 @@ import {
 import {
   ClassConfiguration,
   MatchingConfiguration,
+  MatchingEntityMappingConfiguration,
 } from 'app/main/content/_model/meta/configurations';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
@@ -42,15 +43,15 @@ import {
 import {
   NewMatchingDialogComponent,
   NewMatchingDialogData,
-} from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/new-dialog/new-dialog.component';
 import {
   OpenMatchingDialogComponent,
   OpenMatchingDialogData,
-} from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/open-dialog/open-dialog.component';
 import {
   DeleteMatchingDialogComponent,
   DeleteMatchingDialogData,
-} from '../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.component';
 import {
   AddPropertyDialogComponent,
   AddPropertyDialogData,
@@ -61,6 +62,8 @@ import {
 } from '../remove-dialog/remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import { User } from 'app/main/content/_model/user';
+import { AddClassDefinitionDialogComponent, AddClassDefinitionDialogData } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { MatchingEntity } from 'app/main/content/_model/matching';
 
 @Directive({
   selector: "app-dialog-factory",
@@ -357,8 +360,8 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(NewMatchingDialogComponent, {
       width: '500px',
       minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      height: '450px',
+      minHeight: '450px',
       data: {},
       disableClose: true,
     });
@@ -435,6 +438,38 @@ export class DialogFactoryDirective {
       .toPromise()
       .then(() => {
         return idsDeleted;
+      });
+  }
+
+  openAddClassDefinitionDialog(
+    matchingEntityConfiguration: MatchingEntityMappingConfiguration, existingEntityPaths: string[]
+  ) {
+    const dialogRef = this.dialog.open(AddClassDefinitionDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '418px',
+      minHeight: '418px',
+      data: {
+        matchingEntityConfiguration: matchingEntityConfiguration,
+        existingEntityPaths: existingEntityPaths,
+        addedEntities: [],
+      },
+    });
+
+    let returnValue: AddClassDefinitionDialogData;
+
+    dialogRef
+      .beforeClose()
+      .toPromise()
+      .then((result: AddClassDefinitionDialogData) => {
+        returnValue = result;
+      });
+
+    return dialogRef
+      .afterClosed()
+      .toPromise()
+      .then(() => {
+        return returnValue;
       });
   }
 

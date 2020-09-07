@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.core.security.activation.CoreActivationService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
@@ -13,15 +14,21 @@ public class CoreRegistrationService {
 	// @Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	// @Autowired private CoreVolunteerRepository coreVolunteerRepository;
 
-	@Autowired
-	private CoreUserRepository coreUserRepository;
+	@Autowired private CoreUserRepository coreUserRepository;
+	@Autowired CoreActivationService coreActivationService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public void registerUser(CoreUser user) {
-		encryptPassword(user);
-		this.coreUserRepository.save(user);
+	public CoreUser registerUser(CoreUser user) {
+		
+		CoreUser existingUser = this.coreUserRepository.findByUsernameOrLoginEmail(user.getUsername(), user.getLoginEmail());
+		if (existingUser == null) {
+			encryptPassword(user);
+			this.coreUserRepository.save(user);
+			this.coreActivationService.createActivationAndSendLink(user);
+		}
+		return existingUser; 
 	}
 
 	// public void registerVolunteer(CoreVolunteer volunteer) {

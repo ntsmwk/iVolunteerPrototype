@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
-import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingCollectorConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
@@ -30,7 +30,7 @@ public class InitializationService {
 	@Autowired protected FlatPropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired protected ClassConfigurationRepository classConfigurationRepository;
 	@Autowired protected MatchingConfigurationRepository matchingConfigurationRepository;
-	@Autowired protected MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired protected MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
 	@Autowired protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 
 	@Autowired private CoreTenantRestClient coreTenantRestClient;

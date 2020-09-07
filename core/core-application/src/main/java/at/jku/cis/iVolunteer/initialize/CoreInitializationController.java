@@ -8,14 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CoreInitializationController {
 
-	@Autowired
-	private CoreInitializationService coreInitializationService;
-	@Autowired
-	private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired
-	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired
-	private CoreTenantInitializationService coreTenantInitializationService;
+	@Autowired private CoreInitializationService coreInitializationService;
+	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
+	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
+	
 
 	@PutMapping("/init/stage-one")
 	public void createMarketplaceTenantsAndUsers() {
@@ -212,7 +209,9 @@ public class CoreInitializationController {
 	@PutMapping("init/wipe-core")
 	public void wipeCore() {
 		coreInitializationService.coreUserRepository.deleteAll();
+		coreInitializationService.pendingActivationRepository.deleteAll();
 		coreTenantInitializationService.coreTenantRepository.deleteAll();
+		
 
 	}
 
