@@ -78,11 +78,8 @@ export class FuseLoginComponent implements OnInit {
         .login(this.loginForm.value.username, this.loginForm.value.password)
         .toPromise()
         .then((response: HttpResponse<any>) => {
-          localStorage.setItem(
-            "accessToken",
-            response.headers.get("Authorization")
-          );
-          localStorage.setItem("refreshToken", response.headers.get("Refresh"));
+          localStorage.setItem("accessToken", response.body.accessToken);
+          localStorage.setItem("refreshToken", response.body.refreshToken);
           this.router.navigate(["/role"]);
 
           // this.router.navigate["/main/dashboard"];

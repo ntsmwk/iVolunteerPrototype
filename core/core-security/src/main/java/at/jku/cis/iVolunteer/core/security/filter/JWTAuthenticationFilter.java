@@ -1,9 +1,5 @@
 package at.jku.cis.iVolunteer.core.security.filter;
 
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.ACCESS_HEADER_STRING;
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.REFRESH_HEADER_STRING;
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;
-
 import static java.util.Collections.emptyList;
 
 import java.io.IOException;
@@ -22,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.core.security.model.Credentials;
+import at.jku.cis.iVolunteer.core.security.model.LoginResponse;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -59,8 +56,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			String accessToken = this.tokenProvider.generateAccessToken(auth);
 			String refreshToken = this.tokenProvider.generateRefreshToken(auth);
 
-			res.addHeader(ACCESS_HEADER_STRING, TOKEN_PREFIX + accessToken);
-			res.addHeader(REFRESH_HEADER_STRING, TOKEN_PREFIX + refreshToken);
+			res.setContentType("application/json");
+			res.setCharacterEncoding("UTF-8");
+			res.getWriter().write(new LoginResponse(accessToken, refreshToken).toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();

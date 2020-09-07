@@ -13,19 +13,26 @@ export class TokenGuard implements CanActivate {
   constructor(private router: Router, private loginService: LoginService) {}
 
   async canActivate(): Promise<boolean> {
-    const token = localStorage.getItem("accessToken");
-    if (
-      isNullOrUndefined(token) ||
-      token.length === 0 ||
-      this.jwtHelper.isTokenExpired(token)
-    ) {
-      let refreshToken = localStorage.getItem("refreshToken");
+    let accessToken = localStorage.getItem("accessToken");
 
-      let response: any = await this.loginService
-        .refreshAccessToken(refreshToken)
-        .toPromise();
+    if (isNullOrUndefined(accessToken) || accessToken.length === 0) {
+      this.router.navigate(["/login"]);
+    } else {
+      if (this.jwtHelper.isTokenExpired(accessToken)) {
+        let refreshToken = localStorage.getItem("refreshToken");
+        if (
+          isNullOrUndefined(refreshToken) ||
+          refreshToken.length === 0 ||
+          this.jwtHelper.isTokenExpired(refreshToken)
+        ) {
+          this.router.navigate(["/login"]);
+        }
 
-      localStorage.setItem("accessToken", response.accessToken);
+        let response: any = await this.loginService
+          .refreshAccessToken(refreshToken)
+          .toPromise();
+        localStorage.setItem("accessToken", response.accessToken);
+      }
     }
     return true;
   }
