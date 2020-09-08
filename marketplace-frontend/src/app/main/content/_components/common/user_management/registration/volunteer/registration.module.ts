@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { FuseRegistrationComponent } from "./registration.component";
+import { VolunteerRegistrationComponent } from "./registration.component";
 import { RouterModule } from "@angular/router";
 import { FuseSharedModule } from "@fuse/shared.module";
 import {
@@ -12,7 +12,7 @@ import {
   MatNativeDateModule,
 } from "@angular/material";
 
-const routes = [{ path: "", component: FuseRegistrationComponent }];
+const routes = [{ path: "", component: VolunteerRegistrationComponent }];
 
 @NgModule({
   imports: [
@@ -28,7 +28,7 @@ const routes = [{ path: "", component: FuseRegistrationComponent }];
     FuseSharedModule,
   ],
   exports: [],
-  declarations: [FuseRegistrationComponent],
+  declarations: [VolunteerRegistrationComponent],
   providers: [],
 })
-export class FuseRegistrationModule {}
+export class VolunteerRegistrationModule {}

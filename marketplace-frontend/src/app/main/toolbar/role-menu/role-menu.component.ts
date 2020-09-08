@@ -4,7 +4,7 @@ import { RoleChangeService } from "app/main/content/_service/role-change.service
 import {
   User,
   UserRole,
-  roleTenantMapping,
+  RoleTenantMapping,
 } from "app/main/content/_model/user";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
@@ -24,9 +24,9 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
   role: UserRole;
   allTenants: Tenant[] = [];
 
-  currentMapping: roleTenantMapping;
-  roleTenantMappings: roleTenantMapping[] = [];
-  possibleRoleTenantMappings: roleTenantMapping[] = [];
+  currentMapping: RoleTenantMapping;
+  roleTenantMappings: RoleTenantMapping[] = [];
+  possibleRoleTenantMappings: RoleTenantMapping[] = [];
 
   onRoleChanged: Subscription;
   onUpdate: Subscription;
@@ -57,7 +57,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    this.currentMapping = new roleTenantMapping();
+    this.currentMapping = new RoleTenantMapping();
     this.currentMapping.role = this.role;
     this.currentMapping.tenantIds = globalInfo.tenants.map((t) => t.id);
 
@@ -72,7 +72,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.isLoaded = true;
   }
 
-  onRoleSelected(mapping: roleTenantMapping) {
+  onRoleSelected(mapping: RoleTenantMapping) {
     this.role = mapping.role;
     this.currentMapping = mapping;
     this.possibleRoleTenantMappings = this.roleTenantMappings.filter((m) => {
@@ -104,7 +104,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
   }
 
   getCurrentTenantImage() {
-    let tenant = this.allTenants.find(
+    const tenant = this.allTenants.find(
       (t) => t.id === this.currentMapping.tenantIds[0]
     );
     if (isNullOrUndefined(tenant)) {
@@ -114,8 +114,8 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTenantImage(mapping: roleTenantMapping) {
-    if (mapping.role == UserRole.VOLUNTEER) {
+  getTenantImage(mapping: RoleTenantMapping) {
+    if (mapping.role === UserRole.VOLUNTEER) {
       return "/assets/images/avatars/profile.jpg";
     }
     let tenant = this.allTenants.find((t) => t.id === mapping.tenantIds[0]);
@@ -126,10 +126,10 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     }
   }
 
-  isSameMapping(a: roleTenantMapping, b: roleTenantMapping) {
-    if (a.role != b.role) {
+  isSameMapping(a: RoleTenantMapping, b: RoleTenantMapping) {
+    if (a.role !== b.role) {
       return false;
-    } else if (a.tenantIds.length != b.tenantIds.length) {
+    } else if (a.tenantIds.length !== b.tenantIds.length) {
       return false;
     } else if (a.tenantIds.every((id) => b.tenantIds.indexOf(id) != -1)) {
       return true;

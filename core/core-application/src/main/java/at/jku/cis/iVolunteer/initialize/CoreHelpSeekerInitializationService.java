@@ -69,7 +69,7 @@ public class CoreHelpSeekerInitializationService {
 			helpSeeker.setFirstname(firstName);
 			helpSeeker.setLastname(lastName);
 			helpSeeker.setNickname(nickName);
-			helpSeeker.setPosition(position);
+			helpSeeker.setOrganizationPosition(position);
 			helpSeeker.setActivated(true);
 			// helpSeeker = coreUserRepository.insert(helpSeeker);
 			coreUserService.addNewUser(helpSeeker, "", false);

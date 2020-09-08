@@ -7,23 +7,22 @@ import {
 } from "@angular/forms";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { Router } from "@angular/router";
-import { RegistrationService } from "../../../../_service/registration.service";
+import { RegistrationService } from "app/main/content/_service/registration.service";
 import { HttpResponse } from "@angular/common/http";
 import { fuseAnimations } from "@fuse/animations";
 import { User } from "app/main/content/_model/user";
 import { equals } from 'app/main/content/_validator/equals.validator';
 import { isNullOrUndefined } from 'util';
 import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
-import { stringsUnique } from 'app/main/content/_validator/strings-unique.validator';
 
 
 @Component({
-  selector: "registration",
+  selector: "volunteer-registration",
   templateUrl: "registration.component.html",
   styleUrls: ["./registration.component.scss"],
   animations: fuseAnimations,
 })
-export class FuseRegistrationComponent implements OnInit {
+export class VolunteerRegistrationComponent implements OnInit {
   registrationForm: FormGroup;
   registrationFormErrors: any;
   today = new Date();
@@ -116,7 +115,7 @@ export class FuseRegistrationComponent implements OnInit {
     volunteer.lastname = this.registrationForm.value.lastName;
     volunteer.birthday = this.registrationForm.value.birthday;
 
-    this.registrationService.registerVolunteer(volunteer)
+    this.registrationService.registerUser(volunteer)
       .toPromise().then((response: HttpResponse<any>) => {
 
         const user: User = response.body;

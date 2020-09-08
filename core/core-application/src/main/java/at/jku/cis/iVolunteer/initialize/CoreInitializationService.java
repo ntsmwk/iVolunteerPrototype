@@ -67,7 +67,7 @@ public class CoreInitializationService {
 			recruiter.setPassword(bCryptPasswordEncoder.encode(password));
 			recruiter.setFirstname(firstName);
 			recruiter.setLastname(lastName);
-			recruiter.setPosition(position);
+			recruiter.setOrganizationPosition(position);
 			recruiter.setActivated(true);
 			recruiter = coreUserRepository.save(recruiter);
 		}

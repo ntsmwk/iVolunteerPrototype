@@ -16,12 +16,15 @@ public class User {
 	private String password;
 	private String loginEmail;
 
+	private String titleBefore;
 	private String firstname;
-	private String middlename;
 	private String lastname;
+	private String titleAfter;
+	
 	private String nickname;
 
-	private String position;
+	private String organizationPosition;
+	private String organizationName;
 
 	private Date birthday;
 
@@ -47,11 +50,13 @@ public class User {
 		this.username = coreUser.getUsername();
 		this.password = coreUser.getPassword();
 		this.loginEmail = coreUser.getLoginEmail();
+		this.titleBefore = coreUser.getTitleBefore();
 		this.firstname = coreUser.getFirstname();
-		this.middlename = coreUser.getMiddlename();
 		this.lastname = coreUser.getLastname();
+		this.titleAfter = coreUser.getTitleAfter();
 		this.nickname = coreUser.getNickname();
-		this.position = coreUser.getPosition();
+		this.organizationPosition = coreUser.getOrganizationPosition();
+		this.organizationName = coreUser.getOrganizationName();
 		this.birthday = coreUser.getBirthday();
 		this.locations = coreUser.getLocations();
 		this.about = coreUser.getAbout();
@@ -105,12 +110,28 @@ public class User {
 		this.firstname = firstname;
 	}
 
-	public String getMiddlename() {
-		return middlename;
+	public String getTitleBefore() {
+		return titleBefore;
 	}
 
-	public void setMiddlename(final String middlename) {
-		this.middlename = middlename;
+	public void setTitleBefore(String titleBefore) {
+		this.titleBefore = titleBefore;
+	}
+
+	public String getTitleAfter() {
+		return titleAfter;
+	}
+
+	public void setTitleAfter(String titleAfter) {
+		this.titleAfter = titleAfter;
+	}
+
+	public String getOrganizationName() {
+		return organizationName;
+	}
+
+	public void setOrganizationName(String organizationName) {
+		this.organizationName = organizationName;
 	}
 
 	public String getLastname() {
@@ -129,12 +150,12 @@ public class User {
 		this.nickname = nickname;
 	}
 
-	public String getPosition() {
-		return position;
+	public String getOrganizationPosition() {
+		return organizationPosition;
 	}
 
-	public void setPosition(final String position) {
-		this.position = position;
+	public void setOrganizationPosition(String organizationPosition) {
+		this.organizationPosition = organizationPosition;
 	}
 
 	public byte[] getImage() {

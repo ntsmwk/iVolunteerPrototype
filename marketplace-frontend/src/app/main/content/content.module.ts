@@ -31,11 +31,18 @@ const routes: Route[] = [
     path: 'register/volunteer',
     loadChildren: () =>
       import(
-        './_components/common/user_management/registration/registration.module'
-      ).then((m) => m.FuseRegistrationModule),
+        './_components/common/user_management/registration/volunteer/registration.module'
+      ).then((m) => m.VolunteerRegistrationModule),
     // canActivate: [AnonymGuard]
   },
-
+  {
+    path: 'register/organization',
+    loadChildren: () =>
+      import(
+        './_components/common/user_management/registration/organization/registration.module'
+      ).then((m) => m.OrganizationRegistrationModule),
+    // canActivate: [AnonymGuard]
+  },
   {
     path: 'register/activate',
     loadChildren: () =>

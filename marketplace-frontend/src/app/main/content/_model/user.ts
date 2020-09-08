@@ -6,12 +6,15 @@ export class User {
   password: string;
   loginEmail: string;
 
+  titleBefore: string;
   firstname: string;
   lastname: string;
-  middlename: string;
+  titleAfter: string;
+
   nickname: string;
 
-  position: string;
+  organizationName: string;
+  organizationPosition: string;
 
   birthday: Date;
 
@@ -24,7 +27,7 @@ export class User {
   registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
-  image;
+  image: any;
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
@@ -52,7 +55,7 @@ export class TenantUserSubscription {
   role: UserRole;
 }
 
-export class roleTenantMapping {
+export class RoleTenantMapping {
   role: UserRole;
   tenantIds: string[];
 }

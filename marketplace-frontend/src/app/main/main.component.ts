@@ -1,11 +1,5 @@
 import {
-  Component,
-  ElementRef,
-  HostBinding,
-  Inject,
-  OnDestroy,
-  Renderer2,
-  ViewEncapsulation,
+  Component, ElementRef, HostBinding, Inject, OnDestroy, Renderer2, ViewEncapsulation,
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { Platform } from "@angular/cdk/platform";
@@ -13,14 +7,9 @@ import { Subscription } from "rxjs";
 
 import { FuseConfigService } from "@fuse/services/config.service";
 
-import { navigation_volunteer } from "app/navigation/navigation_volunteer";
-import { navigation_helpseeker } from "app/navigation/navigation_helpseeker";
 import { LoginService } from "./content/_service/login.service";
-import { UserRole, User, roleTenantMapping } from "./content/_model/user";
-import { navigation_flexprod } from "app/navigation/navigation_flexprod";
-import { navigation_recruiter } from "app/navigation/navigation_recruiter";
+import { UserRole } from "./content/_model/user";
 import { Router } from "@angular/router";
-import { navigation_admin } from "app/navigation/navigation_admin";
 import { RoleChangeService } from "./content/_service/role-change.service";
 
 @Component({

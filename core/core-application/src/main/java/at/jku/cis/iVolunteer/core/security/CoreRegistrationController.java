@@ -16,7 +16,7 @@ public class CoreRegistrationController {
 	@Autowired
 	private CoreRegistrationService coreRegistrationService;
 
-	@PostMapping("/volunteer")
+	@PostMapping()
 	public CoreUser registerUser(@RequestBody CoreUser user) {
 		return coreRegistrationService.registerUser(user);
 	}
