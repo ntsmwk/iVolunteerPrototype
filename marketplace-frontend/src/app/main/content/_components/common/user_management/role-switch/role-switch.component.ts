@@ -3,7 +3,7 @@ import { LoginService } from "app/main/content/_service/login.service";
 import {
   User,
   UserRole,
-  roleTenantMapping,
+  RoleTenantMapping,
 } from "app/main/content/_model/user";
 import { ImageService } from "app/main/content/_service/image.service";
 import { fuseAnimations } from "@fuse/animations";
@@ -22,7 +22,7 @@ import { isNullOrUndefined } from "util";
 export class RoleSwitchComponent implements OnInit {
   user: User;
   allTenants: Tenant[] = [];
-  roleTenantMappings: roleTenantMapping[] = [];
+  roleTenantMappings: RoleTenantMapping[] = [];
 
   isLoaded: boolean = false;
 
@@ -32,7 +32,7 @@ export class RoleSwitchComponent implements OnInit {
     private imageService: ImageService,
     private tenantService: TenantService,
     private roleChangeService: RoleChangeService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
@@ -55,7 +55,7 @@ export class RoleSwitchComponent implements OnInit {
     this.isLoaded = true;
   }
 
-  onRoleSelected(mapping: roleTenantMapping) {
+  onRoleSelected(mapping: RoleTenantMapping) {
     this.loginService
       .generateGlobalInfo(mapping.role, mapping.tenantIds)
       .then(() => {

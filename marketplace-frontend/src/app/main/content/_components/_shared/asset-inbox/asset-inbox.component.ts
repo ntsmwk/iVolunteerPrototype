@@ -47,7 +47,7 @@ export class AssetInboxComponent implements OnInit {
   volunteers: User[] = [];
   userImagePaths: any[];
 
-  constructor(private userService: CoreUserService) {}
+  constructor(private userService: CoreUserService) { }
 
   ngOnInit() {
     if (!isNullOrUndefined(this.classInstanceDTOs)) {
@@ -131,10 +131,10 @@ export class AssetInboxComponent implements OnInit {
   getIssuerPositionForEntry(personId: string) {
     const user = this.issuers.find((p) => p.id === personId);
 
-    if (isNullOrUndefined(user) || isNullOrUndefined(user.position)) {
+    if (isNullOrUndefined(user) || isNullOrUndefined(user.organizationPosition)) {
       return "";
     } else {
-      return "(" + user.position + ")";
+      return "(" + user.organizationPosition + ")";
     }
   }
 

@@ -23,17 +23,24 @@ const routes: Route[] = [
       import("./_components/common/user_management/login/login.module").then(
         (m) => m.FuseLoginModule
       ),
-    canActivate: [AnonymGuard],
+    // canActivate: [AnonymGuard],
   },
   {
     path: "register/volunteer",
     loadChildren: () =>
       import(
-        "./_components/common/user_management/registration/registration.module"
-      ).then((m) => m.FuseRegistrationModule),
-    canActivate: [AnonymGuard],
+        './_components/common/user_management/registration/volunteer/registration.module'
+      ).then((m) => m.VolunteerRegistrationModule),
+    canActivate: [AnonymGuard]
   },
-
+  {
+    path: 'register/organization',
+    loadChildren: () =>
+      import(
+        './_components/common/user_management/registration/organization/registration.module'
+      ).then((m) => m.OrganizationRegistrationModule),
+    canActivate: [AnonymGuard]
+  },
   {
     path: "register/activate",
     loadChildren: () =>
@@ -263,4 +270,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent],
 })
-export class FuseContentModule {}
+export class FuseContentModule { }
