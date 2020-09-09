@@ -5,7 +5,7 @@ import {
   PreloadAllModules,
   RouterModule,
   Routes,
-  NoPreloading
+  NoPreloading,
 } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
 import "hammerjs";
@@ -25,9 +25,9 @@ registerLocaleData(localeDe, "de-AT");
 const appRoutes: Routes = [
   {
     path: "**",
-    redirectTo: "main/dashboard"
+    redirectTo: "main/dashboard",
     // redirectTo: 'login'
-  }
+  },
 ];
 
 @NgModule({
@@ -37,7 +37,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
     RouterModule.forRoot(appRoutes, {
-      preloadingStrategy: NoPreloading /*, enableTracing: true*/
+      preloadingStrategy: NoPreloading /*, enableTracing: true*/,
     }),
 
     DragulaModule.forRoot(),
@@ -47,9 +47,9 @@ const appRoutes: Routes = [
     FuseModule.forRoot(fuseConfig),
     FuseMainModule,
 
-    HttpClientModule
+    HttpClientModule,
   ],
   bootstrap: [AppComponent],
-  providers: []
+  providers: [],
 })
 export class AppModule {}

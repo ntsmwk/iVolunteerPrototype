@@ -30,7 +30,6 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 import static at.jku.cis.iVolunteer.core.security.SecurityConstants.REFRESH_HEADER_STRING;
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/login")
@@ -75,7 +74,7 @@ public class CoreLoginController {
 						user.getAuthorities());
 				String accessToken = this.tokenProvider.generateAccessToken(authentication);
 
-				return ResponseEntity.ok(new RefreshTokenResponse(TOKEN_PREFIX + accessToken));
+				return ResponseEntity.ok(new RefreshTokenResponse(accessToken));
 			} else {
 				return new ResponseEntity<Object>(new ErrorResponse("Empty Refresh Token"), HttpStatus.NOT_ACCEPTABLE);
 			}

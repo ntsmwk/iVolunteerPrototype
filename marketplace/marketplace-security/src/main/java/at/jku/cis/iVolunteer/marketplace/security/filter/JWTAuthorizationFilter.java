@@ -46,7 +46,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 		try {
-
 			String header = req.getHeader(ACCESS_HEADER_STRING);
 
 			if (header == null || !header.startsWith(TOKEN_PREFIX)) {
@@ -62,9 +61,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			} else {
 				res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + "Token is empty");
 			}
-
 		} catch (Exception e) {
-			e.printStackTrace();
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + e.getMessage());
 		}
 	}
