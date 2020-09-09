@@ -101,6 +101,7 @@ export class FuseLoginComponent implements OnInit {
               })
               .catch((e) => {
                 console.error("login error");
+                this.loginService.logout();
                 this.error = true;
               });
           } else {
