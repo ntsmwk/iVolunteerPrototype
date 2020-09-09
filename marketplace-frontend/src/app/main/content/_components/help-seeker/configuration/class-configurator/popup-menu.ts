@@ -25,16 +25,16 @@ export class EditorPopupMenu {
   private createPopupMenu(menu: mxgraph.mxPopupMenu, cell: MyMxCell, evt: any) {
     if (cell != null) {
       if (cell.isVertex() && cell.cellType === MyMxCellType.CLASS) {
-        menu.addItem('Create new Instance', null, () => {
+        menu.addItem('Eintrag erfassen', null, () => {
           this.editorInstance.showInstanceForm();
         }, null, null, true, true);
 
-        menu.addItem('Export JSON', null, () => {
+        menu.addItem('JSON Exportieren', null, () => {
           this.editorInstance.showExportDialog();
         }, null, null, true, true);
       }
       // Options present in every cell (vertexes as well as edges)
-      menu.addItem('Print cell to console', null, () => {
+      menu.addItem('DEBUG: Print cell to console', null, () => {
         console.log(cell);
       }, null, null, true, true);
 

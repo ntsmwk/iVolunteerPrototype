@@ -17,3 +17,5 @@ export enum ActivationResponse {
     FAILED = 'FAILED',
     EXPIRED = 'EXPIRED'
 }
+
+

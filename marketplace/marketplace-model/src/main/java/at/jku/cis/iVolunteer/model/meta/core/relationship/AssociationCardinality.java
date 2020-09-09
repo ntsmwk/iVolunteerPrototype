@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.core.relationship;
 
 public enum AssociationCardinality {
-//	NONE(""), ONE("1"), ZEROONE("0...1"), ZEROSTAR("0...*"), ONESTAR("1...*");
 	NONE(""), ONE("ONE"), N("N");
 	
 	private final String associationCardinality;

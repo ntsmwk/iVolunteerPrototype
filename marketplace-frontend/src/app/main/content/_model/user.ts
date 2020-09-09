@@ -32,6 +32,7 @@ export class User {
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
   activated: boolean;
+  accountType: AccountType;
 }
 
 export enum UserRole {
@@ -58,4 +59,9 @@ export class TenantUserSubscription {
 export class RoleTenantMapping {
   role: UserRole;
   tenantIds: string[];
+}
+
+export enum AccountType {
+  PERSON = 'PERSON',
+  ORGANIZATION = 'ORGANIZATION',
 }

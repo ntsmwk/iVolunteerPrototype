@@ -10,6 +10,8 @@ import {
   MatInputModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatSelectModule,
+  MatOptionModule,
 } from "@angular/material";
 
 const routes = [{ path: "", component: OrganizationRegistrationComponent }];
@@ -24,6 +26,8 @@ const routes = [{ path: "", component: OrganizationRegistrationComponent }];
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
+    MatOptionModule,
 
     FuseSharedModule,
   ],

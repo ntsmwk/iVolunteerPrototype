@@ -1,5 +1,14 @@
 @import "common";
 :host {
+  h1,
+  h2 {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  h1 {
+  }
+
   #login {
     width: 100%;
     overflow: hidden;
@@ -45,10 +54,11 @@
         max-width: 100%;
       }
       #login-form {
-        padding: 128px 48px 48px 48px;
+        padding: 48px;
         @include media-breakpoint("xs") {
           text-align: center;
-          padding: 24px;
+          padding: 0;
+          margin: 20px;
         }
         .logo {
           width: 128px;
@@ -73,10 +83,22 @@
           padding-top: 32px;
           mat-form-field {
             width: 100%;
-            @include media-breakpoint("xs") {
-              width: 80%;
+          }
+
+          .password-div {
+            mat-form-field {
+              width: 50%;
             }
           }
+
+          .sub-title {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1;
+            padding: 4px;
+            color: rgb(75, 75, 75);
+          }
+
           mat-checkbox {
             margin: 0;
           }

@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.user;
+package at.jku.cis.iVolunteer.model.registration;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

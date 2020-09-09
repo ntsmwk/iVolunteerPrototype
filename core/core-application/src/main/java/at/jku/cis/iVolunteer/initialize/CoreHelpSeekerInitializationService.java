@@ -12,6 +12,7 @@ import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -71,6 +72,7 @@ public class CoreHelpSeekerInitializationService {
 			helpSeeker.setNickname(nickName);
 			helpSeeker.setOrganizationPosition(position);
 			helpSeeker.setActivated(true);
+			helpSeeker.setAccountType(AccountType.PERSON);
 			// helpSeeker = coreUserRepository.insert(helpSeeker);
 			coreUserService.addNewUser(helpSeeker, "", false);
 		}
@@ -166,6 +168,7 @@ public class CoreHelpSeekerInitializationService {
 			tenantAdmin.setFirstname(firstName);
 			tenantAdmin.setLastname(lastName);
 			tenantAdmin.setActivated(true);
+			tenantAdmin.setAccountType(AccountType.ORGANIZATION);
 			coreUserService.addNewUser(tenantAdmin, "", false);
 		}
 		return tenantAdmin;

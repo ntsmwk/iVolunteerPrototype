@@ -22,9 +22,10 @@ import org.springframework.util.FileCopyUtils;
 
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.user.ActivationLinkClickedResponse;
-import at.jku.cis.iVolunteer.model.user.ActivationResponse;
-import at.jku.cis.iVolunteer.model.user.PendingActivation;
+import at.jku.cis.iVolunteer.model.registration.ActivationLinkClickedResponse;
+import at.jku.cis.iVolunteer.model.registration.ActivationResponse;
+import at.jku.cis.iVolunteer.model.registration.PendingActivation;
+import at.jku.cis.iVolunteer.model.registration.AccountType;
 
 @Service
 public class CoreActivationService {
@@ -44,15 +45,16 @@ public class CoreActivationService {
         emailSender.send(message);
     }
     
-    public boolean createActivationAndSendLink(CoreUser user) {
+    public boolean createActivationAndSendLink(CoreUser user, AccountType type) {
     	
     	PendingActivation pendingActivation = findActivationByUserId(user.getId());
-    	if (pendingActivation != null) {
+    	if (pendingActivation != null) { 
     		deletePendingActivation(pendingActivation.getActivationId());
     	}
     	
-    	pendingActivation = createActivation(user);
-    	boolean sendSuccessful = sendMimeActivationMessage(user, pendingActivation.getActivationId());
+    	pendingActivation = createActivation(user, type);
+    	
+    	boolean sendSuccessful = sendActivationMessage(user, pendingActivation.getActivationId(), type);
     	if (sendSuccessful) {
     		pendingActivationRepository.save(pendingActivation);
     	}
@@ -79,6 +81,7 @@ public class CoreActivationService {
     			activationResponse = ActivationResponse.SUCCESS;
     			user = userService.getByUserId(pendingActivation.getUserId());
     			user.setActivated(true);
+    			user.setAccountType(pendingActivation.getAccountType());
     			userService.updateUser(user, "", false);
     		}	
     		deletePendingActivation(activationId);
@@ -88,9 +91,9 @@ public class CoreActivationService {
     	
     }
     
-    private PendingActivation createActivation(CoreUser user) {
+    private PendingActivation createActivation(CoreUser user, AccountType type) {
 		String md5 = RandomStringUtils.randomAlphanumeric(128);
-		PendingActivation pendingActivation = new PendingActivation(md5, user.getId(), user.getLoginEmail());
+		PendingActivation pendingActivation = new PendingActivation(md5, user.getId(), user.getLoginEmail(), type);
 		return pendingActivation;
     }
     
@@ -106,9 +109,10 @@ public class CoreActivationService {
     	pendingActivationRepository.delete(activationId);
     }
     
-    private boolean sendMimeActivationMessage(CoreUser user, String activationId) {
-		String url = uri + "/register/activate/" + activationId + "?username=" + user.getUsername() + "&email=" + user.getLoginEmail();
-		String msg = patchURL(getText(), url);
+    private boolean sendActivationMessage(CoreUser user, String activationId, AccountType type) {
+		String url = uri + "/register/activate/" + activationId + "?username=" + user.getUsername() + "&email=" + user.getLoginEmail() + "&type=" + type;
+		
+		String msg = patchURL(getText(type), url);
     	
     	
     	MimeMessage mimeMessage = this.emailSender.createMimeMessage();
@@ -127,8 +131,18 @@ public class CoreActivationService {
     }
 
     
-    private String getText() {
-		Resource resource = new ClassPathResource("/eMailTemplate/template.html");
+    private String getText(AccountType type) {
+    	
+    	Resource resource;
+    	if (type == AccountType.PERSON) {
+    		resource = new ClassPathResource("/eMailTemplate/template-person.html");
+    	} else if (type == AccountType.ORGANIZATION) {
+    		resource = new ClassPathResource("/eMailTemplate/template-organization.html");
+    	} else {
+    		System.out.println("Error - RegistrationType must be 'person' or 'organization'");
+    		return "";
+    	}
+    	
 		try {
 			InputStream input = resource.getInputStream();
 	        byte[] bdata = FileCopyUtils.copyToByteArray(input);
