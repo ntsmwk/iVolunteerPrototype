@@ -65,7 +65,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 				res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + "Token is empty");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + e.getMessage());
 		}
 

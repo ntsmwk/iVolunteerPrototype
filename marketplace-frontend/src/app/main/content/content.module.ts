@@ -4,8 +4,6 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseContentComponent } from "app/main/content/content.component";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { TokenInterceptor } from "./_interceptor/token.interceptor";
-import { Http401Interceptor } from "./_interceptor/http-401.interceptor";
-import { TokenGuard } from "./_guard/token.guard";
 import { VolunteerGuard } from "./_guard/volunteer.guard";
 import { LoginGuard } from "./_guard/login.guard";
 import { FlexProdOrTenantAdminGuard } from "./_guard/flexprod-helpseeker.guard";
@@ -49,7 +47,7 @@ const routes: Route[] = [
       import(
         "./_components/common/user_management/role-switch/role-switch.module"
       ).then((m) => m.FuseRoleSwitchModule),
-    canActivate: [TokenGuard],
+    // canActivate: [],
   },
   {
     path: "main/volunteer/asset-inbox",
@@ -57,7 +55,7 @@ const routes: Route[] = [
       import(
         "./_components/volunteer/common/asset-inbox-volunteer/asset-inbox-volunteer.module"
       ).then((m) => m.AssetInboxVolunteerModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+    canActivate: [VolunteerGuard],
   },
   {
     path: "main/helpseeker/asset-inbox",
@@ -65,7 +63,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/asset-inbox-helpseeker/asset-inbox-helpseeker.module"
       ).then((m) => m.AssetInboxHelpseekerModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+    canActivate: [HelpSeekerOrTenantAdminGuard],
   },
   {
     path: "main/volunteer/asset-inbox/confirm",
@@ -73,7 +71,7 @@ const routes: Route[] = [
       import(
         "./_components/volunteer/common/asset-inbox-volunteer/confirmation-screen/confirmation-screen.module"
       ).then((m) => m.VolunteerConfirmationScreenModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+    canActivate: [VolunteerGuard],
   },
   {
     path: "main/helpseeker/asset-inbox/confirm",
@@ -81,7 +79,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/asset-inbox-helpseeker/confirmation-screen/confirmation-screen.module"
       ).then((m) => m.HelpseekerConfirmationScreenModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+    canActivate: [HelpSeekerOrTenantAdminGuard],
   },
   {
     path: "main/dashboard",
@@ -89,7 +87,7 @@ const routes: Route[] = [
       import("./_components/common/dashboard/dashboard.module").then(
         (m) => m.FuseDashboardModule
       ),
-    canActivate: [TokenGuard, LoginGuard],
+    canActivate: [LoginGuard],
   },
   {
     path: "main/achievements/overview",
@@ -97,7 +95,7 @@ const routes: Route[] = [
       import(
         "./_components/volunteer/task-management/achievements/management-summary/management-summary.module"
       ).then((m) => m.ManagementSummary),
-    canActivate: [TokenGuard, VolunteerGuard],
+    canActivate: [VolunteerGuard],
   },
   {
     path: "main/achievements/details",
@@ -105,7 +103,7 @@ const routes: Route[] = [
       import(
         "./_components/volunteer/task-management/achievements/achievements.module"
       ).then((m) => m.AchievementsModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+    canActivate: [VolunteerGuard],
   },
 
   {
@@ -114,7 +112,7 @@ const routes: Route[] = [
       import(
         "./_components/volunteer/social-management/get-connected/get-connected.module"
       ).then((m) => m.FuseGetConnectedModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+    canActivate: [VolunteerGuard],
   },
   {
     path: "main/task-select",
@@ -122,7 +120,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/task-management/task-select/task-select.module"
       ).then((m) => m.FuseTaskSelectModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+    canActivate: [TenantAdminGuard],
   },
   {
     path: "main/tasks/all",
@@ -130,7 +128,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/task-management/task-list/task-list.module"
       ).then((m) => m.FuseTaskListModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+    canActivate: [HelpSeekerOrTenantAdminGuard],
   },
   {
     path: "main/properties/all",
@@ -138,7 +136,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/property-configurator/list/property-list.module"
       ).then((m) => m.PropertyListModule),
-    canActivate: [TokenGuard, FlexProdOrTenantAdminGuard],
+    canActivate: [FlexProdOrTenantAdminGuard],
   },
 
   {
@@ -147,7 +145,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/property-configurator/detail/property-detail.module"
       ).then((m) => m.PropertyDetailModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+    canActivate: [HelpSeekerOrTenantAdminGuard],
   },
   {
     path: "main/property-builder",
@@ -155,7 +153,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/property-configurator/builder/property-build-form.module"
       ).then((m) => m.PropertyBuildFormModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+    canActivate: [TenantAdminGuard],
   },
   {
     path: "main/class-configurator",
@@ -163,7 +161,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/class-configurator/configurator.module"
       ).then((m) => m.ConfiguratorModule),
-    canActivate: [TokenGuard, FlexProdOrTenantAdminGuard],
+    canActivate: [FlexProdOrTenantAdminGuard],
   },
 
   {
@@ -172,7 +170,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/class-instance-configurator/form-editor/class-instance-form-editor.module"
       ).then((m) => m.ClassInstanceFormEditorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+    canActivate: [TenantAdminGuard],
   },
   {
     path: "main/rules/all",
@@ -180,7 +178,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/rule-view/rule-overview.module"
       ).then((m) => m.FuseRuleOverviewModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+    canActivate: [TenantAdminGuard],
   },
   {
     path: "main/rule",
@@ -188,7 +186,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/rule-configurator/rule-configurator.module"
       ).then((m) => m.FuseRuleConfiguratorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+    canActivate: [TenantAdminGuard],
   },
   {
     path: "main/recruitment",
@@ -196,7 +194,7 @@ const routes: Route[] = [
       import("./_components/recruiter/recruit-view/recruit-view.module").then(
         (m) => m.RecruitViewModule
       ),
-    canActivate: [TokenGuard, RecruiterGuard],
+    canActivate: [RecruiterGuard],
   },
   {
     path: "main/marketplace/all",
@@ -204,7 +202,7 @@ const routes: Route[] = [
       import(
         "./_components/admin/marketplace-list/marketplace-list.module"
       ).then((m) => m.FuseMarketplaceListModule),
-    canActivate: [TokenGuard, AdminGuard],
+    canActivate: [AdminGuard],
   },
   {
     path: "main/marketplace-form",
@@ -212,7 +210,7 @@ const routes: Route[] = [
       import(
         "./_components/admin/marketplace-form/marketplace-form.module"
       ).then((m) => m.FuseMarketplaceFormModule),
-    canActivate: [TokenGuard, AdminGuard],
+    canActivate: [AdminGuard],
   },
   {
     path: "main/tenant-form",
@@ -220,7 +218,7 @@ const routes: Route[] = [
       import("./_components/admin/tenant-form/tenant-form.module").then(
         (m) => m.FuseTenantFormModule
       ),
-    canActivate: [TokenGuard, AdminGuard],
+    canActivate: [AdminGuard],
   },
   {
     path: "main/import",
@@ -228,7 +226,7 @@ const routes: Route[] = [
       import("./_components/help-seeker/import/import.module").then(
         (m) => m.ImportModule
       ),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+    canActivate: [HelpSeekerOrTenantAdminGuard],
   },
   {
     path: "main/profile",
@@ -236,7 +234,7 @@ const routes: Route[] = [
       import("./_components/common/profile/profile.module").then(
         (m) => m.ProfileModule
       ),
-    canActivate: [TokenGuard, LoginGuard],
+    canActivate: [LoginGuard],
   },
   {
     path: "main/matching-configurator",
@@ -244,7 +242,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/matching-configurator/matching-configurator.module"
       ).then((m) => m.MatchingConfiguratorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+    canActivate: [TenantAdminGuard],
   },
   {
     path: "main/details",
@@ -252,7 +250,7 @@ const routes: Route[] = [
       import(
         "./_components/common/class-instance-details/class-instance-details.module"
       ).then((m) => m.ClassInstanceDetailsModule),
-    canActivate: [TokenGuard, LoginGuard],
+    canActivate: [LoginGuard],
   },
 ];
 
@@ -261,7 +259,6 @@ const routes: Route[] = [
   imports: [RouterModule.forChild(routes), FuseSharedModule, ShareMenuModule],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true },
   ],
   exports: [FuseContentComponent, ShareMenuComponent],
 })
