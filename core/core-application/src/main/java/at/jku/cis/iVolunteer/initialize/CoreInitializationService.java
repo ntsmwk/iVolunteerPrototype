@@ -13,6 +13,7 @@ import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -69,6 +70,7 @@ public class CoreInitializationService {
 			recruiter.setLastname(lastName);
 			recruiter.setOrganizationPosition(position);
 			recruiter.setActivated(true);
+			recruiter.setAccountType(AccountType.PERSON);
 			recruiter = coreUserRepository.save(recruiter);
 		}
 	}
@@ -101,6 +103,7 @@ public class CoreInitializationService {
 			admin.setUsername(username);
 			admin.setPassword(bCryptPasswordEncoder.encode(password));
 			admin.setActivated(true);
+			admin.setAccountType(AccountType.ADMIN);
 			admin = coreUserRepository.save(admin);
 		}
 		return admin;

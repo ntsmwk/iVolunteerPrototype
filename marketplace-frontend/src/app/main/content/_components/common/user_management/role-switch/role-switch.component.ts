@@ -1,22 +1,23 @@
-import { Component, OnInit } from "@angular/core";
-import { LoginService } from "app/main/content/_service/login.service";
+import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'app/main/content/_service/login.service';
 import {
   User,
   UserRole,
   RoleTenantMapping,
-} from "app/main/content/_model/user";
-import { ImageService } from "app/main/content/_service/image.service";
-import { fuseAnimations } from "@fuse/animations";
-import { Tenant } from "app/main/content/_model/tenant";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Router } from "@angular/router";
-import { RoleChangeService } from "app/main/content/_service/role-change.service";
-import { isNullOrUndefined } from "util";
+  AccountType,
+} from 'app/main/content/_model/user';
+import { ImageService } from 'app/main/content/_service/image.service';
+import { fuseAnimations } from '@fuse/animations';
+import { Tenant } from 'app/main/content/_model/tenant';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { Router } from '@angular/router';
+import { RoleChangeService } from 'app/main/content/_service/role-change.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: "app-role-switch",
-  templateUrl: "./role-switch.component.html",
-  styleUrls: ["./role-switch.component.scss"],
+  templateUrl: './role-switch.component.html',
+  styleUrls: ['./role-switch.component.scss'],
   animations: fuseAnimations,
 })
 export class RoleSwitchComponent implements OnInit {
@@ -24,7 +25,7 @@ export class RoleSwitchComponent implements OnInit {
   allTenants: Tenant[] = [];
   roleTenantMappings: RoleTenantMapping[] = [];
 
-  isLoaded: boolean = false;
+  isLoaded = false;
 
   constructor(
     private router: Router,
@@ -40,14 +41,16 @@ export class RoleSwitchComponent implements OnInit {
     this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(
       this.user
     );
-
-    if (this.roleTenantMappings.length === 0) {
+    console.log(this.user);
+    if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.PERSON) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
-        this.router.navigate(["/main/dashboard/tenants"]);
+        this.router.navigate(['/main/dashboard/tenants']);
       });
-    }
-
-    if (this.roleTenantMappings.length === 1) {
+    } else if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.ORGANIZATION) {
+      this.loginService.generateGlobalInfo(UserRole.TENANT_ADMIN, []).then(() => {
+        this.router.navigate(['/main/dashboard/create-tenant']);
+      });
+    } else if (this.roleTenantMappings.length === 1) {
       this.onRoleSelected(this.roleTenantMappings[0]);
     }
 
@@ -59,7 +62,7 @@ export class RoleSwitchComponent implements OnInit {
     this.loginService
       .generateGlobalInfo(mapping.role, mapping.tenantIds)
       .then(() => {
-        this.router.navigate(["/main/dashboard"]).then(() => {
+        this.router.navigate(['/main/dashboard']).then(() => {
           this.roleChangeService.changeRole(mapping.role);
         });
       });
@@ -70,16 +73,16 @@ export class RoleSwitchComponent implements OnInit {
   }
 
   getTenantImage(tenantId: string) {
-    let tenant = this.allTenants.find((t) => t.id === tenantId);
+    const tenant = this.allTenants.find((t) => t.id === tenantId);
     if (isNullOrUndefined(tenant)) {
-      return "/assets/images/avatars/profile.jpg";
+      return '/assets/images/avatars/profile.jpg';
     } else {
       return this.imageService.getImgSourceFromBytes(tenant.image);
     }
   }
 
   getTenantNameString(tenantId: string) {
-    let tenant = this.allTenants.find((t) => t.id === tenantId);
+    const tenant = this.allTenants.find((t) => t.id === tenantId);
     return tenant.name;
   }
 

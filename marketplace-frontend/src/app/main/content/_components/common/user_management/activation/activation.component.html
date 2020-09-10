@@ -20,11 +20,7 @@
           <h1 class="pl-28">Aktivierung fehlgeschlagen</h1>
         </div>
         <div class="mt-20">
-          Leider existiert die Aktivierung nicht mehr in unserem System.
-          Bist du dir sicher dass du dich bereits Registriert hast?
-          Wenn ja, kannst du dir einen neuen Link schicken lassen.
-          Alternativ kannst du dich neu Registrieren.
-          Du kannst auch probieren, dich mit deinem Konto einzuloggen, falls es vorher bereits aktiviert wurde.
+          {{activationTexts.failed}}
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" class="mt-36">
           <ng-container *ngTemplateOutlet="resend"></ng-container>
@@ -44,12 +40,12 @@
           <h1 class="pl-28">Aktivierung erfolgreich</h1>
         </div>
         <div class="mt-20">
-          Geschafft! - Dein Konto ist nur freigeschaltet. Zum Fortfahren logge dich bitte ein. Mit dem Button kommst du
-          zum Login.
+          {{activationTexts.success}}
         </div>
 
-        <ng-container *ngTemplateOutlet="toLogin"></ng-container>
-
+        <div class="mt-36">
+          <ng-container *ngTemplateOutlet="toLogin"></ng-container>
+        </div>
       </div>
 
       <div *ngIf="response.activationResponse === 'EXPIRED'">
@@ -60,9 +56,7 @@
           <h1 class="pl-28">Aktivierunglink ist abgelaufen</h1>
         </div>
         <div class="mt-20">
-          Leider ist der benutzte Aktivierungslink nicht mehr gültig. Beachte dass eine Aktivierung ab Verschicken der
-          E-Mail nur für eine Gültigkeitsdauer von 15 Minuten hat. Um einen neuen Link zu erhalten, klicke einfach auf
-          den ersten Button unten.
+          {{activationTexts.expired}}
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" class="mt-36">
           <ng-container *ngTemplateOutlet="resend"></ng-container>
@@ -74,7 +68,8 @@
         </div>
       </div>
 
-      <resend-link [emailAddress]="emailAddress" [username]="username" *ngIf="resendActivationFlow">
+      <resend-link [emailAddress]="emailAddress" [username]="username" [accountType]="accountType"
+        *ngIf="resendActivationFlow">
       </resend-link>
 
 
@@ -102,7 +97,7 @@
 </ng-template>
 
 <ng-template #toRegistration>
-  <button mat-stroked-button class="primary-button-light ml-8" routerLink="/register/volunteer">
+  <button mat-stroked-button class="primary-button-light ml-8" [routerLink]="activationTexts.registrationURI">
     Zurück zur Registrierung
   </button>
 </ng-template>

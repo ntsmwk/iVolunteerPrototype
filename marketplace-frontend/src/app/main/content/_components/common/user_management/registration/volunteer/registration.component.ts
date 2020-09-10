@@ -1,16 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { FuseConfigService } from "@fuse/services/config.service";
-import { Router } from "@angular/router";
-import { RegistrationService } from "app/main/content/_service/registration.service";
-import { HttpResponse } from "@angular/common/http";
-import { fuseAnimations } from "@fuse/animations";
-import { User } from "app/main/content/_model/user";
+  FormGroup, FormBuilder, FormControl, Validators,
+} from '@angular/forms';
+import { FuseConfigService } from '@fuse/services/config.service';
+import { Router } from '@angular/router';
+import { RegistrationService } from 'app/main/content/_service/registration.service';
+import { HttpResponse } from '@angular/common/http';
+import { fuseAnimations } from '@fuse/animations';
+import { User, AccountType } from 'app/main/content/_model/user';
 import { equals } from 'app/main/content/_validator/equals.validator';
 import { isNullOrUndefined } from 'util';
 import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
@@ -18,8 +15,8 @@ import { stringUniqueValidator } from 'app/main/content/_validator/string-unique
 
 @Component({
   selector: "volunteer-registration",
-  templateUrl: "registration.component.html",
-  styleUrls: ["./registration.component.scss"],
+  templateUrl: 'registration.component.html',
+  styleUrls: ['./registration.component.scss'],
   animations: fuseAnimations,
 })
 export class VolunteerRegistrationComponent implements OnInit {
@@ -36,9 +33,9 @@ export class VolunteerRegistrationComponent implements OnInit {
 
   ) {
     const layout = {
-      navigation: "none",
-      toolbar: "none",
-      footer: "none",
+      navigation: 'none',
+      toolbar: 'none',
+      footer: 'none',
     };
     this.fuseConfig.setConfig({ layout: layout });
 
@@ -61,15 +58,15 @@ export class VolunteerRegistrationComponent implements OnInit {
 
 
     this.registrationForm = this.formBuilder.group({
-      username: new FormControl("", Validators.required),
-      password: new FormControl("", Validators.required),
-      confirmPassword: new FormControl(""),
-      email: new FormControl("", [Validators.required, Validators.pattern(
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
+      confirmPassword: new FormControl(''),
+      email: new FormControl('', [Validators.required, Validators.pattern(
         /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
       )]),
-      firstName: new FormControl("", Validators.required),
-      lastName: new FormControl("", Validators.required),
-      birthday: new FormControl("", Validators.required),
+      firstName: new FormControl('', Validators.required),
+      lastName: new FormControl('', Validators.required),
+      birthday: new FormControl('', Validators.required),
     });
 
     this.registrationForm.valueChanges.subscribe(() => {
@@ -115,9 +112,8 @@ export class VolunteerRegistrationComponent implements OnInit {
     volunteer.lastname = this.registrationForm.value.lastName;
     volunteer.birthday = this.registrationForm.value.birthday;
 
-    this.registrationService.registerUser(volunteer)
+    this.registrationService.registerUser(volunteer, AccountType.PERSON)
       .toPromise().then((response: HttpResponse<any>) => {
-
         const user: User = response.body;
         if (isNullOrUndefined(user)) {
           this.loginFormWrapper.nativeElement.scrollTo(0, 0);

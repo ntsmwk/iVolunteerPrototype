@@ -39,7 +39,7 @@ export const navigation_tenantAdmin = [
   },
   {
     id: "configurator",
-    title: "Klassen konfigurieren",
+    title: "Einträge konfigurieren",
     type: "item",
     icon: "cogs",
     url: "/main/class-configurator"

@@ -26,6 +26,7 @@ import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
@@ -96,6 +97,7 @@ public class CoreVolunteerInitializationService {
 			volunteer.setEmails(Collections.singletonList("iVolunteerTest@gmx.at"));
 
 			volunteer.setActivated(true);
+			volunteer.setAccountType(AccountType.PERSON);
 			volunteer = coreUserRepository.insert(volunteer);
 			coreUserService.addNewUser(volunteer, "", false);
 

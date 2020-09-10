@@ -54,7 +54,7 @@ const subMenuItems: SubMenuItem[] = [
   { rootId: 1, id: 3, label: 'Konfiguration speichern', clickAction: 'saveClicked', icon: undefined },
   // { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
   { rootId: 1, id: 3, label: 'Konfiguration löschen', clickAction: 'deleteClicked', icon: undefined },
-  { rootId: 1, id: 4, label: 'Instanz erstellen', clickAction: 'createEditorClicked', icon: undefined },
+  { rootId: 1, id: 4, label: 'Eintrag erfassen', clickAction: 'createEditorClicked', icon: undefined },
 ];
 
 @Component({

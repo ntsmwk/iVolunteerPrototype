@@ -12,9 +12,32 @@
   <div #loginFormWrapper id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
     [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
     <div id="login-form" *ngIf="!displaySuccess">
-      <div class="title">Registrierung als Freiwilliger</div>
+      <div class="title">Registrierung als Organisation</div>
 
       <form name="registrationForm" (submit)="register()" [formGroup]="registrationForm" novalidate>
+
+        <mat-form-field>
+          <input matInput placeholder="E-Mail Adresse" formControlName="email" />
+          <mat-error *ngIf="
+                  registrationFormErrors.email &&
+                  registrationFormErrors.email.required
+                ">
+            Pflichtfeld
+          </mat-error>
+          <mat-error *ngIf="
+              registrationFormErrors.email &&
+              registrationFormErrors.email.pattern
+            ">
+            Valide E-Mail-Adresse eingeben
+          </mat-error>
+          <mat-error *ngIf="
+              registrationFormErrors.email &&
+              registrationFormErrors.email.stringsUnique
+            ">
+            E-Mail Adresse bereits verwendet
+          </mat-error>
+        </mat-form-field>
+
         <mat-form-field>
           <input matInput placeholder="Benutzername" formControlName="username" />
           <mat-error *ngIf="
@@ -31,7 +54,7 @@
           </mat-error>
         </mat-form-field>
 
-        <div fxLayout="row" fxLayoutAlign="start center">
+        <div class="password-div" fxLayout="row" fxLayoutAlign="start center" style="margin: auto 0">
           <mat-form-field>
             <input matInput type="password" placeholder="Passwort" formControlName="password" />
             <mat-error *ngIf="
@@ -59,26 +82,47 @@
           </mat-form-field>
         </div>
 
+        <div class="sub-title">> Zu Ihrer Organisation</div>
+
         <mat-form-field>
-          <input matInput placeholder="E-Mail Adresse" formControlName="email" />
+          <input matInput type="text" placeholder="Bezeichnung der Organisation" formControlName="organizationName" />
           <mat-error *ngIf="
-              registrationFormErrors.email &&
-              registrationFormErrors.email.required
+                registrationFormErrors.organizationName &&
+                registrationFormErrors.organizationName.required
+              ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Ihre Position in der Organisation"
+            formControlName="organizationPosition" />
+          <mat-error *ngIf="
+                  registrationFormErrors.organizationPosition &&
+                  registrationFormErrors.organizationPosition.required
+                ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field>
+
+        <div class="sub-title">> Zu Ihrer Person</div>
+
+        <mat-form-field>
+          <mat-select placeholder="Anrede" formControlName="formOfAddress">
+            <mat-option value="Frau">Frau</mat-option>
+            <mat-option value="Herr">Herr</mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="
+              registrationFormErrors.formOfAddress &&
+              registrationFormErrors.formOfAddress.required
             ">
             Pflichtfeld
           </mat-error>
-          <mat-error *ngIf="
-          registrationFormErrors.email &&
-          registrationFormErrors.email.pattern
-        ">
-            Valide E-Mail-Adresse eingeben
-          </mat-error>
-          <mat-error *ngIf="
-          registrationFormErrors.email &&
-          registrationFormErrors.email.stringsUnique
-        ">
-            E-Mail Adresse bereits verwendet
-          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Vorgestellter Titel" formControlName="titleBefore" />
         </mat-form-field>
 
         <mat-form-field>
@@ -102,17 +146,9 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>Geburtsdatum</mat-label>
-          <input matInput formControlName="birthday" [matDatepicker]="picker" [max]="today" />
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="
-              registrationFormErrors.birthday &&
-              registrationFormErrors.birthday.required
-            ">
-            Pflichtfeld
-          </mat-error>
+          <input matInput type="text" placeholder="Nachgestellter Titel" formControlName="titleAfter" />
         </mat-form-field>
+
 
         <button type="submit" mat-stroked-button class="primary-button-dark full-width "
           [disabled]="registrationForm.invalid">

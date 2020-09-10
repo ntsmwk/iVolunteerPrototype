@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.User;
 
 @Document
@@ -14,6 +15,7 @@ public class CoreUser extends User {
 	private List<CoreUser> follower = new ArrayList<>();
 	private List<String> registeredMarketplaceIds = new ArrayList<>();
 	private boolean activated;
+	private AccountType accountType;
 
 	public List<String> getRegisteredMarketplaceIds() {
 		return registeredMarketplaceIds;
@@ -38,6 +40,15 @@ public class CoreUser extends User {
 	public void setActivated(boolean activated) {
 		this.activated = activated;
 	}
+
+	public AccountType getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(AccountType accountType) {
+		this.accountType = accountType;
+	}
+	
 	
 	
 }

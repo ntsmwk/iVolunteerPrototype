@@ -5,7 +5,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { ActivationService } from 'app/main/content/_service/activation.service';
 import { isNullOrUndefined } from 'util';
 import { ActivationLinkClickedResponse } from 'app/main/content/_model/activation';
-import { User } from 'app/main/content/_model/user';
+import { organizationTexts, personTexts } from "./activation-texts";
+import { AccountType } from 'app/main/content/_model/user';
 
 
 @Component({
@@ -22,7 +23,9 @@ export class ActivationComponent implements OnInit {
 
   emailAddress: string;
   username: string;
+  accountType: AccountType;
 
+  activationTexts: any;
 
 
   constructor(
@@ -47,8 +50,16 @@ export class ActivationComponent implements OnInit {
     this.route.queryParams.subscribe((param) => {
       this.username = param['username'];
       this.emailAddress = param['email'];
+      this.accountType = param['type'];
       console.log(param);
     });
+
+    if (isNullOrUndefined(this.accountType)) {
+      this.accountType = AccountType.ORGANIZATION;
+    }
+
+    this.activationTexts = this.accountType === AccountType.PERSON ? personTexts : organizationTexts;
+
 
     if (!isNullOrUndefined(this.activationId)) {
       this.activationService.activate(this.activationId).toPromise().then((ret: ActivationLinkClickedResponse) => {
