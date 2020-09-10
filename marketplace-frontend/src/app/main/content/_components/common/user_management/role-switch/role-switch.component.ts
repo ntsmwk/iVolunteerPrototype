@@ -41,14 +41,13 @@ export class RoleSwitchComponent implements OnInit {
     this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(
       this.user
     );
-    console.log(this.user);
     if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.PERSON) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
         this.router.navigate(['/main/dashboard/tenants']);
       });
     } else if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.ORGANIZATION) {
       this.loginService.generateGlobalInfo(UserRole.TENANT_ADMIN, []).then(() => {
-        this.router.navigate(['/main/dashboard/create-tenant']);
+        this.router.navigate(['/main/create-tenant']);
       });
     } else if (this.roleTenantMappings.length === 1) {
       this.onRoleSelected(this.roleTenantMappings[0]);

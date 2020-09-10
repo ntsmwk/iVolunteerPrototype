@@ -13,7 +13,7 @@ import { stringUniqueValidator } from 'app/main/content/_validator/string-unique
 @Component({
   selector: "organization-registration",
   templateUrl: 'registration.component.html',
-  styleUrls: ['./registration.component.scss'],
+  styleUrls: ['../registration.component.scss'],
   animations: fuseAnimations,
 })
 export class OrganizationRegistrationComponent implements OnInit {

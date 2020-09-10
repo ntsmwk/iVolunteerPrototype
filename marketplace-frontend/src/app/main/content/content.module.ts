@@ -98,6 +98,14 @@ const routes: Route[] = [
     canActivate: [TokenGuard, LoginGuard],
   },
   {
+    path: "main/create-tenant",
+    loadChildren: () =>
+      import("./_components/common/user_management/create-tenant/create-tenant.module").then(
+        (m) => m.CreateTenantModule
+      ),
+    canActivate: [TokenGuard, LoginGuard],
+  },
+  {
     path: "main/achievements/overview",
     loadChildren: () =>
       import(
