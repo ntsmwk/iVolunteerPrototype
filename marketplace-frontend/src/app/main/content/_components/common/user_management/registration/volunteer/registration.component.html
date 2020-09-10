@@ -12,7 +12,7 @@
   <div #loginFormWrapper id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
     [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
     <div id="login-form" *ngIf="!displaySuccess">
-      <div class="title">Registrierung als Freiwilliger</div>
+      <div class="title">Registrierung als Person</div>
 
       <form name="registrationForm" (submit)="register()" [formGroup]="registrationForm" novalidate>
         <mat-form-field>
@@ -133,7 +133,7 @@
         Zum Fortfahren folge bitte den Anweisungen in der E-Mail
       </div>
 
-      <button mat-stroked-button class="primary-button-dark" style="display:block; margin: 0 auto"
+      <button mat-stroked-button class="primary-button-dark" style="display:block; margin: 28px auto"
         (click)="handleBackToLoginClick()">
         Zurück zum Login
       </button>

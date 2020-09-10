@@ -66,6 +66,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			}
 		} catch (Exception e) {
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + e.getMessage());
+			e.printStackTrace();	
 		}
 
 	}

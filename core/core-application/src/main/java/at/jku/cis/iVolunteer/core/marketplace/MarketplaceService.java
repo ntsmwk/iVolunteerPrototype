@@ -28,6 +28,18 @@ public class MarketplaceService {
 		marketplaceRepository.findAll(marketplaceIds).forEach(marketplaces::add);
 		return marketplaces;
 	}
+	
+	public Marketplace findFirst() {
+		List<Marketplace> marketplaces = marketplaceRepository.findAll();
+		
+		if (marketplaces == null || marketplaces.size() <= 0) {
+			return null;
+		} 
+		
+		return marketplaces.get(0);
+	}
+	
+	
 
 	public Marketplace createMarketplace(@RequestBody Marketplace marketplace) {
 		return marketplaceRepository.insert(marketplace);

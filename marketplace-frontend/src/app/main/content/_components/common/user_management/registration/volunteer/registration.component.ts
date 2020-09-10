@@ -16,7 +16,7 @@ import { stringUniqueValidator } from 'app/main/content/_validator/string-unique
 @Component({
   selector: "volunteer-registration",
   templateUrl: 'registration.component.html',
-  styleUrls: ['./registration.component.scss'],
+  styleUrls: ['../registration.component.scss'],
   animations: fuseAnimations,
 })
 export class VolunteerRegistrationComponent implements OnInit {

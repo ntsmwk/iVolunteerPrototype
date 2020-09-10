@@ -36,7 +36,6 @@ import { HeaderModule } from "app/main/content/_components/_shared/header/header
 import { HighchartsChartModule } from "highcharts-angular";
 import { DialogFactoryModule } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.module";
 import { DashboardHelpSeekerTenantAdminComponent } from "./dashboard-helpseeker-tenantAdmin/dashboard-helpseeker-tenantAdmin.component";
-import { CreateTenantComponent } from './create-tenant/create-tenant.component';
 
 const routes = [
   {
@@ -46,10 +45,6 @@ const routes = [
   {
     path: "tenants",
     component: TenantOverviewComponent,
-  },
-  {
-    path: "create-tenant",
-    component: CreateTenantComponent,
   }
 ];
 
@@ -59,7 +54,6 @@ const routes = [
     DashboardHelpSeekerTenantAdminComponent,
     DashboardComponent,
     TenantOverviewComponent,
-    CreateTenantComponent,
     ShareDialog,
   ],
   imports: [
