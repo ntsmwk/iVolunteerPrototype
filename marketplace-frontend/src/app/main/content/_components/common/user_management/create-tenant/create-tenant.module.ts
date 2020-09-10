@@ -3,6 +3,8 @@ import { RouterModule } from "@angular/router";
 
 import { FuseSharedModule } from "@fuse/shared.module";
 import { CreateTenantComponent } from './create-tenant.component';
+import { MatCommonModule, MatCardModule } from '@angular/material';
+import { FuseTenantFormModule } from '../../../admin/tenant-form/tenant-form.module';
 
 const routes = [
   {
@@ -18,6 +20,9 @@ const routes = [
   imports: [
     RouterModule.forChild(routes),
     FuseSharedModule,
+    MatCommonModule,
+    MatCardModule,
+
   ],
   exports: [CreateTenantComponent],
 })
