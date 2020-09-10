@@ -30,12 +30,18 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private ClassInstanceMapper classInstanceMapper;
-	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
-	@Autowired private DateTimeService dateTimeService;
-	@Autowired private MarketplaceService marketplaceService;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private ClassInstanceMapper classInstanceMapper;
+	@Autowired
+	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired
+	private DateTimeService dateTimeService;
+	@Autowired
+	private MarketplaceService marketplaceService;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,

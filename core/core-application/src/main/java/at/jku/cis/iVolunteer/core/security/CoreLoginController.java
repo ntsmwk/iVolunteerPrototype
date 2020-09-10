@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,7 +29,7 @@ import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.REFRESH_HEADER_STRING;
+import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;;
 
 @RestController
 @RequestMapping("/login")
@@ -56,14 +57,15 @@ public class CoreLoginController {
 		return (user != null && user.isActivated()) || user == null;
 	}
 
-	@GetMapping("/refreshToken")
-	public ResponseEntity<Object> refreshToken(@RequestHeader(REFRESH_HEADER_STRING) String rawRefreshToken)
-			throws Exception {
+	@PostMapping("/refreshToken")
+	public ResponseEntity<Object> refreshToken(@RequestBody String rawRefreshToken) throws Exception {
 		try {
 			if (StringUtils.hasText(rawRefreshToken) && this.tokenProvider.validateRefreshToken(rawRefreshToken)) {
-				String refreshToken = rawRefreshToken.substring(7, rawRefreshToken.length());
-				User user = new User(this.tokenProvider.getUserNameFromRefreshToken(refreshToken), null,
-						Collections.emptyList());
+				String refreshToken = rawRefreshToken.substring(TOKEN_PREFIX.length(), rawRefreshToken.length());
+
+				String username = this.tokenProvider.getUserNameFromRefreshToken(refreshToken);
+				CoreUser iVolUser = this.userRepository.findByUsername(username);
+				User user = new User(iVolUser.getUsername(), iVolUser.getPassword(), Collections.emptyList());
 
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null,
 						user.getAuthorities());

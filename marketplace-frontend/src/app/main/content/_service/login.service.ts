@@ -64,20 +64,16 @@ export class LoginService {
   }
 
   refreshAccessToken(refreshToken: string) {
-    return this.http
-      .get("/core/login/refreshToken", {
-        headers: this.createTokenHeader(refreshToken),
-      })
-      .pipe(
-        tap(
-          (response: any) => {
-            localStorage.setItem("accessToken", response.accessToken);
-          },
-          (error) => {
-            this.logout();
-          }
-        )
-      );
+    return this.http.post("/core/login/refreshToken", refreshToken).pipe(
+      tap(
+        (response: any) => {
+          localStorage.setItem("accessToken", response.accessToken);
+        },
+        (error) => {
+          this.logout();
+        }
+      )
+    );
   }
 
   getRefreshToken() {
@@ -86,18 +82,6 @@ export class LoginService {
 
   getAccessToken() {
     return localStorage.getItem("accessToken");
-  }
-
-  private createTokenHeader(refreshToken: string): HttpHeaders {
-    let reqOptions = new HttpHeaders().set("Content-Type", "application/json");
-
-    if (refreshToken) {
-      reqOptions = new HttpHeaders()
-        .set("Content-Type", "application/json")
-        .set("Refresh", refreshToken);
-    }
-
-    return reqOptions;
   }
 
   getGlobalInfo() {

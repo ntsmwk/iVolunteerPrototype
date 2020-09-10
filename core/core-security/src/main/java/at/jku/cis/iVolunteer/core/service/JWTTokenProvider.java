@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.core.service;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -56,36 +58,24 @@ public class JWTTokenProvider {
         return claims.getSubject();
     }
 
-    public boolean validateAccessToken(String token) throws Exception {
+    public boolean validateAccessToken(String token) {
         return validateToken(token, ACCESS_SECRET);
     }
 
-    public boolean validateRefreshToken(String token) throws Exception {
+    public boolean validateRefreshToken(String token) {
         return validateToken(token, REFRESH_SECRET);
     }
 
-    private boolean validateToken(String token, String secret) throws Exception {
+    private boolean validateToken(String token, String secret) {
         if (token.startsWith(TOKEN_PREFIX)) {
             token = token.substring(TOKEN_PREFIX.length(), token.length());
         }
         try {
             Jwts.parser().setSigningKey(secret.getBytes("UTF-8")).parseClaimsJws(token);
             return true;
-        } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
-            throw new SignatureException("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
-            throw new MalformedJwtException("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
-            throw new ExpiredJwtException(null, null, "Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
-            throw new UnsupportedJwtException("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
-            throw new IllegalArgumentException("JWT claims string is empty.");
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException
+                | IllegalArgumentException | UnsupportedEncodingException ex) {
+            return false;
         }
     }
 }

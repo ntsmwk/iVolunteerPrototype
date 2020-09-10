@@ -48,24 +48,21 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-		try {
-			String header = req.getHeader(ACCESS_HEADER_STRING);
 
-			if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-				chain.doFilter(req, res);
-				return;
-			}
+		String header = req.getHeader(ACCESS_HEADER_STRING);
 
-			String token = req.getHeader(ACCESS_HEADER_STRING);
+		if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+			chain.doFilter(req, res);
+			return;
+		}
 
-			if (StringUtils.hasText(token) && this.tokenProvider.validateAccessToken(token)) {
-				SecurityContextHolder.getContext().setAuthentication(getAuthentication(req));
-				chain.doFilter(req, res);
-			} else {
-				res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + "Token is empty");
-			}
-		} catch (Exception e) {
-			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + e.getMessage());
+		String token = req.getHeader(ACCESS_HEADER_STRING);
+
+		if (StringUtils.hasText(token) && this.tokenProvider.validateAccessToken(token)) {
+			SecurityContextHolder.getContext().setAuthentication(getAuthentication(req));
+			chain.doFilter(req, res);
+		} else {
+			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, NOT_AUTHORISED + "Problem with Token");
 		}
 
 	}
