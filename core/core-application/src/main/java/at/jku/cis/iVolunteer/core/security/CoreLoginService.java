@@ -13,12 +13,16 @@ public class CoreLoginService {
 
 	@Autowired
 	private CoreUserRepository coreUserRepository;
-	
-	
 
 	public CoreUser getLoggedInUser() {
 		Authentication authentication = determineAuthentication();
-		return findByUsername((String) authentication.getPrincipal());
+		CoreUser user = findByUsername((String) authentication.getPrincipal());
+
+		if (user != null) {
+			user.setPassword(null);
+		}
+
+		return user;
 	}
 
 	private CoreUser findByUsername(String username) {

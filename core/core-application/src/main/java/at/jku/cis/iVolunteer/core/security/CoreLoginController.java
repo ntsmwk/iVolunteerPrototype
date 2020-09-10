@@ -25,7 +25,6 @@ import at.jku.cis.iVolunteer.core.security.model.RefreshTokenResponse;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
-import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
@@ -50,13 +49,13 @@ public class CoreLoginController {
 		final CoreUser user = loginService.getLoggedInUser();
 		return user;
 	}
-	
+
 	@PutMapping("/activation-status")
 	public boolean checkActivationStatus(@RequestBody String username) {
 		final CoreUser user = userRepository.findByUsername(username);
 		return (user != null && user.isActivated()) || user == null;
 	}
-	
+
 	@GetMapping("/refreshToken")
 	public ResponseEntity<Object> refreshToken(@RequestHeader(REFRESH_HEADER_STRING) String rawRefreshToken)
 			throws Exception {
