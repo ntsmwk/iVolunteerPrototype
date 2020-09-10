@@ -6,4 +6,8 @@ export class Tenant {
   primaryColor: string;
   secondaryColor: string;
   marketplaceId: string;
+
+  public constructor(init?: Partial<Tenant>) {
+    Object.assign(this, init);
+  }
 }

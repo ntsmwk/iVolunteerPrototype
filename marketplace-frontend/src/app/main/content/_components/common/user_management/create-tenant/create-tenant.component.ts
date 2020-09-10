@@ -1,4 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { LoginService } from 'app/main/content/_service/login.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { Tenant } from 'app/main/content/_model/tenant';
 
 
 @Component({
@@ -8,16 +11,23 @@ import { Component, OnInit } from "@angular/core";
 })
 export class CreateTenantComponent implements OnInit {
 
-  isLoaded: boolean = false;
+  globalInfo: GlobalInfo;
+  tenant: Tenant;
+  loaded: boolean;
 
   constructor(
-
+    private loginService: LoginService,
   ) { }
 
-  async ngOnInit() {
 
 
-    this.isLoaded = true;
+  ngOnInit() {
+    this.loaded = false;
+    this.loginService.getGlobalInfo().toPromise().then((globalInfo: GlobalInfo) => {
+      this.globalInfo = globalInfo;
+      this.tenant = new Tenant({ name: this.globalInfo.user.organizationName, primaryColor: '', secondaryColor: '' });
+      this.loaded = true;
+    });
   }
 
 }

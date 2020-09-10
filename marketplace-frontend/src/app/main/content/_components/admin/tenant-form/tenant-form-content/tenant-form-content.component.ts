@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material';
 import { User, UserRole } from 'app/main/content/_model/user';
 import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 import { Marketplace } from 'app/main/content/_model/marketplace';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: "tenant-form-content",
@@ -29,10 +30,9 @@ export class TenantFormContentComponent implements OnInit {
     private coreUserService: CoreUserService,
   ) {
     this.tenantForm = formBuilder.group({
-      id: new FormControl(undefined),
-      name: new FormControl(undefined, Validators.required),
-      primaryColor: new FormControl(undefined, Validators.required),
-      secondaryColor: new FormControl(undefined, Validators.required),
+      name: new FormControl('', Validators.required),
+      primaryColor: new FormControl('', Validators.required),
+      secondaryColor: new FormControl('', Validators.required),
     });
   }
 
@@ -41,26 +41,23 @@ export class TenantFormContentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initializeTenantForm(this.tenant.id);
+    this.initializeTenantForm(this.tenant);
   }
 
-  private async initializeTenantForm(tenantId: string) {
-    if (tenantId == null || tenantId.length === 0) {
+  private async initializeTenantForm(tenant: Tenant) {
+    if (isNullOrUndefined(tenant)) {
       return;
     }
-    this.tenant = <Tenant>(
-      await this.tenantService.findById(tenantId).toPromise()
-    );
+
     this.tenantForm.setValue({
-      id: this.tenant.id,
-      name: this.tenant.name,
-      primaryColor: this.tenant.primaryColor,
-      secondaryColor: this.tenant.secondaryColor,
+      name: tenant.name,
+      primaryColor: tenant.primaryColor,
+      secondaryColor: tenant.secondaryColor,
     });
 
     this.dataSource.data = <User[]>(
       await this.coreUserService
-        .findAllByRoleAndTenantId(this.tenant.id, UserRole.HELP_SEEKER)
+        .findAllByRoleAndTenantId(tenant.id, UserRole.HELP_SEEKER)
         .toPromise()
     );
     console.error(this.dataSource.data);
