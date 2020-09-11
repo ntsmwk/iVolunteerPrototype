@@ -8,6 +8,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 @Component({
   selector: "tenant-form",
   templateUrl: "tenant-form.component.html",
+  styleUrls: ["./tenant-form.component.scss"]
 })
 export class FuseTenantFormComponent implements OnInit {
   tenant: Tenant;

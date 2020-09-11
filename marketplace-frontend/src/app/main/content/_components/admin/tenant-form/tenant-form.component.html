@@ -3,7 +3,9 @@
     <h1>Tenant</h1>
   </div>
 
-  <tenant-form-content *ngIf="tenant && marketplace" [tenant]="tenant" [marketplace]="marketplace">
-  </tenant-form-content>
-
+  <div class="content p-24 mat-white-bg mt-12">
+    <tenant-form-content fusePerfectScrollbar *ngIf="tenant && marketplace" [tenant]="tenant"
+      [marketplace]="marketplace">
+    </tenant-form-content>
+  </div>
 </div>

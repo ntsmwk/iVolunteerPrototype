@@ -8,10 +8,12 @@ import { User, UserRole } from 'app/main/content/_model/user';
 import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
+import { FileInput } from 'ngx-material-file-input';
 
 @Component({
   selector: "tenant-form-content",
   templateUrl: 'tenant-form-content.component.html',
+  styleUrls: ['./tenant-form-content.component.scss'],
 })
 export class TenantFormContentComponent implements OnInit {
 
@@ -22,6 +24,10 @@ export class TenantFormContentComponent implements OnInit {
   dataSource = new MatTableDataSource<User>();
   displayedColumns = ['firstname', 'lastname', 'username', 'actions'];
 
+  imageFileInput: FileInput;
+  previewImage: any;
+  uploadingImage: boolean;
+
   constructor(
     formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -31,6 +37,7 @@ export class TenantFormContentComponent implements OnInit {
   ) {
     this.tenantForm = formBuilder.group({
       name: new FormControl('', Validators.required),
+      description: new FormControl('', Validators.required),
       primaryColor: new FormControl('', Validators.required),
       secondaryColor: new FormControl('', Validators.required),
     });
@@ -49,11 +56,9 @@ export class TenantFormContentComponent implements OnInit {
       return;
     }
 
-    this.tenantForm.setValue({
-      name: tenant.name,
-      primaryColor: tenant.primaryColor,
-      secondaryColor: tenant.secondaryColor,
-    });
+    for (const key of Object.keys(tenant)) {
+      this.tenantForm.controls[key].setValue(tenant[key]);
+    }
 
     this.dataSource.data = <User[]>(
       await this.coreUserService
@@ -76,6 +81,21 @@ export class TenantFormContentComponent implements OnInit {
       .then(() =>
         this.router.navigate([`/main/marketplace-form/${this.marketplace.id}`])
       );
+  }
+
+
+  upload() {
+    this.uploadingImage = true;
+    const fileReader = new FileReader();
+    fileReader.onload = async (e) => {
+      console.log(e);
+      const image = fileReader.result;
+      this.uploadingImage = false;
+      this.previewImage = image;
+
+
+    };
+    fileReader.readAsDataURL(this.imageFileInput.files[0]);
   }
 
   navigateToHelpSeekerForm(userId: string) {
