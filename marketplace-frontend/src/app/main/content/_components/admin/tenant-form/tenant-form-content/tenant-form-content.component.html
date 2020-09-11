@@ -38,15 +38,22 @@
           </div>
         </div>
 
-        <div class="mt-8" fxLayout="row" fxLayoutAlign="start center">
-          <mat-form-field fxFlex>
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
+          <mat-form-field fxFlex class="mt-8 mr-8">
             <ngx-mat-file-input [(ngModel)]="imageFileInput" [ngModelOptions]="{standalone: true}"
               placeholder="Titelbild hochladen"></ngx-mat-file-input>
             <mat-icon matSuffix>folder</mat-icon>
           </mat-form-field>
-          <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
-            (click)="upload()" [disabled]="!imageFileInput">
-            Upload</button>
+
+          <div fxLayout="row" fxLayoutAlign="space-around center" class="upload-buttons">
+            <button mat-stroked-button type="button" class="primary-button-dark" style="max-width: max-content"
+              (click)="uploadImage()" [disabled]="!imageFileInput">
+              Upload</button>
+            <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
+              (click)="deleteImage()" [disabled]="!previewImage">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </div>
         </div>
 
         <div class="section-border centered image-preview" *ngIf="uploadingImage || previewImage">
@@ -57,7 +64,7 @@
             <mat-spinner></mat-spinner>
           </div>
           <div *ngIf="previewImage" class="image-container">
-            <img [src]=" previewImage" style="max-width: 100%; max-height: 100%; height: auto" alt="Vorschau">
+            <img [src]="previewImage" style="max-width: 100%; max-height: 100%; height: auto" alt="Vorschau">
           </div>
         </div>
 

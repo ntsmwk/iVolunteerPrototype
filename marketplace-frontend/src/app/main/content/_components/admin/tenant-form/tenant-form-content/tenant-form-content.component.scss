@@ -14,6 +14,27 @@ $image-preview-label-offset: -18px;
   border-radius: 4px;
   width: 100%;
 
+  .upload-buttons {
+    @include media-breakpoint("sm") {
+      width: 100%;
+    }
+
+    @include media-breakpoint("xs") {
+      width: 100%;
+      button {
+        min-width: 0;
+        width: 50%;
+      }
+    }
+
+    @media (max-width: 400px) {
+      width: 100%;
+      button {
+        min-width: max-content !important;
+      }
+    }
+  }
+
   .image-preview {
     display: block;
     width: 80%;

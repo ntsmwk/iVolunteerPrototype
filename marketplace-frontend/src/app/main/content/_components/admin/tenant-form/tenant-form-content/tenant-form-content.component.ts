@@ -87,18 +87,20 @@ export class TenantFormContentComponent implements OnInit {
   }
 
 
-  upload() {
+  uploadImage() {
     this.uploadingImage = true;
     const fileReader = new FileReader();
     fileReader.onload = async (e) => {
-      console.log(e);
       const image = fileReader.result;
       this.uploadingImage = false;
       this.previewImage = image;
-
-
     };
     fileReader.readAsDataURL(this.imageFileInput.files[0]);
+  }
+
+  deleteImage() {
+    this.imageFileInput = undefined;
+    this.previewImage = undefined;
   }
 
   navigateToHelpSeekerForm(userId: string) {
