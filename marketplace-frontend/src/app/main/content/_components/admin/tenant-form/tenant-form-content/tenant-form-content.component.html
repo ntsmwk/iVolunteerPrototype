@@ -7,12 +7,16 @@
         <h2 class="mt-0">Zur Organisation selbst</h2>
 
         <mat-form-field>
-          <input matInput type="text" formControlName="name" placeholder="Name der Organisation" />
+          <input matInput type="text" formControlName="name" placeholder="Name der Organisation" required />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <textarea matInput type="text" formControlName="description" placeholder="Kurzbeschreibung der Organisation"
-            matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
+            matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 required></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="url" formControlName="homepage" placeholder="Homepage" />
         </mat-form-field>
 
         <h2>Gestaltungsoptionen</h2>
@@ -57,7 +61,7 @@
           </div>
         </div>
 
-        <h2>Machen Sie Ihre Organisation auffindbar</h2>
+        <h2>Zuordnungsoptionen</h2>
 
         <div>TODO TAGS</div>
 

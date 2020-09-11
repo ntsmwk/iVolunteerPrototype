@@ -38,6 +38,7 @@ export class TenantFormContentComponent implements OnInit {
     this.tenantForm = formBuilder.group({
       name: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),
+      homepage: new FormControl(''),
       primaryColor: new FormControl('', Validators.required),
       secondaryColor: new FormControl('', Validators.required),
     });
@@ -57,7 +58,9 @@ export class TenantFormContentComponent implements OnInit {
     }
 
     for (const key of Object.keys(tenant)) {
-      this.tenantForm.controls[key].setValue(tenant[key]);
+      if (!isNullOrUndefined(this.tenantForm.controls[key])) {
+        this.tenantForm.controls[key].setValue(tenant[key]);
+      }
     }
 
     this.dataSource.data = <User[]>(
