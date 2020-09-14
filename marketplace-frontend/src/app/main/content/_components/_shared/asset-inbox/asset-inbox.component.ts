@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { MatTableDataSource } from "@angular/material";
 import {
   ClassInstanceDTO,
-  ClassArchetype,
+  ClassArchetype
 } from "app/main/content/_model/meta/class";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Marketplace } from "app/main/content/_model/marketplace";
@@ -13,7 +13,7 @@ import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 @Component({
   selector: "app-asset-inbox",
   templateUrl: "./asset-inbox.component.html",
-  styleUrls: ["./asset-inbox.component.scss"],
+  styleUrls: ["./asset-inbox.component.scss"]
 })
 export class AssetInboxComponent implements OnInit {
   output = "";
@@ -26,14 +26,14 @@ export class AssetInboxComponent implements OnInit {
     "label",
     "archetype",
     "issuer",
-    "date",
+    "date"
   ];
   displayedColumnsHelpseeker = [
     "checkboxes",
     "label",
     "archetype",
     "user",
-    "date",
+    "date"
   ];
 
   selection = new SelectionModel<ClassInstanceDTO>(true, []);
@@ -47,9 +47,10 @@ export class AssetInboxComponent implements OnInit {
   volunteers: User[] = [];
   userImagePaths: any[];
 
-  constructor(private userService: CoreUserService) { }
+  constructor(private userService: CoreUserService) {}
 
   ngOnInit() {
+    console.error(this.classInstanceDTOs);
     if (!isNullOrUndefined(this.classInstanceDTOs)) {
       this.classInstanceDTOs.sort(
         (a, b) => a.blockchainDate.valueOf() - b.blockchainDate.valueOf()
@@ -68,7 +69,7 @@ export class AssetInboxComponent implements OnInit {
           .toPromise()
           .then((volunteers: User[]) => {
             this.volunteers = volunteers;
-          }),
+          })
       ]).then(() => {
         this.fetchImagePaths();
       });
@@ -83,6 +84,8 @@ export class AssetInboxComponent implements OnInit {
       this.displayedColumns = this.displayedColumnsHelpseeker;
     }
     this.datasource.data = this.classInstanceDTOs;
+    console.error("datasource data");
+    console.error(this.datasource.data);
   }
 
   fetchImagePaths() {
@@ -117,9 +120,9 @@ export class AssetInboxComponent implements OnInit {
   getNameForEntry(personId: string, type: string) {
     let person: User;
     if (type === "issuer") {
-      person = this.issuers.find((i) => i.id === personId);
+      person = this.issuers.find(i => i.id === personId);
     } else {
-      person = this.volunteers.find((i) => i.id === personId);
+      person = this.volunteers.find(i => i.id === personId);
     }
     if (isNullOrUndefined(person)) {
       return "";
@@ -129,9 +132,12 @@ export class AssetInboxComponent implements OnInit {
   }
 
   getIssuerPositionForEntry(personId: string) {
-    const user = this.issuers.find((p) => p.id === personId);
+    const user = this.issuers.find(p => p.id === personId);
 
-    if (isNullOrUndefined(user) || isNullOrUndefined(user.organizationPosition)) {
+    if (
+      isNullOrUndefined(user) ||
+      isNullOrUndefined(user.organizationPosition)
+    ) {
       return "";
     } else {
       return "(" + user.organizationPosition + ")";
@@ -151,7 +157,7 @@ export class AssetInboxComponent implements OnInit {
       return "/assets/images/avatars/profile.jpg";
     }
 
-    const ret = this.userImagePaths.find((userImagePath) => {
+    const ret = this.userImagePaths.find(userImagePath => {
       return userImagePath.userId === id;
     });
 
@@ -205,7 +211,7 @@ export class AssetInboxComponent implements OnInit {
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.datasource.data.forEach((row) => this.selection.select(row));
+      : this.datasource.data.forEach(row => this.selection.select(row));
   }
 
   navigateBack() {

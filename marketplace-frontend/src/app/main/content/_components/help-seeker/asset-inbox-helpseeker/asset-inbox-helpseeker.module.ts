@@ -2,9 +2,10 @@ import { NgModule } from "@angular/core";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { AssetInboxHelpseekerComponent } from "./asset-inbox-helpseeker.component";
 import { CommonModule } from "@angular/common";
-import { MatButtonModule } from "@angular/material";
+import { MatButtonModule, MatTableModule } from "@angular/material";
 import { RouterModule } from "@angular/router";
 import { AssetInboxModule } from "../../_shared/asset-inbox/asset-inbox.module";
+import { HeaderModule } from "../../_shared/header/header.module";
 
 const routes = [{ path: "", component: AssetInboxHelpseekerComponent }];
 
@@ -15,9 +16,11 @@ const routes = [{ path: "", component: AssetInboxHelpseekerComponent }];
     RouterModule.forChild(routes),
     FuseSharedModule,
     MatButtonModule,
+    HeaderModule,
+    MatTableModule,
 
     AssetInboxModule
   ],
   exports: [AssetInboxHelpseekerComponent]
 })
-export class AssetInboxHelpseekerModule { }
+export class AssetInboxHelpseekerModule {}
