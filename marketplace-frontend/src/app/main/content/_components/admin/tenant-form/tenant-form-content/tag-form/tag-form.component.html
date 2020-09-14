@@ -1,0 +1,27 @@
+<div *ngIf="loaded">
+
+  <mat-chip-list style="">
+    <mat-chip *ngFor="let tag of addedTags" selectable="true" removable="true" (removed)="handleTagRemove(tag)">
+      {{tag}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+
+  <div style="">
+    <form [formGroup]="tagForm" fxLayout="row wrap" fxLayoutAlign="start center">
+      <mat-form-field fxFlex>
+        <input #inputText matInput type="text" formControlName="inputText" placeholder="Tag Suchen"
+          [matAutocomplete]="auto" />
+      </mat-form-field>
+      <button mat-stroked-button type="button" class="primary-button-dark ml-8 mr-8"
+        (click)="handleTagAdd()">Hinzufügen</button>
+    </form>
+  </div>
+
+</div>
+
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-option *ngFor="let option of filteredTags | async" [value]="option" (click)="handleTagAdd()">
+    {{ option }}
+  </mat-option>
+</mat-autocomplete>

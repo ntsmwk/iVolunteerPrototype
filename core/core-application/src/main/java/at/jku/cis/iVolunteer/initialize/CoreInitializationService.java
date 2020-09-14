@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.security.activation.CorePendingActivationRepository;
+import at.jku.cis.iVolunteer.core.tenant.tags.TagRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.tenant.Tag;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
@@ -28,6 +30,7 @@ public class CoreInitializationService {
 	@Autowired private MarketplaceRepository marketplaceRepository;
 	@Autowired protected CorePendingActivationRepository pendingActivationRepository;
 	@Autowired private Environment environment;
+	@Autowired protected TagRepository tagRepository;
 
 	public void init() {
 //		createMarketplace();
@@ -142,6 +145,13 @@ public class CoreInitializationService {
 		}
 
 		return fpUser;
+	}
+	
+	protected void addTenantTags() {
+		for (int i = 0; i < 10; i++) {
+			Tag t = new Tag("Tenant Tag" + i );
+			tagRepository.save(t);
+		}
 	}
 
 }

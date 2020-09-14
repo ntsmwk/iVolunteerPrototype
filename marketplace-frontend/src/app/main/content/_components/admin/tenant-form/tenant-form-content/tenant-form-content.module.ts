@@ -5,6 +5,7 @@ import {
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { TenantTagFormModule } from './tag-form/tag-form.module';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     FuseSharedModule,
     MaterialFileInputModule,
     MatProgressSpinnerModule,
-
+    TenantTagFormModule
   ],
 
   providers: [

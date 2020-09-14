@@ -57,6 +57,7 @@ public class CoreInitializationController {
 		createTenantAdmins();
 		createAdmins();
 		createRecruiters();
+		addTenantTags();
 		// createFlexProdUsers();
 	}
 
@@ -151,6 +152,11 @@ public class CoreInitializationController {
 	public void unsubscribeVolunteersFromTenant() {
 		// TODO init
 	}
+	
+	@PutMapping("/init/tenant/add-tags")
+	public void addTenantTags() {
+		coreInitializationService.addTenantTags();
+	}
 
 	/**
 	 * Marketplace registration
@@ -205,12 +211,15 @@ public class CoreInitializationController {
 	public void unregistereVolunteersFromMarketplace() {
 		// TODO init
 	}
+	
+
 
 	@PutMapping("init/wipe-core")
 	public void wipeCore() {
 		coreInitializationService.coreUserRepository.deleteAll();
 		coreInitializationService.pendingActivationRepository.deleteAll();
 		coreTenantInitializationService.coreTenantRepository.deleteAll();
+		coreInitializationService.tagRepository.deleteAll();
 		
 
 	}
