@@ -1,30 +1,26 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Tenant } from "app/main/content/_model/tenant";
-import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { TenantTagService } from 'app/main/content/_service/tenant-tag.service';
-import { isNullOrUndefined } from 'util'
+import { isNullOrUndefined } from 'util';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: "tenant-tag-form",
-  templateUrl: "tag-form.component.html",
-  styleUrls: ["./tag-form.component.scss"]
+  templateUrl: 'tag-form.component.html',
+  styleUrls: ['./tag-form.component.scss']
 })
 export class TenantTagFormComponent implements OnInit {
 
   loaded: boolean;
   filteredTags: Observable<string[]>;
   possibleTags: string[] = [];
-  addedTags: string[] = [];
+  @Input() addedTags: string[] = [];
   tagForm: FormGroup;
 
   @ViewChild('inputText', { static: false }) inputTextField: ElementRef;
-
+  @Output() tags: EventEmitter<String[]> = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,7 +29,7 @@ export class TenantTagFormComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-
+    this.loaded = false;
     this.possibleTags = <string[]>await this.tenantTagService.findAllAsString().toPromise();
 
     this.tagForm = this.formBuilder.group({
@@ -41,16 +37,11 @@ export class TenantTagFormComponent implements OnInit {
     });
 
     this.resetFilter();
-
-
-
     this.loaded = true;
-
   }
 
   handleTagAdd() {
     const inputText = this.tagForm.value.inputText;
-    console.log(inputText);
 
     if (isNullOrUndefined(inputText)) { return; }
 
@@ -65,6 +56,7 @@ export class TenantTagFormComponent implements OnInit {
 
     this.inputTextField.nativeElement.blur();
     this.tagForm.reset();
+    this.emitChanges();
 
   }
 
@@ -72,6 +64,7 @@ export class TenantTagFormComponent implements OnInit {
     this.addedTags = this.addedTags.filter(t => t !== tag);
     this.possibleTags.push(tag);
     this.resetFilter();
+    this.emitChanges();
 
   }
 
@@ -90,6 +83,10 @@ export class TenantTagFormComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.possibleTags.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  private emitChanges() {
+    this.tags.emit(this.addedTags);
   }
 
 }

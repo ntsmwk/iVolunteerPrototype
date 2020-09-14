@@ -3,8 +3,6 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { Tenant } from 'app/main/content/_model/tenant';
-import { MatTableDataSource } from '@angular/material';
-import { User, UserRole } from 'app/main/content/_model/user';
 import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
@@ -18,38 +16,30 @@ import { FileInput } from 'ngx-material-file-input';
 export class TenantFormContentComponent implements OnInit {
 
   tenantForm: FormGroup;
+  addedTags: string[];
   @Input() tenant: Tenant;
   @Input() marketplace: Marketplace;
-
-  dataSource = new MatTableDataSource<User>();
-  displayedColumns = ['firstname', 'lastname', 'username', 'actions'];
 
   imageFileInput: FileInput;
   previewImage: any;
   uploadingImage: boolean;
 
+  loaded: boolean;
+  showHelpseekersForm: boolean;
+
   constructor(
-    formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private tenantService: TenantService,
-    private coreUserService: CoreUserService,
-  ) {
-    this.tenantForm = formBuilder.group({
-      name: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
-      homepage: new FormControl(''),
-      primaryColor: new FormControl('', Validators.required),
-      secondaryColor: new FormControl('', Validators.required),
-    });
-  }
+    private formBuilder: FormBuilder,
+  ) { }
 
   isEditMode() {
     return this.tenantForm.value.id !== null;
   }
 
   ngOnInit() {
+    this.loaded = false;
+    this.showHelpseekersForm = false;
     this.initializeTenantForm(this.tenant);
+    this.loaded = true;
   }
 
   private async initializeTenantForm(tenant: Tenant) {
@@ -57,33 +47,44 @@ export class TenantFormContentComponent implements OnInit {
       return;
     }
 
+    this.tenantForm = this.formBuilder.group({
+      name: new FormControl('', Validators.required),
+      description: new FormControl('', Validators.required),
+      homepage: new FormControl(''),
+      primaryColor: new FormControl('', Validators.required),
+      secondaryColor: new FormControl('', Validators.required),
+    });
+
     for (const key of Object.keys(tenant)) {
       if (!isNullOrUndefined(this.tenantForm.controls[key])) {
         this.tenantForm.controls[key].setValue(tenant[key]);
       }
     }
 
-    this.dataSource.data = <User[]>(
-      await this.coreUserService
-        .findAllByRoleAndTenantId(tenant.id, UserRole.HELP_SEEKER)
-        .toPromise()
-    );
-    console.error(this.dataSource.data);
+    this.previewImage = this.tenant.image;
+    this.addedTags = this.tenant.tags;
   }
 
   save() {
     if (!this.tenantForm.valid) {
       return;
     }
-    this.tenant = <Tenant>this.tenantForm.value;
-    this.tenant.marketplaceId = this.marketplace.id;
+    this.tenant = new Tenant(this.tenantForm.value);
 
-    this.tenantService
-      .save(<Tenant>this.tenantForm.value)
-      .toPromise()
-      .then(() =>
-        this.router.navigate([`/main/marketplace-form/${this.marketplace.id}`])
-      );
+    this.tenant.marketplaceId = this.marketplace.id;
+    this.tenant.image = this.previewImage;
+
+    this.tenant.tags = this.addedTags;
+    this.showHelpseekersForm = true;
+
+    console.log(this.tenant);
+
+    // this.tenantService
+    //   .save(<Tenant>this.tenantForm.value)
+    //   .toPromise()
+    //   .then(() =>
+    //     this.router.navigate([`/main/marketplace-form/${this.marketplace.id}`])
+    //   );
   }
 
 
@@ -103,7 +104,4 @@ export class TenantFormContentComponent implements OnInit {
     this.previewImage = undefined;
   }
 
-  navigateToHelpSeekerForm(userId: string) {
-    // TODO
-  }
 }

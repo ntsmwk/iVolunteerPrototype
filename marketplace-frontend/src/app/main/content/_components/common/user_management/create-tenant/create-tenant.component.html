@@ -1,8 +1,9 @@
 <div *ngIf="loaded" class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll;">
   <mat-card class="page content">
 
-    <h1>Um Ihre Organisation zu erstellen benötigen wir einige Daten:</h1>
+    <h1>Um Ihre Organisation zu erstellen benötigen wir noch ein paar Kleinigkeiten:</h1>
 
-    <tenant-form-content [tenant]="tenant" [marketplace]="globalInfo.marketplace"></tenant-form-content>
+    <tenant-form-content [tenant]="tenant" [marketplace]="globalInfo.marketplace">
+    </tenant-form-content>
 
   </mat-card>
