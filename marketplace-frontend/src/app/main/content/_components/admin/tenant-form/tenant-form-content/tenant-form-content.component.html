@@ -50,7 +50,7 @@
               (click)="uploadImage()" [disabled]="!imageFileInput">
               Upload</button>
             <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
-              (click)="deleteImage()" [disabled]="!previewImage">
+              (click)="deleteImage()" [disabled]="!previewImage && !imageFileInput">
               <mat-icon>clear</mat-icon>
             </button>
           </div>
@@ -70,7 +70,9 @@
 
         <h2>Zuordnungsoptionen</h2>
 
-        <div>TODO TAGS</div>
+        <!-- <div>TODO TAGS</div> -->
+
+        <tenant-tag-form></tenant-tag-form>
 
         <button class="primary-button-dark mt-32" type="submit" mat-stroked-button>Speichern</button>
       </div>

@@ -7,6 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Tag {
 
 	@Id private String label;
+	
+	public Tag() {};
+	
+	public Tag(String label) {
+		this.label = label;
+	}
 
 	public String getLabel() {
 		return label;
