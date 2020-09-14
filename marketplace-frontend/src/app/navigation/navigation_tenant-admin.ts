@@ -25,13 +25,13 @@ export const navigation_tenantAdmin = [
     icon: "import",
     url: "/main/import"
   },
-  // {
-  //   id: "inbox",
-  //   title: "Einträge bestätigen",
-  //   type: "item",
-  //   icon: "unlock",
-  //   url: "/main/helpseeker/asset-inbox",
-  // },
+  {
+    id: "inbox",
+    title: "Einträge bestätigen",
+    type: "item",
+    icon: "unlock",
+    url: "/main/helpseeker/asset-inbox"
+  },
   {
     id: "config",
     title: "Konfigurieren",

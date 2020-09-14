@@ -22,7 +22,7 @@ public interface ClassInstanceRepository extends HasTenantRepository<ClassInstan
 	List<ClassInstance> getByUserIdAndTenantId(String userId, String tenantId);
 
 //	List<ClassInstance> getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(String userId, boolean inUserRepository, boolean inIssuerInbox, String tenantId);
-//
-//	List<ClassInstance> getByIssuerIdAndInIssuerInboxAndInUserRepositoryAndTenantId(String issuerId, boolean inIssuerInbox, boolean inUserRepository, String tenantId);
+
+	List<ClassInstance> getByIssuedAndTenantId(boolean issued, String tenantId);
 
 }

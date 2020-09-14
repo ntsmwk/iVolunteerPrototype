@@ -30,18 +30,12 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceMapper classInstanceMapper;
-	@Autowired
-	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
-	@Autowired
-	private DateTimeService dateTimeService;
-	@Autowired
-	private MarketplaceService marketplaceService;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceMapper classInstanceMapper;
+	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired private DateTimeService dateTimeService;
+	@Autowired private MarketplaceService marketplaceService;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -124,6 +118,7 @@ public class ClassInstanceController {
 			classInstance.setIssuerId(tenantId);
 			classInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
 			classInstance.setTimestamp(new Date());
+			classInstance.setIssued(false);
 
 			classInstance.getProperties().forEach(p -> {
 				if (properties.containsKey(p.getName())) {
@@ -161,15 +156,12 @@ public class ClassInstanceController {
 	// return classInstanceMapper.mapToDTO(new ArrayList<>(ret));
 	// }
 	//
-	// @GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
-	// private List<ClassInstance>
-	// getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId,
-	// @RequestParam(value="tId", required = true) String tenantId) {
-	// List<ClassInstance> instances = classInstanceRepository
-	// .getByIssuerIdAndInIssuerInboxAndInUserRepositoryAndTenantId(issuerId, true,
-	// false, tenantId);
-	// return instances;
-	// }
+	@GetMapping("/meta/core/class/instance/in-issuer-inbox")
+	private List<ClassInstance> getClassInstanceInIssuerInbox(@RequestParam(value = "tId", required = true) String tenantId) {
+		List<ClassInstance> instances = classInstanceRepository
+				.getByIssuedAndTenantId(false, tenantId);
+		return instances;
+	}
 
 	@PutMapping("/meta/core/class/instance/set-in-user-repository/{inUserRepository}")
 	private List<ClassInstance> setClassInstancesInUserRepository(

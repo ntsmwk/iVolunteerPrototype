@@ -3,12 +3,12 @@ import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ClassInstance,
-  ClassDefinition,
+  ClassDefinition
 } from "app/main/content/_model/meta/class";
 import { User } from "app/main/content/_model/user";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class ClassInstanceService {
   constructor(private http: HttpClient) {}
@@ -59,13 +59,9 @@ export class ClassInstanceService {
     );
   }
 
-  getClassInstancesInIssuerInbox(
-    marketplace: Marketplace,
-    issuerId: string,
-    tenantId: string
-  ) {
+  getClassInstancesInIssuerInbox(marketplace: Marketplace, tenantId: string) {
     return this.http.get(
-      `${marketplace.url}/meta/core/class/instance/in-issuer-inbox/${issuerId}?tId=${tenantId}`
+      `${marketplace.url}/meta/core/class/instance/in-issuer-inbox?tId=${tenantId}`
     );
   }
 

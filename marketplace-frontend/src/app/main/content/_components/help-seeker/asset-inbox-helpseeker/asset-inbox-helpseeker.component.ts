@@ -13,7 +13,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 @Component({
   selector: "asset-inbox-helpseeker",
   templateUrl: "./asset-inbox-helpseeker.component.html",
-  styleUrls: ["./asset-inbox-helpseeker.component.scss"],
+  styleUrls: ["./asset-inbox-helpseeker.component.scss"]
 })
 export class AssetInboxHelpseekerComponent implements OnInit {
   public marketplaces = new Array<Marketplace>();
@@ -44,11 +44,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
 
   loadInboxEntries() {
     this.classInstanceService
-      .getClassInstancesInIssuerInbox(
-        this.marketplace,
-        this.user.id,
-        this.tenant.id
-      )
+      .getClassInstancesInIssuerInbox(this.marketplace, this.tenant.id)
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {
         this.classInstanceDTO = ret;
@@ -56,13 +52,11 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       });
   }
 
-  close() {}
-
   onAssetInboxSubmit() {
     this.classInstanceService
       .setClassInstanceInIssuerInbox(
         this.marketplace,
-        this.classInstanceDTO.map((c) => c.id),
+        this.classInstanceDTO.map(c => c.id),
         false
       )
       .toPromise()
@@ -72,21 +66,9 @@ export class AssetInboxHelpseekerComponent implements OnInit {
           state: {
             instances: this.classInstanceDTO,
             marketplace: this.marketplace,
-            participant: this.user,
-          },
+            participant: this.user
+          }
         });
       });
-  }
-
-  private isFF() {
-    return this.tenant && this.tenant.name == "FF Eidenberg";
-  }
-
-  private isMV() {
-    return this.tenant && this.tenant.name === "MV Schwertberg";
-  }
-
-  private isOther() {
-    return !this.isFF() && !this.isMV();
   }
 }

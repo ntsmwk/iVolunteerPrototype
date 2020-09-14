@@ -1,61 +1,17 @@
-<link
-  type="text/css"
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans"
-/>
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
 
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-  <!-- HEADER -->
-  <div *ngIf="user && isFF()">
-    <div
-      class="header-ff p-16 p-sm-24"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-    >
-      <h1 class="l-heading">Einträge bestätigen</h1>
-      <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg" />
-    </div>
-  </div>
 
-  <div *ngIf="user && isMV()">
-    <div
-      class="header-mv p-16 p-sm-24"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-    >
-      <h1 class="l-heading">Einträge bestätigen</h1>
-      <img
-        class="header-logo"
-        src="assets/images/avatars/musikvereinschwertberg.jpeg"
-      />
-    </div>
-  </div>
+  <customizable-header *ngIf="tenant" [tenant]="tenant" headerText="Einträge bestätigen"></customizable-header>
 
-  <div *ngIf="user && isOther()">
-    <div
-      class="header p-16 p-sm-24"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-    >
-      <h1 class="l-heading">Einträge bestätigen</h1>
-    </div>
-  </div>
 
   <!-- / HEADER -->
 
-  <div
-    class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24 mt-12"
-    *ngIf="isLoaded"
-  >
+  <div class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24 mt-12" *ngIf="isLoaded">
     <div class="pt-8 pb-12 fs-18">
       Freiwilligenpasseinträge für die Bestätigung auswählen
     </div>
 
-    <app-asset-inbox
-      [classInstanceDTOs]="classInstanceDTOs"
-      [marketplace]="marketplace"
-      inboxOwner="user"
-      (submit)="onAssetInboxSubmit($event)"
-    ></app-asset-inbox>
+    <app-asset-inbox [classInstanceDTOs]="classInstanceDTOs" [marketplace]="marketplace" inboxOwner="user" (submit)="onAssetInboxSubmit($event)"></app-asset-inbox>
   </div>
 </div>
