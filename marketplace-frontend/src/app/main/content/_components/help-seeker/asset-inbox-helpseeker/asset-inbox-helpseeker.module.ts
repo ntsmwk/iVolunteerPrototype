@@ -10,7 +10,6 @@ import {
   MatCheckboxModule
 } from "@angular/material";
 import { RouterModule } from "@angular/router";
-import { AssetInboxModule } from "../../_shared/asset-inbox/asset-inbox.module";
 import { HeaderModule } from "../../_shared/header/header.module";
 
 const routes = [{ path: "", component: AssetInboxHelpseekerComponent }];
@@ -25,9 +24,7 @@ const routes = [{ path: "", component: AssetInboxHelpseekerComponent }];
     HeaderModule,
     MatIconModule,
     MatTableModule,
-    MatCheckboxModule,
-
-    AssetInboxModule
+    MatCheckboxModule
   ],
   exports: [AssetInboxHelpseekerComponent]
 })

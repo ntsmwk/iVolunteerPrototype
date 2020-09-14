@@ -61,17 +61,19 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       .then((ret: ClassInstanceDTO[]) => {
         this.classInstanceDTOs = ret;
         this.isLoaded = true;
-        console.error(this.classInstanceDTOs);
+        this.sortClassInstances();
         this.loadUsers();
       });
   }
 
+  sortClassInstances() {
+    this.classInstanceDTOs.sort(
+      (a, b) => a.blockchainDate.valueOf() - b.blockchainDate.valueOf()
+    );
+  }
+
   loadUsers() {
     if (!isNullOrUndefined(this.classInstanceDTOs)) {
-      this.classInstanceDTOs.sort(
-        (a, b) => a.blockchainDate.valueOf() - b.blockchainDate.valueOf()
-      );
-
       Promise.all([
         this.userService
           .findAllByRole(this.marketplace, UserRole.HELP_SEEKER)
@@ -86,11 +88,8 @@ export class AssetInboxHelpseekerComponent implements OnInit {
           .then((volunteers: User[]) => {
             this.volunteers = volunteers;
           })
-      ]).then(() => {
-        this.fetchImagePaths();
-      });
+      ]);
     } else {
-      this.fetchImagePaths();
       this.classInstanceDTOs = [];
     }
 
@@ -99,20 +98,6 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     console.error(this.datasource.data);
 
     console.error(this.classInstanceDTOs);
-  }
-
-  fetchImagePaths() {
-    // TODO
-    // const users: (Volunteer | Helpseeker)[] = [];
-    // users.push(...this.issuers);
-    // users.push(...this.volunteers);
-    // this.userImagePathService
-    //   .getImagePathsById(users.map((u) => u.id))
-    //   .toPromise()
-    //   .then((ret: any) => {
-    //     console.log(ret);
-    //     this.userImagePaths = ret;
-    //   });
   }
 
   onAssetInboxSubmit() {

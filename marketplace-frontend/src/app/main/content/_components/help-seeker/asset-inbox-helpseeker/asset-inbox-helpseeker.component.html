@@ -144,9 +144,9 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }" class="table-row"></mat-row>
       </mat-table>
 
-      <!-- <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
-          Keine unbestätigten Freiwilligenpasseinträge
-        </div> -->
+      <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
+        Keine unbestätigten Freiwilligenpasseinträge
+      </div>
 
 
     </div>
