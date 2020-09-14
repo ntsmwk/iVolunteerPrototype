@@ -25,10 +25,8 @@ import {
   MatPaginatorModule,
   MatSortModule,
   MatCard,
-  MatCardModule,
+  MatCardModule
 } from "@angular/material";
-import { AssetInboxHelpseekerModule } from "../../help-seeker/asset-inbox-helpseeker/asset-inbox-helpseeker.module";
-import { AssetInboxModule } from "../../_shared/asset-inbox/asset-inbox.module";
 import { OrganisationFilterModule } from "app/main/content/_components/_shared/organisation-filter/organisation-filter.module";
 import { TenantOverviewComponent } from "./tenant-overview/tenant-overview.component";
 import { FuseTruncatePipeModule } from "app/main/content/_pipe/truncate-pipe.module";
@@ -40,11 +38,11 @@ import { DashboardHelpSeekerTenantAdminComponent } from "./dashboard-helpseeker-
 const routes = [
   {
     path: "",
-    component: DashboardComponent,
+    component: DashboardComponent
   },
   {
     path: "tenants",
-    component: TenantOverviewComponent,
+    component: TenantOverviewComponent
   }
 ];
 
@@ -54,13 +52,12 @@ const routes = [
     DashboardHelpSeekerTenantAdminComponent,
     DashboardComponent,
     TenantOverviewComponent,
-    ShareDialog,
+    ShareDialog
   ],
   imports: [
     RouterModule.forChild(routes),
 
     MatIconModule,
-    AssetInboxModule,
     OrganisationFilterModule,
     HeaderModule,
     MatButtonModule,
@@ -86,9 +83,9 @@ const routes = [
     DialogFactoryModule,
 
     FuseSharedModule,
-    FuseWidgetModule,
+    FuseWidgetModule
   ],
   exports: [DashboardComponent],
-  entryComponents: [ShareDialog],
+  entryComponents: [ShareDialog]
 })
-export class FuseDashboardModule { }
+export class FuseDashboardModule {}
