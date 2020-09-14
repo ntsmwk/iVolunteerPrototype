@@ -5,10 +5,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +26,7 @@ import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
@@ -90,7 +94,10 @@ public class CoreVolunteerInitializationService {
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
 			volunteer.setLocalRepositoryLocation(LocalRepositoryLocation.LOCAL);
+			volunteer.setEmails(Collections.singletonList("iVolunteerTest@gmx.at"));
 
+			volunteer.setActivated(true);
+			volunteer.setAccountType(AccountType.PERSON);
 			volunteer = coreUserRepository.insert(volunteer);
 			coreUserService.addNewUser(volunteer, "", false);
 

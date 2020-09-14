@@ -1,4 +1,4 @@
-import { MatchingOperatorRelationship, MatchingCollector } from "../matching";
+import { MatchingEntityMappings } from "../matching";
 import { Relationship } from './relationship';
 import { ClassDefinition } from './class';
 
@@ -28,13 +28,17 @@ export class MatchingConfiguration {
   leftClassConfigurationId: string;
   leftClassConfigurationName: string;
 
+  leftAddedClassDefinitionPaths: string[] = [];
+
   rightClassConfigurationId: string;
   rightClassConfigurationName: string;
+
+  rightAddedClassDefinitionPaths: string[] = [];
 }
 
-export class MatchingCollectorConfiguration {
+export class MatchingEntityMappingConfiguration {
   id: string;
   classConfigurationId: string;
 
-  collectors: MatchingCollector[];
+  mappings: MatchingEntityMappings;
 }

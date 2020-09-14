@@ -11,6 +11,7 @@ public class Tenant {
 	@Id
 	private String id;
 	private String name;
+	private String description;
 
 	private String homepage;
 
@@ -20,8 +21,11 @@ public class Tenant {
 	private String secondaryColor;
 
 	private String marketplaceId;
+	
+	private List<String> tags;
 
 	private List<SubscriptionRule> subscriptionRules = new ArrayList<>();
+	
 
 	public String getId() {
 		return id;
@@ -37,6 +41,14 @@ public class Tenant {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getHomepage() {
@@ -77,6 +89,14 @@ public class Tenant {
 
 	public void setMarketplaceId(String marketplaceId) {
 		this.marketplaceId = marketplaceId;
+	}
+	
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
 	public List<SubscriptionRule> getSubscriptionRules() {

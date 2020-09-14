@@ -17,7 +17,12 @@ public class LoginService {
 
 	public User getLoggedInUser() {
 		Authentication authentication = determineAuthentication();
-		return findByUsername((String) authentication.getPrincipal());
+		User user = findByUsername((String) authentication.getPrincipal());
+
+		if (user != null) {
+			user.setPassword(null);
+		}
+		return user;
 	}
 
 	public UserRole getLoggedInUserRole(Tenant tenant) {

@@ -1,15 +1,20 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { UserRole } from "../_model/user";
 import { GlobalInfo } from "../_model/global-info";
 import { Observable, generate } from "rxjs";
-import { global } from "@angular/compiler/src/util";
+import { tap } from "rxjs/operators";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
 })
 export class LoginService {
-  constructor(private http: HttpClient, private httpClient: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private httpClient: HttpClient,
+    private router: Router
+  ) {}
 
   login(username: string, password: string) {
     return this.http.post(
@@ -17,6 +22,18 @@ export class LoginService {
       { username: username, password: password },
       { observe: "response" }
     );
+  }
+
+  logout() {
+    localStorage.clear();
+
+    this.router.navigate(["/login"]).then(() => {
+      window.location.reload(true);
+    });
+  }
+
+  getActivationStatus(username: string) {
+    return this.http.put("/core/login/activation-status", username);
   }
 
   getLoggedIn() {
@@ -44,6 +61,27 @@ export class LoginService {
         subscriber.complete();
       });
     }
+  }
+
+  refreshAccessToken(refreshToken: string) {
+    return this.http.post("/core/login/refreshToken", refreshToken).pipe(
+      tap(
+        (response: any) => {
+          localStorage.setItem("accessToken", response.accessToken);
+        },
+        (error) => {
+          this.logout();
+        }
+      )
+    );
+  }
+
+  getRefreshToken() {
+    return localStorage.getItem("refreshToken");
+  }
+
+  getAccessToken() {
+    return localStorage.getItem("accessToken");
   }
 
   getGlobalInfo() {

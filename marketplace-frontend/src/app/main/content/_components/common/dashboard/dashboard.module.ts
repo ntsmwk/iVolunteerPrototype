@@ -45,7 +45,7 @@ const routes = [
   {
     path: "tenants",
     component: TenantOverviewComponent,
-  },
+  }
 ];
 
 @NgModule({
@@ -91,4 +91,4 @@ const routes = [
   exports: [DashboardComponent],
   entryComponents: [ShareDialog],
 })
-export class FuseDashboardModule {}
+export class FuseDashboardModule { }

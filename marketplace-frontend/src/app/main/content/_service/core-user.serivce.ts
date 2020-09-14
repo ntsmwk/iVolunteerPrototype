@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { User, UserRole } from "../_model/user";
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: "root" })
 export class CoreUserService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   findAll() {
     // console.log(`findAll()`);

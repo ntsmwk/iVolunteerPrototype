@@ -1,0 +1,22 @@
+<form #emailForm="ngForm" class="mt-20">
+  <div *ngIf="loading" class="center-vh">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="!loading && !showResultMessage">
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="emailAddress" placeholder="E-Mail-Adresse" name="E-Mail-Adresse" email />
+    </mat-form-field>
+    <button (click)="onSubmit()" mat-stroked-button class="primary-button-dark full-width "
+      [disabled]="emailForm.invalid">Anfordern</button>
+  </div>
+
+  <div *ngIf="showResultMessage" class="pt-32">
+    <p>
+      Eine Nachricht mit einem Aktivierungslink wurde an <b>{{emailAddress}}</b> gesendet, falls sich diese in unserem
+      System befindet.
+    </p>
+    <p>
+      {{activationTexts.resend2}}
+    </p>
+  </div>
+</form>

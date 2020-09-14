@@ -17,31 +17,13 @@ const routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-
     MatCommonModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
-    MatTableModule,
-    MatButtonModule,
-    MatFormFieldModule,
-
-    MatDividerModule,
-
-    MatSelectModule,
-    MatOptionModule,
     MatTooltipModule,
-    MatSnackBarModule,
     MatCheckboxModule,
-
-
     FuseSharedModule,
-    FuseTruncatePipeModule,
-
-    DialogFactoryModule,
 
     MatchingEditorTopMenuBarModule,
     MatchingOptionsOverlayControlModule,
-
   ],
   declarations: [MatchingConfiguratorComponent],
 

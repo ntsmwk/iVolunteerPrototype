@@ -4,13 +4,17 @@ export class User {
   id: string;
   username: string;
   password: string;
+  loginEmail: string;
 
+  titleBefore: string;
   firstname: string;
   lastname: string;
-  middlename: string;
+  titleAfter: string;
+
   nickname: string;
 
-  position: string;
+  organizationName: string;
+  organizationPosition: string;
 
   birthday: Date;
 
@@ -23,10 +27,12 @@ export class User {
   registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
-  image;
+  image: any;
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
+  activated: boolean;
+  accountType: AccountType;
 }
 
 export enum UserRole {
@@ -50,7 +56,12 @@ export class TenantUserSubscription {
   role: UserRole;
 }
 
-export class roleTenantMapping {
+export class RoleTenantMapping {
   role: UserRole;
   tenantIds: string[];
+}
+
+export enum AccountType {
+  PERSON = 'PERSON',
+  ORGANIZATION = 'ORGANIZATION',
 }

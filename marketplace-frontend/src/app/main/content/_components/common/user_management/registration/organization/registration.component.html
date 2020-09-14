@@ -1,0 +1,179 @@
+<div id="login" fxLayout="row" fxLayoutAlign="start">
+  <div id="login-intro" fxFlex fxHide fxShow.gt-xs>
+    <div class="logo" *fuseIfOnDom [@animate]="{ value: '*', params: { scale: '0.2' } }">
+      <img src="assets/logo.png" />
+    </div>
+
+    <div class="title" *fuseIfOnDom [@animate]="{ value: '*', params: { delay: '50ms', y: '25px' } }">
+      Willkommen bei iVolunteer!
+    </div>
+  </div>
+
+  <div #loginFormWrapper id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
+    [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
+    <div id="login-form" *ngIf="!displaySuccess">
+      <div class="title">Registrierung als Organisation</div>
+
+      <form name="registrationForm" (submit)="register()" [formGroup]="registrationForm" novalidate>
+
+        <mat-form-field>
+          <input matInput placeholder="E-Mail Adresse" formControlName="email" />
+          <mat-error *ngIf="
+                  registrationFormErrors.email &&
+                  registrationFormErrors.email.required
+                ">
+            Pflichtfeld
+          </mat-error>
+          <mat-error *ngIf="
+              registrationFormErrors.email &&
+              registrationFormErrors.email.pattern
+            ">
+            Valide E-Mail-Adresse eingeben
+          </mat-error>
+          <mat-error *ngIf="
+              registrationFormErrors.email &&
+              registrationFormErrors.email.stringsUnique
+            ">
+            E-Mail Adresse bereits verwendet
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Benutzername" formControlName="username" />
+          <mat-error *ngIf="
+              registrationFormErrors.username &&
+              registrationFormErrors.username.required
+            ">
+            Pflichtfeld
+          </mat-error>
+          <mat-error *ngIf="
+          registrationFormErrors.username &&
+          registrationFormErrors.username.stringsUnique
+        ">
+            Benutzername bereits verwendet
+          </mat-error>
+        </mat-form-field>
+
+        <div class="password-div" fxLayout="row" fxLayoutAlign="start center" style="margin: auto 0">
+          <mat-form-field>
+            <input matInput type="password" placeholder="Passwort" formControlName="password" />
+            <mat-error *ngIf="
+              registrationFormErrors.password &&
+              registrationFormErrors.password.required
+            ">
+              Pflichtfeld
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="ml-8">
+            <input matInput type="password" placeholder="Bestätigen" formControlName="confirmPassword" />
+            <mat-error *ngIf="
+              registrationFormErrors.confirmPassword &&
+              registrationFormErrors.confirmPassword.required
+            ">
+              Pflichtfeld
+            </mat-error>
+            <mat-error *ngIf="
+              registrationFormErrors.confirmPassword &&
+              registrationFormErrors.confirmPassword.equals
+            ">
+              Passwörter müssen übereinstimmen
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="sub-title">> Zu Ihrer Organisation</div>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Bezeichnung der Organisation" formControlName="organizationName" />
+          <mat-error *ngIf="
+                registrationFormErrors.organizationName &&
+                registrationFormErrors.organizationName.required
+              ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Ihre Position in der Organisation"
+            formControlName="organizationPosition" />
+          <mat-error *ngIf="
+                  registrationFormErrors.organizationPosition &&
+                  registrationFormErrors.organizationPosition.required
+                ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field>
+
+        <div class="sub-title">> Zu Ihrer Person</div>
+
+        <mat-form-field>
+          <mat-select placeholder="Anrede" formControlName="formOfAddress">
+            <mat-option value="Frau">Frau</mat-option>
+            <mat-option value="Herr">Herr</mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="
+              registrationFormErrors.formOfAddress &&
+              registrationFormErrors.formOfAddress.required
+            ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Vorgestellter Titel" formControlName="titleBefore" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Vorname" formControlName="firstName" />
+          <mat-error *ngIf="
+              registrationFormErrors.firstName &&
+              registrationFormErrors.firstName.required
+            ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Nachname" formControlName="lastName" />
+          <mat-error *ngIf="
+              registrationFormErrors.lastName &&
+              registrationFormErrors.lastName.required
+            ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" placeholder="Nachgestellter Titel" formControlName="titleAfter" />
+        </mat-form-field>
+
+
+        <button type="submit" mat-stroked-button class="primary-button-dark full-width "
+          [disabled]="registrationForm.invalid">
+          Registrieren
+        </button>
+
+        <button type="button" mat-stroked-button class="secondary-button-dark full-width mt-4"
+          (click)="handleBackClick()">
+          Zurück
+        </button>
+      </form>
+    </div>
+
+    <div id="login-form" *ngIf="displaySuccess">
+      <div class="title">Registrierung erfolgreich!</div>
+      <div class="description">Eine Bestätigungs-E-Mail wurde an <b>{{registrationForm.value.email}}</b> gesendet.</div>
+      <div>
+        Zum Fortfahren folgen Sie bitte den Anweisungen in der E-Mail
+      </div>
+
+      <button mat-stroked-button class="primary-button-dark" style="display:block; margin: 28px auto"
+        (click)="handleBackToLoginClick()">
+        Zurück zum Login
+      </button>
+    </div>
+
+  </div>
+</div>

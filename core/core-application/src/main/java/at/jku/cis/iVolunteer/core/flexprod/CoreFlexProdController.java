@@ -57,7 +57,7 @@ public class CoreFlexProdController {
 		User flexProdUser = new User();
 		flexProdUser.setId(coreFlexProdUser.getId());
 		flexProdUser.setUsername(flexProdUser.getUsername());
-		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, flexProdUser);
+		coreMarketplaceRestClient.registerOrUpdateMarketplaceUser(marketplace.getUrl(), authorization, flexProdUser);
 	}
 
 }

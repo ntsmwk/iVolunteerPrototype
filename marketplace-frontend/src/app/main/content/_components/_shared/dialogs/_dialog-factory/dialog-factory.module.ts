@@ -14,9 +14,9 @@ import { ClassInstanceFormPreviewExportDialogModule } from '../../../help-seeker
 import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dialog.module';
 import { RemovePropertyDialogModule } from '../remove-dialog/remove-dialog.module';
 import { PropertyCreationDialogModule } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.module';
-import { NewMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.module';
-import { OpenMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.module';
-import { DeleteMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.module';
+import { NewMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/_dialogs/new-dialog/new-dialog.module';
+import { OpenMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/_dialogs/open-dialog/open-dialog.module';
+import { DeleteMatchingDialogModule } from '../../../help-seeker/configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.module';
 import { DialogFactoryDirective } from './dialog-factory.component';
 import { TextFieldDialogComponent } from '../text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -32,9 +32,11 @@ import { ClassInstanceFormPreviewExportDialogComponent } from '../../../help-see
 import { AddPropertyDialogComponent } from '../add-property-dialog/add-property-dialog.component';
 import { RemovePropertyDialogComponent } from '../remove-dialog/remove-dialog.component';
 import { PropertyCreationDialogComponent } from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.component';
-import { NewMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
-import { OpenMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
-import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
+import { NewMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/new-dialog/new-dialog.component';
+import { OpenMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/open-dialog/open-dialog.component';
+import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.component';
+import { AddClassDefinitionDialogModule } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.module';
+import { AddClassDefinitionDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
 
 @NgModule({
   imports: [
@@ -63,6 +65,7 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     NewMatchingDialogModule,
     OpenMatchingDialogModule,
     DeleteMatchingDialogModule,
+    AddClassDefinitionDialogModule,
 
     // Tree Property Configurator
   ],
@@ -92,6 +95,7 @@ import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuratio
     NewMatchingDialogComponent,
     OpenMatchingDialogComponent,
     DeleteMatchingDialogComponent,
+    AddClassDefinitionDialogComponent,
 
     // Tree Property Configurator
   ],

@@ -41,10 +41,7 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    localStorage.clear();
-    this.router.navigate(["/login"]).then(() => {
-      window.location.reload(true);
-    });
+    this.loginService.logout();
   }
 
   getImage() {

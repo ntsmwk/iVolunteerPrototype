@@ -20,31 +20,31 @@ public class CoreMarketplaceRestClient {
 	private RestTemplate restTemplate;
 
 	//TODO remove
-	public User registerUser(String marketplaceURL, String authorization, User user) {
-		UserRole role = user.getSubscribedTenants().stream().map(t -> t.getRole()).findFirst()
-				.orElse(UserRole.VOLUNTEER);
-
-		String preUrl = "";
-		switch (role) {
-			case VOLUNTEER:
-				preUrl = "{0}/volunteer";
-				break;
-			case HELP_SEEKER:
-				preUrl = "{0}/helpseeker";
-				break;
-			case RECRUITER:
-				preUrl = "{0}/recruiter";
-				break;
-			case FLEXPROD:
-				preUrl = "{0}/flexprod";
-				break;
-			default:
-				break;
-		}
-
-		String url = format(preUrl, marketplaceURL, user);
-		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
-	}
+//	public User registerUser(String marketplaceURL, String authorization, User user) {
+//		UserRole role = user.getSubscribedTenants().stream().map(t -> t.getRole()).findFirst()
+//				.orElse(UserRole.VOLUNTEER);
+//
+//		String preUrl = "";
+//		switch (role) {
+//			case VOLUNTEER:
+//				preUrl = "{0}/volunteer";
+//				break;
+//			case HELP_SEEKER:
+//				preUrl = "{0}/helpseeker";
+//				break;
+//			case RECRUITER:
+//				preUrl = "{0}/recruiter";
+//				break;
+//			case FLEXPROD:
+//				preUrl = "{0}/flexprod";
+//				break;
+//			default:
+//				break;
+//		}
+//
+//		String url = format(preUrl, marketplaceURL, user);
+//		return restTemplate.postForObject(url, buildEntity(user, authorization), User.class);
+//	}
 	
 	public User registerOrUpdateMarketplaceUser(String marketplaceURL, String authorization, User user) {
 		String preUrl = "{0}/user/register";

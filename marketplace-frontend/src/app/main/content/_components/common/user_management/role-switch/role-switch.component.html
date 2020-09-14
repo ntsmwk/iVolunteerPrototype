@@ -1,34 +1,18 @@
-<link
-  type="text/css"
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans"
-/>
+<link type="text/css" rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
 
-<div
-  class="page-layout blank p-24"
-  fusePerfectScrollbar
-  style="overflow: scroll;"
-  *ngIf="roleTenantMappings.length > 1"
->
-  <div
-    class="header p-24"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayout.gt-sm="row"
-    fxLayoutAlign.gt-sm="space-between end"
-  >
-    <div
-      *ngIf="user"
-      class="user-info"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayout.gt-sm="row"
-      fxLayoutAlign.gt-sm="start center"
-    >
-      <div
-        class="name"
-        [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
-      >
+
+<div *ngIf="!isLoaded" class="center-vh">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll;"
+  *ngIf="roleTenantMappings.length > 1">
+  <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+    fxLayoutAlign.gt-sm="space-between end">
+    <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="start center">
+      <div class="name" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">
         Wähle eine Rolle aus, mit der du fortfahren möchtest:
       </div>
     </div>
@@ -36,21 +20,13 @@
 
   <div *ngIf="isLoaded" fxLayout="row" fxLayoutAlign="space-around start">
     <div *ngFor="let mapping of roleTenantMappings" class="card-parent">
-      <mat-card
-        class="tenant-card mat-elevation-z8"
-        (click)="onRoleSelected(mapping)"
-        fusePerfectScrollbar
-      >
+      <mat-card class="tenant-card mat-elevation-z8" (click)="onRoleSelected(mapping)" fusePerfectScrollbar>
         <mat-card-header>
           <mat-card-title>{{ getRoleNameString(mapping.role) }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div
-            *ngFor="let tenantId of mapping.tenantIds"
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            style="margin-left: 40px;"
-          >
+          <div *ngFor="let tenantId of mapping.tenantIds" fxLayout="row" fxLayoutAlign="start center"
+            style="margin-left: 40px;">
             <img class="avatar" [src]="getTenantImage(tenantId)" />
             <p>
               {{ getTenantNameString(tenantId) }}

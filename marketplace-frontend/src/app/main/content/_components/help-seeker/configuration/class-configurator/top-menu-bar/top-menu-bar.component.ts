@@ -46,10 +46,6 @@ export class TopMenuResponse {
 
 const rootMenuItems: RootMenuItem[] = [
   { id: 1, label: 'Menü', icon: 'menu' },
-  // { id: 2, label: 'Bearbeiten' },
-  // { id: 3, label: 'Ansicht' },
-  // { id: 4, label: 'Extras' },
-  // { id: 5, label: 'Hilfe' },
 ];
 
 const subMenuItems: SubMenuItem[] = [
@@ -58,24 +54,7 @@ const subMenuItems: SubMenuItem[] = [
   { rootId: 1, id: 3, label: 'Konfiguration speichern', clickAction: 'saveClicked', icon: undefined },
   // { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
   { rootId: 1, id: 3, label: 'Konfiguration löschen', clickAction: 'deleteClicked', icon: undefined },
-  { rootId: 1, id: 4, label: 'Instanz erstellen', clickAction: 'createEditorClicked', icon: undefined },
-
-  // { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
-  // { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
-  // { rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined },
-  // { rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined },
-
-  // { rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined },
-  // { rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined },
-  // { rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined },
-
-  // { rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined },
-
-  // { rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined },
+  { rootId: 1, id: 4, label: 'Eintrag erfassen', clickAction: 'createEditorClicked', icon: undefined },
 ];
 
 @Component({

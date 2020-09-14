@@ -1,17 +1,11 @@
-import {
-  Component, Input, ElementRef, ViewChild, Output, EventEmitter, HostListener,
-  AfterContentInit,
-} from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, Output, EventEmitter, HostListener, AfterContentInit } from '@angular/core';
 import { mxgraph } from 'mxgraph';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { MyMxCell, MyMxCellType } from '../../../../myMxCell';
-import {
-  TreePropertyDefinition, TreePropertyEntry, TreePropertyRelationship,
-} from 'app/main/content/_model/meta/property/tree-property';
+import { TreePropertyDefinition, TreePropertyEntry, TreePropertyRelationship } from 'app/main/content/_model/meta/property/tree-property';
 import { CConstants } from '../../../../class-configurator/utils-and-constants';
 import { isNullOrUndefined } from 'util';
-import { TreePropertyDefinitionService } from 'app/main/content/_service/meta/core/property/tree-property-definition.service';
 import { TreePropertyOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 import { User } from 'app/main/content/_model/user';
 
@@ -29,23 +23,17 @@ const mx: typeof mxgraph = require('mxgraph')({
   selector: "app-tree-property-graph-editor",
   templateUrl: './tree-property-graph-editor.component.html',
   styleUrls: ['./tree-property-graph-editor.component.scss'],
-  // providers: [DialogFactoryDirective]
 })
 export class TreePropertyGraphEditorComponent implements AfterContentInit {
-  constructor(
-    private objectIdService: ObjectIdService,
-  ) { }
+  constructor(private objectIdService: ObjectIdService) { }
 
   @Input() marketplace: Marketplace;
   @Input() tenantAdmin: User;
   @Input() treePropertyDefinition: TreePropertyDefinition;
-  @Output() result: EventEmitter<{
-    type: string;
-    payload: TreePropertyDefinition;
-  }> = new EventEmitter();
+  @Output() result: EventEmitter<{ type: string; payload: TreePropertyDefinition; }> = new EventEmitter();
   @Output() management: EventEmitter<String> = new EventEmitter();
+  @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
 
-  @ViewChild('treePropertyGraphContainer', { static: true }) graphContainer: ElementRef;
   graph: mxgraph.mxGraph;
   rootCell: MyMxCell;
   layout: any;
@@ -58,73 +46,38 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
    * ******INITIALIZATION******
    */
   ngAfterContentInit() {
-    this.graphContainer.nativeElement.style.overflow = 'hidden';
-    this.graphContainer.nativeElement.style.height = '65vh';
-    this.graphContainer.nativeElement.style.width = '100%';
-    this.graphContainer.nativeElement.style.background = 'white';
+    if (!mx.mxClient.isBrowserSupported()) {
+      mx.mxUtils.error('Browser is not supported!', 200, false);
+      return;
+    }
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
-    this.graph.isCellSelectable = function (cell) {
-      const state = this.view.getState(cell);
-      const style = state != null ? state.style : this.getCellStyle(cell);
-
-      return (
-        this.isCellsSelectable() &&
-        !this.isCellLocked(cell) &&
-        style['selectable'] !== 0
-      );
-    };
-
-    const outer = this;
-    this.graph.getCursorForCell = function (cell: MyMxCell) {
-      // todo cursor
-      if (
-        cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON ||
-        cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON
-      ) {
+    this.graph.getCursorForCell = (cell: MyMxCell) => {
+      if (cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON || cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     };
+    mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
+    // tslint:disable-next-line: no-unused-expression
+    new mx.mxRubberband(this.graph);
+    this.graph.setPanning(true);
+    this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
 
-    if (!mx.mxClient.isBrowserSupported()) {
-      mx.mxUtils.error('Browser is not supported!', 200, false);
-    } else {
-      // Disables the built-in context menu
-      mx.mxEvent.disableContextMenu(this.graphContainer.nativeElement);
+    /**
+     * ******EVENT LISTENERS******
+     */
 
-      // Enables rubberband selection
-      // tslint:disable-next-line: no-unused-expression
-      new mx.mxRubberband(this.graph);
-      this.graph.setPanning(true);
-      this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
-
-      /**
-       * ******EVENT LISTENERS******
-       */
-
-      this.graph.addListener(mx.mxEvent.CLICK, function (
-        sender: mxgraph.mxGraph,
-        evt: mxgraph.mxEventObject
-      ) {
-        // Todo click event
-        const mouseEvent = evt.getProperty('event');
-        if (mouseEvent.button === 0) {
-          outer.handleMXGraphLeftClickEvent(evt);
-        } else if (mouseEvent.button === 2) {
-          // Handle Right Click
-        }
-      });
-
-      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (
-        sender: mxgraph.mxGraph,
-        evt: mxgraph.mxEventObject
-      ) {
-        // TODO double click event
-      });
-      this.createGraph();
-      this.setLayout();
-      this.executeLayout();
-    }
+    this.graph.addListener(mx.mxEvent.CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+      const mouseEvent = evt.getProperty('event');
+      if (mouseEvent.button === 0) {
+        this.handleMXGraphLeftClickEvent(evt);
+      } else if (mouseEvent.button === 2) {
+        // Handle Right Click
+      }
+    });
+    this.createGraph();
+    this.setLayout();
+    this.executeLayout();
   }
 
   createGraph() {
@@ -137,28 +90,17 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   private createRootCell() {
     const rootCell = this.graph.insertVertex(
-      this.graph.getDefaultParent(),
-      this.treePropertyDefinition.id,
-      this.treePropertyDefinition.name,
-      0,
-      0,
-      ENTRY_CELL_WIDTH,
-      ENTRY_CELL_HEIGHT,
-      CConstants.mxStyles.classTree
+      this.graph.getDefaultParent(), this.treePropertyDefinition.id, this.treePropertyDefinition.name,
+      0, 0, ENTRY_CELL_WIDTH, ENTRY_CELL_HEIGHT, CConstants.mxStyles.classTree
     ) as MyMxCell;
+
     rootCell.root = true;
     rootCell.cellType = MyMxCellType.TREE_HEAD;
     this.rootCell = rootCell;
 
     const nextIcon: MyMxCell = this.graph.insertVertex(
-      rootCell,
-      'add_class_next_level_icon',
-      'Eintrag hinzufügen',
-      85,
-      45,
-      20,
-      20,
-      CConstants.mxStyles.addClassNewLevelIcon
+      rootCell, 'add_class_next_level_icon', 'Eintrag hinzufügen',
+      85, 45, 20, 20, CConstants.mxStyles.addClassNewLevelIcon
     ) as MyMxCell;
     nextIcon.setConnectable(false);
     nextIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
@@ -166,7 +108,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   private createEntryCells(treePropertyEntries: TreePropertyEntry[]) {
     for (const entry of treePropertyEntries) {
-      const cell = this.createEntryCell(entry);
+      this.createEntryCell(entry);
     }
   }
 
@@ -179,14 +121,8 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     }
 
     const cell = this.graph.insertVertex(
-      this.graph.getDefaultParent(),
-      treePropertyEntry.id,
-      treePropertyEntry.value,
-      position.x,
-      position.y,
-      ENTRY_CELL_WIDTH,
-      ENTRY_CELL_HEIGHT,
-      CConstants.mxStyles.classTree
+      this.graph.getDefaultParent(), treePropertyEntry.id, treePropertyEntry.value,
+      position.x, position.y, ENTRY_CELL_WIDTH, ENTRY_CELL_HEIGHT, CConstants.mxStyles.classTree
     ) as MyMxCell;
     cell.root = false;
     cell.cellType = MyMxCellType.TREE_ENTRY;
@@ -232,33 +168,22 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   private createRelationshipCells(treePropertyRelationships: TreePropertyRelationship[]) {
     for (const relationship of treePropertyRelationships) {
-      const cell = this.createRelationshipCellById(relationship);
+      this.createRelationshipCellById(relationship);
     }
   }
 
   private createRelationshipCellById(treePropertyRelationships: TreePropertyRelationship): MyMxCell {
-    const source: MyMxCell = this.graph
-      .getModel()
+    const source: MyMxCell = this.graph.getModel()
       .getCell(treePropertyRelationships.sourceId) as MyMxCell;
-    const target: MyMxCell = this.graph
-      .getModel()
+    const target: MyMxCell = this.graph.getModel()
       .getCell(treePropertyRelationships.targetId) as MyMxCell;
 
     return this.createRelationshipCell(treePropertyRelationships.id, source, target);
   }
 
-  private createRelationshipCell(
-    id: string,
-    source: MyMxCell,
-    target: MyMxCell
-  ): MyMxCell {
+  private createRelationshipCell(id: string, source: MyMxCell, target: MyMxCell): MyMxCell {
     const cell = this.graph.insertEdge(
-      this.graph.getDefaultParent(),
-      id,
-      '',
-      source,
-      target,
-      CConstants.mxStyles.genericConnection
+      this.graph.getDefaultParent(), id, '', source, target, CConstants.mxStyles.genericConnection
     ) as MyMxCell;
     cell.cellType = MyMxCellType.TREE_CONNECTOR;
     return cell;
@@ -275,28 +200,19 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
     if (eventCell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON) {
       const newCell = this.createEntryCell();
-      const relationship = this.createRelationship(
-        eventCell.getParent().id,
-        newCell.id
-      );
-      this.createRelationshipCell(
-        relationship.id,
-        eventCell.getParent() as MyMxCell,
-        newCell
-      );
+      const relationship = this.createRelationship(eventCell.getParent().id, newCell.id);
+      this.createRelationshipCell(relationship.id, eventCell.getParent() as MyMxCell, newCell);
       this.executeLayout();
+
     } else if (eventCell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
       const newCell = this.createEntryCell();
-      const parentCell = this.graph.getIncomingEdges(eventCell.getParent())[0]
-        .source as MyMxCell;
+      const parentCell = this.graph.getIncomingEdges(eventCell.getParent())[0].source as MyMxCell;
       const relationship = this.createRelationship(parentCell.id, newCell.id);
       this.createRelationshipCell(relationship.id, parentCell, newCell);
       this.executeLayout();
+
     } else if (eventCell.cellType === MyMxCellType.OPTIONS_ICON) {
-      this.openOverlay(
-        eventCell.getParent() as MyMxCell,
-        event.getProperty('event')
-      );
+      this.openOverlay(eventCell.getParent() as MyMxCell, event.getProperty('event'));
     }
   }
 
@@ -319,12 +235,9 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     // update entries
     const newTreePropertyEntries: TreePropertyEntry[] = [];
     for (const vertice of vertices) {
-      if (vertice.id === this.rootCell.id) {
-        continue;
-      }
-      const treePropertyEntry = this.treePropertyDefinition.entries.find(
-        (e) => e.id === vertice.id
-      );
+      if (vertice.id === this.rootCell.id) { continue; }
+
+      const treePropertyEntry = this.treePropertyDefinition.entries.find(e => e.id === vertice.id);
       treePropertyEntry.value = vertice.value;
       newTreePropertyEntries.push(treePropertyEntry);
     }
@@ -332,9 +245,7 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
     const newTreePropertyRelationships: TreePropertyRelationship[] = [];
     for (const edge of edges) {
-      const relationship = this.treePropertyDefinition.relationships.find(
-        (r) => r.id === edge.id
-      );
+      const relationship = this.treePropertyDefinition.relationships.find(r => r.id === edge.id);
       relationship.sourceId = edge.source.id;
       relationship.targetId = edge.target.id;
       newTreePropertyRelationships.push(relationship);
@@ -352,27 +263,21 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
   }
 
   private setLayout() {
-    if (
-      !isNullOrUndefined(this.rootCell.edges) &&
-      this.rootCell.edges.length > 0
-    ) {
-      this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
-      this.layout.levelDistance = 50;
-      this.layout.alignRanks = true;
-      this.layout.minEdgeJetty = 50;
-      this.layout.prefHozEdgeSep = 5;
-      this.layout.resetEdges = false;
-      this.layout.edgeRouting = true;
+    if (isNullOrUndefined(this.rootCell.edges) || this.rootCell.edges.length <= 0) {
+      return;
     }
+    this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
+    this.layout.levelDistance = 50;
+    this.layout.alignRanks = true;
+    this.layout.minEdgeJetty = 50;
+    this.layout.prefHozEdgeSep = 5;
+    this.layout.resetEdges = false;
+    this.layout.edgeRouting = true;
   }
 
   private executeLayout() {
-    if (isNullOrUndefined(this.layout)) {
-      this.setLayout();
-    }
-    if (!isNullOrUndefined(this.layout)) {
-      this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
-    }
+    isNullOrUndefined(this.layout) ? this.setLayout()
+      : this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
   }
 
   /**
@@ -388,19 +293,17 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
 
   private performDelete(cells: MyMxCell[]) {
     cells = cells.filter((c: MyMxCell) => !c.writeProtected);
-    const removedCells = this.graph.removeCells(cells, false) as MyMxCell[];
+    this.graph.removeCells(cells, false);
   }
 
   private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
     this.overlayEvent = event;
     this.overlayContent = new TreePropertyOptionsOverlayContentData();
-    this.overlayContent.treePropertyEntry = this.treePropertyDefinition.entries.find(
-      (e) => e.id === cell.id
-    );
+    this.overlayContent.treePropertyEntry =
+      this.treePropertyDefinition.entries.find(e => e.id === cell.id);
+
     this.management.emit('disableScroll');
-    this.graph.setPanning(false);
     this.graph.setEnabled(false);
-    this.graph.setTooltips(false);
     this.displayOverlay = true;
   }
 
@@ -415,8 +318,6 @@ export class TreePropertyGraphEditorComponent implements AfterContentInit {
     this.overlayEvent = undefined;
     this.displayOverlay = false;
     this.management.emit('enableScroll');
-    this.graph.setPanning(true);
     this.graph.setEnabled(true);
-    this.graph.setTooltips(true);
   }
 }

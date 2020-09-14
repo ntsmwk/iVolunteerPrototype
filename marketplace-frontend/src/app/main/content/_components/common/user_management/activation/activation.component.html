@@ -1,0 +1,103 @@
+<div id="left-side" fxLayout="row" fxLayoutAlign="start">
+  <div id="intro" fxFlex fxHide fxShow.gt-xs>
+    <div class="logo" *fuseIfOnDom [@animate]="{ value: '*', params: { scale: '0.2' } }">
+      <img src="assets/logo.png" />
+    </div>
+
+    <div class="title" *fuseIfOnDom [@animate]="{ value: '*', params: { delay: '50ms', y: '25px' } }">
+      Willkommen bei iVolunteer!
+    </div>
+  </div>
+
+  <div #textWrapper id="textWrapper" fusePerfectScrollbar *fuseIfOnDom
+    [@animate]="{ value: '*', params: { delay: '300ms', x: '100%' } }">
+    <div id="login-form" *ngIf="loaded">
+      <div *ngIf="response.activationResponse === 'FAILED'">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <div>
+            <i class="fas fa-frown-open fa-3x red-fg"></i>
+          </div>
+          <h1 class="pl-28">Aktivierung fehlgeschlagen</h1>
+        </div>
+        <div class="mt-20">
+          {{activationTexts.failed}}
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" class="mt-36">
+          <ng-container *ngTemplateOutlet="resend"></ng-container>
+
+          <ng-container *ngTemplateOutlet="toLogin"></ng-container>
+
+          <ng-container *ngTemplateOutlet="toRegistration"></ng-container>
+
+        </div>
+      </div>
+
+      <div *ngIf="response.activationResponse === 'SUCCESS'">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <div>
+            <i class="fas fa-laugh-beam fa-2x green-fg"></i>
+          </div>
+          <h1 class="pl-28">Aktivierung erfolgreich</h1>
+        </div>
+        <div class="mt-20">
+          {{activationTexts.success}}
+        </div>
+
+        <div class="mt-36">
+          <ng-container *ngTemplateOutlet="toLogin"></ng-container>
+        </div>
+      </div>
+
+      <div *ngIf="response.activationResponse === 'EXPIRED'">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <div>
+            <i class="fas fa-frown-open fa-3x red-fg"></i>
+          </div>
+          <h1 class="pl-28">Aktivierunglink ist abgelaufen</h1>
+        </div>
+        <div class="mt-20">
+          {{activationTexts.expired}}
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" class="mt-36">
+          <ng-container *ngTemplateOutlet="resend"></ng-container>
+
+          <ng-container *ngTemplateOutlet="toLogin"></ng-container>
+
+          <ng-container *ngTemplateOutlet="toRegistration"></ng-container>
+
+        </div>
+      </div>
+
+      <resend-link [emailAddress]="emailAddress" [username]="username" [accountType]="accountType"
+        *ngIf="resendActivationFlow">
+      </resend-link>
+
+
+    </div>
+
+    <div *ngIf="!loaded" style="height: 100%; display: flex; justify-content: center; align-items: center;">
+      <mat-spinner></mat-spinner>
+    </div>
+
+
+
+  </div>
+</div>
+<ng-template #resend>
+  <button [disabled]="resendActivationFlow" mat-stroked-button class="primary-button-dark"
+    (click)="resendActivationFlow = true">
+    Aktivierung erneut senden
+  </button>
+</ng-template>
+
+<ng-template #toLogin>
+  <button mat-stroked-button class="primary-button-light ml-8" routerLink="/login">
+    Zurück zum Login
+  </button>
+</ng-template>
+
+<ng-template #toRegistration>
+  <button mat-stroked-button class="primary-button-light ml-8" [routerLink]="activationTexts.registrationURI">
+    Zurück zur Registrierung
+  </button>
+</ng-template>
