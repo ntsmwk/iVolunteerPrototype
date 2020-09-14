@@ -34,6 +34,10 @@ export class ActivationComponent implements OnInit {
     private route: ActivatedRoute,
     private activationService: ActivationService,
   ) {
+
+  }
+
+  ngOnInit() {
     const layout = {
       navigation: 'none',
       toolbar: 'none',
@@ -41,9 +45,8 @@ export class ActivationComponent implements OnInit {
     };
 
     this.fuseConfig.setConfig({ layout: layout });
-  }
 
-  ngOnInit() {
+
     this.route.params.subscribe((param) => {
       this.activationId = param['activationId'];
     });

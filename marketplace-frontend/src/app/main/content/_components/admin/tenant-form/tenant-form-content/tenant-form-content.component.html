@@ -1,117 +1,80 @@
-<div>
-  <div>
-    <form form class="tenant-form" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="form"
-      (submit)="save()" [formGroup]="tenantForm">
-      <div fxLayout="column">
+<div *ngIf="loaded">
+  <form form class="tenant-form" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="form" (submit)="save()"
+    [formGroup]="tenantForm">
+    <div fxLayout="column">
 
-        <h2 class="mt-0">Zur Organisation selbst</h2>
+      <h2 class="mt-0">Zur Organisation selbst</h2>
 
-        <mat-form-field>
-          <input matInput type="text" formControlName="name" placeholder="Name der Organisation" required />
-        </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" formControlName="name" placeholder="Name der Organisation" required />
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <textarea matInput type="text" formControlName="description" placeholder="Kurzbeschreibung der Organisation"
-            matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 required></textarea>
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <textarea matInput type="text" formControlName="description" placeholder="Kurzbeschreibung der Organisation"
+          matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 required></textarea>
+      </mat-form-field>
 
-        <mat-form-field>
-          <input matInput type="url" formControlName="homepage" placeholder="Homepage" />
-        </mat-form-field>
+      <mat-form-field>
+        <input matInput type="url" formControlName="homepage" placeholder="Homepage" />
+      </mat-form-field>
 
-        <h2>Gestaltungsoptionen</h2>
+      <h2>Gestaltungsoptionen</h2>
 
-        <div fxLayout="row" fxLayoutAlign="start center">
-          <div class="color-field section-border">
-            <div class="color-field-label">
-              Farbe 1</div>
-            <div class="color-input">
-              <input type="color" formControlName="primaryColor" />
-            </div>
-          </div>
-          <div class="color-field ml-8 section-border">
-            <div class="color-field-label">
-              Farbe 2</div>
-            <div class="color-input">
-              <input type="color" formControlName="secondaryColor" />
-            </div>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div class="color-field section-border">
+          <div class="color-field-label">
+            Farbe 1</div>
+          <div class="color-input">
+            <input type="color" formControlName="primaryColor" />
           </div>
         </div>
-
-        <div fxLayout="row wrap" fxLayoutAlign="start center">
-          <mat-form-field fxFlex class="mt-8 mr-8">
-            <ngx-mat-file-input [(ngModel)]="imageFileInput" [ngModelOptions]="{standalone: true}"
-              placeholder="Titelbild hochladen"></ngx-mat-file-input>
-            <mat-icon matSuffix>folder</mat-icon>
-          </mat-form-field>
-
-          <div fxLayout="row" fxLayoutAlign="space-around center" class="upload-buttons">
-            <button mat-stroked-button type="button" class="primary-button-dark" style="max-width: max-content"
-              (click)="uploadImage()" [disabled]="!imageFileInput">
-              Upload</button>
-            <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
-              (click)="deleteImage()" [disabled]="!previewImage && !imageFileInput">
-              <mat-icon>clear</mat-icon>
-            </button>
+        <div class="color-field ml-8 section-border">
+          <div class="color-field-label">
+            Farbe 2</div>
+          <div class="color-input">
+            <input type="color" formControlName="secondaryColor" />
           </div>
         </div>
-
-        <div class="section-border centered image-preview" *ngIf="uploadingImage || previewImage">
-          <div class="image-preview-label">
-            Vorschau
-          </div>
-          <div *ngIf="uploadingImage">
-            <mat-spinner></mat-spinner>
-          </div>
-          <div *ngIf="previewImage" class="image-container">
-            <img [src]="previewImage" style="max-width: 100%; max-height: 100%; height: auto" alt="Vorschau">
-          </div>
-        </div>
-
-        <h2>Zuordnungsoptionen</h2>
-
-        <!-- <div>TODO TAGS</div> -->
-
-        <tenant-tag-form></tenant-tag-form>
-
-        <button class="primary-button-dark mt-32" type="submit" mat-stroked-button>Speichern</button>
       </div>
-    </form>
-  </div>
-  <h2>Helpseekers</h2>
-  <div>
-    <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length !== 0">
-      <ng-container matColumnDef="firstname">
-        <mat-header-cell *matHeaderCellDef>Vorname</mat-header-cell>
-        <mat-cell *matCellDef="let helpseeker">{{
-            helpseeker.firstname
-          }}</mat-cell>
-      </ng-container>
 
-      <ng-container matColumnDef="lastname">
-        <mat-header-cell *matHeaderCellDef>Nachname</mat-header-cell>
-        <mat-cell *matCellDef="let helpseeker">{{
-            helpseeker.lastname
-          }}</mat-cell>
-      </ng-container>
+      <div fxLayout="row wrap" fxLayoutAlign="start center">
+        <mat-form-field fxFlex class="mt-8 mr-8">
+          <ngx-mat-file-input [(ngModel)]="imageFileInput" [ngModelOptions]="{standalone: true}"
+            placeholder="Titelbild hochladen"></ngx-mat-file-input>
+          <mat-icon matSuffix>folder</mat-icon>
+        </mat-form-field>
 
-      <ng-container matColumnDef="username">
-        <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
-        <mat-cell *matCellDef="let helpseeker">{{
-            helpseeker.username
-          }}</mat-cell>
-      </ng-container>
+        <div fxLayout="row" fxLayoutAlign="space-around center" class="upload-buttons">
+          <button mat-stroked-button type="button" class="primary-button-dark" style="max-width: max-content"
+            (click)="uploadImage()" [disabled]="!imageFileInput">
+            Upload</button>
+          <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
+            (click)="deleteImage()" [disabled]="!previewImage && !imageFileInput">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </div>
 
-      <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-        <mat-cell *matCellDef="let helpseeker">
-          <mat-icon (click)="navigateToHelpSeekerForm(helpseeker.id)" style="cursor: pointer;">
-            edit</mat-icon>
-        </mat-cell>
-      </ng-container>
+      <div class="section-border centered image-preview" *ngIf="uploadingImage || previewImage">
+        <div class="image-preview-label">
+          Vorschau
+        </div>
+        <div *ngIf="uploadingImage">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div *ngIf="previewImage" class="image-container">
+          <img [src]="previewImage" style="max-width: 100%; max-height: 100%; height: auto" alt="Vorschau">
+        </div>
+      </div>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-    </mat-table>
-  </div>
+      <h2>Zuordnungsoptionen</h2>
+
+      <tenant-tag-form [addedTags]="addedTags" (tags)="addedTags = $event"></tenant-tag-form>
+
+      <button class="primary-button-dark mt-32" type="submit" mat-stroked-button>Speichern</button>
+    </div>
+  </form>
 </div>
+
+
+<tenant-helpseekers-form *ngIf="showHelpseekersForm" [tenant]="tenant"></tenant-helpseekers-form>
