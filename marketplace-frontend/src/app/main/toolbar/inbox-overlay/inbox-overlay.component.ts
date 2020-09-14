@@ -5,7 +5,7 @@ import {
   EventEmitter,
   ElementRef,
   ViewChild,
-  Output,
+  Output
 } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
@@ -17,14 +17,14 @@ import { isNullOrUndefined } from "util";
 import {
   ClassInstance,
   ClassArchetype,
-  ClassInstanceDTO,
+  ClassInstanceDTO
 } from "app/main/content/_model/meta/class";
 import { Router } from "@angular/router";
 
 @Component({
   selector: "inbox-overlay",
   templateUrl: "./inbox-overlay.component.html",
-  styleUrls: ["./inbox-overlay.component.scss"],
+  styleUrls: ["./inbox-overlay.component.scss"]
 })
 export class InboxOverlayComponent implements OnInit {
   constructor(
@@ -80,7 +80,7 @@ export class InboxOverlayComponent implements OnInit {
             }
 
             if (this.userRole === UserRole.VOLUNTEER) {
-              this.user.subscribedTenants.forEach((tenantId) => {
+              this.user.subscribedTenants.forEach(tenantId => {
                 this.classInstanceService
                   .getClassInstancesInUserInbox(
                     this.marketplace,
@@ -97,7 +97,6 @@ export class InboxOverlayComponent implements OnInit {
               this.classInstanceService
                 .getClassInstancesInIssuerInbox(
                   this.marketplace,
-                  this.user.id,
                   this.user.tenantId
                 )
                 .toPromise()
@@ -136,7 +135,7 @@ export class InboxOverlayComponent implements OnInit {
       return "";
     }
 
-    const name = entry.properties.find((p) => p.id === "name");
+    const name = entry.properties.find(p => p.id === "name");
 
     if (
       isNullOrUndefined(name) ||
@@ -174,7 +173,7 @@ export class InboxOverlayComponent implements OnInit {
   showInboxClicked() {
     this.closeOverlay.emit(true);
     this.router.navigate(["/main/volunteer/asset-inbox"], {
-      state: { marketplace: this.marketplace, participant: this.user },
+      state: { marketplace: this.marketplace, participant: this.user }
     });
   }
 }
