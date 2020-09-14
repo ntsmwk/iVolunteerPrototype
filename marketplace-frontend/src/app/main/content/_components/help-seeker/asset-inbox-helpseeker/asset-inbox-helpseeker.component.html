@@ -10,7 +10,6 @@
     </div>
 
     <div class="inbox-content">
-      asdfasfd
       <mat-table #inboxTable class="inbox-table" [dataSource]="datasource" *ngIf="datasource.data.length > 0">
 
         <ng-container matColumnDef="checkboxes">
@@ -27,16 +26,6 @@
         <ng-container matColumnDef="archetype">
           <mat-header-cell *matHeaderCellDef>Typ</mat-header-cell>
           <mat-cell *matCellDef="let entry">
-
-            <!-- <div *ngIf="entry.imagePath!='null'">
-                <div style=" z-index: 255; position: relative; width: 25px; height: 25px;">
-                  <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
-                    [src]="entry.imagePath">
-                </div>
-              </div>
-      
-              <div *ngIf="entry.imagePath=='null'"> -->
-
             <div fxLayout="row" fxLayoutAlign="start center">
               <div style=" z-index: 255; position: relative; width: 25px; height: 25px;">
                 <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;" [src]="getArchetypeIcon(entry)">
@@ -139,7 +128,6 @@
           </mat-cell>
         </ng-container>
 
-
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }" class="table-row"></mat-row>
       </mat-table>
@@ -147,9 +135,13 @@
       <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
         Keine unbestätigten Freiwilligenpasseinträge
       </div>
-
-
     </div>
 
+    <div class="button-row" fxLayout="row" fxLayoutAlign="space-between center">
+      <div></div>
+      <button mat-raised-button color="primary" (click)="onAssetInboxSubmit()" [disabled]="selection.isEmpty()" matTooltip="Mit dieser Aktion wird der Eintrag in der Blockchain persistiert." aria-label="Button that displays a tooltip when focused or hovered over">
+        Bestätigen</button>
+
+    </div>
   </div>
 </div>

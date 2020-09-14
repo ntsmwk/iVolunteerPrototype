@@ -94,10 +94,6 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     }
 
     this.datasource.data = this.classInstanceDTOs;
-    console.error("datasource data");
-    console.error(this.datasource.data);
-
-    console.error(this.classInstanceDTOs);
   }
 
   onAssetInboxSubmit() {
@@ -109,7 +105,6 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       )
       .toPromise()
       .then(() => {
-        console.log("confirm");
         this.router.navigate(["main/helpseeker/asset-inbox/confirm"], {
           state: {
             instances: this.classInstanceDTOs,
