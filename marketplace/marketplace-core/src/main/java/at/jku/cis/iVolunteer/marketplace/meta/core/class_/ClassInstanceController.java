@@ -147,8 +147,6 @@ public class ClassInstanceController {
 		}
 		
 		contractorPublishingRestClient.publishClassInstances(classInstances, authorization);
-		
-		
 		return classInstanceRepository.save(classInstances);
 	}
 
@@ -176,6 +174,7 @@ public class ClassInstanceController {
 		ciNew.setTimestamp(ci.getTimestamp());
 		ciNew.setMarketplaceId(ci.getMarketplaceId());
 		ciNew.setTenantId(tenantId);
+		ciNew.setIssued(ci.isIssued());
 
 		return classInstanceMapper.mapToDTO(Collections.singletonList(this.classInstanceRepository.save(ciNew)))
 				.stream().findFirst().orElse(null);
