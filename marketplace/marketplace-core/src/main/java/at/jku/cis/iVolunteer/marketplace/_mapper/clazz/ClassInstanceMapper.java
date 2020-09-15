@@ -37,7 +37,6 @@ public class ClassInstanceMapper {
 			dto.setHash(hasher.generateHash(ci));
 			dto.setIssued(ci.isIssued());
 
-
 			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "name".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (name != null) {
