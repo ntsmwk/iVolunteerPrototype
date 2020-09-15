@@ -34,14 +34,10 @@ import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX
 @RestController
 @RequestMapping("/login")
 public class CoreLoginController {
-	@Autowired
-	private TenantService tenantService;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreLoginService loginService;
-	@Autowired
-	private CoreUserRepository userRepository;
+	@Autowired private TenantService tenantService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreLoginService loginService;
+	@Autowired private CoreUserRepository userRepository;
 
 	private JWTTokenProvider tokenProvider = new JWTTokenProvider();
 

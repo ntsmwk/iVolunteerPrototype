@@ -99,24 +99,9 @@ export class ClassInstanceService {
     );
   }
 
-  setClassInstanceInUserRepository(
-    marketplace: Marketplace,
-    classInstanceIds: string[],
-    inUserRepository: boolean
-  ) {
+  issueClassInstance(marketplace: Marketplace, classInstanceIds: string[]) {
     return this.http.put(
-      `${marketplace.url}/meta/core/class/instance/set-in-user-repository/${inUserRepository}`,
-      classInstanceIds
-    );
-  }
-
-  setClassInstanceInIssuerInbox(
-    marketplace: Marketplace,
-    classInstanceIds: string[],
-    inIssuerInbox: boolean
-  ) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/instance/set-in-issuer-inbox/${inIssuerInbox}`,
+      `${marketplace.url}/meta/core/class/instance/issue`,
       classInstanceIds
     );
   }

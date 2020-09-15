@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.blockchainify.ContractorPublishingRestClient;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -36,6 +38,7 @@ public class ClassInstanceController {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
 	@Autowired private DateTimeService dateTimeService;
 	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private ContractorPublishingRestClient contractorPublishingRestClient;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -131,6 +134,22 @@ public class ClassInstanceController {
 			@RequestParam(value = "tId", required = true) String tenantId) {
 		List<ClassInstance> instances = classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
 		return instances;
+	}
+
+	@PutMapping("/meta/core/class/instance/issue")
+	private List<ClassInstance> issueClassInstance(
+			@RequestBody List<String> classInstanceIds, @RequestHeader("Authorization") String authorization) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+
+		for (ClassInstance classInstance : classInstances) {
+			classInstance.setIssued(true);
+		}
+		
+		contractorPublishingRestClient.publishClassInstances(classInstances, authorization);
+		
+		
+		return classInstanceRepository.save(classInstances);
 	}
 
 	@PostMapping("/meta/core/class/instance/new")

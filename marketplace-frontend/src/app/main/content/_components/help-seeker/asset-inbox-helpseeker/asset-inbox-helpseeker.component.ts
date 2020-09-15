@@ -98,10 +98,9 @@ export class AssetInboxHelpseekerComponent implements OnInit {
 
   onAssetInboxSubmit() {
     this.classInstanceService
-      .setClassInstanceInIssuerInbox(
+      .issueClassInstance(
         this.marketplace,
-        this.classInstanceDTOs.map(c => c.id),
-        false
+        this.classInstanceDTOs.map(c => c.id)
       )
       .toPromise()
       .then(() => {
