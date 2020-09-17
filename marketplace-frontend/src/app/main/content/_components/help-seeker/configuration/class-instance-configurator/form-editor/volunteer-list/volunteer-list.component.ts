@@ -16,6 +16,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LoginGuard } from "app/main/content/_guard/login.guard";
 import { LoginService } from "app/main/content/_service/login.service";
 import { Tenant } from "app/main/content/_model/tenant";
+import { UserService } from 'app/main/content/_service/user.service';
 
 @Component({
   selector: "app-instance-creation-volunteer-list",
@@ -40,8 +41,9 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
   constructor(
     private coreUserService: CoreUserService,
     private imageService: ImageService,
-    private loginService: LoginService
-  ) {}
+    private loginService: LoginService,
+    private userService: UserService,
+  ) { }
 
   async ngOnInit() {
     this.volunteers = [];
@@ -70,12 +72,8 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
   }
 
   getImage(userId: string) {
-    let user = this.volunteers.find((v) => v.id === userId);
-    if (isNullOrUndefined(user.image)) {
-      return "/assets/images/avatars/profile.jpg";
-    } else {
-      return this.imageService.getImgSourceFromBytes(user.image);
-    }
+    const user = this.volunteers.find((v) => v.id === userId);
+    return this.userService.getUserProfileImage(user);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

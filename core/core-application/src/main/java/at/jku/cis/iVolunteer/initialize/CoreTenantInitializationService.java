@@ -10,6 +10,7 @@ import org.springframework.util.FileCopyUtils;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @Service
@@ -43,7 +44,7 @@ public class CoreTenantInitializationService {
 			tenant = new Tenant();
 			tenant.setName(name);
 			tenant.setHomepage(homepage);
-			setTenantImage(fileName, tenant);
+			setTenantProfileImage(fileName, tenant);
 			tenant.setPrimaryColor(primaryColor);
 			tenant.setSecondaryColor(secondaryColor);
 			tenant.setMarketplaceId(marketplaceId);
@@ -52,12 +53,13 @@ public class CoreTenantInitializationService {
 		return tenant;
 	}
 
-	private void setTenantImage(String fileName, Tenant tenant) {
+	private void setTenantProfileImage(String fileName, Tenant tenant) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				tenant.setImage(binaryData);
+				tenant.setProfileImage(new ImageWrapper("data:image/png;base64", binaryData));
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

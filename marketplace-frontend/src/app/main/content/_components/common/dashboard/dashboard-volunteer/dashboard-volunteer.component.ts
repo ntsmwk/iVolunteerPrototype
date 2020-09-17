@@ -27,6 +27,8 @@ import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { ImageService } from "app/main/content/_service/image.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { UserService } from 'app/main/content/_service/user.service';
 HC_venn(Highcharts);
 
 @Component({
@@ -103,7 +105,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private iconRegistry: MatIconRegistry,
     private dialogFactory: DialogFactoryDirective,
     private loginService: LoginService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private userService: UserService,
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -214,8 +217,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   setVolunteerImage() {
-    let objectURL = "data:image/png;base64," + this.volunteer.image;
-    this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    this.image = this.userService.getUserProfileImage(this.volunteer);
   }
 
   navigateToClassInstanceDetails(row) {
@@ -223,12 +225,10 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   getTenantImage(tenantId: string) {
-    let tenant = this.allTenants.find((t) => t.id === tenantId);
-    if (isNullOrUndefined(tenant)) {
-      return "/assets/images/avatars/profile.jpg";
-    } else {
-      return this.imageService.getImgSourceFromBytes(tenant.image);
-    }
+    const tenant = this.allTenants.find((t) => t.id === tenantId);
+   
+      return this.tenantService.getTenantProfileImage(tenant);
+    
   }
 
   getTenantName(tenantId: string) {
@@ -253,7 +253,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe((result: any) => { });
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -721,7 +721,7 @@ export class DashboardVolunteerComponent implements OnInit {
     ];
     Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) {}
+  onVennClicked(event) { }
 }
 
 export interface DialogData {

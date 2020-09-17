@@ -1,0 +1,75 @@
+@import "common";
+
+$image-preview-label-offset: -9px;
+$image-preview-width: 120px;
+$tenant-form-background: rgb(250, 250, 250);
+
+.image-preview {
+  display: block;
+  width: $image-preview-width;
+  max-width: $image-preview-width;
+  height: auto;
+
+  .image-preview-label {
+    display: block;
+    position: relative;
+    top: $image-preview-label-offset;
+    left: 4px;
+    padding: 0 2px;
+    background: $tenant-form-background;
+    width: max-content;
+  }
+
+  .image-container {
+    padding: 0 8px 8px;
+    position: relative;
+    top: $image-preview-label-offset;
+
+    img {
+      max-width: 100%;
+      width: $image-preview-width;
+      max-height: 100%;
+      height: auto;
+      margin-bottom: $image-preview-label-offset;
+    }
+  }
+}
+
+.image-input {
+  margin-bottom: -1.25em;
+}
+
+.image-upload-buttons {
+  @include media-breakpoint("sm") {
+    width: 100%;
+  }
+
+  @include media-breakpoint("xs") {
+    width: 100%;
+    button {
+      min-width: 0;
+      width: 50%;
+    }
+  }
+  @media (max-width: 400px) {
+    width: 100%;
+    button {
+      min-width: max-content !important;
+    }
+  }
+}
+
+.section-border {
+  color: grey;
+  border: solid grey 1px;
+  border-radius: 4px;
+}
+
+.spinner-container {
+  display: block;
+  width: max-content;
+  margin: 0 auto 8px auto;
+  mat-spinner {
+    margin: 0;
+  }
+}

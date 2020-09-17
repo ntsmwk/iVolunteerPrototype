@@ -1,4 +1,5 @@
 import { map } from "lodash";
+import { ImageWrapper } from './image';
 
 export class User {
   id: string;
@@ -27,7 +28,7 @@ export class User {
   registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
-  image: any;
+  image: ImageWrapper;
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;

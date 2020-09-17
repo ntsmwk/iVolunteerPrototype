@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { User, UserRole } from "../_model/user";
-import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: "root" })
 export class CoreUserService {
@@ -20,6 +19,10 @@ export class CoreUserService {
   findAllByRole(role: UserRole) {
     // console.log(`findAllByRole(${role})`);
     return this.http.get(`/core/user/all/role/${role}`);
+  }
+
+  findAllByRoles(roles: UserRole[], includeNoRole: boolean) {
+    return this.http.put(`/core/user/all/roles?includeNoRole=${includeNoRole}`, roles);
   }
 
   findAllByRoleAndTenantId(tenantId: string, role: UserRole) {

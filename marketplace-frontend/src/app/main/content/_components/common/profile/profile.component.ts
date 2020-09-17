@@ -11,6 +11,7 @@ import {
 } from "@angular/forms";
 import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { UserService } from 'app/main/content/_service/user.service';
 
 @Component({
   selector: "profile",
@@ -32,7 +33,8 @@ export class ProfileComponent implements OnInit {
     private loginService: LoginService,
     private imageService: ImageService,
     private formBuilder: FormBuilder,
-    private coreUserService: CoreUserService
+    private coreUserService: CoreUserService,
+    private userService: UserService,
   ) {
     this.profileFormErrors = {
       firstName: {},
@@ -103,11 +105,9 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfileImage() {
-    if (this.user.image) {
-      return this.imageService.getImgSourceFromBytes(this.user.image);
-    } else {
-      return "/assets/images/avatars/profile.jpg";
-    }
+
+    return this.userService.getUserProfileImage(this.user);
+
   }
 
   hasVolunteerRole() {

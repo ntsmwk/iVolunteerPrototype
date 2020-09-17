@@ -1,11 +1,18 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Tenant</h1>
+    <h1>Organisation bearbeiten</h1>
   </div>
 
-  <div class="content p-24 mat-white-bg mt-12">
-    <tenant-form-content fusePerfectScrollbar *ngIf="tenant && marketplace" [tenant]="tenant"
-      [marketplace]="marketplace">
+  <div class="content p-24 mat-white-bg mt-12" *ngIf="loaded">
+    <tenant-form-content fusePerfectScrollbar [tenant]="tenant">
     </tenant-form-content>
+
+
+    <tenant-helpseekers-form [tenant]="tenant" (tenantSaved)="handleTenantSaved($event)"></tenant-helpseekers-form>
+
+    <button mat-stroked-button class="secondary-button-dark mt-12" type="button"
+      (click)="handleBackClick()">Zurück</button>
+
   </div>
+
 </div>

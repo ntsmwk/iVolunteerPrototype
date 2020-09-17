@@ -36,9 +36,9 @@ public class TenantController {
 		return tenantService.getTenantById(tenantId);
 	}
 
-	@GetMapping("/volunteer/{volunteerId}")
-	public List<Tenant> getTenantsByVolunteer(@PathVariable String volunteerId) {
-		return tenantService.getTenantsByUser(volunteerId).stream().distinct().collect(Collectors.toList());
+	@GetMapping("/user/{userId}")
+	public List<Tenant> getTenantsByUserId(@PathVariable("userId") String userId) {
+		return tenantService.getTenantsByUser(userId).stream().distinct().collect(Collectors.toList());
 	}
 
 	@GetMapping("/marketplace/{marketplaceId}")
@@ -51,8 +51,8 @@ public class TenantController {
 		return tenantService.createTenant(tenant);
 	}
 
-	@PutMapping("{tenantId}")
-	public Tenant updateTenant(@PathVariable("tenantId") String tenantId, @RequestBody Tenant tenant) {
-		return tenantService.updateTenant(tenantId, tenant);
+	@PutMapping
+	public Tenant updateTenant(@RequestBody Tenant tenant) {
+		return tenantService.updateTenant(tenant);
 	}
 }

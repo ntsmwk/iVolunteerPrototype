@@ -14,7 +14,7 @@ export class LoginService {
     private http: HttpClient,
     private httpClient: HttpClient,
     private router: Router
-  ) {}
+  ) { }
 
   login(username: string, password: string) {
     return this.http.post(
@@ -94,7 +94,6 @@ export class LoginService {
         this.httpClient.get(`/core/login/globalInfo`);
       }
     });
-
     return observable;
   }
 
