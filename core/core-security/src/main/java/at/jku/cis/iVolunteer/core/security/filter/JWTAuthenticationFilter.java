@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.core.security.model.Credentials;
-import at.jku.cis.iVolunteer.core.security.model.LoginResponse;
+import at.jku.cis.iVolunteer.core.security.model.TokenResponse;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -58,7 +58,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 			res.setContentType("application/json");
 			res.setCharacterEncoding("UTF-8");
-			res.getWriter().write(new LoginResponse(accessToken, refreshToken).toString());
+			res.getWriter().write(new TokenResponse(accessToken, refreshToken).toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
