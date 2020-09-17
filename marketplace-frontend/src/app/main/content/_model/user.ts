@@ -1,4 +1,5 @@
 import { map } from "lodash";
+import { NextcloudCredentials } from "./nextcloud-credentials";
 
 export class User {
   id: string;
@@ -31,6 +32,8 @@ export class User {
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
+  nextcloudCredentials: NextcloudCredentials;
+
   activated: boolean;
   accountType: AccountType;
 }
@@ -48,6 +51,7 @@ export enum UserRole {
 export enum LocalRepositoryLocation {
   LOCAL = "LOCAL",
   DROPBOX = "DROPBOX",
+  NEXTCLOUD = "NEXTCLOUD",
 }
 
 export class TenantUserSubscription {
@@ -62,6 +66,6 @@ export class RoleTenantMapping {
 }
 
 export enum AccountType {
-  PERSON = 'PERSON',
-  ORGANIZATION = 'ORGANIZATION',
+  PERSON = "PERSON",
+  ORGANIZATION = "ORGANIZATION",
 }

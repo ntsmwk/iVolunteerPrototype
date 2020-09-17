@@ -141,14 +141,17 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    // if (
-    //   this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
-    // ) {
-    //   this.localRepositoryService = this.lrJsonServerService;
-    // } else {
-    //   this.localRepositoryService = this.lrDropboxService;
-    // }
-    this.localRepositoryService = this.lrNextcloudService;
+    switch (this.volunteer.localRepositoryLocation) {
+      case LocalRepositoryLocation.LOCAL:
+        this.localRepositoryService = this.lrJsonServerService;
+        break;
+      case LocalRepositoryLocation.DROPBOX:
+        this.localRepositoryService = this.lrDropboxService;
+        break;
+      case LocalRepositoryLocation.NEXTCLOUD:
+        this.localRepositoryService = this.lrNextcloudService;
+        break;
+    }
 
     let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
       await this.classInstanceService

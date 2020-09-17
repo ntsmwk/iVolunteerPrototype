@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { LocalRepository } from "../_model/local-repository";
 import { ClassInstance } from "../_model/meta/class";
 import { createClient } from "webdav/web";
+import { NextcloudCredentials } from "../_model/nextcloud-credentials";
 
 @Injectable({
   providedIn: "root",
@@ -13,14 +14,32 @@ export class LocalRepositoryNextcloudService {
   FILE_NAME: string = "db.json";
   FULL_FILE_NAME: string = this.FILE_PATH + this.FILE_NAME;
 
-  NEXTCLOUD_DOMAIN: string =
-    "http://philstar.ddns.net:31415/remote.php/dav/files/Philipp/";
-  NEXTCLOUD_USERNAME: string = "Philipp";
-  NEXTCLOUD_PASSWORD: string = "JcsBS-nTGXj-sG76N-fskTd-KeLdQ";
-
   localRepositorys: LocalRepository[] = [];
 
   constructor() {}
+
+  public async isConnected(credentials: NextcloudCredentials) {
+    if (
+      credentials == null ||
+      credentials.domain == null ||
+      credentials.username == null ||
+      credentials.password == null
+    ) {
+      return false;
+    }
+
+    let nextcloud = createClient(credentials.domain, {
+      username: credentials.username,
+      password: credentials.password,
+    });
+
+    try {
+      let c = await nextcloud.getDirectoryContents("/");
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
   private findByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
@@ -35,9 +54,9 @@ export class LocalRepositoryNextcloudService {
       };
 
       try {
-        let nextcloud = createClient(this.NEXTCLOUD_DOMAIN, {
-          username: this.NEXTCLOUD_USERNAME,
-          password: this.NEXTCLOUD_PASSWORD,
+        let nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
+          username: volunteer.nextcloudCredentials.username,
+          password: volunteer.nextcloudCredentials.password,
         });
 
         nextcloud
@@ -58,7 +77,7 @@ export class LocalRepositoryNextcloudService {
                   }
                 )
                 .then(async () => {
-                  let result = await nextcloud.getFileContents(
+                  let parsedJSON = await nextcloud.getFileContents(
                     this.FULL_FILE_NAME,
                     {
                       format: "text",
@@ -66,12 +85,9 @@ export class LocalRepositoryNextcloudService {
                   );
 
                   this.localRepositorys = [];
-                  if (this.isValidJson(<string>result)) {
-                    let parsedJSON = JSON.parse(<string>result);
-                    parsedJSON.repository.forEach((lr: LocalRepository) => {
-                      this.localRepositorys.push(lr);
-                    });
-                  }
+                  parsedJSON.repository.forEach((lr: LocalRepository) => {
+                    this.localRepositorys.push(lr);
+                  });
 
                   if (
                     this.localRepositorys.findIndex(
@@ -98,7 +114,7 @@ export class LocalRepositoryNextcloudService {
                 });
             } else {
               // only read
-              let result = await nextcloud.getFileContents(
+              let parsedJSON = await nextcloud.getFileContents(
                 this.FULL_FILE_NAME,
                 {
                   format: "text",
@@ -106,15 +122,9 @@ export class LocalRepositoryNextcloudService {
               );
 
               this.localRepositorys = [];
-              console.error(result);
-              // TODO Philipp: PROBLEM result is not valid json
-              if (this.isValidJson(result)) {
-                let parsedJSON = JSON.parse(<string>result);
-
-                parsedJSON.repository.forEach((lr: LocalRepository) => {
-                  this.localRepositorys.push(lr);
-                });
-              }
+              parsedJSON.repository.forEach((lr: LocalRepository) => {
+                this.localRepositorys.push(lr);
+              });
 
               if (
                 this.localRepositorys.filter((lr) => lr.id == volunteer.id)
@@ -375,9 +385,10 @@ export class LocalRepositoryNextcloudService {
 
   private async saveToNextcloud(volunteer: User) {
     console.error("in saveToNextcloud");
-    let nextcloud = createClient(this.NEXTCLOUD_DOMAIN, {
-      username: this.NEXTCLOUD_USERNAME,
-      password: this.NEXTCLOUD_PASSWORD,
+
+    let nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
+      username: volunteer.nextcloudCredentials.username,
+      password: volunteer.nextcloudCredentials.password,
     });
 
     let content = { repository: this.localRepositorys };
@@ -387,23 +398,7 @@ export class LocalRepositoryNextcloudService {
       JSON.stringify(content, null, 2),
       {
         overwrite: true,
-      },
-      {
-        onUploadProgress: (progress) => {
-          console.error(progress);
-        },
       }
     );
-  }
-
-  isValidJson(str) {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      console.error(e);
-
-      return false;
-    }
-    return true;
   }
 }

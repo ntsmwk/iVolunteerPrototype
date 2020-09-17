@@ -19,7 +19,8 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @RestController
 public class CoreUserController {
 
-	@Autowired private CoreUserService coreUserService;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	@GetMapping("/user/all")
 	private List<CoreUser> findAll() {
@@ -62,7 +63,7 @@ public class CoreUserController {
 	@GetMapping("/user/{userId}/marketplaces")
 	private List<Marketplace> findRegisteredMarketplaces(@PathVariable("userId") String userId) {
 		return coreUserService.findRegisteredMarketplaces(userId);
-//		return coreUserService.getOnlyFirstMarketplace(userId);
+		// return coreUserService.getOnlyFirstMarketplace(userId);
 	}
 
 	@PostMapping("/user/{userId}/register/{marketplaceId")

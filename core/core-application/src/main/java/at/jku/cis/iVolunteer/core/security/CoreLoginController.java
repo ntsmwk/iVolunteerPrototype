@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.core.global.GlobalInfo;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.security.model.ErrorResponse;
-import at.jku.cis.iVolunteer.core.security.model.RefreshTokenResponse;
+import at.jku.cis.iVolunteer.core.security.model.TokenResponse;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
@@ -70,8 +70,9 @@ public class CoreLoginController {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null,
 						user.getAuthorities());
 				String accessToken = this.tokenProvider.generateAccessToken(authentication);
+				String newRefreshToken = this.tokenProvider.generateRefreshToken(authentication);
 
-				return ResponseEntity.ok(new RefreshTokenResponse(accessToken));
+				return ResponseEntity.ok(new TokenResponse(accessToken, newRefreshToken).toString());
 			} else {
 				return new ResponseEntity<Object>(new ErrorResponse("Empty Refresh Token"), HttpStatus.NOT_ACCEPTABLE);
 			}

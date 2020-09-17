@@ -19,10 +19,14 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @Service
 public class CoreUserService {
 
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired private TenantRepository tenantRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
-	@Autowired private MarketplaceService marketplaceService;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private TenantRepository tenantRepository;
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private MarketplaceService marketplaceService;
 
 	public List<CoreUser> findAll() {
 		return coreUserRepository.findAll();
@@ -133,12 +137,16 @@ public class CoreUserService {
 	}
 
 	public CoreUser updateUser(CoreUser user, String authorization, boolean updateMarketplaces) {
-		user = this.coreUserRepository.save(user);
+		if (this.coreUserRepository.findOne(user.getId()) != null) {
+			user.setPassword(this.coreUserRepository.findOne(user.getId()).getPassword());
+		}
+		this.coreUserRepository.save(user);
 
 		if (updateMarketplaces) {
 			this.updateMarketplaces(user, authorization);
 		}
 
+		user.setPassword(null);
 		return user;
 	}
 

@@ -1,5 +1,5 @@
 <div *ngIf="isLoaded">
-  <mat-card style="margin: 20px;">
+  <mat-card style="margin: 20px">
     <mat-card-title>
       Speicherort des lokalen Freiwilligenpasses
     </mat-card-title>
@@ -7,45 +7,147 @@
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <mat-radio-group
           aria-label="Select an option"
-          style="margin-left: 20px;"
+          style="margin-left: 20px"
           (change)="localRepositoryLocationChange($event.value)"
         >
-          <mat-radio-button
-            value="LOCAL"
-            [disabled]="!isJsonServerConnected"
-            [checked]="getChecked('LOCAL')"
-            >Lokal (json-server)</mat-radio-button
+          <div
+            matTooltip="Nicht verknüpft"
+            [matTooltipDisabled]="isJsonServerConnected"
           >
-          <mat-radio-button
-            value="DROPBOX"
-            [disabled]="!isAuthenticated"
-            [checked]="getChecked('DROPBOX')"
-            >Dropbox</mat-radio-button
+            <mat-radio-button
+              value="LOCAL"
+              [disabled]="!isJsonServerConnected"
+              [checked]="getChecked('LOCAL')"
+              >Lokal (json-server)</mat-radio-button
+            >
+          </div>
+          <div
+            matTooltip="Nicht verknüpft"
+            [matTooltipDisabled]="isDropboxConnected"
           >
+            <mat-radio-button
+              value="DROPBOX"
+              [disabled]="!isDropboxConnected"
+              [checked]="getChecked('DROPBOX')"
+              >Dropbox</mat-radio-button
+            >
+          </div>
+          <div
+            matTooltip="Nicht verknüpft"
+            [matTooltipDisabled]="isNextcloudConnected"
+          >
+            <mat-radio-button
+              value="NEXTCLOUD"
+              [disabled]="!isNextcloudConnected"
+              [checked]="getChecked('NEXTCLOUD')"
+              >Nextcloud</mat-radio-button
+            >
+          </div>
         </mat-radio-group>
+      </div>
 
-        <div fxLayout="column" style="margin-right: 50px;">
-          <img
-            style="margin-bottom: 5px;"
-            src="./assets/images/logos/Dropbox_logo.svg"
-          />
+      <!-- Dropbox -->
 
-          <a
-            mat-raised-button
-            *ngIf="!isAuthenticated"
-            color="primary"
-            href="{{ authUrl }}"
-          >
-            Dropbox Konto verknüpfen
-          </a>
+      <div class="login" fxLayout="column" style="margin-right: 50px">
+        <img
+          style="margin-bottom: 5px"
+          src="./assets/images/logos/Dropbox_logo.svg"
+        />
 
+        <a
+          mat-raised-button
+          *ngIf="!isDropboxConnected"
+          color="primary"
+          href="{{ dropboxAuthUrl }}"
+        >
+          Dropbox Konto verknüpfen
+        </a>
+
+        <div
+          matTooltip="Nicht möglich, da gerade ausgewählt!"
+          [matTooltipDisabled]="user.localRepositoryLocation != 'DROPBOX'"
+        >
           <button
             mat-raised-button
-            *ngIf="isAuthenticated"
+            *ngIf="isDropboxConnected"
+            [disabled]="user.localRepositoryLocation == 'DROPBOX'"
             color="primary"
-            (click)="removeToken()"
+            (click)="removeDropbox()"
           >
             Verbindung zu Dropbox aufheben
+          </button>
+        </div>
+      </div>
+
+      <!-- Nextcloud -->
+      <div
+        class="login"
+        fxLayout="column"
+        fxLayoutAlign="space-between center"
+        style="margin-right: 50px"
+      >
+        <img
+          style="margin-bottom: 5px"
+          src="./assets/images/logos/Nextcloud_Logo.svg"
+        />
+        <form
+          *ngIf="!isNextcloudConnected"
+          name="nextcloudLoginForm"
+          (submit)="loginNextcloud()"
+          [formGroup]="nextcloudLoginForm"
+          novalidate
+        >
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="WebDAV Domain"
+              formControlName="domain"
+            />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Benutzername"
+              formControlName="username"
+            />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              type="password"
+              placeholder="Passwort"
+              formControlName="password"
+            />
+          </mat-form-field>
+          <p *ngIf="nextcloudLoginError" class="text-align-center error">
+            Anmeldedaten nicht korrekt!
+          </p>
+
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            class="submit-button"
+            aria-label="Nextcloud verknüpfen"
+            [disabled]="nextcloudLoginForm.invalid"
+          >
+            Nextcloud Konto verknüpfen
+          </button>
+        </form>
+        <div
+          matTooltip="Nicht möglich, da gerade ausgewählt!"
+          [matTooltipDisabled]="user.localRepositoryLocation != 'NEXTCLOUD'"
+        >
+          <button
+            mat-raised-button
+            *ngIf="isNextcloudConnected"
+            [disabled]="user.localRepositoryLocation == 'NEXTCLOUD'"
+            color="primary"
+            (click)="removeNextcloud()"
+          >
+            Verbindung zu Nextcloud aufheben
           </button>
         </div>
       </div>

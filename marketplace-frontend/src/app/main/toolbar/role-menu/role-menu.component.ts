@@ -116,7 +116,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
   getTenantImage(mapping: RoleTenantMapping) {
     if (mapping.role === UserRole.VOLUNTEER) {
-      return "/assets/images/avatars/profile.jpg";
+      return this.imageService.getImgSourceFromBytes(this.user.image);
     }
     let tenant = this.allTenants.find((t) => t.id === mapping.tenantIds[0]);
     if (isNullOrUndefined(tenant)) {
