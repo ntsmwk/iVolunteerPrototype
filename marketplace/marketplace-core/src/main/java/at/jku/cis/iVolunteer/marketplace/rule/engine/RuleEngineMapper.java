@@ -35,10 +35,8 @@ import at.jku.cis.iVolunteer.model.user.User;
 @Component
 public class RuleEngineMapper {
 
-	@Autowired
-	ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	ClassPropertyService classPropertyService;
+	@Autowired ClassDefinitionRepository classDefinitionRepository;
+	@Autowired ClassPropertyService classPropertyService;
 
 	public String generateDroolsRuleFrom(DerivationRule derivationRule) {
 		StringBuilder stringBuilder = new StringBuilder();
@@ -52,7 +50,8 @@ public class RuleEngineMapper {
 
 	private String newPackage() {
 		return "package " + this.getClass().getPackage().getName() + ";\r\n";
-		//return "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n " + "\r\n";
+		// return "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n " +
+		// "\r\n";
 	}
 
 	private String newGeneralImports() {
@@ -114,7 +113,7 @@ public class RuleEngineMapper {
 		}
 		stringBuilder.append(patternEnd());
 		// check whether target already exists for volunteer
-		
+
 		return stringBuilder.toString();
 	}
 
@@ -147,25 +146,23 @@ public class RuleEngineMapper {
 		stringBuilder.append("\r\n");
 		return stringBuilder.toString();
 	}
-	
+
 	private String preventDuplicateInstance(List<ClassAction> classActions) {
 		StringBuilder stringBuilder = new StringBuilder();
-		for (ClassAction classAction: classActions) {
+		for (ClassAction classAction : classActions) {
 			if (classAction.getType() == ActionType.NEW) {
 				ClassDefinition cd = classDefinitionRepository.findOne(classAction.getClassDefinitionId());
-				if ( (cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT) ||
-					 (cd.getClassArchetype() == ClassArchetype.COMPETENCE) || 
-					 (cd.getClassArchetype() == ClassArchetype.FUNCTION)) {
+				if ((cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT)
+						|| (cd.getClassArchetype() == ClassArchetype.COMPETENCE)
+						|| (cd.getClassArchetype() == ClassArchetype.FUNCTION)) {
 					// no duplicate assets allowed
 					stringBuilder.append("ClassInstanceService (");
-						
-					
+
 					stringBuilder.append(")");
 				}
 			}
 		}
-				
-		
+
 		return stringBuilder.toString();
 	}
 	/*
@@ -216,38 +213,36 @@ public class RuleEngineMapper {
 
 		return stringBuilder.toString();
 	}
-	
+
 	private String sumInstances(ClassCondition classCondition) {
 		ClassProperty<Object> classProperty = classPropertyService.getClassPropertyFromAllClassProperties(
-				                            classCondition.getClassDefinitionId(), classCondition.getClassPropertyId());
+				classCondition.getClassDefinitionId(), classCondition.getClassPropertyId());
 		StringBuilder stringBuilder = new StringBuilder();
-		
+
 		if (classProperty.getType().equals(PropertyType.FLOAT_NUMBER)) {
 			stringBuilder.append(" (double) sum( ");
 			stringBuilder.append(buildConstraintsForInstances(classCondition));
-			stringBuilder.append(", new SumCriteria(\"" +classCondition.getClassPropertyId() + "\", \r\n " +
-					"		                   PropertyType.FLOAT_NUMBER )");
-		    stringBuilder.append("  ) >= " + classCondition.getValue()+"");
+			stringBuilder.append(", new SumCriteria(\"" + classCondition.getClassPropertyId() + "\", \r\n "
+					+ "		                   PropertyType.FLOAT_NUMBER )");
+			stringBuilder.append("  ) >= " + classCondition.getValue() + "");
 		} else if (classProperty.getType().equals(PropertyType.WHOLE_NUMBER)) {
 			stringBuilder.append("(Integer) sum( ");
 			stringBuilder.append(buildConstraintsForInstances(classCondition));
-			stringBuilder.append(", new SumCriteria(\"" +classCondition.getClassPropertyId() + "\", \r\n " +
-					"		                   PropertyType.WHOLE_NUMBER )"); 
+			stringBuilder.append(", new SumCriteria(\"" + classCondition.getClassPropertyId() + "\", \r\n "
+					+ "		                   PropertyType.WHOLE_NUMBER )");
 			stringBuilder.append(" ) >= " + classCondition.getValue());
 		}
-		//stringBuilder.append(")");
+		// stringBuilder.append(")");
 		return stringBuilder.toString();
 	}
-	
+
 	private String countInstances(ClassCondition classCondition) {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(
-				   buildConstraintsForInstances(classCondition) + 
-				   decodeAggregationOperator(
-						   (AggregationOperatorType) classCondition.getOperatorType(), classCondition.getValue()));
+		stringBuilder.append(buildConstraintsForInstances(classCondition) + decodeAggregationOperator(
+				(AggregationOperatorType) classCondition.getOperatorType(), classCondition.getValue()));
 		return stringBuilder.toString();
 	}
-	
+
 	private String buildConstraintsForInstances(ClassCondition classCondition) {
 		String constraints = "getClassInstances(v, \"" + classCondition.getClassDefinitionId() + "\", t.getId())";
 		// get properties to filter for class instance
@@ -260,38 +255,27 @@ public class RuleEngineMapper {
 
 	private String mapGeneralConditionToRuleConstraint(GeneralCondition generalCondition) {
 		switch (generalCondition.getAttributeName()) {
-			case "Alter":
-				return "	v.getBirthday() != null && " + " currentAge( v ) "
-						+ decodeComparisonOperator((ComparisonOperatorType) generalCondition.getOperatorType()) + " "
-						+ generalCondition.getValue();
-			default:
-				return null;
+		case "Alter":
+			return "	v.getBirthday() != null && " + " currentAge( v ) "
+					+ decodeComparisonOperator((ComparisonOperatorType) generalCondition.getOperatorType()) + " "
+					+ generalCondition.getValue();
+		default:
+			return null;
 		}
-	}
-	
-	// XXX to do
-	private String buildDuplicateCheck(ClassAction classAction) {
-		String constraints = " getClassInstances(v, \"" + classAction.getClassDefinitionId() + "\", t.getId())";
-			// get properties to filter for class instance
-			for (AttributeCondition attrCondition : classAction.getAttributes()) {
-				constraints = " filterInstancesByPropertyCriteria(" + constraints + ", "
-						+ decodeAttributeCondition(attrCondition) + ")";
-			}
-		return constraints;
 	}
 
 	private String mapClassActionToRuleAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
 		switch (classAction.getType()) {
-			case DELETE:
-				stringBuilder.append(newDeleteAction(classAction));
-				break;
-			case NEW:
-				stringBuilder.append(newInsertAction(classAction));
-				break;
-			case UPDATE:
-				stringBuilder.append(newUpdateAction(classAction));
-			default:
+		case DELETE:
+			stringBuilder.append(newDeleteAction(classAction));
+			break;
+		case NEW:
+			stringBuilder.append(newInsertAction(classAction));
+			break;
+		case UPDATE:
+			stringBuilder.append(newUpdateAction(classAction));
+		default:
 		}
 		return stringBuilder.toString();
 	}
@@ -341,26 +325,26 @@ public class RuleEngineMapper {
 	private String decodeAttributeCondition(AttributeCondition attributeCondition) {
 		String criteria = null;
 		switch ((ComparisonOperatorType) attributeCondition.getOperatorType()) {
-			case EQ:
-				criteria = "new EQCriteria";
-				break;
-			case NE:
-				criteria = "new NECriteria";
-				break;
-			case GT:
-				criteria = "new GTCriteria";
-				break;
-			case GE:
-				criteria = "new GECriteria";
-				break;
-			case LE:
-				criteria = "new LECriteria";
-				break;
-			case LT:
-				criteria = "new LTCriteria";
-				break;
-			default:
-				break;
+		case EQ:
+			criteria = "new EQCriteria";
+			break;
+		case NE:
+			criteria = "new NECriteria";
+			break;
+		case GT:
+			criteria = "new GTCriteria";
+			break;
+		case GE:
+			criteria = "new GECriteria";
+			break;
+		case LE:
+			criteria = "new LECriteria";
+			break;
+		case LT:
+			criteria = "new LTCriteria";
+			break;
+		default:
+			break;
 		}
 		if (criteria != null)
 			criteria += "(\"" + attributeCondition.getClassPropertyId() + "\", " + "\"" + attributeCondition.getValue()
@@ -370,48 +354,48 @@ public class RuleEngineMapper {
 
 	private String decodeAggregationOperator(AggregationOperatorType aggregationOperator, Object value) {
 		switch (aggregationOperator) {
-			case COUNT:
-				return ".size() == " + value;
-			case EXISTS:
-				return ".size() > 0";
-			case NOT_EXISTS:
-				return ".size() == 0";
-			case MIN:
-				return ".size() >= " + value;
-			case MAX:
-				return ".size() <= " + value;
+		case COUNT:
+			return ".size() == " + value;
+		case EXISTS:
+			return ".size() > 0";
+		case NOT_EXISTS:
+			return ".size() == 0";
+		case MIN:
+			return ".size() >= " + value;
+		case MAX:
+			return ".size() <= " + value;
 		}
 		return null;
 	}
 
 	private String decodeComparisonOperator(ComparisonOperatorType comparisonOperator) {
 		switch (comparisonOperator) {
-			case EQ:
-				return " == ";
-			case NE:
-				return " != ";
-			case GT:
-				return " > ";
-			case GE:
-				return " >= ";
-			case LT:
-				return " < ";
-			case LE:
-				return " <= ";
-			default:
-				break;
+		case EQ:
+			return " == ";
+		case NE:
+			return " != ";
+		case GT:
+			return " > ";
+		case GE:
+			return " >= ";
+		case LT:
+			return " < ";
+		case LE:
+			return " <= ";
+		default:
+			break;
 		}
 		return null;
 	}
 
 	private String decodeLogicalOperator(LogicalOperatorType logicalOperator) {
 		switch (logicalOperator) {
-			case AND:
-				return " && ";
-			case OR:
-				return " || ";
-			case NOT:
-				return " ! ";
+		case AND:
+			return " && ";
+		case OR:
+			return " || ";
+		case NOT:
+			return " ! ";
 		}
 		return null;
 	}

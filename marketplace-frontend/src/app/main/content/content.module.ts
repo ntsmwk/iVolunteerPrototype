@@ -23,24 +23,24 @@ const routes: Route[] = [
     path: "login",
     loadChildren: () =>
       import("./_components/common/user_management/login/login.module").then(
-        (m) => m.FuseLoginModule
-      ),
+        m => m.FuseLoginModule
+      )
     // canActivate: [AnonymGuard],
   },
   {
     path: "register/volunteer",
     loadChildren: () =>
       import(
-        './_components/common/user_management/registration/volunteer/registration.module'
-      ).then((m) => m.VolunteerRegistrationModule),
+        "./_components/common/user_management/registration/volunteer/registration.module"
+      ).then(m => m.VolunteerRegistrationModule),
     canActivate: [AnonymGuard]
   },
   {
-    path: 'register/organization',
+    path: "register/organization",
     loadChildren: () =>
       import(
-        './_components/common/user_management/registration/organization/registration.module'
-      ).then((m) => m.OrganizationRegistrationModule),
+        "./_components/common/user_management/registration/organization/registration.module"
+      ).then(m => m.OrganizationRegistrationModule),
     canActivate: [AnonymGuard]
   },
   {
@@ -48,80 +48,64 @@ const routes: Route[] = [
     loadChildren: () =>
       import(
         "./_components/common/user_management/activation/activation.module"
-      ).then((m) => m.ActivationModule),
-    canActivate: [AnonymGuard],
+      ).then(m => m.ActivationModule),
+    canActivate: [AnonymGuard]
   },
   {
     path: "role",
     loadChildren: () =>
       import(
         "./_components/common/user_management/role-switch/role-switch.module"
-      ).then((m) => m.FuseRoleSwitchModule),
-    canActivate: [TokenGuard],
-  },
-  {
-    path: "main/volunteer/asset-inbox",
-    loadChildren: () =>
-      import(
-        "./_components/volunteer/common/asset-inbox-volunteer/asset-inbox-volunteer.module"
-      ).then((m) => m.AssetInboxVolunteerModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+      ).then(m => m.FuseRoleSwitchModule),
+    canActivate: [TokenGuard]
   },
   {
     path: "main/helpseeker/asset-inbox",
     loadChildren: () =>
       import(
         "./_components/help-seeker/asset-inbox-helpseeker/asset-inbox-helpseeker.module"
-      ).then((m) => m.AssetInboxHelpseekerModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
-  },
-  {
-    path: "main/volunteer/asset-inbox/confirm",
-    loadChildren: () =>
-      import(
-        "./_components/volunteer/common/asset-inbox-volunteer/confirmation-screen/confirmation-screen.module"
-      ).then((m) => m.VolunteerConfirmationScreenModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+      ).then(m => m.AssetInboxHelpseekerModule),
+    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard]
   },
   {
     path: "main/helpseeker/asset-inbox/confirm",
     loadChildren: () =>
       import(
         "./_components/help-seeker/asset-inbox-helpseeker/confirmation-screen/confirmation-screen.module"
-      ).then((m) => m.HelpseekerConfirmationScreenModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+      ).then(m => m.HelpseekerConfirmationScreenModule),
+    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard]
   },
   {
     path: "main/dashboard",
     loadChildren: () =>
       import("./_components/common/dashboard/dashboard.module").then(
-        (m) => m.FuseDashboardModule
+        m => m.FuseDashboardModule
       ),
-    canActivate: [TokenGuard, LoginGuard],
+    canActivate: [TokenGuard, LoginGuard]
   },
   {
     path: "main/create-tenant",
     loadChildren: () =>
-      import("./_components/common/user_management/create-tenant/create-tenant.module").then(
-        (m) => m.CreateTenantModule
-      ),
-    canActivate: [TokenGuard, LoginGuard],
+      import(
+        "./_components/common/user_management/create-tenant/create-tenant.module"
+      ).then(m => m.CreateTenantModule),
+    canActivate: [TokenGuard, LoginGuard]
   },
   {
     path: "main/achievements/overview",
     loadChildren: () =>
       import(
         "./_components/volunteer/task-management/achievements/management-summary/management-summary.module"
-      ).then((m) => m.ManagementSummary),
-    canActivate: [TokenGuard, VolunteerGuard],
+      ).then(m => m.ManagementSummary),
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: "main/achievements/details",
     loadChildren: () =>
       import(
         "./_components/volunteer/task-management/achievements/achievements.module"
-      ).then((m) => m.AchievementsModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+      ).then(m => m.AchievementsModule),
+    canActivate: [TokenGuard, VolunteerGuard]
   },
 
   {
@@ -129,32 +113,32 @@ const routes: Route[] = [
     loadChildren: () =>
       import(
         "./_components/volunteer/social-management/get-connected/get-connected.module"
-      ).then((m) => m.FuseGetConnectedModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+      ).then(m => m.FuseGetConnectedModule),
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: "main/task-select",
     loadChildren: () =>
       import(
         "./_components/help-seeker/task-management/task-select/task-select.module"
-      ).then((m) => m.FuseTaskSelectModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+      ).then(m => m.FuseTaskSelectModule),
+    canActivate: [TokenGuard, TenantAdminGuard]
   },
   {
     path: "main/tasks/all",
     loadChildren: () =>
       import(
         "./_components/help-seeker/task-management/task-list/task-list.module"
-      ).then((m) => m.FuseTaskListModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+      ).then(m => m.FuseTaskListModule),
+    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard]
   },
   {
     path: "main/properties/all",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/property-configurator/list/property-list.module"
-      ).then((m) => m.PropertyListModule),
-    canActivate: [TokenGuard, FlexProdOrTenantAdminGuard],
+      ).then(m => m.PropertyListModule),
+    canActivate: [TokenGuard, FlexProdOrTenantAdminGuard]
   },
 
   {
@@ -162,24 +146,24 @@ const routes: Route[] = [
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/property-configurator/detail/property-detail.module"
-      ).then((m) => m.PropertyDetailModule),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+      ).then(m => m.PropertyDetailModule),
+    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard]
   },
   {
     path: "main/property-builder",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/property-configurator/builder/property-build-form.module"
-      ).then((m) => m.PropertyBuildFormModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+      ).then(m => m.PropertyBuildFormModule),
+    canActivate: [TokenGuard, TenantAdminGuard]
   },
   {
     path: "main/class-configurator",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/class-configurator/configurator.module"
-      ).then((m) => m.ConfiguratorModule),
-    canActivate: [TokenGuard, FlexProdOrTenantAdminGuard],
+      ).then(m => m.ConfiguratorModule),
+    canActivate: [TokenGuard, FlexProdOrTenantAdminGuard]
   },
 
   {
@@ -187,54 +171,54 @@ const routes: Route[] = [
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/class-instance-configurator/form-editor/class-instance-form-editor.module"
-      ).then((m) => m.ClassInstanceFormEditorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+      ).then(m => m.ClassInstanceFormEditorModule),
+    canActivate: [TokenGuard, TenantAdminGuard]
   },
   {
     path: "main/rules/all",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/rule-view/rule-overview.module"
-      ).then((m) => m.FuseRuleOverviewModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+      ).then(m => m.FuseRuleOverviewModule),
+    canActivate: [TokenGuard, TenantAdminGuard]
   },
   {
     path: "main/rule",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/rule-configurator/rule-configurator.module"
-      ).then((m) => m.FuseRuleConfiguratorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+      ).then(m => m.FuseRuleConfiguratorModule),
+    canActivate: [TokenGuard, TenantAdminGuard]
   },
   {
     path: "main/recruitment",
     loadChildren: () =>
       import("./_components/recruiter/recruit-view/recruit-view.module").then(
-        (m) => m.RecruitViewModule
+        m => m.RecruitViewModule
       ),
-    canActivate: [TokenGuard, RecruiterGuard],
+    canActivate: [TokenGuard, RecruiterGuard]
   },
   {
     path: "main/marketplace/all",
     loadChildren: () =>
       import(
         "./_components/admin/marketplace-list/marketplace-list.module"
-      ).then((m) => m.FuseMarketplaceListModule),
-    canActivate: [TokenGuard, AdminGuard],
+      ).then(m => m.FuseMarketplaceListModule),
+    canActivate: [TokenGuard, AdminGuard]
   },
   {
     path: "main/marketplace-form",
     loadChildren: () =>
       import(
         "./_components/admin/marketplace-form/marketplace-form.module"
-      ).then((m) => m.FuseMarketplaceFormModule),
-    canActivate: [TokenGuard, AdminGuard],
+      ).then(m => m.FuseMarketplaceFormModule),
+    canActivate: [TokenGuard, AdminGuard]
   },
   {
     path: "main/edit-tenant",
     loadChildren: () =>
       import("./_components/admin/tenant-form/tenant-form.module").then(
-        (m) => m.FuseTenantFormModule
+        m => m.FuseTenantFormModule
       ),
     canActivate: [TokenGuard, AdminOrTenantAdminGuard],
   },
@@ -242,42 +226,42 @@ const routes: Route[] = [
     path: "main/import",
     loadChildren: () =>
       import("./_components/help-seeker/import/import.module").then(
-        (m) => m.ImportModule
+        m => m.ImportModule
       ),
-    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard],
+    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard]
   },
   {
     path: "main/profile",
     loadChildren: () =>
       import("./_components/common/profile/profile.module").then(
-        (m) => m.ProfileModule
+        m => m.ProfileModule
       ),
-    canActivate: [TokenGuard, LoginGuard],
+    canActivate: [TokenGuard, LoginGuard]
   },
   {
     path: "main/matching-configurator",
     loadChildren: () =>
       import(
         "./_components/help-seeker/configuration/matching-configurator/matching-configurator.module"
-      ).then((m) => m.MatchingConfiguratorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
+      ).then(m => m.MatchingConfiguratorModule),
+    canActivate: [TokenGuard, TenantAdminGuard]
   },
   {
     path: "main/details",
     loadChildren: () =>
       import(
         "./_components/common/class-instance-details/class-instance-details.module"
-      ).then((m) => m.ClassInstanceDetailsModule),
-    canActivate: [TokenGuard, LoginGuard],
-  },
+      ).then(m => m.ClassInstanceDetailsModule),
+    canActivate: [TokenGuard, LoginGuard]
+  }
 ];
 
 @NgModule({
   declarations: [FuseContentComponent],
   imports: [RouterModule.forChild(routes), FuseSharedModule, ShareMenuModule],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
-  exports: [FuseContentComponent, ShareMenuComponent],
+  exports: [FuseContentComponent, ShareMenuComponent]
 })
-export class FuseContentModule { }
+export class FuseContentModule {}

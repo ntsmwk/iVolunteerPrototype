@@ -25,6 +25,7 @@ public class ClassInstanceDTO {
 	private String taskType3;
 	private String hash;
 	private String marketplaceId;
+	private boolean issued;
 
 	// Temp flags for dashboard presentation
 	private boolean published; // flag if published
@@ -229,6 +230,14 @@ public class ClassInstanceDTO {
 
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
+	}
+
+	public boolean isIssued() {
+		return issued;
+	}
+
+	public void setIssued(boolean issued) {
+		this.issued = issued;
 	}
 
 }
