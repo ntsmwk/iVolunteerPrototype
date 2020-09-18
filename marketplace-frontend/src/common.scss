@@ -173,3 +173,19 @@ $dark: #3e7ddb;
   color: grey !important;
   border-color: grey !important;
 }
+
+.shrinkable {
+  min-width: max-content !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.center-vh {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

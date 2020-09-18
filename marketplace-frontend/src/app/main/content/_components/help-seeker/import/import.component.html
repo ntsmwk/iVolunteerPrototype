@@ -1,15 +1,10 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
-  <customizable-header
-    *ngIf="tenant"
-    [tenant]="tenant"
-    [displayNavigateBack]="false"
-    headerText="Einträge importieren"
-  ></customizable-header>
+  <customizable-header *ngIf="tenant" [tenant]="tenant" [displayNavigateBack]="false" headerText="Einträge importieren">
+  </customizable-header>
 
   <div style="padding-top: 20px;"></div>
 
-  <mat-card class="infoText"
-    >Importiere Freiwilligenpass-Einträge. Wähle dazu die entsprechende
+  <mat-card class="infoText">Importiere Freiwilligenpass-Einträge. Wähle dazu die entsprechende
     Konfiguration und das dazugehörige JSON-File aus.
   </mat-card>
 
@@ -18,15 +13,8 @@
     und Export-Datei an.
   </p>
 
-  <form
-    form
-    style="padding-top: 20px; padding-left: 40px;"
-    name="form"
-    fxLayout="row"
-    fxLayoutGap="20px"
-    fxLayoutAlign="start"
-    [formGroup]="importForm"
-  >
+  <form form style="padding-top: 20px; padding-left: 40px;" name="form" fxLayout="row" fxLayoutGap="20px"
+    fxLayoutAlign="start" [formGroup]="importForm">
     <mat-form-field style="width: 300px;">
       <mat-label>Voluntär</mat-label>
       <mat-select formControlName="volunteer">
@@ -37,10 +25,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <ngx-mat-file-input
-        formControlName="file"
-        placeholder="Import-Datei"
-      ></ngx-mat-file-input>
+      <ngx-mat-file-input formControlName="file" placeholder="Import-Datei"></ngx-mat-file-input>
       <mat-icon matSuffix>folder</mat-icon>
     </mat-form-field>
 

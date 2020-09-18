@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { User, UserRole } from '../_model/user';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { User, UserRole } from "../_model/user";
 
-@Injectable({ providedIn: 'root', }) export class CoreUserService {
+@Injectable({ providedIn: "root" })
+export class CoreUserService {
   constructor(private http: HttpClient) { }
 
   findAll() {
@@ -18,6 +19,10 @@ import { User, UserRole } from '../_model/user';
   findAllByRole(role: UserRole) {
     // console.log(`findAllByRole(${role})`);
     return this.http.get(`/core/user/all/role/${role}`);
+  }
+
+  findAllByRoles(roles: UserRole[], includeNoRole: boolean) {
+    return this.http.put(`/core/user/all/roles?includeNoRole=${includeNoRole}`, roles);
   }
 
   findAllByRoleAndTenantId(tenantId: string, role: UserRole) {
@@ -52,21 +57,47 @@ import { User, UserRole } from '../_model/user';
 
   createUser(user: User, updateMarketplaces: boolean) {
     // console.log(`createUser(${user.id},${updateMarketplaces})`);
-    return this.http.post(`/core/user/new?updateMarketplaces=${updateMarketplaces}`, user);
+    return this.http.post(
+      `/core/user/new?updateMarketplaces=${updateMarketplaces}`,
+      user
+    );
   }
 
   updateUser(user: User, updateMarketplaces: boolean) {
     // console.log(`createUser(${user.id},${updateMarketplaces})`);
-    return this.http.put(`/core/user/update?updateMarketplaces=${updateMarketplaces}`, user);
+    return this.http.put(
+      `/core/user/update?updateMarketplaces=${updateMarketplaces}`,
+      user
+    );
   }
 
-  subscribeUserToTenant(userId: string, marketplaceId: string, tenantId: string, role: UserRole) {
-    // console.log(`subscribeUserToTenant(${userId},${marketplaceId},${tenantId},${role})`);
-    return this.http.put(`/core/user/${userId}/subscribe/${marketplaceId}/${tenantId}/${role}`, {});
+  subscribeUserToTenant(
+    userId: string,
+    marketplaceId: string,
+    tenantId: string,
+    role: UserRole
+  ) {
+    console.log(
+      `subscribeUserToTenant(${userId},${marketplaceId},${tenantId},${role})`
+    );
+    return this.http.put(
+      `/core/user/${userId}/subscribe/${marketplaceId}/${tenantId}/${role}`,
+      {}
+    );
   }
 
-  unsubscribeUserFromTenant(userId: string, marketplaceId: string, tenantId: string, role: UserRole) {
-    // console.log(`unsubscribeUserFromTenant(${userId},${marketplaceId},${tenantId},${role})`);
-    return this.http.put(`/core/user/${userId}/unsubscribe/${marketplaceId}/${tenantId}/${role}`, {});
+  unsubscribeUserFromTenant(
+    userId: string,
+    marketplaceId: string,
+    tenantId: string,
+    role: UserRole
+  ) {
+    console.log(
+      `unsubscribeUserFromTenant(${userId},${marketplaceId},${tenantId},${role})`
+    );
+    return this.http.put(
+      `/core/user/${userId}/unsubscribe/${marketplaceId}/${tenantId}/${role}`,
+      {}
+    );
   }
 }

@@ -1,16 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.rule.engine.test;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +17,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
@@ -37,7 +30,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinit
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
@@ -48,30 +41,18 @@ import at.jku.cis.iVolunteer.model.user.User;
 @Service
 public class TestDataClasses {
 
-	@Autowired
-	private ClassConfigurationController classConfigurationController;
-	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassPropertyService classPropertyService;
-	@Autowired
-	private RelationshipRepository relationshipRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceService classInstanceService;
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
-	@Autowired
-	private UserRepository userRepository;
+	@Autowired private ClassConfigurationController classConfigurationController;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassPropertyService classPropertyService;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceService classInstanceService;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired private UserRepository userRepository;
 
 	public static final String ROOT_FREIWILLIGENPASS_EINTRAG = "Freiwilligenpass-\nEintrag";
 	public static final String CERTIFICATE_HEAD_AUSBILDUNG = "Ausbildung";
@@ -238,7 +219,7 @@ public class TestDataClasses {
 
 	public void createProperties(ClassConfiguration classConfig) {
 		if (propertyDefinitionRepository.getByNameAndTenantId("Alter", classConfig.getTenantId()).size() == 0) {
-			PropertyDefinition<Object> pdAlter = new PropertyDefinition<Object>();
+			FlatPropertyDefinition<Object> pdAlter = new FlatPropertyDefinition<Object>();
 			pdAlter.setTenantId(classConfig.getTenantId());
 			pdAlter.setMarketplaceId(classConfig.getMarketplaceId());
 			pdAlter.setType(PropertyType.WHOLE_NUMBER);
@@ -246,7 +227,7 @@ public class TestDataClasses {
 			propertyDefinitionRepository.save(pdAlter);
 		}
 	}
-	
+
 	protected void deleteInstances(User volunteer, String tenantId, String className) {
 		// System.out.println("Volunteer: " + volunteer + " tenant: " + tenantId + "
 		// className " + className);
@@ -266,11 +247,11 @@ public class TestDataClasses {
 		return a0;
 	}
 
-	public PropertyDefinition<Object> obtainProperty(String name, PropertyType type, String tenantId) {
-		List<PropertyDefinition<Object>> pdList = propertyDefinitionRepository.getByNameAndTenantId(name, tenantId);
-		PropertyDefinition<Object> pd;
+	public FlatPropertyDefinition<Object> obtainProperty(String name, PropertyType type, String tenantId) {
+		List<FlatPropertyDefinition<Object>> pdList = propertyDefinitionRepository.getByNameAndTenantId(name, tenantId);
+		FlatPropertyDefinition<Object> pd;
 		if (pdList.size() == 0) {
-			pd = new PropertyDefinition<Object>(name, type, tenantId);
+			pd = new FlatPropertyDefinition<Object>(name, type, tenantId);
 			propertyDefinitionRepository.save(pd);
 		} else
 			pd = pdList.get(0);
@@ -292,7 +273,7 @@ public class TestDataClasses {
 			fwPassEintrag.setWriteProtected(true);
 			fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
 			// properties
-			PropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
+			FlatPropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
 			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
 			pd = obtainProperty("id", PropertyType.TEXT, tenantId);
 			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
@@ -476,10 +457,10 @@ public class TestDataClasses {
 		// set properties
 		List<Object> levelValues = Arrays.asList(DrivingLevel.LEVEL1.getName(), DrivingLevel.LEVEL2.getName(),
 				DrivingLevel.LEVEL3.getName(), DrivingLevel.LEVEL4.getName());
-		PropertyDefinition<Object> pdLevel = obtainProperty(PROPERTY_DRIVING_LEVEL, PropertyType.TEXT, tenantId);
+		FlatPropertyDefinition<Object> pdLevel = obtainProperty(PROPERTY_DRIVING_LEVEL, PropertyType.TEXT, tenantId);
 		pdLevel.setAllowedValues(levelValues);
-		PropertyDefinition<Object> pdEvidence = obtainProperty(PROPERTY_EVIDENCE, PropertyType.TEXT, tenantId);
-		PropertyDefinition<Object> pdIssued = obtainProperty("Issued", PropertyType.DATE, tenantId);
+		FlatPropertyDefinition<Object> pdEvidence = obtainProperty(PROPERTY_EVIDENCE, PropertyType.TEXT, tenantId);
+		FlatPropertyDefinition<Object> pdIssued = obtainProperty("Issued", PropertyType.DATE, tenantId);
 		c1.setProperties(new ArrayList<ClassProperty<Object>>());
 		c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdLevel));
 		c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdEvidence));
@@ -502,7 +483,7 @@ public class TestDataClasses {
 			c1.setRoot(false);
 			c1.setParentId(compClass.getId());
 			// set properties
-			PropertyDefinition<Object> pdLevel = obtainProperty("Maturity Level", PropertyType.WHOLE_NUMBER,
+			FlatPropertyDefinition<Object> pdLevel = obtainProperty("Maturity Level", PropertyType.WHOLE_NUMBER,
 					classConfig.getTenantId());
 			c1.setProperties(new ArrayList<ClassProperty<Object>>());
 			c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdLevel));
@@ -529,9 +510,9 @@ public class TestDataClasses {
 			certificateClass.setParentId(root.getId());
 			certificateClass.setProperties(new ArrayList<ClassProperty<Object>>());
 
-			PropertyDefinition<Object> pdDescription = obtainProperty("Description", PropertyType.TEXT, tenantId);
+			FlatPropertyDefinition<Object> pdDescription = obtainProperty("Description", PropertyType.TEXT, tenantId);
 			certificateClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdDescription));
-			PropertyDefinition<Object> pdIssued = obtainProperty("Issued", PropertyType.DATE, tenantId);
+			FlatPropertyDefinition<Object> pdIssued = obtainProperty("Issued", PropertyType.DATE, tenantId);
 			certificateClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdIssued));
 			classDefinitionRepository.save(certificateClass);
 		}
@@ -552,9 +533,9 @@ public class TestDataClasses {
 			competenceClass.setParentId(root.getId());
 			competenceClass.setProperties(new ArrayList<ClassProperty<Object>>());
 
-			PropertyDefinition<Object> pdDescription = obtainProperty("Level", PropertyType.TEXT, tenantId);
+			FlatPropertyDefinition<Object> pdDescription = obtainProperty("Level", PropertyType.TEXT, tenantId);
 			competenceClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdDescription));
-			PropertyDefinition<Object> pdIssued = obtainProperty("evidence", PropertyType.TEXT, tenantId);
+			FlatPropertyDefinition<Object> pdIssued = obtainProperty("evidence", PropertyType.TEXT, tenantId);
 			competenceClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdIssued));
 			classDefinitionRepository.save(competenceClass);
 		}
@@ -575,7 +556,7 @@ public class TestDataClasses {
 			taskClass.setWriteProtected(true);
 			taskClass.setProperties(new ArrayList<ClassProperty<Object>>());
 
-			PropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
+			FlatPropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
 			taskClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
 			pd = obtainProperty("role", PropertyType.TEXT, tenantId);
 			taskClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
@@ -605,7 +586,7 @@ public class TestDataClasses {
 			verdienstClass.setWriteProtected(true);
 			verdienstClass.setProperties(new ArrayList<ClassProperty<Object>>());
 
-			PropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
+			FlatPropertyDefinition<Object> pd = obtainProperty("Description", PropertyType.TEXT, tenantId);
 			verdienstClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
 			pd = obtainProperty("issuedOn", PropertyType.DATE, tenantId);
 			verdienstClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
@@ -628,7 +609,7 @@ public class TestDataClasses {
 			functionClass.setWriteProtected(true);
 			functionClass.setProperties(new ArrayList<ClassProperty<Object>>());
 
-			PropertyDefinition<Object> pd = obtainProperty("Starting Date", PropertyType.DATE, tenantId);
+			FlatPropertyDefinition<Object> pd = obtainProperty("Starting Date", PropertyType.DATE, tenantId);
 			functionClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
 			pd = obtainProperty("End Date", PropertyType.DATE, tenantId);
 			functionClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
@@ -658,24 +639,24 @@ public class TestDataClasses {
 	protected ClassDefinition newClassDefinition(ClassDefinition parent) {
 		ClassDefinition cd = null;
 		switch (parent.getClassArchetype()) {
-			case ACHIEVEMENT:
-				cd = new AchievementClassDefinition();
-				cd.setClassArchetype(ClassArchetype.ACHIEVEMENT);
-				break;
-			case COMPETENCE:
-				cd = new CompetenceClassDefinition();
-				cd.setClassArchetype(ClassArchetype.COMPETENCE);
-				break;
-			case TASK:
-				cd = new TaskClassDefinition();
-				cd.setClassArchetype(ClassArchetype.TASK);
-				break;
-			case FUNCTION:
-				cd = new FunctionClassDefinition();
-				cd.setClassArchetype(ClassArchetype.FUNCTION);
-				break;
-			default:
-				break;
+		case ACHIEVEMENT:
+			cd = new AchievementClassDefinition();
+			cd.setClassArchetype(ClassArchetype.ACHIEVEMENT);
+			break;
+		case COMPETENCE:
+			cd = new CompetenceClassDefinition();
+			cd.setClassArchetype(ClassArchetype.COMPETENCE);
+			break;
+		case TASK:
+			cd = new TaskClassDefinition();
+			cd.setClassArchetype(ClassArchetype.TASK);
+			break;
+		case FUNCTION:
+			cd = new FunctionClassDefinition();
+			cd.setClassArchetype(ClassArchetype.FUNCTION);
+			break;
+		default:
+			break;
 		}
 		return cd;
 	}
@@ -692,7 +673,7 @@ public class TestDataClasses {
 			volClass.setWriteProtected(true);
 			volClass.setProperties(new ArrayList<ClassProperty<Object>>());
 
-			PropertyDefinition<Object> pd = obtainProperty("Eintrittsdatum", PropertyType.DATE, tenantId);
+			FlatPropertyDefinition<Object> pd = obtainProperty("Eintrittsdatum", PropertyType.DATE, tenantId);
 			volClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
 			pd = obtainProperty("Hauptdienststelle", PropertyType.TEXT, tenantId);
 			volClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
@@ -890,7 +871,7 @@ public class TestDataClasses {
 		// Function
 		FunctionClassDefinition functionClassAmbulanceService = (FunctionClassDefinition) obtainClass(tenantId,
 				"Funktion durch Ausbildung", functionClassRoot);
-		PropertyDefinition<Object> pdDescription = obtainProperty("Description", PropertyType.TEXT, tenantId);
+		FlatPropertyDefinition<Object> pdDescription = obtainProperty("Description", PropertyType.TEXT, tenantId);
 		functionClassAmbulanceService.getProperties()
 				.add(propertyDefinitionToClassPropertyMapper.toTarget(pdDescription));
 		classDefinitions.add(functionClassAmbulanceService);

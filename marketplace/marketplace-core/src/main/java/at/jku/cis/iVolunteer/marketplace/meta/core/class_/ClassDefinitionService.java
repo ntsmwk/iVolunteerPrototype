@@ -123,7 +123,6 @@ public class ClassDefinitionService {
 
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 		for (ClassDefinition startClassDefinition : startClassDefintions) {
-
 			List<ClassDefinition> classDefinitions = new ArrayList<>();
 			List<Relationship> relationships = new ArrayList<>();
 			ClassConfiguration classConfiguration = classConfigurationRepository

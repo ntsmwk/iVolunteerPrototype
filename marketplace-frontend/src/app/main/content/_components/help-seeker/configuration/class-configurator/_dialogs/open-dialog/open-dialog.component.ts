@@ -12,12 +12,12 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
 import { ClassBrowseSubDialogData } from "../browse-sub-dialog/browse-sub-dialog.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface OpenClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
   classDefinitions: ClassDefinition[];
   relationships: Relationship[];
-  marketplace: Marketplace;
 }
 
 @Component({
@@ -33,7 +33,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   selected: string;
   allClassConfigurations: ClassConfiguration[];
@@ -43,19 +43,22 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   browseMode: boolean;
   browseDialogData: ClassBrowseSubDialogData;
 
+  globalInfo: GlobalInfo;
+  tenant: Tenant;
+
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
+    this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
 
-    const tenantId = globalInfo.tenants[0].id;
+    this.tenant = this.globalInfo.tenants[0];
 
     this.classConfigurationService
-      .getClassConfigurationsByTenantId(this.data.marketplace, tenantId)
+      .getClassConfigurationsByTenantId(this.globalInfo.marketplace, this.tenant.id)
       .toPromise()
       .then((classConfigurations: ClassConfiguration[]) => {
         this.allClassConfigurations = classConfigurations.filter((c) => {
-          return c.tenantId === tenantId;
+          return c.tenantId === this.tenant.id;
         });
 
         this.recentClassConfigurations = this.allClassConfigurations;
@@ -64,10 +67,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
         );
 
         if (this.recentClassConfigurations.length > 6) {
-          this.recentClassConfigurations = this.recentClassConfigurations.slice(
-            0,
-            6
-          );
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 6);
         }
         this.loaded = true;
       });
@@ -81,18 +81,17 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     Promise.all([
       this.classDefinitionService
         .getClassDefinitionsById(
-          this.data.marketplace,
+          this.globalInfo.marketplace,
           c.classDefinitionIds,
           undefined
         )
-        .toPromise()
-        .then((classDefinitions: ClassDefinition[]) => {
+        .toPromise().then((classDefinitions: ClassDefinition[]) => {
           if (!isNullOrUndefined(classDefinitions)) {
             this.data.classDefinitions = classDefinitions;
           }
         }),
       this.relationshipService
-        .getRelationshipsById(this.data.marketplace, c.relationshipIds)
+        .getRelationshipsById(this.globalInfo.marketplace, c.relationshipIds)
         .toPromise()
         .then((relationships: Relationship[]) => {
           if (!isNullOrUndefined(relationships)) {
@@ -106,7 +105,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
 
   handleBrowseClick() {
     this.browseDialogData = new ClassBrowseSubDialogData();
-    this.browseDialogData.marketplace = this.data.marketplace;
+    this.browseDialogData.globalInfo = this.globalInfo;
     this.browseDialogData.sourceReference = undefined;
     this.browseDialogData.title = "Klassen-Konfigurationen durchsuchen";
 
@@ -128,7 +127,6 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   }
 
   handleReturnFromBrowse(event: { cancelled: boolean; entryId: string }) {
-    console.log(event);
     if (!event.cancelled) {
       const selectedClassConfiguration = this.allClassConfigurations.find(
         (c) => c.id === event.entryId

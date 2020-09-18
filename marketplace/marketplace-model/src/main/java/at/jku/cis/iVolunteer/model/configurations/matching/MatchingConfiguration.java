@@ -1,32 +1,27 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
+
 @Document
-public class MatchingConfiguration {
-	@Id private String id;
+public class MatchingConfiguration extends IVolunteerObject {
 	private String name;
-	private Date timestamp;
 
 	private String leftClassConfigurationId;
 	private String leftClassConfigurationName;
+	
+	private List<String> leftAddedClassDefinitionPaths = new ArrayList<>();
 
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
-
-	List<MatchingOperatorRelationship> relationships;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	
+	private List<String> rightAddedClassDefinitionPaths = new ArrayList<>();
+	
+	private String hash;
 
 	public String getName() {
 		return name;
@@ -36,24 +31,6 @@ public class MatchingConfiguration {
 		this.name = name;
 	}
 
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public List<MatchingOperatorRelationship> getRelationships() {
-		return relationships;
-	}
-
-	public void setRelationships(List<MatchingOperatorRelationship> relationships) {
-		this.relationships = relationships;
-	}
-	
-	
-	
 	public String getLeftClassConfigurationId() {
 		return leftClassConfigurationId;
 	}
@@ -84,6 +61,30 @@ public class MatchingConfiguration {
 
 	public void setRightClassConfigurationName(String rightClassConfigurationName) {
 		this.rightClassConfigurationName = rightClassConfigurationName;
+	}
+	
+	public List<String> getLeftAddedClassDefinitionPaths() {
+		return leftAddedClassDefinitionPaths;
+	}
+
+	public void setLeftAddedClassDefinitionPaths(List<String> leftAddedClassDefinitionPaths) {
+		this.leftAddedClassDefinitionPaths = leftAddedClassDefinitionPaths;
+	}
+
+	public List<String> getRightAddedClassDefinitionPaths() {
+		return rightAddedClassDefinitionPaths;
+	}
+
+	public void setRightAddedClassDefinitionPaths(List<String> rightAddedClassDefinitionPaths) {
+		this.rightAddedClassDefinitionPaths = rightAddedClassDefinitionPaths;
+	}
+	
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	@Override

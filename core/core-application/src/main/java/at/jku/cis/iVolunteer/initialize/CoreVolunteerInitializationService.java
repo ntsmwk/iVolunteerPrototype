@@ -1,8 +1,6 @@
 package at.jku.cis.iVolunteer.initialize;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -12,9 +10,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -26,8 +25,10 @@ import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.registration.AccountType;
+import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -37,10 +38,6 @@ public class CoreVolunteerInitializationService {
 	private static final String BROISER = "broiser";
 	private static final String MWEISSENBEK = "mweissenbek";
 	private static final String MWEIXLBAUMER = "mweixlbaumer";
-
-	private static final String TENANT_FF = "FF Eidenberg";
-	private static final String TENANT_MV = "MV Schwertberg";
-	private static final String TENANT_RK = "RK Wilhering";
 
 	private static final String RAW_PASSWORD = "passme";
 
@@ -94,12 +91,15 @@ public class CoreVolunteerInitializationService {
 			volunteer.setNickname(nickName);
 
 			setImage(fileName, volunteer);
-
 			volunteer.setRegisteredMarketplaceIds(
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
+			volunteer.setLocalRepositoryLocation(LocalRepositoryLocation.LOCAL);
+			volunteer.setEmails(Collections.singletonList("iVolunteerTest@gmx.at"));
+
+			volunteer.setActivated(true);
+			volunteer.setAccountType(AccountType.PERSON);
 			volunteer = coreUserRepository.insert(volunteer);
-			
 			coreUserService.addNewUser(volunteer, "", false);
 
 			// List<String> tenantIds = new ArrayList<String>();
@@ -116,7 +116,7 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				volunteer.setImage(binaryData);
+				volunteer.setImage(new ImageWrapper("data:image/png;base64", binaryData));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -144,15 +144,16 @@ public class CoreVolunteerInitializationService {
 
 	protected void registerVolunteers() {
 		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-		
-		this.coreUserService.getAllByUserRole(UserRole.VOLUNTEER).forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
+
+		this.coreUserService.getAllByUserRole(UserRole.VOLUNTEER)
+				.forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
 	}
 
-//	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
-//		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-//
-//		if (mp != null) {
-//			coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
-//		}
-//	}
+	// private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
+	// Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+	//
+	// if (mp != null) {
+	// coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
+	// }
+	// }
 }

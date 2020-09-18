@@ -1,0 +1,28 @@
+<div class="page-layout right-sidenav p-24" fusePerfectScrollbar>
+  <!-- Stub Result page for instance {{ resultClassInstance.id }} - {{ resultClassInstance.name }}
+  <div class="pt-12 pb-12">
+    JSON:
+  </div>
+  <div [innerHTML]="jsonString" style="
+      height: 500px;
+      word-wrap: break-word;
+      overflow: scroll;
+      background-color: rgb(216, 216, 216);
+    "></div> -->
+  <p class="alert alert-success">
+    Eintrag wurde erfolgreich erstellt.
+  </p>
+
+
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="pt-20">
+    <div></div>
+    <button type="button" mat-raised-button color="primary" (click)="handleAnotherClick()">
+      Noch einen Eintrag erfassen
+    </button>
+
+    <button type="button" mat-raised-button color="primary" (click)="handleFinishedClick()">
+      Fertig
+    </button>
+    <div></div>
+  </div>
+</div>

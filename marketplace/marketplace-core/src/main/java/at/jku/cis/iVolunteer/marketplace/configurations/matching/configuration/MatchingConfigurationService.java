@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,23 @@ public class MatchingConfigurationService {
 
 	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIdsUnordered(String classConfigurationId1,
 			String classConfigurationId2) {
-		String id = createHashFromClassConfigurationIds(classConfigurationId1, classConfigurationId2);
-		return matchingConfigurationRepository.findOne(id);
+		String hash = createHashFromClassConfigurationIds(classConfigurationId1, classConfigurationId2);
+		if (classConfigurationId1.equals(classConfigurationId2)) {
+			return getMatchingConfiguratorByClassConfigurationIds(classConfigurationId1, classConfigurationId2);
+		} else {
+			List<MatchingConfiguration> matchingConfigurations = matchingConfigurationRepository.findByHash(hash);
+			if (matchingConfigurations.size() == 1) {
+				return matchingConfigurations.get(0);
+			}
+		}
+		
+		return null;
+	}
+	
+	public List<MatchingConfiguration> getByTenantId(String tenantId){
+		
+		
+		return null;
 	}
 
 	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
@@ -32,7 +48,7 @@ public class MatchingConfigurationService {
 			String leftClassConfigurationId = matchingConfiguration.getLeftClassConfigurationId();
 			String rightClassConfigurationId = matchingConfiguration.getRightClassConfigurationId();
 			String hash = createHashFromClassConfigurationIds(leftClassConfigurationId, rightClassConfigurationId);
-			matchingConfiguration.setId(hash);
+			matchingConfiguration.setHash(hash);
 
 			ClassConfiguration leftConfiguration = configuratorRepository.findOne(leftClassConfigurationId);
 			ClassConfiguration rightConfiguration = configuratorRepository.findOne(rightClassConfigurationId);

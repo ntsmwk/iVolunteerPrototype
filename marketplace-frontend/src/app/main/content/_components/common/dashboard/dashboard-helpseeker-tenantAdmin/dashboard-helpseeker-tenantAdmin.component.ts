@@ -20,6 +20,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
   user: User;
   tenant: Tenant;
+  loaded: boolean;
 
   constructor(
     private loginService: LoginService,
@@ -27,21 +28,19 @@ export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
     private imageService: ImageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
+    this.loaded = false;
     let globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
+    this.loaded = true;
   }
 
-  private isFF() {
-    return this.tenant && this.tenant.name == "FF Eidenberg";
-  }
-
-  private isMV() {
-    return this.tenant && this.tenant.name === "MV Schwertberg";
+  getTitleImage() {
+    return this.tenantService.getTenantLandingPageImage(this.tenant);
   }
 }

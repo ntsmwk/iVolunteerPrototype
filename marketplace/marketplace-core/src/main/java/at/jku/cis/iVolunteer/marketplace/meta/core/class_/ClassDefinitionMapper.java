@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinitionDTO;
 
 @Component
 public class ClassDefinitionMapper {

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
@@ -16,6 +18,8 @@ public class InitializationController {
 	@Autowired private UserMappingRepository userMappingRepository;
 	@Autowired private UserRepository userRepository;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
+	@Autowired private MatchingOperatorRelationshipRepository matchingOperatorRelationshipRepository;
 	
 	@Autowired private InitializationService initializationService;
 	@Autowired private APIInitializationService apiInitializationService;
@@ -70,7 +74,7 @@ public class InitializationController {
 	
 	@PutMapping("/init/delete-enumdefinitions")
 	public void deleteEnumDefinitions() {
-		initializationService.enumDefinitionRepository.deleteAll();
+		initializationService.treePropertyDefinitionRepository.deleteAll();
 	}
 	
 	/**
@@ -166,6 +170,12 @@ public class InitializationController {
 	public void deleteUserMappings() {
 		userMappingRepository.deleteAll();
 	}
+	
+	@PutMapping("/init/matching/delete")
+	public void deleteMatchingConfigurations() {
+		matchingConfigurationRepository.deleteAll();
+		matchingOperatorRelationshipRepository.deleteAll();
+	}
 
 	
 	@PutMapping("/init/wipe-marketplace")
@@ -179,6 +189,7 @@ public class InitializationController {
 		deleteMatchingCollectorConfigurations();
 		deleteEnumDefinitions();
 		deleteUserMappings();
+		deleteMatchingConfigurations();
 		
 	}
 	

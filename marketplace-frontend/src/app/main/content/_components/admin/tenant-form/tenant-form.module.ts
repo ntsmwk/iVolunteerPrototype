@@ -11,6 +11,8 @@ import {
   MatTableModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
+import { TenantHelpseekersFormModule } from './tenant-form-content/helpseekers-form/helpseekers-form.module';
+import { TenantFormContentModule } from './tenant-form-content/tenant-form-content.module';
 
 const routes: Route[] = [
   { path: "", component: FuseTenantFormComponent },
@@ -30,8 +32,10 @@ const routes: Route[] = [
     MatInputModule,
     MatTableModule,
     FuseSharedModule,
+    TenantFormContentModule,
+    TenantHelpseekersFormModule,
   ],
 
   providers: [],
 })
-export class FuseTenantFormModule {}
+export class FuseTenantFormModule { }

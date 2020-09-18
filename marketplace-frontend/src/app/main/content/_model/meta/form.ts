@@ -1,7 +1,7 @@
 import { ClassDefinition } from './class';
-import { QuestionBase } from '../dynamic-forms/questions';
+import { DynamicFormItemBase } from '../dynamic-forms/item';
 import { FormGroup } from '@angular/forms';
-import { ClassProperty } from './property';
+import { ClassProperty } from './property/property';
 import { Relationship } from './relationship';
 
 export class FormEntry {
@@ -13,7 +13,7 @@ export class FormEntry {
 
     subEntries: FormEntry[];
 
-    questions: QuestionBase<any>[] = [];
+    formItems: DynamicFormItemBase<any>[] = [];
     formGroup: FormGroup;
 
     imagePath: string;
@@ -40,26 +40,13 @@ export class FormConfigurationPreviewRequest {
 }
 
 export class FormEntryReturnEventData {
-    formGroup: FormGroup;
+    value: any;
     formConfigurationId: string;
 
-    constructor(formGroup: FormGroup, formConfigurationId: string) {
-        this.formGroup = formGroup;
+    constructor(formConfigurationId: string, value: any[]) {
+        this.value = value;
         this.formConfigurationId = formConfigurationId;
     }
 }
 
-// export class EnumRepresentation {
-//     id: string;
-//     enumEntries: EnumEntry[];
-//     selectedEntries: EnumEntry[];
-//     classDefinition: ClassDefinition;
-// }
-
-// export class EnumEntry {
-//     level: number;
-//     position: number[];
-//     value: string;
-//     selectable: boolean;
-// }
 

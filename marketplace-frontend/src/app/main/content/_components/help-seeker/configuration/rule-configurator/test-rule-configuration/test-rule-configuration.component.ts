@@ -27,21 +27,22 @@ export class TestRuleConfigurationComponent implements OnInit {
   classConditions: ClassCondition[];
   ruleExecutions: RuleExecution[];
   displayedColumns = ["Name", "Status"];
-  helpseeker: User;
+  tenantAdmin: User;
   tenant: Tenant;
 
   constructor(
     private loginService: LoginService,
-    private derivationRuleService: DerivationRuleService,
-  ) { }
+    private derivationRuleService: DerivationRuleService
+  ) {}
 
   async ngOnInit() {
     const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
 
+    this.testRule();
   }
 
   private testRule() {

@@ -5,7 +5,7 @@
         <mat-icon>add</mat-icon>
       </td>
       <td>
-        <h1>Property / Enum hinzufügen</h1>
+        <h1>Property hinzufügen</h1>
       </td>
     </tr>
   </table>
@@ -14,13 +14,15 @@
 <mat-dialog-content>
   <div *ngIf="loaded">
     <mat-tab-group #tabGroup (selectedTabChange)="tabIndex = $event.index">
-      <mat-tab label="Properties">
-        <mat-table #propertyTable class="property-table" [dataSource]="propertyDatasource" matSort fusePerfectScrollbar>
+      <mat-tab label="Flat Properties">
+        <mat-table #flatPropertyTable class="property-table" [dataSource]="flatPropertyDataSource" matSort
+          fusePerfectScrollbar>
           <ng-container matColumnDef="checkbox">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? propertySelection.toggle(row) : null"
-                [checked]="propertySelection.isSelected(row)" [disabled]="isPropertyRowDisabled(row)">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                (change)="$event ? flatPropertySelection.toggle(row) : null"
+                [checked]="flatPropertySelection.isSelected(row)" [disabled]="isFlatPropertyRowDisabled(row)">
               </mat-checkbox>
             </mat-cell>
           </ng-container>
@@ -44,22 +46,24 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClick(row)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onFlatRowClick(row)"></mat-row>
         </mat-table>
 
         <mat-form-field appearance="outline" class="search-field">
-          <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
+          <input matInput (keyup)="applyFlatPropertyFilter($event)" placeholder="Suchen..." />
         </mat-form-field>
 
       </mat-tab>
 
-      <mat-tab label="Enums">
-        <mat-table #enumTable class="property-table" [dataSource]="enumDataSource" matSort fusePerfectScrollbar>
+      <mat-tab label="Tree Properties">
+        <mat-table #treePropertyTable class="property-table" [dataSource]="treePropertyDataSource" matSort
+          fusePerfectScrollbar>
           <ng-container matColumnDef="checkbox">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? enumSelection.toggle(row) : null"
-                [checked]="enumSelection.isSelected(row)" [disabled]="isEnumRowDisabled(row)">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                (change)="$event ? treePropertySelection.toggle(row) : null"
+                [checked]="treePropertySelection.isSelected(row)" [disabled]="isTreePropertyRowDisabled(row)">
               </mat-checkbox>
             </mat-cell>
           </ng-container>
@@ -83,11 +87,11 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onEnumRowClick(row)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onTreeRowClick(row)"></mat-row>
         </mat-table>
 
         <mat-form-field appearance="outline" class="search-field">
-          <input matInput (keyup)="applyEnumFilter($event)" placeholder="Suchen..." />
+          <input matInput (keyup)="applyTreePropertyFilter($event)" placeholder="Suchen..." />
         </mat-form-field>
 
       </mat-tab>
@@ -105,13 +109,13 @@
   <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">OK</button>
 
   <button *ngIf="tabIndex === 0" class="primary-button-light" mat-stroked-button type="button"
-    (click)="createNewClicked('property')">
-    Neues Property
+    (click)="createNewClicked('flat')">
+    Neues Flat-Property
   </button>
 
   <button *ngIf="tabIndex === 1" class="primary-button-light" mat-stroked-button type="button"
-    (click)="createNewClicked('enum')">
-    Neues Enum
+    (click)="createNewClicked('tree')">
+    Neues Tree-Property
   </button>
 
   <button class="secondary-button-dark" mat-stroked-button type="button"

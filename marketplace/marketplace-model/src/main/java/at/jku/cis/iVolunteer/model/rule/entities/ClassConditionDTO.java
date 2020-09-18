@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
 
 public class ClassConditionDTO {
@@ -11,6 +12,7 @@ public class ClassConditionDTO {
 	private ClassDefinition classDefinition;
 	private AggregationOperatorType aggregationOperatorType;
 	private Object value;
+	private ClassProperty<Object> classProperty; // only for aggregation SUM (over property)
 	private List<AttributeConditionDTO> attributeConditions;
 	
 	public ClassConditionDTO() {
@@ -46,6 +48,14 @@ public class ClassConditionDTO {
     
     public void setValue(Object value) {
     	this.value = value;
+    }
+    
+    public void setClassProperty(ClassProperty<Object> classProperty) {
+    	this.classProperty = classProperty;
+    }
+    
+    public ClassProperty<Object> getClassProperty() {
+    	return classProperty;
     }
     
     public List<AttributeConditionDTO> getAttributeConditions(){

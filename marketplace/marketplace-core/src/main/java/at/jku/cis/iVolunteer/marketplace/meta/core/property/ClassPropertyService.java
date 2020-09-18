@@ -9,31 +9,50 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.property.EnumDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.TreePropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
-import at.jku.cis.iVolunteer.marketplace.configurations.enums.EnumDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 
 @Service
 public class ClassPropertyService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired private EnumDefinitionRepository enumDefinitionRepository;
-	@Autowired private EnumDefinitionToClassPropertyMapper enumDefinitionToClassPropertyMapper;
+	@Autowired private TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+	@Autowired private TreePropertyDefinitionToClassPropertyMapper enumDefinitionToClassPropertyMapper;
 
 	
 	public List<ClassProperty<Object>> getAllClassPropertiesFromClass(String classDefinitionId) {
 		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
+		List<ClassProperty<Object>> properties = new ArrayList<ClassProperty<Object>>();
 		if (classDefinition != null) {
-			return classDefinition.getProperties();
+			properties.addAll(classDefinition.getProperties());
+
+			// add class properties from parent
+			List<Relationship> relationships = relationshipRepository.
+					  findByTargetAndRelationshipType(classDefinitionId, RelationshipType.INHERITANCE);
+			relationships.stream().
+			        forEach(r -> properties.addAll(getAllClassPropertiesFromClass(r.getSource())));	      
+		
+			// add class properties via aggregation, composition
+			relationships = relationshipRepository.
+					       findBySource(classDefinitionId);	
+			relationships.stream()
+			             .filter(t -> t.getRelationshipType().equals(RelationshipType.ASSOCIATION))
+			             .forEach(r -> properties.addAll(getAllClassPropertiesFromClass(r.getTarget())));
 		}
-		return null;
+		return properties;
 	}
 
 	public ClassProperty<Object> getClassPropertyById(String classDefinitionId, String classPropertyId) {
@@ -95,29 +114,37 @@ public class ClassPropertyService {
 		// @formatter:on		
 	}
 	
+	// search class property in all inherited properties up the hierarchy
+	public ClassProperty<Object> getClassPropertyFromAllClassProperties(String classDefinitionId, String classPropertyId){
+		List<ClassProperty<Object>> classProperties = getAllClassPropertiesFromClass(classDefinitionId);
+		return classProperties.stream()
+		               .filter(entry -> entry.getId().equals(classPropertyId))
+		               .findFirst().orElse(null);
+		
+	}
 	
-	List<ClassProperty<Object>> getClassPropertyFromDefinitionById(List<String> propertyIds, List<String> enumIds) {
-		List<PropertyDefinition<Object>> properties = new ArrayList<>();
-		List<EnumDefinition> enums = new ArrayList<>();
+	List<ClassProperty<Object>> getClassPropertyFromDefinitionById(List<String> flatPropertyIds, List<String> treePropertyIds) {
+		List<FlatPropertyDefinition<Object>> flatProperties = new ArrayList<>();
+		List<TreePropertyDefinition> treeProperties = new ArrayList<>();
 		
-		if (propertyIds != null) {
-			propertyDefinitionRepository.findAll(propertyIds).forEach(properties::add);
+		if (flatPropertyIds != null) {
+			propertyDefinitionRepository.findAll(flatPropertyIds).forEach(flatProperties::add);
 		}
-		if (enumIds != null) {
-			enumDefinitionRepository.findAll(enumIds).forEach(enums::add);
+		if (treePropertyIds != null) {
+			treePropertyDefinitionRepository.findAll(treePropertyIds).forEach(treeProperties::add);
 		}
 		
-		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(properties);
-		List<ClassProperty<Object>> enumProperties = createClassPropertiesFromEnumDefinitions(enums);
+		List<ClassProperty<Object>> flatClassProperties = createClassPropertiesFromDefinitions(flatProperties);
+		List<ClassProperty<Object>> treeClassProperties = createClassPropertiesFromEnumDefinitions(treeProperties);
 		
-		classProperties.addAll(enumProperties);
-		return classProperties;
+		flatClassProperties.addAll(treeClassProperties);
+		return flatClassProperties;
 	}
 
 	// TODO: Philipp: tenantId check required?
 	List<ClassProperty<Object>> addPropertiesToClassDefinitionById(String id, @RequestBody List<String> propertyIds) {
 		
-		List<PropertyDefinition<Object>> properties = new ArrayList<>();
+		List<FlatPropertyDefinition<Object>> properties = new ArrayList<>();
 		propertyDefinitionRepository.findAll(propertyIds).forEach(properties::add);;
 		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(properties);
 
@@ -156,17 +183,17 @@ public class ClassPropertyService {
 		return clazz;
 	}
 
-	private List<ClassProperty<Object>> createClassPropertiesFromDefinitions(List<PropertyDefinition<Object>> propertyDefinitions) {
+	private List<ClassProperty<Object>> createClassPropertiesFromDefinitions(List<FlatPropertyDefinition<Object>> propertyDefinitions) {
 		List<ClassProperty<Object>> cProps = new ArrayList<>();
-		for (PropertyDefinition<Object> pd : propertyDefinitions) {
+		for (FlatPropertyDefinition<Object> pd : propertyDefinitions) {
 			cProps.add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
 		}
 		return cProps;
 	}
 	
-	private List<ClassProperty<Object>> createClassPropertiesFromEnumDefinitions(List<EnumDefinition> enums) {
+	private List<ClassProperty<Object>> createClassPropertiesFromEnumDefinitions(List<TreePropertyDefinition> enums) {
 		List<ClassProperty<Object>> cProps = new ArrayList<>();
-		for (EnumDefinition ed : enums) {
+		for (TreePropertyDefinition ed : enums) {
 			cProps.add(enumDefinitionToClassPropertyMapper.toTarget(ed));
 		}
 		return cProps;

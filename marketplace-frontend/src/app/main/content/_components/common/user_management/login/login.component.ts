@@ -11,7 +11,7 @@ import { HttpResponse } from "@angular/common/http";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { LoginService } from "../../../../_service/login.service";
-
+import { isNullOrUndefined } from "util";
 @Component({
   selector: "fuse-login",
   templateUrl: "./login.component.html",
@@ -23,26 +23,17 @@ export class FuseLoginComponent implements OnInit {
   loginForm: FormGroup;
   loginFormErrors: any;
 
-  error: boolean = false;
+  error: boolean;
+  displayLoginForm: boolean;
+  resendActivationFlow: boolean;
+  layout: { navigation: string; toolbar: string; footer: string };
 
   constructor(
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
     private router: Router,
     private loginService: LoginService
-  ) {
-    const layout = {
-      navigation: "none",
-      toolbar: "none",
-      footer: "none",
-    };
-    this.fuseConfig.setConfig({ layout: layout });
-
-    this.loginFormErrors = {
-      username: {},
-      password: {},
-    };
-  }
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -53,6 +44,21 @@ export class FuseLoginComponent implements OnInit {
     this.loginForm.valueChanges.subscribe(() => {
       this.onLoginFormValuesChanged();
     });
+
+    this.error = false;
+    this.displayLoginForm = true;
+    this.resendActivationFlow = false;
+
+    this.layout = {
+      navigation: "none",
+      toolbar: "none",
+      footer: "none",
+    };
+    this.fuseConfig.setConfig({ layout: this.layout });
+    this.loginFormErrors = {
+      username: {},
+      password: {},
+    };
   }
 
   onLoginFormValuesChanged() {
@@ -75,17 +81,36 @@ export class FuseLoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
       this.loginService
-        .login(this.loginForm.value.username, this.loginForm.value.password)
+        .getActivationStatus(this.loginForm.value.username)
         .toPromise()
-        .then((response: HttpResponse<any>) => {
-          localStorage.setItem("token", response.headers.get("Authorization"));
-          this.router.navigate(["/role"]);
+        .then((cont: boolean) => {
+          if (cont) {
+            this.loginService
+              .login(
+                this.loginForm.value.username,
+                this.loginForm.value.password
+              )
+              .toPromise()
+              .then((response: HttpResponse<any>) => {
+                let accessToken: string = response.body.accessToken;
+                let refreshToken: string = response.body.refreshToken;
 
-          // this.router.navigate["/main/dashboard"];
-        })
-        .catch((e) => {
-          console.error("error");
-          this.error = true;
+                if (accessToken == null || refreshToken == null) {
+                  this.error = true;
+                  this.loginService.logout();
+                } else {
+                  localStorage.setItem("accessToken", accessToken);
+                  localStorage.setItem("refreshToken", refreshToken);
+                  this.router.navigate(["/role"]);
+                }
+              })
+              .catch((e) => {
+                this.loginService.logout();
+                this.error = true;
+              });
+          } else {
+            this.displayLoginForm = false;
+          }
         });
     }
   }

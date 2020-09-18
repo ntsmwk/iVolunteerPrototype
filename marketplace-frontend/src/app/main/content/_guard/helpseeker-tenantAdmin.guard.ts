@@ -7,7 +7,7 @@ import { UserRole } from "../_model/user";
   providedIn: "root",
 })
 export class HelpSeekerOrTenantAdminGuard implements CanActivate {
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router) { }
 
   canActivate(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
@@ -16,7 +16,7 @@ export class HelpSeekerOrTenantAdminGuard implements CanActivate {
         .toPromise()
         .then((role: UserRole) => {
           resolve(
-            role == UserRole.TENANT_ADMIN || role == UserRole.HELP_SEEKER
+            role === UserRole.TENANT_ADMIN || role === UserRole.HELP_SEEKER
           );
         });
     });

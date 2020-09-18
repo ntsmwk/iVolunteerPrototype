@@ -16,7 +16,7 @@ import {
   GeneralCondition,
 } from "app/main/content/_model/derivation-rule";
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
-import { PropertyDefinition } from "app/main/content/_model/meta/property";
+import { FlatPropertyDefinition } from "app/main/content/_model/meta/property/property";
 import { User, UserRole } from "../../../../../_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
@@ -39,13 +39,13 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
     GeneralCondition
   >();
 
-  helpseeker: User;
+  tenantAdmin: User;
   marketplace: Marketplace;
   tenant: Tenant;
   rulePreconditionForm: FormGroup;
   genConditionForms: FormArray;
   comparisonOperators: any;
-  generalAttributes: PropertyDefinition<any>[];
+  generalAttributes: FlatPropertyDefinition<any>[];
 
   constructor(
     private loginService: LoginService,
@@ -83,18 +83,18 @@ export class GeneralPreconditionConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     this.derivationRuleService
       .getGeneralProperties(this.marketplace, this.tenant.id)
       .toPromise()
-      .then((genProperties: PropertyDefinition<any>[]) => {
+      .then((genProperties: FlatPropertyDefinition<any>[]) => {
         this.generalAttributes = genProperties;
       });
   }
 
-  onPropertyChange(propertyDefinition: PropertyDefinition<any>, $event) {
+  onPropertyChange(propertyDefinition: FlatPropertyDefinition<any>, $event) {
     if (
       $event.isUserInput &&
       (!this.generalCondition.propertyDefinition ||

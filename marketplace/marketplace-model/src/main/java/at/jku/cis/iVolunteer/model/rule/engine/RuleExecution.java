@@ -10,7 +10,6 @@ public class RuleExecution {
 
 	public RuleExecution() {
 		status = RuleStatus.NOT_FIRED;
-
 	}
 
 	public RuleExecution(User volunteer) {

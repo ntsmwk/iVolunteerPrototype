@@ -1,13 +1,8 @@
 package at.jku.cis.iVolunteer.core.security.filter;
 
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.EXPIRATION_TIME;
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.HEADER_STRING;
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.SECRET;
-import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;
 import static java.util.Collections.emptyList;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,21 +13,22 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.core.security.model.Credentials;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import at.jku.cis.iVolunteer.core.security.model.TokenResponse;
+import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+	private JWTTokenProvider tokenProvider;
 	private AuthenticationManager authenticationManager;
 
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTTokenProvider tokenProvider) {
 		this.authenticationManager = authenticationManager;
+		this.tokenProvider = tokenProvider;
 	}
 
 	@Override
@@ -55,11 +51,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
-		String username = ((User) auth.getPrincipal()).getUsername();
-		String token = Jwts.builder().setSubject(username).claim("username", username)
-				.claim("authorities", auth.getAuthorities())
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-				.signWith(SignatureAlgorithm.HS512, SECRET.getBytes()).compact();
-		res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
+		try {
+			String accessToken = this.tokenProvider.generateAccessToken(auth);
+			String refreshToken = this.tokenProvider.generateRefreshToken(auth);
+
+			res.setContentType("application/json");
+			res.setCharacterEncoding("UTF-8");
+			res.getWriter().write(new TokenResponse(accessToken, refreshToken).toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

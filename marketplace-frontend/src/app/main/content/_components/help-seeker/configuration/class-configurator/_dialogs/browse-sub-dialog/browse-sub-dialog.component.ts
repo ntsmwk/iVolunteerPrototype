@@ -1,13 +1,13 @@
 import { OnInit, Component, Input, Output, EventEmitter } from "@angular/core";
-import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatTableDataSource } from "@angular/material";
 import { isNullOrUndefined } from "util";
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 export class ClassBrowseSubDialogData {
   title: string;
   entries: { id: string; name: string; date: Date }[];
   sourceReference: "LEFT" | "RIGHT";
-  marketplace: Marketplace;
+  globalInfo: GlobalInfo;
 }
 
 @Component({
@@ -18,28 +18,16 @@ export class ClassBrowseSubDialogData {
 export class BrowseClassSubDialogComponent implements OnInit {
   @Input() data: ClassBrowseSubDialogData;
   @Input() browseMode: boolean;
-  @Output() subDialogReturn: EventEmitter<{
-    cancelled: boolean;
-    entryId: string;
-    sourceReference: "LEFT" | "RIGHT";
-  }> = new EventEmitter<{
-    cancelled: boolean;
-    entryId: string;
-    sourceReference: "LEFT" | "RIGHT";
-  }>();
+  @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string, sourceReference: "LEFT" | "RIGHT"; }> = new EventEmitter();
 
-  datasource: MatTableDataSource<{
-    id: string;
-    name: string;
-    date: Date;
-  }> = new MatTableDataSource();
+  datasource: MatTableDataSource<{ id: string, name: string, date: Date }> = new MatTableDataSource();
 
   currentSortKey: "name" | "date";
   currentSortType: "az" | "za" = "az";
 
   currentFilter: string;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     this.datasource.data = this.data.entries;

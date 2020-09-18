@@ -1,96 +1,61 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { MatTableDataSource } from "@angular/material";
-import { User, UserRole } from "app/main/content/_model/user";
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { User, UserRole } from 'app/main/content/_model/user';
 
 @Component({
   selector: "tenant-form",
   templateUrl: "tenant-form.component.html",
+  styleUrls: ["./tenant-form.component.scss"]
 })
 export class FuseTenantFormComponent implements OnInit {
-  tenantForm: FormGroup;
   tenant: Tenant;
-  marketplaceId: string;
-
-  dataSource = new MatTableDataSource<User>();
-  displayedColumns = ["firstname", "lastname", "username", "actions"];
+  marketplace: Marketplace;
+  globalInfo: GlobalInfo;
+  loaded: boolean;
 
   constructor(
-    formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
     private tenantService: TenantService,
-    private coreUserService: CoreUserService,
-  ) {
-    this.tenantForm = formBuilder.group({
-      id: new FormControl(undefined),
-      name: new FormControl(undefined, Validators.required),
-      primaryColor: new FormControl(undefined, Validators.required),
-      secondaryColor: new FormControl(undefined, Validators.required),
-    });
-  }
-
-  isEditMode() {
-    return this.tenantForm.value.id !== null;
-  }
+    private marketplaceService: MarketplaceService,
+    private loginService: LoginService,
+  ) { }
 
   async ngOnInit() {
+
+    this.loaded = false;
+    let tenantId: string;
+    let marketplaceId: string;
+
     this.route.params.subscribe((params) => {
-      this.initializeTenantForm(params["tenantId"]);
+      tenantId = params['tenantId'];
     });
     this.route.queryParams.subscribe((params) => {
-      this.marketplaceId = params["marketplaceId"];
-    });
-  }
-
-  private async initializeTenantForm(tenantId: string) {
-    if (tenantId == null || tenantId.length === 0) {
-      return;
-    }
-    this.tenant = <Tenant>(
-      await this.tenantService.findById(tenantId).toPromise()
-    );
-    this.tenantForm.setValue({
-      id: this.tenant.id,
-      name: this.tenant.name,
-      primaryColor: this.tenant.primaryColor,
-      secondaryColor: this.tenant.secondaryColor,
+      marketplaceId = params['marketplaceId'];
     });
 
-    this.dataSource.data = <User[]>(
-      await this.coreUserService
-        .findAllByRoleAndTenantId(this.tenant.id, UserRole.HELP_SEEKER)
-        .toPromise()
-    );
-    console.error(this.dataSource.data);
+    Promise.all([
+      this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise(),
+      this.tenantService.findById(tenantId).toPromise().then((tenant: Tenant) => this.tenant = tenant),
+      this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => this.marketplace = marketplace),
+    ]).then(() => {
+      this.loaded = true;
+    });
+
+
   }
 
-  save() {
-    if (!this.tenantForm.valid) {
-      return;
-    }
-    this.tenant = <Tenant>this.tenantForm.value;
-    this.tenant.marketplaceId = this.marketplaceId;
-
-    this.tenantService
-      .save(<Tenant>this.tenantForm.value)
-      .toPromise()
-      .then(() =>
-        this.router.navigate([`/main/marketplace-form/${this.marketplaceId}`])
-      );
+  handleBackClick() {
+    window.history.back();
   }
 
-  navigateToHelpSeekerForm(userId: string) {
-    // TODO
+  handleTenantSaved(tenant: Tenant) {
+    console.log("saved fick dich");
+    console.log(tenant);
   }
 }

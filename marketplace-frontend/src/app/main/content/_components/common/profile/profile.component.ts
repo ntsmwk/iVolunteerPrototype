@@ -1,8 +1,17 @@
 import { Component, OnInit } from "@angular/core";
-import { fuseAnimations } from "@fuse/animations";
-import { UserRole } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
-import { Router } from "@angular/router";
+import { fuseAnimations } from "@fuse/animations";
+import { ImageService } from "app/main/content/_service/image.service";
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from "@angular/forms";
+import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { UserService } from 'app/main/content/_service/user.service';
 
 @Component({
   selector: "profile",
@@ -11,13 +20,97 @@ import { Router } from "@angular/router";
   animations: fuseAnimations,
 })
 export class ProfileComponent implements OnInit {
-  public role: UserRole;
+  globalInfo: GlobalInfo;
+  user: User;
+  currentRoles: UserRole[] = [];
+  profileForm: FormGroup;
+  profileFormErrors: any;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  today = new Date();
+  isLoaded: boolean = false;
+
+  constructor(
+    private loginService: LoginService,
+    private imageService: ImageService,
+    private formBuilder: FormBuilder,
+    private coreUserService: CoreUserService,
+    private userService: UserService,
+  ) {
+    this.profileFormErrors = {
+      firstName: {},
+      lastName: {},
+      birthday: {},
+    };
+  }
 
   async ngOnInit() {
-    this.role = <UserRole>(
-      await this.loginService.getLoggedInUserRole().toPromise()
+    this.profileForm = this.formBuilder.group({
+      firstName: new FormControl("", Validators.required),
+      lastName: new FormControl("", Validators.required),
+      birthday: new FormControl("", Validators.required),
+    });
+
+    this.profileForm.valueChanges.subscribe(() => {
+      this.onProfileFormValuesChanged();
+    });
+    this.reload();
+
+    this.isLoaded = true;
+  }
+
+  async reload() {
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
     );
+
+    this.user = this.globalInfo.user;
+    this.currentRoles = this.user.subscribedTenants.map((s) => s.role);
+
+    this.profileForm.setValue({
+      firstName: this.user.firstname,
+      lastName: this.user.lastname,
+      birthday: new Date(this.user.birthday),
+    });
+  }
+
+  onProfileFormValuesChanged() {
+    for (const field in this.profileFormErrors) {
+      if (!this.profileFormErrors.hasOwnProperty(field)) {
+        continue;
+      }
+
+      // Clear previous errors
+      this.profileFormErrors[field] = {};
+
+      // Get the control
+      const control = this.profileForm.get(field);
+      if (control && control.dirty && !control.valid) {
+        this.profileFormErrors[field] = control.errors;
+      }
+    }
+  }
+
+  async changeProfile() {
+    this.user.firstname = this.profileForm.value.firstName;
+    this.user.lastname = this.profileForm.value.lastName;
+    this.user.birthday = this.profileForm.value.birthday;
+    await this.coreUserService.updateUser(this.user, true).toPromise();
+
+    this.loginService.generateGlobalInfo(
+      this.globalInfo.userRole,
+      this.globalInfo.tenants.map((t) => t.id)
+    );
+
+    this.reload();
+  }
+
+  getProfileImage() {
+
+    return this.userService.getUserProfileImage(this.user);
+
+  }
+
+  hasVolunteerRole() {
+    return this.currentRoles.indexOf(UserRole.VOLUNTEER) != -1;
   }
 }

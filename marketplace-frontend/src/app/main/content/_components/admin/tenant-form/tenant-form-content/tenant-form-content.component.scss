@@ -1,0 +1,161 @@
+@import "common";
+
+$tenant-form-background: rgb(250, 250, 250);
+$color-field-height: 52px;
+$color-field-label-offset: -9px;
+$profile-image-preview-label-offset: -9px;
+$profile-image-preview-width: 120px;
+
+.tenant-form {
+  background: $tenant-form-background;
+  padding: 24px;
+  margin-bottom: 24px;
+
+  border: solid lightgrey 2px;
+  border-radius: 4px;
+  width: 100%;
+
+  .profile-image-preview {
+    display: block;
+    width: $profile-image-preview-width;
+    max-width: $profile-image-preview-width;
+    height: auto;
+
+    .profile-image-preview-label {
+      display: block;
+      position: relative;
+      top: $profile-image-preview-label-offset;
+      left: 4px;
+      padding: 0 2px;
+      background: $tenant-form-background;
+      width: max-content;
+    }
+
+    .profile-image-container {
+      padding: 0 8px 8px;
+      position: relative;
+      top: $profile-image-preview-label-offset;
+
+      img {
+        max-width: 100%;
+        width: $profile-image-preview-width;
+        max-height: 100%;
+        height: auto;
+        margin-bottom: $profile-image-preview-label-offset;
+      }
+    }
+  }
+
+  .profile-image-input {
+    margin-bottom: -1.25em;
+  }
+
+  .profile-image-upload-buttons {
+    @include media-breakpoint("sm") {
+      width: 100%;
+    }
+
+    @include media-breakpoint("xs") {
+      width: 100%;
+      button {
+        min-width: 0;
+        width: 50%;
+      }
+    }
+    @media (max-width: 400px) {
+      width: 100%;
+      button {
+        min-width: max-content !important;
+      }
+    }
+  }
+
+  .section-border {
+    color: grey;
+    border: solid grey 1px;
+    border-radius: 4px;
+  }
+
+  .centered {
+    margin: 0 auto;
+  }
+
+  .spinner-container {
+    display: block;
+    width: max-content;
+    margin: 0 auto 8px auto;
+    mat-spinner {
+      margin: 0;
+    }
+  }
+
+  .color-field {
+    min-width: 50px;
+    max-height: calc(#{$color-field-height} + #{$color-field-label-offset});
+
+    .color-field-label {
+      display: block;
+      position: relative;
+      top: $color-field-label-offset;
+      width: max-content;
+      background: $tenant-form-background;
+      left: 4px;
+      padding: 0 2px;
+      // margin: 0 0 0 4px;
+    }
+
+    .color-input {
+      display: block;
+      position: relative;
+      top: $color-field-label-offset;
+      width: max-content;
+      margin: 0 8px;
+      min-width: inherit;
+      input {
+        // border: 2px solid $tenant-form-background;
+        background-color: $tenant-form-background;
+        height: 30px;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      input:hover {
+        border: 2px solid black;
+        border-radius: 4px;
+        // background-color: black;
+      }
+    }
+  }
+}
+
+// :host ::ng-deep .mat-form-field .mat-form-field-infix {
+//   padding: 0;
+//   margin: 0;
+//   border: 0;
+// }
+
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+//   padding: 0;
+//   margin: 0;
+// }
+
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+//   padding: 0;
+//   margin: 0;
+// }
+
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+//   display: none;
+// }
+
+// :host
+//   ::ng-deep
+//   .mat-form-field-appearance-outline
+//   .mat-form-field-outline-thick {
+//   display: none;
+// }
+
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+//   background-color: white !important;
+//   border-radius: 5px !important;
+// }

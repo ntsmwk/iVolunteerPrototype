@@ -7,6 +7,7 @@ import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dia
 export interface RootMenuItem {
   id: number;
   label: string;
+  icon: string;
 }
 
 export interface SubMenuItem {
@@ -18,11 +19,11 @@ export interface SubMenuItem {
 }
 
 const rootMenuItems: RootMenuItem[] = [
-  { id: 1, label: 'Datei' },
-  { id: 2, label: 'Bearbeiten' },
-  { id: 3, label: 'Ansicht' },
-  { id: 4, label: 'Extras' },
-  { id: 5, label: 'Hilfe' },
+  { id: 1, label: 'Menü', icon: 'menu' },
+  // { id: 2, label: 'Bearbeiten' },
+  // { id: 3, label: 'Ansicht' },
+  // { id: 4, label: 'Extras' },
+  // { id: 5, label: 'Hilfe' },
 ];
 
 const subMenuItems: SubMenuItem[] = [
@@ -31,22 +32,22 @@ const subMenuItems: SubMenuItem[] = [
   { rootId: 1, id: 3, label: 'Matching speichern', clickAction: 'saveClicked', icon: undefined },
   { rootId: 1, id: 4, label: 'Matching löschen', clickAction: 'deleteClicked', icon: undefined },
 
-  { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
-  { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
-  { rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined },
-  { rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined },
 
-  { rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined },
-  { rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined },
-  { rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined },
+  // { rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined },
+  // { rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined },
+  // { rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined },
 
-  { rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined },
 
-  { rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined },
+  // { rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined },
 ];
 
 @Component({
@@ -65,6 +66,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
 
   @ViewChild('menubarContainer', { static: true }) menubarContainer: ElementRef;
   @ViewChild('submenuContainer', { static: true }) submenuContainer: ElementRef;
+  @ViewChild('titlebarTextContainer', { static: true }) titleBarTextContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
   @Input() eventResponseAction: string;
@@ -84,8 +86,8 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
 
     this.submenuContainer.nativeElement.style.position = 'absolute';
     this.submenuContainer.nativeElement.style.overflow = 'hidden';
-    this.submenuContainer.nativeElement.style.padding = '2px';
-    this.submenuContainer.nativeElement.style.top = '30px';
+    this.submenuContainer.nativeElement.style.padding = '0px';
+    this.submenuContainer.nativeElement.style.top = '29px';
     this.submenuContainer.nativeElement.style.left = '10px';
     this.submenuContainer.nativeElement.style.height = 'auto';
     this.submenuContainer.nativeElement.style.width = '200px';
@@ -95,13 +97,18 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
 
     this.menubarContainer.nativeElement.style.position = 'absolute';
     this.menubarContainer.nativeElement.style.overflow = 'hidden';
-    this.menubarContainer.nativeElement.style.padding = '2px';
+    // this.menubarContainer.nativeElement.style.padding = '2px';
     this.menubarContainer.nativeElement.style.right = '0px';
     this.menubarContainer.nativeElement.style.top = '0px';
     this.menubarContainer.nativeElement.style.left = '0px';
-    this.menubarContainer.nativeElement.style.height = '30px';
+    this.menubarContainer.nativeElement.style.height = '35px';
     this.menubarContainer.nativeElement.style.background = 'white';
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
+
+
+    this.titleBarTextContainer.nativeElement.style.maxWidth
+      // clientwidth of titlebar - margin left/right - icon left
+      = (this.menubarContainer.nativeElement.clientWidth - 50 - 15) + 'px';
 
     const outer = this;
 
@@ -111,7 +118,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   handleHTMLClickEvent(event: any) {
-    if (event.srcElement.className !== 'menuitem') {
+    if (event.srcElement.className !== 'menuitem' && event.srcElement.className !== 'menuitem-icon mat-icon notranslate material-icons mat-icon-no-color') {
       this.submenuContainer.nativeElement.style.display = 'none';
     }
   }
@@ -137,7 +144,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   newClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openNewMatchingDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openNewMatchingDialog().then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       }
@@ -145,7 +152,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   openClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openOpenMatchingDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openOpenMatchingDialog().then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
@@ -166,7 +173,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   deleteClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openDeleteMatchingDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openDeleteMatchingDialog().then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
       } else {

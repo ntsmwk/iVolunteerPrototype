@@ -24,7 +24,7 @@ import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 export class ImportComponent implements OnInit {
   classDefinitions: ClassDefinition[] = [];
   volunteers: User[] = [];
-  helpseeker: User;
+  user: User;
   marketplace: Marketplace;
   role: UserRole;
   importForm: FormGroup;
@@ -54,12 +54,12 @@ export class ImportComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0]; // TODO Philipp: not that nice...
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
-        .getAllClassDefinitionsWithoutRootAndEnums(
+        .getAllClassDefinitions(
           this.marketplace,
           this.tenant.id
         )

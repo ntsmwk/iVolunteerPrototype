@@ -1,5 +1,5 @@
 <form *ngIf="attributeCondition" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
-  (change)="onChange($event)" [formGroup]="rulePreconditionForm">
+  (change)="onChange($event)" [formGroup]="rulePreconditionForm"> 
   <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
     <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 225px">
       <mat-label>Attribut</mat-label>
@@ -27,20 +27,13 @@
          {{validation.message}}</mat-error>
       </mat-error>
     </mat-form-field>
+    <div *ngIf="!attributeCondition?.classProperty?.id"> 
     <mat-form-field style="width: 150px">
-      <input *ngIf="attributeCondition?.classProperty?.type != 'ENUM'" matInput placeholder="value"
+      <input matInput placeholder="Wert"
         formControlName="value" />
-      <mat-select *ngIf="attributeCondition?.classProperty?.type == 'ENUM'" placeholder="Wert"
-        formControlName="value" [value]="attributeCondition.comparisonOperatorType">
-        <mat-option *ngFor="let enumVal of findEnumValues()" [value]="enumVal" (onSelectionChange)="onChange($event)">
-          {{ enumVal }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngFor="let validation of attributeValidationMessages.value">
-        <mat-error class="error-message" *ngIf="rulePreconditionForm.get('value').hasError(validation.type) && 
-         (rulePreconditionForm.get('value').dirty || rulePreconditionForm.get('value').touched)">
-         {{validation.message}}</mat-error>
-      </mat-error>
     </mat-form-field>
-  </div>
-</form>
+    </div>
+    <div *ngIf="formItem">
+      <app-form-item [formItem]="formItem" [form]="ruleQuestionForm" 
+         (tupleSelected)="handleTupleSelection($event)"></app-form-item>
+    </div>

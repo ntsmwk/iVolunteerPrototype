@@ -9,9 +9,7 @@ import com.google.gson.JsonObject;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
-import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Document
 public class ClassDefinition extends IVolunteerObject implements IHashObject {
@@ -20,18 +18,16 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	private String configurationId;
 	private String name;
 	private List<ClassProperty<Object>> properties = new ArrayList<>();
-	private List<EnumDefinition> enums = new ArrayList<>();
 	private ClassArchetype classArchetype;
-	
-	
+
 	private boolean collector;
 	private boolean writeProtected;
 
 	private String imagePath;
-	
+
 	boolean root;
 	boolean instantiable = true;
-	
+
 	private boolean visible;
 	private int tabId;
 
@@ -78,24 +74,10 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 		this.properties = properties;
 	}
 	/*
-	public Boolean containsProperty(String name){
-		if (properties == null || properties.size() == 0)
-			return false;
-		for (ClassProperty<Object> pi: properties) {
-			if (pi.getName().equals(name))
-				return true;
-		}
-		return false;
-	}*/
-	
-
-	public List<EnumDefinition> getEnums() {
-		return enums;
-	}
-
-	public void setEnums(List<EnumDefinition> enums) {
-		this.enums = enums;
-	}
+	 * public Boolean containsProperty(String name){ if (properties == null ||
+	 * properties.size() == 0) return false; for (ClassProperty<Object> pi:
+	 * properties) { if (pi.getName().equals(name)) return true; } return false; }
+	 */
 
 	public String getImagePath() {
 		return imagePath;
@@ -128,6 +110,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	public void setCollector(boolean collector) {
 		this.collector = collector;
 	}
+
 	public boolean isWriteProtected() {
 		return writeProtected;
 	}
@@ -151,7 +134,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
 	}
-	
+
 	public boolean isInstantiable() {
 		return instantiable;
 	}

@@ -1,10 +1,10 @@
 <form *ngIf="attributeTarget" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
-(change)="onChange($event)" [formGroup]="ruleTargetAttributeForm">
+ [formGroup]="ruleTargetAttributeForm">
   <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
     <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 225px">
       <mat-label>Attribut</mat-label>
       <mat-select formControlName="classPropertyId" [value]="attributeTarget?.classProperty?.id">
-        <mat-option *ngFor="let cp of classProperties" [value]="cp?.id" (onSelectionChange)="onPropertyChange($event)">
+        <mat-option *ngFor="let cp of classProperties" [value]="cp?.id" (onSelectionChange)="onPropertyChange(cp, $event)">
           {{cp.name}} </mat-option>
       </mat-select>
       <mat-error *ngFor="let validation of targetValidationMessages.property">
@@ -13,21 +13,16 @@
          {{validation.message}}</mat-error>
       </mat-error>
     </mat-form-field>
-    <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 150px">
-      <input *ngIf="attributeTarget?.classProperty?.type != 'ENUM'" matInput placeholder="value"
-        formControlName="value" (change)="onChangeValue($event)"/>
-      <mat-select *ngIf="attributeTarget?.classProperty?.type == 'ENUM'" placeholder="Wert"
-        formControlName="value" [value]="attributeTarget.value">
-        <mat-option *ngFor="let enumVal of findEnumValues()" [value]="enumVal" (onSelectionChange)="onChangeValue($event)">
-          {{ enumVal }}
-        </mat-option>
-        <mat-error *ngFor="let validation of targetValidationMessages.value">
-          <mat-error class="error-message" *ngIf="ruleTargetAttributeForm.get('value').hasError(validation.type) && 
-           (ruleTargetAttributeForm.get('value').dirty || ruleTargetAttributeForm.get('value').touched)">
-           {{validation.message}}</mat-error>
-        </mat-error>
-      </mat-select>
+  <div *ngIf="!attributeTarget?.classProperty?.id"> 
+    <mat-form-field style="width: 150px">
+      <input matInput placeholder="Wert"
+        formControlName="value" />
     </mat-form-field>
+    </div>
+    <div *ngIf="formItem">
+      <app-form-item [formItem]="formItem" [form]="ruleQuestionForm" 
+         (tupleSelected)="handleTupleSelection($event)"></app-form-item>
+    </div>
   </div>
 </form>
 <!--(change)="onChange($event)"-->

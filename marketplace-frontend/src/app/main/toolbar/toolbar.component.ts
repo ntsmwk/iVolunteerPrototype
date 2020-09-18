@@ -132,7 +132,7 @@ export class FuseToolbarComponent {
       case "/main/matching-configurator":
         this.headingText = "Matching-Konfigurator";
         break;
-      case "/main/configurator":
+      case "/main/class-configurator":
         this.headingText = "Klassen-Konfigurator";
         break;
       case String(

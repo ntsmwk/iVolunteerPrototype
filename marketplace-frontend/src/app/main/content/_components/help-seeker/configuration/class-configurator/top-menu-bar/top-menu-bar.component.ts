@@ -2,13 +2,15 @@ import { Component, ElementRef, ViewChild, Output, EventEmitter, Input, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
+import { ClassConfiguration, ClassConfigurationDTO } from 'app/main/content/_model/meta/configurations';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { NewClassConfigurationDialogData } from '../_dialogs/new-dialog/new-dialog.component';
 import { OpenClassConfigurationDialogData } from '../_dialogs/open-dialog/open-dialog.component';
 import { DeleteClassConfigurationDialogData } from '../_dialogs/delete-dialog/delete-dialog.component';
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export interface RootMenuItem {
   id: number;
@@ -26,10 +28,12 @@ export interface SubMenuItem {
 
 export class TopMenuResponse {
   action: string;
-  followingAction: string;
-  classConfiguration: ClassConfiguration;
-  classDefintions: ClassDefinition[];
-  relationships: Relationship[];
+
+  followingAction?: string;
+  classConfiguration?: ClassConfiguration;
+  classConfigurationId?: string;
+  classDefintions?: ClassDefinition[];
+  relationships?: Relationship[];
 
   deletedClassDefinitions?: string[];
   deletedRelationships?: string[];
@@ -42,10 +46,6 @@ export class TopMenuResponse {
 
 const rootMenuItems: RootMenuItem[] = [
   { id: 1, label: 'Menü', icon: 'menu' },
-  // { id: 2, label: 'Bearbeiten' },
-  // { id: 3, label: 'Ansicht' },
-  // { id: 4, label: 'Extras' },
-  // { id: 5, label: 'Hilfe' },
 ];
 
 const subMenuItems: SubMenuItem[] = [
@@ -54,24 +54,7 @@ const subMenuItems: SubMenuItem[] = [
   { rootId: 1, id: 3, label: 'Konfiguration speichern', clickAction: 'saveClicked', icon: undefined },
   // { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
   { rootId: 1, id: 3, label: 'Konfiguration löschen', clickAction: 'deleteClicked', icon: undefined },
-  { rootId: 1, id: 4, label: 'Instanz erstellen', clickAction: 'createEditorClicked', icon: undefined },
-
-  // { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
-  // { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
-  // { rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined },
-  // { rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined },
-
-  // { rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined },
-  // { rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined },
-  // { rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined },
-
-  // { rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined },
-  // { rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined },
-
-  // { rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined },
+  { rootId: 1, id: 4, label: 'Eintrag erfassen', clickAction: 'createEditorClicked', icon: undefined },
 ];
 
 @Component({
@@ -99,7 +82,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   currentClassConfiguration: ClassConfiguration;
 
   constructor(
-    private dialogFactory: DialogFactoryDirective
+    private dialogFactory: DialogFactoryDirective,
+    private classConfigurationService: ClassConfigurationService,
   ) {
 
   }
@@ -179,7 +163,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   private performNew() {
-    this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret: NewClassConfigurationDialogData) => {
+    this.dialogFactory.openNewClassConfigurationDialog().then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
@@ -195,7 +179,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   private performEdit() {
-    this.dialogFactory.openNewClassConfigurationDialog(this.marketplace, this.currentClassConfiguration).then((ret: NewClassConfigurationDialogData) => {
+    this.dialogFactory.openNewClassConfigurationDialog(this.currentClassConfiguration).then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_meta_edit', payload: { name: ret.classConfiguration.name, description: ret.classConfiguration.description } });
@@ -214,7 +198,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   private performOpen() {
-    this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: OpenClassConfigurationDialogData) => {
+
+    this.dialogFactory.openOpenClassConfigurationDialog().then((ret: OpenClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.currentClassConfiguration = ret.classConfiguration;
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
@@ -222,6 +207,22 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
 
+    });
+
+
+  }
+
+  private performOpenByid(classConfigurationId: string) {
+    this.classConfigurationService.getAllForClassConfigurationInOne(this.marketplace, classConfigurationId).toPromise().then((dto: ClassConfigurationDTO) => {
+      if (!isNullOrUndefined(dto)) {
+        this.currentClassConfiguration = dto.classConfiguration;
+        this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: dto });
+      }
+    }).catch((error: HttpErrorResponse) => {
+      if (error.status === 500 && error.statusText === 'OK') {
+        console.error('no classConfiguration with this id: ' + classConfigurationId);
+        this.performOpen();
+      }
     });
   }
 
@@ -233,7 +234,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[], actionAfter: string) {
 
     this.dialogFactory
-      .openSaveConfirmationDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
+      .openSaveClassConfigurationConfirmationDialog(classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
       .then((ret) => {
 
         if (isNullOrUndefined(ret)) {
@@ -249,7 +250,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   deleteClicked() {
-    this.dialogFactory.openDeleteClassConfiguratorDialog(this.marketplace).then((ret: DeleteClassConfigurationDialogData) => {
+    this.dialogFactory.openDeleteClassConfigurationDialog().then((ret: DeleteClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
       } else {
@@ -275,6 +276,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     const eventResponseAction = this.eventResponse.action;
     const eventFollowingAction = this.eventResponse.followingAction;
     const eventClassConfiguration = this.eventResponse.classConfiguration;
+    const eventClassConfigurationId = this.eventResponse.classConfigurationId;
     const eventClassDefinitions = this.eventResponse.classDefintions;
     const eventRelationships = this.eventResponse.relationships;
     const eventDeletedClassDefinitions = this.eventResponse.deletedClassDefinitions;
@@ -284,6 +286,10 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     if (eventResponseAction === 'save') {
       if (!isNullOrUndefined(eventClassConfiguration)) {
         this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships, eventFollowingAction);
+      }
+    } else if (eventResponseAction === 'open') {
+      if (!isNullOrUndefined(eventClassConfigurationId)) {
+        this.performOpenByid(eventClassConfigurationId);
       }
     }
   }

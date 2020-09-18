@@ -1,118 +1,80 @@
-import { MatDialog } from "@angular/material";
-import { TextFieldDialogComponent, TextFieldDialogData } from "../text-field-dialog/text-field-dialog.component";
-import { Directive } from "@angular/core";
-import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
-import { PropertyItem } from "app/main/content/_model/meta/property";
-import { SortDialogComponent, SortDialogData } from "../sort-dialog/sort-dialog.component";
-import { Marketplace } from "app/main/content/_model/marketplace";
+import { MatDialog } from '@angular/material';
+import { Directive } from '@angular/core';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import {
   NewClassConfigurationDialogComponent,
-  NewClassConfigurationDialogData
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/new-dialog/new-dialog.component";
+  NewClassConfigurationDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/new-dialog/new-dialog.component';
 import {
   OpenClassConfigurationDialogComponent,
-  OpenClassConfigurationDialogData
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/open-dialog/open-dialog.component";
-import { ClassConfiguration, MatchingConfiguration } from "app/main/content/_model/meta/configurations";
-import { ClassDefinition } from "app/main/content/_model/meta/class";
-import { Relationship } from "app/main/content/_model/meta/relationship";
+  OpenClassConfigurationDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/open-dialog/open-dialog.component';
+import {
+  ClassConfiguration,
+  MatchingConfiguration,
+  MatchingEntityMappingConfiguration,
+} from 'app/main/content/_model/meta/configurations';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
 import {
   ConfirmClassConfigurationSaveDialogComponent,
-  ConfirmClassConfigurationSaveDialogData
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/confirm-save-dialog/confirm-save-dialog.component";
-import {
-  SaveClassConfigurationAsDialogComponent,
-  SaveClassConfigurationAsDialogData
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/save-as-dialog/save-as-dialog.component";
+  ConfirmClassConfigurationSaveDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/confirm-save-dialog/confirm-save-dialog.component';
 import {
   DeleteClassConfigurationDialogComponent,
-  DeleteClassConfigurationDialogData
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/delete-dialog/delete-dialog.component";
+  DeleteClassConfigurationDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/delete-dialog/delete-dialog.component';
 import {
   ClassInstanceFormPreviewDialogComponent,
-  ClassInstanceFormPreviewDialogData
-} from "../../../help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
+  ClassInstanceFormPreviewDialogData,
+} from '../../../help-seeker/configuration/class-instance-configurator/form-preview-dialog/form-preview-dialog.component';
 import {
   ClassInstanceFormPreviewExportDialogComponent,
-  ClassInstanceFormPreviewExportDialogData
-} from "../../../help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component";
+  ClassInstanceFormPreviewExportDialogData,
+} from '../../../help-seeker/configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.component';
 import {
   ChangeIconDialogComponent,
-  ChangeIconDialogData
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component";
+  ChangeIconDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component';
 import {
-  PropertyOrEnumCreationDialogComponent,
-  PropertyOrEnumCreationDialogData
-} from "../../../help-seeker/configuration/class-configurator/_dialogs/property-enum-creation-dialog/property-enum-creation-dialog.component";
+  PropertyCreationDialogComponent,
+  PropertyCreationDialogData,
+} from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.component';
 import {
   NewMatchingDialogComponent,
-  NewMatchingDialogData
-} from "../../../help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component";
+  NewMatchingDialogData,
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/new-dialog/new-dialog.component';
 import {
   OpenMatchingDialogComponent,
-  OpenMatchingDialogData
-} from "../../../help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component";
+  OpenMatchingDialogData,
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/open-dialog/open-dialog.component';
 import {
   DeleteMatchingDialogComponent,
-  DeleteMatchingDialogData
-} from "../../../help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component";
-import { AddPropertyDialogComponent, AddPropertyDialogData } from "../add-property-dialog/add-property-dialog.component";
-import { RemoveDialogComponent, RemoveDialogData } from "../remove-dialog/remove-dialog.component";
-import { isNullOrUndefined } from "util";
-import { User } from "app/main/content/_model/user";
+  DeleteMatchingDialogData,
+} from '../../../help-seeker/configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.component';
+import {
+  AddPropertyDialogComponent,
+  AddPropertyDialogData,
+} from '../add-property-dialog/add-property-dialog.component';
+import {
+  RemovePropertyDialogData,
+  RemovePropertyDialogComponent,
+} from '../remove-dialog/remove-dialog.component';
+import { isNullOrUndefined } from 'util';
+import { User } from 'app/main/content/_model/user';
+import { AddClassDefinitionDialogComponent, AddClassDefinitionDialogData } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { MatchingEntity } from 'app/main/content/_model/matching';
 
 @Directive({
-  selector: "app-dialog-factory"
+  selector: "app-dialog-factory",
 })
 export class DialogFactoryDirective {
   constructor(public dialog: MatDialog) { }
 
-  /**
-   * EDIT TEMPLATE DESCRIPTION DIALOG
-   *
-   * Dialog utilized to chance the description of a template @param template
-   *
-   * returns new description
-   */
-
-  newTaskTemplateDialog() {
-    const dialogRef = this.dialog.open(TextFieldDialogComponent, {
-      width: "500px",
-      data: {
-        label: "New Template",
-        fields: [
-          { description: "Name", hintText: "Name", value: null },
-          { description: "Description", hintText: "Description", value: null }
-        ]
-      }
-    });
-
-    let ret: string[];
-
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: TextFieldDialogData) => {
-        ret = [];
-        if (!isNullOrUndefined(result)) {
-          for (const val of result.fields) {
-            ret.push(val.value);
-          }
-        }
-      });
-
-    return dialogRef
-      .beforeClose()
-      .toPromise()
-      .then(() => {
-        return ret;
-      });
-  }
-
   confirmationDialog(title: string, description: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: "500px",
-      data: { title: title, description: description }
+      width: '500px',
+      data: { title: title, description: description },
     });
 
     let ret = false;
@@ -134,72 +96,20 @@ export class DialogFactoryDirective {
       });
   }
 
-  changePropertyOrderDialog(properties: PropertyItem[]) {
-    const dialogRef = this.dialog.open(SortDialogComponent, {
-      width: "500px",
-      data: { list: properties, label: "Change Property Order" }
-    });
-
-    let ret: any;
-
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: SortDialogData) => {
-        ret = result;
-      });
-
-    return dialogRef
-      .afterClosed()
-      .toPromise()
-      .then(() => {
-        return ret;
-      });
-  }
-
-  genericDialog1Textfield(label: string, description: string, hintText: string, value: string) {
-    const dialogRef = this.dialog.open(TextFieldDialogComponent, {
-      width: "500px",
-      data: {
-        label: label,
-        fields: [{ description: description, hintText: hintText, value: value }]
-      }
-    });
-
-    let ret: string;
-
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: TextFieldDialogData) => {
-        if (!isNullOrUndefined(result)) {
-          ret = result.fields[0].value;
-        }
-      });
-
-    return dialogRef
-      .afterClosed()
-      .toPromise()
-      .then(() => {
-        return ret;
-      });
-  }
-
   /**
-   *  Class-Configurator Dialogs
+   * ******CLASS CONFIGURATION******
    */
 
-  openNewClassConfigurationDialog(marketplace: Marketplace, currentClassConfiguration?: ClassConfiguration) {
+  openNewClassConfigurationDialog(currentClassConfiguration?: ClassConfiguration) {
     const dialogRef = this.dialog.open(NewClassConfigurationDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
       data: {
-        marketplace: marketplace,
-        classConfiguration: currentClassConfiguration
+        classConfiguration: currentClassConfiguration,
       },
-      disableClose: true
+      disableClose: true,
     });
 
     let returnData: NewClassConfigurationDialogData;
@@ -218,14 +128,14 @@ export class DialogFactoryDirective {
       });
   }
 
-  openConfiguratorDialog(marketplace: Marketplace) {
+  openOpenClassConfigurationDialog() {
     const dialogRef = this.dialog.open(OpenClassConfigurationDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: { marketplace: marketplace, configurator: undefined },
-      disableClose: true
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { configurator: undefined },
+      disableClose: true,
     });
 
     let returnData: OpenClassConfigurationDialogData;
@@ -244,27 +154,27 @@ export class DialogFactoryDirective {
       });
   }
 
-  openSaveConfirmationDialog(
-    marketplace: Marketplace,
+  openSaveClassConfigurationConfirmationDialog(
     classConfiguration: ClassConfiguration,
     classDefinitions: ClassDefinition[],
     relationships: Relationship[],
     deletedClassDefintions: string[],
     deletedRelationships: string[]
   ) {
-    const dialogRef = this.dialog.open(ConfirmClassConfigurationSaveDialogComponent, {
-      width: "500px",
-      data: {
-        classConfiguration: classConfiguration,
-        classDefinitions: classDefinitions,
-        relationships: relationships,
+    const dialogRef = this.dialog.open(
+      ConfirmClassConfigurationSaveDialogComponent,
+      {
+        width: '500px',
+        data: {
+          classConfiguration: classConfiguration,
+          classDefinitions: classDefinitions,
+          relationships: relationships,
 
-        deletedClassDefintions: deletedClassDefintions,
-        deletedRelationships: deletedRelationships,
-
-        marketplace: marketplace
+          deletedClassDefintions: deletedClassDefintions,
+          deletedRelationships: deletedRelationships,
+        },
       }
-    });
+    );
 
     let returnData: ConfirmClassConfigurationSaveDialogData;
 
@@ -283,57 +193,18 @@ export class DialogFactoryDirective {
       });
   }
 
-  openSaveClassConfigurationAsDialog(
-    marketplace: Marketplace,
-    classConfiguration: ClassConfiguration,
-    classDefinitions: ClassDefinition[],
-    relationships: Relationship[],
-    deletedClassDefintions: string[],
-    deletedRelationships: string[]
-  ) {
-    const dialogRef = this.dialog.open(SaveClassConfigurationAsDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: {
-        classConfiguration: classConfiguration,
-        classDefinitions: classDefinitions,
-        relationships: relationships,
-
-        deletedClassDefinitions: deletedClassDefintions,
-        deletedRelationships: deletedRelationships,
-
-        marketplace: marketplace
-      },
-      disableClose: true
-    });
-
-    let returnData: SaveClassConfigurationAsDialogData;
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: SaveClassConfigurationAsDialogData) => {
-        returnData = result;
-      });
-
-    return dialogRef
-      .afterClosed()
-      .toPromise()
-      .then(() => {
-        return returnData;
-      });
-  }
-
-  openDeleteClassConfiguratorDialog(marketplace: Marketplace) {
-    const dialogRef = this.dialog.open(DeleteClassConfigurationDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: { marketplace: marketplace, configurator: undefined },
-      disableClose: true
-    });
+  openDeleteClassConfigurationDialog() {
+    const dialogRef = this.dialog.open(
+      DeleteClassConfigurationDialogComponent,
+      {
+        width: '500px',
+        minWidth: '500px',
+        height: '400px',
+        minHeight: '400px',
+        data: { configurator: undefined },
+        disableClose: true,
+      }
+    );
 
     let returnData: DeleteClassConfigurationDialogData;
     dialogRef
@@ -351,79 +222,14 @@ export class DialogFactoryDirective {
       });
   }
 
-  openInstanceFormPreviewDialog(
-    marketplace: Marketplace,
-    classDefinitions: ClassDefinition[],
-    relationships: Relationship[],
-    rootClassDefinition: ClassDefinition
-  ) {
-    const dialogRef = this.dialog.open(ClassInstanceFormPreviewDialogComponent, {
-      width: "90vw",
-      minWidth: "90vw",
-      height: "90vh",
-      minHeight: "90vh",
-      data: {
-        marketplace: marketplace,
-        classDefinitions: classDefinitions,
-        relationships: relationships,
-        rootClassDefinition: rootClassDefinition
-      },
-      disableClose: true
-    });
-
-    let returnData: ClassInstanceFormPreviewDialogData;
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: ClassInstanceFormPreviewDialogData) => {
-        returnData = result;
-      });
-
-    return dialogRef
-      .afterClosed()
-      .toPromise()
-      .then(() => {
-        return returnData;
-      });
-  }
-
-  openPreviewExportDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
-    const dialogRef = this.dialog.open(ClassInstanceFormPreviewExportDialogComponent, {
-      width: "90vw",
-      minWidth: "90vw",
-      height: "90vh",
-      minHeight: "90vh",
-      data: {
-        marketplace: marketplace,
-        classConfigurationIds: classConfigurationIds
-      },
-      disableClose: true
-    });
-
-    let returnValue: ClassInstanceFormPreviewExportDialogData;
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: ClassInstanceFormPreviewExportDialogData) => {
-        returnValue = result;
-      });
-
-    return dialogRef
-      .afterClosed()
-      .toPromise()
-      .then(() => {
-        return returnValue;
-      });
-  }
-
-  openChangeIconDialog(marketplace: Marketplace, currentImagePath: string) {
+  openChangeIconDialog(currentImagePath: string) {
     const dialogRef = this.dialog.open(ChangeIconDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: { marketplace: marketplace, imagePath: currentImagePath },
-      disableClose: true
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { imagePath: currentImagePath },
+      disableClose: true,
     });
 
     let imagePath: string;
@@ -444,21 +250,21 @@ export class DialogFactoryDirective {
       });
   }
 
-  openPropertyCreationDialog(marketplace: Marketplace, helpseeker: User) {
-    const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
-      width: "90vw",
-      minWidth: "90vw",
-      height: "90vh",
-      minHeight: "90vh",
-      data: { marketplace: marketplace, helpseeker: helpseeker },
-      disableClose: true
+  openPropertyCreationDialog(tenantAdmin: User) {
+    const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { tenantAdmin: tenantAdmin },
+      disableClose: true,
     });
 
-    let returnValue: PropertyOrEnumCreationDialogData;
+    let returnValue: PropertyCreationDialogData;
     dialogRef
       .beforeClose()
       .toPromise()
-      .then((result: PropertyOrEnumCreationDialogData) => {
+      .then((result: PropertyCreationDialogData) => {
         returnValue = result;
       });
 
@@ -470,17 +276,94 @@ export class DialogFactoryDirective {
       });
   }
 
+  /**
+   * ******INSTANTIATION******
+   */
+
+
+  openInstanceFormPreviewDialog(
+    classDefinitions: ClassDefinition[],
+    relationships: Relationship[],
+    rootClassDefinition: ClassDefinition
+  ) {
+    const dialogRef = this.dialog.open(
+      ClassInstanceFormPreviewDialogComponent,
+      {
+        width: '90vw',
+        minWidth: '90vw',
+        height: '90vh',
+        minHeight: '90vh',
+        data: {
+          classDefinitions: classDefinitions,
+          relationships: relationships,
+          rootClassDefinition: rootClassDefinition,
+        },
+        disableClose: true,
+      }
+    );
+
+    let returnData: ClassInstanceFormPreviewDialogData;
+    dialogRef
+      .beforeClose()
+      .toPromise()
+      .then((result: ClassInstanceFormPreviewDialogData) => {
+        returnData = result;
+      });
+
+    return dialogRef
+      .afterClosed()
+      .toPromise()
+      .then(() => {
+        return returnData;
+      });
+  }
+
+  openPreviewExportDialog(
+    classConfigurationIds: string[]
+  ) {
+    const dialogRef = this.dialog.open(
+      ClassInstanceFormPreviewExportDialogComponent,
+      {
+        width: '90vw',
+        minWidth: '90vw',
+        height: '90vh',
+        minHeight: '90vh',
+        data: {
+          classConfigurationIds: classConfigurationIds,
+        },
+        disableClose: true,
+      }
+    );
+
+    let returnValue: ClassInstanceFormPreviewExportDialogData;
+    dialogRef
+      .beforeClose()
+      .toPromise()
+      .then((result: ClassInstanceFormPreviewExportDialogData) => {
+        returnValue = result;
+      });
+
+    return dialogRef
+      .afterClosed()
+      .toPromise()
+      .then(() => {
+        return returnValue;
+      });
+  }
+
+
+
   /*
    *  Matching-Configurator Dialogs
    */
-  openNewMatchingDialog(marketplace: Marketplace) {
+  openNewMatchingDialog() {
     const dialogRef = this.dialog.open(NewMatchingDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: { marketplace: marketplace },
-      disableClose: true
+      width: '500px',
+      minWidth: '500px',
+      height: '450px',
+      minHeight: '450px',
+      data: {},
+      disableClose: true,
     });
 
     let returnValue: NewMatchingDialogData;
@@ -500,14 +383,14 @@ export class DialogFactoryDirective {
       });
   }
 
-  openOpenMatchingDialog(marketplace: Marketplace) {
+  openOpenMatchingDialog() {
     const dialogRef = this.dialog.open(OpenMatchingDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: { marketplace: marketplace },
-      disableClose: true
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: {},
+      disableClose: true,
     });
 
     let matchingConfiguration: MatchingConfiguration;
@@ -529,14 +412,14 @@ export class DialogFactoryDirective {
       });
   }
 
-  openDeleteMatchingDialog(marketplace: Marketplace) {
+  openDeleteMatchingDialog() {
     const dialogRef = this.dialog.open(DeleteMatchingDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: { marketplace: marketplace },
-      disableClose: true
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: {},
+      disableClose: true,
     });
 
     let idsDeleted: string[];
@@ -558,25 +441,53 @@ export class DialogFactoryDirective {
       });
   }
 
+  openAddClassDefinitionDialog(
+    matchingEntityConfiguration: MatchingEntityMappingConfiguration, existingEntityPaths: string[]
+  ) {
+    const dialogRef = this.dialog.open(AddClassDefinitionDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '418px',
+      minHeight: '418px',
+      data: {
+        matchingEntityConfiguration: matchingEntityConfiguration,
+        existingEntityPaths: existingEntityPaths,
+        addedEntities: [],
+      },
+    });
+
+    let returnValue: AddClassDefinitionDialogData;
+
+    dialogRef
+      .beforeClose()
+      .toPromise()
+      .then((result: AddClassDefinitionDialogData) => {
+        returnValue = result;
+      });
+
+    return dialogRef
+      .afterClosed()
+      .toPromise()
+      .then(() => {
+        return returnValue;
+      });
+  }
+
   openAddPropertyDialog(
-    marketplace: Marketplace,
-    helpseeker: User,
     classDefinition: ClassDefinition,
     allClassDefinitions: ClassDefinition[],
     allRelationships: Relationship[]
   ) {
     const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "418px",
-      minHeight: "418px",
+      width: '500px',
+      minWidth: '500px',
+      height: '418px',
+      minHeight: '418px',
       data: {
-        marketplace: marketplace,
-        helpseeker: helpseeker,
         classDefinition: classDefinition,
         allClassDefinitions: allClassDefinitions,
-        allRelationships: allRelationships
-      }
+        allRelationships: allRelationships,
+      },
     });
 
     let returnValue: AddPropertyDialogData;
@@ -596,21 +507,21 @@ export class DialogFactoryDirective {
       });
   }
 
-  openRemoveDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
-    const dialogRef = this.dialog.open(RemoveDialogComponent, {
-      width: "500px",
-      minWidth: "500px",
-      height: "400px",
-      minHeight: "400px",
-      data: { marketplace: marketplace, classDefinition: classDefinition }
+  openRemovePropertyDialog(classDefinition: ClassDefinition) {
+    const dialogRef = this.dialog.open(RemovePropertyDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { classDefinition: classDefinition },
     });
 
-    let returnValue: RemoveDialogData;
+    let returnValue: RemovePropertyDialogData;
 
     dialogRef
       .beforeClose()
       .toPromise()
-      .then((result: RemoveDialogData) => {
+      .then((result: RemovePropertyDialogData) => {
         returnValue = result;
       });
 

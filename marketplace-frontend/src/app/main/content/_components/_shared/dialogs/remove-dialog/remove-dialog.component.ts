@@ -1,46 +1,43 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PropertyItem, PropertyDefinition, PropertyType } from '../../../../_model/meta/property';
-import { Marketplace } from 'app/main/content/_model/marketplace';
+import { FlatPropertyDefinition, PropertyType } from '../../../../_model/meta/property/property';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { MatTableDataSource, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
-export interface RemoveDialogData {
-  marketplace: Marketplace;
+export interface RemovePropertyDialogData {
   classDefinition: ClassDefinition;
 }
 
-interface PropertyOrEnumEntry {
+interface PropertyEntry {
   id: string;
   name: string;
   type: PropertyType;
 }
 
 @Component({
-  selector: 'remove-dialog',
+  selector: 'remove-property-dialog',
   templateUrl: './remove-dialog.component.html',
   styleUrls: ['./remove-dialog.component.scss']
 })
-export class RemoveDialogComponent implements OnInit {
+export class RemovePropertyDialogComponent implements OnInit {
   constructor(
-    public dialogRef: MatDialogRef<RemoveDialogData>, @Inject(MAT_DIALOG_DATA)
-    public data: RemoveDialogData,
+    public dialogRef: MatDialogRef<RemovePropertyDialogData>, @Inject(MAT_DIALOG_DATA)
+    public data: RemovePropertyDialogData,
   ) {
   }
 
-  datasource = new MatTableDataSource<PropertyOrEnumEntry>();
+  datasource = new MatTableDataSource<PropertyEntry>();
   displayedColumns = ['checkbox', 'label', 'type'];
-  entryList: PropertyOrEnumEntry[];
-  selection = new SelectionModel<PropertyOrEnumEntry>(true, []);
+  entryList: PropertyEntry[];
+  selection = new SelectionModel<PropertyEntry>(true, []);
 
   loaded: boolean;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
 
-  ngOnInit() {
-
+  async ngOnInit() {
     this.entryList = [];
     this.entryList.push(...this.data.classDefinition.properties);
 
@@ -49,7 +46,7 @@ export class RemoveDialogComponent implements OnInit {
     this.loaded = true;
   }
 
-  isDisabled(propertyDefinition: PropertyDefinition<any>) {
+  isDisabled(propertyDefinition: FlatPropertyDefinition<any>) {
     return false;
   }
 
@@ -58,7 +55,7 @@ export class RemoveDialogComponent implements OnInit {
     this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
-  onRowClick(row: PropertyOrEnumEntry) {
+  onRowClick(row: PropertyEntry) {
     if (this.selection.isSelected(row)) {
       this.selection.deselect(row);
     } else {

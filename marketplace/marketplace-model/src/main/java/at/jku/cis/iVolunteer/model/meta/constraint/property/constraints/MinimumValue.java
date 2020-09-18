@@ -12,17 +12,5 @@ public class MinimumValue extends LongNumberPropertyConstraint<Integer> {
 		setConstraintType(ConstraintType.MIN);
 		this.setValue(value);
 	}
-	
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof MinimumValue)) {
-			return false;
-		}
-		return ((MinimumValue) obj).getId().equals(getId());
-	}
+
 }

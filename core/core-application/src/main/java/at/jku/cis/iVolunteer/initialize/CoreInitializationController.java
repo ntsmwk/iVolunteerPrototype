@@ -8,14 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CoreInitializationController {
 
-	@Autowired
-	private CoreInitializationService coreInitializationService;
-	@Autowired
-	private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired
-	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired
-	private CoreTenantInitializationService coreTenantInitializationService;
+	@Autowired private CoreInitializationService coreInitializationService;
+	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
+	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
+	
 
 	@PutMapping("/init/stage-one")
 	public void createMarketplaceTenantsAndUsers() {
@@ -60,6 +57,7 @@ public class CoreInitializationController {
 		createTenantAdmins();
 		createAdmins();
 		createRecruiters();
+		addTenantTags();
 		// createFlexProdUsers();
 	}
 
@@ -104,16 +102,14 @@ public class CoreInitializationController {
 
 	@PutMapping("/init/tenant/subscribe/all")
 	public void subscribeAllToTenant() {
-		subscribeHelpseekersToTenant();
-		subscribeTenantAdminsToTenant();
+		subscribeAllToTenantExceptVolunteers();
 		subscribeVolunteersToTenant();
-		subscribeAdminsToTenant();
-		subscribeRecruitersToTenant();
 	}
 
 	@PutMapping("/init/tenant/subscribe/all-except-volunteers")
 	public void subscribeAllToTenantExceptVolunteers() {
 		subscribeHelpseekersToTenant();
+		subscribeTenantAdminsToTenant();
 		subscribeAdminsToTenant();
 		subscribeRecruitersToTenant();
 	}
@@ -155,6 +151,11 @@ public class CoreInitializationController {
 	@PutMapping("/init/tenant/unsubscribe/volunteers")
 	public void unsubscribeVolunteersFromTenant() {
 		// TODO init
+	}
+	
+	@PutMapping("/init/tenant/add-tags")
+	public void addTenantTags() {
+		coreInitializationService.addTenantTags();
 	}
 
 	/**
@@ -210,11 +211,16 @@ public class CoreInitializationController {
 	public void unregistereVolunteersFromMarketplace() {
 		// TODO init
 	}
+	
+
 
 	@PutMapping("init/wipe-core")
 	public void wipeCore() {
 		coreInitializationService.coreUserRepository.deleteAll();
+		coreInitializationService.pendingActivationRepository.deleteAll();
 		coreTenantInitializationService.coreTenantRepository.deleteAll();
+		coreInitializationService.tagRepository.deleteAll();
+		
 
 	}
 

@@ -23,15 +23,21 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 export class FuseRuleOverviewComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<DerivationRule>();
-  displayedColumns = ["active", "name", "sourcesGeneral", "sourcesClasses", "target"];
-  helpseeker: User;
+  displayedColumns = [
+    "active",
+    "name",
+    "sourcesGeneral",
+    "sourcesClasses",
+    "target",
+  ];
+  tenantAdmin: User;
   tenant: Tenant;
 
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private derivationRuleService: DerivationRuleService,
-  ) { }
+    private derivationRuleService: DerivationRuleService
+  ) {}
 
   async ngOnInit() {
     this.loadAllDerivationRules();
@@ -41,7 +47,7 @@ export class FuseRuleOverviewComponent implements OnInit {
     this.router.navigate(["/main/rule/" + derivationRule.id]);
   }
 
-  onChangeActivation(derivationRule: DerivationRule){
+  onChangeActivation(derivationRule: DerivationRule) {
     this.derivationRuleService
       .save(this.marketplace, derivationRule)
       .toPromise();
@@ -53,7 +59,7 @@ export class FuseRuleOverviewComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.marketplace = globalInfo.marketplace;
-    this.helpseeker = globalInfo.user;
+    this.tenantAdmin = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
 
     this.derivationRuleService
@@ -77,5 +83,4 @@ export class FuseRuleOverviewComponent implements OnInit {
       AggregationOperatorType[op as keyof typeof AggregationOperatorType];
     return x;
   }
-
 }

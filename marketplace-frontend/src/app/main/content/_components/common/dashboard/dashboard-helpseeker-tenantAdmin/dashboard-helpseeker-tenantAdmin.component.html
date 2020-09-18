@@ -1,31 +1,17 @@
-<link
-  type="text/css"
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans"
-/>
+<link type="text/css" rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
 
-<div class="page-layout blank p-24" fusePerfectScrollbar>
-  <customizable-header
-    *ngIf="tenant"
-    [tenant]="tenant"
-    [displayNavigateBack]="false"
-    headerText="Herzlich Willkommen bei iVolunteer"
-  ></customizable-header>
+<div *ngIf="loaded" class="page-layout blank p-24" fusePerfectScrollbar>
+  <customizable-header *ngIf="tenant" [tenant]="tenant" [displayNavigateBack]="false"
+    [headerText]="tenant.landingpageMessage"></customizable-header>
 
   <!-- Landing Pages.. TODO Remove/Replace someday -->
 
-  <div *ngIf="this.user && isFF()">
-    <section fxLayout="column" class="p-40">
-      <h2 class="verein-heading">Freiwillige Feuerwehr Eidenberg</h2>
+  <section fxLayout="column" class="p-40">
+    <h2 class="verein-heading">{{tenant.landingpageTitle}}</h2>
 
-      <img src="assets/images/FF_Eidenberg.png" alt="FF Eidenberg" />
-    </section>
-  </div>
+    <img [src]="getTitleImage()" alt="Landing Page Titelbild" />
 
-  <div *ngIf="this.user && isMV()">
-    <section fxLayout="column" class="p-40">
-      <h2 class="verein-heading">Musikverein Schwertberg</h2>
-      <img src="assets/images/musicverein.jpg" alt="Musikverein Schwertberg" />
-    </section>
-  </div>
+    <p>{{tenant.landingpageText}}</p>
+  </section>
 </div>

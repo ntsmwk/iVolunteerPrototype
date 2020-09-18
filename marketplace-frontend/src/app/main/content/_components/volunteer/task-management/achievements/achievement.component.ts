@@ -10,10 +10,11 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { MatTabChangeEvent } from "@angular/material";
 import { isNullOrUndefined } from "util";
-import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { User } from "app/main/content/_model/user";
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
+import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 
 @Component({
   selector: "fuse-achievements",
@@ -24,6 +25,7 @@ import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 export class AchievementsComponent implements OnInit {
   volunteer: User;
   marketplace: Marketplace;
+  localRepositoryService;
   classInstanceDTOs: ClassInstanceDTO[] = [];
   filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
@@ -39,8 +41,9 @@ export class AchievementsComponent implements OnInit {
     private loginService: LoginService,
     private coreUserService: CoreUserService,
     private classInstanceService: ClassInstanceService,
-    private localRepositoryService: LocalRepositoryService
-  ) { }
+    private lrDropboxService: LocalRepositoryDropboxService,
+    private lrJsonServerService: LocalRepositoryJsonServerService
+  ) {}
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
@@ -50,6 +53,14 @@ export class AchievementsComponent implements OnInit {
     this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
+
+    if (
+      this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
+    ) {
+      this.localRepositoryService = this.lrJsonServerService;
+    } else {
+      this.localRepositoryService = this.lrDropboxService;
+    }
 
     // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
     //   this.volunteer

@@ -10,9 +10,10 @@ import { StoredChartService } from "app/main/content/_service/stored-chart.servi
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { StoredChart } from "app/main/content/_model/stored-chart";
 import { isNullOrUndefined } from "util";
-import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { User } from "app/main/content/_model/user";
+import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
+import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 
 @Component({
   selector: "fuse-management-summary",
@@ -65,13 +66,16 @@ export class ManagementSummaryComponent implements OnInit {
 
   percentageFilteredOut: number = 0;
 
+  localRepositoryService;
+
   constructor(
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
     private storedChartService: StoredChartService,
     private tenantService: TenantService,
-    private localRepositoryService: LocalRepositoryService
-  ) { }
+    private lrDropboxService: LocalRepositoryDropboxService,
+    private lrJsonServerService: LocalRepositoryJsonServerService
+  ) {}
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
@@ -84,6 +88,14 @@ export class ManagementSummaryComponent implements OnInit {
 
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
+
+    if (
+      this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
+    ) {
+      this.localRepositoryService = this.lrJsonServerService;
+    } else {
+      this.localRepositoryService = this.lrDropboxService;
+    }
 
     try {
       let localClassInstances = <ClassInstance[]>(

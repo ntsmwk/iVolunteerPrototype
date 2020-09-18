@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.core.user;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +36,15 @@ public class CoreUserController {
 		return coreUserService.getAllByUserRole(userRole);
 	}
 
+	@PutMapping("/user/all/roles")
+	private List<CoreUser> getAllByUserRoles(@RequestBody List<UserRole> roles, @RequestParam("includeNoRole") boolean includeNoRole) {
+			return coreUserService.getAllByUserRoles(roles, includeNoRole);
+	}
+
 	@GetMapping("/user/all/role/{role}/tenant/{tenantId}")
 	private List<CoreUser> getAllByTenantIdAndUserRole(@PathVariable("role") UserRole userRole,
 			@PathVariable("tenantId") String tenantId) {
-		
+
 		return coreUserService.getAllByTenantIdAndUserRole(userRole, tenantId);
 	}
 
@@ -51,6 +55,7 @@ public class CoreUserController {
 
 	@GetMapping("/user/name/{username}")
 	private CoreUser getByUserName(@PathVariable("username") String username) {
+		System.out.println(username);
 		return coreUserService.getByUserName(username);
 	}
 
@@ -72,12 +77,14 @@ public class CoreUserController {
 	}
 
 	@PostMapping("/user/new")
-	private CoreUser addNewUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization, @RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
+	private CoreUser addNewUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
+			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
 		return coreUserService.addNewUser(user, authorization, updateMarketplaces);
 	}
 
 	@PutMapping("/user/update")
-	private CoreUser updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization, @RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces ) {
+	private CoreUser updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
+			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
 		return coreUserService.updateUser(user, authorization, updateMarketplaces);
 	}
 
@@ -85,7 +92,7 @@ public class CoreUserController {
 	private CoreUser subscribeUserToTenant(@PathVariable("userId") String userId,
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
-		
+
 		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role, authorization, true);
 	}
 
@@ -93,7 +100,7 @@ public class CoreUserController {
 	private CoreUser unsubscribeUserFromTenant(@PathVariable("userId") String userId,
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
-		
+
 		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role, authorization, true);
 	}
 

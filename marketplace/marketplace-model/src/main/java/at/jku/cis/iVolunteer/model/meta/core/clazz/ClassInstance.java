@@ -29,6 +29,8 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	private boolean visible;
 	private int tabId;
+	
+	private boolean issued = false;
 
 	public ClassInstance() {
 	}
@@ -160,6 +162,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
 	}
+	
+	public boolean isIssued() {
+		return issued;
+	}
+
+	public void setIssued(boolean issued) {
+		this.issued = issued;
+	}
 
 	@Override
 	public String toHashObject() {
@@ -167,10 +177,10 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		json.addProperty("id", id);
 		json.addProperty("name", name);
 		json.addProperty("marketplaceId", marketplaceId);
-//TODO @MWE		json.addProperty("classDefinition", classDefinition.toHashObject());
 		json.addProperty("properties", this.properties.hashCode());
-//		json.addProperty("timestamp", timestamp.toString());
 		return json.toString();
 	}
+
+	
 
 }

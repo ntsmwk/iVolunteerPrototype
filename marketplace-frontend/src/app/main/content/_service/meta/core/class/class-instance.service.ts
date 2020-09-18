@@ -3,12 +3,12 @@ import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ClassInstance,
-  ClassDefinition,
+  ClassDefinition
 } from "app/main/content/_model/meta/class";
 import { User } from "app/main/content/_model/user";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class ClassInstanceService {
   constructor(private http: HttpClient) {}
@@ -59,13 +59,9 @@ export class ClassInstanceService {
     );
   }
 
-  getClassInstancesInIssuerInbox(
-    marketplace: Marketplace,
-    issuerId: string,
-    tenantId: string
-  ) {
+  getClassInstancesInIssuerInbox(marketplace: Marketplace, tenantId: string) {
     return this.http.get(
-      `${marketplace.url}/meta/core/class/instance/in-issuer-inbox/${issuerId}?tId=${tenantId}`
+      `${marketplace.url}/meta/core/class/instance/in-issuer-inbox?tId=${tenantId}`
     );
   }
 
@@ -103,24 +99,9 @@ export class ClassInstanceService {
     );
   }
 
-  setClassInstanceInUserRepository(
-    marketplace: Marketplace,
-    classInstanceIds: string[],
-    inUserRepository: boolean
-  ) {
+  issueClassInstance(marketplace: Marketplace, classInstanceIds: string[]) {
     return this.http.put(
-      `${marketplace.url}/meta/core/class/instance/set-in-user-repository/${inUserRepository}`,
-      classInstanceIds
-    );
-  }
-
-  setClassInstanceInIssuerInbox(
-    marketplace: Marketplace,
-    classInstanceIds: string[],
-    inIssuerInbox: boolean
-  ) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/instance/set-in-issuer-inbox/${inIssuerInbox}`,
+      `${marketplace.url}/meta/core/class/instance/issue`,
       classInstanceIds
     );
   }

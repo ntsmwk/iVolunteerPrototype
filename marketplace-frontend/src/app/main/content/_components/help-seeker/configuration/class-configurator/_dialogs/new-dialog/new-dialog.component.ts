@@ -1,32 +1,28 @@
-import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { LoginService } from "app/main/content/_service/login.service";
-import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
-import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
-import { FormControl, FormGroup } from "@angular/forms";
-import { Relationship } from "app/main/content/_model/meta/relationship";
-import { ClassDefinition } from "app/main/content/_model/meta/class";
-import { RelationshipService } from "app/main/content/_service/meta/core/relationship/relationship.service";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { stringUniqueValidator } from "app/main/content/_validator/string-unique.validator";
-import { User, UserRole } from "app/main/content/_model/user";
-import { isNullOrUndefined } from "util";
-import { GlobalInfo } from "app/main/content/_model/global-info";
-import { Tenant } from "app/main/content/_model/tenant";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
+import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
+import { isNullOrUndefined } from 'util';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { Tenant } from 'app/main/content/_model/tenant';
 
 export interface NewClassConfigurationDialogData {
-  marketplace: Marketplace;
   classConfiguration: ClassConfiguration;
   relationships: Relationship[];
   classDefinitions: ClassDefinition[];
-  tenantId: string;
 }
 
 @Component({
   selector: "new-class-configuration-dialog",
-  templateUrl: "./new-dialog.component.html",
-  styleUrls: ["./new-dialog.component.scss"],
+  templateUrl: './new-dialog.component.html',
+  styleUrls: ['./new-dialog.component.scss']
 })
 export class NewClassConfigurationDialogComponent implements OnInit {
   constructor(
@@ -36,9 +32,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     private relationshipsService: RelationshipService,
     private classDefintionService: ClassDefinitionService,
     private loginService: LoginService
-  ) {}
-  marketplace: Marketplace;
-  user: User;
+  ) { }
   tenant: Tenant;
 
   dialogForm: FormGroup;
@@ -46,45 +40,35 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   showEditDialog: boolean;
   loaded = false;
 
+  globalInfo: GlobalInfo;
+
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
+    this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    this.tenant = globalInfo.tenants[0];
+    this.tenant = this.globalInfo.tenants[0];
 
     this.classConfigurationService
-      .getClassConfigurationsByTenantId(
-        this.data.marketplace,
-        this.data.tenantId
-      )
+      .getClassConfigurationsByTenantId(this.globalInfo.marketplace, this.tenant.id)
       .toPromise()
       .then((classConfigurations: ClassConfiguration[]) => {
-        this.data.tenantId = this.tenant.id;
         this.allClassConfigurations = classConfigurations;
-
         this.dialogForm = new FormGroup({
-          label: new FormControl(
-            "",
-            isNullOrUndefined(this.data.classConfiguration)
-              ? stringUniqueValidator(
-                  this.allClassConfigurations.map((c) => c.name)
-                )
-              : stringUniqueValidator(
-                  this.allClassConfigurations.map((c) => c.name),
-                  [this.data.classConfiguration.name]
-                )
+          label: new FormControl('', isNullOrUndefined(this.data.classConfiguration) ?
+            stringUniqueValidator(this.allClassConfigurations.map(c => c.name))
+            : stringUniqueValidator(this.allClassConfigurations.map(c => c.name), [this.data.classConfiguration.name])
           ),
-          description: new FormControl(""),
+          description: new FormControl('')
           // rootLabel: new FormControl('')
         });
 
         if (!isNullOrUndefined(this.data.classConfiguration)) {
           this.showEditDialog = true;
           this.dialogForm
-            .get("label")
+            .get('label')
             .setValue(this.data.classConfiguration.name);
           this.dialogForm
-            .get("description")
+            .get('description')
             .setValue(this.data.classConfiguration.description);
         }
         // ----DEBUG
@@ -97,8 +81,8 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   }
 
   displayErrorMessage(key: string) {
-    if (key === "label") {
-      return "Name bereits vorhanden";
+    if (key === 'label') {
+      return 'Name bereits vorhanden';
     }
   }
 
@@ -114,37 +98,28 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     const formValues = this.getFormValues();
 
     this.classConfigurationService
-      .createNewClassConfiguration(
-        this.data.marketplace,
-        this.data.tenantId,
-        formValues.name,
-        formValues.description
-      )
+      .createNewClassConfiguration(this.globalInfo.marketplace, this.tenant.id, formValues.name, formValues.description)
       .toPromise()
       .then((ret: ClassConfiguration) => {
         this.data.classConfiguration = ret;
-      })
-      .then(() => {
+      }).then(() => {
         Promise.all([
           this.relationshipsService
-            .getRelationshipsById(
-              this.data.marketplace,
-              this.data.classConfiguration.relationshipIds
-            )
+            .getRelationshipsById(this.globalInfo.marketplace, this.data.classConfiguration.relationshipIds)
             .toPromise()
             .then((ret: Relationship[]) => {
               this.data.relationships = ret;
             }),
           this.classDefintionService
             .getClassDefinitionsById(
-              this.data.marketplace,
+              this.globalInfo.marketplace,
               this.data.classConfiguration.classDefinitionIds,
-              this.data.tenantId
+              this.tenant.id
             )
             .toPromise()
             .then((ret: ClassDefinition[]) => {
               this.data.classDefinitions = ret;
-            }),
+            })
         ]).then(() => {
           this.dialogRef.close(this.data);
         });
@@ -157,28 +132,22 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     }
     const formValues = this.getFormValues();
     this.classConfigurationService
-      .saveClassConfigurationMeta(
-        this.data.marketplace,
-        this.data.classConfiguration.id,
-        formValues.name,
-        formValues.description
-      )
-      .toPromise()
-      .then((ret: ClassConfiguration) => {
+      .saveClassConfigurationMeta(this.globalInfo.marketplace, this.data.classConfiguration.id, formValues.name, formValues.description)
+      .toPromise().then((ret: ClassConfiguration) => {
         this.data.classConfiguration = ret;
         this.dialogRef.close(this.data);
       });
   }
 
   private checkFormInvalid() {
-    this.dialogForm.get("label").markAsTouched();
-    this.dialogForm.get("description").markAsTouched();
+    this.dialogForm.get('label').markAsTouched();
+    this.dialogForm.get('description').markAsTouched();
     return this.dialogForm.invalid;
   }
 
   private getFormValues(): { name: string; description: string } {
-    const name = this.dialogForm.get("label").value;
-    const description = this.dialogForm.get("description").value;
+    const name = this.dialogForm.get('label').value;
+    const description = this.dialogForm.get('description').value;
 
     return { name, description };
   }

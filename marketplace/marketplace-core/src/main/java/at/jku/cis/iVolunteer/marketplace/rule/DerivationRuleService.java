@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.marketplace.rule.mapper.DerivationRuleMapper;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
 import at.jku.cis.iVolunteer.model.rule.entities.ClassActionDTO;
@@ -20,7 +20,7 @@ public class DerivationRuleService {
 
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
 	@Autowired private DerivationRuleMapper derivationRuleMapper;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private RuleService ruleService;
 		
 	public List<DerivationRuleDTO> getRules(String tenantId) {
@@ -38,36 +38,27 @@ public class DerivationRuleService {
 
 	public DerivationRuleDTO createRule(DerivationRuleDTO derivationRuleDTO) {
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		ruleService.addRule(derivationRule, false);
+		ruleService.addRule(derivationRule);
 		derivationRuleRepository.save(derivationRule);
 		//ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
 		return derivationRuleMapper.toTarget(derivationRule);
 	}
 	
 	public List<RuleExecution> testRule(DerivationRuleDTO derivationRuleDTO) {
-		// reset possible actions --> we are only testing the conditions!
-		derivationRuleDTO.setClassActions(new ArrayList<ClassActionDTO>());
-		
 	    DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		// add rule to container in testing mode
-		ruleService.addRule(derivationRule, true);
-		// only for test --> execute rule 
-		List<RuleExecution> ruleExecution = ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
-		// remove container rule again
-		ruleService.deleteRule(derivationRule.getTenantId(), derivationRule.getContainer(), derivationRule.getName());
-		return ruleExecution;
+		return ruleService.testRule(derivationRule);
 	}
 
 	public void updateRule(String id, DerivationRuleDTO derivationRuleDTO) {
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		ruleService.addRule(derivationRule, false);
+		ruleService.addRule(derivationRule);
 		derivationRuleRepository.save(derivationRule);
 	}
 	
-	public List<PropertyDefinition<Object>> getGeneralProperties(String tenantId){
-		List<PropertyDefinition<Object>> properties = new ArrayList<PropertyDefinition<Object>>();
+	public List<FlatPropertyDefinition<Object>> getGeneralProperties(String tenantId){
+		List<FlatPropertyDefinition<Object>> properties = new ArrayList<FlatPropertyDefinition<Object>>();
 		
-		PropertyDefinition<Object> pd = (PropertyDefinition<Object>) propertyDefinitionRepository.getByNameAndTenantId("Alter", tenantId).get(0);
+		FlatPropertyDefinition<Object> pd = (FlatPropertyDefinition<Object>) propertyDefinitionRepository.getByNameAndTenantId("Alter", tenantId).get(0);
 		properties.add(pd);
 		
 		return properties;
