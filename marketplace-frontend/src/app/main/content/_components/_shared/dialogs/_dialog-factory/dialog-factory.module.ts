@@ -37,6 +37,8 @@ import { OpenMatchingDialogComponent } from '../../../help-seeker/configuration/
 import { DeleteMatchingDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.component';
 import { AddClassDefinitionDialogModule } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.module';
 import { AddClassDefinitionDialogComponent } from '../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { AddHelpseekerDialogComponent } from '../../../admin/tenant-form/tenant-form-content/helpseekers-form/add-helpseeker-dialog/add-helpseeker-dialog.component';
+import { AddHelpseekerDialogModule } from '../../../admin/tenant-form/tenant-form-content/helpseekers-form/add-helpseeker-dialog/add-helpseeker-dialog.module';
 
 @NgModule({
   imports: [
@@ -68,6 +70,9 @@ import { AddClassDefinitionDialogComponent } from '../../../help-seeker/configur
     AddClassDefinitionDialogModule,
 
     // Tree Property Configurator
+
+    // Tenant Form
+    AddHelpseekerDialogModule,
   ],
   declarations: [DialogFactoryDirective],
   entryComponents: [
@@ -98,6 +103,9 @@ import { AddClassDefinitionDialogComponent } from '../../../help-seeker/configur
     AddClassDefinitionDialogComponent,
 
     // Tree Property Configurator
+
+    // Tenant Form
+    AddHelpseekerDialogComponent,
   ],
 })
 export class DialogFactoryModule { }

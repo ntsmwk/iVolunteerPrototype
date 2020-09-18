@@ -1,17 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
-import { TenantTagService } from 'app/main/content/_service/tenant-tag.service';
+import { Component, OnInit, Input } from '@angular/core';
 import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { UserRole, User } from 'app/main/content/_model/user';
 import { MatTableDataSource } from '@angular/material';
-
+import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 
 @Component({
   selector: "tenant-helpseekers-form",
   templateUrl: 'helpseekers-form.component.html',
-  styleUrls: ['./helpseekers-form.component.scss']
+  styleUrls: ['./helpseekers-form.component.scss'],
+  providers: [DialogFactoryDirective]
 })
 export class TenantHelpseekersFormComponent implements OnInit {
 
@@ -23,6 +21,7 @@ export class TenantHelpseekersFormComponent implements OnInit {
 
   constructor(
     private coreUserService: CoreUserService,
+    private dialogFactory: DialogFactoryDirective,
   ) { }
 
   async ngOnInit() {
@@ -30,18 +29,15 @@ export class TenantHelpseekersFormComponent implements OnInit {
     this.dataSource.data = [];
 
     this.dataSource.data = <User[]>(
-      await this.coreUserService
-        .findAllByRoleAndTenantId(this.tenant.id, UserRole.HELP_SEEKER)
-        .toPromise()
+      await this.coreUserService.findAllByRoleAndTenantId(this.tenant.id, UserRole.HELP_SEEKER).toPromise()
     );
     console.error(this.dataSource.data);
-    this.addHelpseeker();
     this.loaded = true;
   }
 
   addHelpseeker() {
-    this.coreUserService.findAllByRoles([UserRole.NONE, UserRole.VOLUNTEER, UserRole.HELP_SEEKER], true).toPromise().then((users: User[]) => {
-      console.log(users);
+    this.dialogFactory.openAddHelpseekerDialog(this.dataSource.data).then(ret => {
+      console.log(ret);
     });
   }
 
