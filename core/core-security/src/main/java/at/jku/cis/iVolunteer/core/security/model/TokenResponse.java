@@ -4,11 +4,11 @@ import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX
 
 import com.google.gson.JsonObject;
 
-public class LoginResponse {
+public class TokenResponse {
     private String accessToken;
     private String refreshToken;
 
-    public LoginResponse(String accessToken, String refreshToken) {
+    public TokenResponse(String accessToken, String refreshToken) {
         this.accessToken = TOKEN_PREFIX + accessToken;
         this.refreshToken = TOKEN_PREFIX + refreshToken;
 
@@ -28,7 +28,6 @@ public class LoginResponse {
         json.addProperty("accessToken", accessToken);
         json.addProperty("refreshToken", refreshToken);
         return json.toString();
-
     }
 
 }

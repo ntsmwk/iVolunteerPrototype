@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 
 public class User {
 	@Id
@@ -35,7 +36,7 @@ public class User {
 	private List<String> websites;
 	private List<String> emails;
 
-	private byte[] image;
+	private ImageWrapper image;
 
 	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
 
@@ -158,14 +159,13 @@ public class User {
 		this.organizationPosition = organizationPosition;
 	}
 
-	public byte[] getImage() {
+	public ImageWrapper getImage() {
 		return image;
 	}
 
-	public void setImage(final byte[] image) {
+	public void setImage(ImageWrapper image) {
 		this.image = image;
 	}
-
 
 	public List<String> getLocations() {
 		return locations;

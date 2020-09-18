@@ -16,7 +16,7 @@ export class FuseTenantListComponent implements OnInit {
   dataSource = new MatTableDataSource<Marketplace>();
   displayedColumns = ["name", "primaryColor", "secondaryColor", "actions"];
 
-  constructor(private router: Router, private tenantService: TenantService) {}
+  constructor(private router: Router, private tenantService: TenantService) { }
 
   async ngOnInit() {
     this.dataSource.data = <Marketplace[]>(
@@ -25,13 +25,13 @@ export class FuseTenantListComponent implements OnInit {
   }
 
   addTenant() {
-    this.router.navigate([`/main/tenant-form`], {
+    this.router.navigate([`/main/edit-tenant`], {
       queryParams: { marketplaceId: this.marketplaceId },
     });
   }
 
   navigateToTenantForm(tenantId: string) {
-    this.router.navigate([`/main/tenant-form/${tenantId}`], {
+    this.router.navigate([`/main/edit-tenant/${tenantId}`], {
       queryParams: { marketplaceId: this.marketplaceId },
     });
   }

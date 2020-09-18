@@ -11,6 +11,7 @@ import {
   MatTableModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
+import { TenantHelpseekersFormModule } from './tenant-form-content/helpseekers-form/helpseekers-form.module';
 import { TenantFormContentModule } from './tenant-form-content/tenant-form-content.module';
 
 const routes: Route[] = [
@@ -32,6 +33,7 @@ const routes: Route[] = [
     MatTableModule,
     FuseSharedModule,
     TenantFormContentModule,
+    TenantHelpseekersFormModule,
   ],
 
   providers: [],

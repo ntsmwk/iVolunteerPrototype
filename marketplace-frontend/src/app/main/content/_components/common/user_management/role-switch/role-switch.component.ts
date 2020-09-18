@@ -73,11 +73,7 @@ export class RoleSwitchComponent implements OnInit {
 
   getTenantImage(tenantId: string) {
     const tenant = this.allTenants.find((t) => t.id === tenantId);
-    if (isNullOrUndefined(tenant)) {
-      return '/assets/images/avatars/profile.jpg';
-    } else {
-      return this.imageService.getImgSourceFromBytes(tenant.image);
-    }
+    return this.tenantService.getTenantProfileImage(tenant);
   }
 
   getTenantNameString(tenantId: string) {

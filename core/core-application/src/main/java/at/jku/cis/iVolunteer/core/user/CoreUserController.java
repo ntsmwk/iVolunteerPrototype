@@ -36,6 +36,11 @@ public class CoreUserController {
 		return coreUserService.getAllByUserRole(userRole);
 	}
 
+	@PutMapping("/user/all/roles")
+	private List<CoreUser> getAllByUserRoles(@RequestBody List<UserRole> roles, @RequestParam("includeNoRole") boolean includeNoRole) {
+			return coreUserService.getAllByUserRoles(roles, includeNoRole);
+	}
+
 	@GetMapping("/user/all/role/{role}/tenant/{tenantId}")
 	private List<CoreUser> getAllByTenantIdAndUserRole(@PathVariable("role") UserRole userRole,
 			@PathVariable("tenantId") String tenantId) {

@@ -1,9 +1,5 @@
 <div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
-  <div
-    class="header-management-summary p-16 p-sm-24"
-    fxLayout="row"
-    fxLayoutAlign="center center"
-  >
+  <div class="header-management-summary p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
     <h1>Mein FreiwilligenÜBERBLICK</h1>
   </div>
   <!-- HEADER END -->
@@ -21,10 +17,7 @@
           <div fxLayout="column" style="width: 100%;">
             <h2 style="font-size: 30px;">{{ tenant.name }}</h2>
             <div fxLayout="row">
-              <img
-                src="{{ 'data:image/png;base64,' + tenant.image }}"
-                class="img"
-              />
+              <img src="{{ 'data:image/png;base64,' + tenant.profileImage }}" class="img" />
               <table class="table">
                 <tbody>
                   <tr>
@@ -61,31 +54,16 @@
       <div fxLayout="column" fxLayoutAlign="start center" style="width: 100%;">
         <div fxLayout="column" fxLayoutAlign="start center">
           <div>
-            <div
-              class="donut-parent-duration"
-              *ngIf="durationTotal.length != 0"
-            >
-              <ngx-charts-advanced-pie-chart
-                class="chart-container"
-                [results]="durationTotal"
-                [animations]="animations"
-                [tooltipDisabled]="false"
-                [customColors]="colors"
-                [valueFormatting]="valueFormattingDuration"
-              >
+            <div class="donut-parent-duration" *ngIf="durationTotal.length != 0">
+              <ngx-charts-advanced-pie-chart class="chart-container" [results]="durationTotal" [animations]="animations"
+                [tooltipDisabled]="false" [customColors]="colors" [valueFormatting]="valueFormattingDuration">
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
           <div>
             <div class="donut-parent-duration" *ngIf="numberTotal.length != 0">
-              <ngx-charts-advanced-pie-chart
-                class="chart-container"
-                [results]="numberTotal"
-                [animations]="animations"
-                [tooltipDisabled]="false"
-                [customColors]="colors"
-                [valueFormatting]="valueFormattingNumber"
-              >
+              <ngx-charts-advanced-pie-chart class="chart-container" [results]="numberTotal" [animations]="animations"
+                [tooltipDisabled]="false" [customColors]="colors" [valueFormatting]="valueFormattingNumber">
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
@@ -96,11 +74,8 @@
         <div style="width: 100%;" fxLayout="row" fxLayoutAlign="start center">
           <h1 class="engagement">Engagement</h1>
           <mat-form-field>
-            <mat-select
-              class="formFieldEngament"
-              [value]="engagementYear"
-              (selectionChange)="generateEngagementYearData($event.value)"
-            >
+            <mat-select class="formFieldEngament" [value]="engagementYear"
+              (selectionChange)="generateEngagementYearData($event.value)">
               <mat-option *ngFor="let year of uniqueYears" [value]="year">{{
                 year
               }}</mat-option>
@@ -111,27 +86,15 @@
         <div fxLayout="column" fxLayoutAlign="start center">
           <div>
             <div class="donut-parent-duration" *ngIf="durationYear.length != 0">
-              <ngx-charts-advanced-pie-chart
-                class="chart-container"
-                [results]="durationYear"
-                [animations]="animations"
-                [tooltipDisabled]="false"
-                [customColors]="colors"
-                [valueFormatting]="valueFormattingDuration"
-              >
+              <ngx-charts-advanced-pie-chart class="chart-container" [results]="durationYear" [animations]="animations"
+                [tooltipDisabled]="false" [customColors]="colors" [valueFormatting]="valueFormattingDuration">
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
           <div>
             <div class="donut-parent-duration" *ngIf="numberYear.length != 0">
-              <ngx-charts-advanced-pie-chart
-                class="chart-container"
-                [results]="numberYear"
-                [animations]="animations"
-                [tooltipDisabled]="false"
-                [customColors]="colors"
-                [valueFormatting]="valueFormattingNumber"
-              >
+              <ngx-charts-advanced-pie-chart class="chart-container" [results]="numberYear" [animations]="animations"
+                [tooltipDisabled]="false" [customColors]="colors" [valueFormatting]="valueFormattingNumber">
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
@@ -149,41 +112,22 @@
             <mat-form-field class="formFieldComparison">
               <mat-label>Vergleichsjahr</mat-label>
 
-              <mat-select
-                [value]="comparisonYear"
-                (selectionChange)="generateComparisonChartData($event.value)"
-              >
+              <mat-select [value]="comparisonYear" (selectionChange)="generateComparisonChartData($event.value)">
                 <mat-option *ngFor="let year of uniqueYears" [value]="year">{{
                   year
                 }}</mat-option>
               </mat-select>
             </mat-form-field>
             <div style="width: 50px;"></div>
-            <app-share-menu
-              class="shareMenu"
-              [label]="'Vergleich'"
-              (export)="exportChart($event)"
-            >
+            <app-share-menu class="shareMenu" [label]="'Vergleich'" (export)="exportChart($event)">
             </app-share-menu>
           </div>
 
           <div class="chartParrent">
-            <ngx-charts-bar-vertical-2d
-              [results]="comparisonData"
-              [customColors]="colors"
-              [animations]="animations"
-              [xAxis]="true"
-              [yAxis]="true"
-              [showXAxisLabel]="true"
-              [showYAxisLabel]="true"
-              [xAxisLabel]="comparisonXlabel"
-              [yAxisLabel]="comparisonYlabel"
-              [roundEdges]="false"
-              [legend]="true"
-              [legendTitle]="Legende"
-              [showDataLabel]="true"
-              [noBarWhenZero]="false"
-            >
+            <ngx-charts-bar-vertical-2d [results]="comparisonData" [customColors]="colors" [animations]="animations"
+              [xAxis]="true" [yAxis]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
+              [xAxisLabel]="comparisonXlabel" [yAxisLabel]="comparisonYlabel" [roundEdges]="false" [legend]="true"
+              [legendTitle]="Legende" [showDataLabel]="true" [noBarWhenZero]="false">
             </ngx-charts-bar-vertical-2d>
           </div>
         </div>
@@ -196,23 +140,17 @@
     zu wenig Daten über mehrere Jahre vorhanden sind!
   </p>
 
-  <p
-    *ngIf="isLoaded && subscribedTenants.length === 0"
-    class="alert alert-info"
-  >
+  <p *ngIf="isLoaded && subscribedTenants.length === 0" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation
     beigetreten!
   </p>
 
-  <p
-    *ngIf="
+  <p *ngIf="
       isLoaded &&
       classInstanceDTOs.length === 0 &&
       isLocalRepositoryConnected &&
       uniqueTenants.length > 0
-    "
-    class="alert alert-info"
-  >
+    " class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine
     Daten in deinem lokalen Freiwilligenpass!
   </p>

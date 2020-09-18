@@ -23,8 +23,8 @@ export class TenantService {
     return this.http.get(`/core/tenant/${tenantId}`);
   }
 
-  findByVolunteerId(volunteerId: string) {
-    return this.http.get(`/core/tenant/volunteer/${volunteerId}`);
+  findByUserId(userId: string) {
+    return this.http.get(`/core/tenant/user/${userId}`);
   }
 
   findByMarketplace(marketplaceId: string) {
@@ -35,12 +35,27 @@ export class TenantService {
     if (tenant.id == null) {
       return this.http.post(`/core/tenant`, tenant);
     }
-    return this.http.put(`/core/tenant/${tenant.id}`, tenant);
+    return this.http.put(`/core/tenant`, tenant);
   }
 
-  getTenantImage(tenant: Tenant) {
-    return this.imageService.getImgSourceFromBytes(tenant.image);
+  getTenantProfileImage(tenant: Tenant) {
+
+    if (tenant == null) {
+      return "/assets/images/avatars/profile.jpg"
+    }
+
+    const ret = this.imageService.getImgSourceFromImageWrapper(tenant.profileImage);
+    if (ret == null) {
+      return "/assets/images/avatars/profile.jpg"
+    } else {
+      return ret;
+    }
   }
+
+  getTenantLandingPageImage(tenant: Tenant) {
+    return this.imageService.getImgSourceFromImageWrapper(tenant.landingpageImage);
+  }
+
 
   initHeader(tenant: Tenant) {
     (<HTMLElement>document.querySelector(".header")).style.background =

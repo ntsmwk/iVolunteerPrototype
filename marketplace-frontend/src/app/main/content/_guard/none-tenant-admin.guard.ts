@@ -6,7 +6,7 @@ import { UserRole } from "../_model/user";
 @Injectable({
   providedIn: "root",
 })
-export class HelpSeekerOrTenantAdminGuard implements CanActivate {
+export class NoneOrTenantAdminGuard implements CanActivate {
   constructor(private loginService: LoginService, private router: Router) { }
 
   canActivate(): Promise<boolean> {
@@ -15,9 +15,7 @@ export class HelpSeekerOrTenantAdminGuard implements CanActivate {
         .getLoggedInUserRole()
         .toPromise()
         .then((role: UserRole) => {
-          resolve(
-            role === UserRole.TENANT_ADMIN || role === UserRole.HELP_SEEKER
-          );
+          resolve(role === UserRole.TENANT_ADMIN || role === UserRole.NONE);
         });
     });
   }

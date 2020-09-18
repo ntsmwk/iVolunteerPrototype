@@ -264,17 +264,6 @@ public class RuleEngineMapper {
 		}
 	}
 
-	// XXX to do
-	private String buildDuplicateCheck(ClassAction classAction) {
-		String constraints = " getClassInstances(v, \"" + classAction.getClassDefinitionId() + "\", t.getId())";
-		// get properties to filter for class instance
-		for (AttributeCondition attrCondition : classAction.getAttributes()) {
-			constraints = " filterInstancesByPropertyCriteria(" + constraints + ", "
-					+ decodeAttributeCondition(attrCondition) + ")";
-		}
-		return constraints;
-	}
-
 	private String mapClassActionToRuleAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
 		switch (classAction.getType()) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
@@ -59,6 +60,21 @@ public class CoreUserService {
 				returnUsers.add(user);
 			}
 		}
+		return returnUsers;
+	}
+	
+	public List<CoreUser> getAllByUserRoles(List<UserRole> roles, boolean includeNoRole) {
+		List<CoreUser> returnUsers = new ArrayList<>();
+		List<CoreUser> allUsers = coreUserRepository.findAll();
+		
+		if (allUsers == null) { return returnUsers;}
+		
+		for (CoreUser user : allUsers) {	
+			if ((includeNoRole && user.getSubscribedTenants().size() == 0) || user.getSubscribedTenants().stream().filter(st -> roles.contains(st.getRole())).findFirst().isPresent()) {
+				returnUsers.add(user);
+			}
+		}
+		
 		return returnUsers;
 	}
 

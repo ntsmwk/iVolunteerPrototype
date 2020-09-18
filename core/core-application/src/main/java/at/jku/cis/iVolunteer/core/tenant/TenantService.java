@@ -51,19 +51,19 @@ public class TenantService {
 	}
 
 	public Tenant createTenant(Tenant tenant) {
-		return tenantRepository.insert(tenant);
+		return tenantRepository.save(tenant);
 	}
 
-	public Tenant updateTenant(String tenantId, @RequestBody Tenant tenant) {
-		Tenant orginalTenant = tenantRepository.findOne(tenantId);
-		if (orginalTenant == null) {
-			throw new NotAcceptableException();
-		}
-		orginalTenant.setName(tenant.getName());
-		orginalTenant.setPrimaryColor(tenant.getPrimaryColor());
-		orginalTenant.setSecondaryColor(tenant.getSecondaryColor());
-		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
-		return tenantRepository.save(orginalTenant);
+	public Tenant updateTenant(/*String tenantId,*/ @RequestBody Tenant tenant) {
+//		Tenant orginalTenant = tenantRepository.findOne(tenantId);
+//		if (orginalTenant == null) {
+//			throw new NotAcceptableException();
+//		}
+//		orginalTenant.setName(tenant.getName());
+//		orginalTenant.setPrimaryColor(tenant.getPrimaryColor());
+//		orginalTenant.setSecondaryColor(tenant.getSecondaryColor());
+//		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
+		return tenantRepository.save(tenant);
 	}
 
 }

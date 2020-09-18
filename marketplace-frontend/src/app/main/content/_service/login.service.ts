@@ -14,7 +14,7 @@ export class LoginService {
     private http: HttpClient,
     private httpClient: HttpClient,
     private router: Router
-  ) {}
+  ) { }
 
   login(username: string, password: string) {
     return this.http.post(
@@ -26,10 +26,7 @@ export class LoginService {
 
   logout() {
     localStorage.clear();
-
-    this.router.navigate(["/login"]).then(() => {
-      window.location.reload(true);
-    });
+    this.router.navigate(["/login"]);
   }
 
   getActivationStatus(username: string) {
@@ -67,7 +64,15 @@ export class LoginService {
     return this.http.post("/core/login/refreshToken", refreshToken).pipe(
       tap(
         (response: any) => {
-          localStorage.setItem("accessToken", response.accessToken);
+          let accessToken: string = response.accessToken;
+          let refreshToken: string = response.refreshToken;
+
+          if (accessToken == null || refreshToken == null) {
+            this.logout();
+          } else {
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+          }
         },
         (error) => {
           this.logout();
@@ -94,7 +99,6 @@ export class LoginService {
         this.httpClient.get(`/core/login/globalInfo`);
       }
     });
-
     return observable;
   }
 

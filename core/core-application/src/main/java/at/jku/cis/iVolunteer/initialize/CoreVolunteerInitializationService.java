@@ -25,6 +25,7 @@ import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
@@ -115,7 +116,7 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				volunteer.setImage(binaryData);
+				volunteer.setImage(new ImageWrapper("data:image/png;base64", binaryData));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
