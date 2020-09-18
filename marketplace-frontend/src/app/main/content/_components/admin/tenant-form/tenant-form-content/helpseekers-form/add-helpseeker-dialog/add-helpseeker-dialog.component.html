@@ -1,12 +1,12 @@
 <div mat-dialog-title fxLayout="row" fxLayoutAlign="start center">
   <mat-icon>add</mat-icon>
-  <h1>Property hinzufügen</h1>
+  <h1>Helpseeker hinzufügen</h1>
 </div>
 
-<mat-dialog-content>
+<mat-dialog-content class="mt-8">
   <div *ngIf="loaded">
 
-    <mat-table #matTable class="table" [dataSource]="datasource" matSort fusePerfectScrollbar>
+    <mat-table #matTable class="user-table" [dataSource]="datasource" matSort fusePerfectScrollbar>
       <ng-container matColumnDef="checkbox">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let row">
@@ -17,9 +17,10 @@
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>User</mat-header-cell>
         <mat-cell *matCellDef="let entry">
-          <div fxLayout="column" fxLayoutAlign="start start">
+          <div fxLayout="column" fxLayoutAlign="start center">
+
             <div class="name">{{ entry.firstname }} {{ entry.lastname }} ({{entry.username}})</div>
           </div>
         </mat-cell>
