@@ -69,7 +69,7 @@ export class TenantFormContentComponent implements OnInit {
       return;
     }
 
-    tenant.landingpageTitle = this.patchLandingPageTitle(tenant.landingpageTitle);
+    tenant.landingpageMessage = this.patchLandingPageMessage(tenant.landingpageMessage);
 
     this.tenantForm = this.formBuilder.group({
       name: new FormControl('', Validators.required),
@@ -96,11 +96,11 @@ export class TenantFormContentComponent implements OnInit {
     this.addedTags = this.tenant.tags;
   }
 
-  private patchLandingPageTitle(title: string) {
-    if (isNullOrUndefined(title)) {
-      title = 'Herzlich Willkommen bei iVolunteer';
+  private patchLandingPageMessage(message: string) {
+    if (isNullOrUndefined(message)) {
+      message = 'Herzlich Willkommen bei iVolunteer';
     }
-    return title;
+    return message;
   }
 
   save() {
@@ -116,7 +116,7 @@ export class TenantFormContentComponent implements OnInit {
     this.tenant = new Tenant(this.tenantForm.value);
     this.tenant.id = tenantId;
     this.tenant.marketplaceId = this.globalInfo.marketplace.id;
-    this.tenant.landingpageTitle = this.patchLandingPageTitle(this.tenant.landingpageTitle);
+    this.tenant.landingpageMessage = this.patchLandingPageMessage(this.tenant.landingpageMessage);
 
     this.tenant.profileImage = this.assignCurrentImage(this.previewProfileImage, this.previewProfileImageDirty, oldProfileImage);
     this.tenant.landingpageImage = this.assignCurrentImage(this.landingPageImage, this.landingPageImageDirty, oldLandingPageImage);
