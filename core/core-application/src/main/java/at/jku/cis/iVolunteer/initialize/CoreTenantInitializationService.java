@@ -49,7 +49,7 @@ public class CoreTenantInitializationService {
 			tenant.setPrimaryColor(primaryColor);
 			tenant.setSecondaryColor(secondaryColor);
 			tenant.setMarketplaceId(marketplaceId);
-			tenant.setLandingpageTitle("Herzlich Willkommen bei iVolunteer!");
+			tenant.setLandingpageMessage("Herzlich Willkommen bei iVolunteer!");
 			tenant.setLandingpageTitle(landingpageTitle);
 			tenant = coreTenantRepository.insert(tenant);
 		}
