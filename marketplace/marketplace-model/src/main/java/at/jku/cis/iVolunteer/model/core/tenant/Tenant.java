@@ -24,8 +24,9 @@ public class Tenant {
 
 	private String marketplaceId;
 	
-	private List<String> tags;
+	private List<String> tags = new ArrayList<>();
 
+	private String landingpageTitle;
 	private String landingpageMessage;
 	private String landingpageText;
 	private ImageWrapper landingpageImage;
@@ -104,6 +105,14 @@ public class Tenant {
 		this.tags = tags;
 	}
 	
+	public String getLandingpageTitle() {
+		return landingpageTitle;
+	}
+
+	public void setLandingpageTitle(String landingpageTitle) {
+		this.landingpageTitle = landingpageTitle;
+	}
+
 	public String getLandingpageMessage() {
 		return landingpageMessage;
 	}

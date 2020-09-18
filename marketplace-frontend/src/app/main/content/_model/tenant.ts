@@ -12,6 +12,7 @@ export class Tenant {
   tags: string[] = [];
 
   landingpageMessage: string;
+  landingpageTitle: string;
   landingpageText: string;
   landingpageImage: ImageWrapper;
 

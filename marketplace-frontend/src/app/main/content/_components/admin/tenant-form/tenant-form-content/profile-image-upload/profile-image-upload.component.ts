@@ -64,7 +64,7 @@ export class ProfileImageUploadComponent implements OnInit {
   deleteImage() {
     this.imageFileInput = undefined;
     this.previewImage = undefined;
-    this.uploadedImage.emit({ key: 'clear', image: undefined });
+    this.uploadedImage.emit({ key: 'clear', image: null });
   }
 
   revertImage() {
