@@ -1,0 +1,52 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center">
+  <mat-icon>add</mat-icon>
+  <h1>Helpseeker hinzufügen</h1>
+</div>
+
+<mat-dialog-content class="mt-8">
+  <div *ngIf="loaded">
+
+    <mat-table #matTable class="user-table" [dataSource]="datasource" matSort fusePerfectScrollbar>
+      <ng-container matColumnDef="checkbox">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>User</mat-header-cell>
+        <mat-cell *matCellDef="let entry">
+          <div fxLayout="column" fxLayoutAlign="start center">
+
+            <div class="name">{{ entry.firstname }} {{ entry.lastname }} ({{entry.username}})</div>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClick(row)"></mat-row>
+    </mat-table>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
+    </mat-form-field>
+
+  </div>
+
+  <div *ngIf="!loaded" class="center-spinner-wrapper">
+    <mat-spinner></mat-spinner>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="loaded">
+
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">OK</button>
+
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
+
+
+</mat-dialog-actions>

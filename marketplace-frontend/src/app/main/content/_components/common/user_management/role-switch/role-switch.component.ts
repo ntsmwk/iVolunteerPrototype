@@ -37,10 +37,9 @@ export class RoleSwitchComponent implements OnInit {
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
-
-    this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(
-      this.user
-    );
+    console.log(this.user);
+    this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(this.user);
+    console.log(this.roleTenantMappings);
     if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.PERSON) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
         this.router.navigate(['/main/dashboard/tenants']);
@@ -58,9 +57,11 @@ export class RoleSwitchComponent implements OnInit {
   }
 
   onRoleSelected(mapping: RoleTenantMapping) {
+    //@AK fehler hier?
     this.loginService
       .generateGlobalInfo(mapping.role, mapping.tenantIds)
       .then(() => {
+
         this.router.navigate(['/main/dashboard']).then(() => {
           this.roleChangeService.changeRole(mapping.role);
         });
