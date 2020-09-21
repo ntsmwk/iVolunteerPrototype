@@ -66,19 +66,22 @@ public class CoreUserService {
 		}
 		return returnUsers;
 	}
-	
+
 	public List<CoreUser> getAllByUserRoles(List<UserRole> roles, boolean includeNoRole) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
-		
-		if (allUsers == null) { return returnUsers;}
-		
-		for (CoreUser user : allUsers) {	
-			if ((includeNoRole && user.getSubscribedTenants().size() == 0) || user.getSubscribedTenants().stream().filter(st -> roles.contains(st.getRole())).findFirst().isPresent()) {
+
+		if (allUsers == null) {
+			return returnUsers;
+		}
+
+		for (CoreUser user : allUsers) {
+			if ((includeNoRole && user.getSubscribedTenants().size() == 0) || user.getSubscribedTenants().stream()
+					.filter(st -> roles.contains(st.getRole())).findFirst().isPresent()) {
 				returnUsers.add(user);
 			}
 		}
-		
+
 		return returnUsers;
 	}
 
@@ -153,10 +156,11 @@ public class CoreUserService {
 	}
 
 	public CoreUser updateUser(CoreUser user, String authorization, boolean updateMarketplaces) {
-		if (this.coreUserRepository.findOne(user.getId()) != null) {
-			user.setPassword(this.coreUserRepository.findOne(user.getId()).getPassword());
+		CoreUser existingUser = coreUserRepository.findOne(user.getId());
+		if (existingUser != null) {
+			user.setPassword(existingUser.getPassword());
 		}
-		this.coreUserRepository.save(user);
+		user = this.coreUserRepository.save(user);
 
 		if (updateMarketplaces) {
 			this.updateMarketplaces(user, authorization);
