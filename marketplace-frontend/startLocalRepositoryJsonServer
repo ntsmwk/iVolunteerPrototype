@@ -1,0 +1,16 @@
+DEFAULT='{
+  "repository": []
+}'
+
+if test -f "db.json"; then
+    if grep -q "repository" db.json; then
+        json-server --watch db.json
+    else
+        > db.json
+        echo "$DEFAULT" >> db.json
+        json-server --watch db.json 
+    fi
+else
+    echo "$DEFAULT" >> db.json
+    json-server --watch db.json    
+fi
