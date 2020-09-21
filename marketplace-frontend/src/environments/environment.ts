@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   hmr: false,
   REDIRECT_URI: "http://localhost:4200/main/profile",
+  JSON_SERVER_URL: "http://localhost:3000/repository",
 };
 
 /*

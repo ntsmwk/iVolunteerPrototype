@@ -95,6 +95,7 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
       let sourceService = this.getService(this.user.localRepositoryLocation);
       let destService = this.getService(newLocation);
 
+      // unterscheiden zwischen nicht erreichbar und null (noch nicht gesetzt)
       if (sourceService != null) {
         try {
           let classInstances = <ClassInstance[]>(

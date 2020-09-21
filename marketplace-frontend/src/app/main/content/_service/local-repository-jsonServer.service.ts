@@ -6,13 +6,13 @@ import { isNullOrUndefined } from "util";
 import { ClassInstance } from "../_model/meta/class";
 import { User } from "../_model/user";
 import { LocalRepositoryService } from "./local-repository.service";
+import { environment } from "environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class LocalRepositoryJsonServerService extends LocalRepositoryService {
-  private apiUrl = "http://localhost:3000/repository";
-  // private apiUrl = "http://140.78.92.57:3000/repository";
+  private apiUrl = environment.JSON_SERVER_URL;
 
   constructor(private http: HttpClient) {
     super();
