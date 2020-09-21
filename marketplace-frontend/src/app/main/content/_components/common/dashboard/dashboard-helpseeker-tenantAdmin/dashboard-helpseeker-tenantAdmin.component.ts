@@ -20,6 +20,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
   user: User;
   tenant: Tenant;
+  image: any;
   loaded: boolean;
 
   constructor(
@@ -37,6 +38,8 @@ export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
     );
     this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
+    this.image = this.getTitleImage();
+    console.log(this.image);
     this.loaded = true;
   }
 
