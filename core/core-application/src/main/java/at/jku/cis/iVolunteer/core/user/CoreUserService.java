@@ -20,10 +20,14 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @Service
 public class CoreUserService {
 
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired private TenantRepository tenantRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
-	@Autowired private MarketplaceService marketplaceService;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private TenantRepository tenantRepository;
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private MarketplaceService marketplaceService;
 
 	public List<CoreUser> findAll() {
 		return coreUserRepository.findAll();
@@ -62,19 +66,22 @@ public class CoreUserService {
 		}
 		return returnUsers;
 	}
-	
+
 	public List<CoreUser> getAllByUserRoles(List<UserRole> roles, boolean includeNoRole) {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
-		
-		if (allUsers == null) { return returnUsers;}
-		
-		for (CoreUser user : allUsers) {	
-			if ((includeNoRole && user.getSubscribedTenants().size() == 0) || user.getSubscribedTenants().stream().filter(st -> roles.contains(st.getRole())).findFirst().isPresent()) {
+
+		if (allUsers == null) {
+			return returnUsers;
+		}
+
+		for (CoreUser user : allUsers) {
+			if ((includeNoRole && user.getSubscribedTenants().size() == 0) || user.getSubscribedTenants().stream()
+					.filter(st -> roles.contains(st.getRole())).findFirst().isPresent()) {
 				returnUsers.add(user);
 			}
 		}
-		
+
 		return returnUsers;
 	}
 
@@ -149,12 +156,17 @@ public class CoreUserService {
 	}
 
 	public CoreUser updateUser(CoreUser user, String authorization, boolean updateMarketplaces) {
+		CoreUser existingUser = coreUserRepository.findOne(user.getId());
+		if (existingUser != null) {
+			user.setPassword(existingUser.getPassword());
+		}
 		user = this.coreUserRepository.save(user);
 
 		if (updateMarketplaces) {
 			this.updateMarketplaces(user, authorization);
 		}
 
+		user.setPassword(null);
 		return user;
 	}
 

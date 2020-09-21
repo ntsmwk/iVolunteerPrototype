@@ -39,7 +39,6 @@ export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
     this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
     this.image = this.getTitleImage();
-    console.log(this.image);
     this.loaded = true;
   }
 

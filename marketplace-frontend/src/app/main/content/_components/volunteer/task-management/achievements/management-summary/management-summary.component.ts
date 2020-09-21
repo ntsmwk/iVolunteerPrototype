@@ -14,6 +14,7 @@ import { LocalRepositoryJsonServerService } from "app/main/content/_service/loca
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 
 @Component({
   selector: "fuse-management-summary",
@@ -66,7 +67,7 @@ export class ManagementSummaryComponent implements OnInit {
 
   percentageFilteredOut: number = 0;
 
-  localRepositoryService;
+  localRepositoryService: LocalRepositoryService;
 
   constructor(
     private loginService: LoginService,
@@ -89,13 +90,9 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
 
-    if (
-      this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
-    ) {
-      this.localRepositoryService = this.lrJsonServerService;
-    } else {
-      this.localRepositoryService = this.lrDropboxService;
-    }
+    this.localRepositoryService = this.loginService.getLocalRepositoryService(
+      this.volunteer
+    );
 
     try {
       let localClassInstances = <ClassInstance[]>(

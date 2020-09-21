@@ -1,0 +1,22 @@
+.login {
+  margin-top: 20px;
+}
+
+.input {
+  min-width: 450px;
+}
+
+.logo {
+  height: 70px;
+  margin-bottom: 5px;
+}
+
+.radioButtons {
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0;
+}
+
+mat-radio-button {
+  margin-left: 20px;
+}

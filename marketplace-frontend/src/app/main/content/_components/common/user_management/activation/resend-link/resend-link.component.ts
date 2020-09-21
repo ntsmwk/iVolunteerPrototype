@@ -15,6 +15,7 @@ export class ResendLinkComponent implements OnInit {
   @Input() emailAddress: string;
   @Input() username: string;
   @Input() accountType: AccountType;
+
   loading = false;
   showResultMessage = false;
   activationTexts: any;
@@ -32,17 +33,13 @@ export class ResendLinkComponent implements OnInit {
   }
 
   onSubmit() {
-    // this.submitForm.emit(this.emailAddress);
     this.handleResendLinkSubmit(this.emailAddress);
   }
 
   handleResendLinkSubmit(email: string) {
-    console.log("submit");
-    console.log(email);
     this.loading = true;
     this.emailAddress = email;
     this.activationService.createActivationLinkViaEmail(email, this.accountType).toPromise().then((ret) => {
-      console.log(ret);
       this.loading = false;
       this.showResultMessage = true;
     });

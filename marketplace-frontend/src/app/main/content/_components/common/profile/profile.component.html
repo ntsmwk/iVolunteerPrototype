@@ -1,131 +1,19 @@
-<div id="profile" class="page-layout simple tabbed" *ngIf="isLoaded">
-  <div
-    class="header p-24"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayout.gt-sm="row"
-    fxLayoutAlign.gt-sm="space-between end"
-  >
-    <div
-      *ngIf="user"
-      class="user-info"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayout.gt-sm="row"
-      fxLayoutAlign.gt-sm="start center"
-    >
-      <img
-        class="profile-image avatar huge"
-        [src]="getProfileImage()"
-        [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }"
-      />
-      <div
-        class="name"
-        [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
-      >
+<div id="profile" class="page-layout simple tabbed" *ngIf="loaded">
+  <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+    fxLayoutAlign.gt-sm="space-between end">
+    <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="start center">
+      <img class="profile-image avatar huge" [src]="getProfileImage()"
+        [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }" />
+      <div class="name" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">
         {{ user.firstname }} {{ user.lastname }}
       </div>
     </div>
-
-    <!-- <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{ value: '*', params: { delay: '200ms' } }">
-      <button mat-raised-button color="accent" aria-label="Follow">
-        Follow
-      </button>
-      <button mat-raised-button color="primary" aria-label="Send Message">
-        Send Message
-      </button>
-    </div> -->
   </div>
-  <div class="content">
-    <div style="padding-top: 15px"></div>
-    <!-- <mat-card class="org-card p-10 m-10">
-      <h3>asdfasf</h3>
-    </mat-card> -->
-    <div fxLayout="column">
-      <mat-card style="margin: 20px">
-        <mat-card-title> Stammdaten </mat-card-title>
-        <mat-card-content>
-          <form
-            name="profileForm"
-            (submit)="changeProfile()"
-            [formGroup]="profileForm"
-            novalidate
-            fxLayout="column"
-            style="max-width: 500px"
-          >
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Vorname"
-                formControlName="firstName"
-              />
-              <mat-error
-                *ngIf="
-                  profileFormErrors.firstName &&
-                  profileFormErrors.firstName.required
-                "
-              >
-                Vorname benötigt
-              </mat-error>
-            </mat-form-field>
 
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Nachname"
-                formControlName="lastName"
-              />
-              <mat-error
-                *ngIf="
-                  profileFormErrors.lastName &&
-                  profileFormErrors.lastName.required
-                "
-              >
-                Nachname benötigt
-              </mat-error>
-            </mat-form-field>
 
-            <mat-form-field>
-              <mat-label>Geburtsdatum</mat-label>
-
-              <input
-                matInput
-                [matDatepicker]="picker"
-                formControlName="birthday"
-                [max]="today"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="picker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-              <mat-error
-                *ngIf="
-                  profileFormErrors.birthday &&
-                  profileFormErrors.birthday.required
-                "
-              >
-                Geburtsdatum benötigt
-              </mat-error>
-            </mat-form-field>
-
-            <button
-              type="submit"
-              mat-raised-button
-              color="primary"
-              class="submit-button"
-              aria-label="SUBMIT"
-              [disabled]="profileForm.invalid"
-            >
-              Speichern
-            </button>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <app-local-repository-location-switch
-      *ngIf="hasVolunteerRole()"
-    ></app-local-repository-location-switch>
+  <div class="content pt-16">
+    <profile-form [user]="user"></profile-form>
+    <app-local-repository-location-switch *ngIf="hasVolunteerRole()"></app-local-repository-location-switch>
   </div>
 </div>

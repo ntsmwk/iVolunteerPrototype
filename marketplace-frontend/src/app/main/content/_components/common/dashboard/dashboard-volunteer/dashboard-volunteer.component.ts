@@ -22,13 +22,11 @@ import * as Highcharts from "highcharts";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { DialogFactoryDirective } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
-import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
+import { User } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { ImageService } from "app/main/content/_service/image.service";
-import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 import { UserService } from "app/main/content/_service/user.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -40,7 +38,7 @@ HC_venn(Highcharts);
 export class DashboardVolunteerComponent implements OnInit {
   volunteer: User;
   marketplace: Marketplace;
-  localRepositoryService;
+  localRepositoryService: LocalRepositoryService;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -96,8 +94,6 @@ export class DashboardVolunteerComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private classInstanceService: ClassInstanceService,
-    private lrDropboxService: LocalRepositoryDropboxService,
-    private lrJsonServerService: LocalRepositoryJsonServerService,
     private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
@@ -142,13 +138,9 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    if (
-      this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
-    ) {
-      this.localRepositoryService = this.lrJsonServerService;
-    } else {
-      this.localRepositoryService = this.lrDropboxService;
-    }
+    this.localRepositoryService = this.loginService.getLocalRepositoryService(
+      this.volunteer
+    );
 
     let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
       await this.classInstanceService
