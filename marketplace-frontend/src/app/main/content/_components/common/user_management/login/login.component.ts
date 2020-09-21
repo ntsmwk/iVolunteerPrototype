@@ -33,7 +33,7 @@ export class FuseLoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -107,6 +107,7 @@ export class FuseLoginComponent implements OnInit {
               .catch((e) => {
                 this.loginService.logout();
                 this.error = true;
+                this.loginService.logout();
               });
           } else {
             this.displayLoginForm = false;

@@ -22,6 +22,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { UserService } from "app/main/content/_service/user.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 
 @Component({
   selector: "app-class-instance-details",
@@ -45,7 +46,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
   tableDataSource = new MatTableDataSource<PropertyInstance<any>>();
   displayedColumns = ["name", "values", "type"];
 
-  localRepositoryService;
+  localRepositoryService: LocalRepositoryService;
 
   constructor(
     private route: ActivatedRoute,
@@ -77,11 +78,9 @@ export class ClassInstanceDetailsComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
 
-    if (this.user.localRepositoryLocation == LocalRepositoryLocation.LOCAL) {
-      this.localRepositoryService = this.lrJsonServerService;
-    } else {
-      this.localRepositoryService = this.lrDropboxService;
-    }
+    this.localRepositoryService = this.loginService.getLocalRepositoryService(
+      this.volunteer
+    );
 
     this.classInstance = <ClassInstance>(
       await this.classInstanceService
@@ -118,7 +117,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
       .values[0];
   }
 
-  getVolunteerName(userId: string) { }
+  getVolunteerName(userId: string) {}
 
   sortData(sort: Sort) {
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {

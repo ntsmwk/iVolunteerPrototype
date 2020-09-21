@@ -94,7 +94,6 @@ public class CoreVolunteerInitializationService {
 			volunteer.setRegisteredMarketplaceIds(
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
-			volunteer.setLocalRepositoryLocation(LocalRepositoryLocation.LOCAL);
 			volunteer.setEmails(Collections.singletonList("iVolunteerTest@gmx.at"));
 
 			volunteer.setActivated(true);

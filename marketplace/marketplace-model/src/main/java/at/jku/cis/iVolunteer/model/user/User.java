@@ -22,7 +22,7 @@ public class User {
 	private String firstname;
 	private String lastname;
 	private String titleAfter;
-	
+
 	private String nickname;
 
 	private String organizationPosition;
@@ -43,6 +43,7 @@ public class User {
 
 	private LocalRepositoryLocation localRepositoryLocation;
 	private String dropboxToken;
+	private NextcloudCredentials nextcloudCredentials;
 
 	public User() {
 	}
@@ -71,6 +72,7 @@ public class User {
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
+		this.nextcloudCredentials = coreUser.getNextcloudCredentials();
 	}
 
 	public String getId() {
@@ -278,7 +280,15 @@ public class User {
 	public void setDropboxToken(String dropboxToken) {
 		this.dropboxToken = dropboxToken;
 	}
-	
+
+	public NextcloudCredentials getNextcloudCredentials() {
+		return this.nextcloudCredentials;
+	}
+
+	public void setNextcloudCredentials(NextcloudCredentials nextcloudCredentials) {
+		this.nextcloudCredentials = nextcloudCredentials;
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (!(obj instanceof User)) {

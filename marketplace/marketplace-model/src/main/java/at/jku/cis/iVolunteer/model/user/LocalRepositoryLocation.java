@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.model.user;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum LocalRepositoryLocation {
-    LOCAL("LOCAL"), DROPBOX("DROPBOX");
+    LOCAL("LOCAL"), DROPBOX("DROPBOX"), NEXTCLOUD("NEXTCLOUD");
 
     private String value;
 

@@ -3,18 +3,45 @@ import { User } from "../_model/user";
 import { Observable } from "rxjs";
 import { LocalRepository } from "../_model/local-repository";
 import { ClassInstance } from "../_model/meta/class";
-import { Dropbox } from "dropbox";
+import { createClient } from "webdav/web";
+import { NextcloudCredentials } from "../_model/nextcloud-credentials";
 import { LocalRepositoryService } from "./local-repository.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class LocalRepositoryDropboxService extends LocalRepositoryService {
-  FILE_PATH: string = "/db.json";
+export class LocalRepositoryNextcloudService extends LocalRepositoryService {
+  FILE_PATH: string = "/Apps/iVolunteer/";
+  FILE_NAME: string = "db.json";
+  FULL_FILE_NAME: string = this.FILE_PATH + this.FILE_NAME;
+
   localRepositorys: LocalRepository[] = [];
 
   constructor() {
     super();
+  }
+
+  public async isConnected(credentials: NextcloudCredentials) {
+    if (
+      credentials == null ||
+      credentials.domain == null ||
+      credentials.username == null ||
+      credentials.password == null
+    ) {
+      return false;
+    }
+
+    let nextcloud = createClient(credentials.domain, {
+      username: credentials.username,
+      password: credentials.password,
+    });
+
+    try {
+      await nextcloud.getDirectoryContents("/");
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   private findByVolunteer(volunteer: User) {
@@ -30,82 +57,40 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
       };
 
       try {
-        if (volunteer.dropboxToken) {
-          let dbx = new Dropbox({ accessToken: volunteer.dropboxToken });
+        let nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
+          username: volunteer.nextcloudCredentials.username,
+          password: volunteer.nextcloudCredentials.password,
+        });
 
-          dbx.filesListFolder({ path: "" }).then((filesList) => {
+        nextcloud
+          .getDirectoryContents(this.FILE_PATH)
+          .then(async (filesList) => {
             if (
-              filesList.entries.findIndex(
-                (entry) => entry.name === "db.json"
+              filesList.findIndex(
+                (entry) => entry.basename === this.FILE_NAME
               ) == -1
             ) {
               // create and read
-              dbx
-                .filesUpload({
-                  contents: JSON.stringify({ repository: [] }, null, 2),
-                  path: this.FILE_PATH,
-                  mode: { ".tag": "overwrite" },
-                  autorename: false,
-                  mute: false,
-                })
-                .then(() => {
-                  dbx.filesDownload({ path: this.FILE_PATH }).then((file) => {
-                    let reader = new FileReader();
-                    let blob: Blob = (<any>file).fileBlob;
-
-                    reader.addEventListener("loadend", () => {
-                      this.localRepositorys = [];
-                      if (this.isValidJson(<string>reader.result)) {
-                        let parsedJSON = JSON.parse(<string>reader.result);
-                        parsedJSON.repository.forEach((lr: LocalRepository) => {
-                          this.localRepositorys.push(lr);
-                        });
-                      }
-
-                      if (
-                        this.localRepositorys.findIndex(
-                          (l) => l.id === volunteer.id
-                        ) === -1
-                      ) {
-                        let newRepo = new LocalRepository(
-                          volunteer.id,
-                          volunteer.username
-                        );
-
-                        this.localRepositorys.push(newRepo);
-                        this.saveToDropbox(volunteer);
-                        successFunction(newRepo);
-                      } else {
-                        successFunction(
-                          this.localRepositorys.find(
-                            (localRepository: LocalRepository) => {
-                              return localRepository.id === volunteer.id;
-                            }
-                          )
-                        );
-                      }
-                    });
-                    reader.readAsText(blob);
-                  });
-                })
-                .catch((error) => {
-                  console.error(error);
-                  alert("Failed to save to dropbox");
-                });
-            } else {
-              // only read
-              dbx.filesDownload({ path: this.FILE_PATH }).then((file) => {
-                let reader = new FileReader();
-                let blob: Blob = (<any>file).fileBlob;
-
-                reader.addEventListener("loadend", () => {
-                  this.localRepositorys = [];
-                  if (this.isValidJson(<string>reader.result)) {
-                    let parsedJSON = JSON.parse(<string>reader.result);
-                    parsedJSON.repository.forEach((lr: LocalRepository) => {
-                      this.localRepositorys.push(lr);
-                    });
+              nextcloud
+                .putFileContents(
+                  this.FULL_FILE_NAME,
+                  JSON.stringify({ repository: [] }, null, 2),
+                  {
+                    overwrite: true,
                   }
+                )
+                .then(async () => {
+                  let parsedJSON = await nextcloud.getFileContents(
+                    this.FULL_FILE_NAME,
+                    {
+                      format: "text",
+                    }
+                  );
+
+                  this.localRepositorys = [];
+                  parsedJSON.repository.forEach((lr: LocalRepository) => {
+                    this.localRepositorys.push(lr);
+                  });
 
                   if (
                     this.localRepositorys.findIndex(
@@ -118,7 +103,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
                     );
 
                     this.localRepositorys.push(newRepo);
-                    this.saveToDropbox(volunteer);
+                    this.saveToNextcloud(volunteer);
                     successFunction(newRepo);
                   } else {
                     successFunction(
@@ -130,13 +115,43 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
                     );
                   }
                 });
-                reader.readAsText(blob);
+            } else {
+              // only read
+              let parsedJSON = await nextcloud.getFileContents(
+                this.FULL_FILE_NAME,
+                {
+                  format: "text",
+                }
+              );
+
+              this.localRepositorys = [];
+              parsedJSON.repository.forEach((lr: LocalRepository) => {
+                this.localRepositorys.push(lr);
               });
+
+              if (
+                this.localRepositorys.filter((lr) => lr.id == volunteer.id)
+                  .length == 0
+              ) {
+                let newRepo = new LocalRepository(
+                  volunteer.id,
+                  volunteer.username
+                );
+
+                this.localRepositorys.push(newRepo);
+                this.saveToNextcloud(volunteer);
+                successFunction(newRepo);
+              } else {
+                successFunction(
+                  this.localRepositorys.find(
+                    (localRepository: LocalRepository) => {
+                      return localRepository.id === volunteer.id;
+                    }
+                  )
+                );
+              }
             }
           });
-        } else {
-          failureFunction(null);
-        }
       } catch (error) {
         failureFunction(error);
       }
@@ -192,7 +207,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
                 this.localRepositorys[index] = localRepository;
               }
             });
-            this.saveToDropbox(volunteer);
+            this.saveToNextcloud(volunteer);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -252,7 +267,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToNextcloud(volunteer);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -287,7 +302,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToNextcloud(volunteer);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -323,7 +338,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToNextcloud(volunteer);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -357,7 +372,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToNextcloud(volunteer);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -370,37 +385,20 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
     return observable;
   }
 
-  private saveToDropbox(volunteer: User) {
-    let dbx = new Dropbox({ accessToken: volunteer.dropboxToken });
+  private async saveToNextcloud(volunteer: User) {
+    let nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
+      username: volunteer.nextcloudCredentials.username,
+      password: volunteer.nextcloudCredentials.password,
+    });
+
     let content = { repository: this.localRepositorys };
 
-    dbx
-      .filesUpload({
-        contents: JSON.stringify(content, null, 2),
-        path: this.FILE_PATH,
-        mode: { ".tag": "overwrite" },
-        autorename: false,
-        mute: false,
-      })
-      .then(() => {
-        // console.error("successfully written to dropbox");
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Failed to save to dropbox");
-      });
-  }
-
-  isValidJson(str) {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      return false;
-    }
-    return true;
-  }
-
-  isConnected(credentials: any) {
-    throw new Error("Method not implemented.");
+    await nextcloud.putFileContents(
+      this.FULL_FILE_NAME,
+      JSON.stringify(content, null, 2),
+      {
+        overwrite: true,
+      }
+    );
   }
 }

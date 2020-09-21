@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { RoleChangeService } from 'app/main/content/_service/role-change.service';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { LoginService } from "app/main/content/_service/login.service";
+import { RoleChangeService } from "app/main/content/_service/role-change.service";
 import {
   User,
   UserRole,
   RoleTenantMapping,
-} from 'app/main/content/_model/user';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { isNullOrUndefined } from 'util';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { ImageService } from 'app/main/content/_service/image.service';
-import { UserService } from 'app/main/content/_service/user.service';
+} from "app/main/content/_model/user";
+import { Subscription } from "rxjs";
+import { Router } from "@angular/router";
+import { Tenant } from "app/main/content/_model/tenant";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { isNullOrUndefined } from "util";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { ImageService } from "app/main/content/_service/image.service";
+import { UserService } from "app/main/content/_service/user.service";
 
 @Component({
   selector: "app-role-menu",
-  templateUrl: './role-menu.component.html',
-  styleUrls: ['./role-menu.component.scss'],
+  templateUrl: "./role-menu.component.html",
+  styleUrls: ["./role-menu.component.scss"],
 })
 export class RoleMenuComponent implements OnInit, OnDestroy {
   user: User;
@@ -39,7 +39,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private roleChangeService: RoleChangeService,
     private tenantService: TenantService,
     private imageService: ImageService,
-    private userService: UserService,
+    private userService: UserService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -86,8 +86,8 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
       .then(() => {
         this.roleChangeService.changeRole(mapping.role);
 
-        this.router.navigate(['/login']).then(() => {
-          this.router.navigate(['/main/dashboard']);
+        this.router.navigate(["/login"]).then(() => {
+          this.router.navigate(["/main/dashboard"]);
         });
       });
   }
@@ -119,7 +119,6 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
     const tenant = this.allTenants.find((t) => t.id === mapping.tenantIds[0]);
     return this.tenantService.getTenantProfileImage(tenant);
-
   }
 
   isSameMapping(a: RoleTenantMapping, b: RoleTenantMapping) {

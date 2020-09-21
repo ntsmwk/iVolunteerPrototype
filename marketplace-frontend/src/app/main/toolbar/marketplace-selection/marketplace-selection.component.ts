@@ -10,7 +10,7 @@ import { MessageService } from "../../content/_service/message.service";
 import { ArrayService } from "../../content/_service/array.service";
 import { Subscription } from "rxjs";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 
 @Component({
   selector: "fuse-marketplace-selection",
@@ -29,8 +29,8 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
     private arrayService: ArrayService,
     private messageService: MessageService,
     private loginService: LoginService,
-    private coreUserService: CoreUserService,
-  ) { }
+    private coreUserService: CoreUserService
+  ) {}
 
   ngOnInit() {
     this.loadMarketplaces();
@@ -44,35 +44,29 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
     this.marketplaceRegistrationSubscription.unsubscribe();
   }
 
-  loadMarketplaces() {
-    Promise.all([
-      this.loginService.getLoggedIn().toPromise(),
-      this.loginService.getLoggedInUserRole().toPromise(),
-    ])
-      .then((values: any[]) => {
-        this.role = <UserRole>values[1];
-        if (this.isRoleVolunteer(this.role)) {
-          this.coreUserService
-            .findRegisteredMarketplaces((<User>values[0]).id)
-            .toPromise()
-            .then((marketplaces: Marketplace[]) => {
-              this.marketplaces = marketplaces;
-              this.marketplaces.forEach((marketplace: Marketplace) => {
-                const storedMarketplaces = <Marketplace[]>(
-                  JSON.parse(localStorage.getItem("marketplaces"))
-                );
-                if (
-                  this.arrayService.contains(storedMarketplaces, marketplace)
-                ) {
-                  this.selection.select(marketplace);
-                }
-              });
-            });
+  async loadMarketplaces() {
+    let globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
+    this.role = globalInfo.userRole;
+    this.user = globalInfo.user;
+
+    if (this.isRoleVolunteer(this.role)) {
+      this.marketplaces = <Marketplace[]>(
+        await this.coreUserService
+          .findRegisteredMarketplaces(this.user.id)
+          .toPromise()
+      );
+
+      this.marketplaces.forEach((marketplace: Marketplace) => {
+        const storedMarketplaces = <Marketplace[]>(
+          JSON.parse(localStorage.getItem("marketplaces"))
+        );
+        if (this.arrayService.contains(storedMarketplaces, marketplace)) {
+          this.selection.select(marketplace);
         }
-      })
-      .catch((e) => {
-        console.warn(e);
       });
+    }
   }
 
   isSelected(marketplace: Marketplace) {

@@ -6,6 +6,9 @@ import {
   MatButtonModule,
   MatRadioModule,
   MatIconModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatTooltipModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -20,6 +23,10 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatButtonModule,
     MatRadioModule,
     MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatTooltipModule,
 
     FuseSharedModule,
   ],
