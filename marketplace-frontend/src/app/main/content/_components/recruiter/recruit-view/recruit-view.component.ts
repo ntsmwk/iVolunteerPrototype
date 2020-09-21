@@ -16,7 +16,7 @@ import { UserService } from "app/main/content/_service/user.service";
 @Component({
   selector: "recruit-view",
   templateUrl: "./recruit-view.component.html",
-  styleUrls: ["./recruit-view.component.scss"],
+  styleUrls: ["./recruit-view.component.scss"]
 })
 export class RecruitViewComponent implements OnInit, AfterViewInit {
   constructor(
@@ -36,7 +36,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     "taskDateFrom",
     "taskDuration",
     "hash",
-    "verificationStatus",
+    "verificationStatus"
   ];
   marketplace: Marketplace;
   user: User;
@@ -90,7 +90,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
         .toPromise()
         .then((user: User) => {
           this.user = user;
-        }),
+        })
     ]).then(() => {
       this.loadStoredCharts();
       this.loadTasks();
@@ -115,7 +115,8 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
                 this.marketplace,
                 "TASK",
                 this.volunteer.id,
-                this.tenantId
+                this.tenantId,
+                true
               )
               .toPromise()
               .then((ret: ClassInstanceDTO[]) => {
@@ -140,37 +141,37 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       .toPromise()
       .then((storedCharts: StoredChart[]) => {
         this.charts = storedCharts;
-        if (this.charts.findIndex((c) => c.title === "Wochentag") >= 0) {
+        if (this.charts.findIndex(c => c.title === "Wochentag") >= 0) {
           this.weekdayData = JSON.parse(
-            this.charts.find((c) => c.title === "Wochentag").data
+            this.charts.find(c => c.title === "Wochentag").data
           );
         }
-        if (this.charts.findIndex((c) => c.title == "Tageszeit") >= 0) {
+        if (this.charts.findIndex(c => c.title == "Tageszeit") >= 0) {
           this.dayNightData = JSON.parse(
-            this.charts.find((c) => c.title === "Tageszeit").data
+            this.charts.find(c => c.title === "Tageszeit").data
           );
         }
         if (
           this.charts.findIndex(
-            (c) => c.title == "STUNDEN absolvierter Ausbildungen"
+            c => c.title == "STUNDEN absolvierter Ausbildungen"
           ) >= 0
         ) {
           this.trainingData = JSON.parse(
             this.charts.find(
-              (c) => c.title == "STUNDEN absolvierter Ausbildungen"
+              c => c.title == "STUNDEN absolvierter Ausbildungen"
             ).data
           );
         }
         if (
           this.charts.findIndex(
-            (c) =>
+            c =>
               c.title ==
               "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf"
           ) >= 0
         ) {
           this.taskData = JSON.parse(
             this.charts.find(
-              (c) =>
+              c =>
                 c.title ==
                 "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf"
             ).data
@@ -182,16 +183,16 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
 
   pressedVerifyAll() {
     const outer = this;
-    setTimeout(function () {
+    setTimeout(function() {
       outer.verify2 = true;
     }, 3000);
-    setTimeout(function () {
+    setTimeout(function() {
       outer.verify3 = true;
     }, 5000);
-    setTimeout(function () {
+    setTimeout(function() {
       outer.verify5 = true;
     }, 1000);
-    setTimeout(function () {
+    setTimeout(function() {
       outer.verify1 = true;
     }, 2000);
   }

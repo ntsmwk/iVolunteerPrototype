@@ -49,22 +49,6 @@
       <div fxLayout="column">
         <div class="vennParent optionHeader" id="container"></div>
       </div>
-      <!-- <table class="table">
-        <tbody>
-          <tr>
-            <td>Einträge nur am Marktplatz:</td>
-            <td class="alignRight">{{ nrMpOnly }}</td>
-          </tr>
-          <tr>
-            <td>Einträge nur im lokalen Freiwilligenpass:</td>
-            <td class="alignRight">{{ nrLrOnly }}</td>
-          </tr>
-          <tr>
-            <td>Einträge synchronisiert:</td>
-            <td class="alignRight">{{nrMpUnionLr}} </td>
-          </tr>
-        </tbody>
-      </table> -->
     </div>
   </mat-card>
 
@@ -82,8 +66,6 @@
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
               <img class="avatar" [src]="getTenantImage(entry.tenantId)" />
-
-              <!-- <div>{{ getIssuerName(entry.issuerId) }}</div> -->
               <div style="align-self: center;">
                 {{ getIssuerName(entry.tenantId) }}
               </div>

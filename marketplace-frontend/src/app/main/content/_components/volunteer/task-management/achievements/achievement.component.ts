@@ -3,7 +3,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ClassInstanceDTO,
-  ClassInstance,
+  ClassInstance
 } from "app/main/content/_model/meta/class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LoginService } from "app/main/content/_service/login.service";
@@ -20,7 +20,7 @@ import { LocalRepositoryDropboxService } from "app/main/content/_service/local-r
   selector: "fuse-achievements",
   templateUrl: "./achievement.component.html",
   styleUrls: ["./achievement.component.scss"],
-  animations: fuseAnimations,
+  animations: fuseAnimations
 })
 export class AchievementsComponent implements OnInit {
   volunteer: User;
@@ -93,7 +93,8 @@ export class AchievementsComponent implements OnInit {
               this.marketplace,
               "TASK",
               this.volunteer.id,
-              this.subscribedTenants.map((t) => t.id)
+              this.subscribedTenants.map(t => t.id),
+              true
             )
             .toPromise()
         );
@@ -102,7 +103,7 @@ export class AchievementsComponent implements OnInit {
 
     // filter out classInstances missing the reqired fields
     let before = this.classInstanceDTOs.length;
-    this.classInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
+    this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
       return (
         ci.name != null &&
         ci.tenantId != null &&
@@ -123,8 +124,8 @@ export class AchievementsComponent implements OnInit {
   tenantSelectionChanged(selectedTenants: Tenant[]) {
     this.selectedTenants = selectedTenants;
 
-    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
-      return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
+    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(ci => {
+      return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
     });
   }
 
