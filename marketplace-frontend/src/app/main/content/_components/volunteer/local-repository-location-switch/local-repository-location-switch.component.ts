@@ -95,24 +95,32 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
       let sourceService = this.getService(this.user.localRepositoryLocation);
       let destService = this.getService(newLocation);
 
-      // unterscheiden zwischen nicht erreichbar und null (noch nicht gesetzt)
-      if (sourceService != null) {
-        try {
-          let classInstances = <ClassInstance[]>(
-            await sourceService
-              .findClassInstancesByVolunteer(this.user)
-              .toPromise()
-          );
+      if (sourceService == null) {
+        // no location set yet
+        this.user.localRepositoryLocation = newLocation;
+        this.updateUserAndGlobalInfo();
+      } else {
+        if (sourceService && destService) {
+          try {
+            let classInstances = <ClassInstance[]>(
+              await sourceService
+                .findClassInstancesByVolunteer(this.user)
+                .toPromise()
+            );
 
-          destService
-            .overrideClassInstances(this.user, classInstances)
-            .toPromise();
-        } catch (error) {
-          alert("Fehler bei der Datenübertragung!");
+            destService
+              .overrideClassInstances(this.user, classInstances)
+              .toPromise();
+          } catch (error) {
+            alert("Fehler bei der Datenübertragung!");
+          }
+
+          this.user.localRepositoryLocation = newLocation;
+          this.updateUserAndGlobalInfo();
+        } else {
+          alert("Fehler: Service nicht verfügbar!");
         }
       }
-      this.user.localRepositoryLocation = newLocation;
-      this.updateUserAndGlobalInfo();
     }
   }
 
@@ -121,15 +129,15 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
       case LocalRepositoryLocation.LOCAL:
         return this.isJsonServerConnected
           ? this.localRepoJsonServerService
-          : null;
+          : false;
 
       case LocalRepositoryLocation.DROPBOX:
-        return this.isDropboxConnected ? this.localRepoDropboxService : null;
+        return this.isDropboxConnected ? this.localRepoDropboxService : false;
 
       case LocalRepositoryLocation.NEXTCLOUD:
         return this.isNextcloudConnected
           ? this.localRepoNextcloudService
-          : null;
+          : false;
     }
   }
 
