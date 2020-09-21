@@ -4,25 +4,44 @@
     <mat-card-content>
       <form name="profileForm" (submit)="changeProfile()" [formGroup]="profileForm" novalidate fxLayout="column"
         style="max-width: 500px">
-        <mat-form-field>
-          <input matInput placeholder="Vorname" formControlName="firstName" />
+
+
+        <!-- <mat-form-field>
+          <mat-select placeholder="Anrede" formControlName="formOfAddress">
+            <mat-option value="Frau">Frau</mat-option>
+            <mat-option value="Herr">Herr</mat-option>
+          </mat-select>
+
           <mat-error *ngIf="
+              registrationFormErrors.formOfAddress &&
+              registrationFormErrors.formOfAddress.required
+            ">
+            Pflichtfeld
+          </mat-error>
+        </mat-form-field> -->
+
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
+          <mat-form-field fxFlex>
+            <input matInput placeholder="Vorname" formControlName="firstName" />
+            <mat-error *ngIf="
                   profileFormErrors.firstName &&
                   profileFormErrors.firstName.required
                 ">
-            Vorname benötigt
-          </mat-error>
-        </mat-form-field>
+              Vorname benötigt
+            </mat-error>
+          </mat-form-field>
 
-        <mat-form-field>
-          <input matInput placeholder="Nachname" formControlName="lastName" />
-          <mat-error *ngIf="
+          <mat-form-field fxFlex>
+            <input matInput placeholder="Nachname" formControlName="lastName" />
+            <mat-error *ngIf="
                   profileFormErrors.lastName &&
                   profileFormErrors.lastName.required
                 ">
-            Nachname benötigt
-          </mat-error>
-        </mat-form-field>
+              Nachname benötigt
+            </mat-error>
+          </mat-form-field>
+        </div>
+
 
         <mat-form-field>
           <mat-label>Geburtsdatum</mat-label>

@@ -16,7 +16,8 @@ public class User {
 	private String username;
 	private String password;
 	private String loginEmail;
-
+	
+	private String formOfAddress;
 	private String titleBefore;
 	private String firstname;
 	private String lastname;
@@ -51,6 +52,7 @@ public class User {
 		this.username = coreUser.getUsername();
 		this.password = coreUser.getPassword();
 		this.loginEmail = coreUser.getLoginEmail();
+		this.formOfAddress = coreUser.getFormOfAddress();
 		this.titleBefore = coreUser.getTitleBefore();
 		this.firstname = coreUser.getFirstname();
 		this.lastname = coreUser.getLastname();
@@ -109,6 +111,14 @@ public class User {
 
 	public void setFirstname(final String firstname) {
 		this.firstname = firstname;
+	}
+
+	public String getFormOfAddress() {
+		return formOfAddress;
+	}
+
+	public void setFormOfAddress(String formOfAddress) {
+		this.formOfAddress = formOfAddress;
 	}
 
 	public String getTitleBefore() {

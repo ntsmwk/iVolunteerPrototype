@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup } from '@angular/forms';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { UserService } from 'app/main/content/_service/user.service';
+import { LoginService } from 'app/main/content/_service/login.service';
 
 @Component({
   selector: "profile",
@@ -15,20 +16,22 @@ export class ProfileComponent implements OnInit {
   globalInfo: GlobalInfo;
   user: User;
   currentRoles: UserRole[] = [];
-  profileForm: FormGroup;
-  profileFormErrors: any;
 
-  today = new Date();
   loaded: boolean;
 
   constructor(
+    private loginService: LoginService,
     private userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.loaded = false;
 
+    this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+    this.user = this.globalInfo.user;
+    this.currentRoles = this.user.subscribedTenants.map((s) => s.role);
 
+    console.log(this.user.id);
     this.loaded = true;
   }
 

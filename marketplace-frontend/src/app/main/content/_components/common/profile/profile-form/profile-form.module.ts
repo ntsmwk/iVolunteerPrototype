@@ -3,16 +3,14 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import {
   MatButtonModule, MatTableModule, MatIconModule, MatCommonModule, MatTooltipModule,
-  MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatInputModule,
+  MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatCardModule, MatSelectModule, MatOptionModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { ProfileFormComponent } from './profile-form.component';
 
-const routes = [{ path: "", component: ProfileFormComponent }];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(routes),
     MatButtonModule,
     MatTableModule,
     MatIconModule,
@@ -23,6 +21,9 @@ const routes = [{ path: "", component: ProfileFormComponent }];
     MatFormFieldModule,
     MatInputModule,
     FuseSharedModule,
+    MatCardModule,
+    MatSelectModule,
+    MatOptionModule,
   ],
   exports: [ProfileFormComponent],
   declarations: [ProfileFormComponent],

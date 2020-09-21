@@ -9,23 +9,11 @@
         {{ user.firstname }} {{ user.lastname }}
       </div>
     </div>
-
-    <!-- <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{ value: '*', params: { delay: '200ms' } }">
-      <button mat-raised-button color="accent" aria-label="Follow">
-        Follow
-      </button>
-      <button mat-raised-button color="primary" aria-label="Send Message">
-        Send Message
-      </button>
-    </div> -->
   </div>
-  <div class="content">
-    <div style="padding-top: 15px"></div>
-    <!-- <mat-card class="org-card p-10 m-10">
-      <h3>asdfasf</h3>
-    </mat-card> -->
-    <profile-form [user]="user"></profile-form>
 
+
+  <div class="content pt-16">
+    <profile-form [user]="user"></profile-form>
     <app-local-repository-location-switch *ngIf="hasVolunteerRole()"></app-local-repository-location-switch>
   </div>
 </div>

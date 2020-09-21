@@ -1,19 +1,16 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { User, UserRole } from "app/main/content/_model/user";
-import { LoginService } from "app/main/content/_service/login.service";
-import { fuseAnimations } from "@fuse/animations";
-import { ImageService } from "app/main/content/_service/image.service";
-import {
-  FormGroup, FormBuilder, FormControl, Validators,
-} from "@angular/forms";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
-import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Component, OnInit, Input } from '@angular/core';
+import { User, UserRole } from 'app/main/content/_model/user';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { fuseAnimations } from '@fuse/animations';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { UserService } from 'app/main/content/_service/user.service';
 
 @Component({
   selector: "profile-form",
-  templateUrl: "profile-form.component.html",
-  styleUrls: ["profile-form.component.scss"],
+  templateUrl: 'profile-form.component.html',
+  styleUrls: ['profile-form.component.scss'],
   animations: fuseAnimations,
 })
 export class ProfileFormComponent implements OnInit {
@@ -33,6 +30,8 @@ export class ProfileFormComponent implements OnInit {
     private userService: UserService,
   ) {
     this.profileFormErrors = {
+
+      // formOfAddress: {},
       firstName: {},
       lastName: {},
       birthday: {},
@@ -43,9 +42,10 @@ export class ProfileFormComponent implements OnInit {
     this.loaded = false;
 
     this.profileForm = this.formBuilder.group({
-      firstName: new FormControl("", Validators.required),
-      lastName: new FormControl("", Validators.required),
-      birthday: new FormControl("", Validators.required),
+      // formOfAddress: new FormControl('', Validators.required),
+      firstName: new FormControl('', Validators.required),
+      lastName: new FormControl('', Validators.required),
+      birthday: new FormControl('', Validators.required),
     });
 
     this.profileForm.valueChanges.subscribe(() => {
@@ -57,14 +57,9 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async reload() {
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-
-    this.user = this.globalInfo.user;
-    this.currentRoles = this.user.subscribedTenants.map((s) => s.role);
 
     this.profileForm.setValue({
+      // formOfAddress: this.user.formOfAddress,
       firstName: this.user.firstname,
       lastName: this.user.lastname,
       birthday: new Date(this.user.birthday),
@@ -109,6 +104,6 @@ export class ProfileFormComponent implements OnInit {
   }
 
   hasVolunteerRole() {
-    return this.currentRoles.indexOf(UserRole.VOLUNTEER) != -1;
+    return this.currentRoles.indexOf(UserRole.VOLUNTEER) !== -1;
   }
 }
