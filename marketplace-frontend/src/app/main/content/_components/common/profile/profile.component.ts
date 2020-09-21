@@ -26,12 +26,9 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.loaded = false;
-
     this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
     this.user = this.globalInfo.user;
     this.currentRoles = this.user.subscribedTenants.map((s) => s.role);
-
-    console.log(this.user.id);
     this.loaded = true;
   }
 

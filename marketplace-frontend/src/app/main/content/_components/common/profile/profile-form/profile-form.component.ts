@@ -31,7 +31,7 @@ export class ProfileFormComponent implements OnInit {
   ) {
     this.profileFormErrors = {
 
-      // formOfAddress: {},
+      formOfAddress: {},
       firstName: {},
       lastName: {},
       birthday: {},
@@ -40,9 +40,9 @@ export class ProfileFormComponent implements OnInit {
 
   async ngOnInit() {
     this.loaded = false;
-
+    console.log(this.user);
     this.profileForm = this.formBuilder.group({
-      // formOfAddress: new FormControl('', Validators.required),
+      formOfAddress: new FormControl('', Validators.required),
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
       birthday: new FormControl('', Validators.required),
@@ -59,7 +59,7 @@ export class ProfileFormComponent implements OnInit {
   async reload() {
 
     this.profileForm.setValue({
-      // formOfAddress: this.user.formOfAddress,
+      formOfAddress: this.user.formOfAddress,
       firstName: this.user.firstname,
       lastName: this.user.lastname,
       birthday: new Date(this.user.birthday),
