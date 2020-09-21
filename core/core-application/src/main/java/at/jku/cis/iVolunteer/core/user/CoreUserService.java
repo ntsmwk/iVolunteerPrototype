@@ -149,6 +149,10 @@ public class CoreUserService {
 	}
 
 	public CoreUser updateUser(CoreUser user, String authorization, boolean updateMarketplaces) {
+		CoreUser existingUser = coreUserRepository.findOne(user.getId());
+		if (existingUser != null) {
+			user.setPassword(existingUser.getPassword());
+		}
 		user = this.coreUserRepository.save(user);
 
 		if (updateMarketplaces) {
