@@ -17,6 +17,7 @@ import {
 } from "@angular/forms";
 import { NextcloudCredentials } from "app/main/content/_model/nextcloud-credentials";
 import { LocalRepositoryNextcloudService } from "app/main/content/_service/local-repository-nextcloud.service";
+import { environment } from "environments/environment";
 
 @Component({
   selector: "app-local-repository-location-switch",
@@ -25,8 +26,7 @@ import { LocalRepositoryNextcloudService } from "app/main/content/_service/local
 })
 export class LocalRepositoryLocationSwitchComponent implements OnInit {
   DROPBOX_CLIENT_ID: string = "ky4bainncqhjjn8";
-  REDIRECT_URI_DEV: string = "http://localhost:4200/main/profile";
-  REDIRECT_URI_PROD: string = "ivolunteer.cis.jku.at:4200/main/profile";
+  REDIRECT_URI = environment.REDIRECT_URI;
 
   globalInfo: GlobalInfo;
   user: User;
@@ -42,17 +42,6 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
   nextcloudLoginError: boolean;
 
   isLoaded: boolean = false;
-
-  // NEXTCLOUD_DOMAIN: string =
-  //   "http://philstar.ddns.net:31415/remote.php/dav/files/Philipp/";
-  // NEXTCLOUD_USERNAME: string = "Philipp";
-  // NEXTCLOUD_PASSWORD: string = "WxBX2-6i8BH-Zg8KF-dWQx3-jeM6E";
-
-  // credenteials = new NextcloudCredentials(
-  //   this.NEXTCLOUD_DOMAIN,
-  //   this.NEXTCLOUD_USERNAME,
-  //   this.NEXTCLOUD_PASSWORD
-  // );
 
   constructor(
     private location: Location,
@@ -71,7 +60,7 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
     this.user = this.globalInfo.user;
 
     let dbx = new Dropbox({ clientId: this.DROPBOX_CLIENT_ID });
-    this.dropboxAuthUrl = dbx.getAuthenticationUrl(this.REDIRECT_URI_DEV);
+    this.dropboxAuthUrl = dbx.getAuthenticationUrl(this.REDIRECT_URI);
 
     if (this.user.dropboxToken && this.user.dropboxToken !== "undefined") {
       this.isDropboxConnected = true;
