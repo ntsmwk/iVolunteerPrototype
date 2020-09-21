@@ -24,4 +24,5 @@ export class VolunteerService {
     // return this.http.get(`${marketplace.url}/volunteer/username/${name}`);
     return this.findByName(marketplace, name);
   }
+
 }

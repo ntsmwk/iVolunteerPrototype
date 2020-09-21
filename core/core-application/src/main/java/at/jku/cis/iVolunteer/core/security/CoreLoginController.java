@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.global.GlobalInfo;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.security.model.ErrorResponse;
-import at.jku.cis.iVolunteer.core.security.model.RefreshTokenResponse;
+import at.jku.cis.iVolunteer.core.security.model.TokenResponse;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
@@ -34,10 +33,14 @@ import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX
 @RestController
 @RequestMapping("/login")
 public class CoreLoginController {
-	@Autowired private TenantService tenantService;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreLoginService loginService;
-	@Autowired private CoreUserRepository userRepository;
+	@Autowired
+	private TenantService tenantService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreLoginService loginService;
+	@Autowired
+	private CoreUserRepository userRepository;
 
 	private JWTTokenProvider tokenProvider = new JWTTokenProvider();
 
@@ -66,8 +69,9 @@ public class CoreLoginController {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null,
 						user.getAuthorities());
 				String accessToken = this.tokenProvider.generateAccessToken(authentication);
+				String newRefreshToken = this.tokenProvider.generateRefreshToken(authentication);
 
-				return ResponseEntity.ok(new RefreshTokenResponse(accessToken));
+				return ResponseEntity.ok(new TokenResponse(accessToken, newRefreshToken).toString());
 			} else {
 				return new ResponseEntity<Object>(new ErrorResponse("Empty Refresh Token"), HttpStatus.NOT_ACCEPTABLE);
 			}

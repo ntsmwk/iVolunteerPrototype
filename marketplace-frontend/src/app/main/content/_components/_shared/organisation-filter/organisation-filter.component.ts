@@ -24,19 +24,19 @@ export class OrganisationFilterComponent implements OnInit {
     private loginService: LoginService,
     private tenantService: TenantService,
     private imageService: ImageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();
     this.tenants = <Tenant[]>(
-      await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
+      await this.tenantService.findByUserId(this.volunteer.id).toPromise()
     );
     this.selectedTenants = [...this.tenants];
     this.tenantSelectionChanged.emit(this.selectedTenants);
   }
 
   getTenantImage(tenant: Tenant) {
-    return this.imageService.getImgSourceFromBytes(tenant.image);
+    return this.tenantService.getTenantProfileImage(tenant);
   }
 
   tenantClicked(tenant: Tenant) {

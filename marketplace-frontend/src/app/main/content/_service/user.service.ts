@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from '../_model/marketplace';
-import { UserRole } from '../_model/user';
+import { UserRole, User } from '../_model/user';
+import { ImageService } from './image.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private imageService: ImageService) { }
 
   findAll(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/user/all`);
@@ -31,5 +33,17 @@ export class UserService {
 
   findByName(marketplace: Marketplace, name: string) {
     return this.http.get(`${marketplace.url}/user/username/${name}`);
+  }
+
+  getUserProfileImage(user: User) {
+    if (user === null) {
+      return "/assets/images/avatars/profile.jpg";
+    }
+    const ret = this.imageService.getImgSourceFromImageWrapper(user.image);
+    if (ret == null) {
+      return "/assets/images/avatars/profile.jpg";
+    } else {
+      return ret;
+    }
   }
 }

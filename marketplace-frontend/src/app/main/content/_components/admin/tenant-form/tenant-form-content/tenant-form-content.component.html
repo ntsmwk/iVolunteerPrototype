@@ -1,6 +1,5 @@
 <div *ngIf="loaded">
-  <form form class="tenant-form" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="form" (submit)="save()"
-    [formGroup]="tenantForm">
+  <form form class="tenant-form" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" [formGroup]="tenantForm">
     <div fxLayout="column">
 
       <h2 class="mt-0">Zur Organisation selbst</h2>
@@ -20,6 +19,8 @@
 
       <h2>Gestaltungsoptionen</h2>
 
+      <h3>Allgemein</h3>
+
       <div fxLayout="row" fxLayoutAlign="start center">
         <div class="color-field section-border">
           <div class="color-field-label">
@@ -37,44 +38,43 @@
         </div>
       </div>
 
-      <div fxLayout="row wrap" fxLayoutAlign="start center">
-        <mat-form-field fxFlex class="mt-8 mr-8">
-          <ngx-mat-file-input [(ngModel)]="imageFileInput" [ngModelOptions]="{standalone: true}"
-            placeholder="Titelbild hochladen"></ngx-mat-file-input>
-          <mat-icon matSuffix>folder</mat-icon>
-        </mat-form-field>
+      <tenant-profile-image-upload *ngIf="showProfileImageForm" [tenant]="tenant"
+        (uploadedImage)="handleProfileImageUploadEvent($event)">
+      </tenant-profile-image-upload>
 
-        <div fxLayout="row" fxLayoutAlign="space-around center" class="upload-buttons">
-          <button mat-stroked-button type="button" class="primary-button-dark" style="max-width: max-content"
-            (click)="uploadImage()" [disabled]="!imageFileInput">
-            Upload</button>
-          <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
-            (click)="deleteImage()" [disabled]="!previewImage && !imageFileInput">
-            <mat-icon>clear</mat-icon>
-          </button>
-        </div>
-      </div>
 
-      <div class="section-border centered image-preview" *ngIf="uploadingImage || previewImage">
-        <div class="image-preview-label">
-          Vorschau
-        </div>
-        <div *ngIf="uploadingImage">
-          <mat-spinner></mat-spinner>
-        </div>
-        <div *ngIf="previewImage" class="image-container">
-          <img [src]="previewImage" style="max-width: 100%; max-height: 100%; height: auto" alt="Vorschau">
-        </div>
-      </div>
+      <h3>Landing Page</h3>
+
+
+      <mat-form-field>
+        <input matInput type="text" formControlName="landingpageMessage"
+          placeholder="Begrüßungstext der im Header angezeigt werden soll" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" formControlName="landingpageTitle" placeholder="Titel im Content-Bereich" />
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <textarea matInput type="text" formControlName="landingpageText" placeholder="Kurzer Fließtext"
+          matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
+      </mat-form-field>
+
+
+      <tenant-landing-page-image-upload *ngIf="showLandingPageImageForm" [tenant]="tenant"
+        (uploadedImage)="handleLandingPageImageUploadEvent($event)">
+      </tenant-landing-page-image-upload>
+
+
+
 
       <h2>Zuordnungsoptionen</h2>
 
       <tenant-tag-form [addedTags]="addedTags" (tags)="addedTags = $event"></tenant-tag-form>
 
-      <button class="primary-button-dark mt-32" type="submit" mat-stroked-button>Speichern</button>
+      <button class="primary-button-dark mt-32" type="button" (click)="save()" mat-stroked-button
+        [disabled]="tenantForm.disabled">Speichern</button>
     </div>
   </form>
 </div>
-
-
-<tenant-helpseekers-form *ngIf="showHelpseekersForm" [tenant]="tenant"></tenant-helpseekers-form>

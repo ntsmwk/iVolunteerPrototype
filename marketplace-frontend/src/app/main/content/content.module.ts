@@ -15,6 +15,8 @@ import { AdminGuard } from "./_guard/admin.guard";
 import { TenantAdminGuard } from "./_guard/tenant-admin.guard";
 import { HelpSeekerOrTenantAdminGuard } from "./_guard/helpseeker-tenantAdmin.guard";
 import { TokenGuard } from "./_guard/token.guard";
+import { AdminOrTenantAdminGuard } from './_guard/admin-tenantAdmin.guard';
+import { NoneOrTenantAdminGuard } from './_guard/none-tenant-admin.guard';
 
 const routes: Route[] = [
   {
@@ -213,12 +215,12 @@ const routes: Route[] = [
     canActivate: [TokenGuard, AdminGuard]
   },
   {
-    path: "main/tenant-form",
+    path: "main/edit-tenant",
     loadChildren: () =>
       import("./_components/admin/tenant-form/tenant-form.module").then(
         m => m.FuseTenantFormModule
       ),
-    canActivate: [TokenGuard, AdminGuard]
+    canActivate: [TokenGuard, AdminOrTenantAdminGuard],
   },
   {
     path: "main/import",

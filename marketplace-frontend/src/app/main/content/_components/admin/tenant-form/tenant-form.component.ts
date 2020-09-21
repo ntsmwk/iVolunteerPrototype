@@ -4,6 +4,9 @@ import { MarketplaceService } from "app/main/content/_service/core-marketplace.s
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { Marketplace } from 'app/main/content/_model/marketplace';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { User, UserRole } from 'app/main/content/_model/user';
 
 @Component({
   selector: "tenant-form",
@@ -13,19 +16,46 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 export class FuseTenantFormComponent implements OnInit {
   tenant: Tenant;
   marketplace: Marketplace;
+  globalInfo: GlobalInfo;
+  loaded: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private tenantService: TenantService,
     private marketplaceService: MarketplaceService,
+    private loginService: LoginService,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+
+    this.loaded = false;
+    let tenantId: string;
+    let marketplaceId: string;
+
     this.route.params.subscribe((params) => {
-      this.tenantService.findById(params['tenantId']).toPromise().then((tenant: Tenant) => this.tenant = tenant);
+      tenantId = params['tenantId'];
     });
     this.route.queryParams.subscribe((params) => {
-      this.marketplaceService.findById(params['marketplaceId']).toPromise().then((marketplace: Marketplace) => this.marketplace = marketplace);
+      marketplaceId = params['marketplaceId'];
     });
+
+    Promise.all([
+      this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise(),
+      this.tenantService.findById(tenantId).toPromise().then((tenant: Tenant) => this.tenant = tenant),
+      this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => this.marketplace = marketplace),
+    ]).then(() => {
+      this.loaded = true;
+    });
+
+
+  }
+
+  handleBackClick() {
+    window.history.back();
+  }
+
+  handleTenantSaved(tenant: Tenant) {
+    console.log("saved fick dich");
+    console.log(tenant);
   }
 }

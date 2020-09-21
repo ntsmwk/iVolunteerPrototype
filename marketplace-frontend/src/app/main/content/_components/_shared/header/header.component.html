@@ -1,15 +1,7 @@
 <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-  <mat-icon
-    *ngIf="displayNavigateBack"
-    class="iconButton"
-    (click)="navigateBack()"
-    style="margin-left: 20px; color: white;"
-    >keyboard_return
+  <mat-icon *ngIf="displayNavigateBack" class="iconButton" (click)="navigateBack()"
+    style="margin-left: 20px; color: white;">keyboard_return
   </mat-icon>
-  <img
-    *ngIf="tenant && !displayNavigateBack"
-    class="header-logo"
-    [src]="tenantService.getTenantImage(tenant)"
-  />
+  <img *ngIf="tenant && !displayNavigateBack" class="header-logo" [src]="tenantService.getTenantProfileImage(tenant)" />
   <h1 class="l-heading">{{ headerText }}</h1>
 </div>

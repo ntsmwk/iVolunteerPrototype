@@ -27,6 +27,7 @@ export class TenantHelpseekersFormComponent implements OnInit {
 
   async ngOnInit() {
     this.loaded = false;
+    this.dataSource.data = [];
 
     this.dataSource.data = <User[]>(
       await this.coreUserService
@@ -34,7 +35,14 @@ export class TenantHelpseekersFormComponent implements OnInit {
         .toPromise()
     );
     console.error(this.dataSource.data);
+    this.addHelpseeker();
     this.loaded = true;
+  }
+
+  addHelpseeker() {
+    this.coreUserService.findAllByRoles([UserRole.NONE, UserRole.VOLUNTEER, UserRole.HELP_SEEKER], true).toPromise().then((users: User[]) => {
+      console.log(users);
+    });
   }
 
 

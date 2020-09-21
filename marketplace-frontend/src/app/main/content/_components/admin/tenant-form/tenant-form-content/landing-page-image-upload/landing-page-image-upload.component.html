@@ -1,0 +1,41 @@
+<div *ngIf="loaded">
+  <div fxLayout="row wrap" fxLayoutAlign="start end" class="mt-16">
+
+    <mat-form-field fxFlex class="ml-8 mr-8 image-input">
+      <ngx-mat-file-input [(ngModel)]="imageFileInput" [ngModelOptions]="{standalone: true}"
+        placeholder="Titelbild hochladen"></ngx-mat-file-input>
+      <mat-icon matSuffix>folder</mat-icon>
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayoutAlign="space-around center" class="image-upload-buttons">
+      <button mat-stroked-button type="button" class="primary-button-dark" style="max-width: max-content"
+        (click)="uploadImage()" [disabled]="!imageFileInput">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+      <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
+        (click)="deleteImage()" [disabled]="!previewImage && !imageFileInput">
+        <mat-icon>clear</mat-icon>
+      </button>
+      <button mat-stroked-button type="button" class="primary-button-dark ml-8" style="max-width: max-content"
+        (click)="revertImage()" [disabled]="!previewImage && !imageFileInput">
+        <mat-icon>history</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="image-preview section-border mt-16" *ngIf="uploadingImage || previewImage">
+    <div class="image-preview-label">
+      Vorschau
+    </div>
+    <div *ngIf="uploadingImage" class="spinner-container">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+    <div *ngIf="!uploadingImage" class="image-container">
+      <img [src]="previewImage" alt="Vorschau">
+    </div>
+  </div>
+
+
+</div>

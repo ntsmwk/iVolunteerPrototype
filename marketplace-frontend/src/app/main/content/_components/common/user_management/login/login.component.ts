@@ -33,7 +33,7 @@ export class FuseLoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -92,15 +92,19 @@ export class FuseLoginComponent implements OnInit {
               )
               .toPromise()
               .then((response: HttpResponse<any>) => {
-                localStorage.setItem("accessToken", response.body.accessToken);
-                localStorage.setItem(
-                  "refreshToken",
-                  response.body.refreshToken
-                );
-                this.router.navigate(["/role"]);
+                let accessToken: string = response.body.accessToken;
+                let refreshToken: string = response.body.refreshToken;
+
+                if (accessToken == null || refreshToken == null) {
+                  this.error = true;
+                  this.loginService.logout();
+                } else {
+                  localStorage.setItem("accessToken", accessToken);
+                  localStorage.setItem("refreshToken", refreshToken);
+                  this.router.navigate(["/role"]);
+                }
               })
               .catch((e) => {
-                console.error("login error");
                 this.loginService.logout();
                 this.error = true;
               });
