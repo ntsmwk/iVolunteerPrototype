@@ -40,7 +40,9 @@ export class ProfileFormComponent implements OnInit {
 
   async ngOnInit() {
     this.loaded = false;
-    console.log(this.user);
+
+    this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+
     this.profileForm = this.formBuilder.group({
       formOfAddress: new FormControl('', Validators.required),
       firstName: new FormControl('', Validators.required),
@@ -83,7 +85,8 @@ export class ProfileFormComponent implements OnInit {
     }
   }
 
-  async changeProfile() {
+  async save() {
+    this.user.formOfAddress = this.profileForm.value.formOfAddress;
     this.user.firstname = this.profileForm.value.firstName;
     this.user.lastname = this.profileForm.value.lastName;
     this.user.birthday = this.profileForm.value.birthday;
