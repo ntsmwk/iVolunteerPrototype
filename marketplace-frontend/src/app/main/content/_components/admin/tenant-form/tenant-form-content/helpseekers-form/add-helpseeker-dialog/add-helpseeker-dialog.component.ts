@@ -8,9 +8,10 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { User, UserRole } from 'app/main/content/_model/user';
 import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
 
 export interface AddHelpseekerDialogData {
-  addedHelpseekers: User[];
+  helpseekers: User[];
 }
 
 @Component({
@@ -26,6 +27,7 @@ export class AddHelpseekerDialogComponent implements OnInit {
     public dialog: MatDialog,
     private loginService: LoginService,
     private coreUserService: CoreUserService,
+    private tenantService: TenantService,
   ) { }
 
   datasource = new MatTableDataSource<User>();
@@ -54,7 +56,9 @@ export class AddHelpseekerDialogComponent implements OnInit {
     this.coreUserService.findAllByRoles([UserRole.NONE, UserRole.VOLUNTEER, UserRole.HELP_SEEKER], true).toPromise().then((ret: User[]) => {
       console.log(ret);
       this.allHelpseekers = ret;
-      this.datasource.data = ret;
+      this.allHelpseekers = this.allHelpseekers.filter(h => this.data.helpseekers.findIndex(f => f.id === h.id) === -1);
+      this.datasource.data = this.allHelpseekers;
+
 
       this.loaded = true;
     });
@@ -71,9 +75,17 @@ export class AddHelpseekerDialogComponent implements OnInit {
     this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row);
   }
 
-  onSubmit() {
-    // Add selected, but filter out existing ones
-
+  async onSubmit() {
+    const addedUsers = <User[]>await Promise.all(
+      this.selection.selected.map(async elem => {
+        const user = <User>await this.coreUserService
+          .subscribeUserToTenant(elem.id, this.globalInfo.marketplace.id, this.globalInfo.tenants[0].id, UserRole.HELP_SEEKER)
+          .toPromise();
+        return user;
+      })
+    );
+    this.data.helpseekers = addedUsers;
+    this.dialogRef.close(this.data);
   }
 
 

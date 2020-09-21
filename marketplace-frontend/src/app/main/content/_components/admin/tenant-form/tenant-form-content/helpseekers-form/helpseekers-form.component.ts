@@ -4,6 +4,7 @@ import { Tenant } from 'app/main/content/_model/tenant';
 import { UserRole, User } from 'app/main/content/_model/user';
 import { MatTableDataSource } from '@angular/material';
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: "tenant-helpseekers-form",
@@ -15,6 +16,7 @@ export class TenantHelpseekersFormComponent implements OnInit {
 
   loaded: boolean;
   @Input() tenant: Tenant;
+  helpseekers: User[];
 
   dataSource = new MatTableDataSource<User>();
   displayedColumns = ['firstname', 'lastname', 'username', 'actions'];
@@ -28,17 +30,25 @@ export class TenantHelpseekersFormComponent implements OnInit {
     this.loaded = false;
     this.dataSource.data = [];
 
-    this.dataSource.data = <User[]>(
+    this.helpseekers = <User[]>(
       await this.coreUserService.findAllByRoleAndTenantId(this.tenant.id, UserRole.HELP_SEEKER).toPromise()
     );
-    console.error(this.dataSource.data);
+
+    this.dataSource.data = this.helpseekers;
     this.loaded = true;
   }
 
   addHelpseeker() {
-    this.dialogFactory.openAddHelpseekerDialog(this.dataSource.data).then(ret => {
-      console.log(ret);
+    this.dialogFactory.openAddHelpseekerDialog(this.helpseekers).then(ret => {
+      if (!isNullOrUndefined(ret)) {
+        this.helpseekers = ret.helpseekers;
+        this.dataSource.data = this.helpseekers;
+      }
     });
+  }
+
+  removeHelpseeker(helpseeker: User) {
+    console.log(helpseeker);
   }
 
 
