@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, } from '@angular/material/dialog';
 import { MatTableDataSource, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { isNullOrUndefined } from 'util';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';

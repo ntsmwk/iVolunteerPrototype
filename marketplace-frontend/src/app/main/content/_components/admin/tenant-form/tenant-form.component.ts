@@ -56,7 +56,6 @@ export class FuseTenantFormComponent implements OnInit {
   }
 
   handleTenantSaved(tenant: Tenant) {
-    console.log('saved ');
-    console.log(tenant);
+
   }
 }

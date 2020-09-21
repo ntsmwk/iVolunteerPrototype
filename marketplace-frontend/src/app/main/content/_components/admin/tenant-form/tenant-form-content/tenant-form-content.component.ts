@@ -150,23 +150,15 @@ export class TenantFormContentComponent implements OnInit {
       return imageWrapper;
 
     }
-
     return null;
-
   }
 
-
-
   handleProfileImageUploadEvent(event: { key: string, image: any }) {
-    console.log("image upload");
-    console.log(event);
     this.previewProfileImageDirty = true;
     this.previewProfileImage = event.image;
   }
 
   handleLandingPageImageUploadEvent(event: { key: string, image: any }) {
-    console.log("image upload");
-    console.log(event);
     this.landingPageImageDirty = true;
     this.landingPageImage = event.image;
 
