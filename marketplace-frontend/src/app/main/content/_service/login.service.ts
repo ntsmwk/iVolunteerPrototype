@@ -7,14 +7,14 @@ import { tap } from "rxjs/operators";
 import { Router } from "@angular/router";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class LoginService {
   constructor(
     private http: HttpClient,
     private httpClient: HttpClient,
     private router: Router
-  ) { }
+  ) {}
 
   login(username: string, password: string) {
     return this.http.post(
@@ -36,7 +36,7 @@ export class LoginService {
   getLoggedIn() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.user);
         subscriber.complete();
       });
@@ -48,12 +48,12 @@ export class LoginService {
   getLoggedInUserRole() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.userRole);
         subscriber.complete();
       });
     } else {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(UserRole.NONE);
         subscriber.complete();
       });
@@ -74,7 +74,7 @@ export class LoginService {
             localStorage.setItem("refreshToken", refreshToken);
           }
         },
-        (error) => {
+        error => {
           this.logout();
         }
       )
@@ -90,13 +90,14 @@ export class LoginService {
   }
 
   getGlobalInfo() {
-    const observable = new Observable((subscriber) => {
+    const observable = new Observable(subscriber => {
       let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
       if (globalInfo) {
         subscriber.next(globalInfo);
         subscriber.complete();
       } else {
-        this.httpClient.get(`/core/login/globalInfo`);
+        // TODO @
+        this.httpClient.get(`/core/login/globalInfo/`);
       }
     });
     return observable;

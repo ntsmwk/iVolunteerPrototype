@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.api.standard.model.badge;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
 public class PersonBadgeService {
@@ -33,14 +33,14 @@ public class PersonBadgeService {
 	private void savePersonBadge(ClassDefinition personBadgeClassDefinition, PersonBadge personBadge) {
 		// @formatter:off
 		ClassInstance personBadgeClassInstance = classDefinition2InstanceMapper.toTarget(personBadgeClassDefinition);
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeID")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeID(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeName(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeDescription")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeDescription(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeIssuedOn(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeIcon")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeIcon(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personBadge.getiVolunteerUUID(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personBadge.getiVolunteerSource(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personBadge.getPersonID(), new Object[0])));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeID")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getBadgeID())));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getBadgeName())));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeDescription")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getBadgeDescription())));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getBadgeIssuedOn())));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeIcon")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getBadgeIcon())));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getiVolunteerUUID())));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getiVolunteerSource())));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Collections.singletonList(personBadge.getPersonID())));
 		
 		personBadgeClassInstance.setUserId(userMappingService.getByExternalUserId(personBadge.getPersonID()).getiVolunteerUserId());
 
