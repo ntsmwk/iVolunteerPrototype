@@ -24,9 +24,8 @@
 
         <ng-container matColumnDef="configuration">
           <mat-header-cell *matHeaderCellDef>Konfiguration</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{
-            task.configurationName
-          }}</mat-cell>
+          <mat-cell *matCellDef="let task">{{ task.configurationName }}
+          </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -36,7 +35,6 @@
   </div>
 
   <p *ngIf="dataSource.data.length == 0" class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren
-    Konfigurationen - Erstellen Sie zunächste eine Konfiguration.
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren Konfigurationen - Erstellen Sie zunächste eine Konfiguration.
   </p>
 </div>

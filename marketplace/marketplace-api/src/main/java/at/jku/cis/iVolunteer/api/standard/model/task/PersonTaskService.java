@@ -100,12 +100,12 @@ public class PersonTaskService {
 
 		personTaskClassInstance
 				.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
-//		personTaskClassInstance.setInIssuerInbox(false);
-//		personTaskClassInstance.setInUserRepository(true);
 
 		personTaskClassInstance.setIssuerId(tenantId);
 		personTaskClassInstance.setTenantId(tenantId);
+		personTaskClassInstance.setBlockchainDate(new Date());
 		personTaskClassInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
+		personTaskClassInstance.setIssued(true);
 
 		personTaskClassInstance.setTimestamp(new Date());
 

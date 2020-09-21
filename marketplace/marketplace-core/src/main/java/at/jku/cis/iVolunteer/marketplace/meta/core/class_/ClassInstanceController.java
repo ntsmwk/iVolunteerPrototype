@@ -42,21 +42,20 @@ public class ClassInstanceController {
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
-			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
+			@PathVariable("userId") String userId, @RequestParam(value = "issued") boolean issued, @RequestBody List<String> tenantIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 
 		tenantIds.forEach(tenantId -> {
 			classInstances.addAll(
-					classInstanceRepository.getByUserIdAndClassArchetypeAndTenantId(userId, archeType, tenantId));
+					classInstanceRepository.getByUserIdAndClassArchetypeAndTenantIdAndIssued(userId, archeType, tenantId, issued));
 		});
 
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
 	@GetMapping("/meta/core/class/instance/all")
-	private List<ClassInstanceDTO> getAllClassInstances() {
-		// TODO filter by tenant Id as header param
-		return classInstanceMapper.mapToDTO(classInstanceRepository.findAll());
+	private List<ClassInstanceDTO> getAllClassInstances(@RequestParam(value = "tId", required=true) String tenantId) {
+		return classInstanceMapper.mapToDTO(classInstanceRepository.findByTenantId(tenantId));
 	}
 
 	@GetMapping("/meta/core/class/instance/{id}")

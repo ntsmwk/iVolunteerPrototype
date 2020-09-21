@@ -123,7 +123,8 @@ export class ManagementSummaryComponent implements OnInit {
               this.marketplace,
               "TASK",
               this.volunteer.id,
-              this.volunteer.subscribedTenants.map((s) => s.tenantId)
+              this.volunteer.subscribedTenants.map((s) => s.tenantId),
+              true
             )
             .toPromise()
         );

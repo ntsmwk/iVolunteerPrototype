@@ -13,7 +13,7 @@ import { ClassInstance } from "app/main/content/_model/meta/class";
 @Component({
   selector: "app-local-repository-location-switch",
   templateUrl: "./local-repository-location-switch.component.html",
-  styleUrls: ["./local-repository-location-switch.component.scss"],
+  styleUrls: ["./local-repository-location-switch.component.scss"]
 })
 export class LocalRepositoryLocationSwitchComponent implements OnInit {
   CLIENT_ID: string = "ky4bainncqhjjn8";
@@ -40,6 +40,7 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
     var dbx = new Dropbox({ clientId: this.CLIENT_ID });
     this.authUrl = dbx.getAuthenticationUrl(
       "http://localhost:4200/main/profile"
+      // "http://ivolunteer.cis.jku.at:4200/main/profile"
     );
 
     this.globalInfo = <GlobalInfo>(
@@ -148,7 +149,7 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
   updateGlobalInfo() {
     this.loginService.generateGlobalInfo(
       this.globalInfo.userRole,
-      this.globalInfo.tenants.map((t) => t.id)
+      this.globalInfo.tenants.map(t => t.id)
     );
   }
 }
