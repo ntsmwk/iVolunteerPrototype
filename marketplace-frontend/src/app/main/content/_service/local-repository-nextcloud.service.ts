@@ -5,18 +5,21 @@ import { LocalRepository } from "../_model/local-repository";
 import { ClassInstance } from "../_model/meta/class";
 import { createClient } from "webdav/web";
 import { NextcloudCredentials } from "../_model/nextcloud-credentials";
+import { LocalRepositoryService } from "./local-repository.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class LocalRepositoryNextcloudService {
+export class LocalRepositoryNextcloudService extends LocalRepositoryService {
   FILE_PATH: string = "/Apps/iVolunteer/";
   FILE_NAME: string = "db.json";
   FULL_FILE_NAME: string = this.FILE_PATH + this.FILE_NAME;
 
   localRepositorys: LocalRepository[] = [];
 
-  constructor() {}
+  constructor() {
+    super();
+  }
 
   public async isConnected(credentials: NextcloudCredentials) {
     if (

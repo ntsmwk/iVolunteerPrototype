@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { UserRole } from "../_model/user";
+import { LocalRepositoryLocation, User, UserRole } from "../_model/user";
 import { GlobalInfo } from "../_model/global-info";
 import { Observable, generate } from "rxjs";
 import { tap } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { LocalRepositoryJsonServerService } from "./local-repository-jsonServer.service";
+import { LocalRepositoryDropboxService } from "./local-repository-dropbox.service";
+import { LocalRepositoryNextcloudService } from "./local-repository-nextcloud.service";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +16,10 @@ export class LoginService {
   constructor(
     private http: HttpClient,
     private httpClient: HttpClient,
-    private router: Router
+    private router: Router,
+    private lrDropboxService: LocalRepositoryDropboxService,
+    private lrJsonServerService: LocalRepositoryJsonServerService,
+    private lrNextcloudService: LocalRepositoryNextcloudService
   ) {}
 
   login(username: string, password: string) {
@@ -111,5 +117,16 @@ export class LoginService {
     );
 
     localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
+  }
+
+  getLocalRepositoryService(volunteer: User) {
+    switch (volunteer.localRepositoryLocation) {
+      case LocalRepositoryLocation.LOCAL:
+        return this.lrJsonServerService;
+      case LocalRepositoryLocation.DROPBOX:
+        return this.lrDropboxService;
+      case LocalRepositoryLocation.NEXTCLOUD:
+        return this.lrNextcloudService;
+    }
   }
 }

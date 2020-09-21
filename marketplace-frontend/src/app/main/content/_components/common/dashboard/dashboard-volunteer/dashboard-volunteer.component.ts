@@ -28,6 +28,7 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { ImageService } from "app/main/content/_service/image.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 import { LocalRepositoryNextcloudService } from "app/main/content/_service/local-repository-nextcloud.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -39,7 +40,7 @@ HC_venn(Highcharts);
 export class DashboardVolunteerComponent implements OnInit {
   volunteer: User;
   marketplace: Marketplace;
-  localRepositoryService;
+  localRepositoryService: LocalRepositoryService;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -95,9 +96,6 @@ export class DashboardVolunteerComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private classInstanceService: ClassInstanceService,
-    private lrDropboxService: LocalRepositoryDropboxService,
-    private lrJsonServerService: LocalRepositoryJsonServerService,
-    private lrNextcloudService: LocalRepositoryNextcloudService,
     private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
@@ -141,17 +139,9 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
-    switch (this.volunteer.localRepositoryLocation) {
-      case LocalRepositoryLocation.LOCAL:
-        this.localRepositoryService = this.lrJsonServerService;
-        break;
-      case LocalRepositoryLocation.DROPBOX:
-        this.localRepositoryService = this.lrDropboxService;
-        break;
-      case LocalRepositoryLocation.NEXTCLOUD:
-        this.localRepositoryService = this.lrNextcloudService;
-        break;
-    }
+    this.localRepositoryService = this.loginService.getLocalRepositoryService(
+      this.volunteer
+    );
 
     let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
       await this.classInstanceService

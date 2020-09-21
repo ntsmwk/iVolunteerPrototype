@@ -15,6 +15,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
 import { CoreUserService } from "app/main/content/_service/core-user.serivce";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 
 @Component({
   selector: "fuse-achievements",
@@ -25,7 +26,7 @@ import { LocalRepositoryDropboxService } from "app/main/content/_service/local-r
 export class AchievementsComponent implements OnInit {
   volunteer: User;
   marketplace: Marketplace;
-  localRepositoryService;
+  localRepositoryService: LocalRepositoryService;
   classInstanceDTOs: ClassInstanceDTO[] = [];
   filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
@@ -54,19 +55,10 @@ export class AchievementsComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
 
-    if (
-      this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
-    ) {
-      this.localRepositoryService = this.lrJsonServerService;
-    } else {
-      this.localRepositoryService = this.lrDropboxService;
-    }
+    this.localRepositoryService = this.loginService.getLocalRepositoryService(
+      this.volunteer
+    );
 
-    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-    //   this.volunteer
-    // );
-
-    // if (this.isLocalRepositoryConnected) {
     try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService

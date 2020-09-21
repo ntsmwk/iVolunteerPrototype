@@ -4,15 +4,18 @@ import { Observable } from "rxjs";
 import { LocalRepository } from "../_model/local-repository";
 import { ClassInstance } from "../_model/meta/class";
 import { Dropbox } from "dropbox";
+import { LocalRepositoryService } from "./local-repository.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class LocalRepositoryDropboxService {
+export class LocalRepositoryDropboxService extends LocalRepositoryService {
   FILE_PATH: string = "/db.json";
   localRepositorys: LocalRepository[] = [];
 
-  constructor() {}
+  constructor() {
+    super();
+  }
 
   private findByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
@@ -395,5 +398,9 @@ export class LocalRepositoryDropboxService {
       return false;
     }
     return true;
+  }
+
+  isConnected(credentials: any) {
+    throw new Error("Method not implemented.");
   }
 }

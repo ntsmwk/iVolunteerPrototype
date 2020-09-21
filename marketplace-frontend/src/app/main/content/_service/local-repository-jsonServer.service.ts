@@ -5,15 +5,27 @@ import { LocalRepository } from "../_model/local-repository";
 import { isNullOrUndefined } from "util";
 import { ClassInstance } from "../_model/meta/class";
 import { User } from "../_model/user";
+import { LocalRepositoryService } from "./local-repository.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class LocalRepositoryJsonServerService {
+export class LocalRepositoryJsonServerService extends LocalRepositoryService {
   private apiUrl = "http://localhost:3000/repository";
   // private apiUrl = "http://140.78.92.57:3000/repository";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    super();
+  }
+
+  public async isConnected() {
+    try {
+      await this.http.get(this.apiUrl).toPromise();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
   private findByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
@@ -246,16 +258,5 @@ export class LocalRepositoryJsonServerService {
     });
 
     return observable;
-  }
-
-  async isConnected() {
-    try {
-      let x = await this.http.get(this.apiUrl).toPromise();
-      console.error(x);
-      return true;
-    } catch (error) {
-      console.error("isConnected false");
-      return false;
-    }
   }
 }
