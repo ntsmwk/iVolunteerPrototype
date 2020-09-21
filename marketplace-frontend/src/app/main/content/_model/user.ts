@@ -1,4 +1,3 @@
-import { map } from "lodash";
 import { ImageWrapper } from './image';
 
 export class User {
@@ -37,18 +36,18 @@ export class User {
 }
 
 export enum UserRole {
-  VOLUNTEER = "VOLUNTEER",
-  HELP_SEEKER = "HELP_SEEKER",
-  TENANT_ADMIN = "TENANT_ADMIN",
-  ADMIN = "ADMIN",
-  RECRUITER = "RECRUITER",
-  FLEXPROD = "FLEXPROD",
-  NONE = "NONE",
+  VOLUNTEER = 'VOLUNTEER',
+  HELP_SEEKER = 'HELP_SEEKER',
+  TENANT_ADMIN = 'TENANT_ADMIN',
+  ADMIN = 'ADMIN',
+  RECRUITER = 'RECRUITER',
+  FLEXPROD = 'FLEXPROD',
+  NONE = 'NONE',
 }
 
 export enum LocalRepositoryLocation {
-  LOCAL = "LOCAL",
-  DROPBOX = "DROPBOX",
+  LOCAL = 'LOCAL',
+  DROPBOX = 'DROPBOX',
 }
 
 export class TenantUserSubscription {

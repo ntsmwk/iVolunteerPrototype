@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { Tenant } from 'app/main/content/_model/tenant';
@@ -14,34 +14,38 @@ const STANDARD_SECONDARY_COLOR = '#fafafa';
 
 @Component({
   selector: "create-tenant",
-  templateUrl: "create-tenant.component.html",
-  styleUrls: ["create-tenant.component.scss"],
+  templateUrl: 'create-tenant.component.html',
+  styleUrls: ['create-tenant.component.scss'],
 })
 export class CreateTenantComponent implements OnInit {
 
   globalInfo: GlobalInfo;
   tenant: Tenant;
   loaded: boolean;
+  tenantSaved: boolean;
+  layout = {
+    navigation: 'none',
+    footer: 'none',
+    toolbar: 'none',
+  };
+  layoutAfter = {
+    navigation: 'left',
+    footer: 'none',
+    toolbar: 'below',
+  };
+
 
   constructor(
     private router: Router,
     private fuseConfig: FuseConfigService,
     private loginService: LoginService,
-    private tenantServce: TenantService,
     private coreUserService: CoreUserService,
   ) { }
 
   async ngOnInit() {
     this.loaded = false;
-
-    const layout1 = {
-      navigation: 'none',
-      footer: 'none',
-      toolbar: 'none',
-    };
-
-
-    this.fuseConfig.setConfig({ layout: layout1 });
+    this.tenantSaved = false;
+    this.fuseConfig.setConfig({ layout: this.layout });
 
     this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
 
@@ -50,7 +54,6 @@ export class CreateTenantComponent implements OnInit {
       this.tenant = new Tenant({ name: this.globalInfo.user.organizationName, primaryColor: STANDARD_PRIMARY_COLOR, secondaryColor: STANDARD_SECONDARY_COLOR });
     }
 
-    console.log(this.tenant);
     this.loaded = true;
   }
 
@@ -61,11 +64,17 @@ export class CreateTenantComponent implements OnInit {
     await this.coreUserService.subscribeUserToTenant(this.globalInfo.user.id, this.globalInfo.marketplace.id, tenant.id, UserRole.TENANT_ADMIN).toPromise();
     await this.loginService.generateGlobalInfo(UserRole.TENANT_ADMIN, [tenant.id]);
     await this.loginService.getGlobalInfo().toPromise();
+    this.tenantSaved = true;
   }
 
   handleLogoutClick() {
     this.loginService.logout();
     this.router.navigate([`/`]);
+  }
+
+  handleFinishedClick() {
+    this.fuseConfig.setConfig(this.fuseConfig.defaultConfig);
+    this.router.navigate(['/role']);
   }
 
 
