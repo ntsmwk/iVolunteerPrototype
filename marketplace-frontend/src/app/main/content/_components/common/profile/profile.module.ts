@@ -23,6 +23,7 @@ import {
 import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseWidgetModule } from "@fuse/components";
 import { LocalRepositoryLocationSwitchModule } from "../../volunteer/local-repository-location-switch/local-repository-location-switch.module";
+import { ProfileFormComponent } from './profile-form/profile-form.component';
 
 const routes = [{ path: "", component: ProfileComponent }];
 
@@ -47,6 +48,7 @@ const routes = [{ path: "", component: ProfileComponent }];
     FuseSharedModule,
     MatCardModule,
     FuseWidgetModule,
+    ProfileFormComponent,
 
     LocalRepositoryLocationSwitchModule,
   ],
@@ -54,4 +56,4 @@ const routes = [{ path: "", component: ProfileComponent }];
   declarations: [ProfileComponent],
   providers: [],
 })
-export class ProfileModule {}
+export class ProfileModule { }

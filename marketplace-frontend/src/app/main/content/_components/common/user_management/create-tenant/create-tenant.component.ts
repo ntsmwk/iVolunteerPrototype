@@ -3,7 +3,6 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { FuseConfigService } from '@fuse/services/config.service';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { UserRole } from 'app/main/content/_model/user';
 import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
 import { Router } from '@angular/router';
@@ -28,12 +27,6 @@ export class CreateTenantComponent implements OnInit {
     footer: 'none',
     toolbar: 'none',
   };
-  layoutAfter = {
-    navigation: 'left',
-    footer: 'none',
-    toolbar: 'below',
-  };
-
 
   constructor(
     private router: Router,
