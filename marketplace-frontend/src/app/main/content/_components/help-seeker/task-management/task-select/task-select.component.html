@@ -8,11 +8,7 @@
     />
   </div> -->
 
-  <customizable-header
-    *ngIf="tenant"
-    [tenant]="tenant"
-    headerText="Einträge erfassen"
-  ></customizable-header>
+  <customizable-header *ngIf="tenant" [tenant]="tenant" headerText="Einträge erfassen"></customizable-header>
 
   <div *ngIf="dataSource.data.length > 0">
     <p class="mt-24 fs-25">
@@ -28,22 +24,17 @@
 
         <ng-container matColumnDef="configuration">
           <mat-header-cell *matHeaderCellDef>Konfiguration</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{
-            task.configurationName
-          }}</mat-cell>
+          <mat-cell *matCellDef="let task">{{ task.configurationName }}
+          </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          (click)="onRowSelect(row)"
-        ></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowSelect(row)"></mat-row>
       </mat-table>
     </div>
   </div>
 
   <p *ngIf="dataSource.data.length == 0" class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren
-    Konfigurationen - Erstellen Sie zunächste eine Konfiguration.
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren Konfigurationen - Erstellen Sie zunächste eine Konfiguration.
   </p>
 </div>

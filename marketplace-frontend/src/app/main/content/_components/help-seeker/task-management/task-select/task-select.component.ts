@@ -14,7 +14,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   templateUrl: "./task-select.component.html",
-  styleUrls: ["./task-select.component.scss"],
+  styleUrls: ["./task-select.component.scss"]
 })
 export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
@@ -28,7 +28,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private router: Router,
     private loginService: LoginService,
     private classDefinitionService: ClassDefinitionService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
@@ -46,26 +46,14 @@ export class FuseTaskSelectComponent implements OnInit {
       );
 
       this.dataSource.data = tasks
-        .filter((t) => t.configurationId != null)
+        .filter(t => t.configurationId != null)
         .sort((c1, c2) => c1.configurationId.localeCompare(c2.configurationId));
     }
   }
 
   onRowSelect(row) {
-    this.router.navigate(
-      [`main/instance-editor/${this.marketplace.id}`],
-      { queryParams: [row.id] }
-    );
-  }
-
-  private isFF() {
-    return this.tenant.name === "FF Eidenberg";
-  }
-
-  private isMV() {
-    return this.tenant.name === "MV Schwertberg";
-  }
-  private isOther() {
-    return !this.isFF() && !this.isMV();
+    this.router.navigate([`main/instance-editor/${this.marketplace.id}`], {
+      queryParams: [row.id]
+    });
   }
 }
