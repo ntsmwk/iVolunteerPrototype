@@ -61,6 +61,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       .then((ret: ClassInstanceDTO[]) => {
         this.classInstanceDTOs = ret;
         this.isLoaded = true;
+        console.error(this.classInstanceDTOs);
         this.sortClassInstances();
         this.loadUsers();
       });

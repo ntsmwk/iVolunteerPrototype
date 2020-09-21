@@ -27,11 +27,6 @@ public class ClassInstanceDTO {
 	private String marketplaceId;
 	private boolean issued;
 
-	// Temp flags for dashboard presentation
-	private boolean published; // flag if published
-	private boolean inUserRepository;// flag if in inbox or in repository of user
-	private boolean inIssuerInbox; // flag if in inbox of issuer
-
 	public String getUserId() {
 		return userId;
 	}
@@ -54,30 +49,6 @@ public class ClassInstanceDTO {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
-	}
-
-	public boolean isPublished() {
-		return published;
-	}
-
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
-
-	public boolean isInUserRepository() {
-		return inUserRepository;
-	}
-
-	public void setInUserRepository(boolean inUserRepository) {
-		this.inUserRepository = inUserRepository;
-	}
-
-	public boolean isInIssuerInbox() {
-		return inIssuerInbox;
-	}
-
-	public void setInIssuerInbox(boolean inIssuerInbox) {
-		this.inIssuerInbox = inIssuerInbox;
 	}
 
 	public ClassArchetype getClassArchetype() {
