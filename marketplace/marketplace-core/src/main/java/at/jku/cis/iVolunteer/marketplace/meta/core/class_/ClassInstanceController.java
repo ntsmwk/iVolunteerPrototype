@@ -82,8 +82,8 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@RequestParam(value = "tId", required = true) String tenantId) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
-				tenantId);
+//		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
+//				tenantId);
 		// TODO implement!!
 		return classInstances;
 	}
@@ -129,10 +129,10 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/in-issuer-inbox")
-	private List<ClassInstance> getClassInstanceInIssuerInbox(
+	private List<ClassInstanceDTO> getClassInstanceInIssuerInbox(
 			@RequestParam(value = "tId", required = true) String tenantId) {
 		List<ClassInstance> instances = classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
-		return instances;
+		return classInstanceMapper.mapToDTO(instances);
 	}
 
 	@PutMapping("/meta/core/class/instance/issue")
