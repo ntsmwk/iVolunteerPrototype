@@ -43,7 +43,10 @@ export class LocalRepositoryJsonServerService {
             );
           }
         })
-        .catch((error: any) => failureFunction(error));
+        .catch((error: any) => {
+          console.error("error");
+          failureFunction(error);
+        });
     });
     return observable;
   }
@@ -246,17 +249,13 @@ export class LocalRepositoryJsonServerService {
   }
 
   async isConnected() {
-    let isConnected = false;
-
-    let localRepos = <LocalRepository[]>await this.http
-      .get(this.apiUrl)
-      .toPromise()
-      .catch(() => (isConnected = false));
-
-    if (localRepos) {
-      isConnected = true;
+    try {
+      let x = await this.http.get(this.apiUrl).toPromise();
+      console.error(x);
+      return true;
+    } catch (error) {
+      console.error("isConnected false");
+      return false;
     }
-
-    return isConnected;
   }
 }

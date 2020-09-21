@@ -106,7 +106,7 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
       let sourceService = this.getService(this.user.localRepositoryLocation);
       let destService = this.getService(newLocation);
 
-      if (sourceService != null && destService != null) {
+      if (sourceService != null) {
         try {
           let classInstances = <ClassInstance[]>(
             await sourceService
@@ -119,17 +119,10 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
             .toPromise();
         } catch (error) {
           alert("Fehler bei der Datenübertragung!");
-          // Todo: revert radiobutton to source...
         }
-
-        this.user.localRepositoryLocation = newLocation;
-        this.updateUserAndGlobalInfo();
-      } else {
-        alert(
-          "Wechseln des Speicherorts nicht möglich, da ein Service nicht erreichbar ist!"
-        );
-        // Todo: revert radiobutton to source...
       }
+      this.user.localRepositoryLocation = newLocation;
+      this.updateUserAndGlobalInfo();
     }
   }
 

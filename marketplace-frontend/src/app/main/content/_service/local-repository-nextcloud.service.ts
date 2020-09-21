@@ -34,7 +34,7 @@ export class LocalRepositoryNextcloudService {
     });
 
     try {
-      let c = await nextcloud.getDirectoryContents("/");
+      await nextcloud.getDirectoryContents("/");
       return true;
     } catch (error) {
       return false;
@@ -384,8 +384,6 @@ export class LocalRepositoryNextcloudService {
   }
 
   private async saveToNextcloud(volunteer: User) {
-    console.error("in saveToNextcloud");
-
     let nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
       username: volunteer.nextcloudCredentials.username,
       password: volunteer.nextcloudCredentials.password,
