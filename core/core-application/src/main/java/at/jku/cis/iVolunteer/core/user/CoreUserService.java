@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -152,6 +153,9 @@ public class CoreUserService {
 	}
 
 	public CoreUser addNewUser(CoreUser user, String authorization, boolean updateMarketplaces) {
+		if (user.getId() == null) {
+			user.setId(new ObjectId().toHexString());
+		}
 		return this.updateUser(user, authorization, updateMarketplaces);
 	}
 

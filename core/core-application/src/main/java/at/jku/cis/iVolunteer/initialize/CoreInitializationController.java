@@ -169,7 +169,6 @@ public class CoreInitializationController {
 		registerVolunteersToMarketplace();
 		registerAdminsToMarketplace();
 		registerRecruitersToMarketplace();
-
 	}
 
 	@PutMapping("/init/marketplace/register/helpseekers")
