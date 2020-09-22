@@ -57,10 +57,9 @@ public class ClassInstanceController {
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
-	@PreAuthorize("hasAnyRole('VOLUNTEER')")
+//	@PreAuthorize("hasAnyRole('VOLUNTEER')")
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstanceDTO> getAllClassInstances(@RequestParam(value = "tId", required=true) String tenantId) {
-		Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		return classInstanceMapper.mapToDTO(classInstanceRepository.findByTenantId(tenantId));
 	}
 

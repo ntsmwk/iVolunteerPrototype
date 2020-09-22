@@ -46,23 +46,19 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreUserRepository coreUserRepository;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private TenantRepository coreTenantRepository;
-	@Autowired
-	private CoreUserService coreUserService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreUserRepository coreUserRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private TenantRepository coreTenantRepository;
+	@Autowired private CoreUserService coreUserService;
 	@Autowired CoreUserImageController coreUserImageController;
 
 //	"/img/pstarzer.jpg"
 	public void initVolunteers() {
 
 		createVolunteer(USERNAMES[0], RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
-		createVolunteer(USERNAMES[1], RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "", "/img/pstarzer.jpg");
+		createVolunteer(USERNAMES[1], RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995, 10, 9), "",
+				"/img/pstarzer.jpg");
 		createVolunteer(USERNAMES[2], RAW_PASSWORD, "Markus", "Weißenbek", LocalDate.of(1994, 1, 23), "", "");
 		createVolunteer(USERNAMES[3], RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985, 5, 24), "",
 				"/img/weixlbaumer_small.png");
@@ -117,7 +113,8 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				coreUserImageController.addNewUserImage(new UserImage(volunteer.getId(),new ImageWrapper("data:image/png;base64", binaryData)));
+				coreUserImageController.addNewUserImage(
+						new UserImage(volunteer.getId(), new ImageWrapper("data:image/png;base64", binaryData)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
