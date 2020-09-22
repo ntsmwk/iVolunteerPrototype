@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json --disable-host-check",
+    "start-prod": "ng serve --prod --host 0.0.0.0 --proxy-config proxy.conf.json --disable-host-check",
     "start-hmr": "ng serve --configuration hmr -sm=false --host 0.0.0.0 --proxy-config proxy.conf.json",
     "start-hmr-sourcemaps": "ng serve --hmr -e=hmr --host 0.0.0.0 --proxy-config proxy.conf.json",
     "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev",
