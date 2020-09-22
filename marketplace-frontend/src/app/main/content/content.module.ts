@@ -15,8 +15,8 @@ import { AdminGuard } from "./_guard/admin.guard";
 import { TenantAdminGuard } from "./_guard/tenant-admin.guard";
 import { HelpSeekerOrTenantAdminGuard } from "./_guard/helpseeker-tenantAdmin.guard";
 import { TokenGuard } from "./_guard/token.guard";
-import { AdminOrTenantAdminGuard } from './_guard/admin-tenantAdmin.guard';
-import { NoneOrTenantAdminGuard } from './_guard/none-tenant-admin.guard';
+import { AdminOrTenantAdminGuard } from "./_guard/admin-tenantAdmin.guard";
+import { NoneOrTenantAdminGuard } from "./_guard/none-tenant-admin.guard";
 
 const routes: Route[] = [
   {
@@ -122,7 +122,7 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/task-management/task-select/task-select.module"
       ).then(m => m.FuseTaskSelectModule),
-    canActivate: [TokenGuard, TenantAdminGuard]
+    canActivate: [TokenGuard, HelpSeekerOrTenantAdminGuard]
   },
   {
     path: "main/tasks/all",
@@ -220,7 +220,7 @@ const routes: Route[] = [
       import("./_components/admin/tenant-form/tenant-form.module").then(
         m => m.FuseTenantFormModule
       ),
-    canActivate: [TokenGuard, AdminOrTenantAdminGuard],
+    canActivate: [TokenGuard, AdminOrTenantAdminGuard]
   },
   {
     path: "main/import",

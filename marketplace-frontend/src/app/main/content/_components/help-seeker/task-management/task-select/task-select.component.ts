@@ -22,6 +22,7 @@ export class FuseTaskSelectComponent implements OnInit {
   displayedColumns = ["name", "configuration"];
   user: User;
   tenant: Tenant;
+  userRole: UserRole;
 
   constructor(
     formBuilder: FormBuilder,
@@ -37,6 +38,7 @@ export class FuseTaskSelectComponent implements OnInit {
     this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
     this.marketplace = globalInfo.marketplace;
+    this.userRole = globalInfo.userRole;
 
     if (!isNullOrUndefined(this.marketplace)) {
       let tasks = <ClassDefinition[]>(

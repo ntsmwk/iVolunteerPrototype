@@ -14,13 +14,13 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
   selector: "fuse-task-list",
   templateUrl: "./task-list.component.html",
   styleUrls: ["./task-list.component.scss"],
-  animations: fuseAnimations,
+  animations: fuseAnimations
 })
 export class FuseTaskListComponent implements OnInit, AfterViewInit {
   marketplace: Marketplace;
 
-  private classInstanceDTOs: ClassInstanceDTO[] = [];
-  private tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
+  classInstanceDTOs: ClassInstanceDTO[] = [];
+  tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -31,11 +31,11 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     "taskType2",
     "taskDateFrom",
     "taskDuration",
-    "verified",
+    "verified"
   ];
 
-  private user: User;
-  private tenant: Tenant;
+  user: User;
+  tenant: Tenant;
 
   constructor(
     private router: Router,

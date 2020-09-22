@@ -4,14 +4,14 @@ import { TenantService } from "../../../_service/core-tenant.service";
 
 @Component({
   selector: "customizable-header",
-  templateUrl: "header.component.html",
+  templateUrl: "header.component.html"
 })
 export class HeaderComponent implements OnInit {
   @Input() headerText: string;
   @Input() tenant: Tenant;
   @Input() displayNavigateBack: boolean;
 
-  constructor(private tenantService: TenantService) { }
+  constructor(private tenantService: TenantService) {}
 
   ngOnInit() {
     // console.error(this.tenant);
