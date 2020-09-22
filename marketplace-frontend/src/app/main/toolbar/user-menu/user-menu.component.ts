@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User, UserRole } from '../../content/_model/user';
 import { LoginService } from '../../content/_service/login.service';
-import { isNullOrUndefined } from 'util';
-import { ImageService } from 'app/main/content/_service/image.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoleChangeService } from 'app/main/content/_service/role-change.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { UserService } from 'app/main/content/_service/user.service';
+import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
+import { UserImage } from 'app/main/content/_model/image';
 
 @Component({
   selector: 'fuse-user-menu',
@@ -16,6 +15,8 @@ import { UserService } from 'app/main/content/_service/user.service';
 })
 export class FuseUserMenuComponent implements OnInit, OnDestroy {
   user: User;
+  userImage: UserImage;
+
   role: UserRole;
   globalInfo: GlobalInfo;
 
@@ -24,9 +25,8 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private imageService: ImageService,
     private roleChangeService: RoleChangeService,
-    private userService: UserService,
+    private userImageService: CoreUserImageService,
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -34,9 +34,13 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.role = <UserRole>await this.loginService.getLoggedInUserRole().toPromise();
-    this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+    this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise(),
     this.user = this.globalInfo.user;
+
+    await Promise.all([
+      this.role = <UserRole>await this.loginService.getLoggedInUserRole().toPromise(),
+      this.userImage = <UserImage>await this.userImageService.findByUserId(this.user.id).toPromise(),
+    ]);
   }
 
   ngOnDestroy() {
@@ -48,7 +52,7 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
   }
 
   getImage() {
-    return this.userService.getUserProfileImage(this.user);
+    return this.userImageService.getUserProfileImage(this.userImage);
   }
 
   getUserNameString() {

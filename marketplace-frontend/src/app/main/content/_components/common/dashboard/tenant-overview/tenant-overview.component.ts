@@ -5,7 +5,7 @@ import { ImageService } from 'app/main/content/_service/image.service';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { User, UserRole } from 'app/main/content/_model/user';
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from 'app/main/content/_service/core-user.service';
 import { RoleChangeService } from 'app/main/content/_service/role-change.service';
 
 @Component({

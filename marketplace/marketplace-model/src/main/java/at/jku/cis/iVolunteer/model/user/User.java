@@ -37,7 +37,7 @@ public class User {
 	private List<String> websites;
 	private List<String> emails;
 
-	private ImageWrapper image;
+//	private ImageWrapper image;
 
 	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
 
@@ -68,7 +68,7 @@ public class User {
 		this.phoneNumbers = coreUser.getPhoneNumbers();
 		this.websites = coreUser.getWebsites();
 		this.emails = coreUser.getEmails();
-		this.image = coreUser.getImage();
+//		this.image = coreUser.getImage();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
@@ -171,13 +171,13 @@ public class User {
 		this.organizationPosition = organizationPosition;
 	}
 
-	public ImageWrapper getImage() {
-		return image;
-	}
-
-	public void setImage(ImageWrapper image) {
-		this.image = image;
-	}
+//	public ImageWrapper getImage() {
+//		return image;
+//	}
+//
+//	public void setImage(ImageWrapper image) {
+//		this.image = image;
+//	}
 
 	public List<String> getLocations() {
 		return locations;

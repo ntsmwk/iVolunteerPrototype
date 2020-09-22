@@ -3,9 +3,11 @@ import { User, UserRole } from 'app/main/content/_model/user';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from 'app/main/content/_service/core-user.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { UserService } from 'app/main/content/_service/user.service';
+import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
+import { UserImage } from 'app/main/content/_model/image';
 
 @Component({
   selector: "profile-form",
@@ -16,6 +18,7 @@ import { UserService } from 'app/main/content/_service/user.service';
 export class ProfileFormComponent implements OnInit {
   globalInfo: GlobalInfo;
   @Input() user: User;
+  @Input() userImage: UserImage;
   currentRoles: UserRole[] = [];
   profileForm: FormGroup;
   profileFormErrors: any;
@@ -28,6 +31,7 @@ export class ProfileFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private coreUserService: CoreUserService,
     private userService: UserService,
+    private userImageService: CoreUserImageService,
   ) {
     this.profileFormErrors = {
 
@@ -102,7 +106,7 @@ export class ProfileFormComponent implements OnInit {
 
   getProfileImage() {
 
-    return this.userService.getUserProfileImage(this.user);
+    return this.userImageService.getUserProfileImage(this.userImage);
 
   }
 

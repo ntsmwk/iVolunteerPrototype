@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from 'app/main/content/_service/core-user.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { UserRole, User } from 'app/main/content/_model/user';
 import { MatTableDataSource } from '@angular/material';

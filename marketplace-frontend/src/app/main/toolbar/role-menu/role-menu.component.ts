@@ -10,10 +10,11 @@ import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { isNullOrUndefined } from "util";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { ImageService } from "app/main/content/_service/image.service";
 import { UserService } from "app/main/content/_service/user.service";
+import { UserImage } from 'app/main/content/_model/image';
+import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
 
 @Component({
   selector: "app-role-menu",
@@ -22,6 +23,7 @@ import { UserService } from "app/main/content/_service/user.service";
 })
 export class RoleMenuComponent implements OnInit, OnDestroy {
   user: User;
+  userImage: UserImage;
   role: UserRole;
   allTenants: Tenant[] = [];
 
@@ -38,7 +40,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private roleChangeService: RoleChangeService,
     private tenantService: TenantService,
-    private imageService: ImageService,
+    private userImageService: CoreUserImageService,
     private userService: UserService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
@@ -57,7 +59,10 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.user = globalInfo.user;
     this.role = globalInfo.userRole;
 
-    this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
+    await Promise.all([
+      this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise(),
+      this.userImage = <UserImage>await this.userImageService.findByUserId(this.user.id).toPromise()
+    ]);
 
     this.currentMapping = new RoleTenantMapping();
     this.currentMapping.role = this.role;
@@ -114,7 +119,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
   getTenantImage(mapping: RoleTenantMapping) {
     if (mapping.role === UserRole.VOLUNTEER) {
-      return this.userService.getUserProfileImage(this.user);
+      return this.userImageService.getUserProfileImage(this.userImage);
     }
 
     const tenant = this.allTenants.find((t) => t.id === mapping.tenantIds[0]);
