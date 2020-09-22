@@ -31,7 +31,10 @@ export class ProfileComponent implements OnInit {
     this.loaded = false;
     this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
     this.user = this.globalInfo.user;
-    this.userImage = <UserImage>await this.userImageService.findByUserId(this.user.id).toPromise();
+
+    // Don't wait for image...
+    this.userImageService.findByUserId(this.user.id).toPromise().then((userImage: UserImage) => this.userImage = userImage);
+
     this.currentRoles = this.user.subscribedTenants.map((s) => s.role);
     this.loaded = true;
   }

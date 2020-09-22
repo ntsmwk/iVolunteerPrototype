@@ -58,7 +58,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.user = globalInfo.user;
     this.role = globalInfo.userRole;
 
-    //Don't wait for image...
+    // Don't wait for image...
     this.userImageService.findByUserId(this.user.id).toPromise().then((userImage: UserImage) => this.userImage = userImage);
 
 

@@ -128,11 +128,12 @@ export class DashboardVolunteerComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
 
-    this.volunteerImage = <UserImage>await this.userImageService.findByUserId(this.volunteer.id).toPromise();
 
-
-    this.setVolunteerImage();
-
+    // Don't wait for image...
+    this.userImageService.findByUserId(this.volunteer.id).toPromise().then((userImage: UserImage) => {
+      this.volunteerImage = userImage;
+      this.setVolunteerImage();
+    });
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
     this.localRepositoryService = this.loginService.getLocalRepositoryService(
