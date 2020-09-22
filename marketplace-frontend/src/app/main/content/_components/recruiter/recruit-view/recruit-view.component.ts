@@ -27,7 +27,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     private coreTenantService: TenantService,
     private userService: UserService
   ) {}
-  private tableDataSource = new MatTableDataSource<ClassInstanceDTO>([]);
+  tableDataSource = new MatTableDataSource<ClassInstanceDTO>([]);
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = [
@@ -54,6 +54,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   legendTitle: string = " ";
   showXAxisLabel: boolean = false;
   showYAxisLabel: boolean = true;
+  xAxisLabel = "Datum";
   yAxisLabel1: string = "Stunden";
   yAxisLabel2: string = "Anzahl";
   animations: boolean = true;
