@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +60,7 @@ public class ClassInstanceController {
 	@PreAuthorize("hasAnyRole('VOLUNTEER')")
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstanceDTO> getAllClassInstances(@RequestParam(value = "tId", required=true) String tenantId) {
+		Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		return classInstanceMapper.mapToDTO(classInstanceRepository.findByTenantId(tenantId));
 	}
 
