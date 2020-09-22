@@ -35,11 +35,15 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise(),
-    this.user = this.globalInfo.user;
+      this.user = this.globalInfo.user;
+
+    //Don't wait for image...
+    this.userImageService.findByUserId(this.user.id).toPromise().then((userImage: UserImage) => this.userImage = userImage);
+
 
     await Promise.all([
       this.role = <UserRole>await this.loginService.getLoggedInUserRole().toPromise(),
-      this.userImage = <UserImage>await this.userImageService.findByUserId(this.user.id).toPromise(),
+      // this.userImage = <UserImage>await this.userImageService.findByUserId(this.user.id).toPromise(),
     ]);
   }
 

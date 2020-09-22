@@ -41,7 +41,6 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private roleChangeService: RoleChangeService,
     private tenantService: TenantService,
     private userImageService: CoreUserImageService,
-    private userService: UserService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -59,9 +58,12 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.user = globalInfo.user;
     this.role = globalInfo.userRole;
 
+    //Don't wait for image...
+    this.userImageService.findByUserId(this.user.id).toPromise().then((userImage: UserImage) => this.userImage = userImage);
+
+
     await Promise.all([
       this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise(),
-      this.userImage = <UserImage>await this.userImageService.findByUserId(this.user.id).toPromise()
     ]);
 
     this.currentMapping = new RoleTenantMapping();
