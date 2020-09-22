@@ -22,7 +22,7 @@ import at.jku.cis.iVolunteer.marketplace.security.filter.JWTAuthorizationFilter;
 import at.jku.cis.marketplace.security.service.ParticipantDetailsService;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired

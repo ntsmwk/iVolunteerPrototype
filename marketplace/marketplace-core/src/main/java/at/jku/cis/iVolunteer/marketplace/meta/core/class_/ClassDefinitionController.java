@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ public class ClassDefinitionController {
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassDefinitionMapper classDefinitionMapper;
 	
-
+	@PreAuthorize("hasAnyRole('TENANT_ADMIN', 'HELP_SEEKER')")
 	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")
 	private List<ClassDefinition> getAllClassDefinitions(@PathVariable("tenantId") String tenantId) {
 		return classDefinitionRepository.getByTenantId(tenantId);
