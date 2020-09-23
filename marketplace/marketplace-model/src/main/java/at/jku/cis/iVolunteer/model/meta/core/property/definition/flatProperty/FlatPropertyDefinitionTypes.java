@@ -57,4 +57,11 @@ public class FlatPropertyDefinitionTypes {
 			this.type = PropertyType.TUPLE;
 		}
 	}
+	
+	public static class LocationPropertyDefinition extends FlatPropertyDefinition<String> {
+
+		public LocationPropertyDefinition() {
+			this.type = PropertyType.LOCATION;
+		}
+	}
 }

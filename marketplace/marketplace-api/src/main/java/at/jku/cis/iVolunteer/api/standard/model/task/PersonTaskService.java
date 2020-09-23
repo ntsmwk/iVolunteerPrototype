@@ -44,31 +44,31 @@ public class PersonTaskService {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance) classDefinition2InstanceMapper
 				.toTarget(personTaskClassDefinition);
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskId"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskId())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("name"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskName())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType1"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskType1"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskType1())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType2"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskType2"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskType2())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType3"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskType3"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskType3())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType4"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskType4"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskType4())));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Description"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskDescription())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("purpose"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Purpose"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getPurpose())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("role"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Role"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getRole())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("rank"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Rank"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getRank())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("phase"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Phase"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getPhase())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("unit"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Unit"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getUnit())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("level"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Level"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getLevel())));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> {
 			try {
@@ -84,17 +84,17 @@ public class PersonTaskService {
 				e.printStackTrace();
 			}
 		});
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("duration"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Duration"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskDuration())));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Location"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskLocation())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("geoInformation"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("GeoInformation"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskGeoInformation())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("IVolunteerUUID"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getiVolunteerUUID())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("IVolunteerSource"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getiVolunteerSource())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID"))
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("PersonID"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getPersonID())));
 
 		personTaskClassInstance
