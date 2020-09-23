@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.Date;
 
+
 public class ClassInstanceDTO {
 	private String name;
 	private String id;

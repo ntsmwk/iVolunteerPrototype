@@ -182,12 +182,9 @@ public class CoreHelpSeekerInitializationService {
 		// since there is only one marketplace
 		Marketplace mp = this.marketplaceRepository.findByName("Marketplace 1");
 
-		coreUserService.subscribeUserToTenant(TENANT_ADMIN_FF, mp.getId(), tenantIdFF, UserRole.TENANT_ADMIN, "",
-				false);
-		coreUserService.subscribeUserToTenant(TENANT_ADMIN_RK, mp.getId(), tenantIdRK, UserRole.TENANT_ADMIN, "",
-				false);
-		coreUserService.subscribeUserToTenant(TENANT_ADMIN_MV, mp.getId(), tenantIdMV, UserRole.TENANT_ADMIN, "",
-				false);
+		coreUserService.subscribeUserToTenant(TENANT_ADMIN_FF, mp.getId(), tenantIdFF, UserRole.TENANT_ADMIN, "", false);
+		coreUserService.subscribeUserToTenant(TENANT_ADMIN_RK, mp.getId(), tenantIdRK, UserRole.TENANT_ADMIN, "", false);
+		coreUserService.subscribeUserToTenant(TENANT_ADMIN_MV, mp.getId(), tenantIdMV, UserRole.TENANT_ADMIN, "", false);
 	}
 
 	public void registerDefaultTenantAdmins() {

@@ -182,15 +182,27 @@ public class ClassConfigurationController {
 		fwPassEintrag.setCollector(true);
 		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
 
-		FlatPropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("id")).findFirst().get();
+		FlatPropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("ID")).findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(idProperty));
 
-		FlatPropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("name")).findFirst().get();
+		FlatPropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("Name")).findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(nameProperty));
 
-		FlatPropertyDefinition evidenzProperty = properties.stream().filter(p -> p.getName().equals("evidenz")).findFirst()
-				.get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
+//		FlatPropertyDefinition evidenzProperty = properties.stream().filter(p -> p.getName().equals("evidenz")).findFirst()
+//				.get();
+//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
+		
+		FlatPropertyDefinition imageLinkProperty = properties.stream().filter(p -> p.getName().equals("Description")).findFirst().get();
+		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(imageLinkProperty));
+		
+		FlatPropertyDefinition descriptionProperty = properties.stream().filter(p -> p.getName().equals("Image Link")).findFirst().get();
+		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(descriptionProperty));
+		
+		FlatPropertyDefinition expiredProperty = properties.stream().filter(p -> p.getName().equals("Expired")).findFirst().get();
+		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
+	
+		
+		
 
 		classDefinitions.add(fwPassEintrag);
 
@@ -209,6 +221,10 @@ public class ClassConfigurationController {
 		FlatPropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date")).findFirst()
 				.get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
+		
+		FlatPropertyDefinition locationProperty = properties.stream().filter(p -> p.getName().equals("Location")).findFirst()
+				.get();
+		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(locationProperty));
 
 		classDefinitions.add(task);
 
@@ -278,22 +294,22 @@ public class ClassConfigurationController {
 		myTask.setClassArchetype(ClassArchetype.TASK);
 		myTask.setProperties(new ArrayList<>());
 
-		FlatPropertyDefinition tt1 = properties.stream().filter(p -> p.getName().equals("taskType1")).findFirst().get();
+		FlatPropertyDefinition tt1 = properties.stream().filter(p -> p.getName().equals("TaskType1")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt1));
 
-		FlatPropertyDefinition tt2 = properties.stream().filter(p -> p.getName().equals("taskType2")).findFirst().get();
+		FlatPropertyDefinition tt2 = properties.stream().filter(p -> p.getName().equals("TaskType2")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt2));
 
-		FlatPropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("taskType3")).findFirst().get();
+		FlatPropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("TaskType3")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
 
 		FlatPropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
 
-		FlatPropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("rank")).findFirst().get();
+		FlatPropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("Rank")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(rank));
 
-		FlatPropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("duration")).findFirst().get();
+		FlatPropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("Duration")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(duration));
 
 		classDefinitions.add(myTask);

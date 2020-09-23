@@ -42,38 +42,8 @@ public class InitializationService {
 	@Autowired protected TestDataClasses testDataClasses;
 	@Autowired protected TestDataInstances testDataInstances;
 
-//	private static final String FFEIDENBERG = "FF Eidenberg";
-//	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
-//	private static final String RKWILHERING = "RK Wilhering";
-
 	@PostConstruct
-	public void init() {
-		// finalizationService.destroy(configuratorRepository,
-		// classDefinitionRepository, classInstanceRepository,
-		// relationshipRepository, propertyDefinitionRepository,
-		// derivationRuleRepository);
-
-		// if(environment.acceptsProfiles("dev")) {}
-
-//		addiVolunteerAPIClassDefinition();
-		// addTestConfigClasses();
-		// addConfigurators();
-//		addConfiguratorSlots();
-		// this.addTestClassInstances();
-
-		// addTestClassInstances();
-		// addTestConfigClasses();
-		// addConfigurators();
-
-		// addConfiguratorSlots();
-//		addiVolunteerPropertyDefinitions();
-//		addClassConfigurations();
-//		
-//		apiInitializationService.addiVolunteerAPIClassDefinition();
-//		// testDataClasses.createClassConfigurations();
-//		testDataInstances.createUserData();
-		// addTestClassInstances();
-	}
+	public void init() {}
 
 	private List<Tenant> getTenants() {
 		List<Tenant> tenants = new ArrayList<>();
