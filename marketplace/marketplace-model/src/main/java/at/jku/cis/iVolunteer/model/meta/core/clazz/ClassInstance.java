@@ -32,6 +32,8 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	
 	private boolean issued = false;
 
+	private String derivationRuleId;
+	
 	public ClassInstance() {
 	}
 
@@ -170,6 +172,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setIssued(boolean issued) {
 		this.issued = issued;
 	}
+	
+	public void setDerivationRuleId(String derivationRuleId) {
+		this.derivationRuleId = derivationRuleId;
+	}
+	
+	public String getDerivationRuleId() {
+		return derivationRuleId;
+	}
 
 	@Override
 	public String toHashObject() {
@@ -180,7 +190,5 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		json.addProperty("properties", this.properties.hashCode());
 		return json.toString();
 	}
-
-	
 
 }

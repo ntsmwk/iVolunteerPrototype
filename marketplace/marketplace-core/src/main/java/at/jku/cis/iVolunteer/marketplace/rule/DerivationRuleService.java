@@ -38,8 +38,8 @@ public class DerivationRuleService {
 
 	public DerivationRuleDTO createRule(DerivationRuleDTO derivationRuleDTO) {
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		ruleService.addRule(derivationRule);
 		derivationRuleRepository.save(derivationRule);
+		ruleService.addRule(derivationRule);
 		//ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
 		return derivationRuleMapper.toTarget(derivationRule);
 	}

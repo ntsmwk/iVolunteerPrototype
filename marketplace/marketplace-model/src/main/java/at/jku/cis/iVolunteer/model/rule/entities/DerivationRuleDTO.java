@@ -16,6 +16,7 @@ public class DerivationRuleDTO {
 	private List<ClassActionDTO> classActions = new ArrayList<ClassActionDTO>();
 	private Date timestamp;
 	private boolean active;
+	private int fireNumOfTimes;
 
 	public DerivationRuleDTO() {
 
@@ -111,6 +112,14 @@ public class DerivationRuleDTO {
 
 	public boolean getActive() {
 		return active;
+	}
+	
+	public void setFireNumOfTimes(int fireNumOfTimes) {
+		this.fireNumOfTimes = fireNumOfTimes;
+	}
+
+	public int getFireNumOfTimes() {
+		return fireNumOfTimes;
 	}
 
 }

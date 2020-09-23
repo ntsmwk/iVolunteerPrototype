@@ -12,6 +12,7 @@ import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.Criteria;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.SumCriteria;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
@@ -29,6 +30,8 @@ public class ClassInstanceService {
 
 	@Autowired
 	private ClassInstanceRepository classInstanceRepository;
+	@Autowired 
+	private ClassPropertyService classPropertyService;
 	@Autowired
 	private ClassDefinitionService classDefinitionService;
 	@Autowired
@@ -56,6 +59,10 @@ public class ClassInstanceService {
 		return getClassInstances(volunteer, classDefinitionService.getByName(classDefinitionName, tenantId).getId(),
 				tenantId);
 	}
+	
+	public List<ClassInstance> getClassInstancesCreatedByRule(User volunteer, String derivationRuleId){
+		return classInstanceRepository.getByUserIdAndDerivationRuleId(volunteer.getId(), derivationRuleId);
+	}
 
 	public List<ClassInstance> filterInstancesByPropertyCriteria(User volunteer, String classDefinitionId,
 			String tenantId, Criteria criteria) {
@@ -74,13 +81,11 @@ public class ClassInstanceService {
 	public void setProperty(ClassInstance ci, String propertyId, Object propertyValue) {
 		PropertyInstance<Object> pi = ci.getProperty(propertyId);
 		pi.setValues(Arrays.asList(propertyValue));
-		classInstanceRepository.save(ci);
 	}
 
 	public void addPropertyValue(ClassInstance ci, String propertyId, Object propertyValue) {
 		PropertyInstance<Object> pi = ci.getProperty(propertyId);
 		pi.getValues().add(propertyValue);
-		classInstanceRepository.save(ci);
 	}
 
 	public ClassInstance newClassInstance(User volunteer, String classDefinitionId, String tenantId) {
@@ -109,13 +114,14 @@ public class ClassInstanceService {
 		ci.setTenantId(tenantId);
 		// copy properties from target class
 		List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
-		List<ClassProperty<Object>> propLicenseList = classDefinition.getProperties();
+		List<ClassProperty<Object>> propLicenseList =  classPropertyService.
+					getAllClassPropertiesFromClass(classDefinition.getId());
 		propLicenseList.forEach(cp -> propInstList.add(classPropertyToPropertyInstanceMapper.toTarget(cp)));
 		ci.setProperties(propInstList);
-		return newClassInstance(ci);
+		return ci;
 	}
 
-	public ClassInstance newClassInstance(ClassInstance classInstance) {
+	public ClassInstance saveClassInstance(ClassInstance classInstance) {
 		return classInstanceRepository.save(classInstance);
 	}
 

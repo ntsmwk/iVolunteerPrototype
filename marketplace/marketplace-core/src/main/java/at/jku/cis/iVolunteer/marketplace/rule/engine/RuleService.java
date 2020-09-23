@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
+import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.NoSuchContainerException;
@@ -26,6 +27,7 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.util.RuleEngineUtil;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.rule.ClassAction;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
@@ -41,6 +43,7 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 public class RuleService {
 
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
+	@Autowired private DerivationRuleRepository derivationRuleRepository;
 	@Autowired private UserRepository userRepository;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private ClassInstanceService classInstanceService;
@@ -115,21 +118,49 @@ public class RuleService {
 		KieSession ksession = getKieSession(tenantId, container);
 		User volunteer = userRepository.findOne(volunteerId);
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId);
+		
+		List<ClassInstance> volClassInstances = new ArrayList<ClassInstance>();
 
 		RuleExecution ruleExecution = new RuleExecution(volunteer);
+		
 		// insert objects into session
 		ksession.insert(ruleExecution);
 		ksession.insert(tenant);
 		ksession.insert(volunteer);
 		ksession.insert(userService);
 		ksession.insert(classInstanceService);
+		ksession.insert(volClassInstances);
 
 		ksession.fireAllRules();
-
+		
 		ksession.dispose();
 
+		// System.out.println("  num. of instances created by rules: " + volClassInstances.size());
+		List<ClassInstance> filtered = volClassInstances.stream().
+		         filter(ci -> classInstanceAllowed(volunteer, ci)).
+		         collect(Collectors.toList());
+		
+		// System.out.println("  new num. of instances: " + filtered.size());
+		filtered.stream().
+		         forEach(ci -> classInstanceService.saveClassInstance(ci));
+		
 		userRepository.save(volunteer);
 		return ruleExecution;
+	}
+	
+	private boolean classInstanceAllowed(User volunteer, ClassInstance ci) {
+		List<ClassInstance> classInstancesByRule = classInstanceService.
+				getClassInstancesCreatedByRule(volunteer, ci.getDerivationRuleId());
+		
+		if (classInstancesByRule.size() > 0) {
+			// class instances created by rule already exist
+			DerivationRule derivationRule = derivationRuleRepository.findOne(ci.getDerivationRuleId());
+			if (derivationRule.getFireNumOfTimes() == 1)
+				return false;
+			else 
+				return true;
+		} else 
+			return true;
 	}
 
 	public void executeFibonacci(String tenantId, String container) {
@@ -179,7 +210,7 @@ public class RuleService {
 
 	public void addRule(DerivationRule derivationRule) {
 		String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(derivationRule);
-		System.out.println(ruleContent);
+		
 		ContainerRuleEntry containerRule;
 		
 		if (derivationRule.getContainerRuleEntryId() == null) {
@@ -196,6 +227,7 @@ public class RuleService {
 		containerRuleEntryRepository.save(containerRule);
 		if (derivationRule.getContainerRuleEntryId() == null) {
 			derivationRule.setContainerRuleEntryId(containerRule.getId());
+			derivationRuleRepository.save(derivationRule);
 		}
 		refreshContainer(derivationRule.getTenantId());
 	}
