@@ -4,33 +4,16 @@
     <h1>Tätigkeiten</h1>
   </div> -->
 
-  <customizable-header
-    *ngIf="tenant"
-    [tenant]="tenant"
-    headerText="Einträge erfassen"
-  ></customizable-header>
+  <customizable-header *ngIf="tenant" [tenant]="tenant" headerText="Einträge erfassen"></customizable-header>
 
   <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-    <button
-      mat-fab
-      class="mat-warn"
-      style="border-radius: 50%; background-color: green;"
-      (click)="addTask()"
-      aria-label="Add rule"
-      *fuseIfOnDom
-      [@animate]="{ value: '*', params: { delay: '300ms', scale: '0.2' } }"
-    >
+    <button mat-fab class="mat-warn" style="border-radius: 50%; background-color: green;" (click)="addTask()" aria-label="Add rule" *fuseIfOnDom [@animate]="{ value: '*', params: { delay: '300ms', scale: '0.2' } }">
       <mat-icon class="add-btn-icon">add</mat-icon>
     </button>
   </div>
 
   <div class="table">
-    <mat-table
-      #table
-      [dataSource]="tableDataSource"
-      matSort
-      *ngIf="tableDataSource.data.length > 0"
-    >
+    <mat-table #table [dataSource]="tableDataSource" matSort *ngIf="tableDataSource.data.length > 0">
       <ng-container matColumnDef="taskName">
         <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{ element.name }} </mat-cell>
@@ -66,17 +49,15 @@
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="verified">
-        <mat-header-cell *matHeaderCellDef> Verifiziert </mat-header-cell>
-        <mat-cell *matCellDef="let element"
-          ><i class="fas fa-check-circle" style="color: green;"></i
-        ></mat-cell>
+        <mat-header-cell *matHeaderCellDef> Bestätigt </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <i *ngIf="element.issued" class="fas fa-check-circle" style="color: green;"></i>
+          <i *ngIf="!element.issued" class="fas fa-times-circle" style="color: red;"></i>
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        (click)="rowSelected(row)"
-      ></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" (click)="rowSelected(row)"></mat-row>
     </mat-table>
   </div>
   <mat-paginator [pageSize]="14" showFirstLastButtons></mat-paginator>

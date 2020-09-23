@@ -1,15 +1,15 @@
-import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import { FuseSharedModule } from "@fuse/shared.module";
+import { FuseSharedModule } from '@fuse/shared.module';
 import { CreateTenantComponent } from './create-tenant.component';
-import { MatCommonModule, MatCardModule } from '@angular/material';
+import { MatCommonModule, MatCardModule, MatButtonModule } from '@angular/material';
 import { TenantHelpseekersFormModule } from '../../../admin/tenant-form/tenant-form-content/helpseekers-form/helpseekers-form.module';
 import { TenantFormContentModule } from '../../../admin/tenant-form/tenant-form-content/tenant-form-content.module';
 
 const routes = [
   {
-    path: "",
+    path: '',
     component: CreateTenantComponent,
   }
 ];
@@ -23,6 +23,7 @@ const routes = [
     FuseSharedModule,
     MatCommonModule,
     MatCardModule,
+    MatButtonModule,
     TenantFormContentModule,
     TenantHelpseekersFormModule,
 

@@ -16,15 +16,19 @@ public interface ClassInstanceRepository extends HasTenantRepository<ClassInstan
 	List<ClassInstance> getByUserIdAndClassDefinitionIdAndTenantId(String userId, String classDefinitionId,
 			String tenantId);
 
-	List<ClassInstance> getByUserIdAndClassArchetypeAndTenantId(String userId, ClassArchetype classArchetype,
-			String tenantId);
+	List<ClassInstance> getByUserIdAndClassArchetypeAndTenantIdAndIssued(String userId, ClassArchetype classArchetype,
+			String tenantId, boolean issued);
 
 	List<ClassInstance> getByUserIdAndTenantId(String userId, String tenantId);
-
-//	List<ClassInstance> getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(String userId, boolean inUserRepository, boolean inIssuerInbox, String tenantId);
 
 	List<ClassInstance> getByIssuedAndTenantId(boolean issued, String tenantId);
 	
 	List<ClassInstance> getByUserIdAndDerivationRuleId(String userId, String derivationRuleId);
 
+	List<ClassInstance> getByClassArchetypeAndTenantId(ClassArchetype classArchetype, String tenantId);
+
+	List<ClassInstance> getByClassArchetypeAndUserIdAndTenantId(ClassArchetype classArchetype, String userId,
+			String tenantId);
+
+	List<ClassInstance> getByClassArchetypeAndUserId(ClassArchetype classArchetype, String userId);
 }

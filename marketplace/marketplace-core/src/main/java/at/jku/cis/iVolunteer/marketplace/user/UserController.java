@@ -101,7 +101,6 @@ public class UserController {
 
 		user.addSubscribedTenant(marketplaceId, tenantId, role);
 		user = userRepository.save(user);
-
 		return user;
 	}
 

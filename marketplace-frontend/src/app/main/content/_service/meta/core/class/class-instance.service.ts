@@ -17,10 +17,11 @@ export class ClassInstanceService {
     marketplace: Marketplace,
     archetype: string,
     userId: string,
-    tenantIds: string[]
+    tenantIds: string[],
+    issued: boolean
   ) {
     return this.http.post(
-      `${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user/${userId}`,
+      `${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user/${userId}?issued=${issued}`,
       tenantIds
     );
   }

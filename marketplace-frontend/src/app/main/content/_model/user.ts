@@ -1,5 +1,5 @@
-import { map } from "lodash";
-import { ImageWrapper } from './image';
+import { ImageWrapper } from "./image";
+import { NextcloudCredentials } from "./nextcloud-credentials";
 
 export class User {
   id: string;
@@ -7,6 +7,7 @@ export class User {
   password: string;
   loginEmail: string;
 
+  formOfAddress: string;
   titleBefore: string;
   firstname: string;
   lastname: string;
@@ -28,10 +29,12 @@ export class User {
   registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
-  image: ImageWrapper;
+  // image: ImageWrapper;
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
+  nextcloudCredentials: NextcloudCredentials;
+
   activated: boolean;
   accountType: AccountType;
 }
@@ -49,6 +52,7 @@ export enum UserRole {
 export enum LocalRepositoryLocation {
   LOCAL = "LOCAL",
   DROPBOX = "DROPBOX",
+  NEXTCLOUD = "NEXTCLOUD",
 }
 
 export class TenantUserSubscription {
@@ -63,6 +67,6 @@ export class RoleTenantMapping {
 }
 
 export enum AccountType {
-  PERSON = 'PERSON',
-  ORGANIZATION = 'ORGANIZATION',
+  PERSON = "PERSON",
+  ORGANIZATION = "ORGANIZATION",
 }

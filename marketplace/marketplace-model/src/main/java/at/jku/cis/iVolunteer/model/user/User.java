@@ -16,12 +16,13 @@ public class User {
 	private String username;
 	private String password;
 	private String loginEmail;
-
+	
+	private String formOfAddress;
 	private String titleBefore;
 	private String firstname;
 	private String lastname;
 	private String titleAfter;
-	
+
 	private String nickname;
 
 	private String organizationPosition;
@@ -36,12 +37,13 @@ public class User {
 	private List<String> websites;
 	private List<String> emails;
 
-	private ImageWrapper image;
+//	private ImageWrapper image;
 
 	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
 
 	private LocalRepositoryLocation localRepositoryLocation;
 	private String dropboxToken;
+	private NextcloudCredentials nextcloudCredentials;
 
 	public User() {
 	}
@@ -51,6 +53,7 @@ public class User {
 		this.username = coreUser.getUsername();
 		this.password = coreUser.getPassword();
 		this.loginEmail = coreUser.getLoginEmail();
+		this.formOfAddress = coreUser.getFormOfAddress();
 		this.titleBefore = coreUser.getTitleBefore();
 		this.firstname = coreUser.getFirstname();
 		this.lastname = coreUser.getLastname();
@@ -65,10 +68,11 @@ public class User {
 		this.phoneNumbers = coreUser.getPhoneNumbers();
 		this.websites = coreUser.getWebsites();
 		this.emails = coreUser.getEmails();
-		this.image = coreUser.getImage();
+//		this.image = coreUser.getImage();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
+		this.nextcloudCredentials = coreUser.getNextcloudCredentials();
 	}
 
 	public String getId() {
@@ -109,6 +113,14 @@ public class User {
 
 	public void setFirstname(final String firstname) {
 		this.firstname = firstname;
+	}
+
+	public String getFormOfAddress() {
+		return formOfAddress;
+	}
+
+	public void setFormOfAddress(String formOfAddress) {
+		this.formOfAddress = formOfAddress;
 	}
 
 	public String getTitleBefore() {
@@ -159,13 +171,13 @@ public class User {
 		this.organizationPosition = organizationPosition;
 	}
 
-	public ImageWrapper getImage() {
-		return image;
-	}
-
-	public void setImage(ImageWrapper image) {
-		this.image = image;
-	}
+//	public ImageWrapper getImage() {
+//		return image;
+//	}
+//
+//	public void setImage(ImageWrapper image) {
+//		this.image = image;
+//	}
 
 	public List<String> getLocations() {
 		return locations;
@@ -268,7 +280,15 @@ public class User {
 	public void setDropboxToken(String dropboxToken) {
 		this.dropboxToken = dropboxToken;
 	}
-	
+
+	public NextcloudCredentials getNextcloudCredentials() {
+		return this.nextcloudCredentials;
+	}
+
+	public void setNextcloudCredentials(NextcloudCredentials nextcloudCredentials) {
+		this.nextcloudCredentials = nextcloudCredentials;
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (!(obj instanceof User)) {

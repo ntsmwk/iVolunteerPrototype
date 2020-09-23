@@ -3,7 +3,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ClassInstanceDTO,
-  ClassInstance,
+  ClassInstance
 } from "app/main/content/_model/meta/class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LoginService } from "app/main/content/_service/login.service";
@@ -13,19 +13,20 @@ import { isNullOrUndefined } from "util";
 import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 
 @Component({
   selector: "fuse-achievements",
   templateUrl: "./achievement.component.html",
   styleUrls: ["./achievement.component.scss"],
-  animations: fuseAnimations,
+  animations: fuseAnimations
 })
 export class AchievementsComponent implements OnInit {
   volunteer: User;
   marketplace: Marketplace;
-  localRepositoryService;
+  localRepositoryService: LocalRepositoryService;
   classInstanceDTOs: ClassInstanceDTO[] = [];
   filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
@@ -43,7 +44,7 @@ export class AchievementsComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private lrDropboxService: LocalRepositoryDropboxService,
     private lrJsonServerService: LocalRepositoryJsonServerService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
@@ -54,19 +55,10 @@ export class AchievementsComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
 
-    if (
-      this.volunteer.localRepositoryLocation == LocalRepositoryLocation.LOCAL
-    ) {
-      this.localRepositoryService = this.lrJsonServerService;
-    } else {
-      this.localRepositoryService = this.lrDropboxService;
-    }
+    this.localRepositoryService = this.loginService.getLocalRepositoryService(
+      this.volunteer
+    );
 
-    // this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
-    //   this.volunteer
-    // );
-
-    // if (this.isLocalRepositoryConnected) {
     try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
@@ -93,7 +85,8 @@ export class AchievementsComponent implements OnInit {
               this.marketplace,
               "TASK",
               this.volunteer.id,
-              this.subscribedTenants.map((t) => t.id)
+              this.subscribedTenants.map(t => t.id),
+              true
             )
             .toPromise()
         );
@@ -102,7 +95,7 @@ export class AchievementsComponent implements OnInit {
 
     // filter out classInstances missing the reqired fields
     let before = this.classInstanceDTOs.length;
-    this.classInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
+    this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
       return (
         ci.name != null &&
         ci.tenantId != null &&
@@ -123,8 +116,8 @@ export class AchievementsComponent implements OnInit {
   tenantSelectionChanged(selectedTenants: Tenant[]) {
     this.selectedTenants = selectedTenants;
 
-    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
-      return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
+    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(ci => {
+      return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
     });
   }
 

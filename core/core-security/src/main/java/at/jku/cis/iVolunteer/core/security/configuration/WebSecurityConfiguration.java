@@ -28,7 +28,7 @@ import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.service.ParticipantDetailsService;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -45,6 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
+			.antMatchers("/**").permitAll()  // TODO remove!!!
 			.antMatchers("/init/**").permitAll()
 			.antMatchers("/trustifier/contractor/classInstance").permitAll()
 			.antMatchers("/trustifier/contractor/classInstances").permitAll()

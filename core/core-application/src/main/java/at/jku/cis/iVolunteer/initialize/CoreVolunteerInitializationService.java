@@ -22,6 +22,7 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
+import at.jku.cis.iVolunteer.core.user.image.CoreUserImageController;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -29,6 +30,7 @@ import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
+import at.jku.cis.iVolunteer.model.user.UserImage;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -44,17 +46,14 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreUserRepository coreUserRepository;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private TenantRepository coreTenantRepository;
-	@Autowired
-	private CoreUserService coreUserService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreUserRepository coreUserRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private TenantRepository coreTenantRepository;
+	@Autowired private CoreUserService coreUserService;
+	@Autowired CoreUserImageController coreUserImageController;
 
+//	"/img/pstarzer.jpg"
 	public void initVolunteers() {
 
 		createVolunteer(USERNAMES[0], RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
@@ -90,17 +89,15 @@ public class CoreVolunteerInitializationService {
 			volunteer.setBirthday(date);
 			volunteer.setNickname(nickName);
 
-			setImage(fileName, volunteer);
 			volunteer.setRegisteredMarketplaceIds(
 					marketplaceRepository.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList()));
 
-			volunteer.setLocalRepositoryLocation(LocalRepositoryLocation.LOCAL);
 			volunteer.setEmails(Collections.singletonList("iVolunteerTest@gmx.at"));
 
 			volunteer.setActivated(true);
 			volunteer.setAccountType(AccountType.PERSON);
-			volunteer = coreUserRepository.insert(volunteer);
-			coreUserService.addNewUser(volunteer, "", false);
+			volunteer = coreUserService.addNewUser(volunteer, "", false);
+			setImage(fileName, volunteer);
 
 			// List<String> tenantIds = new ArrayList<String>();
 			// tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
@@ -116,7 +113,8 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				volunteer.setImage(new ImageWrapper("data:image/png;base64", binaryData));
+				coreUserImageController.addNewUserImage(
+						new UserImage(volunteer.getId(), new ImageWrapper("data:image/png;base64", binaryData)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

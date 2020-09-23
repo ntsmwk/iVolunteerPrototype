@@ -23,6 +23,15 @@
           </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="label">
+          <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+          <mat-cell *matCellDef="let entry">
+            <div fxLayout="column" fxLayoutAlign="start start">
+              <div>{{entry.name}}</div>
+            </div>
+          </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="archetype">
           <mat-header-cell *matHeaderCellDef>Typ</mat-header-cell>
           <mat-cell *matCellDef="let entry">
@@ -57,16 +66,6 @@
             <img class="avatar" [src]="getImagePathById(entry.userId)">
             <div>{{getNameForEntry(entry.userId,'volunteer')}}</div>
 
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="label">
-          <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-          <mat-cell *matCellDef="let entry">
-            <div fxLayout="column" fxLayoutAlign="start start">
-              <div>{{entry.name}}</div>
-              <div class="pl-8">{{findNameProperty(entry)}}</div>
-            </div>
           </mat-cell>
         </ng-container>
 

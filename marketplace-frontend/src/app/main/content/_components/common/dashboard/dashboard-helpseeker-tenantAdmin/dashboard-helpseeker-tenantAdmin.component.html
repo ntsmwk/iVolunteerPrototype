@@ -10,7 +10,7 @@
   <section fxLayout="column" class="p-40">
     <h2 class="verein-heading">{{tenant.landingpageTitle}}</h2>
 
-    <img [src]="getTitleImage()" alt="Landing Page Titelbild" />
+    <img *ngIf="image" [src]="image" alt="Landing Page Titelbild" />
 
     <p>{{tenant.landingpageText}}</p>
   </section>

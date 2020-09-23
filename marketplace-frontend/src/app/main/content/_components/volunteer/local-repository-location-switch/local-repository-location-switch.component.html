@@ -1,14 +1,17 @@
 <div *ngIf="isLoaded">
-  <mat-card style="margin: 20px;">
+  <mat-card style="margin: 20px">
     <mat-card-title>
       Speicherort des lokalen Freiwilligenpasses
     </mat-card-title>
     <mat-card-content>
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-        <mat-radio-group
-          aria-label="Select an option"
-          style="margin-left: 20px;"
-          (change)="localRepositoryLocationChange($event.value)"
+      <!-- local repo location radio buttons -->
+      <mat-radio-group
+        class="radioButtons"
+        (change)="localRepositoryLocationChange($event.value)"
+      >
+        <div
+          matTooltip="Nicht verknüpft"
+          [matTooltipDisabled]="isJsonServerConnected"
         >
           <mat-radio-button
             value="LOCAL"
@@ -16,37 +19,141 @@
             [checked]="getChecked('LOCAL')"
             >Lokal (json-server)</mat-radio-button
           >
+        </div>
+        <div
+          matTooltip="Nicht verknüpft"
+          [matTooltipDisabled]="isDropboxConnected"
+        >
           <mat-radio-button
             value="DROPBOX"
-            [disabled]="!isAuthenticated"
+            [disabled]="!isDropboxConnected"
             [checked]="getChecked('DROPBOX')"
             >Dropbox</mat-radio-button
           >
-        </mat-radio-group>
-
-        <div fxLayout="column" style="margin-right: 50px;">
-          <img
-            style="margin-bottom: 5px;"
-            src="./assets/images/logos/Dropbox_logo.svg"
-          />
-
-          <a
-            mat-raised-button
-            *ngIf="!isAuthenticated"
-            color="primary"
-            href="{{ authUrl }}"
+        </div>
+        <div
+          matTooltip="Nicht verknüpft"
+          [matTooltipDisabled]="isNextcloudConnected"
+        >
+          <mat-radio-button
+            value="NEXTCLOUD"
+            [disabled]="!isNextcloudConnected"
+            [checked]="getChecked('NEXTCLOUD')"
+            >Nextcloud</mat-radio-button
           >
-            Dropbox Konto verknüpfen
-          </a>
+        </div>
+      </mat-radio-group>
 
-          <button
-            mat-raised-button
-            *ngIf="isAuthenticated"
-            color="primary"
-            (click)="removeToken()"
+      <div style="height: 30px"></div>
+
+      <div fxLayout="row" fxLayoutAlign="space-around start">
+        <!-- Nextcloud -->
+        <div
+          class="login"
+          fxLayout="column"
+          fxLayoutAlign="space-between center"
+        >
+          <img class="logo" src="./assets/images/logos/Nextcloud_Logo.svg" />
+          <form
+            *ngIf="!isNextcloudConnected"
+            fxLayout="column"
+            name="nextcloudLoginForm"
+            (submit)="loginNextcloud()"
+            [formGroup]="nextcloudLoginForm"
+            novalidate
           >
-            Verbindung zu Dropbox aufheben
-          </button>
+            <mat-form-field class="input">
+              <input
+                matInput
+                placeholder="WebDAV Domain"
+                formControlName="domain"
+              />
+            </mat-form-field>
+
+            <mat-form-field class="input">
+              <input
+                matInput
+                placeholder="Benutzername"
+                formControlName="username"
+              />
+            </mat-form-field>
+
+            <mat-form-field class="input">
+              <input
+                matInput
+                type="password"
+                placeholder="Passwort"
+                formControlName="password"
+              />
+            </mat-form-field>
+            <p *ngIf="nextcloudLoginError" class="text-align-center error">
+              Anmeldedaten nicht korrekt!
+            </p>
+
+            <button
+              class="input"
+              type="submit"
+              mat-raised-button
+              color="primary"
+              class="submit-button"
+              aria-label="Nextcloud verknüpfen"
+              [disabled]="nextcloudLoginForm.invalid"
+            >
+              Nextcloud Konto verknüpfen
+            </button>
+          </form>
+          <div
+            matTooltip="Nicht möglich, da gerade als Speicherort ausgewählt!"
+            [matTooltipDisabled]="user.localRepositoryLocation != 'NEXTCLOUD'"
+          >
+            <button
+              class="input"
+              mat-raised-button
+              *ngIf="isNextcloudConnected"
+              [disabled]="user.localRepositoryLocation == 'NEXTCLOUD'"
+              color="primary"
+              (click)="removeNextcloud()"
+            >
+              Verbindung zu Nextcloud aufheben
+            </button>
+          </div>
+        </div>
+
+        <!-- Dropbox -->
+        <div
+          class="login"
+          fxLayout="column"
+          fxLayoutAlign="space-between center"
+        >
+          <img class="logo" src="./assets/images/logos/Dropbox_logo.svg" />
+
+          <div class="input">
+            <a
+              mat-raised-button
+              style="width: 100%"
+              *ngIf="!isDropboxConnected"
+              color="primary"
+              href="{{ dropboxAuthUrl }}"
+            >
+              Dropbox Konto verknüpfen
+            </a>
+          </div>
+
+          <div
+            matTooltip="Nicht möglich, da gerade als Speicherort ausgewählt!"
+            [matTooltipDisabled]="user.localRepositoryLocation != 'DROPBOX'"
+          >
+            <button
+              class="input"
+              mat-raised-button
+              *ngIf="isDropboxConnected"
+              [disabled]="user.localRepositoryLocation == 'DROPBOX'"
+              color="primary"
+              (click)="removeDropbox()"
+            >
+              Verbindung zu Dropbox aufheben
+            </button>
+          </div>
         </div>
       </div>
     </mat-card-content>

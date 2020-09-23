@@ -5,15 +5,27 @@ import { LocalRepository } from "../_model/local-repository";
 import { isNullOrUndefined } from "util";
 import { ClassInstance } from "../_model/meta/class";
 import { User } from "../_model/user";
+import { LocalRepositoryService } from "./local-repository.service";
+import { environment } from "environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
-export class LocalRepositoryJsonServerService {
-  private apiUrl = "http://localhost:3000/repository";
-  // private apiUrl = "http://140.78.92.57:3000/repository";
+export class LocalRepositoryJsonServerService extends LocalRepositoryService {
+  private apiUrl = environment.JSON_SERVER_URL;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    super();
+  }
+
+  public async isConnected() {
+    try {
+      await this.http.get(this.apiUrl).toPromise();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
   private findByVolunteer(volunteer: User) {
     const observable = new Observable((subscriber) => {
@@ -43,7 +55,10 @@ export class LocalRepositoryJsonServerService {
             );
           }
         })
-        .catch((error: any) => failureFunction(error));
+        .catch((error: any) => {
+          console.error("error");
+          failureFunction(error);
+        });
     });
     return observable;
   }
@@ -243,20 +258,5 @@ export class LocalRepositoryJsonServerService {
     });
 
     return observable;
-  }
-
-  async isConnected() {
-    let isConnected = false;
-
-    let localRepos = <LocalRepository[]>await this.http
-      .get(this.apiUrl)
-      .toPromise()
-      .catch(() => (isConnected = false));
-
-    if (localRepos) {
-      isConnected = true;
-    }
-
-    return isConnected;
   }
 }

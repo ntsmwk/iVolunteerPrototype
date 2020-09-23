@@ -1,0 +1,65 @@
+<mat-card style="margin: 20px" *ngIf="loaded">
+  <mat-card-title> Stammdaten </mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="profileForm" novalidate fxLayout="column" style="width: 100%;">
+
+
+      <mat-form-field style="width: 25%">
+        <mat-select placeholder="Anrede" formControlName="formOfAddress">
+          <mat-option value="Frau">Frau</mat-option>
+          <mat-option value="Herr">Herr</mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="
+              profileFormErrors.formOfAddress &&
+              profileFormErrors.formOfAddress.required
+            ">
+          Pflichtfeld
+        </mat-error>
+      </mat-form-field>
+
+      <div fxLayout="row wrap" fxLayoutAlign="start center">
+        <mat-form-field fxFlex>
+          <input matInput placeholder="Vorname" formControlName="firstName" />
+          <mat-error *ngIf="
+                  profileFormErrors.firstName &&
+                  profileFormErrors.firstName.required
+                ">
+            Vorname benötigt
+          </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field fxFlex class="ml-4">
+          <input matInput placeholder="Nachname" formControlName="lastName" />
+          <mat-error *ngIf="
+                  profileFormErrors.lastName &&
+                  profileFormErrors.lastName.required
+                ">
+            Nachname benötigt
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <mat-form-field>
+        <mat-label>Geburtsdatum</mat-label>
+
+        <input matInput [matDatepicker]="picker" formControlName="birthday" [max]="today" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="
+                  profileFormErrors.birthday &&
+                  profileFormErrors.birthday.required
+                ">
+          Geburtsdatum benötigt
+        </mat-error>
+      </mat-form-field>
+
+      <button type="submit" mat-stroked-button class="submit-button primary-button-dark" (click)="save()"
+        aria-label="SUBMIT" [disabled]="profileForm.invalid">
+        Speichern
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -37,7 +37,7 @@ public class ClassInstanceMapper {
 			dto.setHash(hasher.generateHash(ci));
 			dto.setIssued(ci.isIssued());
 
-			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "name".equals(p.getName()))
+			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "Name".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (name != null) {
 				if (name.getValues().size() > 0) {
@@ -45,7 +45,7 @@ public class ClassInstanceMapper {
 				}
 			}
 
-			PropertyInstance<Object> purpose = ci.getProperties().stream().filter(p -> "purpose".equals(p.getName()))
+			PropertyInstance<Object> purpose = ci.getProperties().stream().filter(p -> "Purpose".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (purpose != null) {
 				if (purpose.getValues().size() > 0) {
@@ -93,7 +93,7 @@ public class ClassInstanceMapper {
 				}
 			}
 
-			PropertyInstance<Object> duration = ci.getProperties().stream().filter(p -> "duration".equals(p.getName()))
+			PropertyInstance<Object> duration = ci.getProperties().stream().filter(p -> "Duration".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (duration != null) {
 				if (duration.getValues().size() > 0) {
@@ -117,7 +117,7 @@ public class ClassInstanceMapper {
 				}
 			}
 
-			PropertyInstance<Object> rank = ci.getProperties().stream().filter(p -> "rank".equals(p.getName()))
+			PropertyInstance<Object> rank = ci.getProperties().stream().filter(p -> "Rank".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (rank != null) {
 				if (rank.getValues().size() > 0) {
@@ -126,7 +126,7 @@ public class ClassInstanceMapper {
 			}
 
 			PropertyInstance<Object> taskType1 = ci.getProperties().stream()
-					.filter(p -> "taskType1".equals(p.getName())).findFirst().orElse(null);
+					.filter(p -> "TaskType1".equals(p.getName())).findFirst().orElse(null);
 			if (taskType1 != null) {
 				if (taskType1.getValues().size() > 0) {
 					dto.setTaskType1((String) taskType1.getValues().get(0));
@@ -134,7 +134,7 @@ public class ClassInstanceMapper {
 			}
 
 			PropertyInstance<Object> taskType2 = ci.getProperties().stream()
-					.filter(p -> "taskType2".equals(p.getName())).findFirst().orElse(null);
+					.filter(p -> "TaskType2".equals(p.getName())).findFirst().orElse(null);
 			if (taskType2 != null) {
 				if (taskType2.getValues().size() > 0) {
 					dto.setTaskType2((String) taskType2.getValues().get(0));
@@ -142,7 +142,7 @@ public class ClassInstanceMapper {
 			}
 
 			PropertyInstance<Object> taskType3 = ci.getProperties().stream()
-					.filter(p -> "taskType3".equals(p.getName())).findFirst().orElse(null);
+					.filter(p -> "TaskType3".equals(p.getName())).findFirst().orElse(null);
 			if (taskType3 != null) {
 				if (taskType3.getValues().size() > 0) {
 					dto.setTaskType3((String) taskType3.getValues().get(0));

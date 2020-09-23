@@ -134,6 +134,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
 
   changeNavigation(role: UserRole) {
     switch (role) {
+      case UserRole.TENANT_ADMIN:
+        this.navigation = navigation_tenantAdmin;
+        break;
       case UserRole.HELP_SEEKER:
         this.navigation = navigation_helpseeker;
         break;

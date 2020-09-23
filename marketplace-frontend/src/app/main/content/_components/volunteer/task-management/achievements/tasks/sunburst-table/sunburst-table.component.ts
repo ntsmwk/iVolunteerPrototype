@@ -7,7 +7,7 @@ import {
   Output,
   EventEmitter,
   ViewChild,
-  SimpleChanges,
+  SimpleChanges
 } from "@angular/core";
 import { ClassInstanceDTO } from "app/main/content/_model/meta/class";
 import {
@@ -15,20 +15,20 @@ import {
   MatSort,
   MatTableDataSource,
   MatTable,
-  MatDialog,
+  MatDialog
 } from "@angular/material";
 import * as moment from "moment";
 import * as Highcharts from "highcharts";
 import HC_sunburst from "highcharts/modules/sunburst";
 import { Router } from "@angular/router";
-import { ClassInstanceDetailsComponent } from 'app/main/content/_components/common/class-instance-details/class-instance-details.component';
+import { ClassInstanceDetailsComponent } from "app/main/content/_components/common/class-instance-details/class-instance-details.component";
 
 HC_sunburst(Highcharts);
 
 @Component({
   selector: "app-sunburst-table",
   templateUrl: "./sunburst-table.component.html",
-  styleUrls: ["./sunburst-table.component.scss"],
+  styleUrls: ["./sunburst-table.component.scss"]
 })
 export class SunburstTableComponent
   implements OnInit, OnChanges, AfterViewInit {
@@ -60,23 +60,23 @@ export class SunburstTableComponent
     "#8796c0",
     "#7ed3ed",
     "#50abcc",
-    "#ad6886",
+    "#ad6886"
   ];
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {
     chart: {
       height: 900,
-      margin: [0, 0, 0, 0],
+      margin: [0, 0, 0, 0]
     },
     title: {
-      text: undefined,
+      text: undefined
     },
     tooltip: {
-      valueDecimals: 2,
+      valueDecimals: 2
     },
     credits: {
-      enabled: false,
+      enabled: false
     },
     plotOptions: {
       series: {
@@ -84,10 +84,10 @@ export class SunburstTableComponent
           enabled: true,
           style: {
             fontSize: "17px",
-            color: "#ffffff",
-          },
-        },
-      },
+            color: "#ffffff"
+          }
+        }
+      }
     },
     series: [
       {
@@ -95,8 +95,8 @@ export class SunburstTableComponent
         data: this.sunburstData,
         allowTraversingTree: true,
         cursor: "pointer"
-      },
-    ],
+      }
+    ]
   };
 
   uniqueTt1: any[];
@@ -109,8 +109,7 @@ export class SunburstTableComponent
 
   first: boolean = true;
 
-  constructor(private router: Router,
-               public dialog: MatDialog) { }
+  constructor(private router: Router, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.updateSelectedTaskType();
@@ -126,12 +125,12 @@ export class SunburstTableComponent
       plotOptions: {
         series: {
           events: {
-            click: (event) => {
+            click: event => {
               this.onSunburstChange(event);
-            },
-          },
-        },
-      },
+            }
+          }
+        }
+      }
     });
   }
 
@@ -146,16 +145,16 @@ export class SunburstTableComponent
             if (typeof changes.classInstanceDTOs.currentValue != "undefined") {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
 
-              let list = this.classInstanceDTOs.map((ci) => {
+              let list = this.classInstanceDTOs.map(ci => {
                 return {
                   tt1: ci.taskType1,
                   tt2: ci.taskType2,
-                  tt3: ci.taskType3,
+                  tt3: ci.taskType3
                 };
               });
-              this.uniqueTt1 = [...new Set(list.map((item) => item.tt1))];
-              this.uniqueTt2 = [...new Set(list.map((item) => item.tt2))];
-              this.uniqueTt3 = [...new Set(list.map((item) => item.tt2))];
+              this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
+              this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
+              this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
 
               this.uniqueTt1.sort();
               this.tt1ColorMap = new Map();
@@ -199,7 +198,6 @@ export class SunburstTableComponent
 
     if (changed) {
       this.generateSunburstData();
-
     }
   }
 
@@ -211,28 +209,32 @@ export class SunburstTableComponent
       } else {
         this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
           return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
-        }
-        );
+        });
       }
     } else {
       // filter by timeline from to
       this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
         return (
-          moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
-          moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
+          moment(c.dateFrom).isSameOrAfter(
+            moment(this.timelineFilter.from),
+            "day"
+          ) &&
+          moment(c.dateFrom).isSameOrBefore(
+            moment(this.timelineFilter.to),
+            "day"
+          )
         );
-      }
-      );
+      });
     }
 
-    let list = this.filteredClassInstanceDTOs.map((ci) => {
+    let list = this.filteredClassInstanceDTOs.map(ci => {
       let value: number;
       this.selectedYaxis === "Anzahl" ? (value = 1) : (value = ci.duration);
       return {
         tt1: ci.taskType1,
         tt2: ci.taskType2,
         tt3: ci.taskType3,
-        value: value,
+        value: value
       };
     });
 
@@ -247,18 +249,18 @@ export class SunburstTableComponent
         id: (index + 1).toString(),
         parent: "0",
         name: tt1,
-        color: this.ngxColorsCool[index],
+        color: this.ngxColorsCool[index]
       });
     });
 
     // insert tt2 entries (for each tt1 separetly)
-    this.uniqueTt1.forEach((tt1) => {
-      let tt1List = list.filter((l) => {
+    this.uniqueTt1.forEach(tt1 => {
+      let tt1List = list.filter(l => {
         return tt1 === l.tt1;
       });
 
       let tt2Map: Map<string, number> = new Map<string, number>();
-      tt1List.forEach((entry) => {
+      tt1List.forEach(entry => {
         if (tt2Map.get(entry.tt2)) {
           tt2Map.set(
             entry.tt2,
@@ -277,7 +279,7 @@ export class SunburstTableComponent
             id: indexParent + "-" + (index + 1).toString(),
             parent: indexParent.toString(),
             name: entry[0],
-            value: Number(entry[1]),
+            value: Number(entry[1])
           });
         }
       });
@@ -287,13 +289,13 @@ export class SunburstTableComponent
     let dataTt2 = [...data];
 
     // insert tt3 entries (for each tt2 separetly)
-    this.uniqueTt2.forEach((tt2) => {
-      let tt2List = list.filter((l) => {
+    this.uniqueTt2.forEach(tt2 => {
+      let tt2List = list.filter(l => {
         return tt2 === l.tt2;
       });
 
       let tt3Map: Map<string, number> = new Map<string, number>();
-      tt2List.forEach((entry) => {
+      tt2List.forEach(entry => {
         if (tt3Map.get(entry.tt3)) {
           tt3Map.set(
             entry.tt3,
@@ -305,7 +307,7 @@ export class SunburstTableComponent
       });
 
       let indexParent: string = null;
-      dataTt2.forEach((d) => {
+      dataTt2.forEach(d => {
         if (d.name === tt2) {
           indexParent = d.id;
         }
@@ -317,7 +319,7 @@ export class SunburstTableComponent
             id: indexParent + "-" + (index + 1).toString(),
             parent: indexParent.toString(),
             name: entry[0],
-            value: Number(entry[1]),
+            value: Number(entry[1])
           });
         }
       });
@@ -329,24 +331,19 @@ export class SunburstTableComponent
         type: "sunburst",
         allowTraversingTree: true,
         cursor: "pointer",
-        data: this.sunburstData,
-      },
+        data: this.sunburstData
+      }
     ];
     Highcharts.chart("sunburstChart", this.chartOptions);
 
     this.filteredClassInstanceDTOs.sort((a, b) => {
-      return (
-        new Date(b.dateFrom).getTime() -
-        new Date(a.dateFrom).getTime()
-      );
+      return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
     });
-
 
     if (!this.first) {
       this.tableDataSource.data = this.filteredClassInstanceDTOs;
     }
     this.first = false;
-
   }
 
   onSunburstChange(event) {
@@ -357,13 +354,14 @@ export class SunburstTableComponent
       this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
     } else {
       if (!event.point.node.isLeaf) {
-
-        if (typeof event.point.node.sliced === 'boolean' &&
-          event.point.node.sliced === false) {
+        if (
+          typeof event.point.node.sliced === "boolean" &&
+          event.point.node.sliced === false
+        ) {
           // drillup
 
           let parent = null;
-          this.sunburstData.forEach((d) => {
+          this.sunburstData.forEach(d => {
             if (d.id === event.point.parent) {
               parent = d;
             }
@@ -375,7 +373,7 @@ export class SunburstTableComponent
           } else {
             this.selectedTaskType = parent.name;
             this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
-              (c) => {
+              c => {
                 return c.taskType1 === parent.name;
               }
             );
@@ -387,14 +385,14 @@ export class SunburstTableComponent
             // filter for tt1
             this.selectedTaskType = event.point.name;
             this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
-              (c) => {
+              c => {
                 return c.taskType1 === event.point.name;
               }
             );
           } else if (this.uniqueTt2.indexOf(event.point.name) > -1) {
             // filter for tt2
             this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
-              (c) => {
+              c => {
                 return c.taskType2 === event.point.name;
               }
             );
@@ -406,7 +404,6 @@ export class SunburstTableComponent
 
     this.prevClicked = event.point.node.name;
 
-
     // TIME FILTER
     if (this.timelineFilter.from === null) {
       // filter by year
@@ -414,7 +411,7 @@ export class SunburstTableComponent
         this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
       } else {
         this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
-          (c) => {
+          c => {
             return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
           }
         );
@@ -422,20 +419,23 @@ export class SunburstTableComponent
     } else {
       // filter by timeline from to
       this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
-        (c) => {
+        c => {
           return (
-            moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
-            moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
+            moment(c.dateFrom).isSameOrAfter(
+              moment(this.timelineFilter.from),
+              "day"
+            ) &&
+            moment(c.dateFrom).isSameOrBefore(
+              moment(this.timelineFilter.to),
+              "day"
+            )
           );
         }
       );
     }
 
     this.filteredClassInstanceDTOs.sort((a, b) => {
-      return (
-        new Date(b.dateFrom).getTime() -
-        new Date(a.dateFrom).getTime()
-      );
+      return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
     });
 
     this.updateSelectedTaskType();
@@ -448,7 +448,7 @@ export class SunburstTableComponent
 
   getStyle(tt1) {
     return {
-      "background-color": this.tt1ColorMap.get(tt1) + "9B", // opacity
+      "background-color": this.tt1ColorMap.get(tt1) + "9B" // opacity
     };
   }
 
@@ -458,13 +458,11 @@ export class SunburstTableComponent
 
   openDialog(row): void {
     const dialogRef = this.dialog.open(ClassInstanceDetailsComponent, {
-      width: '800px',
-      height: '900px',
-      data: { id: row.id },
-
+      width: "800px",
+      height: "900px",
+      data: { id: row.id }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-    });
+    dialogRef.afterClosed().subscribe(result => {});
   }
 }

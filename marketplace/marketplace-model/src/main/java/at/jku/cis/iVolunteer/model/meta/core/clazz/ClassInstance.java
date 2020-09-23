@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -31,6 +32,9 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private int tabId;
 	
 	private boolean issued = false;
+	
+	private Date blockchainDate;
+
 
 	private String derivationRuleId;
 	
@@ -179,6 +183,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	
 	public String getDerivationRuleId() {
 		return derivationRuleId;
+	}
+
+	public Date getBlockchainDate() {
+		return blockchainDate;
+	}
+	
+	public void setBlockchainDate(Date blockchainDate) {
+		this.blockchainDate = blockchainDate;
 	}
 
 	@Override

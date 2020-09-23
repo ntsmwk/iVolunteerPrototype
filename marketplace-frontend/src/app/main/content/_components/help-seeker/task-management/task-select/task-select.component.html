@@ -24,9 +24,8 @@
 
         <ng-container matColumnDef="configuration">
           <mat-header-cell *matHeaderCellDef>Konfiguration</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{
-            task.configurationName
-          }}</mat-cell>
+          <mat-cell *matCellDef="let task">{{ task.configurationName }}
+          </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -34,9 +33,11 @@
       </mat-table>
     </div>
   </div>
-
-  <p *ngIf="dataSource.data.length == 0" class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren
-    Konfigurationen - Erstellen Sie zunächste eine Konfiguration.
+  <p *ngIf="dataSource.data.length == 0 && userRole=='TENANT_ADMIN'" class="alert alert-warn">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren Konfigurationen - Erstellen Sie zunächst eine
+    <a href="/main/class-configurator">Konfiguration</a> .
+  </p>
+  <p *ngIf="dataSource.data.length == 0 && userRole=='HELP_SEEKER'" class="alert alert-warn">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren Konfigurationen - Wenden Sie sich an ihren Administrator.
   </p>
 </div>

@@ -1,18 +1,17 @@
-import { Component, OnInit } from "@angular/core";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Tenant } from "app/main/content/_model/tenant";
-import { ImageService } from "app/main/content/_service/image.service";
-import { LoginService } from "app/main/content/_service/login.service";
-import { timeout, timeInterval } from "rxjs/operators";
-import { GlobalInfo } from "app/main/content/_model/global-info";
-import { User, UserRole } from "app/main/content/_model/user";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
-import { RoleChangeService } from "app/main/content/_service/role-change.service";
+import { Component, OnInit } from '@angular/core';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { Tenant } from 'app/main/content/_model/tenant';
+import { ImageService } from 'app/main/content/_service/image.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { User, UserRole } from 'app/main/content/_model/user';
+import { CoreUserService } from 'app/main/content/_service/core-user.service';
+import { RoleChangeService } from 'app/main/content/_service/role-change.service';
 
 @Component({
   selector: "tenant-overview",
-  templateUrl: "tenant-overview.component.html",
-  styleUrls: ["tenant-overview.component.scss"],
+  templateUrl: 'tenant-overview.component.html',
+  styleUrls: ['tenant-overview.component.scss'],
 })
 export class TenantOverviewComponent implements OnInit {
   user: User;
@@ -20,12 +19,11 @@ export class TenantOverviewComponent implements OnInit {
   currentRole: UserRole;
   allTenants: Tenant[] = [];
 
-  isLoaded: boolean = false;
+  isLoaded = false;
 
   constructor(
     private loginService: LoginService,
     private tenantService: TenantService,
-    private imageService: ImageService,
     private coreUserService: CoreUserService,
     private roleChangeService: RoleChangeService
   ) { }
@@ -61,7 +59,7 @@ export class TenantOverviewComponent implements OnInit {
         .toPromise()
     );
 
-    if (this.user.subscribedTenants.length == 0) {
+    if (this.user.subscribedTenants.length === 0) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
         this.roleChangeService.changeRole(UserRole.NONE);
         this.updateCurrentInfo();
@@ -69,8 +67,8 @@ export class TenantOverviewComponent implements OnInit {
     } else {
       if (
         // current role unssubscribed?
-        this.currentRole == role &&
-        this.currentTenants.length == 1 &&
+        this.currentRole === role &&
+        this.currentTenants.length === 1 &&
         this.currentTenants.map((t) => t.id).indexOf(tenant.id) >= 0
       ) {
         this.loginService
@@ -109,7 +107,7 @@ export class TenantOverviewComponent implements OnInit {
         .toPromise()
     );
 
-    if (this.currentRole == UserRole.NONE) {
+    if (this.currentRole === UserRole.NONE) {
       this.loginService.generateGlobalInfo(role, [tenant.id]).then(() => {
         this.roleChangeService.changeRole(role);
         this.updateCurrentInfo();
@@ -128,7 +126,7 @@ export class TenantOverviewComponent implements OnInit {
   }
 
   async updateCurrentInfo() {
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
 

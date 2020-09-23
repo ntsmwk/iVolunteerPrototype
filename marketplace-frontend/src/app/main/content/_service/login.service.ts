@@ -1,20 +1,26 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { UserRole } from "../_model/user";
+import { LocalRepositoryLocation, User, UserRole } from "../_model/user";
 import { GlobalInfo } from "../_model/global-info";
 import { Observable, generate } from "rxjs";
 import { tap } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { LocalRepositoryJsonServerService } from "./local-repository-jsonServer.service";
+import { LocalRepositoryDropboxService } from "./local-repository-dropbox.service";
+import { LocalRepositoryNextcloudService } from "./local-repository-nextcloud.service";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class LoginService {
   constructor(
     private http: HttpClient,
     private httpClient: HttpClient,
-    private router: Router
-  ) { }
+    private router: Router,
+    private lrDropboxService: LocalRepositoryDropboxService,
+    private lrJsonServerService: LocalRepositoryJsonServerService,
+    private lrNextcloudService: LocalRepositoryNextcloudService
+  ) {}
 
   login(username: string, password: string) {
     return this.http.post(
@@ -36,7 +42,7 @@ export class LoginService {
   getLoggedIn() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.user);
         subscriber.complete();
       });
@@ -48,12 +54,12 @@ export class LoginService {
   getLoggedInUserRole() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.userRole);
         subscriber.complete();
       });
     } else {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(UserRole.NONE);
         subscriber.complete();
       });
@@ -74,7 +80,7 @@ export class LoginService {
             localStorage.setItem("refreshToken", refreshToken);
           }
         },
-        (error) => {
+        error => {
           this.logout();
         }
       )
@@ -90,13 +96,14 @@ export class LoginService {
   }
 
   getGlobalInfo() {
-    const observable = new Observable((subscriber) => {
+    const observable = new Observable(subscriber => {
       let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
       if (globalInfo) {
         subscriber.next(globalInfo);
         subscriber.complete();
       } else {
-        this.httpClient.get(`/core/login/globalInfo`);
+        // TODO @
+        this.httpClient.get(`/core/login/globalInfo/`);
       }
     });
     return observable;
@@ -110,5 +117,16 @@ export class LoginService {
     );
 
     localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
+  }
+
+  getLocalRepositoryService(volunteer: User) {
+    switch (volunteer.localRepositoryLocation) {
+      case LocalRepositoryLocation.LOCAL:
+        return this.lrJsonServerService;
+      case LocalRepositoryLocation.DROPBOX:
+        return this.lrDropboxService;
+      case LocalRepositoryLocation.NEXTCLOUD:
+        return this.lrNextcloudService;
+    }
   }
 }

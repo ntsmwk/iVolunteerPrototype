@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.api.standard.model.certificate;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,15 @@ public class PersonCertificateService {
 			PersonCertificate personCertificate) {
 		// @formatter:off
 		ClassInstance personCertificateClassInstance = classDefinition2InstanceMapper.toTarget(personCertificateClassDefinition);
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("certificateID")).forEach(p -> p.setValues(Lists.asList(personCertificate.getCertificateID(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Lists.asList(personCertificate.getCertificateName(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("certificateDescription")).forEach(p -> p.setValues(Lists.asList(personCertificate.getCertificateDescription(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Lists.asList(personCertificate.getCertificateIssuedOn(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> p.setValues(Lists.asList(personCertificate.getCertificateValidUntil(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("certificateIcon")).forEach(p -> p.setValues(Lists.asList(personCertificate.getCertificateIcon(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personCertificate.getiVolunteerUUID(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personCertificate.getiVolunteerSource(), new Object[0])));
-		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personCertificate.getPersonID(), new Object[0])));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("certificateID")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getCertificateID())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getCertificateName())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("certificateDescription")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getCertificateDescription())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getCertificateIssuedOn())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getCertificateValidUntil())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("certificateIcon")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getCertificateIcon())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getiVolunteerUUID())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getiVolunteerSource())));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Collections.singletonList(personCertificate.getPersonID())));
 		personCertificateClassInstance.setUserId(userMappingService.getByExternalUserId(personCertificate.getPersonID()).getiVolunteerUserId());
 
 		classInstanceRepository.save(personCertificateClassInstance);		 

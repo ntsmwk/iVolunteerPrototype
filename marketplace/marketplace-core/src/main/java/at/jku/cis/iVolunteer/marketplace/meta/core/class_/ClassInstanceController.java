@@ -1,12 +1,16 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,21 +46,21 @@ public class ClassInstanceController {
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
-			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
+			@PathVariable("userId") String userId, @RequestParam(value = "issued") boolean issued, @RequestBody List<String> tenantIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 
 		tenantIds.forEach(tenantId -> {
 			classInstances.addAll(
-					classInstanceRepository.getByUserIdAndClassArchetypeAndTenantId(userId, archeType, tenantId));
+					classInstanceRepository.getByUserIdAndClassArchetypeAndTenantIdAndIssued(userId, archeType, tenantId, issued));
 		});
 
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
+//	@PreAuthorize("hasAnyRole('VOLUNTEER')")
 	@GetMapping("/meta/core/class/instance/all")
-	private List<ClassInstanceDTO> getAllClassInstances() {
-		// TODO filter by tenant Id as header param
-		return classInstanceMapper.mapToDTO(classInstanceRepository.findAll());
+	private List<ClassInstanceDTO> getAllClassInstances(@RequestParam(value = "tId", required=true) String tenantId) {
+		return classInstanceMapper.mapToDTO(classInstanceRepository.findByTenantId(tenantId));
 	}
 
 	@GetMapping("/meta/core/class/instance/{id}")
@@ -83,8 +87,8 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@RequestParam(value = "tId", required = true) String tenantId) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
-				tenantId);
+//		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
+//				tenantId);
 		// TODO implement!!
 		return classInstances;
 	}
@@ -130,10 +134,10 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/in-issuer-inbox")
-	private List<ClassInstance> getClassInstanceInIssuerInbox(
+	private List<ClassInstanceDTO> getClassInstanceInIssuerInbox(
 			@RequestParam(value = "tId", required = true) String tenantId) {
 		List<ClassInstance> instances = classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
-		return instances;
+		return classInstanceMapper.mapToDTO(instances);
 	}
 
 	@PutMapping("/meta/core/class/instance/issue")

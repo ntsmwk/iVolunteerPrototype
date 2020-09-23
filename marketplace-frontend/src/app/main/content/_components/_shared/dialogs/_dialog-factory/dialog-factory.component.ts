@@ -534,14 +534,14 @@ export class DialogFactoryDirective {
       });
   }
 
-  openAddHelpseekerDialog(addedHelpseekers: User[]) {
+  openAddHelpseekerDialog(helpseekers: User[]) {
     const dialogRef = this.dialog.open(AddHelpseekerDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '418px',
       minHeight: '418px',
       data: {
-        addedHelpseekers
+        helpseekers
       },
     });
 

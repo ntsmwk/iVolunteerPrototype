@@ -7,13 +7,13 @@ import {
   FormControl,
   Validators,
   FormArrayName,
-  FormArray,
+  FormArray
 } from "@angular/forms";
 import {
   DerivationRule,
   GeneralCondition,
   ClassCondition,
-  ClassAction,
+  ClassAction
 } from "app/main/content/_model/derivation-rule";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -22,15 +22,15 @@ import { DerivationRuleService } from "app/main/content/_service/derivation-rule
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { DerivationRuleValidators } from 'app/main/content/_validator/derivation-rule.validators';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { isNullOrUndefined } from 'util';
-import { RuleExecution } from 'app/main/content/_model/derivation-rule-execution';
+import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { isNullOrUndefined } from "util";
+import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
 
 @Component({
   templateUrl: "./rule-configurator.component.html",
   styleUrls: ["./rule-configurator.component.scss"],
-  providers: [],
+  providers: []
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
   tenantAdmin: User;
@@ -66,10 +66,10 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       id: new FormControl(undefined),
       name: new FormControl(undefined, [
         Validators.required,
-        Validators.minLength(5),
+        Validators.minLength(5)
       ]),
       genConditionForms: new FormArray([]),
-      classConditionForms: new FormArray([]),
+      classConditionForms: new FormArray([])
     });
   }
 
@@ -85,16 +85,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
 
-    this.route.params.subscribe((params) => {
+    this.route.params.subscribe(params => {
       this.loadDerivationRule(this.marketplace, params["ruleId"]);
     });
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService
-        .getAllClassDefinitions(
-          this.marketplace,
-          this.tenant.id
-        )
+        .getAllClassDefinitions(this.marketplace, this.tenant.id)
         .toPromise()
     );
   }
@@ -108,7 +105,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           this.derivationRule = rule;
           this.ruleForm.patchValue({
             id: this.derivationRule.id,
-            name: this.derivationRule.name,
+            name: this.derivationRule.name
           });
         });
       this.deactivateSubmit = true;
@@ -172,7 +169,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           .toPromise()
           .then((rule: DerivationRule) => {
             this.derivationRule = rule;
-            this.router.navigate(["/main/rule/" + this.derivationRule.id])
+            this.router.navigate(["/main/rule/" + this.derivationRule.id]);
           });
       }
       this.showSuccessMsg = true;
@@ -203,17 +200,4 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.derivationRule.conditions.push(new ClassCondition());
     this.deactivateSubmit = false;
   }
-  
-  /*
-  private isFF() {
-    console.log("this.tenant.id: " + this.tenant.id + ", name: " + this.tenant.name);
-    return this.tenant.name === "FF Eidenberg";
-  }
-
-  private isMV() {
-    return this.tenant.name === "MV Schwertberg";
-  }
-  private isOther() {
-    return !this.isFF() && !this.isMV();
-  }*/
 }
