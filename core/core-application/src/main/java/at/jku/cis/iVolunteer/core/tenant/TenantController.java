@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.core.tenant;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,19 +12,29 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 
 @RestController
 @RequestMapping("/tenant")
 public class TenantController {
 
-	@Autowired
-	private TenantService tenantService;
+	@Autowired private TenantService tenantService;
+	@Autowired private LoginService loginService;
+	@Autowired private TenantRepository tenantRepository;
 
 	@GetMapping
 	public List<Tenant> getAllTenants() {
-		// TODO MWE tenant restrictions - public...
 		return tenantService.getAllTenants();
+	}
+
+	@GetMapping("/subscribed")
+	public List<Tenant> getSubscribedTenants() {
+		List<String> tenantIds = loginService.getLoggedInUser().getSubscribedTenants().stream()
+				.map(t -> t.getTenantId()).collect(Collectors.toList());
+		return StreamSupport.stream(tenantRepository.findAll(tenantIds).spliterator(), false)
+				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/name/{tenantName}")
