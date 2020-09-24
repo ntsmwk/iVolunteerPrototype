@@ -30,7 +30,8 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	private boolean visible;
 	private int tabId;
-
+	private int level;
+	
 	public ClassDefinition() {
 	}
 
@@ -141,6 +142,14 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setInstantiable(boolean instantiable) {
 		this.instantiable = instantiable;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	@Override

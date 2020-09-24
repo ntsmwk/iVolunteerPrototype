@@ -37,7 +37,6 @@ public class ClassDefinitionService {
 	public List<ClassDefinition> getClassDefinitonsById(List<String> ids, String tenantId) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		
-		System.out.println(ids.size());
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
 
 		return classDefinitions;

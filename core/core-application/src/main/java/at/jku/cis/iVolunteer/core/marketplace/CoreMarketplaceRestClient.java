@@ -5,6 +5,7 @@ import static java.text.MessageFormat.format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -72,6 +73,8 @@ public class CoreMarketplaceRestClient {
 	private HttpHeaders buildAuthorizationHeader(String authorization) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(AUTHORIZATION, authorization);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
 		return headers;
 	}
 }

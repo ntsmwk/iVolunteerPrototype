@@ -21,6 +21,8 @@ import at.jku.cis.iVolunteer.marketplace.security.entrypoint.UnauthorizedAuthent
 import at.jku.cis.iVolunteer.marketplace.security.filter.JWTAuthorizationFilter;
 import at.jku.cis.marketplace.security.service.ParticipantDetailsService;
 
+//@EnableGlobalMethodSecurity(securedEnabled = true)
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
