@@ -56,7 +56,6 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
           }
         })
         .catch((error: any) => {
-          console.error("error");
           failureFunction(error);
         });
     });

@@ -27,6 +27,9 @@ import at.jku.cis.iVolunteer.core.security.filter.JWTAuthorizationFilter;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.service.ParticipantDetailsService;
 
+//@EnableGlobalMethodSecurity(securedEnabled = true)
+
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {

@@ -79,8 +79,6 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     this.data.classDefinitions = [];
     this.data.relationships = [];
 
-    console.log(this.data.classConfiguration);
-
     Promise.all([
       this.classDefinitionService
         .getClassDefinitionsById(

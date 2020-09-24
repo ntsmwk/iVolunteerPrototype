@@ -43,22 +43,26 @@ public class CollectionService {
 	@Autowired FlatPropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
-	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsList(String slotId) {
-		ClassConfiguration configurator = classConfigurationRepository.findOne(slotId);
-		if (configurator == null) {
+	public List<ClassDefinition> assignLevelsToClassDefinitions(List<ClassDefinition> classDefinitions, List<Relationship> relationships) {
+		if (classDefinitions == null || relationships == null) {
 			return null;
 		}
-		List<ClassDefinition> collectors = new ArrayList<ClassDefinition>();
-		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
-			if (c.isCollector()) {
-				collectors.add(c);
-			}
-		});
-
-		for (ClassDefinition collector : collectors) {
-			collector.setProperties(aggregateAllPropertiesDFS(collector, 0, collector.getProperties()));
+		
+		ClassDefinition root = classDefinitions.stream().filter(cd -> cd.isRoot()).findFirst().orElse(null);
+		
+		if (root == null) {
+			return null;
 		}
-		return collectors;
+
+		
+		List<ClassDefinition> ret = getAndUpdateClassDefinitions(root, 0, -1, classDefinitions, relationships);
+		
+		for (ClassDefinition r : ret) {
+			System.out.println(r.getLevel() + ": " + r.getName());
+		}
+		
+		
+		return ret;
 	}
 
 	public MatchingEntityMappings collectAllClassDefinitionsWithPropertiesAsMatchingEntityMappings(String classConfigurationId) {
@@ -70,17 +74,14 @@ public class CollectionService {
 
 		MatchingEntityMappings mapping = new MatchingEntityMappings();
 		
-		
-		
 		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(c -> {
 			if (c.isRoot()) {
 				mapping.setPathDelimiter(PATH_DELIMITER);	
 				mapping.setEntities(new ArrayList<MatchingMappingEntry>());
 				mapping.getEntities().add(new MatchingMappingEntry(c, c.getId(), PATH_DELIMITER));
-				mapping.getEntities().addAll(this.aggregateAllClassDefinitionsDFS(c, 0, new ArrayList<>(), c.getId()));				
+				mapping.getEntities().addAll(this.getMatchingMappingEntryFromClassDefinitionDFS(c, 0, new ArrayList<>(), c.getId()));				
 			}
 		});
-
 
 		for (MatchingMappingEntry entry : mapping.getEntities()) {
 			mapping.setNumberOfProperties(mapping.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
@@ -90,56 +91,57 @@ public class CollectionService {
 		return mapping;
 	}
 
-	private String getPathFromRoot(ClassDefinition classDefinition) {
-		ArrayList<String> pathArray = new ArrayList<>();
-		pathArray.add(classDefinition.getId());
+//	private String getPathFromRoot(ClassDefinition classDefinition) {
+//		ArrayList<String> pathArray = new ArrayList<>();
+//		pathArray.add(classDefinition.getId());
+//
+//		while (!classDefinition.isRoot()) {
+//			List<Relationship> relationships = this.relationshipRepository.findByTarget(classDefinition.getId());
+//
+////			relationships = relationships.stream()
+////					.filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
+////							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
+////					.collect(Collectors.toList());
+//
+//			if (relationships.size() >= 1) {
+//				classDefinition = classDefinitionRepository.findOne(relationships.get(0).getSource());
+//				pathArray.add(PATH_DELIMITER);
+//				pathArray.add(classDefinition.getId());
+//			}
+//		}
+//		Collections.reverse(pathArray);
+//		return String.join("", pathArray);
+//	}
 
-		while (!classDefinition.isRoot()) {
-			List<Relationship> relationships = this.relationshipRepository.findByTarget(classDefinition.getId());
-
-//			relationships = relationships.stream()
-//					.filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
-//							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
-//					.collect(Collectors.toList());
-
-			if (relationships.size() >= 1) {
-				classDefinition = classDefinitionRepository.findOne(relationships.get(0).getSource());
-				pathArray.add(PATH_DELIMITER);
-				pathArray.add(classDefinition.getId());
-			}
-		}
-		Collections.reverse(pathArray);
-		return String.join("", pathArray);
-	}
-
-	List<ClassProperty<Object>> aggregateAllPropertiesDFS(ClassDefinition root, int level, List<ClassProperty<Object>> list) {
+	List<ClassDefinition> getAndUpdateClassDefinitions(ClassDefinition root, int currentLevel, int previousLevel, List<ClassDefinition> classDefinitions, List<Relationship> relationships) {
 		Stack<Relationship> stack = new Stack<Relationship>();
-		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
-				RelationshipType.INHERITANCE);
+
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
 
 		if (stack == null || stack.size() <= 0) {
-			return list;
+			return classDefinitions;
 		}
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
-			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-
-			for (ClassProperty<Object> property : classDefinition.getProperties()) {
-				if (!list.stream().filter(p -> p.getId().contentEquals(property.getId())).findFirst().isPresent()) {
-					list.add(property);
-				}
+			ClassDefinition classDefinition = classDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().orElse(null);
+			
+			if (classDefinition == null) {
+				continue;
 			}
-			this.aggregateAllPropertiesDFS(classDefinition, level + 1, list);
+			
+			int nextLevel = 0;
+			
+			if (previousLevel > 0) {
+				nextLevel = currentLevel + 1;
+			}
+			
+			this.getAndUpdateClassDefinitions(classDefinition, nextLevel, currentLevel, classDefinitions, relationships);
 		}
-		return list;
+		return classDefinitions;
 	}
 
-	List<MatchingMappingEntry> aggregateAllClassDefinitionsDFS(ClassDefinition root, int level, List<MatchingMappingEntry> list, String path) {
-		
-		
-		
+	List<MatchingMappingEntry> getMatchingMappingEntryFromClassDefinitionDFS(ClassDefinition root, int level, List<MatchingMappingEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
 //		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
@@ -156,16 +158,16 @@ public class CollectionService {
 			Relationship relationship = stack.pop();
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 				list.add(new MatchingMappingEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(), PATH_DELIMITER));
-			this.aggregateAllClassDefinitionsDFS(classDefinition, level + 1, list, path + PATH_DELIMITER + classDefinition.getId());
+			this.getMatchingMappingEntryFromClassDefinitionDFS(classDefinition, level + 1, list, path + PATH_DELIMITER + classDefinition.getId());
 		}
 		return list;
 	}
 
 	public List<TreePropertyEntry> collectTreePropertyDefinitions(TreePropertyDefinition treePropertyDefinition) {
-		return aggregateAllTreePropertyEntriesDFS(treePropertyDefinition.getId(), 0, new ArrayList<>(), treePropertyDefinition);
+		return getTreePropertyEntriesDFS(treePropertyDefinition.getId(), 0, new ArrayList<>(), treePropertyDefinition);
 	}
 
-	private List<TreePropertyEntry> aggregateAllTreePropertyEntriesDFS(String rootId, int level, List<TreePropertyEntry> list,
+	private List<TreePropertyEntry> getTreePropertyEntriesDFS(String rootId, int level, List<TreePropertyEntry> list,
 			TreePropertyDefinition treePropertyDefinition) {
 		Stack<TreePropertyRelationship> stack = new Stack<>();
 		List<TreePropertyRelationship> relationships = treePropertyDefinition.getRelationships().stream()
@@ -185,7 +187,7 @@ public class CollectionService {
 			enumEntry.setPosition(new int[level + 1]);
 			enumEntry.setLevel(level);
 			list.add(enumEntry);
-			this.aggregateAllTreePropertyEntriesDFS(enumEntry.getId(), level + 1, list, treePropertyDefinition);
+			this.getTreePropertyEntriesDFS(enumEntry.getId(), level + 1, list, treePropertyDefinition);
 		}
 
 		return list;

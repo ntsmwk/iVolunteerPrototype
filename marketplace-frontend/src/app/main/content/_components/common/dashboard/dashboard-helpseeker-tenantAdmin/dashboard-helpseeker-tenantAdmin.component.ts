@@ -1,20 +1,15 @@
-import { OnInit, Component } from "@angular/core";
-import { Subscription } from "rxjs";
-import { fuseAnimations } from "@fuse/animations";
-import { isNullOrUndefined } from "util";
-import { Router } from "@angular/router";
-import { User } from "../../../../_model/user";
-import { LoginService } from "../../../../_service/login.service";
-import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Tenant } from "app/main/content/_model/tenant";
-import { DomSanitizer } from "@angular/platform-browser";
-import { ImageService } from "app/main/content/_service/image.service";
-import { GlobalInfo } from "app/main/content/_model/global-info";
+import { OnInit, Component } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { User } from '../../../../_model/user';
+import { LoginService } from '../../../../_service/login.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { Tenant } from 'app/main/content/_model/tenant';
+import { GlobalInfo } from 'app/main/content/_model/global-info';
 
 @Component({
   selector: "dashboard-helpseeker-tenantAdmin",
-  templateUrl: "./dashboard-helpseeker-tenantAdmin.component.html",
-  styleUrls: ["dashboard-helpseeker-tenantAdmin.component.scss"],
+  templateUrl: './dashboard-helpseeker-tenantAdmin.component.html',
+  styleUrls: ['dashboard-helpseeker-tenantAdmin.component.scss'],
   animations: fuseAnimations,
 })
 export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
@@ -25,15 +20,12 @@ export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private router: Router,
     private tenantService: TenantService,
-    private sanitizer: DomSanitizer,
-    private imageService: ImageService
   ) { }
 
   async ngOnInit() {
     this.loaded = false;
-    let globalInfo = <GlobalInfo>(
+    const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.user = globalInfo.user;

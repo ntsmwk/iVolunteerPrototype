@@ -92,6 +92,7 @@ public class ClassConfigurationController {
 		return saveClassConfiguration(classConfiguration);
 	}
 
+	
 	@PostMapping("class-configuration/new")
 	public ClassConfiguration createNewClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 3) {
@@ -113,11 +114,11 @@ public class ClassConfigurationController {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(updatedClassConfiguration.getClassDefinitionIds())
 				.forEach(classDefinitions::add);
+		
 		if (classDefinitions != null) {
-			for (ClassDefinition cd : classDefinitions) {
-				cd.setConfigurationId(classConfiguration.getId());
-			}
+//			classDefinitions = updateClassDefinitions(classDefinitions, classConfiguration.getId());
 		}
+		
 		classDefinitionRepository.save(classDefinitions);		
 		
 		// Build MatchingCollector
@@ -133,6 +134,13 @@ public class ClassConfigurationController {
 		return classConfiguration;
 	}
 
+//	private List<ClassDefinition> updateClassDefinitions(List<ClassDefinition> classDefinitions, String classConfigurationId) {
+//				
+//		for (ClassDefinition cd : classDefinitions) {
+//			cd.setConfigurationId(classConfigurationId);
+//		}
+//	}
+	
 	@PutMapping("class-configuration/{id}/save-meta")
 	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
@@ -181,6 +189,7 @@ public class ClassConfigurationController {
 		fwPassEintrag.setWriteProtected(true);
 		fwPassEintrag.setCollector(true);
 		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
+		fwPassEintrag.setLevel(0);
 
 		FlatPropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("ID")).findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(idProperty));
@@ -213,6 +222,7 @@ public class ClassConfigurationController {
 		task.setClassArchetype(ClassArchetype.TASK);
 		task.setWriteProtected(true);
 		task.setProperties(new ArrayList<>());
+		task.setLevel(0);
 
 		FlatPropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date"))
 				.findFirst().get();
@@ -242,6 +252,7 @@ public class ClassConfigurationController {
 		competence.setClassArchetype(ClassArchetype.COMPETENCE);
 		competence.setWriteProtected(true);
 		competence.setProperties(new ArrayList<>());
+		competence.setLevel(0);
 
 		classDefinitions.add(competence);
 
@@ -259,6 +270,7 @@ public class ClassConfigurationController {
 		achievement.setClassArchetype(ClassArchetype.ACHIEVEMENT);
 		achievement.setWriteProtected(true);
 		achievement.setProperties(new ArrayList<>());
+		achievement.setLevel(0);
 
 		classDefinitions.add(achievement);
 
@@ -276,6 +288,7 @@ public class ClassConfigurationController {
 		function.setClassArchetype(ClassArchetype.FUNCTION);
 		function.setWriteProtected(true);
 		function.setProperties(new ArrayList<>());
+		function.setLevel(0);
 
 		classDefinitions.add(function);
 

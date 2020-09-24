@@ -11,11 +11,12 @@ import { LocalRepositoryService } from "./local-repository.service";
   providedIn: "root",
 })
 export class LocalRepositoryNextcloudService extends LocalRepositoryService {
-  FILE_PATH: string = "/Apps/iVolunteer/";
+  FILE_PATH1: string = "/Apps";
+  FILE_PATH2: string = "/Apps/iVolunteer/";
   FILE_NAME: string = "db.json";
-  FULL_FILE_NAME: string = this.FILE_PATH + this.FILE_NAME;
+  FULL_FILE_NAME: string = this.FILE_PATH2 + this.FILE_NAME;
 
-  localRepositorys: LocalRepository[] = [];
+  localRepositories: LocalRepository[] = [];
 
   constructor() {
     super();
@@ -45,6 +46,8 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
   }
 
   private findByVolunteer(volunteer: User) {
+    let nextcloud;
+
     const observable = new Observable((subscriber) => {
       const successFunction = (localRepository: LocalRepository) => {
         subscriber.next(localRepository);
@@ -56,105 +59,67 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      try {
-        let nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
-          username: volunteer.nextcloudCredentials.username,
-          password: volunteer.nextcloudCredentials.password,
-        });
-
-        nextcloud
-          .getDirectoryContents(this.FILE_PATH)
-          .then(async (filesList) => {
-            if (
-              filesList.findIndex(
-                (entry) => entry.basename === this.FILE_NAME
-              ) == -1
-            ) {
-              // create and read
-              nextcloud
-                .putFileContents(
-                  this.FULL_FILE_NAME,
-                  JSON.stringify({ repository: [] }, null, 2),
-                  {
-                    overwrite: true,
-                  }
-                )
-                .then(async () => {
-                  let parsedJSON = await nextcloud.getFileContents(
-                    this.FULL_FILE_NAME,
-                    {
-                      format: "text",
-                    }
-                  );
-
-                  this.localRepositorys = [];
-                  parsedJSON.repository.forEach((lr: LocalRepository) => {
-                    this.localRepositorys.push(lr);
-                  });
-
-                  if (
-                    this.localRepositorys.findIndex(
-                      (l) => l.id === volunteer.id
-                    ) === -1
-                  ) {
-                    let newRepo = new LocalRepository(
-                      volunteer.id,
-                      volunteer.username
-                    );
-
-                    this.localRepositorys.push(newRepo);
-                    this.saveToNextcloud(volunteer);
-                    successFunction(newRepo);
-                  } else {
-                    successFunction(
-                      this.localRepositorys.find(
-                        (localRepository: LocalRepository) => {
-                          return localRepository.id === volunteer.id;
-                        }
-                      )
-                    );
-                  }
-                });
-            } else {
-              // only read
-              let parsedJSON = await nextcloud.getFileContents(
-                this.FULL_FILE_NAME,
-                {
-                  format: "text",
-                }
-              );
-
-              this.localRepositorys = [];
-              parsedJSON.repository.forEach((lr: LocalRepository) => {
-                this.localRepositorys.push(lr);
-              });
-
-              if (
-                this.localRepositorys.filter((lr) => lr.id == volunteer.id)
-                  .length == 0
-              ) {
-                let newRepo = new LocalRepository(
-                  volunteer.id,
-                  volunteer.username
-                );
-
-                this.localRepositorys.push(newRepo);
-                this.saveToNextcloud(volunteer);
-                successFunction(newRepo);
-              } else {
-                successFunction(
-                  this.localRepositorys.find(
-                    (localRepository: LocalRepository) => {
-                      return localRepository.id === volunteer.id;
-                    }
-                  )
-                );
-              }
-            }
+      (async () => {
+        try {
+          nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
+            username: volunteer.nextcloudCredentials.username,
+            password: volunteer.nextcloudCredentials.password,
           });
-      } catch (error) {
-        failureFunction(error);
-      }
+        } catch (error) {
+          console.error("nextcloud client creation failed");
+          failureFunction(error);
+        }
+
+        try {
+          await nextcloud.getDirectoryContents(this.FILE_PATH2);
+        } catch (error) {
+          // create path and db.json
+          await nextcloud.createDirectory(this.FILE_PATH1);
+          await nextcloud.createDirectory(this.FILE_PATH2);
+
+          let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+          this.localRepositories.push(newRepo);
+          let content = { repository: this.localRepositories };
+
+          await nextcloud.putFileContents(
+            this.FULL_FILE_NAME,
+            JSON.stringify(content, null, 2)
+          );
+
+          successFunction(newRepo);
+        }
+
+        try {
+          let parsedJSON = await nextcloud.getFileContents(
+            this.FULL_FILE_NAME,
+            {
+              format: "text",
+            }
+          );
+
+          this.localRepositories = [];
+          parsedJSON.repository.forEach((lr: LocalRepository) => {
+            this.localRepositories.push(lr);
+          });
+
+          let repository = this.localRepositories.find(
+            (localRepository: LocalRepository) => {
+              return localRepository.id === volunteer.id;
+            }
+          );
+
+          if (repository) {
+            successFunction(repository);
+          } else {
+            let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+            this.localRepositories.push(newRepo);
+            this.saveToNextcloud(volunteer);
+            successFunction(newRepo);
+          }
+        } catch (error) {
+          failureFunction(error);
+        }
+      })().then(null, subscriber.error);
     });
     return observable;
   }
@@ -202,9 +167,9 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
           try {
             localRepository.classInstances.push(classInstance);
 
-            this.localRepositorys.forEach((lr, index) => {
+            this.localRepositories.forEach((lr, index) => {
               if (lr.id == localRepository.id) {
-                this.localRepositorys[index] = localRepository;
+                this.localRepositories[index] = localRepository;
               }
             });
             this.saveToNextcloud(volunteer);
@@ -261,9 +226,9 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
               ...classInstances,
             ];
 
-            this.localRepositorys.forEach((lr, index) => {
+            this.localRepositories.forEach((lr, index) => {
               if (lr.id == localRepository.id) {
-                this.localRepositorys[index] = localRepository;
+                this.localRepositories[index] = localRepository;
               }
             });
 
@@ -296,9 +261,9 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
           try {
             localRepository.classInstances = classInstances;
 
-            this.localRepositorys.forEach((lr, index) => {
+            this.localRepositories.forEach((lr, index) => {
               if (lr.id == localRepository.id) {
-                this.localRepositorys[index] = localRepository;
+                this.localRepositories[index] = localRepository;
               }
             });
 
@@ -332,9 +297,9 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
               }
             });
 
-            this.localRepositorys.forEach((lr, index) => {
+            this.localRepositories.forEach((lr, index) => {
               if (lr.id == localRepository.id) {
-                this.localRepositorys[index] = localRepository;
+                this.localRepositories[index] = localRepository;
               }
             });
 
@@ -366,9 +331,9 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
               (c) => classInstanceIds.indexOf(c.id) < 0
             );
 
-            this.localRepositorys.forEach((lr, index) => {
+            this.localRepositories.forEach((lr, index) => {
               if (lr.id == localRepository.id) {
-                this.localRepositorys[index] = localRepository;
+                this.localRepositories[index] = localRepository;
               }
             });
 
@@ -391,7 +356,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
       password: volunteer.nextcloudCredentials.password,
     });
 
-    let content = { repository: this.localRepositorys };
+    let content = { repository: this.localRepositories };
 
     await nextcloud.putFileContents(
       this.FULL_FILE_NAME,
