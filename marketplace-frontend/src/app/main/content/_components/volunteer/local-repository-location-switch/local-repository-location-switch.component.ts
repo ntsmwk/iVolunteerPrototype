@@ -119,6 +119,8 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
           this.updateUserAndGlobalInfo();
         } else {
           alert("Fehler: Service nicht verfügbar!");
+          // TODO: select old radio button: this.user.localRepositoryLocation
+          // or refresh radio buttons... (since data hasnt changed)
         }
       }
     }
