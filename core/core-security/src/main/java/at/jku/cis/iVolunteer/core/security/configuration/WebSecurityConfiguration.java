@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -57,7 +58,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/trustifier/contractor/classInstances").permitAll()
 			.antMatchers("/login/**").permitAll()
 			.antMatchers("/register/**").permitAll()
-			.antMatchers("/tenant/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/tenant").permitAll()
+			.antMatchers(HttpMethod.GET, "/tenant/name/**").permitAll()
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenProvider))
 				.addFilter(new JWTAuthorizationFilter(authenticationManager(), tokenProvider)).sessionManagement()

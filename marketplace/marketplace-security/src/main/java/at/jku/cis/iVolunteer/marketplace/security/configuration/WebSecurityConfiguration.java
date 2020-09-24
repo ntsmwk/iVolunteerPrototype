@@ -42,11 +42,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/swagger-ui.html").permitAll() 
 				.antMatchers("/api/**").permitAll()
 				.antMatchers("/init/**").permitAll()
-				.antMatchers("/volunteer").permitAll()
-				.antMatchers("/helpseeker").permitAll()
-				.antMatchers("/user/**").permitAll()
+				.antMatchers("/user/register").permitAll()
+//				.antMatchers("/user/subscribe").permitAll()
+//				.antMatchers("/user/unsubscribe").permitAll()
 				.antMatchers("/rule/engine/**").permitAll()
-				.antMatchers("/matching/test").permitAll()
 				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
