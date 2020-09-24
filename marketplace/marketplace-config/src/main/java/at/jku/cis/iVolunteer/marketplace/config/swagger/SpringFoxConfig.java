@@ -1,9 +1,7 @@
-package at.jku.cis.iVolunteer.core.config.swagger;
+package at.jku.cis.iVolunteer.marketplace.config.swagger;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
