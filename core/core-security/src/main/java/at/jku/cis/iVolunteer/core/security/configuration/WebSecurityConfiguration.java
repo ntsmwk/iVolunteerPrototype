@@ -45,7 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
-			.antMatchers("/**").permitAll()  // TODO remove!!!
+			.antMatchers("/v2/api-docs").permitAll() 
 			.antMatchers("/init/**").permitAll()
 			.antMatchers("/trustifier/contractor/classInstance").permitAll()
 			.antMatchers("/trustifier/contractor/classInstances").permitAll()
