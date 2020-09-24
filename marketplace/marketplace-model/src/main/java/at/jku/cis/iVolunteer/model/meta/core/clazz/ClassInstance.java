@@ -36,6 +36,8 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private Date blockchainDate;
 
 
+	private String derivationRuleId;
+	
 	public ClassInstance() {
 	}
 
@@ -175,6 +177,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.issued = issued;
 	}
 	
+	public void setDerivationRuleId(String derivationRuleId) {
+		this.derivationRuleId = derivationRuleId;
+	}
+	
+	public String getDerivationRuleId() {
+		return derivationRuleId;
+	}
+
 	public Date getBlockchainDate() {
 		return blockchainDate;
 	}
@@ -192,7 +202,5 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		json.addProperty("properties", this.properties.hashCode());
 		return json.toString();
 	}
-
-	
 
 }

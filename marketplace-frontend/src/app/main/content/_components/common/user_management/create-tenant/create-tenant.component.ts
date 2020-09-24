@@ -4,7 +4,7 @@ import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { UserRole } from 'app/main/content/_model/user';
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from 'app/main/content/_service/core-user.service';
 import { Router } from '@angular/router';
 
 const STANDARD_PRIMARY_COLOR = '#3e7ddb';

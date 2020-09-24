@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Marketplace } from '../../../../_model/marketplace';
-import { ClassDefinition, ClassArchetype } from '../../../../_model/meta/class';
-import { isNullOrUndefined } from 'util';
-import { of } from 'rxjs';
-import { Relationship } from 'app/main/content/_model/meta/relationship';
-import { FormConfigurationPreviewRequest } from 'app/main/content/_model/meta/form';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Marketplace } from "../../../../_model/marketplace";
+import { ClassDefinition, ClassArchetype } from "../../../../_model/meta/class";
+import { isNullOrUndefined } from "util";
+import { of } from "rxjs";
+import { Relationship } from "app/main/content/_model/meta/relationship";
+import { FormConfigurationPreviewRequest } from "app/main/content/_model/meta/form";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class ClassDefinitionService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllClassDefinitions(marketplace: Marketplace, tenantId: string) {
     return this.http.get(
@@ -92,20 +92,38 @@ export class ClassDefinitionService {
   }
 
   getFormConfigurations(marketplace: Marketplace, ids: string[]) {
-    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration`, ids);
+    return this.http.put(
+      `${marketplace.url}/meta/core/class/definition/form-configuration`,
+      ids
+    );
   }
 
-  getFormConfigurationPreview(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
-    const formConfigurationPreviewRequest = new FormConfigurationPreviewRequest(classDefinitions, relationships, rootClassDefinition);
-    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration-preview`, formConfigurationPreviewRequest);
+  getFormConfigurationPreview(
+    marketplace: Marketplace,
+    classDefinitions: ClassDefinition[],
+    relationships: Relationship[],
+    rootClassDefinition: ClassDefinition
+  ) {
+    const formConfigurationPreviewRequest = new FormConfigurationPreviewRequest(
+      classDefinitions,
+      relationships,
+      rootClassDefinition
+    );
+    return this.http.put(
+      `${marketplace.url}/meta/core/class/definition/form-configuration-preview`,
+      formConfigurationPreviewRequest
+    );
   }
 
-  getFormConfigurationChunk(marketplace: Marketplace, currentClassDefinitionId: string, choiceId: string) {
+  getFormConfigurationChunk(
+    marketplace: Marketplace,
+    currentClassDefinitionId: string,
+    choiceId: string
+  ) {
     const params = [currentClassDefinitionId, choiceId];
-    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration-chunk`, params);
-
+    return this.http.put(
+      `${marketplace.url}/meta/core/class/definition/form-configuration-chunk`,
+      params
+    );
   }
-
-
-
 }

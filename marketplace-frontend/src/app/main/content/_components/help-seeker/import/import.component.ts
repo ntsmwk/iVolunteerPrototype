@@ -14,7 +14,7 @@ import { ClassInstanceService } from "app/main/content/_service/meta/core/class/
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
 
 @Component({
   selector: "import",

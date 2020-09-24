@@ -13,6 +13,7 @@ public class DerivationRule extends IVolunteerObject {
 	private String name;
 	private String container;
 	private boolean active;
+	private int fireNumOfTimes;
 	private List<GeneralCondition> generalConditions = new ArrayList<GeneralCondition>();
 	private List<Condition> conditions = new ArrayList<>();
 	private List<ClassAction> actions = new ArrayList<>();
@@ -101,5 +102,12 @@ public class DerivationRule extends IVolunteerObject {
 	public String getContainerRuleEntryId() {
 		return containerRuleEntryId;
 	}
+	
+	public void setFireNumOfTimes(int fireNumOfTimes) {
+		this.fireNumOfTimes = fireNumOfTimes;
+	}
 
+	public int getFireNumOfTimes() {
+		return fireNumOfTimes;
+	}
 }

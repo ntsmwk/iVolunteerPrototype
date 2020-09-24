@@ -69,6 +69,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
         if (this.recentClassConfigurations.length > 6) {
           this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 6);
         }
+
         this.loaded = true;
       });
   }
@@ -78,12 +79,14 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     this.data.classDefinitions = [];
     this.data.relationships = [];
 
+    console.log(this.data.classConfiguration);
+
     Promise.all([
       this.classDefinitionService
         .getClassDefinitionsById(
           this.globalInfo.marketplace,
           c.classDefinitionIds,
-          undefined
+          this.tenant.id
         )
         .toPromise().then((classDefinitions: ClassDefinition[]) => {
           if (!isNullOrUndefined(classDefinitions)) {

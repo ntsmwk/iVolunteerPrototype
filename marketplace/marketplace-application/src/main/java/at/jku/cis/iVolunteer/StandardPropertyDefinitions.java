@@ -17,6 +17,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.Fl
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.BooleanPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.DatePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.DoublePropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.LocationPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.LongPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.TextPropertyDefinition;
@@ -31,10 +32,25 @@ public class StandardPropertyDefinitions {
 	public StandardPropertyDefinitions() {
 
 	}
-	
 	public List<FlatPropertyDefinition<Object>> getAlliVolunteer(String tenantId) {
 		List<FlatPropertyDefinition<Object>> properties = getAllHeader(tenantId);
 		properties.addAll(getAllGeneric(tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("IVolunteerUUID", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("IVolunteerSource", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("IssuedOn", PropertyType.DATE, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("Icon", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("Purpose", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("Phase", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("Unit", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("Level", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("GeoInformation", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("RoleID", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("OrganisationID", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("OrganisationName", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("OrganisationType", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("BadgeID", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("CertificateID", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("TaskID", PropertyType.TEXT, tenantId));
 		
 		return properties;
 	}
@@ -46,6 +62,8 @@ public class StandardPropertyDefinitions {
 		props.add(new EvidenzProperty(tenantId));
 		props.add(new DateFromProperty(tenantId));
 		props.add(new DateToProperty(tenantId));
+		props.add(new ImageLinkProperty(tenantId));
+		props.add(new ExpiredProperty(tenantId));
 		props.add(new TaskType1Property(tenantId));
 		props.add(new TaskType2Property(tenantId));
 		props.add(new TaskType3Property(tenantId));
@@ -209,7 +227,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("id");
+			this.setName("ID");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -222,11 +240,52 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("evidenz");
+			this.setName("Evidenz");
 			this.setTenantId(tenantId);
 		}
 	}
 
+	
+	public static class ImageLinkProperty extends TextPropertyDefinition {
+
+		ImageLinkProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Image Link");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class ExpiredProperty extends BooleanPropertyDefinition {
+
+		ExpiredProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Expired");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class LocationProperty extends LocationPropertyDefinition {
+
+		LocationProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Location");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	
 	public static class DateFromProperty extends DatePropertyDefinition {
 
 		DateFromProperty(String tenantId) {
@@ -261,7 +320,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("taskType1");
+			this.setName("TaskType1");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -274,7 +333,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("taskType2");
+			this.setName("TaskType2");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -287,7 +346,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("taskType3");
+			this.setName("TaskType3");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -300,7 +359,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("taskType4");
+			this.setName("TaskType4");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -313,7 +372,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("rank");
+			this.setName("Rank");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -326,7 +385,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("duration");
+			this.setName("Duration");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -349,7 +408,7 @@ public class StandardPropertyDefinitions {
 		@PostConstruct
 		public void inst(String tenantId) {
 			this.setType(PropertyType.TEXT);
-			this.setName("name");
+			this.setName("Name");
 			this.setRequired(false);
 			this.setTenantId(tenantId);
 
@@ -448,16 +507,16 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class LocationProperty extends TextPropertyDefinition {
-		public LocationProperty(String tenantId) {
-			inst(tenantId);
-		}
-
-		public void inst(String tenantId) {
-			this.setName("Location");
-			this.setTenantId(tenantId);
-		}
-	}
+//	public static class LocationProperty extends TextPropertyDefinition {
+//		public LocationProperty(String tenantId) {
+//			inst(tenantId);
+//		}
+//
+//		public void inst(String tenantId) {
+//			this.setName("Location");
+//			this.setTenantId(tenantId);
+//		}
+//	}
 
 	public static class RequiredEquipmentProperty extends TextPropertyDefinition {
 		public RequiredEquipmentProperty(String tenantId) {

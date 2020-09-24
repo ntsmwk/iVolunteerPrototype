@@ -93,6 +93,7 @@ public class RuleEngineMapper {
 		stringBuilder.append(newPattern("t", "Tenant"));
 		stringBuilder.append(newPattern("re", "RuleExecution"));
 		//
+		stringBuilder.append(newPattern("l", "List"));
 		stringBuilder.append(newPattern("vs", "UserService", true));
 
 		for (int i = 0; i < derivationRule.getGeneralConditions().size(); i++) {
@@ -138,7 +139,7 @@ public class RuleEngineMapper {
 		stringBuilder.append("  re.setStatus(RuleStatus.FIRED);\r\n");
 		for (Action action : derivationRule.getActions()) {
 			if (action instanceof ClassAction)
-				stringBuilder.append(mapClassActionToRuleAction((ClassAction) action));
+				stringBuilder.append(mapClassActionToRuleAction((ClassAction) action, derivationRule.getId()));
 			else {
 				// XXX to do --> General Actions
 			}
@@ -264,42 +265,48 @@ public class RuleEngineMapper {
 		}
 	}
 
-	private String mapClassActionToRuleAction(ClassAction classAction) {
+	private String mapClassActionToRuleAction(ClassAction classAction, String derivationRuleId) {
 		StringBuilder stringBuilder = new StringBuilder();
 		switch (classAction.getType()) {
 		case DELETE:
 			stringBuilder.append(newDeleteAction(classAction));
 			break;
 		case NEW:
-			stringBuilder.append(newInsertAction(classAction));
+			stringBuilder.append(newInsertAction(classAction, derivationRuleId));
 			break;
 		case UPDATE:
-			stringBuilder.append(newUpdateAction(classAction));
+			stringBuilder.append(newUpdateAction(classAction, derivationRuleId));
 		default:
 		}
 		return stringBuilder.toString();
 	}
 
-	private String newUpdateAction(ClassAction classAction) {
+	private String newUpdateAction(ClassAction classAction, String derivationRuleId) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("  ClassInstance ci = cis.getClassInstance(v, \"" + classAction.getClassDefinitionId()
 				+ "\", t.getId());\r\n");
+		stringBuilder.append("  ci.setDerivationRuleId(\"" + derivationRuleId + "\");\r\n");
 		for (AttributeCondition attribute : classAction.getAttributes()) {
 			stringBuilder.append("  cis.setProperty(ci, \"" + attribute.getClassPropertyId() + "\", \""
 					+ attribute.getValue().toString() + "\");\r\n");
 		}
+		stringBuilder.append("  l.add(ci);\r\n");
+		//stringBuilder.append("  cis.saveClassInstance(ci);\r\n"); // XXX only for test
 		return stringBuilder.toString();
 	}
 
-	private String newInsertAction(ClassAction classAction) {
+	private String newInsertAction(ClassAction classAction, String derivationRuleId) {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append("  ClassInstance ci = cis.newClassInstance(v, " + "\"" + classAction.getClassDefinitionId()
 				+ "\", t.getId());\r\n");
+		stringBuilder.append("  ci.setDerivationRuleId(\"" + derivationRuleId + "\");");
 		for (AttributeCondition attribute : classAction.getAttributes()) {
 			stringBuilder.append("  cis.setProperty(ci, \"" + attribute.getClassPropertyId() + "\", \""
 					+ attribute.getValue().toString() + "\");\r\n");
 		}
+		stringBuilder.append("  l.add(ci);\r\n");
+		//stringBuilder.append("  cis.saveClassInstance(ci);\r\n"); // XXX only for test
 		return stringBuilder.toString();
 	}
 

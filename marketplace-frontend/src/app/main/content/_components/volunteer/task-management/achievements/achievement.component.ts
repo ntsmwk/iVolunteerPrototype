@@ -13,7 +13,7 @@ import { isNullOrUndefined } from "util";
 import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 
@@ -44,7 +44,7 @@ export class AchievementsComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private lrDropboxService: LocalRepositoryDropboxService,
     private lrJsonServerService: LocalRepositoryJsonServerService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(

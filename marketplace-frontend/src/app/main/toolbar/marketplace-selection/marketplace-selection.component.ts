@@ -10,7 +10,7 @@ import { MessageService } from "../../content/_service/message.service";
 import { ArrayService } from "../../content/_service/array.service";
 import { Subscription } from "rxjs";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
 
 @Component({
   selector: "fuse-marketplace-selection",
@@ -30,7 +30,7 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private loginService: LoginService,
     private coreUserService: CoreUserService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadMarketplaces();

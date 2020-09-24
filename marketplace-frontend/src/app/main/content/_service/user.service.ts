@@ -35,15 +35,4 @@ export class UserService {
     return this.http.get(`${marketplace.url}/user/username/${name}`);
   }
 
-  getUserProfileImage(user: User) {
-    if (user === null) {
-      return "/assets/images/avatars/profile.jpg";
-    }
-    const ret = this.imageService.getImgSourceFromImageWrapper(user.image);
-    if (ret == null) {
-      return "/assets/images/avatars/profile.jpg";
-    } else {
-      return ret;
-    }
-  }
 }

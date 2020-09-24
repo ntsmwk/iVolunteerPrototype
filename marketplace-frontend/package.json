@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json --disable-host-check",
+    "startprod": "ng serve --prod --host 0.0.0.0 --proxy-config proxy.conf.json --disable-host-check",
     "start-hmr": "ng serve --configuration hmr -sm=false --host 0.0.0.0 --proxy-config proxy.conf.json",
     "start-hmr-sourcemaps": "ng serve --hmr -e=hmr --host 0.0.0.0 --proxy-config proxy.conf.json",
     "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev",
@@ -40,7 +41,7 @@
     "@ngrx/store": "8.5.2",
     "@ngrx/store-devtools": "8.5.2",
     "@ngx-translate/core": "11.0.1",
-    "@swimlane/ngx-charts": "13.0.0",
+    "@swimlane/ngx-charts": "13.0.1",
     "@swimlane/ngx-datatable": "16.0.2",
     "@swimlane/ngx-dnd": "8.1.0",
     "@types/mxgraph": "github:lgleim/mxgraph-typings",

@@ -1,11 +1,12 @@
 import { NgModule } from "@angular/core";
 
 import { AlertComponent } from "./alert.component";
+import { FuseSharedModule } from "@fuse/shared.module";
 
 @NgModule({
-  imports: [],
+  imports: [FuseSharedModule],
   exports: [AlertComponent],
   declarations: [AlertComponent],
-  providers: [],
+  providers: []
 })
 export class AlertModule {}

@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.api.standard.model.personrole;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
 public class PersonRoleService {
@@ -33,16 +33,16 @@ public class PersonRoleService {
 	private void savePersonRole(ClassDefinition personRoleClassDefinition, PersonRole personRole) {
 		// @formatter:off
 		ClassInstance personRoleClassInstance = classDefinition2InstanceMapper.toTarget(personRoleClassDefinition);
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleID")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleID(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleType")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleType(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleName(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleDescription")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleDescription(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("organisationID")).forEach(p -> p.setValues(Lists.asList(personRole.getOrganisationID(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("organisationName")).forEach(p -> p.setValues(Lists.asList(personRole.getOrganisationName(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Lists.asList(personRole.getDateFrom(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> p.setValues(Lists.asList(personRole.getDateTo(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personRole.getiVolunteerSource(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personRole.getPersonID(), new Object[0])));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleID")).forEach(p -> p.setValues(Collections.singletonList(personRole.getRoleID())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleType")).forEach(p -> p.setValues(Collections.singletonList(personRole.getRoleType())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Collections.singletonList(personRole.getRoleName())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleDescription")).forEach(p -> p.setValues(Collections.singletonList(personRole.getRoleDescription())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("organisationID")).forEach(p -> p.setValues(Collections.singletonList(personRole.getOrganisationID())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("organisationName")).forEach(p -> p.setValues(Collections.singletonList(personRole.getOrganisationName())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Collections.singletonList(personRole.getDateFrom())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> p.setValues(Collections.singletonList(personRole.getDateTo())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Collections.singletonList(personRole.getiVolunteerSource())));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Collections.singletonList(personRole.getPersonID())));
 		
 		personRoleClassInstance.setUserId(userMappingService.getByExternalUserId(personRole.getPersonID()).getiVolunteerUserId());
 

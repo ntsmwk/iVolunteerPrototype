@@ -6,7 +6,7 @@ import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { User, UserRole } from 'app/main/content/_model/user';
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from 'app/main/content/_service/core-user.service';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
 
 export interface AddHelpseekerDialogData {

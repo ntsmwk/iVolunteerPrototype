@@ -100,7 +100,7 @@
                   <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <span>{{element.name}} </span>
-                    
+
                   </mat-cell>
 
                 </ng-container>
@@ -109,7 +109,7 @@
                   <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <span>{{element.taskType1}} </span>
-                    
+
                   </mat-cell>
 
                 </ng-container>
@@ -128,7 +128,7 @@
                   <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <span>{{element.dateFrom | date:'dd.MM.yyyy hh:mm'}} </span>
-                    
+
                   </mat-cell>
                 </ng-container>
 
@@ -137,7 +137,7 @@
                   <mat-cell *matCellDef="let element">
 
                     <span>{{element.duration}} h</span>
-                   
+
                   </mat-cell>
                 </ng-container>
 
@@ -146,7 +146,7 @@
                   <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <span>{{element.hash}}</span>
-                    
+
                   </mat-cell>
                 </ng-container>
 
@@ -221,7 +221,7 @@
                   <h2 class="title">Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf</h2>
                 </div>
                 <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                  [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+                  [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations">
                 </ngx-charts-area-chart-stacked>
               </div>
             </div>

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { Tenant } from 'app/main/content/_model/tenant';
-import { CoreUserService } from 'app/main/content/_service/core-user.serivce';
+import { CoreUserService } from 'app/main/content/_service/core-user.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { FileInput } from 'ngx-material-file-input';

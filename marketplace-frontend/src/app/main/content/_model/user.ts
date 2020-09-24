@@ -29,7 +29,7 @@ export class User {
   registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
-  image: ImageWrapper;
+  // image: ImageWrapper;
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;

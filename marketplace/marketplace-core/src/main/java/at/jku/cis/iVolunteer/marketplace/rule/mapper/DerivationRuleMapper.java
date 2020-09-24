@@ -32,6 +32,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		dto.setName(source.getName());
 		dto.setContainer(source.getContainer());
 		dto.setActive(source.getActive());
+		dto.setFireNumOfTimes(source.getFireNumOfTimes());
 		dto.setGeneralConditions(generalConditionMapper.toTargets(source.getGeneralConditions(), source.getTenantId()));
 		if (!source.getConditions().isEmpty()) {
 			// only one multiple condition is set --> in frontend only conjunctions possible so far
@@ -61,6 +62,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		derivationRule.setTenantId(target.getTenantId());
 		derivationRule.setContainer(target.getContainer());
 		derivationRule.setActive(target.getActive());
+		derivationRule.setFireNumOfTimes(1);
 		derivationRule.setGeneralConditions(generalConditionMapper.toSources(target.getGeneralConditions()));
 		if (target.getConditions().size() > 0) {
 			ArrayList<Condition> conditions = new ArrayList<Condition>();

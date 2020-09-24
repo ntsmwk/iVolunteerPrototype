@@ -84,6 +84,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deleteRelationships = true;
     this.clickToDeleteMode = false;
     this.quickEditMode = false;
+    console.log(this.globalInfo);
   }
 
   ngAfterContentInit() {

@@ -10,7 +10,7 @@ import { LocalRepositoryDropboxService } from "./local-repository-dropbox.servic
 import { LocalRepositoryNextcloudService } from "./local-repository-nextcloud.service";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class LoginService {
   constructor(
@@ -42,7 +42,7 @@ export class LoginService {
   getLoggedIn() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.user);
         subscriber.complete();
       });
@@ -54,12 +54,12 @@ export class LoginService {
   getLoggedInUserRole() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.userRole);
         subscriber.complete();
       });
     } else {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(UserRole.NONE);
         subscriber.complete();
       });
@@ -80,7 +80,7 @@ export class LoginService {
             localStorage.setItem("refreshToken", refreshToken);
           }
         },
-        (error) => {
+        error => {
           this.logout();
         }
       )
@@ -96,13 +96,14 @@ export class LoginService {
   }
 
   getGlobalInfo() {
-    const observable = new Observable((subscriber) => {
+    const observable = new Observable(subscriber => {
       let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
       if (globalInfo) {
         subscriber.next(globalInfo);
         subscriber.complete();
       } else {
-        this.httpClient.get(`/core/login/globalInfo`);
+        // TODO @
+        this.httpClient.get(`/core/login/globalInfo/`);
       }
     });
     return observable;

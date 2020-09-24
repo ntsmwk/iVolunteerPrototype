@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum PropertyType {
 	TEXT("TEXT"), LONG_TEXT("LONG_TEXT"), WHOLE_NUMBER("WHOLE_NUMBER"), FLOAT_NUMBER("FLOAT_NUMBER"), BOOL("BOOL"), 
-	DATE("DATE"), ENUM("ENUM"), TUPLE("TUPLE"), TREE("TREE"); 
+	DATE("DATE"), ENUM("ENUM"), TUPLE("TUPLE"), TREE("TREE"), LOCATION("LOCATION"); 
 
 	private final String type;
 

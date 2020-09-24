@@ -5,7 +5,7 @@ import { Dropbox } from "dropbox";
 import { LoginService } from "app/main/content/_service/login.service";
 import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { CoreUserService } from "app/main/content/_service/core-user.serivce";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
 import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 import { ClassInstance } from "app/main/content/_model/meta/class";
