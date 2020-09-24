@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
+import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserImage;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -24,7 +25,10 @@ public class CoreUserImageController {
 
 	@Autowired private CoreUserImageRepository userImageRepository;
 	@Autowired private CoreUserService coreUserService;
+	@Autowired private LoginService loginService;
 
+	
+	
 	@GetMapping("/user/image/all")
 	private List<UserImage> getAll() {
 		return userImageRepository.findAll();
@@ -70,6 +74,13 @@ public class CoreUserImageController {
 	@GetMapping("/user/image/{userId}")
 	private UserImage getByUserId(@PathVariable("userId") String userId) {
 		return this.userImageRepository.findOne(userId);
+	}
+	
+
+	@GetMapping("/user/image")
+	private UserImage getByUserId() {
+		CoreUser user = loginService.getLoggedInUser();
+		return this.userImageRepository.findOne(user.getId());
 	}
 
 	@GetMapping("/user/image/multiple")

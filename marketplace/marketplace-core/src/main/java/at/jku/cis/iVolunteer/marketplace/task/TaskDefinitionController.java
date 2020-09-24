@@ -13,7 +13,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
 @Controller
-@RequestMapping("tasktemplate")
+@RequestMapping("/tasktemplate")
 public class TaskDefinitionController {
 
 	@Autowired private ClassDefinitionService classDefinitionService;

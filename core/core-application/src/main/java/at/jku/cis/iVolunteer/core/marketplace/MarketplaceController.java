@@ -18,7 +18,7 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @RestController
-@RequestMapping("marketplace")
+@RequestMapping("/marketplace")
 public class MarketplaceController {
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private LoginService loginService;
@@ -33,14 +33,11 @@ public class MarketplaceController {
 		CoreUser user = loginService.getLoggedInUser();
 		return user.getRegisteredMarketplaceIds();
 	}
-	
-//	OTHER ENDPOINTS
-	
+
 	@GetMapping("{marketplaceId}")
 	public Marketplace findById(@PathVariable("marketplaceId") String marketplaceId) {
 		return marketplaceService.findById(marketplaceId);
 	}
-
 
 	@PostMapping
 	public Marketplace createMarketplace(@RequestBody Marketplace marketplace) {
