@@ -60,7 +60,7 @@ public class CoreUserController {
 		return coreUserService.getByUserName(username);
 	}
 
-	@GetMapping("/find-by-ids")
+	@GetMapping("/user/find-by-ids")
 	private List<CoreUser> getByUserId(@RequestBody List<String> userIds) {
 		return coreUserService.getByUserId(userIds);
 	}
