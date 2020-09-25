@@ -30,17 +30,13 @@ import at.jku.cis.iVolunteer.core.service.ParticipantDetailsService;
 
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 
-
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private ParticipantDetailsService participantDetailsService;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired private ParticipantDetailsService participantDetailsService;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
 
 	private JWTTokenProvider tokenProvider = new JWTTokenProvider();
 
