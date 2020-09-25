@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.List;
 
+import org.glassfish.hk2.api.UseProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.user.User;
 
 @Controller
-@RequestMapping("task")
+@RequestMapping("/task")
 public class TaskInstanceController {
 
 	@Autowired private ClassInstanceService classInstanceService;
@@ -56,7 +57,7 @@ public class TaskInstanceController {
 		return this.classInstanceService.saveClassInstance(task);
 	}
 
-	@PutMapping("/{taskId}")
+	@PostMapping("/{taskId}")
 	public ClassInstance updateTask(@PathVariable String taskId, @RequestBody ClassInstance task) {
 //		TODO Alex Mapper
 		return this.classInstanceService.saveClassInstance(task);

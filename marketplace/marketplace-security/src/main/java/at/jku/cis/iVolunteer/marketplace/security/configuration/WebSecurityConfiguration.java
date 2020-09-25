@@ -27,27 +27,31 @@ import at.jku.cis.marketplace.security.service.ParticipantDetailsService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private ParticipantDetailsService participantDetailsService;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired private ParticipantDetailsService participantDetailsService;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
+
 		http.cors().and().csrf().disable();
-		http.authorizeRequests().antMatchers("/api/**").permitAll().antMatchers("/push-task-from-api").permitAll()
-				.antMatchers("/fahrtenspange-fake").permitAll().antMatchers("/reset").permitAll()
-				.antMatchers("/create-reset-state").permitAll().antMatchers("/init/**").permitAll()
-				.antMatchers("/volunteer").permitAll().antMatchers("/helpseeker").permitAll().antMatchers("/user/**")
-				.permitAll().antMatchers("/rule/engine/**").permitAll().antMatchers("/matching/test").permitAll()
-				.antMatchers("/tasktemplate/**").permitAll() //TODO TEST REMOVE ALEX
+		http.authorizeRequests()
+				.antMatchers("/v2/api-docs").permitAll() 
+				.antMatchers("/swagger-resources").permitAll() 
+				.antMatchers("/swagger-ui.html").permitAll() 
+				.antMatchers("/api/**").permitAll()
+				.antMatchers("/init/**").permitAll()
+				.antMatchers("/user/register").permitAll()
+//				.antMatchers("/user/subscribe").permitAll()
+//				.antMatchers("/user/unsubscribe").permitAll()
+				.antMatchers("/rule/engine/**").permitAll()
 				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+		//@formatter:on
 	}
 
 	@Override
