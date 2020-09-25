@@ -21,13 +21,11 @@ public class CoreLoginService {
 		if (user != null) {
 			user.setPassword(null);
 		}
-
 		return user;
 	}
 
 	private CoreUser findByUsername(String username) {
 		return coreUserRepository.findByUsername(username);
-
 	}
 
 	private Authentication determineAuthentication() {

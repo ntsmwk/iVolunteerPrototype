@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { LocalRepositoryJsonServerService } from "./local-repository-jsonServer.service";
 import { LocalRepositoryDropboxService } from "./local-repository-dropbox.service";
 import { LocalRepositoryNextcloudService } from "./local-repository-nextcloud.service";
+import { Marketplace } from '../_model/marketplace';
 
 @Injectable({
   providedIn: "root"
@@ -20,7 +21,7 @@ export class LoginService {
     private lrDropboxService: LocalRepositoryDropboxService,
     private lrJsonServerService: LocalRepositoryJsonServerService,
     private lrNextcloudService: LocalRepositoryNextcloudService
-  ) {}
+  ) { }
 
   login(username: string, password: string) {
     return this.http.post(
@@ -129,4 +130,5 @@ export class LoginService {
         return this.lrNextcloudService;
     }
   }
+
 }

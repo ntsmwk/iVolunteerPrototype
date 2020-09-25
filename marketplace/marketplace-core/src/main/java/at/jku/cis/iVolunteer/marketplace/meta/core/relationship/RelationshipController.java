@@ -33,10 +33,15 @@ public class RelationshipController {
 	}
 
 	@PutMapping("/meta/core/relationship/multiple")
-	List<RelationshipDTO> getRelationshipsById(@RequestBody List<String> ids) {
+	public List<RelationshipDTO> getRelationshipsByIdAsDTO(@RequestBody List<String> ids) {
+		List<Relationship> relationships = getRelationshipsById(ids);
+		return relationshipMapper.toTargets(relationships);
+	}
+	
+	public List<Relationship> getRelationshipsById(List<String> ids) {
 		List<Relationship> relationships = new ArrayList<Relationship>();
 		relationshipRepository.findAll(ids).forEach(relationships::add);
-		return relationshipMapper.toTargets(relationships);
+		return relationships;
 	}
 
 	@PutMapping("/meta/core/relationship/add-or-update")

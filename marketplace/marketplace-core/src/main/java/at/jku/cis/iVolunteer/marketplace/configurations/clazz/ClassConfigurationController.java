@@ -50,7 +50,7 @@ public class ClassConfigurationController {
 	}
 
 	@GetMapping("class-configuration/all/tenant/{tenantId}")
-	private List<ClassConfiguration> getClassConfigurationsByTenantId(@PathVariable("tenantId") String tenantId) {
+	public List<ClassConfiguration> getClassConfigurationsByTenantId(@PathVariable("tenantId") String tenantId) {
 		return classConfigurationRepository.findByTenantId(tenantId);
 	}
 
@@ -116,7 +116,7 @@ public class ClassConfigurationController {
 				.forEach(classDefinitions::add);
 		
 		if (classDefinitions != null) {
-//			classDefinitions = updateClassDefinitions(classDefinitions, classConfiguration.getId());
+			classDefinitions = updateClassDefinitions(classDefinitions, classConfiguration);
 		}
 		
 		classDefinitionRepository.save(classDefinitions);		
@@ -134,12 +134,19 @@ public class ClassConfigurationController {
 		return classConfiguration;
 	}
 
-//	private List<ClassDefinition> updateClassDefinitions(List<ClassDefinition> classDefinitions, String classConfigurationId) {
-//				
-//		for (ClassDefinition cd : classDefinitions) {
-//			cd.setConfigurationId(classConfigurationId);
-//		}
-//	}
+	private List<ClassDefinition> updateClassDefinitions(List<ClassDefinition> classDefinitions, ClassConfiguration classConfiguration) {
+				
+		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(classConfiguration.getId());
+		}
+		
+		List<Relationship> relationships = new ArrayList<>();
+		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+		
+		collectionService.assignLevelsToClassDefinitions(classDefinitions, relationships);
+		
+		return classDefinitions;
+	}
 	
 	@PutMapping("class-configuration/{id}/save-meta")
 	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {

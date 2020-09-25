@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 
 @Component({
   selector: "app-configurator",
@@ -11,7 +12,7 @@ export class ConfiguratorComponent implements OnInit {
   globalInfo: GlobalInfo;
   loaded = false;
 
-  constructor(private loginService: LoginService
+  constructor(private loginService: LoginService, private classDefService: ClassDefinitionService
   ) { }
 
   async ngOnInit() {
@@ -19,7 +20,6 @@ export class ConfiguratorComponent implements OnInit {
       await this.loginService.getGlobalInfo().toPromise()
     );
 
-    console.log(this.globalInfo);
     this.loaded = true;
   }
 

@@ -11,7 +11,7 @@ import { FormConfigurationPreviewRequest } from "app/main/content/_model/meta/fo
   providedIn: "root"
 })
 export class ClassDefinitionService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllClassDefinitions(marketplace: Marketplace, tenantId: string) {
     return this.http.get(
@@ -126,4 +126,5 @@ export class ClassDefinitionService {
       params
     );
   }
+
 }
