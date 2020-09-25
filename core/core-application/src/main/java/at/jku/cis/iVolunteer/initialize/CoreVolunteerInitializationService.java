@@ -27,10 +27,10 @@ import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.image.ImageWrapper;
+import at.jku.cis.iVolunteer.model.image.UserImage;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
-import at.jku.cis.iVolunteer.model.user.UserImage;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service

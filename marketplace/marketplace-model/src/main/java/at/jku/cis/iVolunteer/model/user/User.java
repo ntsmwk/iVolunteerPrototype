@@ -8,15 +8,13 @@ import org.springframework.data.annotation.Id;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 
 public class User {
-	@Id
-	private String id;
+	@Id private String id;
 	private String username;
 	private String password;
 	private String loginEmail;
-	
+
 	private String formOfAddress;
 	private String titleBefore;
 	private String firstname;
@@ -36,6 +34,8 @@ public class User {
 	private List<String> phoneNumbers;
 	private List<String> websites;
 	private List<String> emails;
+
+	private String imageId;
 
 //	private ImageWrapper image;
 
@@ -68,7 +68,7 @@ public class User {
 		this.phoneNumbers = coreUser.getPhoneNumbers();
 		this.websites = coreUser.getWebsites();
 		this.emails = coreUser.getEmails();
-//		this.image = coreUser.getImage();
+		this.imageId = coreUser.getImageId();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
@@ -170,14 +170,6 @@ public class User {
 	public void setOrganizationPosition(String organizationPosition) {
 		this.organizationPosition = organizationPosition;
 	}
-
-//	public ImageWrapper getImage() {
-//		return image;
-//	}
-//
-//	public void setImage(ImageWrapper image) {
-//		this.image = image;
-//	}
 
 	public List<String> getLocations() {
 		return locations;
@@ -300,6 +292,14 @@ public class User {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 
 }
