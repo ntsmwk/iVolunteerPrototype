@@ -27,6 +27,7 @@ public class ImageController {
 	@Autowired private UserImageRepository userImageRepository;
 	@Autowired private LoginService loginService;
 	@Autowired private CoreUserService coreUserService;
+	@Autowired private ImageRepository imageRepository;
 
 	@GetMapping("/image/{imageId}")
 	private Image findByImageId(@PathVariable String imageId) {
@@ -34,14 +35,11 @@ public class ImageController {
 		Image image = this.imageService.findByImageId(imageId);
 		if (image instanceof UserImage) {
 			String imageUserId = ((UserImage) image).getUserId();
-			if (imageUserId != null && imageUserId.equals(loggedInUser.getId())) {
-				return image;
-			} else {
+			if (imageUserId == null || !imageUserId.equals(loggedInUser.getId())) {
 				return null;
 			}
-		} else {
-			return image;
 		}
+		return image;
 	}
 
 	@GetMapping("/image/role/{role}/tenant/{tenantId}")
@@ -52,31 +50,31 @@ public class ImageController {
 		return getByUserIds(userIds);
 	}
 
-	@GetMapping("/user/image/{userId}")
+	@GetMapping("/image/user/{userId}")
 	public List<UserImage> getByUserId(@PathVariable("userId") String userId) {
 		return this.userImageRepository.findByUserId(userId);
 	}
 
-	@GetMapping("/image/multiple")
-	public List<UserImage> getByUserIds(@RequestBody List<String> userIds) {
+	
+	@PostMapping("/image/new")
+	public Image addNewImage(@RequestBody Image image) {
+		return imageRepository.save(image);
+	}
+
+	@PutMapping("/image/update")
+	private Image updateUserImage(@RequestBody Image image) {
+		return imageRepository.save(image);
+	}
+
+	@DeleteMapping("/image/{imageId}")
+	private void deleteUserImage(@PathVariable("imageId") String imageId) {
+		imageRepository.delete(imageId);
+	}
+	
+	private List<UserImage> getByUserIds(@RequestBody List<String> userIds) {
 		List<UserImage> images = new ArrayList<>();
 		userImageRepository.findAll(userIds).forEach(images::add);
 		return images;
-	}
-
-	@PostMapping("/user/image/new")
-	public UserImage addNewUserImage(@RequestBody UserImage userImage) {
-		return userImageRepository.save(userImage);
-	}
-
-	@PutMapping("/user/image/update")
-	private UserImage updateUserImage(@RequestBody UserImage userImage) {
-		return userImageRepository.save(userImage);
-	}
-
-	@DeleteMapping("/user/image/{userId}")
-	private void deleteUserImage(@PathVariable("userId") String userId) {
-		userImageRepository.delete(userId);
 	}
 
 	private List<String> getUserIdsFromUsers(List<CoreUser> users) {

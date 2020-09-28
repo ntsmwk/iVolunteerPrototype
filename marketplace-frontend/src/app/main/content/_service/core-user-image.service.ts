@@ -9,26 +9,24 @@ import { isNullOrUndefined } from "util";
 export class CoreUserImageService {
   constructor(private http: HttpClient, private imageService: ImageService) {}
 
-  findAllByRoleAndTenantId(tenantId: string, role: UserRole) {
-    return this.http.get(
-      `/core/user/image/all/role/${role}/tenant/${tenantId}`
-    );
+  findByRoleAndTenantId(tenantId: string, role: UserRole) {
+    return this.http.get(`/core/image/role/${role}/tenant/${tenantId}`);
   }
 
   findByUserId(userId: string) {
-    return this.http.get(`/core/user/image/${userId}`);
+    return this.http.get(`/core/image/user/${userId}`);
   }
 
   createUserImage(userImage: UserImage) {
-    return this.http.post(`/core/user/image/new`, userImage);
+    return this.http.post(`/core/image/new`, userImage);
   }
 
   updateUserImage(userImage: UserImage) {
-    return this.http.put(`/core/user/image/update`, userImage);
+    return this.http.put(`/core/image/update`, userImage);
   }
 
   deleteUserImage(userId: string) {
-    return this.http.delete(`/core/user/image/${userId}`);
+    return this.http.delete(`/core/image/${userId}`);
   }
 
   getUserProfileImage(userImage: UserImage) {

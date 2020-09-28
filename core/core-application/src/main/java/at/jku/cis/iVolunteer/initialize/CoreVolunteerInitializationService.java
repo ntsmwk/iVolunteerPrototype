@@ -113,7 +113,7 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				coreUserImageController.addNewUserImage(
+				coreUserImageController.addNewImage(
 						new UserImage(volunteer.getId(), new ImageWrapper("data:image/png;base64", binaryData)));
 			} catch (IOException e) {
 				e.printStackTrace();
