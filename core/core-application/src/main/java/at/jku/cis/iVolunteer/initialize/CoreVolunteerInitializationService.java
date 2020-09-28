@@ -10,19 +10,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import at.jku.cis.iVolunteer.core.image.ImageController;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
-import at.jku.cis.iVolunteer.core.user.image.CoreUserImageController;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -30,7 +28,6 @@ import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.image.UserImage;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
-import at.jku.cis.iVolunteer.model.user.LocalRepositoryLocation;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -51,7 +48,7 @@ public class CoreVolunteerInitializationService {
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private TenantRepository coreTenantRepository;
 	@Autowired private CoreUserService coreUserService;
-	@Autowired CoreUserImageController coreUserImageController;
+	@Autowired private ImageController imageController;
 
 //	"/img/pstarzer.jpg"
 	public void initVolunteers() {
@@ -113,7 +110,7 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				coreUserImageController.addNewImage(
+				imageController.addNewImage(
 						new UserImage(volunteer.getId(), new ImageWrapper("data:image/png;base64", binaryData)));
 			} catch (IOException e) {
 				e.printStackTrace();
