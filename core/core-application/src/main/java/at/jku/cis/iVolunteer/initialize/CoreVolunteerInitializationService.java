@@ -144,11 +144,4 @@ public class CoreVolunteerInitializationService {
 				.forEach(v -> coreUserService.registerToMarketplace(v.getId(), mp.getId(), ""));
 	}
 
-	// private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
-	// Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
-	//
-	// if (mp != null) {
-	// coreVolunteerService.registerOrUpdateVolunteer("", volunteer, mp);
-	// }
-	// }
 }
