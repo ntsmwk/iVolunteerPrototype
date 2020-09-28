@@ -210,12 +210,12 @@ public class ClassConfigurationController {
 		
 		FlatPropertyDefinition imageLinkProperty = properties.stream().filter(p -> p.getName().equals("Description")).findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(imageLinkProperty));
-		
-		FlatPropertyDefinition descriptionProperty = properties.stream().filter(p -> p.getName().equals("Image Link")).findFirst().get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(descriptionProperty));
-		
-		FlatPropertyDefinition expiredProperty = properties.stream().filter(p -> p.getName().equals("Expired")).findFirst().get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
+//		
+//		FlatPropertyDefinition descriptionProperty = properties.stream().filter(p -> p.getName().equals("Image Link")).findFirst().get();
+//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(descriptionProperty));
+//		
+//		FlatPropertyDefinition expiredProperty = properties.stream().filter(p -> p.getName().equals("Expired")).findFirst().get();
+//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
 	
 		
 		
@@ -323,8 +323,8 @@ public class ClassConfigurationController {
 		FlatPropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("TaskType3")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
 
-		FlatPropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
+//		FlatPropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
+//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
 
 		FlatPropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("Rank")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(rank));

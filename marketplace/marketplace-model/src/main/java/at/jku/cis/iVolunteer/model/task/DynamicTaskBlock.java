@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.model.task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskBlock {
+public class DynamicTaskBlock {
 	
 	String title;
 	List<TaskField> fields = new ArrayList<>();

@@ -32,6 +32,7 @@ public class PropertyInstance<T> {
 	
 	boolean visible;
 	int tabId;
+	int level;
 
 	public PropertyInstance() {
 	}
@@ -138,6 +139,14 @@ public class PropertyInstance<T> {
 
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	@Override

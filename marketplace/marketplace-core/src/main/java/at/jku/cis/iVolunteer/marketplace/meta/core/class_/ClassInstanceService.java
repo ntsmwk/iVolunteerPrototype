@@ -37,7 +37,6 @@ public class ClassInstanceService {
 	public ClassInstance getClassInstance(User volunteer, String classDefinitionId, String tenantId) {
 		return classInstanceRepository
 				.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), classDefinitionId, tenantId).stream()
-			
 				.findFirst().orElse(null);
 	}
 	public ClassInstance getClassInstanceById(String taskId) {
@@ -74,6 +73,16 @@ public class ClassInstanceService {
 	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId){
 		return classInstanceRepository.getByClassArchetypeAndUserId(classArchetype, userId);
 	}
+	
+	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed) {
+		return classInstanceRepository.getByClassArchetypeAndUserIdAndSubscribed(classArchetype, userId, subscribed);
+	}
+	
+	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype classArchetype, String userId, String tenantId, boolean subscribed) {
+		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(classArchetype, tenantId, userId, subscribed);
+
+	}
+	
 	
 
 	public List<ClassInstance> filterInstancesByPropertyCriteria(User volunteer, String classDefinitionId,

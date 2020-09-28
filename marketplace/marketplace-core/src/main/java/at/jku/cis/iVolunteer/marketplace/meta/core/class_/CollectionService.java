@@ -108,7 +108,11 @@ public class CollectionService {
 //	}
 
 	List<ClassDefinition> getAndUpdateClassDefinitions(ClassDefinition root, int currentLevel, List<ClassDefinition> classDefinitions, List<Relationship> allRelationships) {
-		root.setLevel(currentLevel);		
+		root.setLevel(currentLevel);
+		
+		for (ClassProperty<Object> p : root.getProperties()) {
+			p.setLevel(currentLevel);
+		}
 		
 		Stack<Relationship> stack = new Stack<Relationship>();
 		
