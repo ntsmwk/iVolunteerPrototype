@@ -53,14 +53,8 @@ public class CollectionService {
 		if (root == null) {
 			return null;
 		}
-
 		
-		List<ClassDefinition> ret = getAndUpdateClassDefinitions(root, 0, -1, classDefinitions, relationships);
-		
-		for (ClassDefinition r : ret) {
-			System.out.println(r.getLevel() + ": " + r.getName());
-		}
-		
+		List<ClassDefinition> ret = getAndUpdateClassDefinitions(root, 0, classDefinitions, relationships);
 		
 		return ret;
 	}
@@ -113,9 +107,14 @@ public class CollectionService {
 //		return String.join("", pathArray);
 //	}
 
-	List<ClassDefinition> getAndUpdateClassDefinitions(ClassDefinition root, int currentLevel, int previousLevel, List<ClassDefinition> classDefinitions, List<Relationship> relationships) {
+	List<ClassDefinition> getAndUpdateClassDefinitions(ClassDefinition root, int currentLevel, List<ClassDefinition> classDefinitions, List<Relationship> allRelationships) {
+		root.setLevel(currentLevel);		
+		
 		Stack<Relationship> stack = new Stack<Relationship>();
+		
+		List<Relationship> relationships = allRelationships.stream().filter(r -> r.getSource().equals(root.getId())).collect(Collectors.toList());
 
+		
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
 
@@ -124,19 +123,12 @@ public class CollectionService {
 		}
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
-			ClassDefinition classDefinition = classDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().orElse(null);
+			ClassDefinition classDefinition = classDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();
 			
-			if (classDefinition == null) {
-				continue;
-			}
 			
-			int nextLevel = 0;
+			int nextLevel = currentLevel + 1;
 			
-			if (previousLevel > 0) {
-				nextLevel = currentLevel + 1;
-			}
-			
-			this.getAndUpdateClassDefinitions(classDefinition, nextLevel, currentLevel, classDefinitions, relationships);
+			this.getAndUpdateClassDefinitions(classDefinition, nextLevel, classDefinitions, allRelationships);
 		}
 		return classDefinitions;
 	}
