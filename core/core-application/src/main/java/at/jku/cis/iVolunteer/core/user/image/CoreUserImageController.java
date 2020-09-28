@@ -26,40 +26,6 @@ public class CoreUserImageController {
 	@Autowired private CoreUserImageRepository userImageRepository;
 	@Autowired private CoreUserService coreUserService;
 
-	
-	
-	@GetMapping("/user/image/all")
-	private List<UserImage> getAll() {
-		return userImageRepository.findAll();
-	}
-
-	@GetMapping("/user/image/tenant/{tenantId}")
-	private List<UserImage> getAllByTenantId(@PathVariable("tenantId") String tenantId) {
-		List<CoreUser> users = coreUserService.getAllByTenantId(tenantId);
-		if (users == null) { return null;}
-		
-		List<String> userIds = getUserIdsFromUsers(users);
-		return getByUserIds(userIds);
-	}
-
-	@GetMapping("/user/image/role/{role}")
-	private List<UserImage> getAllByUserRole(@PathVariable("role") UserRole userRole) {
-		List<CoreUser> users = coreUserService.getAllByUserRole(userRole);
-		if (users == null) {return null;}	
-		
-		List<String> userIds = getUserIdsFromUsers(users);
-		return getByUserIds(userIds);
-	}
-
-	@PutMapping("/user/image/roles")
-	private List<UserImage> getAllByUserRoles(@RequestBody List<UserRole> roles, @RequestParam("includeNoRole") boolean includeNoRole) {
-		List<CoreUser> users = coreUserService.getAllByUserRoles(roles, includeNoRole);
-		if (users == null) {return null;}	
-		
-		List<String> userIds = getUserIdsFromUsers(users);
-		return getByUserIds(userIds);
-	}
-
 	@GetMapping("/user/image/role/{role}/tenant/{tenantId}")
 	private List<UserImage> getAllByTenantIdAndUserRole(@PathVariable("role") UserRole userRole,
 			@PathVariable("tenantId") String tenantId) {
