@@ -90,9 +90,6 @@ public class CoreUserService {
 		List<CoreUser> returnUsers = new ArrayList<>();
 		List<CoreUser> allUsers = coreUserRepository.findAll();
 
-		if (allUsers == null) {
-			return returnUsers;
-		}
 		for (CoreUser user : allUsers) {
 			if (user.getSubscribedTenants().stream()
 					.filter(st -> st.getTenantId().equals(tenantId) && st.getRole().equals(userRole)).findFirst()
