@@ -133,15 +133,24 @@ public class ClassInstanceToTaskInstanceMapper implements AbstractMapper<ClassIn
 	@Override
 	public ClassInstance toSource(TaskInstance target) {
 		if (target == null) { return null; }
-		ClassInstance classInstance = classInstanceService.getClassInstanceById(target.getRequired().getId());
+		
+		ClassInstance classInstance = new ClassInstance();
+
+		if (target.getRequired().getId() != null) {
+		 classInstance = classInstanceService.getClassInstanceById(target.getRequired().getId());
+		} 
 		User user = loginService.getLoggedInUser();
+		
 		
 		
 		//TODO DEBUG TESTING
 		user = new User();
 		user.setId("5f71ca22e5ccdd629ee45d47");
 		//--------
-		
+
+		if (user == null) {
+			return null;
+		}
 		
 		if (classInstance == null) {
 			classInstance = new ClassInstance();

@@ -37,12 +37,14 @@ public class TaskInstanceController {
 	@GetMapping("/tenant/{tenantId}/subscribed")
 	public List<TaskInstance> getSubscribedTaskClassInstancesByTenantId(@PathVariable String tenantId) {
 		User user = loginService.getLoggedInUser();
-		
+	
 		//TODO DEBUG TESTING
 		user = new User();
 		user.setId("5f71ca22e5ccdd629ee45d47");
 		//--------
-		
+		if (user == null) {
+			return null;
+		}
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype.TASK, user.getId(), tenantId, true);
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
@@ -55,7 +57,9 @@ public class TaskInstanceController {
 		user = new User();
 		user.setId("5f71ca22e5ccdd629ee45d47");
 		//--------
-		
+		if (user == null) {
+			return null;
+		}
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype.TASK, user.getId(), true);
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
