@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @RestController
 public class UserController {
-	@Autowired
-	private UserRepository userRepository;
+	@Autowired private UserRepository userRepository;
 
 	@GetMapping("/user/{id}")
 	private User findUserById(@PathVariable("id") String id) {
@@ -85,7 +85,7 @@ public class UserController {
 	}
 
 	@PostMapping("/user/register")
-	public User registerUserToMarketplace(@RequestBody User user) {
+	public User registerUserToMarketplace(@RequestBody CoreUser user) {
 		return userRepository.save(user);
 	}
 
