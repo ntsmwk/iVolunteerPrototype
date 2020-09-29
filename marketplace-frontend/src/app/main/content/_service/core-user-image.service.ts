@@ -17,18 +17,6 @@ export class CoreUserImageService {
     return this.http.get(`/core/image/user`);
   }
 
-  createUserImage(userImage: UserImage) {
-    return this.http.post(`/core/image/new`, userImage);
-  }
-
-  updateUserImage(userImage: UserImage) {
-    return this.http.put(`/core/image/update`, userImage);
-  }
-
-  deleteUserImage(userId: string) {
-    return this.http.delete(`/core/image/${userId}`);
-  }
-
   getUserProfileImage(userImage: UserImage) {
     if (isNullOrUndefined(userImage)) {
       return "/assets/images/avatars/profile.jpg";

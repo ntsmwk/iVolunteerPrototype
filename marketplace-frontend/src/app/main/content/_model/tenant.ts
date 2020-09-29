@@ -1,11 +1,11 @@
-import { ImageWrapper } from './image';
+import { ImageWrapper } from "./image";
 
 export class Tenant {
   id: string;
   name: string;
   description: string;
   homepage: string;
-  profileImage: ImageWrapper;
+  imageId: string;
   primaryColor: string;
   secondaryColor: string;
   marketplaceId: string;
@@ -14,7 +14,7 @@ export class Tenant {
   landingpageMessage: string;
   landingpageTitle: string;
   landingpageText: string;
-  landingpageImage: ImageWrapper;
+  landingpageImageId: string;
 
   public constructor(init?: Partial<Tenant>) {
     Object.assign(this, init);

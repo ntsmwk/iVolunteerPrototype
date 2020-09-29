@@ -12,6 +12,10 @@ public class Image {
 	public Image() {
 
 	}
+	
+	public Image(ImageWrapper imageWrapper) {
+		this.imageWrapper = imageWrapper;
+	}
 
 	public String getId() {
 		return id;
