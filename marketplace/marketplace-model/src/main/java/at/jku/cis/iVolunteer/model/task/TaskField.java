@@ -11,7 +11,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 public class TaskField {
 
 	String key;
-	Object value;
+	List<Object> values;
 	String label;
 	PropertyType type;
 	boolean required;
@@ -26,7 +26,7 @@ public class TaskField {
 	
 	public TaskField(ClassProperty<Object> classProperty) {
 		this.key = classProperty.getId();
-		this.value = null;
+		this.values = new ArrayList<>();
 		this.label = classProperty.getName();
 		this.type = classProperty.getType();
 		this.required = classProperty.isRequired();
@@ -37,7 +37,7 @@ public class TaskField {
 	
 	public TaskField(PropertyInstance<Object> propertyInstance) {
 		this.key = propertyInstance.getId();
-		this.value = propertyInstance.getValues();
+		this.values = propertyInstance.getValues();
 		this.label = propertyInstance.getName();
 		this.type = propertyInstance.getType();
 		this.required = propertyInstance.isRequired();
@@ -52,11 +52,11 @@ public class TaskField {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	public Object getValue() {
-		return value;
+	public List<Object> getValues() {
+		return values;
 	}
-	public void setValue(Object value) {
-		this.value = value;
+	public void setValues(List<Object> values) {
+		this.values = values;
 	}
 	public String getLabel() {
 		return label;

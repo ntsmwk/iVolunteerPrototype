@@ -5,19 +5,20 @@ import java.util.List;
 
 public class TaskInstance {
 
-	TaskBlock required;
-	List<TaskBlock> dynamic = new ArrayList<>();
+	RequiredTaskBlock required;
+	List<DynamicTaskBlock> dynamic = new ArrayList<>();
 	
-	public TaskBlock getRequired() {
+	
+	public RequiredTaskBlock getRequired() {
 		return required;
 	}
-	public void setRequired(TaskBlock required) {
+	public void setRequired(RequiredTaskBlock required) {
 		this.required = required;
 	}
-	public List<TaskBlock> getDynamic() {
+	public List<DynamicTaskBlock> getDynamic() {
 		return dynamic;
 	}
-	public void setDynamic(List<TaskBlock> dynamic) {
+	public void setDynamic(List<DynamicTaskBlock> dynamic) {
 		this.dynamic = dynamic;
 	}
 	

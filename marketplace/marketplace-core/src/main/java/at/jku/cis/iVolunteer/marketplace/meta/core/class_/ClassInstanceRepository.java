@@ -29,6 +29,12 @@ public interface ClassInstanceRepository extends HasTenantRepository<ClassInstan
 
 	List<ClassInstance> getByClassArchetypeAndUserIdAndTenantId(ClassArchetype classArchetype, String userId,
 			String tenantId);
-
+	
 	List<ClassInstance> getByClassArchetypeAndUserId(ClassArchetype classArchetype, String userId);
+	
+	List<ClassInstance> getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(ClassArchetype classArchetype, String tenantId, String userId, boolean subscribed);
+
+	List<ClassInstance> getByClassArchetypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed);
+
+	
 }

@@ -36,47 +36,35 @@ public class TaskDefinitionController {
 	@Autowired private RelationshipController relationshipController;
 	
 	@GetMapping("/tenant/{tenantId}")
-	public List<TaskDefinition> getTaskClassDefinitionsByTenantId(@PathVariable String tenantId){
-		//		TODO ALEX Mapper
-		
+	public List<TaskDefinition> getTaskClassDefinitionsByTenantId(@PathVariable String tenantId){		
 		List<ClassConfiguration> allTenantClassConfigurations = classConfigurationController.getClassConfigurationsByTenantId(tenantId);
 		List<TaskDefinition> ret = new ArrayList<>();
-		
 		
 		for (ClassConfiguration classConfiguration : allTenantClassConfigurations) {
 			List<ClassDefinition> allClassDefinitions = classDefinitionService.getClassDefinitonsById(classConfiguration.getClassDefinitionIds(), tenantId);
 			List<Relationship> allRelationships = relationshipController.getRelationshipsById(classConfiguration.getRelationshipIds());
-		
 			List<ClassDefinition> eligibleClassDefinitions = allClassDefinitions.stream()
 				.filter(cd -> cd.getClassArchetype().equals(ClassArchetype.TASK) && cd.getLevel() >= 1)
 				.collect(Collectors.toList());
-			
 			
 			for (ClassDefinition classDefinition : eligibleClassDefinitions) {
 				FormEntry formEntry = collectionService.aggregateFormEntry(classDefinition, new FormEntry(), allClassDefinitions, allRelationships, true);	
 				ret.add(formEntryToTaskDefinitionMapper.toTarget(formEntry));
 			}
-
 		}
-
 		return ret;
 	}
 	
 	@GetMapping("/tenant/{tenantId}/template/{templateId}")
-	public TaskDefinition getClassDefinition(@PathVariable("tenantId") String tenantId, @PathVariable("templateId") String templateId) {
-		System.out.println("works");
-		
+	public TaskDefinition getClassDefinition(@PathVariable("tenantId") String tenantId, @PathVariable("templateId") String templateId) {		
 		ClassDefinition currentClassDefinition = classDefinitionService.getClassDefinitionById(templateId, tenantId);
 		ClassConfiguration classConfiguration = classConfigurationController.getClassConfigurationById(currentClassDefinition.getConfigurationId());
 		List<ClassDefinition> allClassDefinitions = classDefinitionService.getClassDefinitonsById(classConfiguration.getClassDefinitionIds(), tenantId);
 		List<Relationship> allRelationships = relationshipController.getRelationshipsById(classConfiguration.getRelationshipIds());
 		
-		
-		
 		FormEntry formEntry = collectionService.aggregateFormEntry(currentClassDefinition, new FormEntry(), allClassDefinitions, allRelationships, true);	
 
-		return formEntryToTaskDefinitionMapper.toTarget(formEntry);
-		
+		return formEntryToTaskDefinitionMapper.toTarget(formEntry);	
 	}
 
 }

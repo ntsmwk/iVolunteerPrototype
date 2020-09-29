@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.List;
 
-import org.glassfish.hk2.api.UseProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,56 +10,79 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace._mapper.task.ClassInstanceToTaskInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.task.TaskInstance;
 import at.jku.cis.iVolunteer.model.user.User;
 
-@Controller
+@RestController
 @RequestMapping("/task")
 public class TaskInstanceController {
 
 	@Autowired private ClassInstanceService classInstanceService;
 	@Autowired private LoginService loginService;
+	@Autowired private ClassInstanceToTaskInstanceMapper classInstanceToTaskInstanceMapper;
 
 	@GetMapping("/tenant/{tenantId}")
-	public List<ClassInstance> getTaskClassInstanceByTenantId(@PathVariable String tenantId) {
-//		TODO ALEX Mapper
-		return classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK, tenantId);
+	public List<TaskInstance> getTaskClassInstancesByTenantId(@PathVariable String tenantId) {
+		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK, tenantId);
+		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
 
 	@GetMapping("/tenant/{tenantId}/subscribed")
-	public List<ClassInstance> getSubscribedTaskClassInstancesByTenantId(@PathVariable String tenantId) {
-//		TODO ALEX Mapper
+	public List<TaskInstance> getSubscribedTaskClassInstancesByTenantId(@PathVariable String tenantId) {
 		User user = loginService.getLoggedInUser();
-		return classInstanceService.getClassInstanceByArchetypeAndUserId(ClassArchetype.TASK, user.getId(), tenantId);
+	
+		//TODO DEBUG TESTING
+//		user = new User();
+//		user.setId("5f71ca22e5ccdd629ee45d47");
+		//--------
+		if (user == null) {
+			return null;
+		}
+		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype.TASK, user.getId(), tenantId, true);
+		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
 
 	@GetMapping("/subscribed")
-	public List<ClassInstance> getSubscribedTaskClassInstances(@PathVariable String tenantId) {
-//		TODO ALEX Mapper
+	public List<TaskInstance> getSubscribedTaskClassInstances() {
 		User user = loginService.getLoggedInUser();
-		return classInstanceService.getClassInstanceByArchetypeAndUserId(ClassArchetype.TASK, user.getId());
+		
+		//TODO DEBUG TESTING
+//		user = new User();
+//		user.setId("5f71ca22e5ccdd629ee45d47");
+		//--------
+		if (user == null) {
+			return null;
+		}
+		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype.TASK, user.getId(), true);
+		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
 
 	@GetMapping("/{taskId}")
-	public ClassInstance getTask(@PathVariable String taskId) {
-//		TODO Alex Mapper
-		return classInstanceService.getClassInstanceById(taskId);
+	public TaskInstance getTask(@PathVariable String taskId) {
+		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
+		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 
 	@PostMapping("/new")
-	public ClassInstance createTask(@RequestBody ClassInstance task) {
-//		TODO Alex Mapper
-		return this.classInstanceService.saveClassInstance(task);
+	public TaskInstance createTask(@RequestBody TaskInstance task) {
+		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
+		classInstance = classInstanceService.saveClassInstance(classInstance);
+		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 
 	@PostMapping("/{taskId}")
-	public ClassInstance updateTask(@PathVariable String taskId, @RequestBody ClassInstance task) {
-//		TODO Alex Mapper
-		return this.classInstanceService.saveClassInstance(task);
+	public TaskInstance updateTask(@PathVariable String taskId, @RequestBody TaskInstance task) {
+		task.getRequired().setId(taskId);
+		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
+		classInstance = classInstanceService.saveClassInstance(classInstance);
+		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 
 }

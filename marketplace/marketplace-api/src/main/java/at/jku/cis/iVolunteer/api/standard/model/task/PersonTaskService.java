@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.api.standard.model.task;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,9 @@ import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+
+
 
 @Service
 public class PersonTaskService {
@@ -27,19 +31,27 @@ public class PersonTaskService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
 	@Autowired private MarketplaceService marketplaceService;
+	
+	private static final ArrayList<String> LEVEL0_PROPERTIES = new ArrayList<String>(Arrays.asList((new String[] {"ID", "Name", "Description"})));
+	private static final ArrayList<String> LEVEL1_PROPERTIES = new ArrayList<String>(Arrays.asList((new String[] {"Starting Date", "End Date", "Location"})));
+	private static final ArrayList<String> LEVEL2_PROPERTIES = new ArrayList<String>(Arrays.asList((new String[] {"TaskType1", "TaskType2", "TaskType3", "Rank", "Duration"})));
+	// Everything else Level3
+
 
 	public void savePersonTasks(List<PersonTask> personTasks, String tenantId) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
-				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, tenantId));
+				ClassInstance classInstance = createPersonTask(personTaskClassDefinition, personTask, tenantId);
+				assignLevels(classInstance);
+				classInstances.add(classInstance);
+				classInstanceRepository.save(classInstance);
 			}
-
 		}
 	}
 
-	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
+	private TaskClassInstance createPersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
 			String tenantId) {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance) classDefinition2InstanceMapper
@@ -108,8 +120,23 @@ public class PersonTaskService {
 
 		personTaskClassInstance.setTimestamp(new Date());
 
-		return classInstanceRepository.save(personTaskClassInstance);
+		return personTaskClassInstance;
 		// @formatter:on
 	}
+	
+	private void assignLevels(ClassInstance classInstance) {
+		for (PropertyInstance<Object> pi : classInstance.getProperties()) {
+			if (LEVEL0_PROPERTIES.contains(pi.getName())) {
+				pi.setLevel(0);
+			} else if (LEVEL1_PROPERTIES.contains(pi.getName())) {
+				pi.setLevel(1);
+			} else if (LEVEL2_PROPERTIES.contains(pi.getName())) {
+				pi.setLevel(2);
+			} else {
+				pi.setLevel(3);
+			}
+		}
+	}
+
 
 }

@@ -32,6 +32,8 @@ public class ClassProperty<T> {
 	private boolean visible;
 	private int tabId;
 	
+	private int level;
+	
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
 	public ClassProperty() {
@@ -149,6 +151,16 @@ public class ClassProperty<T> {
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
 	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	
 	
 	
 
