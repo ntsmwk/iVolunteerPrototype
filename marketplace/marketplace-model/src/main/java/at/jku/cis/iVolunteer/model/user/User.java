@@ -37,8 +37,6 @@ public class User {
 
 	private String imageId;
 
-//	private ImageWrapper image;
-
 	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
 
 	private LocalRepositoryLocation localRepositoryLocation;
@@ -235,28 +233,6 @@ public class User {
 		this.subscribedTenants = subscribedTenants;
 	}
 
-	public List<TenantUserSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
-			final UserRole role) {
-		final TenantUserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
-		if (tenantUserSubscription == null) {
-			this.subscribedTenants.add(new TenantUserSubscription(marketplaceId, tenantId, role));
-		}
-		return this.subscribedTenants;
-	}
-
-	private TenantUserSubscription findTenantUserSubscription(final String marketplaceId, final String tenantId,
-			final UserRole role) {
-		return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId)
-				&& st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().map(f -> f).orElse(null);
-	}
-
-	public List<TenantUserSubscription> removeSubscribedTenant(final String marketplaceId, final String tenantId,
-			final UserRole role) {
-		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId)
-				&& s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));
-		return this.subscribedTenants;
-	}
-
 	public LocalRepositoryLocation getLocalRepositoryLocation() {
 		return this.localRepositoryLocation;
 	}
@@ -281,6 +257,36 @@ public class User {
 		this.nextcloudCredentials = nextcloudCredentials;
 	}
 
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
+
+	public List<TenantUserSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
+			final UserRole role) {
+		final TenantUserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
+		if (tenantUserSubscription == null) {
+			this.subscribedTenants.add(new TenantUserSubscription(marketplaceId, tenantId, role));
+		}
+		return this.subscribedTenants;
+	}
+
+	private TenantUserSubscription findTenantUserSubscription(final String marketplaceId, final String tenantId,
+			final UserRole role) {
+		return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId)
+				&& st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().map(f -> f).orElse(null);
+	}
+
+	public List<TenantUserSubscription> removeSubscribedTenant(final String marketplaceId, final String tenantId,
+			final UserRole role) {
+		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId)
+				&& s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));
+		return this.subscribedTenants;
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (!(obj instanceof User)) {
@@ -292,14 +298,6 @@ public class User {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
-	}
-
-	public String getImageId() {
-		return imageId;
-	}
-
-	public void setImageId(String imageId) {
-		this.imageId = imageId;
 	}
 
 }

@@ -13,10 +13,6 @@ export class CoreUserImageService {
     return this.http.get(`/core/image/role/${role}/tenant/${tenantId}`);
   }
 
-  findByUser() {
-    return this.http.get(`/core/image/user`);
-  }
-
   getUserProfileImage(userImage: UserImage) {
     if (isNullOrUndefined(userImage)) {
       return "/assets/images/avatars/profile.jpg";

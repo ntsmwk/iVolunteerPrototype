@@ -7,8 +7,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.core.image.ImageRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.security.activation.CorePendingActivationRepository;
+import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.tenant.tags.TagRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
@@ -26,24 +28,14 @@ public class CoreInitializationService {
 	private static final String RAW_PASSWORD = "passme";
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired protected CoreUserRepository coreUserRepository;
+	@Autowired private CoreUserRepository coreUserRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired protected CorePendingActivationRepository pendingActivationRepository;
+	@Autowired private CorePendingActivationRepository pendingActivationRepository;
 	@Autowired private Environment environment;
-	@Autowired protected TagRepository tagRepository;
-
-	public void init() {
-//		createMarketplace();
-//
-//		coreTenantInitializationService.initTenants();
-//		coreVolunteerInitializationService.initVolunteers();
-//		coreHelpSeekerInitializationService.initHelpSeekers();
-//
-//		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
-//		createAdminUser(ADMIN, RAW_PASSWORD);
-//		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
-
-	}
+	@Autowired private TagRepository tagRepository;
+	@Autowired private TenantRepository tenantRepository;
+	@Autowired private ImageRepository imageRepository;
+	
 
 	protected void createMarketplace() {
 		Marketplace marketplace = this.marketplaceRepository.findByName("Marketplace 1");
@@ -152,6 +144,19 @@ public class CoreInitializationService {
 			Tag t = new Tag("Tenant Tag" + i );
 			tagRepository.save(t);
 		}
+	}
+
+	public void wipeAll() {
+		coreUserRepository.deleteAll();
+		pendingActivationRepository.deleteAll();
+		tenantRepository.deleteAll();
+		tagRepository.deleteAll();
+		imageRepository.deleteAll();
+
+	}
+
+	public void deleteUsers() {
+		this.coreUserRepository.deleteAll();
 	}
 
 }

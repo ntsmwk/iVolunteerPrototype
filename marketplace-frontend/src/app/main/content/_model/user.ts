@@ -26,6 +26,8 @@ export class User {
   websites: string[] = [];
   emails: string[] = [];
 
+  imageId: string;
+
   registeredMarketplaceIds: string[];
   subscribedTenants: TenantUserSubscription[];
 
@@ -46,13 +48,13 @@ export enum UserRole {
   ADMIN = "ADMIN",
   RECRUITER = "RECRUITER",
   FLEXPROD = "FLEXPROD",
-  NONE = "NONE",
+  NONE = "NONE"
 }
 
 export enum LocalRepositoryLocation {
   LOCAL = "LOCAL",
   DROPBOX = "DROPBOX",
-  NEXTCLOUD = "NEXTCLOUD",
+  NEXTCLOUD = "NEXTCLOUD"
 }
 
 export class TenantUserSubscription {
@@ -68,5 +70,5 @@ export class RoleTenantMapping {
 
 export enum AccountType {
   PERSON = "PERSON",
-  ORGANIZATION = "ORGANIZATION",
+  ORGANIZATION = "ORGANIZATION"
 }

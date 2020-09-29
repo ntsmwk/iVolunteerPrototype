@@ -50,16 +50,6 @@ public class ImageController {
 		return getByUserIds(userIds);
 	}
 
-	@GetMapping("/image/user")
-	public UserImage getByUserId() {
-		CoreUser user = loginService.getLoggedInUser();
-		List<UserImage> images = this.userImageRepository.findByUserId(user.getId());
-		if (images.size() > 0) {
-			return images.get(0);
-		}
-		return null;
-	}
-
 	@PostMapping("/image/new")
 	public Image addNewImage(@RequestBody Image image) {
 		return imageRepository.save(image);

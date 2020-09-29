@@ -40,7 +40,8 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private roleChangeService: RoleChangeService,
     private tenantService: TenantService,
-    private userImageService: CoreUserImageService
+    private userImageService: CoreUserImageService,
+    private imageService: ImageService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -59,8 +60,8 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.role = globalInfo.userRole;
 
     // Don't wait for image...
-    this.userImageService
-      .findByUser()
+    this.imageService
+      .findById(this.user.imageId)
       .toPromise()
       .then((userImage: UserImage) => (this.userImage = userImage));
 

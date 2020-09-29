@@ -7,6 +7,7 @@ import { RoleChangeService } from "app/main/content/_service/role-change.service
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
 import { UserImage } from "app/main/content/_model/image";
+import { ImageService } from "app/main/content/_service/image.service";
 
 @Component({
   selector: "fuse-user-menu",
@@ -26,7 +27,8 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
     private router: Router,
     private loginService: LoginService,
     private roleChangeService: RoleChangeService,
-    private userImageService: CoreUserImageService
+    private userImageService: CoreUserImageService,
+    private imageService: ImageService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -40,8 +42,9 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
       (this.user = this.globalInfo.user);
 
     // Don't wait for image...
-    this.userImageService
-      .findByUser()
+    this.imageService
+      .findById(this.user.imageId)
+
       .toPromise()
       .then((userImage: UserImage) => (this.userImage = userImage));
 

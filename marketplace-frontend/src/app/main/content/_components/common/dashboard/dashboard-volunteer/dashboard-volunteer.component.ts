@@ -1,32 +1,38 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { ShareDialog } from './share-dialog/share-dialog.component';
-import { isNullOrUndefined } from 'util';
-import { Marketplace } from '../../../../_model/marketplace';
-import { ClassInstanceService } from '../../../../_service/meta/core/class/class-instance.service';
-import { ClassInstanceDTO, ClassInstance } from '../../../../_model/meta/class';
-import { MatSort, MatPaginator, Sort, MatIconRegistry } from '@angular/material';
-import { TenantService } from '../../../../_service/core-tenant.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { Tenant } from 'app/main/content/_model/tenant';
-import HC_venn from 'highcharts/modules/venn';
-import * as Highcharts from 'highcharts';
-import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
-import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { User } from 'app/main/content/_model/user';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { LocalRepositoryService } from 'app/main/content/_service/local-repository.service';
-import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
-import { UserImage } from 'app/main/content/_model/image';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatTableDataSource } from "@angular/material/table";
+import { ShareDialog } from "./share-dialog/share-dialog.component";
+import { isNullOrUndefined } from "util";
+import { Marketplace } from "../../../../_model/marketplace";
+import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
+import { ClassInstanceDTO, ClassInstance } from "../../../../_model/meta/class";
+import {
+  MatSort,
+  MatPaginator,
+  Sort,
+  MatIconRegistry
+} from "@angular/material";
+import { TenantService } from "../../../../_service/core-tenant.service";
+import { DomSanitizer } from "@angular/platform-browser";
+import { Router } from "@angular/router";
+import { Tenant } from "app/main/content/_model/tenant";
+import HC_venn from "highcharts/modules/venn";
+import * as Highcharts from "highcharts";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { DialogFactoryDirective } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { User } from "app/main/content/_model/user";
+import { LoginService } from "app/main/content/_service/login.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
+import { UserImage } from "app/main/content/_model/image";
+import { ImageService } from "app/main/content/_service/image.service";
 HC_venn(Highcharts);
 
 @Component({
   selector: "dashboard-volunteer",
-  templateUrl: './dashboard-volunteer.component.html',
-  styleUrls: ['./dashboard-volunteer.component.scss'],
+  templateUrl: "./dashboard-volunteer.component.html",
+  styleUrls: ["./dashboard-volunteer.component.scss"],
   providers: [DialogFactoryDirective]
 })
 export class DashboardVolunteerComponent implements OnInit {
@@ -42,12 +48,12 @@ export class DashboardVolunteerComponent implements OnInit {
 
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
   private displayedColumnsRepository: string[] = [
-    'issuer',
-    'taskName',
-    'taskType1',
-    'date',
-    'action',
-    'share'
+    "issuer",
+    "taskName",
+    "taskType1",
+    "date",
+    "action",
+    "share"
   ];
 
   image;
@@ -77,13 +83,13 @@ export class DashboardVolunteerComponent implements OnInit {
   };
 
   colors: Map<String, String> = new Map([
-    ['marketplace', '#50B3EF'],
-    ['localRepository', '#EF8C50']
+    ["marketplace", "#50B3EF"],
+    ["localRepository", "#EF8C50"]
   ]);
 
   colorsOpac: Map<String, String> = new Map([
-    ['marketplace', this.colors.get('marketplace') + '66'],
-    ['localRepository', this.colors.get('localRepository') + '66']
+    ["marketplace", this.colors.get("marketplace") + "66"],
+    ["localRepository", this.colors.get("localRepository") + "66"]
   ]);
 
   constructor(
@@ -97,26 +103,27 @@ export class DashboardVolunteerComponent implements OnInit {
     private dialogFactory: DialogFactoryDirective,
     private loginService: LoginService,
     private userImageService: CoreUserImageService,
+    private imageService: ImageService
   ) {
     iconRegistry.addSvgIcon(
-      'info',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/info.svg')
+      "info",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/info.svg")
     );
     iconRegistry.addSvgIcon(
-      'share',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/share.svg')
+      "share",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/share.svg")
     );
     iconRegistry.addSvgIcon(
-      'plus',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/plus.svg')
+      "plus",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/plus.svg")
     );
     iconRegistry.addSvgIcon(
-      'minus',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/minus.svg')
+      "minus",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/minus.svg")
     );
     iconRegistry.addSvgIcon(
-      'storeSlash',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/storeSlash.svg')
+      "storeSlash",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/storeSlash.svg")
     );
   }
 
@@ -128,12 +135,14 @@ export class DashboardVolunteerComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
 
-
     // Don't wait for image...
-    this.userImageService.findByUser().toPromise().then((userImage: UserImage) => {
-      this.volunteerImage = userImage;
-      this.setVolunteerImage();
-    });
+    this.imageService
+      .findById(this.volunteer.imageId)
+      .toPromise()
+      .then((userImage: UserImage) => {
+        this.volunteerImage = userImage;
+        this.setVolunteerImage();
+      });
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
     this.localRepositoryService = this.loginService.getLocalRepositoryService(
@@ -144,7 +153,7 @@ export class DashboardVolunteerComponent implements OnInit {
       await this.classInstanceService
         .getUserClassInstancesByArcheType(
           this.marketplace,
-          'TASK',
+          "TASK",
           this.volunteer.id,
           this.volunteer.subscribedTenants.map(s => s.tenantId),
           true
@@ -211,7 +220,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   navigateToClassInstanceDetails(row) {
-    this.router.navigate(['main/details/' + row.id]);
+    this.router.navigate(["main/details/" + row.id]);
   }
 
   getTenantImage(tenantId: string) {
@@ -231,18 +240,18 @@ export class DashboardVolunteerComponent implements OnInit {
     if (!isNullOrUndefined(tenant)) {
       return tenant.name;
     } else {
-      return 'Unbekannt';
+      return "Unbekannt";
     }
   }
 
   triggerShareDialog() {
     const dialogRef = this.dialog.open(ShareDialog, {
-      width: '700px',
-      height: '255px',
-      data: { name: 'share' }
+      width: "700px",
+      height: "255px",
+      data: { name: "share" }
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -321,8 +330,8 @@ export class DashboardVolunteerComponent implements OnInit {
     ) {
       this.dialogFactory
         .confirmationDialog(
-          'Wirklich entfernen?',
-          'Der Eintrag befindet sich nur mehr in Ihrem lokalen Freiwilligenpass, löschen Sie den Eintrag würde er unwiderruflich verloren gehen.'
+          "Wirklich entfernen?",
+          "Der Eintrag befindet sich nur mehr in Ihrem lokalen Freiwilligenpass, löschen Sie den Eintrag würde er unwiderruflich verloren gehen."
         )
         .then((ret: boolean) => {
           if (ret) {
@@ -553,21 +562,21 @@ export class DashboardVolunteerComponent implements OnInit {
 
   sortData(sort: Sort) {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
+      const isAsc = sort.direction === "asc";
       switch (sort.active) {
-        case 'issuer':
+        case "issuer":
           return this.compare(
             this.getIssuerName(a.issuerId),
             this.getIssuerName(b.issuerId),
             isAsc
           );
-        case 'taskName':
+        case "taskName":
           return this.compare(a.name, b.name, isAsc);
-        case 'taskType1':
+        case "taskType1":
           return this.compare(a.taskType1, b.taskType1, isAsc);
-        case 'date':
+        case "date":
           return this.compare(a.dateFrom, b.dateFrom, isAsc);
-        case 'action':
+        case "action":
           return this.compare(
             this.isInLocalRepository(a).toString(),
             this.isInLocalRepository(b).toString(),
@@ -590,28 +599,28 @@ export class DashboardVolunteerComponent implements OnInit {
   getTableRowColor(ci: ClassInstanceDTO) {
     if (this.isSynced(ci)) {
       return {
-        'background-image':
-          'repeating-linear-gradient(to right,' +
-          this.colorsOpac.get('marketplace') +
-          ' 0%, ' +
-          this.colorsOpac.get('localRepository') +
-          ' 33%, ' +
-          this.colorsOpac.get('localRepository') +
-          ' 33%, ' +
-          this.colorsOpac.get('marketplace') +
-          ' 66%, ' +
-          this.colorsOpac.get('marketplace') +
-          ' 66%, ' +
-          this.colorsOpac.get('localRepository') +
-          ' 100%)'
+        "background-image":
+          "repeating-linear-gradient(to right," +
+          this.colorsOpac.get("marketplace") +
+          " 0%, " +
+          this.colorsOpac.get("localRepository") +
+          " 33%, " +
+          this.colorsOpac.get("localRepository") +
+          " 33%, " +
+          this.colorsOpac.get("marketplace") +
+          " 66%, " +
+          this.colorsOpac.get("marketplace") +
+          " 66%, " +
+          this.colorsOpac.get("localRepository") +
+          " 100%)"
       };
     } else if (this.isLocalRepositoryOnly(ci)) {
       return {
-        'background-color': this.colorsOpac.get('localRepository')
+        "background-color": this.colorsOpac.get("localRepository")
       };
     } else if (this.isMarketplaceOnly(ci)) {
       return {
-        'background-color': this.colorsOpac.get('marketplace')
+        "background-color": this.colorsOpac.get("marketplace")
       };
     }
   }
@@ -647,33 +656,33 @@ export class DashboardVolunteerComponent implements OnInit {
     const data = [];
     data.push(
       {
-        sets: ['Freiwilligenpass'],
+        sets: ["Freiwilligenpass"],
         value: this.localClassInstanceDTOs.length, // 2,
         displayValue: this.localClassInstanceDTOs.length,
-        color: this.colors.get('localRepository'),
+        color: this.colors.get("localRepository"),
         dataLabels: {
           y: -15
         }
       },
       {
-        sets: ['Marktplatz'],
+        sets: ["Marktplatz"],
         value: this.marketplaceClassInstanceDTOs.length, // 2,
         displayValue: this.marketplaceClassInstanceDTOs.length,
-        color: this.colors.get('marketplace')
+        color: this.colors.get("marketplace")
       },
       {
-        sets: ['Freiwilligenpass', 'Marktplatz'],
+        sets: ["Freiwilligenpass", "Marktplatz"],
         value: this.nrMpUnionLr, // 1,
         displayValue: this.nrMpUnionLr,
-        name: 'Synchronisiert',
+        name: "Synchronisiert",
         dataLabels: {
           y: 15
         },
         color: {
           linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
           stops: [
-            [0, this.colorsOpac.get('marketplace')], // start
-            [1, this.colorsOpac.get('localRepository')] // end
+            [0, this.colorsOpac.get("marketplace")], // start
+            [1, this.colorsOpac.get("localRepository")] // end
           ]
         }
       }
@@ -682,11 +691,11 @@ export class DashboardVolunteerComponent implements OnInit {
     this.vennData = [...data];
     this.chartOptions.series = [
       {
-        name: 'Anzahl Einträge',
-        type: 'venn',
+        name: "Anzahl Einträge",
+        type: "venn",
         data: this.vennData,
         tooltip: {
-          pointFormat: '{point.name}: {point.displayValue}'
+          pointFormat: "{point.name}: {point.displayValue}"
         },
         // cursor: "pointer",
         events: {
@@ -695,14 +704,14 @@ export class DashboardVolunteerComponent implements OnInit {
           }
         },
         dataLabels: {
-          align: 'center',
+          align: "center",
           allowOverlap: false
         }
       }
     ];
-    Highcharts.chart('container', this.chartOptions);
+    Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) { }
+  onVennClicked(event) {}
 }
 
 export interface DialogData {
