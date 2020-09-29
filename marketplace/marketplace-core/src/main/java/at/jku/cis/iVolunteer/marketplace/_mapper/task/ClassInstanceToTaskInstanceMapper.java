@@ -143,10 +143,10 @@ public class ClassInstanceToTaskInstanceMapper implements AbstractMapper<ClassIn
 		
 		
 		
-		//TODO DEBUG TESTING
-		user = new User();
-		user.setId("5f71ca22e5ccdd629ee45d47");
-		//--------
+//		//TODO DEBUG TESTING
+//		user = new User();
+//		user.setId("5f71ca22e5ccdd629ee45d47");
+//		//--------
 
 		if (user == null) {
 			return null;

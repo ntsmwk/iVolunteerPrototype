@@ -39,8 +39,8 @@ public class TaskInstanceController {
 		User user = loginService.getLoggedInUser();
 	
 		//TODO DEBUG TESTING
-		user = new User();
-		user.setId("5f71ca22e5ccdd629ee45d47");
+//		user = new User();
+//		user.setId("5f71ca22e5ccdd629ee45d47");
 		//--------
 		if (user == null) {
 			return null;
@@ -54,8 +54,8 @@ public class TaskInstanceController {
 		User user = loginService.getLoggedInUser();
 		
 		//TODO DEBUG TESTING
-		user = new User();
-		user.setId("5f71ca22e5ccdd629ee45d47");
+//		user = new User();
+//		user.setId("5f71ca22e5ccdd629ee45d47");
 		//--------
 		if (user == null) {
 			return null;
