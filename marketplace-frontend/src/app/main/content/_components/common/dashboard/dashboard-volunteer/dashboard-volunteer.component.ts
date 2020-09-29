@@ -25,7 +25,7 @@ import { User } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
-import { UserImage } from "app/main/content/_model/image";
+import { UserImage, Image } from "app/main/content/_model/image";
 import { ImageService } from "app/main/content/_service/image.service";
 HC_venn(Highcharts);
 
@@ -221,12 +221,6 @@ export class DashboardVolunteerComponent implements OnInit {
 
   navigateToClassInstanceDetails(row) {
     this.router.navigate(["main/details/" + row.id]);
-  }
-
-  getTenantImage(tenantId: string) {
-    const tenant = this.allTenants.find(t => t.id === tenantId);
-
-    return this.tenantService.getTenantProfileImage(tenant);
   }
 
   getTenantName(tenantId: string) {

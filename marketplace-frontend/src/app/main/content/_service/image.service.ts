@@ -24,11 +24,6 @@ export class ImageService {
     return this.http.delete(`/core/image/${imageId}`);
   }
 
-  getPNGSourceFromBytes(bytes: string) {
-    const objectURL = "data:image/png;base64," + bytes;
-    return this.sanitizer.bypassSecurityTrustUrl(objectURL);
-  }
-
   getImgSourceFromImageWrapper(imageWrapper: ImageWrapper) {
     if (isNullOrUndefined(imageWrapper)) {
       return null;

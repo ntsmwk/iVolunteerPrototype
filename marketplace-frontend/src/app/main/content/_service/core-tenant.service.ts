@@ -39,23 +39,30 @@ export class TenantService {
     return this.http.put(`/core/tenant`, tenant);
   }
 
-  async getTenantProfileImage(tenant: Tenant) {
-    if (tenant == null) {
-      return "/assets/images/avatars/profile.jpg";
-    }
-
-    let profileImg: Image = <Image>(
+  async getTenantImage(tenant: Tenant) {
+    let img: Image = <Image>(
       await this.imageService.findById(tenant.imageId).toPromise()
     );
-    const ret = this.imageService.getImgSourceFromImageWrapper(
-      profileImg.imageWrapper
-    );
-    if (ret == null) {
-      return "/assets/images/avatars/profile.jpg";
-    } else {
-      return ret;
-    }
+    return img.imageWrapper;
   }
+
+  // async getTenantProfileImage(tenant: Tenant) {
+  //   if (tenant == null) {
+  //     return "/assets/images/avatars/profile.jpg";
+  //   }
+
+  //   let profileImg: Image = <Image>(
+  //     await this.imageService.findById(tenant.imageId).toPromise()
+  //   );
+  //   const ret = this.imageService.getImgSourceFromImageWrapper(
+  //     profileImg.imageWrapper
+  //   );
+  //   if (ret == null) {
+  //     return "/assets/images/avatars/profile.jpg";
+  //   } else {
+  //     return ret;
+  //   }
+  // }
 
   async getTenantLandingPageImage(tenant: Tenant) {
     let landingImg: Image = <Image>(
