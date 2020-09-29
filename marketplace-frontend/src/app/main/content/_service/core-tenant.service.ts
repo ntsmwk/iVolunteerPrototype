@@ -40,33 +40,23 @@ export class TenantService {
   }
 
   async getTenantImage(tenant: Tenant) {
-    let img: Image = <Image>(
-      await this.imageService.findById(tenant.imageId).toPromise()
+    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
+    if (!img) {
+      return "/assets/images/avatars/profile.jpg";
+    }
+    const ret = this.imageService.getImgSourceFromImageWrapper(
+      img.imageWrapper
     );
-    return img.imageWrapper;
+    if (ret == null) {
+      return "/assets/images/avatars/profile.jpg";
+    } else {
+      return ret;
+    }
   }
-
-  // async getTenantProfileImage(tenant: Tenant) {
-  //   if (tenant == null) {
-  //     return "/assets/images/avatars/profile.jpg";
-  //   }
-
-  //   let profileImg: Image = <Image>(
-  //     await this.imageService.findById(tenant.imageId).toPromise()
-  //   );
-  //   const ret = this.imageService.getImgSourceFromImageWrapper(
-  //     profileImg.imageWrapper
-  //   );
-  //   if (ret == null) {
-  //     return "/assets/images/avatars/profile.jpg";
-  //   } else {
-  //     return ret;
-  //   }
-  // }
 
   async getTenantLandingPageImage(tenant: Tenant) {
     let landingImg: Image = <Image>(
-      await this.imageService.findById(tenant.landingpageImageId).toPromise()
+      await this.imageService.findById(tenant.landingpageImageId)
     );
 
     return this.imageService.getImgSourceFromImageWrapper(

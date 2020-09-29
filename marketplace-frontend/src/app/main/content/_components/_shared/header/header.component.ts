@@ -21,9 +21,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.image = <Image>(
-      await this.imageService.findById(this.tenant.imageId).toPromise()
-    );
+    this.image = <Image>await this.imageService.findById(this.tenant.imageId);
     this.tenantService.initHeader(this.tenant);
   }
 

@@ -62,7 +62,6 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     // Don't wait for image...
     this.imageService
       .findById(this.user.imageId)
-      .toPromise()
       .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([
@@ -121,9 +120,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     const tenant = this.allTenants.find(
       t => t.id === this.currentMapping.tenantIds[0]
     );
-    let img: Image = <Image>(
-      await this.imageService.findById(tenant.imageId).toPromise()
-    );
+    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
     return img.imageWrapper;
   }
 
@@ -133,9 +130,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     }
 
     const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
-    let img: Image = <Image>(
-      await this.imageService.findById(tenant.imageId).toPromise()
-    );
+    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
     return img.imageWrapper;
   }
 

@@ -39,7 +39,6 @@ export class ProfileComponent implements OnInit {
     // Don't wait for image...
     this.imageService
       .findById(this.user.imageId)
-      .toPromise()
       .then((userImage: UserImage) => (this.userImage = userImage));
 
     this.currentRoles = this.user.subscribedTenants.map(s => s.role);

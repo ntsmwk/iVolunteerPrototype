@@ -44,8 +44,6 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
     // Don't wait for image...
     this.imageService
       .findById(this.user.imageId)
-
-      .toPromise()
       .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([

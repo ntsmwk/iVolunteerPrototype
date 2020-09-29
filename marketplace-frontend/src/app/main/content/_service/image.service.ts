@@ -3,13 +3,23 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { ImageWrapper, Image } from "../_model/image";
 import { isNullOrUndefined } from "util";
 import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class ImageService {
   constructor(private sanitizer: DomSanitizer, private http: HttpClient) {}
 
-  findById(imageId: string) {
-    return this.http.get(`/core/image/${imageId}`);
+  imageMap = {};
+
+  async findById(imageId: string) {
+    if (this.imageMap[imageId]) {
+      return new Promise(() => this.imageMap[imageId]);
+    }
+    let image: Image = <Image>(
+      await this.http.get(`/core/image/${imageId}`).toPromise()
+    );
+    this.imageMap[imageId] = image;
+    return new Promise(() => image);
   }
 
   createImage(image: Image) {
