@@ -4,7 +4,7 @@ import { RoleChangeService } from "app/main/content/_service/role-change.service
 import {
   User,
   UserRole,
-  RoleTenantMapping,
+  RoleTenantMapping
 } from "app/main/content/_model/user";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
@@ -13,13 +13,13 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { ImageService } from "app/main/content/_service/image.service";
 import { UserService } from "app/main/content/_service/user.service";
-import { UserImage } from 'app/main/content/_model/image';
-import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
+import { UserImage } from "app/main/content/_model/image";
+import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
 
 @Component({
   selector: "app-role-menu",
   templateUrl: "./role-menu.component.html",
-  styleUrls: ["./role-menu.component.scss"],
+  styleUrls: ["./role-menu.component.scss"]
 })
 export class RoleMenuComponent implements OnInit, OnDestroy {
   user: User;
@@ -40,7 +40,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private roleChangeService: RoleChangeService,
     private tenantService: TenantService,
-    private userImageService: CoreUserImageService,
+    private userImageService: CoreUserImageService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -59,22 +59,26 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.role = globalInfo.userRole;
 
     // Don't wait for image...
-    this.userImageService.findByUserId(this.user.id).toPromise().then((userImage: UserImage) => this.userImage = userImage);
-
+    this.userImageService
+      .findByUser()
+      .toPromise()
+      .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([
-      this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise(),
+      (this.allTenants = <Tenant[]>(
+        await this.tenantService.findAll().toPromise()
+      ))
     ]);
 
     this.currentMapping = new RoleTenantMapping();
     this.currentMapping.role = this.role;
-    this.currentMapping.tenantIds = globalInfo.tenants.map((t) => t.id);
+    this.currentMapping.tenantIds = globalInfo.tenants.map(t => t.id);
 
     this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(
       this.user
     );
 
-    this.possibleRoleTenantMappings = this.roleTenantMappings.filter((m) => {
+    this.possibleRoleTenantMappings = this.roleTenantMappings.filter(m => {
       return !this.isSameMapping(m, this.currentMapping);
     });
 
@@ -84,7 +88,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
   onRoleSelected(mapping: RoleTenantMapping) {
     this.role = mapping.role;
     this.currentMapping = mapping;
-    this.possibleRoleTenantMappings = this.roleTenantMappings.filter((m) => {
+    this.possibleRoleTenantMappings = this.roleTenantMappings.filter(m => {
       return !this.isSameMapping(m, this.currentMapping);
     });
 
@@ -114,7 +118,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
   getCurrentTenantImage() {
     const tenant = this.allTenants.find(
-      (t) => t.id === this.currentMapping.tenantIds[0]
+      t => t.id === this.currentMapping.tenantIds[0]
     );
     return this.tenantService.getTenantProfileImage(tenant);
   }
@@ -124,7 +128,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
       return this.userImageService.getUserProfileImage(this.userImage);
     }
 
-    const tenant = this.allTenants.find((t) => t.id === mapping.tenantIds[0]);
+    const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
     return this.tenantService.getTenantProfileImage(tenant);
   }
 
@@ -133,7 +137,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
       return false;
     } else if (a.tenantIds.length !== b.tenantIds.length) {
       return false;
-    } else if (a.tenantIds.every((id) => b.tenantIds.indexOf(id) != -1)) {
+    } else if (a.tenantIds.every(id => b.tenantIds.indexOf(id) != -1)) {
       return true;
     } else {
       return false;

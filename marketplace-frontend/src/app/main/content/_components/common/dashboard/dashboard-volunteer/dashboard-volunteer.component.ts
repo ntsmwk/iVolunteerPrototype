@@ -130,7 +130,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
 
     // Don't wait for image...
-    this.userImageService.findByUserId(this.volunteer.id).toPromise().then((userImage: UserImage) => {
+    this.userImageService.findByUser().toPromise().then((userImage: UserImage) => {
       this.volunteerImage = userImage;
       this.setVolunteerImage();
     });

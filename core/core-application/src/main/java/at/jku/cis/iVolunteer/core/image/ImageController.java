@@ -50,12 +50,16 @@ public class ImageController {
 		return getByUserIds(userIds);
 	}
 
-	@GetMapping("/image/user/{userId}")
-	public List<UserImage> getByUserId(@PathVariable("userId") String userId) {
-		return this.userImageRepository.findByUserId(userId);
+	@GetMapping("/image/user")
+	public UserImage getByUserId() {
+		CoreUser user = loginService.getLoggedInUser();
+		List<UserImage> images = this.userImageRepository.findByUserId(user.getId());
+		if (images.size() > 0) {
+			return images.get(0);
+		}
+		return null;
 	}
 
-	
 	@PostMapping("/image/new")
 	public Image addNewImage(@RequestBody Image image) {
 		return imageRepository.save(image);
@@ -70,7 +74,7 @@ public class ImageController {
 	private void deleteUserImage(@PathVariable("imageId") String imageId) {
 		imageRepository.delete(imageId);
 	}
-	
+
 	private List<UserImage> getByUserIds(@RequestBody List<String> userIds) {
 		List<UserImage> images = new ArrayList<>();
 		userImageRepository.findAll(userIds).forEach(images::add);

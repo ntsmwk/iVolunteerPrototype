@@ -1,6 +1,6 @@
 export class Image {
   id: string;
-  image: ImageWrapper;
+  imageWrapper: ImageWrapper;
 
   public constructor(init?: Partial<ImageWrapper>) {
     Object.assign(this, init);

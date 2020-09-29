@@ -13,8 +13,8 @@ export class CoreUserImageService {
     return this.http.get(`/core/image/role/${role}/tenant/${tenantId}`);
   }
 
-  findByUserId(userId: string) {
-    return this.http.get(`/core/image/user/${userId}`);
+  findByUser() {
+    return this.http.get(`/core/image/user`);
   }
 
   createUserImage(userImage: UserImage) {
@@ -33,7 +33,9 @@ export class CoreUserImageService {
     if (isNullOrUndefined(userImage)) {
       return "/assets/images/avatars/profile.jpg";
     }
-    const ret = this.imageService.getImgSourceFromImageWrapper(userImage.image);
+    const ret = this.imageService.getImgSourceFromImageWrapper(
+      userImage.imageWrapper
+    );
     if (ret == null) {
       return "/assets/images/avatars/profile.jpg";
     } else {
