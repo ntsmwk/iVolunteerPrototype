@@ -10,34 +10,34 @@
           <mat-option value="Herr">Herr</mat-option>
         </mat-select>
 
-        <mat-error *ngIf="
+        <!-- <mat-error *ngIf="
               profileFormErrors.formOfAddress &&
               profileFormErrors.formOfAddress.required
             ">
           Pflichtfeld
-        </mat-error>
+        </mat-error> -->
       </mat-form-field>
 
       <div fxLayout="row wrap" fxLayoutAlign="start center">
         <mat-form-field fxFlex>
-          <input matInput placeholder="Vorname" formControlName="firstName" />
-          <mat-error *ngIf="
-                  profileFormErrors.firstName &&
-                  profileFormErrors.firstName.required
+          <input matInput placeholder="Vorname" formControlName="firstname" />
+          <!-- <mat-error *ngIf="
+                  profileFormErrors.firstname &&
+                  profileFormErrors.firstname.required
                 ">
             Vorname benötigt
-          </mat-error>
+          </mat-error> -->
         </mat-form-field>
 
 
         <mat-form-field fxFlex class="ml-4">
-          <input matInput placeholder="Nachname" formControlName="lastName" />
-          <mat-error *ngIf="
-                  profileFormErrors.lastName &&
-                  profileFormErrors.lastName.required
+          <input matInput placeholder="Nachname" formControlName="lastname" />
+          <!-- <mat-error *ngIf="
+                  profileFormErrors.lastname &&
+                  profileFormErrors.lastname.required
                 ">
             Nachname benötigt
-          </mat-error>
+          </mat-error> -->
         </mat-form-field>
       </div>
 
@@ -48,13 +48,99 @@
         <input matInput [matDatepicker]="picker" formControlName="birthday" [max]="today" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="
+        <!-- <mat-error *ngIf="
                   profileFormErrors.birthday &&
                   profileFormErrors.birthday.required
                 ">
           Geburtsdatum benötigt
-        </mat-error>
+        </mat-error> -->
       </mat-form-field>
+
+
+
+      <div class="address-label"> Adresse </div>
+      <fieldset formGroupName="address" class="section-border">
+
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
+
+          <mat-form-field fxFlex class="ml-4">
+            <input matInput placeholder="Straße" formControlName="street" />
+          </mat-form-field>
+
+          <mat-form-field class="ml-4" style="width: 50px">
+            <input matInput placeholder="Nr" formControlName="houseNumber" />
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
+
+          <mat-form-field class="ml-4" style="width: 100px">
+            <input matInput placeholder="PLZ" formControlName="postcode" />
+          </mat-form-field>
+
+          <mat-form-field fxFlex class="ml-4">
+            <input matInput placeholder="Stadt" formControlName="city" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field fxFlex class="ml-4">
+          <input matInput placeholder="Land" formControlName="country" value="Österreich" />
+        </mat-form-field>
+      </fieldset>
+
+
+      <div class="address-label"> Timeslots </div>
+      <fieldset class="section-border">
+        <div formArrayName="timeslots" *ngFor="let value of profileForm.get('timeslots').controls; let i = index"
+          class="m-20">
+          <div [formGroupName]="i">
+            <div class="allowed-value-row" fxLayout="row wrap" fxLayoutAlign="start center">
+
+              <div class="weekday-label">{{getWeekdayLabel(value.value.weekday)}}</div>
+
+              <div class="time-container">
+                <mat-form-field class="time-field ml-4">
+                  <input matInput placeholder="Von" formControlName="from1" />
+                </mat-form-field>
+
+                <!-- <div class="time-mid-label">bis</div> -->
+
+                <mat-form-field class="time-field ml-4">
+                  <input matInput placeholder="Bis" formControlName="to1" />
+                </mat-form-field>
+              </div>
+
+              <div class="time-mid-label">
+                und
+              </div>
+
+              <div class="time-container">
+                <mat-form-field class="time-field ml-4">
+                  <input matInput placeholder="Von" formControlName="from2" />
+                </mat-form-field>
+
+                <!-- <div class="time-mid-label ml-12 mr-12">bis</div> -->
+
+                <mat-form-field class="time-field ml-4">
+                  <input matInput placeholder="Bis" formControlName="to2" />
+                </mat-form-field>
+              </div>
+
+              <div *ngIf="i < 6" class="pt-12 divider-100-20"></div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="mt-16">
+
+
+      </div>
+
+
 
       <button type="submit" mat-stroked-button class="submit-button primary-button-dark" (click)="save()"
         aria-label="SUBMIT" [disabled]="profileForm.invalid">

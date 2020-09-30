@@ -52,3 +52,89 @@ mat-divider {
   margin-top: 25px;
   margin-bottom: 25px;
 }
+
+.address-label {
+  display: block;
+  position: relative;
+  top: 10px;
+  width: max-content;
+  background: white;
+  color: grey;
+  left: 8px;
+  padding: 0 2px;
+}
+
+.weekday-label {
+  color: black;
+  width: 85px;
+
+  @include media-breakpoint("lt-sm") {
+    width: 100%;
+    padding-bottom: 4px;
+    text-align: center;
+  }
+}
+
+.time-field {
+  width: 75px;
+
+  @media (max-width: 510px) {
+    width: 140px;
+  }
+
+  @media (max-width: 450px) {
+    width: 120px;
+  }
+
+  @media (max-width: 350px) {
+    width: 70px;
+  }
+
+  // @media (max-width: 450px) {
+  //   width: 50%;
+  // }
+}
+
+.time-mid-label {
+  margin: 0 12px;
+
+  // @include media-breakpoint("xs") {
+  //   width: 100%;
+  // }
+
+  @media (max-width: 510px) {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+}
+
+.time-container {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+
+  @media (max-width: 510px) {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    place-content: center space-around;
+    align-items: center;
+  }
+}
+
+.divider-100-20 {
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid black;
+
+  @include media-breakpoint("sm") {
+    margin-left: 20vw;
+    margin-right: 20vw;
+  }
+
+  @media (max-width: 450px) {
+    margin-left: 20vw;
+    margin-right: 20vw;
+  }
+}

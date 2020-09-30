@@ -1,9 +1,8 @@
 import { NgModule } from "@angular/core";
 
-import { RouterModule } from "@angular/router";
 import {
   MatButtonModule, MatTableModule, MatIconModule, MatCommonModule, MatTooltipModule,
-  MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatCardModule, MatSelectModule, MatOptionModule,
+  MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatCardModule, MatSelectModule, MatOptionModule, MatDividerModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { ProfileFormComponent } from './profile-form.component';
@@ -11,19 +10,19 @@ import { ProfileFormComponent } from './profile-form.component';
 
 @NgModule({
   imports: [
-    MatButtonModule,
-    MatTableModule,
-    MatIconModule,
+    FuseSharedModule,
     MatCommonModule,
+    MatButtonModule,
+    MatIconModule,
     MatTooltipModule,
     MatNativeDateModule,
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    FuseSharedModule,
     MatCardModule,
     MatSelectModule,
     MatOptionModule,
+    MatDividerModule,
   ],
   exports: [ProfileFormComponent],
   declarations: [ProfileFormComponent],

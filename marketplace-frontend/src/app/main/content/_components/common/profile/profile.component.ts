@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User, UserRole } from 'app/main/content/_model/user';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup } from '@angular/forms';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { UserService } from 'app/main/content/_service/user.service';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { UserImage } from 'app/main/content/_model/image';
 import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
