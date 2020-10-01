@@ -13,6 +13,7 @@ import { UserProfileImageUploadDialogData } from '../../_shared/dialogs/user-pro
   templateUrl: 'profile.component.html',
   styleUrls: ['profile.component.scss'],
   animations: fuseAnimations,
+  providers: [DialogFactoryDirective]
 })
 export class ProfileComponent implements OnInit {
   globalInfo: GlobalInfo;

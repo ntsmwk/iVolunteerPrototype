@@ -10,6 +10,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseWidgetModule } from '@fuse/components';
 import { LocalRepositoryLocationSwitchModule } from '../../volunteer/local-repository-location-switch/local-repository-location-switch.module';
 import { ProfileFormModule } from './profile-form/profile-form.module';
+import { DialogFactoryModule } from '../../_shared/dialogs/_dialog-factory/dialog-factory.module';
 
 const routes = [{ path: '', component: ProfileComponent }];
 
@@ -37,6 +38,7 @@ const routes = [{ path: '', component: ProfileComponent }];
     ProfileFormModule,
 
     LocalRepositoryLocationSwitchModule,
+    DialogFactoryModule,
   ],
   exports: [],
   declarations: [ProfileComponent],
