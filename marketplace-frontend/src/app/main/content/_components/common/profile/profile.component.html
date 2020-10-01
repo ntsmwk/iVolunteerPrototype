@@ -4,12 +4,12 @@
     <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
       fxLayoutAlign.gt-sm="start center">
 
-      <div class="profile-image-container avatar huge" style="position: relative">
-        <div class="profile-image-overlay avatar huge" style="">
+      <div class="profile-image-container avatar huge">
+        <div class="profile-image-overlay avatar huge">
           <mat-icon>edit</mat-icon>
         </div>
 
-        <img class="profile-image avatar huge" style="" [src]="getProfileImage()"
+        <img class="profile-image avatar huge" [src]="getProfileImage()"
           [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }" />
 
       </div>
