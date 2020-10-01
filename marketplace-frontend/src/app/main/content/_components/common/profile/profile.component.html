@@ -3,8 +3,16 @@
     fxLayoutAlign.gt-sm="space-between end">
     <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
       fxLayoutAlign.gt-sm="start center">
-      <img class="profile-image avatar huge" [src]="getProfileImage()"
-        [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }" />
+
+      <div class="profile-image-container avatar huge" style="position: relative">
+        <div class="profile-image-overlay avatar huge" style="">
+          <mat-icon>edit</mat-icon>
+        </div>
+
+        <img class="profile-image avatar huge" style="" [src]="getProfileImage()"
+          [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }" />
+
+      </div>
       <div class="name" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">
         {{ user.firstname }} {{ user.lastname }}
       </div>
