@@ -174,9 +174,11 @@ public class CoreUserService {
 		return user;
 	}
 
-	private void updateMarketplaces(CoreUser user, String authorization) {
-		List<Marketplace> marketplaces = this.findRegisteredMarketplaces(user.getId());
+	private void updateMarketplaces(CoreUser coreUser, String authorization) {
+		List<Marketplace> marketplaces = this.findRegisteredMarketplaces(coreUser.getId());
 
+		User user = new User(coreUser);
+		
 		for (Marketplace marketplace : marketplaces) {
 			coreMarketplaceRestClient.registerOrUpdateMarketplaceUser(marketplace.getUrl(), authorization, user);
 		}

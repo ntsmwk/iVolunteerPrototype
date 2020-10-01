@@ -5,8 +5,8 @@ public class Timeslot {
 	Weekday weekday;
 	int fromHours1;
 	int fromMins1;
-	int toHours1;
-	int toMins1;
+	int toHours1 = 23;
+	int toMins1 = 59;
 	
 	int fromHours2;
 	int fromMins2;
@@ -14,6 +14,7 @@ public class Timeslot {
 	int toMins2;
 	
 	boolean active;
+	boolean secondActive;
 
 	public Weekday getWeekday() {
 		return weekday;
@@ -94,6 +95,15 @@ public class Timeslot {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+	public boolean isSecondActive() {
+		return secondActive;
+	}
+
+	public void setSecondActive(boolean secondActive) {
+		this.secondActive = secondActive;
+	}
+	
 	
 
 	

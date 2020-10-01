@@ -1,5 +1,6 @@
 import { ImageWrapper } from './image';
 import { NextcloudCredentials } from './nextcloud-credentials';
+import { FormTimeSlot } from '../_components/common/profile/profile-form/profile-form.component';
 
 export class User {
   id: string;
@@ -61,9 +62,30 @@ export class Timeslot {
   toMins2: number;
 
   active: boolean;
+  secondActive: boolean;
+
+  constructor(formTimeslot: FormTimeSlot) {
+    this.weekday = formTimeslot.weekday;
+    this.active = formTimeslot.active;
+    this.secondActive = formTimeslot.secondActive;
+
+    const from1 = formTimeslot.from1.split(':');
+    const from2 = formTimeslot.from2.split(':');
+    const to1 = formTimeslot.to1.split(':');
+    const to2 = formTimeslot.to2.split(':');
+
+    this.fromHours1 = Number(from1[0]);
+    this.fromHours2 = Number(from2[0]);
+    this.fromMins1 = Number(from1[1]);
+    this.fromMins2 = Number(from2[1]);
+
+    this.toHours1 = Number(to1[0]);
+    this.toHours2 = Number(to2[0]);
+    this.toMins1 = Number(to1[1]);
+    this.toMins2 = Number(to2[1]);
+
+  }
 }
-
-
 
 export enum Weekday {
   MONDAY = 'MONDAY', TUESDAY = 'TUESDAY', WEDNESDAY = 'WEDNESDAY', THURSDAY = 'THURSDAY', FRIDAY = 'FRIDAY',
