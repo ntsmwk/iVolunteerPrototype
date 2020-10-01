@@ -7,7 +7,7 @@ import {
 import { FuseSharedModule } from '@fuse/shared.module';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { TenantTagFormModule } from './tag-form/tag-form.module';
-import { ProfileImageUploadModule } from '../../../_shared/uploaders/profile-image-upload/profile-image-upload.module';
+import { TenantProfileImageUploadModule } from '../../../_shared/uploaders/tenant-profile-image-upload/tenant-profile-image-upload.module';
 import { LandingPageImageUploadModule } from '../../../_shared/uploaders/landing-page-image-upload/landing-page-image-upload.module';
 
 
@@ -28,7 +28,7 @@ import { LandingPageImageUploadModule } from '../../../_shared/uploaders/landing
     MaterialFileInputModule,
 
     TenantTagFormModule,
-    ProfileImageUploadModule,
+    TenantProfileImageUploadModule,
     LandingPageImageUploadModule,
   ],
 

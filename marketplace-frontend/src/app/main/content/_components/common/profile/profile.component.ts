@@ -5,6 +5,8 @@ import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { UserImage } from 'app/main/content/_model/image';
 import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
+import { DialogFactoryDirective } from '../../_shared/dialogs/_dialog-factory/dialog-factory.component';
+import { UserProfileImageUploadDialogData } from '../../_shared/dialogs/user-profile-image-upload-dialog/user-profile-image-upload-dialog.component';
 
 @Component({
   selector: "profile",
@@ -23,6 +25,7 @@ export class ProfileComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private userImageService: CoreUserImageService,
+    private dialogFactory: DialogFactoryDirective,
   ) { }
 
   async ngOnInit() {
@@ -44,5 +47,11 @@ export class ProfileComponent implements OnInit {
 
   hasVolunteerRole() {
     return this.currentRoles.indexOf(UserRole.VOLUNTEER) !== -1;
+  }
+
+  handleProfileImageClick() {
+    this.dialogFactory.openProfileImageUploadDialog().then((ret: UserProfileImageUploadDialogData) => {
+      console.log(ret);
+    });
   }
 }

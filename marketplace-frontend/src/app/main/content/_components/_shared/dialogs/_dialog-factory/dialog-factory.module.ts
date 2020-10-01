@@ -37,6 +37,8 @@ import { AddClassDefinitionDialogModule } from "../../../help-seeker/configurati
 import { AddClassDefinitionDialogComponent } from "../../../help-seeker/configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component";
 import { AddHelpseekerDialogComponent } from "../../../admin/tenant-form/tenant-form-content/helpseekers-form/add-helpseeker-dialog/add-helpseeker-dialog.component";
 import { AddHelpseekerDialogModule } from "../../../admin/tenant-form/tenant-form-content/helpseekers-form/add-helpseeker-dialog/add-helpseeker-dialog.module";
+import { UserProfileImageUploadDialogModule } from '../user-profile-image-upload-dialog/user-profile-image-upload-dialog.module';
+import { UserProfileImageUploadDialogComponent } from '../user-profile-image-upload-dialog/user-profile-image-upload-dialog.component';
 
 @NgModule({
   imports: [
@@ -69,7 +71,10 @@ import { AddHelpseekerDialogModule } from "../../../admin/tenant-form/tenant-for
     // Tree Property Configurator
 
     // Tenant Form
-    AddHelpseekerDialogModule
+    AddHelpseekerDialogModule,
+
+    // User Profile Form
+    UserProfileImageUploadDialogModule,
   ],
   declarations: [DialogFactoryDirective],
   entryComponents: [
@@ -101,7 +106,10 @@ import { AddHelpseekerDialogModule } from "../../../admin/tenant-form/tenant-for
     // Tree Property Configurator
 
     // Tenant Form
-    AddHelpseekerDialogComponent
+    AddHelpseekerDialogComponent,
+
+    // User Profile Form
+    UserProfileImageUploadDialogComponent,
   ]
 })
-export class DialogFactoryModule {}
+export class DialogFactoryModule { }

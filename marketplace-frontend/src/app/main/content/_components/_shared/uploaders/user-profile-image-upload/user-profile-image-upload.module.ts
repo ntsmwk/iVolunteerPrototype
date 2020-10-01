@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { ProfileImageUploadComponent } from "./profile-image-upload.component";
+import { UserProfileImageUploadComponent } from "./user-profile-image-upload.component";
 import {
   MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule,
 } from "@angular/material";
@@ -8,8 +8,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 
 @NgModule({
-  exports: [ProfileImageUploadComponent],
-  declarations: [ProfileImageUploadComponent],
+  exports: [UserProfileImageUploadComponent],
+  declarations: [UserProfileImageUploadComponent],
   imports: [
     FuseSharedModule,
 
@@ -27,4 +27,4 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
   providers: [
   ],
 })
-export class ProfileImageUploadModule { }
+export class UserProfileImageUploadModule { }

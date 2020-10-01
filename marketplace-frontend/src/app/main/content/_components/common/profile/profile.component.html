@@ -4,7 +4,7 @@
     <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
       fxLayoutAlign.gt-sm="start center">
 
-      <div class="profile-image-container avatar huge">
+      <div class="profile-image-container avatar huge" (click)="handleProfileImageClick()">
         <div class="profile-image-overlay avatar huge">
           <mat-icon>edit</mat-icon>
         </div>

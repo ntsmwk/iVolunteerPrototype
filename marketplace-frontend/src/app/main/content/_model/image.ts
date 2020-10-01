@@ -2,7 +2,7 @@ export class UserImage {
     userId: string;
     image: ImageWrapper;
 
-    public constructor(init?: Partial<ImageWrapper>) {
+    public constructor(init?: Partial<UserImage>) {
         Object.assign(this, init);
     }
 }

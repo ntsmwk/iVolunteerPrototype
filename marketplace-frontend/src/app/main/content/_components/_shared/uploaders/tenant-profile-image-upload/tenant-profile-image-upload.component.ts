@@ -7,10 +7,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: "tenant-profile-image-upload",
-  templateUrl: 'profile-image-upload.component.html',
-  styleUrls: ['./profile-image-upload.component.scss'],
+  templateUrl: 'tenant-profile-image-upload.component.html',
+  styleUrls: ['./tenant-profile-image-upload.component.scss'],
 })
-export class ProfileImageUploadComponent implements OnInit {
+export class TenantProfileImageUploadComponent implements OnInit {
 
   @Input() tenant: Tenant;
   @Output() uploadedImage: EventEmitter<{ key: string, image: any }> = new EventEmitter();
