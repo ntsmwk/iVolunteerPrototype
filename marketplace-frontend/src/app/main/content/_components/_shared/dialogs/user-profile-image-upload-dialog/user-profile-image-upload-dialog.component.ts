@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {
   MatDialogRef, MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import { User } from 'app/main/content/_model/user';
 
 export interface UserProfileImageUploadDialogData {
-
+  user: User;
 }
 
 @Component({
@@ -21,7 +22,7 @@ export class UserProfileImageUploadDialogComponent implements OnInit {
 
 
   ngOnInit() {
-
+    //TODO Dialog
   }
 
 

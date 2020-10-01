@@ -562,14 +562,14 @@ export class DialogFactoryDirective {
       });
   }
 
-  openProfileImageUploadDialog() {
+  openProfileImageUploadDialog(user: User) {
     const dialogRef = this.dialog.open(UserProfileImageUploadDialogComponent, {
-      width: '500px',
-      minWidth: '500px',
-      height: '418px',
-      minHeight: '418px',
+      width: '800px',
+      minWidth: '800px',
+      height: '300px',
+      minHeight: '300px',
       data: {
-
+        user: user
       },
     });
 

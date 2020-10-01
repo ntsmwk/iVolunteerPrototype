@@ -1,12 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SecurityContext } from '@angular/core';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { Tenant } from 'app/main/content/_model/tenant';
 import { isNullOrUndefined } from 'util';
 import { FileInput } from 'ngx-material-file-input';
 import { DomSanitizer } from '@angular/platform-browser';
 import { User } from 'app/main/content/_model/user';
-import { CoreUserService } from 'app/main/content/_service/core-user.service';
-import { UserService } from 'app/main/content/_service/user.service';
 import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
 import { UserImage } from 'app/main/content/_model/image';
 

@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
   }
 
   handleProfileImageClick() {
-    this.dialogFactory.openProfileImageUploadDialog().then((ret: UserProfileImageUploadDialogData) => {
+    this.dialogFactory.openProfileImageUploadDialog(this.user).then((ret: UserProfileImageUploadDialogData) => {
       console.log(ret);
     });
   }
