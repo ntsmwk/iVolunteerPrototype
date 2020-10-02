@@ -20,6 +20,8 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.task.TaskInstance;
 import at.jku.cis.iVolunteer.model.user.User;
 
+
+//TODO xnet
 @RestController
 @RequestMapping("/task")
 public class TaskInstanceController {
@@ -64,19 +66,30 @@ public class TaskInstanceController {
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
 
+/** ADD OR REDO
+ * task/all 
+ * task/unsubscribe
+ * task/tenantId/tid/all
+ * task/tenantId/tid/subscribed
+ * task/tenantId/tid/unsubscribed
+ */
+	
+	
 	@GetMapping("/{taskId}")
 	public TaskInstance getTask(@PathVariable String taskId) {
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
 		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 
-	@PostMapping("/new")
+	@PostMapping("/new") 
+//	return id
 	public TaskInstance createTask(@RequestBody TaskInstance task) {
 		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
 		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 
+//AK TODO	200 oder 400 und put
 	@PostMapping("/{taskId}")
 	public TaskInstance updateTask(@PathVariable String taskId, @RequestBody TaskInstance task) {
 		task.getRequired().setId(taskId);

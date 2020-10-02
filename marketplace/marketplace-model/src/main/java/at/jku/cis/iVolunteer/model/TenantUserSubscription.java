@@ -10,6 +10,11 @@ public class TenantUserSubscription {
     public TenantUserSubscription() {
     }
 
+    // TODO xnet
+    
+    
+//	 * TenantUserSubscripition: -> statt <marketplaceId, tenantId, role> -> <tenantId, role>
+
     public TenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
         this.marketplaceId = marketplaceId;
         this.tenantId = tenantId;

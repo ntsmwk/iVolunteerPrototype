@@ -16,6 +16,8 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
+
+//TODO xnet
 @RestController
 public class CoreUserController {
 
@@ -83,6 +85,7 @@ public class CoreUserController {
 		return coreUserService.addNewUser(user, authorization, updateMarketplaces);
 	}
 
+//	return 200er oder 400 - kein user falls möglich
 	@PutMapping("/user/update")
 	private CoreUser updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {

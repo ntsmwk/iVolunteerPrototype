@@ -22,7 +22,7 @@ export class UserProfileImageUploadDialogComponent implements OnInit {
 
 
   ngOnInit() {
-    //TODO Dialog
+    //TODO Dialog Return
   }
 
 

@@ -17,12 +17,16 @@ public class Tenant {
 
 	private String homepage;
 
-	private ImageWrapper profileImage;
+	private ImageWrapper profileImage; //TODO xnet logo? low prio
 
 	private String primaryColor;
 	private String secondaryColor;
 
 	private String marketplaceId;
+	
+	
+//	TODO xnet adresse hinzufügen
+//  TODO xnet mitglieder volunteers: User[] (würden wir im Frontend später erwarten) aktuell kann das einfach leer sein.. nur die wichtigsten infos beim user
 	
 	private List<String> tags = new ArrayList<>();
 

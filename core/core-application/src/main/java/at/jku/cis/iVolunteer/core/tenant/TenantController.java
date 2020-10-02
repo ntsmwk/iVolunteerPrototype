@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
 import java.util.List;
+
+
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 
+//TODO xnet
+
 @RestController
 @RequestMapping("/tenant")
 public class TenantController {
@@ -24,6 +28,7 @@ public class TenantController {
 	@Autowired private LoginService loginService;
 	@Autowired private TenantRepository tenantRepository;
 
+//	 TODO /all
 	@GetMapping
 	public List<Tenant> getAllTenants() {
 		return tenantService.getAllTenants();
@@ -57,11 +62,13 @@ public class TenantController {
 		return tenantService.getTenantsByMarketplaceIds(marketplaceId);
 	}
 
+	// /new
 	@PostMapping
 	public Tenant createTenant(@RequestBody Tenant tenant) {
 		return tenantService.createTenant(tenant);
 	}
 
+	// /update
 	@PutMapping
 	public Tenant updateTenant(@RequestBody Tenant tenant) {
 		return tenantService.updateTenant(tenant);
