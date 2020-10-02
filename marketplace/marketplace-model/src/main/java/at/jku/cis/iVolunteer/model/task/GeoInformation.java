@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.api.standard.model.task;
+package at.jku.cis.iVolunteer.model.task;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -6,8 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class GeoInformation {
 
 	private boolean enabled;
-	private String latitude;
-	private String longitude;
+	private double latitude;
+	private double longitude;
 	private int gridID;
 
 	public GeoInformation() {
@@ -21,19 +21,19 @@ public class GeoInformation {
 		this.enabled = enabled;
 	}
 
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 

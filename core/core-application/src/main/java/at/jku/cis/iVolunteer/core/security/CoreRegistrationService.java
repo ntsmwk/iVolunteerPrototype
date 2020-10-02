@@ -29,37 +29,35 @@ public class CoreRegistrationService {
 	@Autowired CoreUserService coreUserService;
 	@Autowired MarketplaceService marketplaceService;
 
-	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	
 	public RegisterResponseMessage registerUser(CoreUser user, AccountType type) {
-		
-		CoreUser existingUser = this.coreUserRepository.findByUsernameOrLoginEmail(user.getUsername(), user.getLoginEmail());
-		
-		if(existingUser != null) {
+
+		CoreUser existingUser = this.coreUserRepository.findByUsernameOrLoginEmail(user.getUsername(),
+				user.getLoginEmail());
+
+		if (existingUser != null) {
 			if (user.getUsername().equals(existingUser.getUsername())) {
 				return new RegisterResponseMessage(RegisterResponse.USERNAME, "Benutzername existiert bereits");
 			} else if (user.getLoginEmail().equals(existingUser.getLoginEmail())) {
 				return new RegisterResponseMessage(RegisterResponse.EMAIL, "E-Mail existiert bereits");
 			}
 		}
-		
-			encryptPassword(user);
-		
-			Marketplace marketplace = marketplaceService.findFirst();			
-			user.setRegisteredMarketplaceIds(Collections.singletonList(marketplace.getId()));
-			this.coreUserService.addNewUser(user, "", true);
-//			this.coreUserRepository.save(user);
-			boolean sendSuccessful = this.coreActivationService.createActivationAndSendLink(user, type);
-			
-			if (!sendSuccessful) {
-				return new RegisterResponseMessage(RegisterResponse.ACTIVATION, "Senden der Aktivierungs-E-Mail fehlgeschlagen");
-			}
-			
-			return new RegisterResponseMessage(RegisterResponse.OK, "");
-		
+
+		encryptPassword(user);
+
+		Marketplace marketplace = marketplaceService.findFirst();
+		user.setRegisteredMarketplaceIds(Collections.singletonList(marketplace.getId()));
+		this.coreUserService.addNewUser(user, "", true);
+		boolean sendSuccessful = this.coreActivationService.createActivationAndSendLink(user, type);
+
+		if (!sendSuccessful) {
+			return new RegisterResponseMessage(RegisterResponse.ACTIVATION,
+					"Senden der Aktivierungs-E-Mail fehlgeschlagen");
+		}
+
+		return new RegisterResponseMessage(RegisterResponse.OK, "");
+
 	}
 
 	// public void registerVolunteer(CoreVolunteer volunteer) {
