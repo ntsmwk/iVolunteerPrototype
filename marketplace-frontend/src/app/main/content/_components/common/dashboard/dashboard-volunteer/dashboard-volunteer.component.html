@@ -70,7 +70,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Aussteller</mat-header-cell>
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <img class="avatar" [src]="getTenantImage(entry.tenantId)" />
+              <img class="avatar" src="/assets/images/avatars/profile.jpg" />
               <div style="align-self: center">
                 {{ getIssuerName(entry.tenantId) }}
               </div>
@@ -125,7 +125,7 @@
                   <ng-container *ngIf="isSynced(entry)">
                     <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstanceToOthers(entry, tenant)">
                       <div fxLayout="row" fxLayoutAlign="start center">
-                        <img class="avatar" [src]="getTenantImage(tenant.id)" />
+                        <img class="avatar" src="/assets/images/avatars/profile.jpg" />
                         <div>{{ tenant.name }}</div>
                       </div>
                     </button>
@@ -140,7 +140,7 @@
                     <div fxLayout="row" fxLayoutAlign="start center">
                       <img
                         class="avatar"
-                        [src]="getTenantImage(entry.tenantId)"
+                        src="/assets/images/avatars/profile.jpg"
                       />
                       <div>{{ getTenantName(entry.tenantId) }}</div>
                     </div>
@@ -154,7 +154,7 @@
         <ng-container matColumnDef="share">
           <mat-header-cell *matHeaderCellDef> Geteilt mit </mat-header-cell>
           <mat-cell *matCellDef="let entry">
-            <img *ngFor="let tenant of getSharedWithTenants(entry)" class="avatar" matTooltip="{{ tenant.name }}" [src]="getTenantImage(tenant.id)" style="cursor: pointer" [matMenuTriggerFor]="revokeMenu" [matMenuTriggerData]="{ tenant: tenant }" />
+            <img *ngFor="let tenant of getSharedWithTenants(entry)" class="avatar" matTooltip="{{ tenant.name }}" src="/assets/images/avatars/profile.jpg" style="cursor: pointer" [matMenuTriggerFor]="revokeMenu" [matMenuTriggerData]="{ tenant: tenant }" />
             <mat-menu #revokeMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
               <ng-template matMenuContent let-tenant="tenant">
                 <button mat-menu-item (click)="revokeSharedClassInstance(entry, tenant)">

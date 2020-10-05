@@ -1,12 +1,7 @@
 <div *ngIf="isLoaded && role !== 'NONE'">
-  <button
-    mat-button
-    [matMenuTriggerFor]="roleMenu"
-    class="user-button"
-    [matTooltip]="
+  <button mat-button [matMenuTriggerFor]="roleMenu" class="user-button" [matTooltip]="
       possibleRoleTenantMappings.length > 0 ? 'Rolle wechseln' : null
-    "
-  >
+    ">
     <div fxLayout="row" fxLayoutAlign="center center">
       <img
         *ngIf="role != 'VOLUNTEER'"
@@ -26,13 +21,9 @@
   </button>
 
   <mat-menu #roleMenu="matMenu" [overlapTrigger]="false">
-    <button
-      mat-menu-item
-      *ngFor="let mapping of possibleRoleTenantMappings"
-      (click)="onRoleSelected(mapping)"
-    >
+    <button mat-menu-item *ngFor="let mapping of possibleRoleTenantMappings" (click)="onRoleSelected(mapping)">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <img class="avatar" [src]="getTenantImage(mapping)" />
+        <img class="avatar" src="/assets/images/avatars/profile.jpg" />
         <span>{{ getRoleNameString(mapping.role) }}</span>
       </div>
     </button>
