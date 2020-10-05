@@ -70,7 +70,8 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Aussteller</mat-header-cell>
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <img class="avatar" [src]="getTenantImage()" />
+              <!-- TODO MWE comment -->
+              <!-- <img class="avatar" [src]="getTenantImage() | async" /> -->
               <div style="align-self: center">
                 {{ getIssuerName(entry.tenantId) }}
               </div>
@@ -125,7 +126,8 @@
                   <ng-container *ngIf="isSynced(entry)">
                     <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstanceToOthers(entry, tenant)">
                       <div fxLayout="row" fxLayoutAlign="start center">
-                        <img class="avatar" [src]="getTenantImage(tenant) | async" />
+                        <!-- TODO MWE comment -->
+                        <!-- <img class="avatar" [src]="getTenantImage(tenant) | async" /> -->
                         <div>{{ tenant.name }}</div>
                       </div>
                     </button>
@@ -138,10 +140,11 @@
                   </button>
                   <button *ngIf="!isSynced(entry)" mat-menu-item (click)="shareClassInstanceToIssuer(entry)">
                     <div fxLayout="row" fxLayoutAlign="start center">
-                      <img
+                      <!-- TODO MWE comment -->
+                      <!-- <img
                         class="avatar"
                         [src]="getTenantImageById(entry.tenantId) | async"
-                      />
+                      /> -->
                       <div>{{ getTenantName(entry.tenantId) }}</div>
                     </div>
                   </button>
@@ -154,7 +157,8 @@
         <ng-container matColumnDef="share">
           <mat-header-cell *matHeaderCellDef> Geteilt mit </mat-header-cell>
           <mat-cell *matCellDef="let entry">
-            <img *ngFor="let tenant of getSharedWithTenants(entry)" class="avatar" matTooltip="{{ tenant.name }}" [src]="getTenantImage(tenant) | async" style="cursor: pointer" [matMenuTriggerFor]="revokeMenu" [matMenuTriggerData]="{ tenant: tenant }" />
+            <!-- TODO MWE comment -->
+            <!-- <img *ngFor="let tenant of getSharedWithTenants(entry)" class="avatar" matTooltip="{{ tenant.name }}" [src]="getTenantImage(tenant) | async" style="cursor: pointer" [matMenuTriggerFor]="revokeMenu" [matMenuTriggerData]="{ tenant: tenant }" /> -->
             <mat-menu #revokeMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
               <ng-template matMenuContent let-tenant="tenant">
                 <button mat-menu-item (click)="revokeSharedClassInstance(entry, tenant)">

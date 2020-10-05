@@ -11,7 +11,10 @@ export class ImageService {
 
   imageMap = {};
 
+  count = 0;
+
   async findById(imageId: string) {
+    this.count++;
     return new Promise((resolve, reject) => {
       this.retriveAndStoreImageById(imageId).then(img => {
         if (img) {
@@ -24,14 +27,26 @@ export class ImageService {
   }
 
   private async retriveAndStoreImageById(imageId: string) {
+    if (this.count < 10) {
+      console.error(this.count);
+      console.error(this.imageMap);
+      console.error(imageId);
+      console.error(this.imageMap[imageId]);
+    }
     if (this.imageMap[imageId]) {
+      console.error("found: " + imageId);
+      return new Promise((resolve, reject) => resolve(this.imageMap[imageId]));
+    } else {
+      if (this.count < 10) {
+        let image: Image = <Image>(
+          await this.http.get(`/core/image/${imageId}`).toPromise()
+        );
+        console.error(image);
+        console.error("--------------------------");
+        this.imageMap[imageId] = image;
+      }
       return new Promise((resolve, reject) => resolve(this.imageMap[imageId]));
     }
-    let image: Image = <Image>(
-      await this.http.get(`/core/image/${imageId}`).toPromise()
-    );
-    this.imageMap[imageId] = image;
-    return new Promise((resolve, reject) => resolve(image));
   }
 
   createImage(image: Image) {

@@ -124,8 +124,9 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     return img.imageWrapper;
   }
 
-  async getTenantImage(mapping: RoleTenantMapping) {
-    const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
+  async getTenantImageByTenantId(tenantId: string) {
+    console.error(tenantId)
+    const tenant = this.allTenants.find(t => t.id === tenantId);
     return this.imageService.findById(tenant.id);
   }
 
