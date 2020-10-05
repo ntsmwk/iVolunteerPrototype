@@ -44,27 +44,32 @@ export class TenantService {
       return "/assets/images/avatars/profile.jpg";
     }
 
-    let profileImg: Image = <Image>(
-      await this.imageService.findById(tenant.imageId).toPromise()
-    );
-    const ret = this.imageService.getImgSourceFromImageWrapper(
-      profileImg.imageWrapper
-    );
-    if (ret == null) {
-      return "/assets/images/avatars/profile.jpg";
-    } else {
-      return ret;
-    }
+    //TODO fucked
+    // let profileImg: Image = <Image>(
+    //   await this.imageService.findById(tenant.imageId).toPromise()
+    // );
+    // const ret = this.imageService.getImgSourceFromImageWrapper(
+    //   profileImg.imageWrapper
+    // );
+    // if (ret == null) {
+    return "/assets/images/avatars/profile.jpg";
+    // } else {
+    //   return ret;
+    // }
   }
 
   async getTenantLandingPageImage(tenant: Tenant) {
-    let landingImg: Image = <Image>(
-      await this.imageService.findById(tenant.landingpageImageId).toPromise()
-    );
+    //TODO fucked
+    // let landingImg: Image = <Image>(
+    //   await this.imageService.findById(tenant.landingpageImageId).toPromise()
+    // );
 
-    return this.imageService.getImgSourceFromImageWrapper(
-      landingImg.imageWrapper
-    );
+    // return this.imageService.getImgSourceFromImageWrapper(
+    //   landingImg.imageWrapper
+    // );
+
+    return "/assets/images/avatars/profile.jpg";
+
   }
 
   initHeader(tenant: Tenant) {

@@ -47,10 +47,10 @@ export class UserProfileImageUploadComponent implements OnInit {
     if (isNullOrUndefined(user)) {
       return;
     }
-    const userImage = <UserImage>await this.imageService.findById(this.user.id).toPromise();
-    this.previewImage = this.userImageService.getUserProfileImage(userImage);
+    // const userImage = <UserImage>await this.imageService.findById(this.user.id).toPromise();
+    // this.previewImage = this.userImageService.getUserProfileImage(userImage);
 
-    this.oldImage = this.sanitizer.sanitize(SecurityContext.URL, this.previewImage);
+    // this.oldImage = this.sanitizer.sanitize(SecurityContext.URL, this.previewImage);
   }
 
 
