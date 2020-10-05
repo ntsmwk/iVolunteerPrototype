@@ -38,7 +38,8 @@ export class ProfileComponent implements OnInit {
     );
     this.user = this.globalInfo.user;
 
-    // TODO Don't wait for image...
+    // TODO MWE comment
+    // Don't wait for image... 
     // this.imageService
     //   .findById(this.user.imageId)
     //   .toPromise()

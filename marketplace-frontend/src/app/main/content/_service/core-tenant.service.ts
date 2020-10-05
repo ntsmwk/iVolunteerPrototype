@@ -39,8 +39,11 @@ export class TenantService {
     return this.http.put(`/core/tenant/update`, tenant);
   }
 
-  async getTenantProfileImage(tenant: Tenant) {
-    if (tenant == null) {
+
+  
+  async getTenantImage(tenant: Tenant) {
+    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
+    if (!img) {
       return "/assets/images/avatars/profile.jpg";
     }
 
@@ -69,7 +72,6 @@ export class TenantService {
     // );
 
     return "/assets/images/avatars/profile.jpg";
-
   }
 
   initHeader(tenant: Tenant) {

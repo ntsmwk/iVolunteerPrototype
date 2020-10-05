@@ -97,9 +97,7 @@ export class TenantFormContentComponent implements OnInit {
 
     console.log(this.tenantForm.value);
 
-    this.previewProfileImage = this.tenantService.getTenantProfileImage(
-      this.tenant
-    );
+    this.previewProfileImage = this.tenantService.getTenantImage(this.tenant);
     this.addedTags = this.tenant.tags;
   }
 
@@ -118,12 +116,12 @@ export class TenantFormContentComponent implements OnInit {
 
     const tenantId = this.tenant.id;
 
-    const oldProfileImage = await this.imageService
-      .findById(this.tenant.imageId)
-      .toPromise();
-    const oldLandingPageImage = await this.imageService
-      .findById(this.tenant.landingpageImageId)
-      .toPromise();
+    const oldProfileImage = await this.imageService.findById(
+      this.tenant.imageId
+    );
+    const oldLandingPageImage = await this.imageService.findById(
+      this.tenant.landingpageImageId
+    );
     this.tenant = new Tenant(this.tenantForm.value);
     this.tenant.id = tenantId;
     this.tenant.marketplaceId = this.globalInfo.marketplace.id;

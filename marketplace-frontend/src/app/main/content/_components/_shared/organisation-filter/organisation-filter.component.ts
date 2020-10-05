@@ -6,10 +6,11 @@ import { User } from "../../../_model/user";
 import { Marketplace } from "../../../_model/marketplace";
 import { Tenant } from "../../../_model/tenant";
 import { ImageService } from "../../../_service/image.service";
+import { Image } from "app/main/content/_model/image";
 
 @Component({
   selector: "organisation-filter",
-  templateUrl: "organisation-filter.component.html",
+  templateUrl: "organisation-filter.component.html"
 })
 export class OrganisationFilterComponent implements OnInit {
   volunteer: User;
@@ -24,7 +25,7 @@ export class OrganisationFilterComponent implements OnInit {
     private loginService: LoginService,
     private tenantService: TenantService,
     private imageService: ImageService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();
@@ -35,13 +36,13 @@ export class OrganisationFilterComponent implements OnInit {
     this.tenantSelectionChanged.emit(this.selectedTenants);
   }
 
-  getTenantImage(tenant: Tenant) {
-    return this.tenantService.getTenantProfileImage(tenant);
+  async getTenantImage(tenant: Tenant) {
+    return this.imageService.findById(tenant.imageId);
   }
 
   tenantClicked(tenant: Tenant) {
-    let t = this.selectedTenants.find((t) => t.id === tenant.id);
-    let index = this.selectedTenants.findIndex((t) => t.id === tenant.id);
+    let t = this.selectedTenants.find(t => t.id === tenant.id);
+    let index = this.selectedTenants.findIndex(t => t.id === tenant.id);
 
     if (index >= 0) {
       this.selectedTenants.splice(index, 1);
@@ -52,6 +53,6 @@ export class OrganisationFilterComponent implements OnInit {
   }
 
   tenantSelected(tenant: Tenant) {
-    return this.selectedTenants.findIndex((t) => t.id === tenant.id) >= 0;
+    return this.selectedTenants.findIndex(t => t.id === tenant.id) >= 0;
   }
 }

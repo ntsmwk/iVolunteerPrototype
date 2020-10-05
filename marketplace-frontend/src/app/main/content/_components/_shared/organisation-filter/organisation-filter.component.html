@@ -1,27 +1,17 @@
 <div style="font-size: 18px">
   <div>Deine Organisationen filtern</div>
   <div fxLayout="row" fxLayoutAlign="start start">
-    <button
-      *ngFor="let t of tenants"
-      mat-stroked-button
-      type="button"
-      color="accent"
-      style="height: 60px; min-width: 60px; margin: 3px;"
-      fxLayout="row"
-      fxLayoutAlign="start center"
-      [ngStyle]="{
+    <button *ngFor="let t of tenants" mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px; margin: 3px;" fxLayout="row" fxLayoutAlign="start center" [ngStyle]="{
         'background-color': tenantSelected(t) ? '#4863A0' : 'white'
-      }"
-      (click)="tenantClicked(t)"
-      matTooltip="{{ t.name }}"
-    >
+      }" (click)="tenantClicked(t)" matTooltip="{{ t.name }}">
       <div
         style=" position: relative; width: 50px; height: 50px; padding-top: 5px;"
       >
-        <img
+      <!-- TODO MWE comment -->
+        <!-- <img
           style="object-fit: contain; max-width: 100%; max-height: 100%"
-          [src]="getTenantImage(t)"
-        />
+          [src]="getTenantImage(t) | async"
+        /> -->
       </div>
     </button>
     <div style="padding:3px"></div>

@@ -13,7 +13,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { ImageService } from "app/main/content/_service/image.service";
 import { UserService } from "app/main/content/_service/user.service";
-import { UserImage } from "app/main/content/_model/image";
+import { UserImage, Image } from "app/main/content/_model/image";
 import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
 
 @Component({
@@ -62,7 +62,6 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     // Don't wait for image...
     this.imageService
       .findById(this.user.imageId)
-      .toPromise()
       .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([
@@ -117,21 +116,29 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     return this.roleChangeService.getRoleNameString(role);
   }
 
-  getCurrentTenantImage() {
+  async getCurrentTenantImage() {
     const tenant = this.allTenants.find(
       t => t.id === this.currentMapping.tenantIds[0]
     );
-    return this.tenantService.getTenantProfileImage(tenant);
+    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
+    return img.imageWrapper;
   }
 
-  getTenantImage(mapping: RoleTenantMapping) {
-    if (mapping.role === UserRole.VOLUNTEER) {
-      return this.userImageService.getUserProfileImage(this.userImage);
-    }
-
-    const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
-    return this.tenantService.getTenantProfileImage(tenant);
+  async getTenantImageByTenantId(tenantId: string) {
+    console.error(tenantId)
+    const tenant = this.allTenants.find(t => t.id === tenantId);
+    return this.imageService.findById(tenant.id);
   }
+
+  // async getTenantImage(mapping: RoleTenantMapping) {
+  //   if (mapping.role === UserRole.VOLUNTEER) {
+  //     return this.userImageService.getUserProfileImage(this.userImage);
+  //   }
+
+  //   const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
+  //   let img: Image = <Image>await this.imageService.findById(tenant.imageId);
+  //   return img.imageWrapper;
+  // }
 
   isSameMapping(a: RoleTenantMapping, b: RoleTenantMapping) {
     if (a.role !== b.role) {

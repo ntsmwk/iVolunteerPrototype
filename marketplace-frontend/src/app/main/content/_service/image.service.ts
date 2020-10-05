@@ -3,13 +3,50 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { ImageWrapper, Image } from "../_model/image";
 import { isNullOrUndefined } from "util";
 import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class ImageService {
   constructor(private sanitizer: DomSanitizer, private http: HttpClient) {}
 
-  findById(imageId: string) {
-    return this.http.get(`/core/image/${imageId}`);
+  imageMap = {};
+
+  count = 0;
+
+  async findById(imageId: string) {
+    this.count++;
+    return new Promise((resolve, reject) => {
+      this.retriveAndStoreImageById(imageId).then(img => {
+        if (img) {
+          resolve(img);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+
+  private async retriveAndStoreImageById(imageId: string) {
+    if (this.count < 10) {
+      console.error(this.count);
+      console.error(this.imageMap);
+      console.error(imageId);
+      console.error(this.imageMap[imageId]);
+    }
+    if (this.imageMap[imageId]) {
+      console.error("found: " + imageId);
+      return new Promise((resolve, reject) => resolve(this.imageMap[imageId]));
+    } else {
+      if (this.count < 10) {
+        let image: Image = <Image>(
+          await this.http.get(`/core/image/${imageId}`).toPromise()
+        );
+        console.error(image);
+        console.error("--------------------------");
+        this.imageMap[imageId] = image;
+      }
+      return new Promise((resolve, reject) => resolve(this.imageMap[imageId]));
+    }
   }
 
   createImage(image: Image) {
@@ -22,11 +59,6 @@ export class ImageService {
 
   deleteImage(imageId: string) {
     return this.http.delete(`/core/image/${imageId}`);
-  }
-
-  getPNGSourceFromBytes(bytes: string) {
-    const objectURL = "data:image/png;base64," + bytes;
-    return this.sanitizer.bypassSecurityTrustUrl(objectURL);
   }
 
   getImgSourceFromImageWrapper(imageWrapper: ImageWrapper) {

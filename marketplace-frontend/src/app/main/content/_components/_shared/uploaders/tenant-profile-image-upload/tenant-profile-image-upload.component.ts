@@ -1,9 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, SecurityContext } from '@angular/core';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { isNullOrUndefined } from 'util';
-import { FileInput } from 'ngx-material-file-input';
-import { DomSanitizer } from '@angular/platform-browser';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  SecurityContext
+} from "@angular/core";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { Tenant } from "app/main/content/_model/tenant";
+import { isNullOrUndefined } from "util";
+import { FileInput } from "ngx-material-file-input";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "tenant-profile-image-upload",
@@ -13,7 +20,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class TenantProfileImageUploadComponent implements OnInit {
 
   @Input() tenant: Tenant;
-  @Output() uploadedImage: EventEmitter<{ key: string, image: any }> = new EventEmitter();
+  @Output() uploadedImage: EventEmitter<{
+    key: string;
+    image: any;
+  }> = new EventEmitter();
 
   imageFileInput: FileInput;
   previewImage: any;
@@ -26,7 +36,7 @@ export class TenantProfileImageUploadComponent implements OnInit {
   constructor(
     private tenantService: TenantService,
     private sanitizer: DomSanitizer
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.loaded = false;
@@ -34,7 +44,6 @@ export class TenantProfileImageUploadComponent implements OnInit {
     this.imageFileInput = undefined;
     this.oldImage = undefined;
     this.previewImage = undefined;
-
 
     await this.initialize(this.tenant);
     this.loaded = true;
@@ -44,19 +53,21 @@ export class TenantProfileImageUploadComponent implements OnInit {
     if (isNullOrUndefined(tenant)) {
       return;
     }
-    this.previewImage = this.tenantService.getTenantProfileImage(this.tenant);
-    this.oldImage = this.sanitizer.sanitize(SecurityContext.URL, this.previewImage);
+    this.previewImage = this.tenantService.getTenantImage(this.tenant);
+    this.oldImage = this.sanitizer.sanitize(
+      SecurityContext.URL,
+      this.previewImage
+    );
   }
-
 
   uploadImage() {
     this.uploadingImage = true;
     const fileReader = new FileReader();
-    fileReader.onload = async (e) => {
+    fileReader.onload = async e => {
       const image = fileReader.result;
       this.uploadingImage = false;
       this.previewImage = image;
-      this.uploadedImage.emit({ key: 'uploaded', image });
+      this.uploadedImage.emit({ key: "uploaded", image });
     };
     fileReader.readAsDataURL(this.imageFileInput.files[0]);
   }
@@ -64,14 +75,13 @@ export class TenantProfileImageUploadComponent implements OnInit {
   deleteImage() {
     this.imageFileInput = undefined;
     this.previewImage = undefined;
-    this.uploadedImage.emit({ key: 'clear', image: null });
+    this.uploadedImage.emit({ key: "clear", image: null });
   }
 
   revertImage() {
     this.imageFileInput = undefined;
     this.uploadingImage = false;
     this.previewImage = this.oldImage;
-    this.uploadedImage.emit({ key: 'reverted', image: this.oldImage });
+    this.uploadedImage.emit({ key: "reverted", image: this.oldImage });
   }
-
 }

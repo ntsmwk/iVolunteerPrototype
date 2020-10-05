@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { LoginService } from 'app/main/content/_service/login.service';
+import { Component, OnInit } from "@angular/core";
+import { LoginService } from "app/main/content/_service/login.service";
 import {
   User,
   UserRole,
   RoleTenantMapping,
-  AccountType,
-} from 'app/main/content/_model/user';
-import { ImageService } from 'app/main/content/_service/image.service';
-import { fuseAnimations } from '@fuse/animations';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { Router } from '@angular/router';
-import { RoleChangeService } from 'app/main/content/_service/role-change.service';
-import { isNullOrUndefined } from 'util';
+  AccountType
+} from "app/main/content/_model/user";
+import { ImageService } from "app/main/content/_service/image.service";
+import { fuseAnimations } from "@fuse/animations";
+import { Tenant } from "app/main/content/_model/tenant";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { Router } from "@angular/router";
+import { RoleChangeService } from "app/main/content/_service/role-change.service";
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: "app-role-switch",
-  templateUrl: './role-switch.component.html',
-  styleUrls: ['./role-switch.component.scss'],
-  animations: fuseAnimations,
+  templateUrl: "./role-switch.component.html",
+  styleUrls: ["./role-switch.component.scss"],
+  animations: fuseAnimations
 })
 export class RoleSwitchComponent implements OnInit {
   user: User;
@@ -33,21 +33,31 @@ export class RoleSwitchComponent implements OnInit {
     private imageService: ImageService,
     private tenantService: TenantService,
     private roleChangeService: RoleChangeService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
     console.log(this.user);
-    this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(this.user);
+    this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(
+      this.user
+    );
     console.log(this.roleTenantMappings);
-    if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.PERSON) {
+    if (
+      this.roleTenantMappings.length === 0 &&
+      this.user.accountType === AccountType.PERSON
+    ) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
-        this.router.navigate(['/main/dashboard/tenants']);
+        this.router.navigate(["/main/dashboard/tenants"]);
       });
-    } else if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.ORGANIZATION) {
-      this.loginService.generateGlobalInfo(UserRole.TENANT_ADMIN, []).then(() => {
-        this.router.navigate(['/main/create-tenant']);
-      });
+    } else if (
+      this.roleTenantMappings.length === 0 &&
+      this.user.accountType === AccountType.ORGANIZATION
+    ) {
+      this.loginService
+        .generateGlobalInfo(UserRole.TENANT_ADMIN, [])
+        .then(() => {
+          this.router.navigate(["/main/create-tenant"]);
+        });
     } else if (this.roleTenantMappings.length === 1) {
       this.onRoleSelected(this.roleTenantMappings[0]);
     }
@@ -61,24 +71,23 @@ export class RoleSwitchComponent implements OnInit {
     this.loginService
       .generateGlobalInfo(mapping.role, mapping.tenantIds)
       .then(() => {
-
-        this.router.navigate(['/main/dashboard']).then(() => {
+        this.router.navigate(["/main/dashboard"]).then(() => {
           this.roleChangeService.changeRole(mapping.role);
         });
       });
   }
 
-  getTenant(tenantId: string) {
-    return this.allTenants.filter((t) => t.id === tenantId);
+  async getTenantImageByTenantId(tenantId: string) {
+    let tenant = this.allTenants.find(t => t.id === tenantId)[0];
+    return this.imageService.findById(tenant.imageId);
   }
 
-  getTenantImage(tenantId: string) {
-    const tenant = this.allTenants.find((t) => t.id === tenantId);
-    return this.tenantService.getTenantProfileImage(tenant);
+  getTenant(tenantId: string) {
+    return this.allTenants.filter(t => t.id === tenantId);
   }
 
   getTenantNameString(tenantId: string) {
-    const tenant = this.allTenants.find((t) => t.id === tenantId);
+    const tenant = this.allTenants.find(t => t.id === tenantId);
     return tenant.name;
   }
 
