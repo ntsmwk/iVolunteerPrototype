@@ -22,7 +22,7 @@
         </mat-card-header>
         <mat-card-content>
           <div *ngFor="let tenantId of mapping.tenantIds" fxLayout="row" fxLayoutAlign="start center" style="margin-left: 40px;">
-            <img class="avatar" src="/assets/images/avatars/profile.jpg" />
+            <img class="avatar" [src]="getTenantImageByTenantId(tenantId) | async" />
             <p>
               {{ getTenantNameString(tenantId) }}
             </p>

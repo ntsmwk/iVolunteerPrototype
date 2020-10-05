@@ -12,14 +12,26 @@ export class ImageService {
   imageMap = {};
 
   async findById(imageId: string) {
+    return new Promise((resolve, reject) => {
+      this.retriveAndStoreImageById(imageId).then(img => {
+        if (img) {
+          resolve(img);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+
+  private async retriveAndStoreImageById(imageId: string) {
     if (this.imageMap[imageId]) {
-      return new Promise(() => this.imageMap[imageId]);
+      return new Promise((resolve, reject) => resolve(this.imageMap[imageId]));
     }
     let image: Image = <Image>(
       await this.http.get(`/core/image/${imageId}`).toPromise()
     );
     this.imageMap[imageId] = image;
-    return new Promise(() => image);
+    return new Promise((resolve, reject) => resolve(image));
   }
 
   createImage(image: Image) {

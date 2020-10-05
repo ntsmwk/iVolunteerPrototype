@@ -77,6 +77,11 @@ export class RoleSwitchComponent implements OnInit {
       });
   }
 
+  async getTenantImageByTenantId(tenantId: string) {
+    let tenant = this.allTenants.find(t => t.id === tenantId)[0];
+    return this.imageService.findById(tenant.imageId);
+  }
+
   getTenant(tenantId: string) {
     return this.allTenants.filter(t => t.id === tenantId);
   }

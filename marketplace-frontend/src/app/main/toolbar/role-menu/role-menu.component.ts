@@ -125,14 +125,19 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
   }
 
   async getTenantImage(mapping: RoleTenantMapping) {
-    if (mapping.role === UserRole.VOLUNTEER) {
-      return this.userImageService.getUserProfileImage(this.userImage);
-    }
-
     const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
-    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
-    return img.imageWrapper;
+    return this.imageService.findById(tenant.id);
   }
+
+  // async getTenantImage(mapping: RoleTenantMapping) {
+  //   if (mapping.role === UserRole.VOLUNTEER) {
+  //     return this.userImageService.getUserProfileImage(this.userImage);
+  //   }
+
+  //   const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
+  //   let img: Image = <Image>await this.imageService.findById(tenant.imageId);
+  //   return img.imageWrapper;
+  // }
 
   isSameMapping(a: RoleTenantMapping, b: RoleTenantMapping) {
     if (a.role !== b.role) {

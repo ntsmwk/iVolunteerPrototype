@@ -23,7 +23,7 @@
   <mat-menu #roleMenu="matMenu" [overlapTrigger]="false">
     <button mat-menu-item *ngFor="let mapping of possibleRoleTenantMappings" (click)="onRoleSelected(mapping)">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <img class="avatar" src="/assets/images/avatars/profile.jpg" />
+        <img class="avatar" [src]="getTenantImageByTenantId(mapping.tenantId) | async" />
         <span>{{ getRoleNameString(mapping.role) }}</span>
       </div>
     </button>

@@ -36,6 +36,10 @@ export class OrganisationFilterComponent implements OnInit {
     this.tenantSelectionChanged.emit(this.selectedTenants);
   }
 
+  async getTenantImage(tenant: Tenant) {
+    return this.imageService.findById(tenant.imageId);
+  }
+
   tenantClicked(tenant: Tenant) {
     let t = this.selectedTenants.find(t => t.id === tenant.id);
     let index = this.selectedTenants.findIndex(t => t.id === tenant.id);

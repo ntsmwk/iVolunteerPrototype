@@ -214,6 +214,15 @@ export class DashboardVolunteerComponent implements OnInit {
     this.isLoaded = true;
   }
 
+  async getTenantImage(tenant: Tenant) {
+    return this.imageService.findById(tenant.imageId);
+  }
+
+  async getTenantImageById(tenantId: string){
+    let tenant = this.allTenants.find(t => t.id === tenantId)[0]
+    return this.getTenantImage(tenant);
+  }
+
   setVolunteerImage() {
     this.image = this.userImageService.getUserProfileImage(this.volunteerImage);
   }

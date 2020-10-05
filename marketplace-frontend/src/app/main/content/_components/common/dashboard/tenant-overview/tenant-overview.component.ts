@@ -25,7 +25,8 @@ export class TenantOverviewComponent implements OnInit {
     private loginService: LoginService,
     private tenantService: TenantService,
     private coreUserService: CoreUserService,
-    private roleChangeService: RoleChangeService
+    private roleChangeService: RoleChangeService,
+    private imageService: ImageService
   ) {}
 
   async ngOnInit() {
@@ -33,6 +34,10 @@ export class TenantOverviewComponent implements OnInit {
     this.updateCurrentInfo();
 
     this.isLoaded = true;
+  }
+
+  async getTenantImage(tenant: Tenant) {
+    return this.imageService.findById(tenant.imageId);
   }
 
   isSubscribed(tenant: Tenant, role: UserRole) {
