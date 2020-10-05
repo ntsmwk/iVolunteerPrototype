@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.marketplace.task;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +23,7 @@ import at.jku.cis.iVolunteer.model.task.TaskInstance;
 import at.jku.cis.iVolunteer.model.user.User;
 
 
-//TODO xnet
+//TODO xnet done - test
 @RestController
 @RequestMapping("/task")
 public class TaskInstanceController {
@@ -29,8 +31,21 @@ public class TaskInstanceController {
 	@Autowired private ClassInstanceService classInstanceService;
 	@Autowired private LoginService loginService;
 	@Autowired private ClassInstanceToTaskInstanceMapper classInstanceToTaskInstanceMapper;
+	
+	/** ADD OR REDO
+	 * task/all 
+	 * task/tenantId/tid/all
+	 * task/tenantId/tid/subscribed
+	 * task/tenantId/tid/unsubscribed
+	 */
+	
+	@GetMapping("/all")
+	public List<TaskInstance> getAllTaskInstances() {
+		List<ClassInstance> classInstances = classInstanceService.getAllClassInstances();
+		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
+	}
 
-	@GetMapping("/tenant/{tenantId}")
+	@GetMapping("/tenant/{tenantId}/all")
 	public List<TaskInstance> getTaskClassInstancesByTenantId(@PathVariable String tenantId) {
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK, tenantId);
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
@@ -50,6 +65,21 @@ public class TaskInstanceController {
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype.TASK, user.getId(), tenantId, true);
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
+	
+	@GetMapping("/tenant/{tenantId}/unsubscribed")
+	public List<TaskInstance> getUnsubscribedTaskClassInstancesByTenantId(@PathVariable String tenantId) {
+		User user = loginService.getLoggedInUser();
+	
+		//TODO DEBUG TESTING
+//		user = new User();
+//		user.setId("5f71ca22e5ccdd629ee45d47");
+		//--------
+		if (user == null) {
+			return null;
+		}
+		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype.TASK, user.getId(), tenantId, false);
+		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
+	}
 
 	@GetMapping("/subscribed")
 	public List<TaskInstance> getSubscribedTaskClassInstances() {
@@ -65,14 +95,23 @@ public class TaskInstanceController {
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype.TASK, user.getId(), true);
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
+	
+	@GetMapping("/unsubscribed")
+	public List<TaskInstance> getUnsubscribedTaskClassInstances() {
+		User user = loginService.getLoggedInUser();
+		
+		//TODO DEBUG TESTING
+//		user = new User();
+//		user.setId("5f71ca22e5ccdd629ee45d47");
+		//--------
+		if (user == null) {
+			return null;
+		}
+		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype.TASK, user.getId(), false);
+		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
+	}
 
-/** ADD OR REDO
- * task/all 
- * task/unsubscribe
- * task/tenantId/tid/all
- * task/tenantId/tid/subscribed
- * task/tenantId/tid/unsubscribed
- */
+
 	
 	
 	@GetMapping("/{taskId}")
@@ -80,6 +119,42 @@ public class TaskInstanceController {
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
 		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
+	
+
+	@PutMapping("/{taskId}/subscribe")
+	 public ResponseEntity<Object> subscribeToTask(@PathVariable String taskId) {
+		if (taskId == null) {
+			return new ResponseEntity<Object>("taskId must not be null", HttpStatus.NOT_ACCEPTABLE);
+		}
+		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
+		if (classInstance == null) {
+			return new ResponseEntity<Object>("no such task", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		classInstance.setSubscribed(true);
+		classInstance = classInstanceService.saveClassInstance(classInstance);
+		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
+		
+	}
+	
+	@PutMapping("/{taskId}/unsubscribe")
+	 public ResponseEntity<Object> unsubscribeFromTask(@PathVariable String taskId) {
+		if (taskId == null) {
+			return new ResponseEntity<Object>("taskId must not be null", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
+		if (classInstance == null) {
+			return new ResponseEntity<Object>("no such task", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		classInstance.setSubscribed(false);
+		classInstance = classInstanceService.saveClassInstance(classInstance);
+		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
+	}
+	
+	
+	
 
 	@PostMapping("/new") 
 //	return id
@@ -91,11 +166,15 @@ public class TaskInstanceController {
 
 // TODO xnet	200 oder 400 und put
 	@PostMapping("/{taskId}")
-	public TaskInstance updateTask(@PathVariable String taskId, @RequestBody TaskInstance task) {
+	public ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody TaskInstance task) {
+		if (task == null || taskId == null) {
+			return new ResponseEntity<Object>("task / taskId must not be null", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
 		task.getRequired().setId(taskId);
 		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
-	}
+		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
 
+	}
 }

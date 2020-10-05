@@ -27,7 +27,7 @@ import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
-//TODO xnet - test
+//TODO xnet done - test
 
 @RestController
 @RequestMapping("/tenant")

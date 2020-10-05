@@ -21,7 +21,7 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 
-//TODO xnet done
+//TODO xnet done - test
 @RestController
 public class CoreUserController {
 
