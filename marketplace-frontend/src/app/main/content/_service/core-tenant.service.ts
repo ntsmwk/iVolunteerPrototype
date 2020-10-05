@@ -32,7 +32,7 @@ export class TenantService {
     return this.http.get(`/core/tenant/marketplace/${marketplaceId}`);
   }
 
-  save(tenant: Tenant) {
+  saveTenant(tenant: Tenant) {
     if (tenant.id == null) {
       return this.http.post(`/core/tenant/new`, tenant);
     }

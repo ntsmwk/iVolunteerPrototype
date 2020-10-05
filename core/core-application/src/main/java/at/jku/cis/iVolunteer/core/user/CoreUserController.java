@@ -83,11 +83,12 @@ public class CoreUserController {
 		return coreUserService.registerToMarketplace(userId, marketplaceId, authorization);
 	}
 
-	@PostMapping("/user/new")
-	private CoreUser addNewUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
-			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
-		return coreUserService.addNewUser(user, authorization, updateMarketplaces);
-	}
+//	@PostMapping("/user/new")
+//	private String addNewUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
+//			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
+//		CoreUser ret = coreUserService.addNewUser(user, authorization, updateMarketplaces);
+//		return ret.getId();
+//	}
 
 //	return 200er oder 400 - kein user falls möglich
 	@PutMapping("/user/update")
@@ -98,7 +99,7 @@ public class CoreUserController {
 		}
 		
 		user = coreUserService.updateUser(user, authorization, updateMarketplaces);
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
 	}
 
 	@PutMapping("/user/{userId}/subscribe/{marketplaceId}/{tenantId}/{role}")

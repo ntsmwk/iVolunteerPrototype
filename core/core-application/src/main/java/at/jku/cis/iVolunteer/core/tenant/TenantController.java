@@ -161,13 +161,13 @@ public class TenantController {
 	}
 	
 
-	// /new
+	// /new ... TODO
 	@PostMapping("/new")
 	public Tenant createTenant(@RequestBody Tenant tenant) {
 		return tenantService.createTenant(tenant);
 	}
 
-	// /update
+	// /update ... TODO
 	@PutMapping("/update")
 	public Tenant updateTenant(@RequestBody Tenant tenant) {
 		return tenantService.updateTenant(tenant);

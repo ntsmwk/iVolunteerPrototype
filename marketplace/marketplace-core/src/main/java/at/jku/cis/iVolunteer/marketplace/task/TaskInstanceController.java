@@ -154,17 +154,13 @@ public class TaskInstanceController {
 	}
 	
 	
-	
-
 	@PostMapping("/new") 
-//	return id
 	public TaskInstance createTask(@RequestBody TaskInstance task) {
 		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
 		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 
-// TODO xnet	200 oder 400 und put
 	@PostMapping("/{taskId}")
 	public ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody TaskInstance task) {
 		if (task == null || taskId == null) {

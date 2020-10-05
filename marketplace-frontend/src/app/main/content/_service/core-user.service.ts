@@ -46,12 +46,12 @@ export class CoreUserService {
     return this.http.post(`/core/user/${userId}/register/${marketplaceId}`, {});
   }
 
-  createUser(user: User, updateMarketplaces: boolean) {
-    return this.http.post(
-      `/core/user/new?updateMarketplaces=${updateMarketplaces}`,
-      user
-    );
-  }
+  // createUser(user: User, updateMarketplaces: boolean) {
+  //   return this.http.post(
+  //     `/core/user/new?updateMarketplaces=${updateMarketplaces}`,
+  //     user
+  //   );
+  // }
 
   updateUser(user: User, updateMarketplaces: boolean) {
     return this.http.put(

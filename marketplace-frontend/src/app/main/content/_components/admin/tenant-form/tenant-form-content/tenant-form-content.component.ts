@@ -48,7 +48,7 @@ export class TenantFormContentComponent implements OnInit {
     private loginService: LoginService,
     private imageService: ImageService,
     private roleChangeService: RoleChangeService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.loaded = false;
@@ -150,7 +150,7 @@ export class TenantFormContentComponent implements OnInit {
     this.tenant.tags = this.addedTags;
 
     this.tenantService
-      .save(this.tenant)
+      .saveTenant(this.tenant)
       .toPromise()
       .then((tenant: Tenant) => {
         this.loginService
