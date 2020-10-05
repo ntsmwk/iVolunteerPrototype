@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { User } from 'app/main/content/_model/user';
 import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
 import { UserImage } from 'app/main/content/_model/image';
+import { ImageService } from 'app/main/content/_service/image.service';
 
 @Component({
   selector: "user-profile-image-upload",
@@ -26,6 +27,7 @@ export class UserProfileImageUploadComponent implements OnInit {
 
   constructor(
     private userImageService: CoreUserImageService,
+    private imageService: ImageService,
     private sanitizer: DomSanitizer
   ) { }
 
@@ -45,7 +47,7 @@ export class UserProfileImageUploadComponent implements OnInit {
     if (isNullOrUndefined(user)) {
       return;
     }
-    const userImage = <UserImage>await this.userImageService.findByUserId(this.user.id).toPromise();
+    const userImage = <UserImage>await this.imageService.findById(this.user.id).toPromise();
     this.previewImage = this.userImageService.getUserProfileImage(userImage);
 
     this.oldImage = this.sanitizer.sanitize(SecurityContext.URL, this.previewImage);

@@ -8,7 +8,7 @@ import { Image } from "../_model/image";
   providedIn: "root"
 })
 export class TenantService {
-  constructor(private http: HttpClient, private imageService: ImageService) {}
+  constructor(private http: HttpClient, private imageService: ImageService) { }
 
   findAll() {
     return this.http.get(`/core/tenant`);
@@ -34,9 +34,9 @@ export class TenantService {
 
   save(tenant: Tenant) {
     if (tenant.id == null) {
-      return this.http.post(`/core/tenant`, tenant);
+      return this.http.post(`/core/tenant/new`, tenant);
     }
-    return this.http.put(`/core/tenant`, tenant);
+    return this.http.put(`/core/tenant/update`, tenant);
   }
 
   async getTenantProfileImage(tenant: Tenant) {
