@@ -49,7 +49,7 @@ public class ClassInstanceToTaskInstanceMapper implements AbstractMapper<ClassIn
 		required.setStartDate(propertyInstanceToTaskFieldMapper.toTarget(findProperty("Starting Date", source.getProperties())));
 		required.setEndDate(propertyInstanceToTaskFieldMapper.toTarget(findProperty("End Date", source.getProperties())));
 		required.setDescripiton(propertyInstanceToTaskFieldMapper.toTarget(findProperty("Description", source.getProperties())));
-		required.setLocation(propertyInstanceToTaskFieldMapper.toTarget(findProperty("Location", source.getProperties())));
+		required.setPlace(propertyInstanceToTaskFieldMapper.toTarget(findProperty("Location", source.getProperties())));
 
 		for (int i = 2; i < sortedFields.size(); i++) {
 			DynamicTaskBlock dynamicBlock = new DynamicTaskBlock();
@@ -175,7 +175,7 @@ public class ClassInstanceToTaskInstanceMapper implements AbstractMapper<ClassIn
 		description.setLevel(1);
 		findAndReplaceProperty(description, classInstance);
 		
-		PropertyInstance<Object> location = propertyInstanceToTaskFieldMapper.toSource(target.getRequired().getLocation());
+		PropertyInstance<Object> location = propertyInstanceToTaskFieldMapper.toSource(target.getRequired().getPlace());
 		location.setLevel(1);
 		findAndReplaceProperty(location, classInstance);
 		

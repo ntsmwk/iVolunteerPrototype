@@ -14,13 +14,16 @@ public class Tenant {
 
 	private String homepage;
 
-	private String imageId;
-
+	private String imageId; //TODO xnet rename "logo"? low prio
 	private String primaryColor;
 	private String secondaryColor;
 
 	private String marketplaceId;
-
+	
+	
+//	TODO xnet adresse hinzufügen
+//  TODO xnet mitglieder volunteers: User[] (würden wir im Frontend später erwarten) aktuell kann das einfach leer sein.. nur die wichtigsten infos beim user
+	
 	private List<String> tags = new ArrayList<>();
 
 	private String landingpageTitle;

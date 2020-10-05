@@ -8,7 +8,7 @@ import { Image } from "../_model/image";
   providedIn: "root"
 })
 export class TenantService {
-  constructor(private http: HttpClient, private imageService: ImageService) {}
+  constructor(private http: HttpClient, private imageService: ImageService) { }
 
   findAll() {
     return this.http.get(`/core/tenant`);
@@ -34,9 +34,9 @@ export class TenantService {
 
   save(tenant: Tenant) {
     if (tenant.id == null) {
-      return this.http.post(`/core/tenant`, tenant);
+      return this.http.post(`/core/tenant/new`, tenant);
     }
-    return this.http.put(`/core/tenant`, tenant);
+    return this.http.put(`/core/tenant/update`, tenant);
   }
 
 
@@ -46,24 +46,32 @@ export class TenantService {
     if (!img) {
       return "/assets/images/avatars/profile.jpg";
     }
-    const ret = this.imageService.getImgSourceFromImageWrapper(
-      img.imageWrapper
-    );
-    if (ret == null) {
-      return "/assets/images/avatars/profile.jpg";
-    } else {
-      return ret;
-    }
+
+    //TODO fucked
+    // let profileImg: Image = <Image>(
+    //   await this.imageService.findById(tenant.imageId).toPromise()
+    // );
+    // const ret = this.imageService.getImgSourceFromImageWrapper(
+    //   profileImg.imageWrapper
+    // );
+    // if (ret == null) {
+    return "/assets/images/avatars/profile.jpg";
+    // } else {
+    //   return ret;
+    // }
   }
 
   async getTenantLandingPageImage(tenant: Tenant) {
-    let landingImg: Image = <Image>(
-      await this.imageService.findById(tenant.landingpageImageId)
-    );
+    //TODO fucked
+    // let landingImg: Image = <Image>(
+    //   await this.imageService.findById(tenant.landingpageImageId).toPromise()
+    // );
 
-    return this.imageService.getImgSourceFromImageWrapper(
-      landingImg.imageWrapper
-    );
+    // return this.imageService.getImgSourceFromImageWrapper(
+    //   landingImg.imageWrapper
+    // );
+
+    return "/assets/images/avatars/profile.jpg";
   }
 
   initHeader(tenant: Tenant) {

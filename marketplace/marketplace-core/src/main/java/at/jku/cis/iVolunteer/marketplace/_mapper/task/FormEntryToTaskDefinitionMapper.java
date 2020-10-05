@@ -55,7 +55,7 @@ public class FormEntryToTaskDefinitionMapper implements AbstractMapper<FormEntry
 		required.setStartDate(classPropertyToTaskFieldMapper.toTarget(findProperty("Starting Date", source.getClassProperties())));
 		required.setEndDate(classPropertyToTaskFieldMapper.toTarget(findProperty("End Date", source.getClassProperties())));
 		required.setDescripiton(classPropertyToTaskFieldMapper.toTarget(findProperty("Description", source.getClassProperties())));
-		required.setLocation(classPropertyToTaskFieldMapper.toTarget(findProperty("Location", source.getClassProperties())));
+		required.setPlace(classPropertyToTaskFieldMapper.toTarget(findProperty("Location", source.getClassProperties())));
 		
 		taskDefinition.setDynamic(dynamic);
 		taskDefinition.setRequired(required);

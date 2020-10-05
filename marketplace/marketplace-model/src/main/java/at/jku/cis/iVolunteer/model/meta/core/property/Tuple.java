@@ -5,9 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Tuple<X, Y> {
 
-	public X id;
+	private X id;
 
-	public Y label;
+	private Y label;
 
 	public Tuple(X id, Y label) {
 		this.id = id;

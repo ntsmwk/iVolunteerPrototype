@@ -30,6 +30,8 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 
 import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;;
 
+
+//TODO xnet
 @RestController
 @RequestMapping("/login")
 public class CoreLoginController {
@@ -50,6 +52,18 @@ public class CoreLoginController {
 		return user;
 	}
 
+	
+	/*Get core/userinfo
+	 * 
+	 * return user aber statt "subscribedTenants" "tenantRoles" 
+	 * "tenantroles enthält liste von tenantUserSubscriptions ohne "Volunteer" roles
+	 * TenantUserSubscripition: -> statt <marketplaceId, tenantId, role> -> <tenantId, role>
+	 * */
+	
+	
+	
+
+	
 	@PutMapping("/activation-status")
 	public boolean checkActivationStatus(@RequestBody String username) {
 		final CoreUser user = userRepository.findByUsername(username);
@@ -80,6 +94,13 @@ public class CoreLoginController {
 		}
 	}
 
+	
+	
+	/**
+	 * 
+	 * User Roles nach Rechten staffeln, falls das möglich ist Volunteer < Recruiter < Helpseeker < Tenant_aDmin < Admin
+	 * 
+	 */
 	@PutMapping("/globalInfo/role/{role}")
 	public GlobalInfo getGlobalInfo(@PathVariable("role") UserRole role, @RequestBody List<String> tenantIds) {
 		GlobalInfo globalInfo = new GlobalInfo();

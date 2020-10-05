@@ -19,7 +19,9 @@ import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+import at.jku.cis.iVolunteer.model.task.GeoInformation;
 
 
 
@@ -98,10 +100,15 @@ public class PersonTaskService {
 		});
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Duration"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskDuration())));
+		
+		String taskLocation = personTask.getTaskLocation();
+		GeoInformation taskGeoInformation = personTask.getTaskGeoInformation();
+		Location location = new Location(taskLocation, taskGeoInformation);
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Location"))
-				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskLocation())));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("GeoInformation"))
-				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskGeoInformation())));
+				.forEach(p -> p.setValues(Collections.singletonList(location)));
+	
+		personTaskClassInstance.getProperties().remove(personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("GeoInformation")).findAny().get());
+		
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("IVolunteerUUID"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getiVolunteerUUID())));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("IVolunteerSource"))

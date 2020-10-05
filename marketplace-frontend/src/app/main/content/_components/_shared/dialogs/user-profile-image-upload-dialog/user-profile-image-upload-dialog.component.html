@@ -1,0 +1,29 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center">
+  <mat-icon>edit</mat-icon>
+  <h1>Profilbild hochladen</h1>
+</div>
+
+<mat-dialog-content>
+
+  <user-profile-image-upload [user]="user"></user-profile-image-upload>
+</mat-dialog-content>
+
+<!-- <mat-dialog-actions *ngIf="loaded">
+
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">OK</button>
+
+  <button *ngIf="tabIndex === 0" class="primary-button-light" mat-stroked-button type="button"
+    (click)="createNewClicked('flat')">
+    Neues Flat-Property
+  </button>
+
+  <button *ngIf="tabIndex === 1" class="primary-button-light" mat-stroked-button type="button"
+    (click)="createNewClicked('tree')">
+    Neues Tree-Property
+  </button>
+
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
+
+
+</mat-dialog-actions> -->

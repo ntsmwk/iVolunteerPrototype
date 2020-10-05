@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.api.standard.model.task;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.task.GeoInformation;
+
 @Document
 public class PersonTask {
 

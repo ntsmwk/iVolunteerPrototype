@@ -9,7 +9,7 @@ public class RequiredTaskBlock {
 	String image;
 	TaskField descripiton;
 	boolean expired;
-	TaskField location;
+	TaskField place;
 	
 	public String getTitle() {
 		return title;
@@ -59,11 +59,11 @@ public class RequiredTaskBlock {
 	public void setExpired(boolean expired) {
 		this.expired = expired;
 	}
-	public TaskField getLocation() {
-		return location;
+	public TaskField getPlace() {
+		return place;
 	}
-	public void setLocation(TaskField location) {
-		this.location = location;
+	public void setPlace(TaskField place) {
+		this.place = place;
 	}
 
 }

@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.core.security;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,8 @@ import at.jku.cis.iVolunteer.core.security.activation.CoreActivationService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.core.user.RegisterResponse;
+import at.jku.cis.iVolunteer.model.core.user.RegisterResponseMessage;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
@@ -26,23 +29,35 @@ public class CoreRegistrationService {
 	@Autowired CoreUserService coreUserService;
 	@Autowired MarketplaceService marketplaceService;
 
-	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public CoreUser registerUser(CoreUser user, AccountType type) {
-		
-		CoreUser existingUser = this.coreUserRepository.findByUsernameOrLoginEmail(user.getUsername(), user.getLoginEmail());
-		if (existingUser == null) {
-			encryptPassword(user);
-		
-			Marketplace marketplace = marketplaceService.findFirst();			
-			user.setRegisteredMarketplaceIds(Collections.singletonList(marketplace.getId()));
-			this.coreUserService.addNewUser(user, "", true);
-			this.coreUserRepository.save(user);
-			this.coreActivationService.createActivationAndSendLink(user, type);
+	public RegisterResponseMessage registerUser(CoreUser user, AccountType type) {
+
+		CoreUser existingUser = this.coreUserRepository.findByUsernameOrLoginEmail(user.getUsername(),
+				user.getLoginEmail());
+
+		if (existingUser != null) {
+			if (user.getUsername().equals(existingUser.getUsername())) {
+				return new RegisterResponseMessage(RegisterResponse.USERNAME, "Benutzername existiert bereits");
+			} else if (user.getLoginEmail().equals(existingUser.getLoginEmail())) {
+				return new RegisterResponseMessage(RegisterResponse.EMAIL, "E-Mail existiert bereits");
+			}
 		}
-		return existingUser; 
+
+		encryptPassword(user);
+
+		Marketplace marketplace = marketplaceService.findFirst();
+		user.setRegisteredMarketplaceIds(Collections.singletonList(marketplace.getId()));
+		this.coreUserService.addNewUser(user, "", true);
+		boolean sendSuccessful = this.coreActivationService.createActivationAndSendLink(user, type);
+
+		if (!sendSuccessful) {
+			return new RegisterResponseMessage(RegisterResponse.ACTIVATION,
+					"Senden der Aktivierungs-E-Mail fehlgeschlagen");
+		}
+
+		return new RegisterResponseMessage(RegisterResponse.OK, "");
+
 	}
 
 	// public void registerVolunteer(CoreVolunteer volunteer) {

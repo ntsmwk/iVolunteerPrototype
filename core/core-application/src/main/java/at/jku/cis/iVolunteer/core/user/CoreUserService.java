@@ -132,6 +132,14 @@ public class CoreUserService {
 		return this.findRegisteredMarketplaces(userId).get(0);
 	}
 
+	//TODO xnet
+	/**
+	 * Core - Marketplace Kommunikation sync von usern core / marketplace - 
+	 * Wie soll gehandelt werden, wenn marketplace nicht erreichbar ist?
+	 * 
+	 * retry? rollback? automatischer sync bei jedem zugriff auf marketplace?
+	 */
+	
 	public CoreUser registerToMarketplace(String userId, String marketplaceId, String authorization) {
 		CoreUser coreUser = coreUserRepository.findOne(userId);
 		Marketplace marketplace = marketplaceService.findById(marketplaceId);
@@ -171,9 +179,11 @@ public class CoreUserService {
 		return user;
 	}
 
-	private void updateMarketplaces(CoreUser user, String authorization) {
-		List<Marketplace> marketplaces = this.findRegisteredMarketplaces(user.getId());
+	private void updateMarketplaces(CoreUser coreUser, String authorization) {
+		List<Marketplace> marketplaces = this.findRegisteredMarketplaces(coreUser.getId());
 
+		User user = new User(coreUser);
+		
 		for (Marketplace marketplace : marketplaces) {
 			coreMarketplaceRestClient.registerOrUpdateMarketplaceUser(marketplace.getUrl(), authorization, user);
 		}

@@ -9,11 +9,40 @@
       0 45%;
     background-size: cover;
 
-    .profile-image {
-      margin-right: 24px;
+    .profile-image-container {
+      cursor: pointer;
+      position: relative;
 
-      @include media-breakpoint("sm") {
-        margin: 0 0 16px 0;
+      .profile-image {
+        margin-right: 24px;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        @include media-breakpoint("sm") {
+          margin: 0 0 16px 0;
+        }
+      }
+
+      .profile-image-overlay {
+        display: none;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+    }
+
+    .profile-image-container:hover {
+      .profile-image {
+        border: #ffffff solid 4px;
+      }
+      .profile-image-overlay {
+        display: block;
       }
     }
 

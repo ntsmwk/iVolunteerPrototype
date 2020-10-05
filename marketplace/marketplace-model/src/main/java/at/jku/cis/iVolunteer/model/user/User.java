@@ -30,7 +30,9 @@ public class User {
 
 	private List<String> locations;
 	private String about;
-	private String address;
+	private Address address;
+	private List<Timeslot> timeslots = initTimeslots();
+	
 	private List<String> phoneNumbers;
 	private List<String> websites;
 	private List<String> emails;
@@ -63,6 +65,7 @@ public class User {
 		this.locations = coreUser.getLocations();
 		this.about = coreUser.getAbout();
 		this.address = coreUser.getAddress();
+		this.timeslots = coreUser.getTimeslots();
 		this.phoneNumbers = coreUser.getPhoneNumbers();
 		this.websites = coreUser.getWebsites();
 		this.emails = coreUser.getEmails();
@@ -71,6 +74,16 @@ public class User {
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
 		this.nextcloudCredentials = coreUser.getNextcloudCredentials();
+	}
+	
+	private List<Timeslot> initTimeslots() {
+		List<Timeslot> timeslots = new ArrayList<>();
+		for (Weekday day : Weekday.values()) {
+			Timeslot timeslot = new Timeslot();
+			timeslot.weekday = day;
+			timeslots.add(timeslot);
+		}
+		return timeslots;
 	}
 
 	public String getId() {
@@ -185,12 +198,20 @@ public class User {
 		this.about = about;
 	}
 
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(final String address) {
+	public void setAddress(final Address address) {
 		this.address = address;
+	}
+
+	public List<Timeslot> getTimeslots() {
+		return timeslots;
+	}
+
+	public void setTimeslots(List<Timeslot> timeslots) {
+		this.timeslots = timeslots;
 	}
 
 	public List<String> getPhoneNumbers() {

@@ -33,6 +33,10 @@ public class ClassInstanceService {
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+	
+	public List<ClassInstance> getAllClassInstances() {
+		return classInstanceRepository.findAll();
+	}
 
 	public ClassInstance getClassInstance(User volunteer, String classDefinitionId, String tenantId) {
 		return classInstanceRepository

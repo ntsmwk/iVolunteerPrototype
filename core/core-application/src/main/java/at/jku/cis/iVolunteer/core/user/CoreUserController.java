@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.core.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
+
+//TODO xnet done - test
 @RestController
 public class CoreUserController {
 
@@ -84,10 +89,16 @@ public class CoreUserController {
 		return coreUserService.addNewUser(user, authorization, updateMarketplaces);
 	}
 
+//	return 200er oder 400 - kein user falls möglich
 	@PutMapping("/user/update")
-	private CoreUser updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
+	private ResponseEntity<Object> updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
-		return coreUserService.updateUser(user, authorization, updateMarketplaces);
+		if (user == null) {
+			return new ResponseEntity<Object>("User must not be null", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		user = coreUserService.updateUser(user, authorization, updateMarketplaces);
+		return new ResponseEntity<Object>(user, HttpStatus.OK);
 	}
 
 	@PutMapping("/user/{userId}/subscribe/{marketplaceId}/{tenantId}/{role}")

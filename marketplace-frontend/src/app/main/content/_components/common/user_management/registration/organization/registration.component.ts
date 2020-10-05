@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { FuseConfigService } from '@fuse/services/config.service';
 import { Router } from '@angular/router';
 import { RegistrationService } from 'app/main/content/_service/registration.service';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { fuseAnimations } from '@fuse/animations';
 import { User, AccountType } from 'app/main/content/_model/user';
 import { equals } from 'app/main/content/_validator/equals.validator';
@@ -130,18 +130,16 @@ export class OrganizationRegistrationComponent implements OnInit {
 
     this.registrationService.registerUser(tenantAdmin, AccountType.ORGANIZATION)
       .toPromise().then((response: HttpResponse<any>) => {
+        this.loginFormWrapper.nativeElement.scrollTo(0, 0);
+        this.displaySuccess = true;
 
-        const user: User = response.body;
-        if (isNullOrUndefined(user)) {
-          this.loginFormWrapper.nativeElement.scrollTo(0, 0);
-          this.displaySuccess = true;
-          return;
+      }).catch((response: HttpErrorResponse) => {
+
+        if (response.error.response === 'USERNAME') {
+          this.registrationForm.controls['username'].setValidators([Validators.required, stringUniqueValidator([tenantAdmin.username])]);
         }
-        if (tenantAdmin.loginEmail === user.loginEmail) {
-          this.registrationForm.controls['email'].setValidators([Validators.required, stringUniqueValidator([user.loginEmail])]);
-        }
-        if (tenantAdmin.username === user.username) {
-          this.registrationForm.controls['username'].setValidators([Validators.required, stringUniqueValidator([user.username])]);
+        if (response.error.response === 'EMAIL') {
+          this.registrationForm.controls['email'].setValidators([Validators.required, stringUniqueValidator([tenantAdmin.loginEmail])]);
         }
         this.onRegistrationFormValuesChanged();
       });

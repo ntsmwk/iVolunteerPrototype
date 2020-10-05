@@ -25,7 +25,7 @@
           </mat-error>
           <mat-error *ngIf="
           registrationFormErrors.username &&
-          registrationFormErrors.username.stringsUnique
+          registrationFormErrors.username.stringunique
         ">
             Benutzername bereits verwendet
           </mat-error>
@@ -75,7 +75,7 @@
           </mat-error>
           <mat-error *ngIf="
           registrationFormErrors.email &&
-          registrationFormErrors.email.stringsUnique
+          registrationFormErrors.email.stringunique
         ">
             E-Mail Adresse bereits verwendet
           </mat-error>
