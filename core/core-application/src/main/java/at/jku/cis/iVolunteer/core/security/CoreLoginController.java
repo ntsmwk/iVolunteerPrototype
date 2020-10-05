@@ -62,24 +62,7 @@ public class CoreLoginController {
 	
 	
 	
-	/** Da core/userinfo keine Volunteers enthalten soll, sollten mit den Folgeden calls nur die Volunteers zurückgegeben werden
-	 * 
-	 * get core/tenant/{tid}/subscribe
-	 * 	ret (200 - if sub successful; 400 if unsuccessful)
-	 * 
-	 * get core/tenant/{tid}/unsubscribe
-	 * 	ret (200 - if unsub successful; 400 if unsuccessful)
 
-	 * get core/tenant/subscribed
-	 * ret all subscribed tenants for current user
-
-	 * get core/tenant/unsubscribed
-	 * ret all currently not subscribed tenants for current user
-
-	 * get core/tenant/all
-	 * return all tenants
-	 * 
-	 */
 	
 	@PutMapping("/activation-status")
 	public boolean checkActivationStatus(@RequestBody String username) {

@@ -291,7 +291,7 @@ public class RuleEngineMapper {
 					+ attribute.getValue().toString() + "\");\r\n");
 		}
 		stringBuilder.append("  l.add(ci);\r\n");
-		//stringBuilder.append("  cis.saveClassInstance(ci);\r\n"); // XXX only for test
+		// stringBuilder.append(" cis.saveClassInstance(ci);\r\n"); // XXX only for test
 		return stringBuilder.toString();
 	}
 
@@ -306,7 +306,7 @@ public class RuleEngineMapper {
 					+ attribute.getValue().toString() + "\");\r\n");
 		}
 		stringBuilder.append("  l.add(ci);\r\n");
-		//stringBuilder.append("  cis.saveClassInstance(ci);\r\n"); // XXX only for test
+		// stringBuilder.append(" cis.saveClassInstance(ci);\r\n"); // XXX only for test
 		return stringBuilder.toString();
 	}
 

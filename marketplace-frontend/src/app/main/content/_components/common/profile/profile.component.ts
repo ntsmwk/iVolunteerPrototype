@@ -7,6 +7,7 @@ import { UserImage } from 'app/main/content/_model/image';
 import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
 import { DialogFactoryDirective } from '../../_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { UserProfileImageUploadDialogData } from '../../_shared/dialogs/user-profile-image-upload-dialog/user-profile-image-upload-dialog.component';
+import { ImageService } from 'app/main/content/_service/image.service';
 
 @Component({
   selector: "profile",
@@ -27,20 +28,25 @@ export class ProfileComponent implements OnInit {
     private loginService: LoginService,
     private userImageService: CoreUserImageService,
     private dialogFactory: DialogFactoryDirective,
+    private imageService: ImageService,
   ) { }
 
   async ngOnInit() {
     this.loaded = false;
-    this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
     this.user = this.globalInfo.user;
 
     // Don't wait for image...
-    this.userImageService.findByUserId(this.user.id).toPromise().then((userImage: UserImage) => this.userImage = userImage);
+    this.imageService
+      .findById(this.user.imageId)
+      .toPromise()
+      .then((userImage: UserImage) => (this.userImage = userImage));
 
-    this.currentRoles = this.user.subscribedTenants.map((s) => s.role);
+    this.currentRoles = this.user.subscribedTenants.map(s => s.role);
     this.loaded = true;
   }
-
 
   getProfileImage() {
     return this.userImageService.getUserProfileImage(this.userImage);

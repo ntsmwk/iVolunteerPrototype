@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -21,8 +22,9 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @RestController
 public class CoreUserController {
 
-	@Autowired
-	private CoreUserService coreUserService;
+	@Autowired private CoreUserService coreUserService;
+
+	@Autowired CoreLoginService coreLoginService;
 
 	@GetMapping("/user/all")
 	private List<CoreUser> findAll() {
@@ -40,8 +42,9 @@ public class CoreUserController {
 	}
 
 	@PutMapping("/user/all/roles")
-	private List<CoreUser> getAllByUserRoles(@RequestBody List<UserRole> roles, @RequestParam("includeNoRole") boolean includeNoRole) {
-			return coreUserService.getAllByUserRoles(roles, includeNoRole);
+	private List<CoreUser> getAllByUserRoles(@RequestBody List<UserRole> roles,
+			@RequestParam("includeNoRole") boolean includeNoRole) {
+		return coreUserService.getAllByUserRoles(roles, includeNoRole);
 	}
 
 	@GetMapping("/user/all/role/{role}/tenant/{tenantId}")
@@ -58,7 +61,6 @@ public class CoreUserController {
 
 	@GetMapping("/user/name/{username}")
 	private CoreUser getByUserName(@PathVariable("username") String username) {
-		System.out.println(username);
 		return coreUserService.getByUserName(username);
 	}
 
@@ -70,7 +72,6 @@ public class CoreUserController {
 	@GetMapping("/user/{userId}/marketplaces")
 	private List<Marketplace> findRegisteredMarketplaces(@PathVariable("userId") String userId) {
 		return coreUserService.findRegisteredMarketplaces(userId);
-		// return coreUserService.getOnlyFirstMarketplace(userId);
 	}
 
 	@PostMapping("/user/{userId}/register/{marketplaceId")
@@ -96,7 +97,6 @@ public class CoreUserController {
 	private CoreUser subscribeUserToTenant(@PathVariable("userId") String userId,
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
-
 		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role, authorization, true);
 	}
 
@@ -104,7 +104,6 @@ public class CoreUserController {
 	private CoreUser unsubscribeUserFromTenant(@PathVariable("userId") String userId,
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
-
 		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role, authorization, true);
 	}
 

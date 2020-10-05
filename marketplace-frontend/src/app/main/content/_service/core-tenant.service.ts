@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Tenant } from "../_model/tenant";
 import { ImageService } from "./image.service";
+import { Image } from "../_model/image";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class TenantService {
-  constructor(private http: HttpClient, private imageService: ImageService) { }
+  constructor(private http: HttpClient, private imageService: ImageService) {}
 
   findAll() {
     return this.http.get(`/core/tenant`);
@@ -15,7 +16,7 @@ export class TenantService {
 
   findByName(tenantName: string) {
     return this.http.get(`/core/tenant/name/${tenantName}`, {
-      responseType: "text",
+      responseType: "text"
     });
   }
 
@@ -38,24 +39,33 @@ export class TenantService {
     return this.http.put(`/core/tenant`, tenant);
   }
 
-  getTenantProfileImage(tenant: Tenant) {
-
+  async getTenantProfileImage(tenant: Tenant) {
     if (tenant == null) {
-      return "/assets/images/avatars/profile.jpg"
+      return "/assets/images/avatars/profile.jpg";
     }
 
-    const ret = this.imageService.getImgSourceFromImageWrapper(tenant.profileImage);
+    let profileImg: Image = <Image>(
+      await this.imageService.findById(tenant.imageId).toPromise()
+    );
+    const ret = this.imageService.getImgSourceFromImageWrapper(
+      profileImg.imageWrapper
+    );
     if (ret == null) {
-      return "/assets/images/avatars/profile.jpg"
+      return "/assets/images/avatars/profile.jpg";
     } else {
       return ret;
     }
   }
 
-  getTenantLandingPageImage(tenant: Tenant) {
-    return this.imageService.getImgSourceFromImageWrapper(tenant.landingpageImage);
-  }
+  async getTenantLandingPageImage(tenant: Tenant) {
+    let landingImg: Image = <Image>(
+      await this.imageService.findById(tenant.landingpageImageId).toPromise()
+    );
 
+    return this.imageService.getImgSourceFromImageWrapper(
+      landingImg.imageWrapper
+    );
+  }
 
   initHeader(tenant: Tenant) {
     (<HTMLElement>document.querySelector(".header")).style.background =

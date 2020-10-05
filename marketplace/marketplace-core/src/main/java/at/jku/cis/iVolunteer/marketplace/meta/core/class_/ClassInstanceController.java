@@ -84,12 +84,10 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
-	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
+	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype classArchetype,
 			@RequestParam(value = "tId", required = true) String tenantId) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-//		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
-//				tenantId);
-		// TODO implement!!
+		classInstanceRepository.getByClassArchetypeAndTenantId(classArchetype, tenantId);
 		return classInstances;
 	}
 

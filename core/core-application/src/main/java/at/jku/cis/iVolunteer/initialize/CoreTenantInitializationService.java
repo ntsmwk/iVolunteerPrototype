@@ -7,9 +7,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import at.jku.cis.iVolunteer.core.image.ImageRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.image.Image;
 import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
@@ -22,22 +24,24 @@ public class CoreTenantInitializationService {
 
 	@Autowired protected TenantRepository coreTenantRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private ImageRepository imageRepository;
 
 	public void initTenants() {
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace != null) {
-			createTenant(FF_EIDENBERG, "www.ff-eidenberg.at", "/img/FF_Altenberg.jpg", "/img/FF_Eidenberg.png", "#b20000", "#b2b2b2", "Freiwillige Feuerwehr Eidenberg",
-					marketplace.getId());
-			createTenant(MV_SCHWERTBERG, "www.musikverein-schwertberg.at", "/img/musikvereinschwertberg.jpeg", "/img/musicverein.jpg", "Musikverein Schwertberg",
-					"#005900", "#b2b2b2", marketplace.getId());
+			createTenant(FF_EIDENBERG, "www.ff-eidenberg.at", "/img/FF_Altenberg.jpg", "/img/FF_Eidenberg.png",
+					"#b20000", "#b2b2b2", "Freiwillige Feuerwehr Eidenberg", marketplace.getId());
+			createTenant(MV_SCHWERTBERG, "www.musikverein-schwertberg.at", "/img/musikvereinschwertberg.jpeg",
+					"/img/musicverein.jpg", "Musikverein Schwertberg", "#005900", "#b2b2b2", marketplace.getId());
 			createTenant(RK_WILHERING,
 					"www.roteskreuz.at/ooe/dienststellen/eferding/die-bezirksstelle/die-ortsstellen/wilhering",
 					"/img/OERK_Sonderlogo_rgb_cropped.jpg", "", "#b2b2b2", "#b2b2b2", "", marketplace.getId());
 		}
 	}
 
-	private Tenant createTenant(String name, String homepage, String profileImageFilename, String landingPageImageFilename, String primaryColor,
-			String secondaryColor, String landingpageTitle , String marketplaceId) {
+	private Tenant createTenant(String name, String homepage, String profileImageFilename,
+			String landingPageImageFilename, String primaryColor, String secondaryColor, String landingpageTitle,
+			String marketplaceId) {
 		Tenant tenant = coreTenantRepository.findByName(name);
 
 		if (tenant == null) {
@@ -61,25 +65,29 @@ public class CoreTenantInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				tenant.setProfileImage(new ImageWrapper("data:image/png;base64", binaryData));
+				Image img = new Image(new ImageWrapper("data:image/png;base64", binaryData));
+				img = imageRepository.save(img);
+				tenant.setImageId(img.getId());
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private void setTenantLandingPageImage(String fileName, Tenant tenant) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			try {
-				
+
 				String fileInfo = "data:image/png;base64";
 				if (fileName.endsWith(".jpg")) {
 					fileInfo = "data:image/jpg;base64";
 				}
 				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				tenant.setLandingpageImage(new ImageWrapper(fileInfo , binaryData));
+				Image img = new Image(new ImageWrapper(fileInfo, binaryData));
+				img = imageRepository.save(img);
+				tenant.setLandingpageImageId(img.getId());
 
 			} catch (IOException e) {
 				e.printStackTrace();

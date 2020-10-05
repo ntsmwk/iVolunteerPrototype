@@ -6,19 +6,15 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 
-import at.jku.cis.iVolunteer.model.image.ImageWrapper;
-
 public class Tenant {
 
-	@Id
-	private String id;
+	@Id private String id;
 	private String name;
 	private String description;
 
 	private String homepage;
 
-	private ImageWrapper profileImage; //TODO xnet logo? low prio
-
+	private String imageId; //TODO xnet rename "logo"? low prio
 	private String primaryColor;
 	private String secondaryColor;
 
@@ -33,8 +29,8 @@ public class Tenant {
 	private String landingpageTitle;
 	private String landingpageMessage;
 	private String landingpageText;
-	private ImageWrapper landingpageImage;
-	
+	private String landingpageImageId;
+
 	private List<SubscriptionRule> subscriptionRules = new ArrayList<>();
 
 	public String getId() {
@@ -69,14 +65,6 @@ public class Tenant {
 		this.homepage = homepage;
 	}
 
-	public ImageWrapper getProfileImage() {
-		return profileImage;
-	}
-
-	public void setProfileImage(ImageWrapper profileImage) {
-		this.profileImage = profileImage;
-	}
-
 	public String getPrimaryColor() {
 		return primaryColor;
 	}
@@ -108,7 +96,7 @@ public class Tenant {
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
-	
+
 	public String getLandingpageTitle() {
 		return landingpageTitle;
 	}
@@ -131,14 +119,6 @@ public class Tenant {
 
 	public void setLandingpageText(String landingpageText) {
 		this.landingpageText = landingpageText;
-	}
-
-	public ImageWrapper getLandingpageImage() {
-		return landingpageImage;
-	}
-
-	public void setLandingpageImage(ImageWrapper landingpageImage) {
-		this.landingpageImage = landingpageImage;
 	}
 
 	public List<SubscriptionRule> getSubscriptionRules() {
@@ -164,6 +144,22 @@ public class Tenant {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, name, marketplaceId);
+	}
+
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
+
+	public String getLandingpageImageId() {
+		return landingpageImageId;
+	}
+
+	public void setLandingpageImageId(String landingpageImageId) {
+		this.landingpageImageId = landingpageImageId;
 	}
 
 }

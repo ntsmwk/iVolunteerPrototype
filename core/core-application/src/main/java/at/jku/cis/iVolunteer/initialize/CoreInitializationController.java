@@ -63,7 +63,7 @@ public class CoreInitializationController {
 
 	@DeleteMapping("/init/delete-users")
 	public void deleteUsers() {
-		coreInitializationService.coreUserRepository.deleteAll();
+		coreInitializationService.deleteUsers();
 	}
 
 	@PutMapping("/init/create-volunteers")
@@ -215,12 +215,7 @@ public class CoreInitializationController {
 
 	@PutMapping("init/wipe-core")
 	public void wipeCore() {
-		coreInitializationService.coreUserRepository.deleteAll();
-		coreInitializationService.pendingActivationRepository.deleteAll();
-		coreTenantInitializationService.coreTenantRepository.deleteAll();
-		coreInitializationService.tagRepository.deleteAll();
-		
-
+		coreInitializationService.wipeAll();
 	}
 
 }

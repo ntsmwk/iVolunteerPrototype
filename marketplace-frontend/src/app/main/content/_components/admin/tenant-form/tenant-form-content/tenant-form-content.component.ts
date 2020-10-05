@@ -1,27 +1,31 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { CoreUserService } from 'app/main/content/_service/core-user.service';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { isNullOrUndefined } from 'util';
-import { FileInput } from 'ngx-material-file-input';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { UserRole } from 'app/main/content/_model/user';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { ImageService } from 'app/main/content/_service/image.service';
-import { ImageWrapper } from 'app/main/content/_model/image';
-import { isString } from 'highcharts';
-import { RoleChangeService } from 'app/main/content/_service/role-change.service';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  Validators
+} from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { Tenant } from "app/main/content/_model/tenant";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { isNullOrUndefined } from "util";
+import { FileInput } from "ngx-material-file-input";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { UserRole } from "app/main/content/_model/user";
+import { LoginService } from "app/main/content/_service/login.service";
+import { ImageService } from "app/main/content/_service/image.service";
+import { ImageWrapper } from "app/main/content/_model/image";
+import { isString } from "highcharts";
+import { RoleChangeService } from "app/main/content/_service/role-change.service";
 
 @Component({
   selector: "tenant-form-content",
-  templateUrl: 'tenant-form-content.component.html',
-  styleUrls: ['./tenant-form-content.component.scss'],
+  templateUrl: "tenant-form-content.component.html",
+  styleUrls: ["./tenant-form-content.component.scss"]
 })
 export class TenantFormContentComponent implements OnInit {
-
   tenantForm: FormGroup;
   addedTags: string[];
   @Input() tenant: Tenant;
@@ -33,7 +37,6 @@ export class TenantFormContentComponent implements OnInit {
   landingPageImage: any;
   landingPageImageDirty: boolean;
 
-
   loaded: boolean;
   showProfileImageForm: boolean;
 
@@ -43,9 +46,9 @@ export class TenantFormContentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private tenantService: TenantService,
     private loginService: LoginService,
-    private roleChangeService: RoleChangeService,
-
-  ) { }
+    private imageService: ImageService,
+    private roleChangeService: RoleChangeService
+  ) {}
 
   async ngOnInit() {
     this.loaded = false;
@@ -54,7 +57,9 @@ export class TenantFormContentComponent implements OnInit {
     this.showProfileImageForm = false;
     this.showLandingPageImageForm = false;
     this.addedTags = [];
-    this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+    this.globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo().toPromise()
+    );
     await this.initializeTenantForm(this.tenant);
     this.loaded = true;
 
@@ -69,20 +74,20 @@ export class TenantFormContentComponent implements OnInit {
       return;
     }
 
-    tenant.landingpageMessage = this.patchLandingPageMessage(tenant.landingpageMessage);
+    tenant.landingpageMessage = this.patchLandingPageMessage(
+      tenant.landingpageMessage
+    );
 
     this.tenantForm = this.formBuilder.group({
-      name: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
-      homepage: new FormControl(''),
-      primaryColor: new FormControl('', Validators.required),
-      secondaryColor: new FormControl('', Validators.required),
-      landingpageMessage: new FormControl(''),
-      landingpageTitle: new FormControl(''),
-      landingpageText: new FormControl(''),
+      name: new FormControl("", Validators.required),
+      description: new FormControl("", Validators.required),
+      homepage: new FormControl(""),
+      primaryColor: new FormControl("", Validators.required),
+      secondaryColor: new FormControl("", Validators.required),
+      landingpageMessage: new FormControl(""),
+      landingpageTitle: new FormControl(""),
+      landingpageText: new FormControl("")
     });
-
-
 
     for (const key of Object.keys(tenant)) {
       if (!isNullOrUndefined(this.tenantForm.controls[key])) {
@@ -92,48 +97,75 @@ export class TenantFormContentComponent implements OnInit {
 
     console.log(this.tenantForm.value);
 
-    this.previewProfileImage = this.tenantService.getTenantProfileImage(this.tenant);
+    this.previewProfileImage = this.tenantService.getTenantProfileImage(
+      this.tenant
+    );
     this.addedTags = this.tenant.tags;
   }
 
   private patchLandingPageMessage(message: string) {
     if (isNullOrUndefined(message)) {
-      message = 'Herzlich Willkommen bei iVolunteer';
+      message = "Herzlich Willkommen bei iVolunteer";
     }
     return message;
   }
 
-  save() {
+  async save() {
     if (!this.tenantForm.valid) {
       return;
     }
     this.tenantForm.disable();
 
-
     const tenantId = this.tenant.id;
-    const oldProfileImage = this.tenant.profileImage;
-    const oldLandingPageImage = this.tenant.landingpageImage;
+
+    const oldProfileImage = await this.imageService
+      .findById(this.tenant.imageId)
+      .toPromise();
+    const oldLandingPageImage = await this.imageService
+      .findById(this.tenant.landingpageImageId)
+      .toPromise();
     this.tenant = new Tenant(this.tenantForm.value);
     this.tenant.id = tenantId;
     this.tenant.marketplaceId = this.globalInfo.marketplace.id;
-    this.tenant.landingpageMessage = this.patchLandingPageMessage(this.tenant.landingpageMessage);
+    this.tenant.landingpageMessage = this.patchLandingPageMessage(
+      this.tenant.landingpageMessage
+    );
 
-    this.tenant.profileImage = this.assignCurrentImage(this.previewProfileImage, this.previewProfileImageDirty, oldProfileImage);
-    this.tenant.landingpageImage = this.assignCurrentImage(this.landingPageImage, this.landingPageImageDirty, oldLandingPageImage);
+    let profileImage = this.assignCurrentImage(
+      this.previewProfileImage,
+      this.previewProfileImageDirty,
+      oldProfileImage
+    );
+    profileImage = await this.imageService.createImage(profileImage);
+    this.tenant.imageId = profileImage.id;
+
+    let landingPageImage = this.assignCurrentImage(
+      this.landingPageImage,
+      this.landingPageImageDirty,
+      oldLandingPageImage
+    );
+    landingPageImage = await this.imageService.createImage(landingPageImage);
+    this.tenant.landingpageImageId = landingPageImage.id;
+
     this.tenant.tags = this.addedTags;
 
-
-
-    this.tenantService.save(this.tenant).toPromise().then((tenant: Tenant) => {
-      this.loginService.generateGlobalInfo(this.globalInfo.userRole, this.globalInfo.tenants.map((t) => t.id))
-        .then(() => {
-          this.tenantForm.enable();
-          this.roleChangeService.update();
-          this.tenantSaved.emit(tenant);
-          this.tenant = tenant;
-          this.ngOnInit();
-        });
-    });
+    this.tenantService
+      .save(this.tenant)
+      .toPromise()
+      .then((tenant: Tenant) => {
+        this.loginService
+          .generateGlobalInfo(
+            this.globalInfo.userRole,
+            this.globalInfo.tenants.map(t => t.id)
+          )
+          .then(() => {
+            this.tenantForm.enable();
+            this.roleChangeService.update();
+            this.tenantSaved.emit(tenant);
+            this.tenant = tenant;
+            this.ngOnInit();
+          });
+      });
   }
 
   assignCurrentImage(newImage: any, imageDirty: boolean, originalImage: any) {
@@ -142,26 +174,28 @@ export class TenantFormContentComponent implements OnInit {
     }
 
     if (!isNullOrUndefined(newImage) && isString(newImage)) {
-      const splitResult = (newImage as string).split(',');
+      const splitResult = (newImage as string).split(",");
 
-      if (splitResult.length !== 2) { return null; }
+      if (splitResult.length !== 2) {
+        return null;
+      }
 
-      const imageWrapper = new ImageWrapper({ imageInfo: splitResult[0], data: splitResult[1] });
+      const imageWrapper = new ImageWrapper({
+        imageInfo: splitResult[0],
+        data: splitResult[1]
+      });
       return imageWrapper;
-
     }
     return null;
   }
 
-  handleProfileImageUploadEvent(event: { key: string, image: any }) {
+  handleProfileImageUploadEvent(event: { key: string; image: any }) {
     this.previewProfileImageDirty = true;
     this.previewProfileImage = event.image;
   }
 
-  handleLandingPageImageUploadEvent(event: { key: string, image: any }) {
+  handleLandingPageImageUploadEvent(event: { key: string; image: any }) {
     this.landingPageImageDirty = true;
     this.landingPageImage = event.image;
-
   }
-
 }
