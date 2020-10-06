@@ -33,7 +33,7 @@ export class RoleSwitchComponent implements OnInit {
     private imageService: ImageService,
     private tenantService: TenantService,
     private roleChangeService: RoleChangeService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.user = <User>await this.loginService.getLoggedIn().toPromise();
@@ -42,23 +42,16 @@ export class RoleSwitchComponent implements OnInit {
       this.user
     );
     console.log(this.roleTenantMappings);
-    if (
-      this.roleTenantMappings.length === 0 &&
-      this.user.accountType === AccountType.PERSON
-    ) {
+    if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.PERSON) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
         this.router.navigate(["/main/dashboard/tenants"]);
       });
-    } else if (
-      this.roleTenantMappings.length === 0 &&
-      this.user.accountType === AccountType.ORGANIZATION
-    ) {
-      this.loginService
-        .generateGlobalInfo(UserRole.TENANT_ADMIN, [])
-        .then(() => {
-          this.router.navigate(["/main/create-tenant"]);
-        });
-    } else if (this.roleTenantMappings.length === 1) {
+    } else if (this.roleTenantMappings.length === 0 && this.user.accountType === AccountType.ORGANIZATION) {
+      this.loginService.generateGlobalInfo(UserRole.TENANT_ADMIN, []).then(() => {
+        this.router.navigate(["/main/create-tenant"]);
+      });
+    } else if (this.roleTenantMappings.length >= 1) {
+      console.log("role select");
       this.onRoleSelected(this.roleTenantMappings[0]);
     }
 
@@ -68,10 +61,13 @@ export class RoleSwitchComponent implements OnInit {
 
   onRoleSelected(mapping: RoleTenantMapping) {
     //@AK fehler hier?
+    console.log("select 2")
     this.loginService
       .generateGlobalInfo(mapping.role, mapping.tenantIds)
       .then(() => {
+        console.log("navigating");
         this.router.navigate(["/main/dashboard"]).then(() => {
+          console.log("changing");
           this.roleChangeService.changeRole(mapping.role);
         });
       });
@@ -79,7 +75,7 @@ export class RoleSwitchComponent implements OnInit {
 
   async getTenantImageByTenantId(tenantId: string) {
     let tenant = this.allTenants.find(t => t.id === tenantId)[0];
-    return this.imageService.findById(tenant.imageId);
+    // return this.imageService.findById(tenant.imageId);
   }
 
   getTenant(tenantId: string) {

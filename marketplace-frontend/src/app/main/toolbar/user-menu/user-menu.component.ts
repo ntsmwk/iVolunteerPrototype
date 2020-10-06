@@ -42,9 +42,8 @@ export class FuseUserMenuComponent implements OnInit, OnDestroy {
       (this.user = this.globalInfo.user);
 
     // Don't wait for image...
-    this.imageService
-      .findById(this.user.imageId)
-      .then((userImage: UserImage) => (this.userImage = userImage));
+    // this.imageService.findById(this.user.imageId)
+    //   .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([
       (this.role = <UserRole>(

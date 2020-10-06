@@ -18,10 +18,10 @@ export class HeaderComponent implements OnInit {
   constructor(
     private tenantService: TenantService,
     private imageService: ImageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    this.image = <Image>await this.imageService.findById(this.tenant.imageId);
+    // this.image = <Image>await this.imageService.findById(this.tenant.imageId);
     this.tenantService.initHeader(this.tenant);
   }
 

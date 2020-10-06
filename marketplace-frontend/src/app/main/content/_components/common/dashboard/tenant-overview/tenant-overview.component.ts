@@ -27,7 +27,7 @@ export class TenantOverviewComponent implements OnInit {
     private coreUserService: CoreUserService,
     private roleChangeService: RoleChangeService,
     private imageService: ImageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
@@ -37,7 +37,7 @@ export class TenantOverviewComponent implements OnInit {
   }
 
   async getTenantImage(tenant: Tenant) {
-    return this.imageService.findById(tenant.imageId);
+    // return this.imageService.findById(tenant.imageId);
   }
 
   isSubscribed(tenant: Tenant, role: UserRole) {
@@ -50,14 +50,7 @@ export class TenantOverviewComponent implements OnInit {
 
   async unsubscribe(tenant: Tenant, role: UserRole) {
     this.user = <User>(
-      await this.coreUserService
-        .unsubscribeUserFromTenant(
-          this.user.id,
-          tenant.marketplaceId,
-          tenant.id,
-          role
-        )
-        .toPromise()
+      await this.coreUserService.unsubscribeUserFromTenant(tenant.id, role).toPromise()
     );
 
     if (this.user.subscribedTenants.length === 0) {
@@ -98,14 +91,7 @@ export class TenantOverviewComponent implements OnInit {
 
   async subscribe(tenant: Tenant, role: UserRole) {
     this.user = <User>(
-      await this.coreUserService
-        .subscribeUserToTenant(
-          this.user.id,
-          tenant.marketplaceId,
-          tenant.id,
-          role
-        )
-        .toPromise()
+      await this.coreUserService.subscribeUserToTenant(tenant.id, role).toPromise()
     );
 
     if (this.currentRole === UserRole.NONE) {
@@ -114,15 +100,10 @@ export class TenantOverviewComponent implements OnInit {
         this.updateCurrentInfo();
       });
     } else {
-      this.loginService
-        .generateGlobalInfo(
-          this.currentRole,
-          this.currentTenants.map(t => t.id)
-        )
-        .then(() => {
-          this.roleChangeService.update();
-          this.updateCurrentInfo();
-        });
+      this.loginService.generateGlobalInfo(this.currentRole, this.currentTenants.map(t => t.id)).then(() => {
+        this.roleChangeService.update();
+        this.updateCurrentInfo();
+      });
     }
   }
 

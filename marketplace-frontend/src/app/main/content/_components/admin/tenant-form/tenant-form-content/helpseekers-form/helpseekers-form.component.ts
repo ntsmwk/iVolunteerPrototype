@@ -56,7 +56,7 @@ export class TenantHelpseekersFormComponent implements OnInit {
   }
 
   removeHelpseeker(helpseeker: User) {
-    this.coreUserService.unsubscribeUserFromTenant(helpseeker.id, this.globalInfo.marketplace.id, this.tenant.id, UserRole.HELP_SEEKER).toPromise().then((ret: User) => {
+    this.coreUserService.unsubscribeOtherUserFromTenant(this.tenant.id, UserRole.HELP_SEEKER, helpseeker.id).toPromise().then((ret: User) => {
       if (!isNullOrUndefined(ret)) {
         this.helpseekers = this.helpseekers.filter(h => h.id !== ret.id);
         this.dataSource.data = this.helpseekers;

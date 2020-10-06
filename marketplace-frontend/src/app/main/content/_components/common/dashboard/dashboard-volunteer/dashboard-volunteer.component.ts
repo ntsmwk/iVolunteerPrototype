@@ -136,12 +136,11 @@ export class DashboardVolunteerComponent implements OnInit {
     this.subscribedTenants = globalInfo.tenants;
 
     // Don't wait for image...
-    this.imageService
-      .findById(this.volunteer.imageId)
-      .then((userImage: UserImage) => {
-        this.volunteerImage = userImage;
-        this.setVolunteerImage();
-      });
+    // this.imageService.findById(this.volunteer.imageId)
+    //   .then((userImage: UserImage) => {
+    //     this.volunteerImage = userImage;
+    //     this.setVolunteerImage();
+    //   });
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
     this.localRepositoryService = this.loginService.getLocalRepositoryService(
@@ -215,10 +214,10 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async getTenantImage(tenant: Tenant) {
-    return this.imageService.findById(tenant.imageId);
+    // return this.imageService.findById(tenant.imageId);
   }
 
-  async getTenantImageById(tenantId: string){
+  async getTenantImageById(tenantId: string) {
     let tenant = this.allTenants.find(t => t.id === tenantId)[0]
     return this.getTenantImage(tenant);
   }
@@ -253,7 +252,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" }
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe((result: any) => { });
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -713,7 +712,7 @@ export class DashboardVolunteerComponent implements OnInit {
     ];
     Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) {}
+  onVennClicked(event) { }
 }
 
 export interface DialogData {

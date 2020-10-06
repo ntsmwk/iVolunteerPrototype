@@ -25,7 +25,7 @@ export class OrganisationFilterComponent implements OnInit {
     private loginService: LoginService,
     private tenantService: TenantService,
     private imageService: ImageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();
@@ -37,7 +37,7 @@ export class OrganisationFilterComponent implements OnInit {
   }
 
   async getTenantImage(tenant: Tenant) {
-    return this.imageService.findById(tenant.imageId);
+    // return this.imageService.findById(tenant.imageId);
   }
 
   tenantClicked(tenant: Tenant) {

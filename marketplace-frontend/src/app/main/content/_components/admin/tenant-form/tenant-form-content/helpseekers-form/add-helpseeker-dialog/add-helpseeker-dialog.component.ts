@@ -78,7 +78,7 @@ export class AddHelpseekerDialogComponent implements OnInit {
     const addedUsers = <User[]>await Promise.all(
       this.selection.selected.map(async elem => {
         const user = <User>await this.coreUserService
-          .subscribeUserToTenant(elem.id, this.globalInfo.marketplace.id, this.globalInfo.tenants[0].id, UserRole.HELP_SEEKER)
+          .subscribeOtherUserToTenant(this.globalInfo.tenants[0].id, UserRole.HELP_SEEKER, elem.id)
           .toPromise();
         return user;
       })

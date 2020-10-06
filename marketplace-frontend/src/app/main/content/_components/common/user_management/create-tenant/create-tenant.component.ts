@@ -54,7 +54,7 @@ export class CreateTenantComponent implements OnInit {
 
 
   async handleTenantSaved(tenant: Tenant) {
-    await this.coreUserService.subscribeUserToTenant(this.globalInfo.user.id, this.globalInfo.marketplace.id, tenant.id, UserRole.TENANT_ADMIN).toPromise();
+    await this.coreUserService.subscribeUserToTenant(tenant.id, UserRole.TENANT_ADMIN).toPromise();
     await this.loginService.generateGlobalInfo(UserRole.TENANT_ADMIN, [tenant.id]);
     await this.loginService.getGlobalInfo().toPromise();
     this.tenantSaved = true;

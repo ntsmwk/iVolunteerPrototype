@@ -5,15 +5,10 @@ import {
   FormControl,
   Validators
 } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { CoreUserService } from "app/main/content/_service/core-user.service";
-import { Marketplace } from "app/main/content/_model/marketplace";
 import { isNullOrUndefined } from "util";
-import { FileInput } from "ngx-material-file-input";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { UserRole } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { ImageService } from "app/main/content/_service/image.service";
 import { ImageWrapper } from "app/main/content/_model/image";
@@ -116,12 +111,12 @@ export class TenantFormContentComponent implements OnInit {
 
     const tenantId = this.tenant.id;
 
-    const oldProfileImage = await this.imageService.findById(
-      this.tenant.imageId
-    );
-    const oldLandingPageImage = await this.imageService.findById(
-      this.tenant.landingpageImageId
-    );
+    // const oldProfileImage = await this.imageService.findById(
+    //   this.tenant.imageId
+    // );
+    // const oldLandingPageImage = await this.imageService.findById(
+    //   this.tenant.landingpageImageId
+    // );
     this.tenant = new Tenant(this.tenantForm.value);
     this.tenant.id = tenantId;
     this.tenant.marketplaceId = this.globalInfo.marketplace.id;
@@ -132,7 +127,8 @@ export class TenantFormContentComponent implements OnInit {
     let profileImage = this.assignCurrentImage(
       this.previewProfileImage,
       this.previewProfileImageDirty,
-      oldProfileImage
+      // oldProfileImage
+      undefined
     );
     profileImage = await this.imageService.createImage(profileImage);
     this.tenant.imageId = profileImage.id;
@@ -140,7 +136,8 @@ export class TenantFormContentComponent implements OnInit {
     let landingPageImage = this.assignCurrentImage(
       this.landingPageImage,
       this.landingPageImageDirty,
-      oldLandingPageImage
+      // oldLandingPageImage
+      undefined
     );
     landingPageImage = await this.imageService.createImage(landingPageImage);
     this.tenant.landingpageImageId = landingPageImage.id;

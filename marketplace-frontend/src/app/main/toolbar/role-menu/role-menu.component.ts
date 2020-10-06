@@ -60,9 +60,8 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     this.role = globalInfo.userRole;
 
     // Don't wait for image...
-    this.imageService
-      .findById(this.user.imageId)
-      .then((userImage: UserImage) => (this.userImage = userImage));
+    // this.imageService.findById(this.user.imageId)
+    //   .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([
       (this.allTenants = <Tenant[]>(
@@ -120,15 +119,14 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     const tenant = this.allTenants.find(
       t => t.id === this.currentMapping.tenantIds[0]
     );
-    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
-    return img.imageWrapper;
+    // let img: Image = <Image>await this.imageService.findById(tenant.imageId);
+    // return img.imageWrapper;
   }
 
-  async getTenantImageByTenantId(tenantId: string) {
-    console.error(tenantId)
-    const tenant = this.allTenants.find(t => t.id === tenantId);
-    return this.imageService.findById(tenant.id);
-  }
+  // async getTenantImageByTenantId(tenantId: string) {
+  //   const tenant = this.allTenants.find(t => t.id === tenantId);
+  //   return this.imageService.findById(tenant.id);
+  // }
 
   // async getTenantImage(mapping: RoleTenantMapping) {
   //   if (mapping.role === UserRole.VOLUNTEER) {

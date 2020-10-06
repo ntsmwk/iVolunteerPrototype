@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
+import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
@@ -27,7 +28,8 @@ public class CoreUserController {
 
 	@Autowired private CoreUserService coreUserService;
 
-	@Autowired CoreLoginService coreLoginService;
+	@Autowired private CoreLoginService coreLoginService;
+	@Autowired private TenantService tenantService;
 
 	@GetMapping("/user/all")
 	private List<CoreUser> findAll() {
@@ -95,25 +97,84 @@ public class CoreUserController {
 	private ResponseEntity<Object> updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
 		if (user == null) {
-			return new ResponseEntity<Object>("User must not be null", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Object>("User must not be null", HttpStatus.BAD_REQUEST);
 		}
 		
 		user = coreUserService.updateUser(user, authorization, updateMarketplaces);
 		return new ResponseEntity<Object>("", HttpStatus.OK);
 	}
 
-	@PutMapping("/user/{userId}/subscribe/{marketplaceId}/{tenantId}/{role}")
-	private CoreUser subscribeUserToTenant(@PathVariable("userId") String userId,
-			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
-			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
-		return coreUserService.subscribeUserToTenant(userId, marketplaceId, tenantId, role, authorization, true);
+	@PutMapping("/user/subscribe/{tenantId}")
+	private ResponseEntity<Object> subscribeUserToTenant(@PathVariable("tenantId") String tenantId, @RequestHeader("Authorization") String authorization, @RequestBody String role) {
+		CoreUser user = coreLoginService.getLoggedInUser();
+		Tenant tenant = tenantService.getTenantById(tenantId);
+		
+		if (user == null || tenant == null || role == null) {
+			return new ResponseEntity<Object>("No such user and / or tenant and / or role", HttpStatus.BAD_REQUEST);
+		}
+		
+		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
+		return new ResponseEntity<Object>(user, HttpStatus.OK);
+
 	}
 
-	@PutMapping("/user/{userId}/unsubscribe/{marketplaceId}/{tenantId}/{role}")
-	private CoreUser unsubscribeUserFromTenant(@PathVariable("userId") String userId,
-			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
-			@PathVariable("role") UserRole role, @RequestHeader("Authorization") String authorization) {
-		return coreUserService.unsubscribeUserFromTenant(userId, marketplaceId, tenantId, role, authorization, true);
+	@PutMapping("/user/unsubscribe/{tenantId}")
+	private ResponseEntity<Object> unsubscribeUserFromTenant(@PathVariable("tenantId") String tenantId,
+			@RequestBody String role, @RequestHeader("Authorization") String authorization) {
+		CoreUser user = coreLoginService.getLoggedInUser();
+		Tenant tenant = tenantService.getTenantById(tenantId);
+		
+		if (user == null || tenant == null || role == null) {
+			return new ResponseEntity<Object>("No such user and / or tenant and / or role", HttpStatus.BAD_REQUEST);
+		}
+		
+		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
+		return new ResponseEntity<Object>(user, HttpStatus.OK);
+	}
+	
+	@PutMapping("/user/subscribe/{tenantId}/user/{userId}")
+	private ResponseEntity<Object> subscribeOtherUserToTenant(@PathVariable("tenantId") String tenantId, @PathVariable("userId") String userId, 
+			@RequestHeader("Authorization") String authorization, @RequestBody String role) {
+		CoreUser user = coreLoginService.getLoggedInUser();
+		Tenant tenant = tenantService.getTenantById(tenantId);
+		if (user == null || tenant == null || role == null) {
+			return new ResponseEntity<Object>("No such user and / or tenant and / or role", HttpStatus.BAD_REQUEST);
+		}
+		if (user.getSubscribedTenants().stream().noneMatch(tus -> tus.getTenantId().equals(tenantId) && (tus.getRole().equals(UserRole.TENANT_ADMIN) || tus.getRole().equals(UserRole.ADMIN)))) {
+			return new ResponseEntity<Object>("Only (tenant) admins my change other users subscriptions", HttpStatus.UNAUTHORIZED);
+		}
+		
+		CoreUser changeUser = getByUserId(userId);
+
+		if (changeUser == null) {
+			return new ResponseEntity<Object>("No such user", HttpStatus.BAD_REQUEST);
+		}
+		
+		changeUser = coreUserService.subscribeUserToTenant(changeUser.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
+		return new ResponseEntity<Object>(user, HttpStatus.OK);
+
+	}
+
+	@PutMapping("/user/unsubscribe/{tenantId}/user/{userId}")
+	private ResponseEntity<Object> unsubscribeOtherUserFromTenant(@PathVariable("tenantId") String tenantId, @PathVariable("userId") String userId, 
+			@RequestBody String role, @RequestHeader("Authorization") String authorization) {
+		CoreUser user = coreLoginService.getLoggedInUser();
+		Tenant tenant = tenantService.getTenantById(tenantId);
+		
+		if (user == null || tenant == null || role == null) {
+			return new ResponseEntity<Object>("No such user and / or tenant and / or role", HttpStatus.BAD_REQUEST);
+		}
+		if (user.getSubscribedTenants().stream().noneMatch(tus -> tus.getTenantId().equals(tenantId) && (tus.getRole().equals(UserRole.TENANT_ADMIN) || tus.getRole().equals(UserRole.ADMIN)))) {
+			return new ResponseEntity<Object>("Only (tenant) admins my change other users subscriptions", HttpStatus.UNAUTHORIZED);
+		}
+		
+		CoreUser changeUser = getByUserId(userId);
+
+		if (changeUser == null) {
+			return new ResponseEntity<Object>("No such user", HttpStatus.BAD_REQUEST);
+		}		
+		user = coreUserService.unsubscribeUserFromTenant(changeUser.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
+		return new ResponseEntity<Object>(user, HttpStatus.OK);
 	}
 
 }

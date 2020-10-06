@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { User, UserRole } from "../_model/user";
 
 @Injectable({ providedIn: "root" })
@@ -60,33 +60,19 @@ export class CoreUserService {
     );
   }
 
-  subscribeUserToTenant(
-    userId: string,
-    marketplaceId: string,
-    tenantId: string,
-    role: UserRole
-  ) {
-    console.log(
-      `subscribeUserToTenant(${userId},${marketplaceId},${tenantId},${role})`
-    );
-    return this.http.put(
-      `/core/user/${userId}/subscribe/${marketplaceId}/${tenantId}/${role}`,
-      {}
-    );
+  subscribeUserToTenant(tenantId: string, role: UserRole) {
+    return this.http.put(`/core/user/subscribe/${tenantId}`, role, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
 
-  unsubscribeUserFromTenant(
-    userId: string,
-    marketplaceId: string,
-    tenantId: string,
-    role: UserRole
-  ) {
-    console.log(
-      `unsubscribeUserFromTenant(${userId},${marketplaceId},${tenantId},${role})`
-    );
-    return this.http.put(
-      `/core/user/${userId}/unsubscribe/${marketplaceId}/${tenantId}/${role}`,
-      {}
-    );
+  unsubscribeUserFromTenant(tenantId: string, role: UserRole) {
+    return this.http.put(`/core/user/unsubscribe/${tenantId}`, role, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
+  }
+
+  subscribeOtherUserToTenant(tenantId: string, role: UserRole, userId: string) {
+    return this.http.put(`/core/user/subscribe/${tenantId}/user/${userId}`, role, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
+  }
+
+  unsubscribeOtherUserFromTenant(tenantId: string, role: UserRole, userId: string) {
+    return this.http.put(`/core/user/unsubscribe/${tenantId}/user/${userId}`, role, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
 }

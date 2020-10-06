@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Tenant } from "../_model/tenant";
 import { ImageService } from "./image.service";
 import { Image } from "../_model/image";
+import { UserRole } from '../_model/user';
 
 @Injectable({
   providedIn: "root"
@@ -40,12 +41,11 @@ export class TenantService {
   }
 
 
-  
   async getTenantImage(tenant: Tenant) {
-    let img: Image = <Image>await this.imageService.findById(tenant.imageId);
-    if (!img) {
-      return "/assets/images/avatars/profile.jpg";
-    }
+    // let img: Image = <Image>await this.imageService.findById(tenant.imageId);
+    // if (!img) {
+    //   return "/assets/images/avatars/profile.jpg";
+    // }
 
     //TODO fucked
     // let profileImg: Image = <Image>(
@@ -59,6 +59,12 @@ export class TenantService {
     // } else {
     //   return ret;
     // }
+  }
+
+  //TODO fucked helpseeker - header
+  async getTenantProfileImage(tenant: Tenant) {
+    return "/assets/images/avatars/profile.jpg";
+
   }
 
   async getTenantLandingPageImage(tenant: Tenant) {
