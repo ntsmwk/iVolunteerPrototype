@@ -1,27 +1,31 @@
-import { OnInit, Component, Inject } from '@angular/core';
-import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
-import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
-import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
-import { isNullOrUndefined } from 'util';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { OnInit, Component, Inject } from "@angular/core";
+import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatTableDataSource,
+} from "@angular/material";
+import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
+import { isNullOrUndefined } from "util";
+import { LoginService } from "app/main/content/_service/login.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 export class DeleteClassConfigurationDialogData {
   idsToDelete: string[];
 }
 
 @Component({
-  selector: 'delete-class-configuration-dialog',
-  templateUrl: './delete-dialog.component.html',
-  styleUrls: ['./delete-dialog.component.scss']
+  selector: "delete-class-configuration-dialog",
+  templateUrl: "./delete-dialog.component.html",
+  styleUrls: ["./delete-dialog.component.scss"],
 })
 export class DeleteClassConfigurationDialogComponent implements OnInit {
   allClassConfigurations: ClassConfiguration[];
   loaded: boolean;
 
   datasource: MatTableDataSource<ClassConfiguration> = new MatTableDataSource();
-  currentSortKey: 'name' | 'date';
-  currentSortType: 'az' | 'za' = 'az';
+  currentSortKey: "name" | "date";
+  currentSortType: "az" | "za" = "az";
 
   currentFilter: string;
 
@@ -32,41 +36,48 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DeleteClassConfigurationDialogData,
     private classConfigurationService: ClassConfigurationService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   async ngOnInit() {
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    this.globalInfo = this.loginService.getGlobalInfo();
 
     this.data.idsToDelete = [];
 
-    this.classConfigurationService.getAllClassConfigurations(this.globalInfo.marketplace)
+    this.classConfigurationService
+      .getAllClassConfigurations(this.globalInfo.currentMarketplaces[0])
       .toPromise()
       .then((classConfigurations: ClassConfiguration[]) => {
         this.allClassConfigurations = classConfigurations;
         this.datasource.data = classConfigurations;
-        this.sortClicked('date');
+        this.sortClicked("date");
         this.loaded = true;
       });
   }
 
   handleCheckboxRowClicked(row: ClassConfiguration) {
-    if (this.data.idsToDelete.findIndex(id => row.id === id) === -1) {
+    if (this.data.idsToDelete.findIndex((id) => row.id === id) === -1) {
       this.data.idsToDelete.push(row.id);
     } else {
-      this.data.idsToDelete = this.data.idsToDelete.filter(id => id !== row.id);
+      this.data.idsToDelete = this.data.idsToDelete.filter(
+        (id) => id !== row.id
+      );
     }
   }
 
   isSelected(row: ClassConfiguration) {
-    return this.data.idsToDelete.findIndex(id => id === row.id) !== -1;
+    return this.data.idsToDelete.findIndex((id) => id === row.id) !== -1;
   }
 
   onSubmit() {
-    this.classConfigurationService.deleteClassConfigurations(this.globalInfo.marketplace, this.data.idsToDelete).toPromise().then((ret) => {
-      this.dialogRef.close(this.data);
-    });
+    this.classConfigurationService
+      .deleteClassConfigurations(
+        this.globalInfo.currentMarketplaces[0],
+        this.data.idsToDelete
+      )
+      .toPromise()
+      .then((ret) => {
+        this.dialogRef.close(this.data);
+      });
   }
 
   applyFilter(event: Event) {
@@ -74,20 +85,24 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
     this.datasource.filter = this.currentFilter.trim().toLowerCase();
   }
 
-  sortClicked(sortKey: 'name' | 'date') {
+  sortClicked(sortKey: "name" | "date") {
     if (this.currentSortKey === sortKey) {
       this.switchSortType();
     } else {
-      this.currentSortType = 'az';
+      this.currentSortType = "az";
     }
 
-    if (sortKey === 'date') {
-      this.datasource.data = this.allClassConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf())
+    if (sortKey === "date") {
+      this.datasource.data = this.allClassConfigurations.sort(
+        (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+      );
     }
-    if (sortKey === 'name') {
-      this.datasource.data = this.allClassConfigurations.sort((a, b) => b.name.trim().localeCompare(a.name.trim()));
+    if (sortKey === "name") {
+      this.datasource.data = this.allClassConfigurations.sort((a, b) =>
+        b.name.trim().localeCompare(a.name.trim())
+      );
     }
-    if (this.currentSortType === 'za') {
+    if (this.currentSortType === "za") {
       this.datasource.data.reverse();
     }
     this.currentSortKey = sortKey;
@@ -95,13 +110,11 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
     if (!isNullOrUndefined(this.currentFilter)) {
       this.datasource.filter = this.currentFilter.trim().toLowerCase();
     }
-
   }
 
   switchSortType() {
-    this.currentSortType === 'az' ? this.currentSortType = 'za' : this.currentSortType = 'az';
+    this.currentSortType === "az"
+      ? (this.currentSortType = "za")
+      : (this.currentSortType = "az");
   }
-
-
-
 }

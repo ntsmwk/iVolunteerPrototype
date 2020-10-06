@@ -33,7 +33,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   selected: string;
   allClassConfigurations: ClassConfiguration[];
@@ -47,14 +47,15 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
   tenant: Tenant;
 
   async ngOnInit() {
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    this.globalInfo = this.loginService.getGlobalInfo();
 
-    this.tenant = this.globalInfo.tenants[0];
+    this.tenant = this.globalInfo.currentTenants[0];
 
     this.classConfigurationService
-      .getClassConfigurationsByTenantId(this.globalInfo.marketplace, this.tenant.id)
+      .getClassConfigurationsByTenantId(
+        this.globalInfo.currentMarketplaces[0],
+        this.tenant.id
+      )
       .toPromise()
       .then((classConfigurations: ClassConfiguration[]) => {
         this.allClassConfigurations = classConfigurations.filter((c) => {
@@ -67,7 +68,10 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
         );
 
         if (this.recentClassConfigurations.length > 6) {
-          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 6);
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(
+            0,
+            6
+          );
         }
 
         this.loaded = true;
@@ -82,17 +86,21 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     Promise.all([
       this.classDefinitionService
         .getClassDefinitionsById(
-          this.globalInfo.marketplace,
+          this.globalInfo.currentMarketplaces[0],
           c.classDefinitionIds,
           this.tenant.id
         )
-        .toPromise().then((classDefinitions: ClassDefinition[]) => {
+        .toPromise()
+        .then((classDefinitions: ClassDefinition[]) => {
           if (!isNullOrUndefined(classDefinitions)) {
             this.data.classDefinitions = classDefinitions;
           }
         }),
       this.relationshipService
-        .getRelationshipsById(this.globalInfo.marketplace, c.relationshipIds)
+        .getRelationshipsById(
+          this.globalInfo.currentMarketplaces[0],
+          c.relationshipIds
+        )
         .toPromise()
         .then((relationships: Relationship[]) => {
           if (!isNullOrUndefined(relationships)) {

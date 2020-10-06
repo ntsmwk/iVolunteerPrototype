@@ -25,8 +25,9 @@ import { User, UserRole } from "app/main/content/_model/user";
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
-import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
-import { isNullOrUndefined } from 'util';
+import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
+import { isNullOrUndefined } from "util";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "target-rule-configurator",
@@ -42,7 +43,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     ClassAction
   > = new EventEmitter<ClassAction>();
 
-  tenantAdmin: User;
+  userInfo: UserInfo;
   marketplace: Marketplace;
   tenant: Tenant;
   classDefinitions: ClassDefinition[] = [];
@@ -86,18 +87,14 @@ export class TargetRuleConfiguratorComponent implements OnInit {
       // this.ruleActionForm.value.attributes.controls = [];
       console.log("attributes array: " + attributes.controls);*/
 
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.marketplace = globalInfo.marketplace;
-    this.tenantAdmin = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
+    const globalInfo = this.loginService.getGlobalInfo();
+
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.userInfo = globalInfo.userInfo;
+    this.tenant = globalInfo.currentTenants[0];
 
     this.classDefinitionService
-      .getAllClassDefinitions(
-        this.marketplace,
-        this.tenant.id
-      )
+      .getAllClassDefinitions(this.marketplace, this.tenant.id)
       .toPromise()
       .then((definitions: ClassDefinition[]) => {
         this.classDefinitions = definitions;
@@ -121,8 +118,10 @@ export class TargetRuleConfiguratorComponent implements OnInit {
 
   onTargetChange(classDefinition, $event) {
     if ($event.isUserInput) {
-      if (isNullOrUndefined(this.classAction.classDefinition) ||
-        (this.classAction.classDefinition.id != classDefinition.id)) {
+      if (
+        isNullOrUndefined(this.classAction.classDefinition) ||
+        this.classAction.classDefinition.id != classDefinition.id
+      ) {
         /*this.classAction.classDefinition = this.classDefinitions.find(
           (cd) => cd.id === this.parent.form.get('ruleActionForm').get('classDefinitionId').value
         );*/
@@ -136,15 +135,11 @@ export class TargetRuleConfiguratorComponent implements OnInit {
 
   private loadClassProperties(classDefinition: ClassDefinition) {
     this.classPropertyService
-      .getAllClassPropertiesFromClass(
-        this.marketplace,
-        classDefinition.id
-      )
+      .getAllClassPropertiesFromClass(this.marketplace, classDefinition.id)
       .toPromise()
       .then((props: ClassProperty<any>[]) => {
         this.classProperties = props;
       });
-
   }
 
   private retrieveClassType(classArchetype: ClassArchetype) {

@@ -1,8 +1,4 @@
-import {
-  OnInit,
-  Component,
-  Inject,
-} from "@angular/core";
+import { OnInit, Component, Inject } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { TreePropertyDefinition } from "app/main/content/_model/meta/property/tree-property";
@@ -33,16 +29,15 @@ export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteTreePropertyDefinitionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DeleteTreePropertyDefinitionDialogData,
+    @Inject(MAT_DIALOG_DATA)
+    public data: DeleteTreePropertyDefinitionDialogData,
     private treePropertyDefinitionService: TreePropertyDefinitionService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.tenant = globalInfo.tenants[0];
+    let globalInfo = this.loginService.getGlobalInfo();
+    this.tenant = globalInfo.currentTenants[0];
     this.data.idsToDelete = [];
 
     this.treePropertyDefinitionService
@@ -72,7 +67,7 @@ export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
       });
   }
 
-  handleCancelClick() { }
+  handleCancelClick() {}
 
   hasNoTreePropertyDefinitions() {
     return (
@@ -100,7 +95,11 @@ export class DeleteTreePropertyDefinitionDialogComponent implements OnInit {
     }
   }
 
-  handleCheckboxRowClicked(event: any, index: number, entry: TreePropertyDefinition) {
+  handleCheckboxRowClicked(
+    event: any,
+    index: number,
+    entry: TreePropertyDefinition
+  ) {
     event.stopPropagation();
     this.handleCheckboxClicked(!this.checkboxStates[index], entry, index);
   }

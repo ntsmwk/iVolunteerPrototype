@@ -14,6 +14,7 @@ import {
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
 import { LoginService } from "app/main/content/_service/login.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "test-rule-configuration",
@@ -27,7 +28,7 @@ export class TestRuleConfigurationComponent implements OnInit {
   classConditions: ClassCondition[];
   ruleExecutions: RuleExecution[];
   displayedColumns = ["Name", "Status"];
-  tenantAdmin: User;
+  userInfo: UserInfo;
   tenant: Tenant;
 
   constructor(
@@ -36,11 +37,9 @@ export class TestRuleConfigurationComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.marketplace = globalInfo.marketplace;
-    this.tenantAdmin = globalInfo.user;
+    const globalInfo = this.loginService.getGlobalInfo();
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.userInfo = globalInfo.userInfo;
 
     this.testRule();
   }

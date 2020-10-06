@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ClassInstance } from "../_model/meta/class";
-import { User } from "../_model/user";
+import { UserInfo } from "../_model/userInfo";
 
 @Injectable({
   providedIn: "root",
@@ -8,21 +8,30 @@ import { User } from "../_model/user";
 export abstract class LocalRepositoryService {
   constructor() {}
 
-  abstract findClassInstancesByVolunteer(volunteer: User);
+  abstract findClassInstancesByVolunteer(volunteerInfo: UserInfo);
   abstract synchronizeSingleClassInstance(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstance: ClassInstance
   );
-  abstract getSingleClassInstance(volunteer: User, classInstanceId: string);
-  abstract removeSingleClassInstance(volunteer: User, classInstanceId: string);
+  abstract getSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  );
+  abstract removeSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  );
 
   abstract synchronizeClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   );
-  abstract removeClassInstances(volunteer: User, classInstanceIds: string[]);
+  abstract removeClassInstances(
+    volunteerInfo: UserInfo,
+    classInstanceIds: string[]
+  );
   abstract overrideClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   );
 

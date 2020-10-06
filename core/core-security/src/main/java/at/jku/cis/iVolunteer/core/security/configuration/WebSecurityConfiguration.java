@@ -29,7 +29,6 @@ import at.jku.cis.iVolunteer.core.service.ParticipantDetailsService;
 
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 
-
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -65,7 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/login/refreshToken").and().ignoring().antMatchers("/login/activation-status");
+		web.ignoring().antMatchers("/refreshToken").and().ignoring().antMatchers("/activation-status");
 	}
 
 	@Override

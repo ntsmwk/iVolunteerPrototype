@@ -1,18 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { User, UserRole } from 'app/main/content/_model/user';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { CoreUserService } from 'app/main/content/_service/core-user.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { UserService } from 'app/main/content/_service/user.service';
-import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
-import { UserImage } from 'app/main/content/_model/image';
+import { Component, OnInit, Input } from "@angular/core";
+import { User, UserRole } from "app/main/content/_model/user";
+import { LoginService } from "app/main/content/_service/login.service";
+import { fuseAnimations } from "@fuse/animations";
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from "@angular/forms";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { UserService } from "app/main/content/_service/user.service";
+import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
+import { UserImage } from "app/main/content/_model/image";
 
 @Component({
   selector: "profile-form",
-  templateUrl: 'profile-form.component.html',
-  styleUrls: ['profile-form.component.scss'],
+  templateUrl: "profile-form.component.html",
+  styleUrls: ["profile-form.component.scss"],
   animations: fuseAnimations,
 })
 export class ProfileFormComponent implements OnInit {
@@ -31,10 +36,9 @@ export class ProfileFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private coreUserService: CoreUserService,
     private userService: UserService,
-    private userImageService: CoreUserImageService,
+    private userImageService: CoreUserImageService
   ) {
     this.profileFormErrors = {
-
       formOfAddress: {},
       firstName: {},
       lastName: {},
@@ -45,13 +49,13 @@ export class ProfileFormComponent implements OnInit {
   async ngOnInit() {
     this.loaded = false;
 
-    this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+    this.globalInfo = this.loginService.getGlobalInfo();
 
     this.profileForm = this.formBuilder.group({
-      formOfAddress: new FormControl('', Validators.required),
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required),
-      birthday: new FormControl('', Validators.required),
+      formOfAddress: new FormControl("", Validators.required),
+      firstName: new FormControl("", Validators.required),
+      lastName: new FormControl("", Validators.required),
+      birthday: new FormControl("", Validators.required),
     });
 
     this.profileForm.valueChanges.subscribe(() => {
@@ -63,7 +67,6 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async reload() {
-
     this.profileForm.setValue({
       formOfAddress: this.user.formOfAddress,
       firstName: this.user.firstname,
@@ -97,17 +100,15 @@ export class ProfileFormComponent implements OnInit {
     await this.coreUserService.updateUser(this.user, true).toPromise();
 
     this.loginService.generateGlobalInfo(
-      this.globalInfo.userRole,
-      this.globalInfo.tenants.map((t) => t.id)
+      this.globalInfo.currentRole,
+      this.globalInfo.currentTenants.map((t) => t.id)
     );
 
     this.reload();
   }
 
   getProfileImage() {
-
     return this.userImageService.getUserProfileImage(this.userImage);
-
   }
 
   hasVolunteerRole() {

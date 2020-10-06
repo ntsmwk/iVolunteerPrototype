@@ -1,24 +1,25 @@
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { Component, OnInit, Inject } from '@angular/core';
-import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
-import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { Component, OnInit, Inject } from "@angular/core";
+import { DynamicFormItemService } from "app/main/content/_service/dynamic-form-item.service";
+import { DynamicFormItemControlService } from "app/main/content/_service/dynamic-form-item-control.service";
 import {
   FormConfiguration,
   FormEntryReturnEventData,
   FormEntry,
-} from 'app/main/content/_model/meta/form';
-import { ClassInstance } from 'app/main/content/_model/meta/class';
+} from "app/main/content/_model/meta/form";
+import { ClassInstance } from "app/main/content/_model/meta/class";
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { ClassProperty } from 'app/main/content/_model/meta/property/property';
-import { isNullOrUndefined } from 'util';
-import { FormControl } from '@angular/forms';
-import { DynamicFormItemBase } from 'app/main/content/_model/dynamic-forms/item';
-import { User } from 'app/main/content/_model/user';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { Tenant } from 'app/main/content/_model/tenant';
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
+import { LoginService } from "app/main/content/_service/login.service";
+import { ClassProperty } from "app/main/content/_model/meta/property/property";
+import { isNullOrUndefined } from "util";
+import { FormControl } from "@angular/forms";
+import { DynamicFormItemBase } from "app/main/content/_model/dynamic-forms/item";
+import { User } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 export interface ClassInstanceFormPreviewExportDialogData {
   classConfigurationIds: string[];
@@ -26,8 +27,8 @@ export interface ClassInstanceFormPreviewExportDialogData {
 
 @Component({
   selector: "class-instance-form-preview-export-dialog",
-  templateUrl: './form-preview-export-dialog.component.html',
-  styleUrls: ['./form-preview-export-dialog.component.scss'],
+  templateUrl: "./form-preview-export-dialog.component.html",
+  styleUrls: ["./form-preview-export-dialog.component.scss"],
   providers: [DynamicFormItemService, DynamicFormItemControlService],
 })
 export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
@@ -43,7 +44,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   results: FormEntryReturnEventData[] = [];
 
-  tenantAdmin: User;
+  userInfo: UserInfo;
   tenant: Tenant;
 
   globalInfo: GlobalInfo;
@@ -59,21 +60,19 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     private formItemService: DynamicFormItemService,
     private formItemControlService: DynamicFormItemControlService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.returnedClassInstances = [];
     this.expectedNumberOfResults = 0;
 
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.tenantAdmin = this.globalInfo.user;
-    this.tenant = this.globalInfo.tenants[0];
+    this.globalInfo = this.loginService.getGlobalInfo();
+    this.userInfo = this.globalInfo.userInfo;
+    this.tenant = this.globalInfo.currentTenants[0];
 
     this.classDefinitionService
       .getFormConfigurations(
-        this.globalInfo.marketplace,
+        this.globalInfo.currentMarketplaces[0],
         this.data.classConfigurationIds
       )
       .toPromise()
@@ -90,7 +89,6 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
             config.formEntry,
             config.formEntry.id
           );
-
         }
       })
       .then(() => {
@@ -107,7 +105,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
     // clear validators for everything except the unableToContinue Property-FormItem
     for (const formItem of formEntry.formItems) {
-      if (formItem.controlType !== 'tuple') {
+      if (formItem.controlType !== "tuple") {
         formItem.validators = [];
       }
     }
@@ -116,7 +114,10 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       formEntry.formItems
     );
 
-    if (!isNullOrUndefined(formEntry.formItems) && formEntry.formItems.length > 0) {
+    if (
+      !isNullOrUndefined(formEntry.formItems) &&
+      formEntry.formItems.length > 0
+    ) {
       this.expectedNumberOfResults++;
     }
 
@@ -133,7 +134,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     selection: { id: any; label: any };
     formEntry: FormEntry;
   }) {
-    console.log('handling selection');
+    console.log("handling selection");
     let unableToContinueControl: FormControl;
     // let unableToContinueControlKey: string;
     let unableToContinueQuestion: DynamicFormItemBase<any>;
@@ -141,26 +142,39 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     this.results = [];
 
     Object.keys(evt.formEntry.formGroup.controls).forEach((c) => {
-      if (c.endsWith('unableToContinue')) {
+      if (c.endsWith("unableToContinue")) {
         // unableToContinueControlKey = c;
         unableToContinueControl = evt.formEntry.formGroup.controls[
           c
         ] as FormControl;
-        pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
+        pathPrefix = c.replace(/\.[^.]*unableToContinue/, "");
       }
     });
 
-    unableToContinueQuestion = evt.formEntry.formItems.find((item) => item.key.endsWith('unableToContinue'));
-    console.log(this.globalInfo.marketplace);
+    unableToContinueQuestion = evt.formEntry.formItems.find((item) =>
+      item.key.endsWith("unableToContinue")
+    );
+    console.log(this.globalInfo.currentMarketplaces[0]);
     console.log(pathPrefix);
     console.log(evt.selection.id);
 
-    this.classDefinitionService.getFormConfigurationChunk(this.globalInfo.marketplace, pathPrefix, evt.selection.id)
+    this.classDefinitionService
+      .getFormConfigurationChunk(
+        this.globalInfo.currentMarketplaces[0],
+        pathPrefix,
+        evt.selection.id
+      )
       .toPromise()
       .then((retFormEntry: FormEntry) => {
-        const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
+        const currentFormEntry = this.getFormEntry(
+          pathPrefix,
+          this.currentFormConfiguration.formEntry.id,
+          this.currentFormConfiguration.formEntry
+        );
 
-        const unableToContinueProperty = currentFormEntry.classProperties.find(p => p.id.endsWith('unableToContinue'));
+        const unableToContinueProperty = currentFormEntry.classProperties.find(
+          (p) => p.id.endsWith("unableToContinue")
+        );
 
         unableToContinueProperty.defaultValues = [evt.selection];
         retFormEntry.classProperties.push(unableToContinueProperty);
@@ -207,8 +221,8 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   handleResultEvent(event: FormEntryReturnEventData) {
     this.results.push(event);
-    console.log('actual vs expected');
-    console.log(this.results.length + 'vs' + this.expectedNumberOfResults);
+    console.log("actual vs expected");
+    console.log(this.results.length + "vs" + this.expectedNumberOfResults);
     // const unableToContinue = this.containsUnsetUnableToContinue(this.results.map(fg => fg.formGroup));
     if (
       this.results.length ===
@@ -243,8 +257,8 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   // }
 
   private doExport() {
-    const json = '{' + '"tenantId": "' + this.tenant.id;
-    '", ' + this.addClassToJSON(this.currentFormConfiguration.formEntry) + '}';
+    const json = "{" + '"tenantId": "' + this.tenant.id;
+    '", ' + this.addClassToJSON(this.currentFormConfiguration.formEntry) + "}";
 
     this.exportFile([json]);
   }
@@ -256,57 +270,57 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       '", ' +
       '"properties": [' +
       this.addPropertiesToJSON(formEntry) +
-      '],' +
+      "]," +
       '"subClassInstances": [' +
       this.addClassesToJSON(formEntry.subEntries) +
-      ']'
+      "]"
     );
   }
 
   private addClassesToJSON(formEntries: FormEntry[]) {
-    let returnString = '';
+    let returnString = "";
 
     for (let i = 0; i < formEntries.length; i++) {
-      returnString += '{';
+      returnString += "{";
       returnString += this.addClassToJSON(formEntries[i]);
-      returnString += '}';
+      returnString += "}";
 
       if (i < formEntries.length - 1) {
-        returnString += ',';
+        returnString += ",";
       }
     }
     return returnString;
   }
 
   private addPropertiesToJSON(formEntry: FormEntry) {
-    let returnString = '{';
+    let returnString = "{";
 
     for (let i = 0; i < formEntry.formItems.length; i++) {
-      if (formEntry.formItems[i].controlType !== 'tuple') {
+      if (formEntry.formItems[i].controlType !== "tuple") {
         returnString += ` "${formEntry.formItems[i].label}": ""`;
         if (i < formEntry.formItems.length - 1) {
-          returnString += ',';
+          returnString += ",";
         }
       } else {
         returnString = returnString.substring(0, returnString.length - 1);
       }
     }
 
-    returnString += '}';
+    returnString += "}";
 
     return returnString;
   }
 
   private exportFile(content: string[]) {
-    const blob = new Blob(content, { type: 'application/json' });
+    const blob = new Blob(content, { type: "application/json" });
     const url = window.URL.createObjectURL(blob);
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'export.json';
+    link.download = "export.json";
     // this is necessary as link.click() does not work on the latest firefox
     link.dispatchEvent(
-      new MouseEvent('click', { bubbles: true, cancelable: true, view: window })
+      new MouseEvent("click", { bubbles: true, cancelable: true, view: window })
     );
 
     setTimeout(() => {

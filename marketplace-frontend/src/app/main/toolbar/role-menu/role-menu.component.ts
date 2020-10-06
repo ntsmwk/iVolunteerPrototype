@@ -13,8 +13,9 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { ImageService } from "app/main/content/_service/image.service";
 import { UserService } from "app/main/content/_service/user.service";
-import { UserImage } from 'app/main/content/_model/image';
-import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
+import { UserImage } from "app/main/content/_model/image";
+import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "app-role-menu",
@@ -22,7 +23,7 @@ import { CoreUserImageService } from 'app/main/content/_service/core-user-image.
   styleUrls: ["./role-menu.component.scss"],
 })
 export class RoleMenuComponent implements OnInit, OnDestroy {
-  user: User;
+  userInfo: UserInfo;
   userImage: UserImage;
   role: UserRole;
   allTenants: Tenant[] = [];
@@ -40,7 +41,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private roleChangeService: RoleChangeService,
     private tenantService: TenantService,
-    private userImageService: CoreUserImageService,
+    private userImageService: CoreUserImageService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -53,25 +54,31 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
+      await this.loginService.getGlobalInfo2().toPromise()
     );
-    this.user = globalInfo.user;
-    this.role = globalInfo.userRole;
+    console.error("globalInfo: ", globalInfo);
+
+    this.userInfo = globalInfo.userInfo;
+    this.role = globalInfo.currentRole;
 
     // Don't wait for image...
-    this.userImageService.findByUserId(this.user.id).toPromise().then((userImage: UserImage) => this.userImage = userImage);
-
+    this.userImageService
+      .findByUserId(this.userInfo.id)
+      .toPromise()
+      .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([
-      this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise(),
+      (this.allTenants = <Tenant[]>(
+        await this.tenantService.findAll().toPromise()
+      )),
     ]);
 
     this.currentMapping = new RoleTenantMapping();
     this.currentMapping.role = this.role;
-    this.currentMapping.tenantIds = globalInfo.tenants.map((t) => t.id);
+    this.currentMapping.tenantIds = globalInfo.currentTenants.map((t) => t.id);
 
     this.roleTenantMappings = this.roleChangeService.getRoleTenantMappings(
-      this.user
+      globalInfo.userSubscriptions
     );
 
     this.possibleRoleTenantMappings = this.roleTenantMappings.filter((m) => {
@@ -88,6 +95,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
       return !this.isSameMapping(m, this.currentMapping);
     });
 
+    // TODO: Philipp: updateGlobalInfoRole only
     this.loginService
       .generateGlobalInfo(mapping.role, mapping.tenantIds)
       .then(() => {

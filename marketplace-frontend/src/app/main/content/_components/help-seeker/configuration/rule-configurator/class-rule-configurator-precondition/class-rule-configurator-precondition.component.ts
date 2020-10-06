@@ -24,8 +24,12 @@ import { ClassPropertyService } from "app/main/content/_service/meta/core/proper
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
-import { isNullOrUndefined } from 'util';
-import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property/property';
+import { isNullOrUndefined } from "util";
+import {
+  ClassProperty,
+  PropertyType,
+} from "app/main/content/_model/meta/property/property";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "class-rule-precondition",
@@ -41,7 +45,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     ClassCondition
   > = new EventEmitter<ClassCondition>();
 
-  tenantAdmin: User;
+  userInfo: UserInfo;
   marketplace: Marketplace;
   tenant: Tenant;
   classConditionForms: FormArray;
@@ -88,7 +92,10 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       aggregationOperatorType:
         this.classCondition.aggregationOperatorType || "",
       value: this.classCondition.value || "",
-      classPropertyId: (this.classCondition.classProperty ? this.classCondition.classProperty.id : "") || ""
+      classPropertyId:
+        (this.classCondition.classProperty
+          ? this.classCondition.classProperty.id
+          : "") || "",
     });
 
     this.classCondition.attributeConditions = this.classCondition
@@ -97,12 +104,11 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       : new Array();
     this.aggregationOperators = Object.keys(AggregationOperatorType);
 
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.marketplace = globalInfo.marketplace;
-    this.tenantAdmin = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
+    const globalInfo = this.loginService.getGlobalInfo();
+
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.userInfo = globalInfo.userInfo;
+    this.tenant = globalInfo.currentTenants[0];
 
     this.loadClassDefinitions();
     if (this.classCondition.classDefinition) {
@@ -111,34 +117,39 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   onClassChange(classDefinition: ClassDefinition, $event) {
-    if ($event.isUserInput &&
-      (isNullOrUndefined(this.classCondition.classDefinition) ||       // no class chosen
-        this.classCondition.classDefinition.name != classDefinition.name)) {    // class selection changed
+    if (
+      $event.isUserInput &&
+      (isNullOrUndefined(this.classCondition.classDefinition) || // no class chosen
+        this.classCondition.classDefinition.name != classDefinition.name)
+    ) {
+      // class selection changed
       /*if (!this.classCondition.classDefinition) {
         this.classCondition.classDefinition = new ClassDefinition();
       }*/
       this.classCondition.classDefinition = classDefinition;
       this.classCondition.attributeConditions = new Array();
-      this.rulePreconditionForm.setControl('classAttributeForms', this.formBuilder.array([]));
+      this.rulePreconditionForm.setControl(
+        "classAttributeForms",
+        this.formBuilder.array([])
+      );
       this.loadClassProperties(classDefinition);
       this.classConditionChange.emit(this.classCondition);
     }
   }
 
-  onPropertyChange(classProperty: ClassProperty<any>, $event){
-    if ($event.isUserInput && 
-        ( isNullOrUndefined(this.classCondition.classProperty) ||
-          this.classCondition.classProperty.id != classProperty.id)){
-            this.classCondition.classProperty = classProperty;
-        }
+  onPropertyChange(classProperty: ClassProperty<any>, $event) {
+    if (
+      $event.isUserInput &&
+      (isNullOrUndefined(this.classCondition.classProperty) ||
+        this.classCondition.classProperty.id != classProperty.id)
+    ) {
+      this.classCondition.classProperty = classProperty;
+    }
   }
 
-  private loadClassDefinitions(){
+  private loadClassDefinitions() {
     this.classDefinitionService
-      .getAllClassDefinitions(
-        this.marketplace,
-        this.tenant.id
-      )
+      .getAllClassDefinitions(this.marketplace, this.tenant.id)
       .toPromise()
       .then((definitions: ClassDefinition[]) => {
         this.classDefinitions = definitions;
@@ -147,23 +158,24 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
 
   private loadClassProperties(classDefinition: ClassDefinition) {
     this.classPropertyService
-    .getAllClassPropertiesFromClass(
-      this.marketplace,
-      classDefinition.id
-    )
-    .toPromise()
-    .then((props: ClassProperty<any>[]) => {
-      this.classProperties = props;
-      this.filteredSumClassProperties.push(... this.filterPropertiesByType(PropertyType.FLOAT_NUMBER));
-      this.filteredSumClassProperties.push(... this.filterPropertiesByType(PropertyType.WHOLE_NUMBER));
-    });
+      .getAllClassPropertiesFromClass(this.marketplace, classDefinition.id)
+      .toPromise()
+      .then((props: ClassProperty<any>[]) => {
+        this.classProperties = props;
+        this.filteredSumClassProperties.push(
+          ...this.filterPropertiesByType(PropertyType.FLOAT_NUMBER)
+        );
+        this.filteredSumClassProperties.push(
+          ...this.filterPropertiesByType(PropertyType.WHOLE_NUMBER)
+        );
+      });
   }
 
-  private filterPropertiesByType(propertyType: PropertyType){
+  private filterPropertiesByType(propertyType: PropertyType) {
     /*this.classProperties.forEach(cp => {
       console.log(cp.name + " " + cp.type);
     });*/
-    return this.classProperties.filter(cp => cp.type === propertyType);
+    return this.classProperties.filter((cp) => cp.type === propertyType);
   }
 
   onOperatorChange(aggregationOperatorType: AggregationOperatorType, $event) {

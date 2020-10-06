@@ -1,18 +1,23 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import {
-  MatDialogRef, MAT_DIALOG_DATA, MatDialog,
-} from '@angular/material/dialog';
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+} from "@angular/material/dialog";
 
-import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { MatTableDataSource, MatSort } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-import { isNullOrUndefined } from 'util';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
-import { MatchingEntity } from 'app/main/content/_model/matching';
-import { AddClassDefinitionGraphDialogComponent, AddClassDefinitionGraphDialogData } from '../add-class-definition-graph-dialog/add-class-definition-graph-dialog.component';
+import { ClassDefinition } from "app/main/content/_model/meta/class";
+import { MatTableDataSource, MatSort } from "@angular/material";
+import { SelectionModel } from "@angular/cdk/collections";
+import { isNullOrUndefined } from "util";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { LoginService } from "app/main/content/_service/login.service";
+import { Tenant } from "app/main/content/_model/tenant";
+import { MatchingEntityMappingConfiguration } from "app/main/content/_model/meta/configurations";
+import { MatchingEntity } from "app/main/content/_model/matching";
+import {
+  AddClassDefinitionGraphDialogComponent,
+  AddClassDefinitionGraphDialogData,
+} from "../add-class-definition-graph-dialog/add-class-definition-graph-dialog.component";
 
 export interface AddClassDefinitionDialogData {
   matchingEntityConfiguration: MatchingEntityMappingConfiguration;
@@ -22,19 +27,19 @@ export interface AddClassDefinitionDialogData {
 
 @Component({
   selector: "add-class-definition-dialog",
-  templateUrl: './add-class-definition-dialog.component.html',
-  styleUrls: ['./add-class-definition-dialog.component.scss'],
+  templateUrl: "./add-class-definition-dialog.component.html",
+  styleUrls: ["./add-class-definition-dialog.component.scss"],
 })
 export class AddClassDefinitionDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddClassDefinitionDialogData>,
     @Inject(MAT_DIALOG_DATA) public data: AddClassDefinitionDialogData,
     private loginService: LoginService,
-    public dialog: MatDialog,
-  ) { }
+    public dialog: MatDialog
+  ) {}
 
   dataSource = new MatTableDataSource<MatchingEntity>();
-  displayedColumns = ['checkbox', 'label', 'type'];
+  displayedColumns = ["checkbox", "label", "type"];
 
   selection: SelectionModel<MatchingEntity>;
 
@@ -51,17 +56,17 @@ export class AddClassDefinitionDialogComponent implements OnInit {
   async ngOnInit() {
     this.tabIndex = 0;
 
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    this.globalInfo = this.loginService.getGlobalInfo();
 
-    this.tenant = this.globalInfo.tenants[0];
+    this.tenant = this.globalInfo.currentTenants[0];
 
     this.dataSource.data = this.data.matchingEntityConfiguration.mappings.entities;
 
     this.selection = new SelectionModel<MatchingEntity>(true, []);
 
-    const entities = this.dataSource.data.filter(e => this.data.existingEntityPaths.find(path => path === e.path));
+    const entities = this.dataSource.data.filter((e) =>
+      this.data.existingEntityPaths.find((path) => path === e.path)
+    );
 
     if (!isNullOrUndefined(entities)) {
       this.selection.select(...entities);
@@ -71,7 +76,7 @@ export class AddClassDefinitionDialogComponent implements OnInit {
 
   isRowDisabled(row: MatchingEntity) {
     return !isNullOrUndefined(
-      this.data.existingEntityPaths.find(path => path === row.path)
+      this.data.existingEntityPaths.find((path) => path === row.path)
     );
   }
 
@@ -80,23 +85,26 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-
   onRowClick(row: MatchingEntity) {
     if (this.isRowDisabled(row)) {
       return;
     }
 
-    this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row);
+    this.selection.isSelected(row)
+      ? this.selection.deselect(row)
+      : this.selection.select(row);
   }
 
   openGraphDialog() {
-    console.log('opengraphdialog');
-    this.openAddClassDefinitionDialog(this.data, this.selection.selected).then((ret: AddClassDefinitionGraphDialogData) => {
-      if (!isNullOrUndefined(ret)) {
-        this.selection.clear();
-        this.selection.select(...ret.addedEntities);
+    console.log("opengraphdialog");
+    this.openAddClassDefinitionDialog(this.data, this.selection.selected).then(
+      (ret: AddClassDefinitionGraphDialogData) => {
+        if (!isNullOrUndefined(ret)) {
+          this.selection.clear();
+          this.selection.select(...ret.addedEntities);
+        }
       }
-    });
+    );
   }
 
   onSubmit(submitAll: boolean) {
@@ -120,10 +128,13 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     this.dialogRef.close(this.data);
   }
 
-  openAddClassDefinitionDialog(data: AddClassDefinitionGraphDialogData, selected: MatchingEntity[]) {
+  openAddClassDefinitionDialog(
+    data: AddClassDefinitionGraphDialogData,
+    selected: MatchingEntity[]
+  ) {
     const dialogRef = this.dialog.open(AddClassDefinitionGraphDialogComponent, {
-      width: '90vw',
-      height: '90vh',
+      width: "90vw",
+      height: "90vh",
       data: {
         matchingEntityConfiguration: data.matchingEntityConfiguration,
         existingEntityPaths: data.existingEntityPaths,
@@ -133,15 +144,18 @@ export class AddClassDefinitionDialogComponent implements OnInit {
 
     let returnValue: AddClassDefinitionGraphDialogData;
 
-    dialogRef.beforeClosed().toPromise()
+    dialogRef
+      .beforeClosed()
+      .toPromise()
       .then((result: AddClassDefinitionGraphDialogData) => {
         returnValue = result;
       });
 
-    return dialogRef.afterClosed().toPromise()
+    return dialogRef
+      .afterClosed()
+      .toPromise()
       .then(() => {
         return returnValue;
       });
   }
-
 }

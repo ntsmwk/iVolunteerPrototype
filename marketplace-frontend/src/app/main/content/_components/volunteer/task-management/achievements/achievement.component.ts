@@ -3,7 +3,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ClassInstanceDTO,
-  ClassInstance
+  ClassInstance,
 } from "app/main/content/_model/meta/class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LoginService } from "app/main/content/_service/login.service";
@@ -16,15 +16,16 @@ import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
 import { CoreUserService } from "app/main/content/_service/core-user.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "fuse-achievements",
   templateUrl: "./achievement.component.html",
   styleUrls: ["./achievement.component.scss"],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class AchievementsComponent implements OnInit {
-  volunteer: User;
+  userInfo: UserInfo;
   marketplace: Marketplace;
   localRepositoryService: LocalRepositoryService;
   classInstanceDTOs: ClassInstanceDTO[] = [];
@@ -44,31 +45,31 @@ export class AchievementsComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private lrDropboxService: LocalRepositoryDropboxService,
     private lrJsonServerService: LocalRepositoryJsonServerService
-  ) { }
+  ) {}
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    const globalInfo = this.loginService.getGlobalInfo();
 
-    this.volunteer = globalInfo.user;
-    this.marketplace = globalInfo.marketplace;
-    this.subscribedTenants = globalInfo.tenants;
+    this.userInfo = globalInfo.userInfo;
+    // TODO Philipp: see todo below
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.subscribedTenants = globalInfo.currentTenants;
 
     this.localRepositoryService = this.loginService.getLocalRepositoryService(
-      this.volunteer
+      this.userInfo
     );
 
     try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
-          .findClassInstancesByVolunteer(this.volunteer)
+          .findClassInstancesByVolunteer(this.userInfo)
           .toPromise()
       );
 
       // TODO Philipp
+      // several marketplaces possible, hence
       // get unique marketplaceIds of CIs
-      // perform once per marketplaceId
+      // perform call on each mp once per marketplaceId
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .mapClassInstancesToDTOs(this.marketplace, localClassInstances)
@@ -84,8 +85,8 @@ export class AchievementsComponent implements OnInit {
             .getUserClassInstancesByArcheType(
               this.marketplace,
               "TASK",
-              this.volunteer.id,
-              this.subscribedTenants.map(t => t.id),
+              this.userInfo.id,
+              this.subscribedTenants.map((t) => t.id),
               true
             )
             .toPromise()
@@ -95,7 +96,7 @@ export class AchievementsComponent implements OnInit {
 
     // filter out classInstances missing the reqired fields
     let before = this.classInstanceDTOs.length;
-    this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
+    this.classInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
       return (
         ci.name != null &&
         ci.tenantId != null &&
@@ -116,8 +117,8 @@ export class AchievementsComponent implements OnInit {
   tenantSelectionChanged(selectedTenants: Tenant[]) {
     this.selectedTenants = selectedTenants;
 
-    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(ci => {
-      return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
+    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
+      return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
     });
   }
 

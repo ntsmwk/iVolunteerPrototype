@@ -16,9 +16,10 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LoginGuard } from "app/main/content/_guard/login.guard";
 import { LoginService } from "app/main/content/_service/login.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { UserService } from 'app/main/content/_service/user.service';
-import { CoreUserImageService } from 'app/main/content/_service/core-user-image.service';
-import { UserImage } from 'app/main/content/_model/image';
+import { UserService } from "app/main/content/_service/user.service";
+import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
+import { UserImage } from "app/main/content/_model/image";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "app-instance-creation-volunteer-list",
@@ -27,7 +28,7 @@ import { UserImage } from 'app/main/content/_model/image';
   providers: [],
 })
 export class InstanceCreationVolunteerListComponent implements OnInit {
-  @Input() tenantAdmin: User;
+  @Input() userInfo: UserInfo;
   @Output() selectedVolunteers: EventEmitter<User[]> = new EventEmitter();
 
   tenant: Tenant;
@@ -45,28 +46,33 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
     private coreUserService: CoreUserService,
     private userImageService: CoreUserImageService,
     private loginService: LoginService,
-    private userService: UserService,
-  ) { }
+    private userService: UserService
+  ) {}
 
   async ngOnInit() {
     this.volunteers = [];
     this.volunteerImages = [];
     this.datasource = new MatTableDataSource();
 
-    const globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
-
-    this.tenant = globalInfo.tenants[0];
+    const globalInfo = this.loginService.getGlobalInfo();
+    this.tenant = globalInfo.currentTenants[0];
 
     Promise.all([
-      this.coreUserService.findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER).toPromise().then((volunteers: User[]) => {
-        this.volunteers = volunteers;
-        this.paginator.length = volunteers.length;
-        this.datasource.paginator = this.paginator;
-        this.datasource.data = volunteers;
-      }),
-      this.userImageService.findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER).toPromise().then((volunteerImages: UserImage[]) => {
-        this.volunteerImages = volunteerImages;
-      })
+      this.coreUserService
+        .findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER)
+        .toPromise()
+        .then((volunteers: User[]) => {
+          this.volunteers = volunteers;
+          this.paginator.length = volunteers.length;
+          this.datasource.paginator = this.paginator;
+          this.datasource.data = volunteers;
+        }),
+      this.userImageService
+        .findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER)
+        .toPromise()
+        .then((volunteerImages: UserImage[]) => {
+          this.volunteerImages = volunteerImages;
+        }),
     ]).then(() => {
       this.loaded = true;
     });

@@ -9,12 +9,13 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "fuse-task-list",
   templateUrl: "./task-list.component.html",
   styleUrls: ["./task-list.component.scss"],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class FuseTaskListComponent implements OnInit, AfterViewInit {
   marketplace: Marketplace;
@@ -31,10 +32,10 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     "taskType2",
     "taskDateFrom",
     "taskDuration",
-    "verified"
+    "verified",
   ];
 
-  user: User;
+  userInfo: UserInfo;
   tenant: Tenant;
 
   constructor(
@@ -46,13 +47,11 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   async ngAfterViewInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    const globalInfo = this.loginService.getGlobalInfo();
 
-    this.user = globalInfo.user;
-    this.marketplace = globalInfo.marketplace;
-    this.tenant = globalInfo.tenants[0];
+    this.userInfo = globalInfo.userInfo;
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.tenant = globalInfo.currentTenants[0];
 
     this.tableDataSource.paginator = this.paginator;
     this.tableDataSource.data = <ClassInstanceDTO[]>(

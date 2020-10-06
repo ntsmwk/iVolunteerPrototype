@@ -1,53 +1,80 @@
 package at.jku.cis.iVolunteer.core.global;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import at.jku.cis.iVolunteer.core.security.model.UserInfo;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 public class GlobalInfo {
+	// role independent fields
+	private UserInfo userInfo;
+	private List<UserSubscriptionDTO> userSubscriptions;
+	private List<Marketplace> registeredMarketplaces;
 
-	private User user;
-	private UserRole userRole;
-	private List<Tenant> tenants = new ArrayList<>();
-	private Marketplace marketplace;
+	// role specific fields
+	// irrelevant on server side
+	// private UserRole currentRole;
+	// private List<Tenant> currentTenants;
+	// private List<Marketplace> currentMarketplaces;
 
 	public GlobalInfo() {
 	}
 
-	public User getUser() {
-		return user;
+	public GlobalInfo(UserInfo userInfo, List<UserSubscriptionDTO> subscribedTenants,
+			List<Marketplace> registeredMarketplaces) {
+		this.userInfo = userInfo;
+		this.userSubscriptions = subscribedTenants;
+		this.registeredMarketplaces = registeredMarketplaces;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public UserInfo getUserInfo() {
+		return this.userInfo;
 	}
 
-	public UserRole getUserRole() {
-		return userRole;
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
 	}
 
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
+	public List<UserSubscriptionDTO> getSubscribedTenants() {
+		return this.userSubscriptions;
 	}
 
-	public Marketplace getMarketplace() {
-		return marketplace;
+	public void setSubscribedTenants(List<UserSubscriptionDTO> subscribedTenants) {
+		this.userSubscriptions = subscribedTenants;
 	}
 
-	public void setMarketplace(Marketplace marketplace) {
-		this.marketplace = marketplace;
+	public List<Marketplace> getRegisteredMarketplaces() {
+		return this.registeredMarketplaces;
 	}
 
-	public List<Tenant> getTenants() {
-		return tenants;
+	public void setRegisteredMarketplaces(List<Marketplace> registeredMarketplaces) {
+		this.registeredMarketplaces = registeredMarketplaces;
 	}
 
-	public void setTenants(List<Tenant> tenants) {
-		this.tenants = tenants;
-	}
+	// public UserRole getCurrentRole() {
+	// return this.currentRole;
+	// }
+
+	// public void setCurrentRole(UserRole currentRole) {
+	// this.currentRole = currentRole;
+	// }
+
+	// public List<Tenant> getCurrentTenants() {
+	// return this.currentTenants;
+	// }
+
+	// public void setCurrentTenants(List<Tenant> currentTenants) {
+	// this.currentTenants = currentTenants;
+	// }
+
+	// public List<Marketplace> getCurrentMarketplaces() {
+	// return this.currentMarketplaces;
+	// }
+
+	// public void setCurrentMarketplaces(List<Marketplace> currentMarketplaces) {
+	// this.currentMarketplaces = currentMarketplaces;
+	// }
 
 }

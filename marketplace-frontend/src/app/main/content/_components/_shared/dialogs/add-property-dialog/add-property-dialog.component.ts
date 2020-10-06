@@ -1,27 +1,33 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import {
-  MatDialogRef, MAT_DIALOG_DATA, MatDialog,
-} from '@angular/material/dialog';
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+} from "@angular/material/dialog";
 import {
-  PropertyItem, ClassProperty, FlatPropertyDefinition,
-} from '../../../../_model/meta/property/property';
-import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { MatTableDataSource, MatSort } from '@angular/material';
-import { FlatPropertyDefinitionService } from 'app/main/content/_service/meta/core/property/flat-property-definition.service';
-import { SelectionModel } from '@angular/cdk/collections';
-import { isNullOrUndefined } from 'util';
+  PropertyItem,
+  ClassProperty,
+  FlatPropertyDefinition,
+} from "../../../../_model/meta/property/property";
+import { ClassDefinition } from "app/main/content/_model/meta/class";
+import { MatTableDataSource, MatSort } from "@angular/material";
+import { FlatPropertyDefinitionService } from "app/main/content/_service/meta/core/property/flat-property-definition.service";
+import { SelectionModel } from "@angular/cdk/collections";
+import { isNullOrUndefined } from "util";
 import {
-  Relationship, RelationshipType,
-} from 'app/main/content/_model/meta/relationship';
-import { TreePropertyDefinitionService } from 'app/main/content/_service/meta/core/property/tree-property-definition.service';
-import { TreePropertyDefinition } from 'app/main/content/_model/meta/property/tree-property';
-import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
+  Relationship,
+  RelationshipType,
+} from "app/main/content/_model/meta/relationship";
+import { TreePropertyDefinitionService } from "app/main/content/_service/meta/core/property/tree-property-definition.service";
+import { TreePropertyDefinition } from "app/main/content/_model/meta/property/tree-property";
+import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
 import {
-  PropertyCreationDialogComponent, PropertyCreationDialogData,
-} from '../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.component';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { Tenant } from 'app/main/content/_model/tenant';
+  PropertyCreationDialogComponent,
+  PropertyCreationDialogData,
+} from "../../../help-seeker/configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.component";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { LoginService } from "app/main/content/_service/login.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 export interface AddPropertyDialogData {
   classDefinition: ClassDefinition;
@@ -32,8 +38,8 @@ export interface AddPropertyDialogData {
 
 @Component({
   selector: "add-property-dialog",
-  templateUrl: './add-property-dialog.component.html',
-  styleUrls: ['./add-property-dialog.component.scss'],
+  templateUrl: "./add-property-dialog.component.html",
+  styleUrls: ["./add-property-dialog.component.scss"],
 })
 export class AddPropertyDialogComponent implements OnInit {
   constructor(
@@ -44,12 +50,12 @@ export class AddPropertyDialogComponent implements OnInit {
     private classPropertyService: ClassPropertyService,
     private treePropertyDefinitionService: TreePropertyDefinitionService,
     public dialog: MatDialog,
-    private loginService: LoginService,
-  ) { }
+    private loginService: LoginService
+  ) {}
 
   flatPropertyDataSource = new MatTableDataSource<PropertyItem>();
   treePropertyDataSource = new MatTableDataSource<TreePropertyDefinition>();
-  displayedColumns = ['checkbox', 'label', 'type'];
+  displayedColumns = ["checkbox", "label", "type"];
 
   allFlatPropertyDefinitions: FlatPropertyDefinition<any>[];
   allTreePropertyDefinitions: TreePropertyDefinition[];
@@ -74,15 +80,16 @@ export class AddPropertyDialogComponent implements OnInit {
   async ngOnInit() {
     this.tabIndex = 0;
 
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    this.globalInfo = this.loginService.getGlobalInfo();
 
-    this.tenant = this.globalInfo.tenants[0];
-
+    this.tenant = this.globalInfo.currentTenants[0];
 
     Promise.all([
-      this.flatPropertyDefinitionService.getAllPropertyDefinitons(this.globalInfo.marketplace, this.tenant.id)
+      this.flatPropertyDefinitionService
+        .getAllPropertyDefinitons(
+          this.globalInfo.currentMarketplaces[0],
+          this.tenant.id
+        )
         .toPromise()
         .then((ret: FlatPropertyDefinition<any>[]) => {
           this.flatPropertyDataSource.data = ret;
@@ -98,12 +105,20 @@ export class AddPropertyDialogComponent implements OnInit {
           );
 
           this.disabledFlatPropertyDefinitions = [];
-          this.disabledFlatPropertyDefinitions.push(...this.initialFlatPropertyDefinitions, ...parentProperties);
+          this.disabledFlatPropertyDefinitions.push(
+            ...this.initialFlatPropertyDefinitions,
+            ...parentProperties
+          );
 
-          this.flatPropertySelection.select(...this.initialFlatPropertyDefinitions);
+          this.flatPropertySelection.select(
+            ...this.initialFlatPropertyDefinitions
+          );
         }),
       this.treePropertyDefinitionService
-        .getAllPropertyDefinitionsForTenant(this.globalInfo.marketplace, this.tenant.id)
+        .getAllPropertyDefinitionsForTenant(
+          this.globalInfo.currentMarketplaces[0],
+          this.tenant.id
+        )
         .toPromise()
         .then((ret: TreePropertyDefinition[]) => {
           this.treePropertyDataSource.data = ret;
@@ -113,9 +128,12 @@ export class AddPropertyDialogComponent implements OnInit {
             this.data.classDefinition.properties.find((f) => f.id === e.id)
           );
           this.disabledTreePropertyDefinitions = [];
-          this.disabledTreePropertyDefinitions.push(...this.initialTreePropertyDefinitions);
-          this.treePropertySelection
-            .select(...this.initialTreePropertyDefinitions);
+          this.disabledTreePropertyDefinitions.push(
+            ...this.initialTreePropertyDefinitions
+          );
+          this.treePropertySelection.select(
+            ...this.initialTreePropertyDefinitions
+          );
         }),
     ]).then(() => {
       this.loaded = true;
@@ -129,7 +147,10 @@ export class AddPropertyDialogComponent implements OnInit {
       const relationship = this.data.allRelationships.find(
         (r) => r.target === currentClassDefinition.id
       );
-      if (isNullOrUndefined(relationship) || relationship.relationshipType === RelationshipType.ASSOCIATION) {
+      if (
+        isNullOrUndefined(relationship) ||
+        relationship.relationshipType === RelationshipType.ASSOCIATION
+      ) {
         break;
       }
 
@@ -142,15 +163,21 @@ export class AddPropertyDialogComponent implements OnInit {
     return parentProperties;
   }
 
-  isFlatPropertyRowDisabled(flatPropertyDefinition: FlatPropertyDefinition<any>) {
+  isFlatPropertyRowDisabled(
+    flatPropertyDefinition: FlatPropertyDefinition<any>
+  ) {
     return !isNullOrUndefined(
-      this.disabledFlatPropertyDefinitions.find((p) => p.id === flatPropertyDefinition.id)
+      this.disabledFlatPropertyDefinitions.find(
+        (p) => p.id === flatPropertyDefinition.id
+      )
     );
   }
 
   isTreePropertyRowDisabled(treePropertyDefinition: TreePropertyDefinition) {
     return !isNullOrUndefined(
-      this.disabledTreePropertyDefinitions.find((p) => p.id === treePropertyDefinition.id)
+      this.disabledTreePropertyDefinitions.find(
+        (p) => p.id === treePropertyDefinition.id
+      )
     );
   }
 
@@ -169,7 +196,9 @@ export class AddPropertyDialogComponent implements OnInit {
       return;
     }
 
-    this.flatPropertySelection.isSelected(row) ? this.flatPropertySelection.deselect(row) : this.flatPropertySelection.select(row);
+    this.flatPropertySelection.isSelected(row)
+      ? this.flatPropertySelection.deselect(row)
+      : this.flatPropertySelection.select(row);
   }
 
   onTreeRowClick(row: TreePropertyDefinition) {
@@ -177,7 +206,8 @@ export class AddPropertyDialogComponent implements OnInit {
       return;
     }
 
-    this.treePropertySelection.isSelected(row) ? this.treePropertySelection.deselect(row)
+    this.treePropertySelection.isSelected(row)
+      ? this.treePropertySelection.deselect(row)
       : this.treePropertySelection.select(row);
   }
 
@@ -188,16 +218,15 @@ export class AddPropertyDialogComponent implements OnInit {
         this.data.classDefinition.properties.findIndex((q) => p.id === q.id) ===
         -1
     );
-    const addedTreeProperties = this.treePropertySelection
-      .selected.filter(
-        (e) =>
-          this.data.classDefinition.properties.findIndex((q) => e.id === q.id) ===
-          -1
-      );
+    const addedTreeProperties = this.treePropertySelection.selected.filter(
+      (e) =>
+        this.data.classDefinition.properties.findIndex((q) => e.id === q.id) ===
+        -1
+    );
 
     this.classPropertyService
       .getClassPropertyFromDefinitionById(
-        this.globalInfo.marketplace,
+        this.globalInfo.currentMarketplaces[0],
         addedFlatProperties.map((p) => p.id),
         addedTreeProperties.map((e) => e.id)
       )
@@ -210,19 +239,21 @@ export class AddPropertyDialogComponent implements OnInit {
 
   createNewClicked(type: string) {
     const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
-      width: '70vw',
-      minWidth: '70vw',
-      height: '90vh',
-      minHeight: '90vh',
+      width: "70vw",
+      minWidth: "70vw",
+      height: "90vh",
+      minHeight: "90vh",
       data: {
-        marketplace: this.globalInfo.marketplace,
+        marketplace: this.globalInfo.currentMarketplaces[0],
         allFlatPropertyDefinitions: this.flatPropertyDataSource.data,
         builderType: type,
       },
       disableClose: true,
     });
 
-    dialogRef.beforeClose().toPromise()
+    dialogRef
+      .beforeClose()
+      .toPromise()
       .then((result: PropertyCreationDialogData) => {
         if (!isNullOrUndefined(result)) {
           if (!isNullOrUndefined(result.flatPropertyDefinition)) {

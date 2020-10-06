@@ -1,23 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { ImageService } from 'app/main/content/_service/image.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { User, UserRole } from 'app/main/content/_model/user';
-import { CoreUserService } from 'app/main/content/_service/core-user.service';
-import { RoleChangeService } from 'app/main/content/_service/role-change.service';
+import { Component, OnInit } from "@angular/core";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { Tenant } from "app/main/content/_model/tenant";
+import { ImageService } from "app/main/content/_service/image.service";
+import { LoginService } from "app/main/content/_service/login.service";
+import {
+  GlobalInfo,
+  UserSubscriptionDTO,
+} from "app/main/content/_model/global-info";
+import { User, UserRole } from "app/main/content/_model/user";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
+import { RoleChangeService } from "app/main/content/_service/role-change.service";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "tenant-overview",
-  templateUrl: 'tenant-overview.component.html',
-  styleUrls: ['tenant-overview.component.scss'],
+  templateUrl: "tenant-overview.component.html",
+  styleUrls: ["tenant-overview.component.scss"],
 })
 export class TenantOverviewComponent implements OnInit {
-  user: User;
+  userInfo: UserInfo;
   currentTenants: Tenant[] = [];
   currentRole: UserRole;
   allTenants: Tenant[] = [];
+  userSubscriptions: UserSubscriptionDTO[];
 
   isLoaded = false;
 
@@ -26,7 +31,7 @@ export class TenantOverviewComponent implements OnInit {
     private tenantService: TenantService,
     private coreUserService: CoreUserService,
     private roleChangeService: RoleChangeService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
@@ -41,25 +46,26 @@ export class TenantOverviewComponent implements OnInit {
 
   isSubscribed(tenant: Tenant, role: UserRole) {
     return (
-      this.user.subscribedTenants
-        .filter((s) => s.tenantId === tenant.id)
+      this.userSubscriptions
+        .filter((s) => s.tenant.id === tenant.id)
         .findIndex((t) => t.role === role) >= 0
     );
   }
 
+  // TODO: Philipp: evtl problem: vorher wurde this.user mit rückgabewert aktualisiert, jetzt nicht mehr, problem?
   async unsubscribe(tenant: Tenant, role: UserRole) {
-    this.user = <User>(
-      await this.coreUserService
-        .unsubscribeUserFromTenant(
-          this.user.id,
-          tenant.marketplaceId,
-          tenant.id,
-          role
-        )
-        .toPromise()
-    );
+    // this.userInfo = <User>(
+    await this.coreUserService
+      .unsubscribeUserFromTenant(
+        this.userInfo.id,
+        tenant.marketplaceId,
+        tenant.id,
+        role
+      )
+      .toPromise();
+    // );
 
-    if (this.user.subscribedTenants.length === 0) {
+    if (this.userSubscriptions.length === 0) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
         this.roleChangeService.changeRole(UserRole.NONE);
         this.updateCurrentInfo();
@@ -72,13 +78,11 @@ export class TenantOverviewComponent implements OnInit {
         this.currentTenants.map((t) => t.id).indexOf(tenant.id) >= 0
       ) {
         this.loginService
-          .generateGlobalInfo(this.user.subscribedTenants[0].role, [
-            this.user.subscribedTenants[0].tenantId,
+          .generateGlobalInfo(this.userSubscriptions[0].role, [
+            this.userSubscriptions[0].tenant.id,
           ])
           .then(() => {
-            this.roleChangeService.changeRole(
-              this.user.subscribedTenants[0].role
-            );
+            this.roleChangeService.changeRole(this.userSubscriptions[0].role);
             this.updateCurrentInfo();
           });
       } else {
@@ -96,10 +100,10 @@ export class TenantOverviewComponent implements OnInit {
   }
 
   async subscribe(tenant: Tenant, role: UserRole) {
-    this.user = <User>(
+    this.userInfo = <User>(
       await this.coreUserService
         .subscribeUserToTenant(
-          this.user.id,
+          this.userInfo.id,
           tenant.marketplaceId,
           tenant.id,
           role
@@ -125,14 +129,13 @@ export class TenantOverviewComponent implements OnInit {
     }
   }
 
-  async updateCurrentInfo() {
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+  updateCurrentInfo() {
+    const globalInfo = this.loginService.getGlobalInfo();
 
-    this.user = globalInfo.user;
-    this.currentTenants = globalInfo.tenants;
-    this.currentRole = globalInfo.userRole;
+    this.userInfo = globalInfo.userInfo;
+    this.currentTenants = globalInfo.currentTenants;
+    this.currentRole = globalInfo.currentRole;
+    this.userSubscriptions = globalInfo.userSubscriptions;
   }
 
   navigateBack() {

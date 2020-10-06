@@ -7,7 +7,7 @@ import { MatchingConfigurationService } from "app/main/content/_service/configur
 import { MatchingConfiguration } from "app/main/content/_model/meta/configurations";
 import { MatchingBrowseSubDialogData } from "app/main/content/_components/help-seeker/configuration/matching-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component";
 import { User } from "app/main/content/_model/user";
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 export interface OpenMatchingDialogData {
   matchingConfiguration: MatchingConfiguration;
@@ -24,7 +24,7 @@ export class OpenMatchingDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: OpenMatchingDialogData,
     private matchingConfigurationService: MatchingConfigurationService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   allMatchingConfigurations: MatchingConfiguration[];
   browseDialogData: MatchingBrowseSubDialogData;
@@ -36,13 +36,10 @@ export class OpenMatchingDialogComponent implements OnInit {
   globalInfo: GlobalInfo;
 
   async ngOnInit() {
-
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    this.globalInfo = this.loginService.getGlobalInfo();
 
     this.matchingConfigurationService
-      .getAllMatchingConfigurations(this.globalInfo.marketplace)
+      .getAllMatchingConfigurations(this.globalInfo.currentMarketplaces[0])
       .toPromise()
       .then((matchingConfigurations: MatchingConfiguration[]) => {
         this.recentMatchingConfigurations = matchingConfigurations;

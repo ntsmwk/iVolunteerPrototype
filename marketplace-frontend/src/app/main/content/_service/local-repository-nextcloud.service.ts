@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { User } from "../_model/user";
 import { Observable } from "rxjs";
 import { LocalRepository } from "../_model/local-repository";
 import { ClassInstance } from "../_model/meta/class";
 import { createClient } from "webdav/web";
 import { NextcloudCredentials } from "../_model/nextcloud-credentials";
 import { LocalRepositoryService } from "./local-repository.service";
+import { UserInfo } from "../_model/userInfo";
 
 @Injectable({
   providedIn: "root",
@@ -45,7 +45,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
     }
   }
 
-  private findByVolunteer(volunteer: User) {
+  private findByVolunteer(volunteerInfo: UserInfo) {
     let nextcloud;
 
     const observable = new Observable((subscriber) => {
@@ -61,9 +61,9 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
 
       (async () => {
         try {
-          nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
-            username: volunteer.nextcloudCredentials.username,
-            password: volunteer.nextcloudCredentials.password,
+          nextcloud = createClient(volunteerInfo.nextcloudCredentials.domain, {
+            username: volunteerInfo.nextcloudCredentials.username,
+            password: volunteerInfo.nextcloudCredentials.password,
           });
         } catch (error) {
           console.error("nextcloud client creation failed");
@@ -77,7 +77,10 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
           await nextcloud.createDirectory(this.FILE_PATH1);
           await nextcloud.createDirectory(this.FILE_PATH2);
 
-          let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+          let newRepo = new LocalRepository(
+            volunteerInfo.id,
+            volunteerInfo.username
+          );
           this.localRepositories.push(newRepo);
           let content = { repository: this.localRepositories };
 
@@ -104,16 +107,19 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
 
           let repository = this.localRepositories.find(
             (localRepository: LocalRepository) => {
-              return localRepository.id === volunteer.id;
+              return localRepository.id === volunteerInfo.id;
             }
           );
 
           if (repository) {
             successFunction(repository);
           } else {
-            let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+            let newRepo = new LocalRepository(
+              volunteerInfo.id,
+              volunteerInfo.username
+            );
             this.localRepositories.push(newRepo);
-            this.saveToNextcloud(volunteer);
+            this.saveToNextcloud(volunteerInfo);
             successFunction(newRepo);
           }
         } catch (error) {
@@ -124,7 +130,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
     return observable;
   }
 
-  public findClassInstancesByVolunteer(volunteer: User) {
+  public findClassInstancesByVolunteer(volunteerInfo: UserInfo) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -140,7 +146,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
         }
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) =>
           successFunction(localRepository)
@@ -152,7 +158,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
   }
 
   public synchronizeSingleClassInstance(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstance: ClassInstance
   ) {
     const observable = new Observable((subscriber) => {
@@ -161,7 +167,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -172,7 +178,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
                 this.localRepositories[index] = localRepository;
               }
             });
-            this.saveToNextcloud(volunteer);
+            this.saveToNextcloud(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -185,14 +191,17 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
     return observable;
   }
 
-  public getSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public getSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           let classInstance = localRepository.classInstances.find((ci) => {
@@ -208,7 +217,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
   }
 
   public synchronizeClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   ) {
     const observable = new Observable((subscriber) => {
@@ -217,7 +226,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -232,7 +241,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
               }
             });
 
-            this.saveToNextcloud(volunteer);
+            this.saveToNextcloud(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -246,7 +255,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
   }
 
   public overrideClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   ) {
     const observable = new Observable((subscriber) => {
@@ -255,7 +264,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -267,7 +276,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
               }
             });
 
-            this.saveToNextcloud(volunteer);
+            this.saveToNextcloud(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -280,14 +289,17 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
     return observable;
   }
 
-  public removeSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public removeSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -303,7 +315,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
               }
             });
 
-            this.saveToNextcloud(volunteer);
+            this.saveToNextcloud(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -316,14 +328,17 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
     return observable;
   }
 
-  public removeClassInstances(volunteer: User, classInstanceIds: string[]) {
+  public removeClassInstances(
+    volunteerInfo: UserInfo,
+    classInstanceIds: string[]
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -337,7 +352,7 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
               }
             });
 
-            this.saveToNextcloud(volunteer);
+            this.saveToNextcloud(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -350,10 +365,10 @@ export class LocalRepositoryNextcloudService extends LocalRepositoryService {
     return observable;
   }
 
-  private async saveToNextcloud(volunteer: User) {
-    let nextcloud = createClient(volunteer.nextcloudCredentials.domain, {
-      username: volunteer.nextcloudCredentials.username,
-      password: volunteer.nextcloudCredentials.password,
+  private async saveToNextcloud(volunteerInfo: UserInfo) {
+    let nextcloud = createClient(volunteerInfo.nextcloudCredentials.domain, {
+      username: volunteerInfo.nextcloudCredentials.username,
+      password: volunteerInfo.nextcloudCredentials.password,
     });
 
     let content = { repository: this.localRepositories };

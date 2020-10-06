@@ -22,18 +22,21 @@ import { ClassPropertyService } from "app/main/content/_service/meta/core/proper
 import { User, UserRole } from "app/main/content/_model/user";
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { isNullOrUndefined } from 'util';
-import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
-import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
+import { isNullOrUndefined } from "util";
+import { DynamicFormItemService } from "app/main/content/_service/dynamic-form-item.service";
+import { DynamicFormItemControlService } from "app/main/content/_service/dynamic-form-item-control.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { DynamicFormItemBase } from 'app/main/content/_model/dynamic-forms/item';
+import { DynamicFormItemBase } from "app/main/content/_model/dynamic-forms/item";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "target-attribute-rule-configurator",
   templateUrl: "./target-attribute-rule-configurator.component.html",
   styleUrls: ["./target-attribute-rule-configurator.component.scss"],
-  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
-  providers: [DynamicFormItemService, DynamicFormItemControlService]
+  viewProviders: [
+    { provide: ControlContainer, useExisting: FormGroupDirective },
+  ],
+  providers: [DynamicFormItemService, DynamicFormItemControlService],
 })
 export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   @Input("attributeTarget")
@@ -43,7 +46,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     AttributeCondition
   >();
 
-  tenantAdmin: User;
+  userInfo: UserInfo;
   marketplace: Marketplace;
   role: UserRole;
   tenants: Tenant[];
@@ -69,7 +72,7 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     private dynamicFormItemService: DynamicFormItemService,
     private dynamicFormItemControlService: DynamicFormItemControlService,
     private parent: FormGroupDirective
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.attributeForms = <FormArray>(
@@ -91,12 +94,11 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       value: this.attributeTarget.value || "",
     });
 
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.marketplace = globalInfo.marketplace;
-    this.tenantAdmin = globalInfo.user;
-    this.tenants = globalInfo.tenants;
+    const globalInfo = this.loginService.getGlobalInfo();
+
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.userInfo = globalInfo.userInfo;
+    this.tenants = globalInfo.currentTenants;
 
     this.loadClassProperties(null);
     if (!isNullOrUndefined(this.attributeTarget.classProperty)) {
@@ -121,7 +123,9 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   private addQuestionAndFormGroup(classProperty: ClassProperty<any>) {
     let myArr: ClassProperty<any>[] = new Array();
     myArr.push(classProperty);
-    this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
+    this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(
+      myArr
+    );
 
     // AK war vorher hier ---> 143
     // this.formItem = this.formItems[0];
@@ -133,12 +137,16 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     }
 
     // AK QuestionForm zeicgt jetzt auf dieselbe control wie vorher - muss für 1:N Beziehungen möglichwerweise angepasst werden
-    this.ruleQuestionForm = (this.dynamicFormItemControlService.toFormGroup(this.formItems).controls['entries'] as FormArray).controls[0] as FormControl;
+    this.ruleQuestionForm = (this.dynamicFormItemControlService.toFormGroup(
+      this.formItems
+    ).controls["entries"] as FormArray).controls[0] as FormControl;
 
-    this.ruleTargetAttributeForm.addControl('questionForm', (this.ruleQuestionForm));
-   
-    
-/*
+    this.ruleTargetAttributeForm.addControl(
+      "questionForm",
+      this.ruleQuestionForm
+    );
+
+    /*
     console.log("DISPLAYING FORMGROUP: ");
     console.log("RAW: ");
     console.log(this.ruleQuestionForm);
@@ -156,12 +164,16 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
     // AK hier hab ich auch was verändert - weiß aber nicht mehr was...
     //value: this.ruleQuestionForm.get(this.formItem.key).value
 
-    this.ruleTargetAttributeForm.get('questionForm').valueChanges.subscribe((change) => {
-      this.ruleTargetAttributeForm.patchValue({
-        value: this.ruleQuestionForm.get(this.formItem.key).value
+    this.ruleTargetAttributeForm
+      .get("questionForm")
+      .valueChanges.subscribe((change) => {
+        this.ruleTargetAttributeForm.patchValue({
+          value: this.ruleQuestionForm.get(this.formItem.key).value,
+        });
+        this.attributeTarget.value = this.ruleQuestionForm.get(
+          this.formItem.key
+        ).value;
       });
-      this.attributeTarget.value = this.ruleQuestionForm.get(this.formItem.key).value;
-    });
   }
 
   private initAttributeTarget() {
@@ -171,9 +183,11 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   onPropertyChange(classProperty: ClassProperty<any>, $event) {
-    if ($event.isUserInput &&
-         (isNullOrUndefined(this.attributeTarget.classProperty) ||
-          this.attributeTarget.classProperty.id != classProperty.id)){
+    if (
+      $event.isUserInput &&
+      (isNullOrUndefined(this.attributeTarget.classProperty) ||
+        this.attributeTarget.classProperty.id != classProperty.id)
+    ) {
       this.initAttributeTarget();
       this.attributeTarget.classProperty = classProperty;
       // create new form for value
@@ -182,7 +196,6 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
       this.attributeTargetChange.emit(this.attributeTarget);
     }
   }
-
 
   onChange($event) {
     if (this.classProperties.length > 0) {

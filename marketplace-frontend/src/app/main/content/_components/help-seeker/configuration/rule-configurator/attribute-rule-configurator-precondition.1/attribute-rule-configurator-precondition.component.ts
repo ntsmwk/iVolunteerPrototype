@@ -26,17 +26,20 @@ import { ClassPropertyService } from "app/main/content/_service/meta/core/proper
 import { DerivationRuleValidators } from "app/main/content/_validator/derivation-rule.validators";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
-import { isNullOrUndefined } from 'util';
-import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
-import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
-import { DynamicFormItemBase } from 'app/main/content/_model/dynamic-forms/item';
+import { isNullOrUndefined } from "util";
+import { DynamicFormItemService } from "app/main/content/_service/dynamic-form-item.service";
+import { DynamicFormItemControlService } from "app/main/content/_service/dynamic-form-item-control.service";
+import { DynamicFormItemBase } from "app/main/content/_model/dynamic-forms/item";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "attribute-rule-precondition",
   templateUrl: "./attribute-rule-configurator-precondition.component.html",
   styleUrls: ["../rule-configurator.component.scss"],
-  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
-  providers: [DynamicFormItemService, DynamicFormItemControlService]
+  viewProviders: [
+    { provide: ControlContainer, useExisting: FormGroupDirective },
+  ],
+  providers: [DynamicFormItemService, DynamicFormItemControlService],
 })
 export class FuseAttributeRulePreconditionConfiguratorComponent
   implements OnInit {
@@ -47,7 +50,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     AttributeCondition
   >();*/
 
-  tenantAdmin: User;
+  userInfo: UserInfo;
   marketplace: Marketplace;
   role: UserRole;
   tenant: Tenant;
@@ -76,8 +79,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     private dynamicFormItemService: DynamicFormItemService,
     private dynamicFormItemControlService: DynamicFormItemControlService,
     private parent: FormGroupDirective
-  ) {
-  }
+  ) {}
 
   async ngOnInit() {
     this.attributeForms = <FormArray>(
@@ -98,24 +100,20 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
           ? this.attributeCondition.classProperty.id
           : "") || "",
       comparisonOperatorType:
-        this.attributeCondition.comparisonOperatorType || ComparisonOperatorType.EQ,
+        this.attributeCondition.comparisonOperatorType ||
+        ComparisonOperatorType.EQ,
       value: this.attributeCondition.value || "",
     });
 
     this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.marketplace = globalInfo.marketplace;
-    this.tenantAdmin = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
+    const globalInfo = this.loginService.getGlobalInfo();
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.userInfo = globalInfo.userInfo;
+    this.tenant = globalInfo.currentTenants[0];
 
     this.classDefinitionService
-      .getAllClassDefinitions(
-        this.marketplace,
-        this.tenant.id
-      )
+      .getAllClassDefinitions(this.marketplace, this.tenant.id)
       .toPromise()
       .then((definitions: ClassDefinition[]) => {
         this.classDefinitions = definitions;
@@ -164,7 +162,9 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   private addQuestionAndFormGroup(classProperty: ClassProperty<any>) {
     let myArr: ClassProperty<any>[] = new Array();
     myArr.push(classProperty);
-    this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(myArr);
+    this.formItems = this.dynamicFormItemService.getFormItemsFromProperties(
+      myArr
+    );
     // this.formItem = this.formItems[0]; XXX brauche ich das?
 
     this.formItem = this.formItems[0];
@@ -174,19 +174,24 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     }
 
     // add question form to parent form
-    this.ruleQuestionForm = (this.dynamicFormItemControlService.toFormGroup(this.formItems).controls['entries'] as FormArray).controls[0] as FormControl;
+    this.ruleQuestionForm = (this.dynamicFormItemControlService.toFormGroup(
+      this.formItems
+    ).controls["entries"] as FormArray).controls[0] as FormControl;
     // this.ruleQuestionForm = this.questionControlService.toFormGroup(this.formItems);
-    this.rulePreconditionForm.addControl('questionForm', this.ruleQuestionForm);
+    this.rulePreconditionForm.addControl("questionForm", this.ruleQuestionForm);
 
     // detect change in question form
-    this.rulePreconditionForm.get('questionForm').valueChanges.subscribe((change) => {
-      // update value in form with selection from question form
-      this.rulePreconditionForm.patchValue({
-        value: this.ruleQuestionForm.get(this.formItem.key).value
+    this.rulePreconditionForm
+      .get("questionForm")
+      .valueChanges.subscribe((change) => {
+        // update value in form with selection from question form
+        this.rulePreconditionForm.patchValue({
+          value: this.ruleQuestionForm.get(this.formItem.key).value,
+        });
+        this.attributeCondition.value = this.rulePreconditionForm
+          .get("questionForm")
+          .get(this.formItem.key).value;
       });
-      this.attributeCondition.value = this.rulePreconditionForm.get('questionForm').get(this.formItem.key).value;
-
-    });
   }
 
   onOperatorChange(op, $event) {
@@ -213,5 +218,4 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       ComparisonOperatorType[op as keyof typeof ComparisonOperatorType];
     return x;
   }
-
 }

@@ -5,6 +5,7 @@ import { FlatPropertyDefinition } from "app/main/content/_model/meta/property/pr
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { isNullOrUndefined } from "util";
 import { User } from "app/main/content/_model/user";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "app-builder-container",
@@ -13,19 +14,19 @@ import { User } from "app/main/content/_model/user";
 })
 export class BuilderContainerComponent implements OnInit {
   @Input() marketplace: Marketplace;
-  @Input() tenantAdmin: User;
+  @Input() userInfo: UserInfo;
   @Input() allPropertyDefinitions: FlatPropertyDefinition<any>[];
   @Input() builderType: string;
   @Input() entryId: string;
   @Input() sourceString: string;
-  @Output() result: EventEmitter<FlatPropertyDefinition<any>> = new EventEmitter<
+  @Output() result: EventEmitter<
     FlatPropertyDefinition<any>
-  >();
+  > = new EventEmitter<FlatPropertyDefinition<any>>();
   @Output() management: EventEmitter<String> = new EventEmitter();
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onSelectionChange() {
     if (this.sourceString !== "dialog") {

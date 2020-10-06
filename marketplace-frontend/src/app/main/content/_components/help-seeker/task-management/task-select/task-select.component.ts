@@ -11,16 +11,17 @@ import { isNullOrUndefined } from "util";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { User, UserRole } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   templateUrl: "./task-select.component.html",
-  styleUrls: ["./task-select.component.scss"]
+  styleUrls: ["./task-select.component.scss"],
 })
 export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<ClassDefinition>();
   displayedColumns = ["name", "configuration"];
-  user: User;
+  userInfo: UserInfo;
   tenant: Tenant;
   userRole: UserRole;
 
@@ -32,13 +33,12 @@ export class FuseTaskSelectComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.user = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
-    this.marketplace = globalInfo.marketplace;
-    this.userRole = globalInfo.userRole;
+    const globalInfo = this.loginService.getGlobalInfo();
+
+    this.userInfo = globalInfo.userInfo;
+    this.tenant = globalInfo.currentTenants[0];
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.userRole = globalInfo.currentRole;
 
     if (!isNullOrUndefined(this.marketplace)) {
       let tasks = <ClassDefinition[]>(
@@ -48,14 +48,14 @@ export class FuseTaskSelectComponent implements OnInit {
       );
 
       this.dataSource.data = tasks
-        .filter(t => t.configurationId != null)
+        .filter((t) => t.configurationId != null)
         .sort((c1, c2) => c1.configurationId.localeCompare(c2.configurationId));
     }
   }
 
   onRowSelect(row) {
     this.router.navigate([`main/instance-editor/${this.marketplace.id}`], {
-      queryParams: [row.id]
+      queryParams: [row.id],
     });
   }
 }

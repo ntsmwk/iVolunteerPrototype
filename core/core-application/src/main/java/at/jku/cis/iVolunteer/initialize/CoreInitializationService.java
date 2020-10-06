@@ -11,7 +11,7 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.security.activation.CorePendingActivationRepository;
 import at.jku.cis.iVolunteer.core.tenant.tags.TagRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
-import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.UserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tag;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
@@ -25,23 +25,29 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired protected CoreUserRepository coreUserRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired protected CorePendingActivationRepository pendingActivationRepository;
-	@Autowired private Environment environment;
-	@Autowired protected TagRepository tagRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	protected CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	protected CorePendingActivationRepository pendingActivationRepository;
+	@Autowired
+	private Environment environment;
+	@Autowired
+	protected TagRepository tagRepository;
 
 	public void init() {
-//		createMarketplace();
-//
-//		coreTenantInitializationService.initTenants();
-//		coreVolunteerInitializationService.initVolunteers();
-//		coreHelpSeekerInitializationService.initHelpSeekers();
-//
-//		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
-//		createAdminUser(ADMIN, RAW_PASSWORD);
-//		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
+		// createMarketplace();
+		//
+		// coreTenantInitializationService.initTenants();
+		// coreVolunteerInitializationService.initVolunteers();
+		// coreHelpSeekerInitializationService.initHelpSeekers();
+		//
+		// createFlexProdUser(FLEXPROD, RAW_PASSWORD);
+		// createAdminUser(ADMIN, RAW_PASSWORD);
+		// createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
 
 	}
 
@@ -81,8 +87,8 @@ public class CoreInitializationService {
 	protected void subscribedRecruitersToTenant() {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
-		recruiter.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
+		recruiter.setSubscribedTenants(Collections
+				.singletonList(new UserSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
 		coreUserRepository.save(recruiter);
 	}
 
@@ -90,8 +96,9 @@ public class CoreInitializationService {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace != null) {
-//			TODO register init
-//			coreRecruiterController.registerMarketpace(recruiter.getId(), marketplace.getId(), "");
+			// TODO register init
+			// coreRecruiterController.registerMarketpace(recruiter.getId(),
+			// marketplace.getId(), "");
 		}
 	}
 
@@ -116,7 +123,7 @@ public class CoreInitializationService {
 		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		admin.setSubscribedTenants(
-				Collections.singletonList(new TenantUserSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
+				Collections.singletonList(new UserSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
 		coreUserRepository.save(admin);
 	}
 
@@ -139,17 +146,16 @@ public class CoreInitializationService {
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
 			// TODO: needs proper registration
-			fpUser.setSubscribedTenants(
-					Collections.singletonList(new TenantUserSubscription(null, null, UserRole.FLEXPROD)));
+			fpUser.setSubscribedTenants(Collections.singletonList(new UserSubscription(null, null, UserRole.FLEXPROD)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 
 		return fpUser;
 	}
-	
+
 	protected void addTenantTags() {
 		for (int i = 0; i < 10; i++) {
-			Tag t = new Tag("Tenant Tag" + i );
+			Tag t = new Tag("Tenant Tag" + i);
 			tagRepository.save(t);
 		}
 	}

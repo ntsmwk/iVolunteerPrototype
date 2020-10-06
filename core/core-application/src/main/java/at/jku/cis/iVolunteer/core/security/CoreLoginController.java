@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.core.security;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,32 +12,31 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.global.GlobalInfo;
-import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
+import at.jku.cis.iVolunteer.core.global.UserSubscriptionDTO;
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.security.model.ErrorResponse;
 import at.jku.cis.iVolunteer.core.security.model.TokenResponse;
+import at.jku.cis.iVolunteer.core.security.model.UserInfo;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.user.UserRole;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;;
 
 @RestController
-@RequestMapping("/login")
 public class CoreLoginController {
 	@Autowired
 	private TenantService tenantService;
 	@Autowired
-	private MarketplaceRepository marketplaceRepository;
+	private MarketplaceService marketplaceService;
 	@Autowired
 	private CoreLoginService loginService;
 	@Autowired
@@ -44,10 +44,10 @@ public class CoreLoginController {
 
 	private JWTTokenProvider tokenProvider = new JWTTokenProvider();
 
-	@GetMapping
-	public CoreUser getLoggedInUser() {
-		final CoreUser user = loginService.getLoggedInUser();
-		return user;
+	@GetMapping("/userinfo")
+	public UserInfo getUserInfo() {
+		CoreUser user = loginService.getLoggedInUser();
+		return new UserInfo(user);
 	}
 
 	@PutMapping("/activation-status")
@@ -80,36 +80,22 @@ public class CoreLoginController {
 		}
 	}
 
-	@PutMapping("/globalInfo/role/{role}")
-	public GlobalInfo getGlobalInfo(@PathVariable("role") UserRole role, @RequestBody List<String> tenantIds) {
-		GlobalInfo globalInfo = new GlobalInfo();
-
+	@GetMapping("/globalInfo")
+	public GlobalInfo getGlobalInfo() {
 		CoreUser user = loginService.getLoggedInUser();
 
-		if (user != null) {
-			globalInfo.setUser(user);
-		}
+		List<Marketplace> marketplaces = user.getRegisteredMarketplaceIds().stream()
+				.map(id -> marketplaceService.findById(id)).collect(Collectors.toList());
 
-		if (role != null) {
-			globalInfo.setUserRole(role);
-		}
+		List<UserSubscriptionDTO> subscriptions = new ArrayList<UserSubscriptionDTO>();
+		user.getSubscribedTenants().forEach(subscription -> {
+			UserSubscriptionDTO s = new UserSubscriptionDTO(
+					marketplaceService.findById(subscription.getMarketplaceId()),
+					tenantService.getTenantById(subscription.getTenantId()), subscription.getRole());
+			subscriptions.add(s);
+		});
 
-		if (tenantIds.size() > 0) {
-			if (role == UserRole.VOLUNTEER) {
-				globalInfo.setTenants(user.getSubscribedTenants().stream()
-						.filter(s -> s.getRole() == UserRole.VOLUNTEER).map(s -> s.getTenantId())
-						.map(id -> this.tenantService.getTenantById(id)).collect((Collectors.toList())));
-			} else {
-				globalInfo.setTenants(tenantIds.stream().map(id -> this.tenantService.getTenantById(id))
-						.collect(Collectors.toList()));
-			}
-		}
-
-		final List<String> registeredMarketplaceIds = user.getRegisteredMarketplaceIds();
-		if (registeredMarketplaceIds.size() > 0) {
-			globalInfo.setMarketplace(this.marketplaceRepository.findOne(registeredMarketplaceIds.get(0)));
-		}
-
+		GlobalInfo globalInfo = new GlobalInfo(new UserInfo(user), subscriptions, marketplaces);
 		return globalInfo;
 	}
 }

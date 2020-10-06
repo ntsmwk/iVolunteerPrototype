@@ -12,16 +12,16 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { SelectionModel } from "@angular/cdk/collections";
 import { UserService } from "app/main/content/_service/user.service";
 import { MatTableDataSource } from "@angular/material";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "asset-inbox-helpseeker",
   templateUrl: "./asset-inbox-helpseeker.component.html",
-  styleUrls: ["./asset-inbox-helpseeker.component.scss"]
+  styleUrls: ["./asset-inbox-helpseeker.component.scss"],
 })
 export class AssetInboxHelpseekerComponent implements OnInit {
-  public marketplaces = new Array<Marketplace>();
-  marketplace: Marketplace;
-  user: User;
+  marketplaces: Marketplace[];
+  userInfo: UserInfo;
   tenant: Tenant;
   classInstanceDTOs: ClassInstanceDTO[];
   isLoaded: boolean;
@@ -43,20 +43,17 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-
-    this.user = globalInfo.user;
-    this.marketplace = globalInfo.marketplace;
-    this.tenant = globalInfo.tenants[0];
+    let globalInfo = <GlobalInfo>this.loginService.getGlobalInfo();
+    this.userInfo = globalInfo.userInfo;
+    this.marketplaces = globalInfo.currentMarketplaces;
+    this.tenant = globalInfo.currentTenants[0];
 
     this.loadInboxEntries();
   }
 
   loadInboxEntries() {
     this.classInstanceService
-      .getClassInstancesInIssuerInbox(this.marketplace, this.tenant.id)
+      .getClassInstancesInIssuerInbox(this.marketplaces[0], this.tenant.id)
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {
         this.classInstanceDTOs = ret;
@@ -77,18 +74,18 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     if (!isNullOrUndefined(this.classInstanceDTOs)) {
       Promise.all([
         this.userService
-          .findAllByRole(this.marketplace, UserRole.HELP_SEEKER)
+          .findAllByRole(this.marketplaces[0], UserRole.HELP_SEEKER)
           .toPromise()
           .then((issuers: User[]) => {
             this.issuers = issuers;
           }),
 
         this.userService
-          .findAllByRole(this.marketplace, UserRole.VOLUNTEER)
+          .findAllByRole(this.marketplaces[0], UserRole.VOLUNTEER)
           .toPromise()
           .then((volunteers: User[]) => {
             this.volunteers = volunteers;
-          })
+          }),
       ]);
     } else {
       this.classInstanceDTOs = [];
@@ -100,17 +97,17 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   onAssetInboxSubmit() {
     this.classInstanceService
       .issueClassInstance(
-        this.marketplace,
-        this.classInstanceDTOs.map(c => c.id)
+        this.marketplaces[0],
+        this.classInstanceDTOs.map((c) => c.id)
       )
       .toPromise()
       .then(() => {
         this.router.navigate(["main/helpseeker/asset-inbox/confirm"], {
           state: {
             instances: this.classInstanceDTOs,
-            marketplace: this.marketplace,
-            participant: this.user
-          }
+            marketplace: this.marketplaces,
+            participant: this.userInfo,
+          },
         });
       });
   }
@@ -123,9 +120,9 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   getNameForEntry(personId: string, type: string) {
     let person: User;
     if (type === "issuer") {
-      person = this.issuers.find(i => i.id === personId);
+      person = this.issuers.find((i) => i.id === personId);
     } else {
-      person = this.volunteers.find(i => i.id === personId);
+      person = this.volunteers.find((i) => i.id === personId);
     }
     if (isNullOrUndefined(person)) {
       return "";
@@ -135,7 +132,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   }
 
   getIssuerPositionForEntry(personId: string) {
-    const user = this.issuers.find(p => p.id === personId);
+    const user = this.issuers.find((p) => p.id === personId);
 
     if (
       isNullOrUndefined(user) ||
@@ -160,7 +157,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       return "/assets/images/avatars/profile.jpg";
     }
 
-    const ret = this.userImagePaths.find(userImagePath => {
+    const ret = this.userImagePaths.find((userImagePath) => {
       return userImagePath.userId === id;
     });
 
@@ -214,7 +211,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.datasource.data.forEach(row => this.selection.select(row));
+      : this.datasource.data.forEach((row) => this.selection.select(row));
   }
 
   navigateBack() {

@@ -15,6 +15,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "fuse-management-summary",
@@ -44,7 +45,8 @@ export class ManagementSummaryComponent implements OnInit {
   legendPosition = "below";
   tooltipDisabled = false;
 
-  volunteer: User;
+  globalInfo: GlobalInfo;
+  userInfo: UserInfo;
   marketplace: any = [];
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
@@ -79,31 +81,31 @@ export class ManagementSummaryComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    this.globalInfo = this.loginService.getGlobalInfo();
 
-    this.volunteer = globalInfo.user;
-    this.marketplace = globalInfo.marketplace;
-    this.subscribedTenants = globalInfo.tenants;
+    this.userInfo = this.globalInfo.userInfo;
+    // TODO: Philipp: see todo below
+    this.marketplace = this.globalInfo.currentMarketplaces[0];
+    this.subscribedTenants = this.globalInfo.currentTenants;
 
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
 
     this.localRepositoryService = this.loginService.getLocalRepositoryService(
-      this.volunteer
+      this.userInfo
     );
 
     try {
       let localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
-          .findClassInstancesByVolunteer(this.volunteer)
+          .findClassInstancesByVolunteer(this.userInfo)
           .toPromise()
       );
 
       // TODO Philipp
+      // several marketplaces possible, hence
       // get unique marketplaceIds of CIs
-      // perform once per marketplaceId
+      // perform call on each mp once per marketplaceId
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .mapClassInstancesToDTOs(this.marketplace, localClassInstances)
@@ -119,8 +121,8 @@ export class ManagementSummaryComponent implements OnInit {
             .getUserClassInstancesByArcheType(
               this.marketplace,
               "TASK",
-              this.volunteer.id,
-              this.volunteer.subscribedTenants.map((s) => s.tenantId),
+              this.userInfo.id,
+              this.globalInfo.userSubscriptions.map((s) => s.tenant.id),
               true
             )
             .toPromise()
@@ -263,7 +265,7 @@ export class ManagementSummaryComponent implements OnInit {
           "Vergleich der Anzahl an Tätigkeiten",
           "ngx-charts-bar-vertical-2d",
           JSON.stringify(this.comparisonData),
-          this.volunteer.id
+          this.userInfo.id
         );
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;

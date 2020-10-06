@@ -11,6 +11,7 @@ import { ArrayService } from "../../content/_service/array.service";
 import { Subscription } from "rxjs";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { CoreUserService } from "app/main/content/_service/core-user.service";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "fuse-marketplace-selection",
@@ -18,7 +19,7 @@ import { CoreUserService } from "app/main/content/_service/core-user.service";
   styleUrls: ["./marketplace-selection.component.scss"],
 })
 export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
-  private user: User;
+  private UserInfo: UserInfo;
   private role: UserRole;
   public marketplaces: Marketplace[];
 
@@ -30,7 +31,7 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private loginService: LoginService,
     private coreUserService: CoreUserService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadMarketplaces();
@@ -45,16 +46,18 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
   }
 
   async loadMarketplaces() {
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
+    // const globalInfo = this.loginService.getGlobalInfo();
+    const globalInfo = <GlobalInfo>(
+      await this.loginService.getGlobalInfo2().toPromise()
     );
-    this.role = globalInfo.userRole;
-    this.user = globalInfo.user;
+
+    this.role = globalInfo.currentRole;
+    this.UserInfo = globalInfo.userInfo;
 
     if (this.isRoleVolunteer(this.role)) {
       this.marketplaces = <Marketplace[]>(
         await this.coreUserService
-          .findRegisteredMarketplaces(this.user.id)
+          .findRegisteredMarketplaces(this.UserInfo.id)
           .toPromise()
       );
 

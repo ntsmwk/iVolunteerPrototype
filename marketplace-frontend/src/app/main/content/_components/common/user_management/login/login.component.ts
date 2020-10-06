@@ -107,7 +107,6 @@ export class FuseLoginComponent implements OnInit {
               .catch((e) => {
                 this.loginService.logout();
                 this.error = true;
-                this.loginService.logout();
               });
           } else {
             this.displayLoginForm = false;

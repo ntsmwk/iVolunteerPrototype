@@ -4,9 +4,9 @@ import { Observable } from "rxjs";
 import { LocalRepository } from "../_model/local-repository";
 import { isNullOrUndefined } from "util";
 import { ClassInstance } from "../_model/meta/class";
-import { User } from "../_model/user";
 import { LocalRepositoryService } from "./local-repository.service";
 import { environment } from "environments/environment";
+import { UserInfo } from "../_model/userInfo";
 
 @Injectable({
   providedIn: "root",
@@ -27,7 +27,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
     }
   }
 
-  private findByVolunteer(volunteer: User) {
+  private findByVolunteer(volunteerInfo: UserInfo) {
     const observable = new Observable((subscriber) => {
       const successFunction = (localRepository: LocalRepository) => {
         subscriber.next(localRepository);
@@ -43,14 +43,19 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
         .get(this.apiUrl)
         .toPromise()
         .then((localRepositorys: LocalRepository[]) => {
-          if (localRepositorys.findIndex((l) => l.id === volunteer.id) === -1) {
-            let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+          if (
+            localRepositorys.findIndex((l) => l.id === volunteerInfo.id) === -1
+          ) {
+            let newRepo = new LocalRepository(
+              volunteerInfo.id,
+              volunteerInfo.username
+            );
             this.http.post(this.apiUrl, newRepo).toPromise();
             successFunction(newRepo);
           } else {
             successFunction(
               localRepositorys.find((localRepository: LocalRepository) => {
-                return localRepository.id === volunteer.id;
+                return localRepository.id === volunteerInfo.id;
               })
             );
           }
@@ -62,7 +67,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
     return observable;
   }
 
-  public findClassInstancesByVolunteer(volunteer: User) {
+  public findClassInstancesByVolunteer(volunteerInfo: UserInfo) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -78,7 +83,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
         }
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) =>
           successFunction(localRepository)
@@ -90,7 +95,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
   }
 
   public synchronizeSingleClassInstance(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstance: ClassInstance
   ) {
     const observable = new Observable((subscriber) => {
@@ -99,7 +104,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           localRepository.classInstances.push(classInstance);
@@ -118,14 +123,17 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
     return observable;
   }
 
-  public getSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public getSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           let classInstance = localRepository.classInstances.find((ci) => {
@@ -141,7 +149,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
   }
 
   public synchronizeClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   ) {
     const observable = new Observable((subscriber) => {
@@ -150,7 +158,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           localRepository.classInstances = [
@@ -173,7 +181,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
   }
 
   public overrideClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   ) {
     const observable = new Observable((subscriber) => {
@@ -182,7 +190,7 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           localRepository.classInstances = classInstances;
@@ -201,14 +209,17 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
     return observable;
   }
 
-  public removeSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public removeSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           localRepository.classInstances.forEach((ci, index, object) => {
@@ -231,14 +242,17 @@ export class LocalRepositoryJsonServerService extends LocalRepositoryService {
     return observable;
   }
 
-  public removeClassInstances(volunteer: User, classInstanceIds: string[]) {
+  public removeClassInstances(
+    volunteerInfo: UserInfo,
+    classInstanceIds: string[]
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           localRepository.classInstances = localRepository.classInstances.filter(

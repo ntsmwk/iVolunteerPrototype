@@ -1,4 +1,3 @@
-import { ImageWrapper } from "./image";
 import { NextcloudCredentials } from "./nextcloud-credentials";
 
 export class User {
@@ -27,7 +26,7 @@ export class User {
   emails: string[] = [];
 
   registeredMarketplaceIds: string[];
-  subscribedTenants: TenantUserSubscription[];
+  subscribedTenants: UserSubscription[];
 
   // image: ImageWrapper;
 
@@ -55,7 +54,7 @@ export enum LocalRepositoryLocation {
   NEXTCLOUD = "NEXTCLOUD",
 }
 
-export class TenantUserSubscription {
+export class UserSubscription {
   marketplaceId: string;
   tenantId: string;
   role: UserRole;

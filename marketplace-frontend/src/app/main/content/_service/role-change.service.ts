@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Subject } from "rxjs";
+import { UserSubscriptionDTO } from "../_model/global-info";
 import { UserRole, User, RoleTenantMapping } from "../_model/user";
 
 @Injectable({
@@ -22,28 +23,28 @@ export class RoleChangeService {
     this.onUpdate.next();
   }
 
-  getRoleTenantMappings(user: User) {
+  getRoleTenantMappings(userSubscirptions: UserSubscriptionDTO[]) {
     let map: RoleTenantMapping[] = [];
 
-    let volunteerSubs = user.subscribedTenants.filter((s) => {
+    let volunteerSubs = userSubscirptions.filter((s) => {
       return s.role === UserRole.VOLUNTEER;
     });
 
     if (volunteerSubs.length > 0) {
       let data = new RoleTenantMapping();
       data.role = volunteerSubs[0].role;
-      data.tenantIds = volunteerSubs.map((s) => s.tenantId);
+      data.tenantIds = volunteerSubs.map((s) => s.tenant.id);
       map.push(data);
     }
 
-    user.subscribedTenants
+    userSubscirptions
       .filter((s) => {
         return s.role != UserRole.VOLUNTEER;
       })
       .forEach((s) => {
         let data = new RoleTenantMapping();
         data.role = s.role;
-        data.tenantIds = Array.of(s.tenantId);
+        data.tenantIds = Array.of(s.tenant.id);
         map.push(data);
       });
 

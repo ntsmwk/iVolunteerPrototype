@@ -1,39 +1,41 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { DynamicFormItemService } from 'app/main/content/_service/dynamic-form-item.service';
-import { DynamicFormItemControlService } from 'app/main/content/_service/dynamic-form-item-control.service';
-import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { DynamicFormItemService } from "app/main/content/_service/dynamic-form-item.service";
+import { DynamicFormItemControlService } from "app/main/content/_service/dynamic-form-item-control.service";
+import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   FormConfiguration,
   FormEntryReturnEventData,
-  FormEntry
-} from 'app/main/content/_model/meta/form';
-import { ClassInstance } from 'app/main/content/_model/meta/class';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
-import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { FormGroup, FormControl } from '@angular/forms';
+  FormEntry,
+} from "app/main/content/_model/meta/form";
+import { ClassInstance } from "app/main/content/_model/meta/class";
+import { Router, ActivatedRoute } from "@angular/router";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
+import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
+import { ObjectIdService } from "app/main/content/_service/objectid.service.";
+import { FormGroup, FormControl } from "@angular/forms";
 import {
   PropertyInstance,
   PropertyType,
-  ClassProperty
-} from 'app/main/content/_model/meta/property/property';
-import { isNullOrUndefined } from 'util';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { User, UserRole } from 'app/main/content/_model/user';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { Tenant } from 'app/main/content/_model/tenant';
+  ClassProperty,
+} from "app/main/content/_model/meta/property/property";
+import { isNullOrUndefined } from "util";
+import { LoginService } from "app/main/content/_service/login.service";
+import { User, UserRole } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "app-class-instance-form-editor",
-  templateUrl: './class-instance-form-editor.component.html',
-  styleUrls: ['./class-instance-form-editor.component.scss'],
-  providers: [DynamicFormItemService, DynamicFormItemControlService]
+  templateUrl: "./class-instance-form-editor.component.html",
+  styleUrls: ["./class-instance-form-editor.component.scss"],
+  providers: [DynamicFormItemService, DynamicFormItemControlService],
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
+  globalInfo: GlobalInfo;
   marketplace: Marketplace;
-  tenantAdmin: User;
+  userInfo: UserInfo;
   tenant: Tenant;
 
   formConfigurations: FormConfiguration[];
@@ -49,8 +51,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   canSubmitForm = true;
   errorOccurredInForm = false;
 
-
-  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
+  @ViewChild("contentDiv", { static: false }) contentDiv: ElementRef;
   resultClassInstance: ClassInstance;
 
   constructor(
@@ -63,15 +64,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private formItemService: DynamicFormItemService,
     private formItemControlService: DynamicFormItemControlService,
     private objectIdService: ObjectIdService
-  ) { }
+  ) {}
 
   async ngOnInit() {
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.tenantAdmin = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
-    this.marketplace = globalInfo.marketplace;
+    this.globalInfo = this.loginService.getGlobalInfo();
+    this.userInfo = this.globalInfo.userInfo;
+    this.tenant = this.globalInfo.currentTenants[0];
+    this.marketplace = this.globalInfo.currentMarketplaces[0];
 
     let marketplaceId: string;
     const childClassIds: string[] = [];
@@ -79,16 +78,16 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     this.returnedClassInstances = [];
 
     Promise.all([
-      this.route.params.subscribe(params => {
-        marketplaceId = params['marketplaceId'];
+      this.route.params.subscribe((params) => {
+        marketplaceId = params["marketplaceId"];
       }),
-      this.route.queryParams.subscribe(queryParams => {
+      this.route.queryParams.subscribe((queryParams) => {
         let i = 0;
         while (!isNullOrUndefined(queryParams[i])) {
           childClassIds.push(queryParams[i]);
           i++;
         }
-      })
+      }),
     ]).then(() => {
       this.marketplaceService
         .findById(marketplaceId)
@@ -104,16 +103,19 @@ export class ClassInstanceFormEditorComponent implements OnInit {
                 this.formConfigurations = formConfigurations;
 
                 for (const config of this.formConfigurations) {
-                  config.formEntry = this.addFormItemsAndFormGroup(config.formEntry, config.formEntry.id);
+                  config.formEntry = this.addFormItemsAndFormGroup(
+                    config.formEntry,
+                    config.formEntry.id
+                  );
                 }
               }),
 
             this.loginService
               .getLoggedIn()
               .toPromise()
-              .then((tenantAdmin: User) => {
-                this.tenantAdmin = tenantAdmin;
-              })
+              .then((userInfo: UserInfo) => {
+                this.userInfo = userInfo;
+              }),
           ]).then(() => {
             this.currentFormConfiguration = this.formConfigurations.pop();
             this.loaded = true;
@@ -148,11 +150,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let unableToContinueControlKey: string;
     let pathPrefix: string;
 
-    Object.keys(evt.formGroup.controls).forEach(c => {
-      if (c.endsWith('unableToContinue')) {
+    Object.keys(evt.formGroup.controls).forEach((c) => {
+      if (c.endsWith("unableToContinue")) {
         unableToContinueControlKey = c;
         unableToContinueControl = evt.formGroup.controls[c] as FormControl;
-        pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
+        pathPrefix = c.replace(/\.[^.]*unableToContinue/, "");
       }
     });
 
@@ -160,13 +162,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       .getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id)
       .toPromise()
       .then((retFormEntry: FormEntry) => {
-
         const currentFormEntry = this.getFormEntry(
           pathPrefix,
           this.currentFormConfiguration.formEntry.id,
           this.currentFormConfiguration.formEntry
         );
-
 
         retFormEntry = this.addFormItemsAndFormGroup(retFormEntry, pathPrefix);
 
@@ -188,7 +188,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       return currentFormEntry;
     }
 
-    currentFormEntry = currentFormEntry.subEntries.find(e =>
+    currentFormEntry = currentFormEntry.subEntries.find((e) =>
       pathString.startsWith(e.id)
     );
     return this.getFormEntry(pathString, currentFormEntry.id, currentFormEntry);
@@ -220,9 +220,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   private createInstanceFromResults(result: FormEntryReturnEventData) {
     const classInstances: ClassInstance[] = [];
-    const tenantId = this.tenantAdmin.subscribedTenants.find(
-      t => t.role === UserRole.TENANT_ADMIN
-    ).tenantId;
+    const tenantId = this.globalInfo.userSubscriptions.find(
+      (t) => t.role === UserRole.TENANT_ADMIN
+    ).tenant.id;
 
     if (isNullOrUndefined(this.selectedVolunteers)) {
       const classInstance = this.createClassInstance(
@@ -320,11 +320,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const propertyInstances: PropertyInstance<any>[] = [];
     for (const classProperty of classProperties) {
       // skip "unableToContinue" Properties
-      if (classProperty.id.endsWith('unableToContinue')) {
+      if (classProperty.id.endsWith("unableToContinue")) {
         continue;
       }
 
-      let value = values[0][keys.find(k => k.endsWith(classProperty.id))];
+      let value = values[0][keys.find((k) => k.endsWith(classProperty.id))];
 
       if (classProperty.type === PropertyType.FLOAT_NUMBER) {
         value = Number(value);
@@ -334,24 +334,27 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       const l = propertyInstances.push(
         new PropertyInstance(classProperty, [value])
       );
-
     }
     return propertyInstances;
   }
 
   private findSubEntryResult(subEntryId: string, result: any[]) {
-    return result.find(r => Object.keys(r)[0] === subEntryId);
+    return result.find((r) => Object.keys(r)[0] === subEntryId);
   }
 
   handleCancelEvent() {
-
     let returnParam: string;
-    this.route.queryParams.subscribe(params => {
-      returnParam = params['returnTo'];
+    this.route.queryParams.subscribe((params) => {
+      returnParam = params["returnTo"];
     });
     if (!isNullOrUndefined(returnParam)) {
-      if (returnParam === 'classConfigurator') {
-        this.router.navigate([`main/class-configurator`], { queryParams: { ccId: this.currentFormConfiguration.formEntry.classDefinitions[0].configurationId } });
+      if (returnParam === "classConfigurator") {
+        this.router.navigate([`main/class-configurator`], {
+          queryParams: {
+            ccId: this.currentFormConfiguration.formEntry.classDefinitions[0]
+              .configurationId,
+          },
+        });
       }
     } else {
       history.back();
@@ -368,5 +371,4 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     console.log(this.currentFormConfiguration.formEntry.formItems);
     console.log(this.currentFormConfiguration.formEntry.subEntries);
   }
-
 }

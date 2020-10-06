@@ -6,6 +6,7 @@ import { Marketplace } from "app/main/content/_model/marketplace";
 import { User } from "app/main/content/_model/user";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { Relationship } from "app/main/content/_model/meta/relationship";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 declare var $: any;
 
@@ -14,7 +15,7 @@ const OVERLAY_HEIGHT = 390;
 
 export class OptionsOverlayContentData {
   marketplace: Marketplace;
-  tenantAdmin: User;
+  userInfo: UserInfo;
 
   classDefinition: ClassDefinition;
   relationship: Relationship;
@@ -38,7 +39,7 @@ export class ClassOptionsOverlayControlComponent implements OnInit, OnChanges {
 
   model: OptionsOverlayContentData = new OptionsOverlayContentData();
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.model = $.extend(true, {}, this.overlayContent);

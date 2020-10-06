@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
-import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.UserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 
@@ -16,7 +16,7 @@ public class User {
 	private String username;
 	private String password;
 	private String loginEmail;
-	
+
 	private String formOfAddress;
 	private String titleBefore;
 	private String firstname;
@@ -37,9 +37,9 @@ public class User {
 	private List<String> websites;
 	private List<String> emails;
 
-//	private ImageWrapper image;
+	// private ImageWrapper image;
 
-	private List<TenantUserSubscription> subscribedTenants = new ArrayList<TenantUserSubscription>();
+	private List<UserSubscription> subscribedTenants = new ArrayList<UserSubscription>();
 
 	private LocalRepositoryLocation localRepositoryLocation;
 	private String dropboxToken;
@@ -68,7 +68,7 @@ public class User {
 		this.phoneNumbers = coreUser.getPhoneNumbers();
 		this.websites = coreUser.getWebsites();
 		this.emails = coreUser.getEmails();
-//		this.image = coreUser.getImage();
+		// this.image = coreUser.getImage();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
@@ -171,13 +171,13 @@ public class User {
 		this.organizationPosition = organizationPosition;
 	}
 
-//	public ImageWrapper getImage() {
-//		return image;
-//	}
-//
-//	public void setImage(ImageWrapper image) {
-//		this.image = image;
-//	}
+	// public ImageWrapper getImage() {
+	// return image;
+	// }
+	//
+	// public void setImage(ImageWrapper image) {
+	// this.image = image;
+	// }
 
 	public List<String> getLocations() {
 		return locations;
@@ -235,30 +235,30 @@ public class User {
 		this.birthday = birthday;
 	}
 
-	public List<TenantUserSubscription> getSubscribedTenants() {
+	public List<UserSubscription> getSubscribedTenants() {
 		return this.subscribedTenants;
 	}
 
-	public void setSubscribedTenants(final List<TenantUserSubscription> subscribedTenants) {
+	public void setSubscribedTenants(final List<UserSubscription> subscribedTenants) {
 		this.subscribedTenants = subscribedTenants;
 	}
 
-	public List<TenantUserSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
+	public List<UserSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
 			final UserRole role) {
-		final TenantUserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
+		final UserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
 		if (tenantUserSubscription == null) {
-			this.subscribedTenants.add(new TenantUserSubscription(marketplaceId, tenantId, role));
+			this.subscribedTenants.add(new UserSubscription(marketplaceId, tenantId, role));
 		}
 		return this.subscribedTenants;
 	}
 
-	private TenantUserSubscription findTenantUserSubscription(final String marketplaceId, final String tenantId,
+	private UserSubscription findTenantUserSubscription(final String marketplaceId, final String tenantId,
 			final UserRole role) {
 		return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId)
 				&& st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().map(f -> f).orElse(null);
 	}
 
-	public List<TenantUserSubscription> removeSubscribedTenant(final String marketplaceId, final String tenantId,
+	public List<UserSubscription> removeSubscribedTenant(final String marketplaceId, final String tenantId,
 			final UserRole role) {
 		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId)
 				&& s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));

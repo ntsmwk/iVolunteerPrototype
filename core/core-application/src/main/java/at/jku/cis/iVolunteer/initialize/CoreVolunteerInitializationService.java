@@ -23,7 +23,7 @@ import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.image.CoreUserImageController;
-import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.UserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.image.ImageWrapper;
@@ -46,14 +46,20 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private TenantRepository coreTenantRepository;
-	@Autowired private CoreUserService coreUserService;
-	@Autowired CoreUserImageController coreUserImageController;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private TenantRepository coreTenantRepository;
+	@Autowired
+	private CoreUserService coreUserService;
+	@Autowired
+	CoreUserImageController coreUserImageController;
 
-//	"/img/pstarzer.jpg"
+	// "/img/pstarzer.jpg"
 	public void initVolunteers() {
 
 		createVolunteer(USERNAMES[0], RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988, 9, 7), "", "");
@@ -131,7 +137,7 @@ public class CoreVolunteerInitializationService {
 
 		for (int i = 0; i < volunteers.size(); i++) {
 			CoreUser volunteer = volunteers.get(i);
-			volunteer.setSubscribedTenants(new ArrayList<TenantUserSubscription>());
+			volunteer.setSubscribedTenants(new ArrayList<UserSubscription>());
 			for (Tenant t : tenants) {
 				volunteer.addSubscribedTenant(mp.getId(), t.getId(), UserRole.VOLUNTEER);
 			}

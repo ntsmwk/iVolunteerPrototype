@@ -23,6 +23,7 @@ import { LocalRepositoryJsonServerService } from "app/main/content/_service/loca
 import { UserService } from "app/main/content/_service/user.service";
 import { LocalRepositoryDropboxService } from "app/main/content/_service/local-repository-dropbox.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "app-class-instance-details",
@@ -34,7 +35,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
 
   id: string = null;
   classInstance: ClassInstance;
-  user: User;
+  userInfo: UserInfo;
   role: UserRole;
   marketplace: Marketplace;
   tenant: Tenant;
@@ -70,13 +71,11 @@ export class ClassInstanceDetailsComponent implements OnInit {
       this.isDialog = true;
     }
 
-    let globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.user = globalInfo.user;
-    this.role = globalInfo.userRole;
-    this.marketplace = globalInfo.marketplace;
-    this.tenant = globalInfo.tenants[0];
+    let globalInfo = this.loginService.getGlobalInfo();
+    this.userInfo = globalInfo.userInfo;
+    this.role = globalInfo.currentRole;
+    //  this.marketplace = globalInfo.marketplace;
+    //  this.tenant = globalInfo.tenants[0];
 
     this.localRepositoryService = this.loginService.getLocalRepositoryService(
       this.volunteer
@@ -92,7 +91,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
       if (this.role === UserRole.VOLUNTEER) {
         this.classInstance = <ClassInstance>(
           await this.localRepositoryService
-            .getSingleClassInstance(this.user, this.id)
+            .getSingleClassInstance(this.userInfo, this.id)
             .toPromise()
         );
         this.isLocal = true;

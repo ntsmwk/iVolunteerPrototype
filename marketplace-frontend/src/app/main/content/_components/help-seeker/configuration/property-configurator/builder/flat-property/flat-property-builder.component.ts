@@ -1,20 +1,29 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import {
-  FormGroup, FormControl, Validators, FormArray, FormBuilder,
-} from '@angular/forms';
-import { isNullOrUndefined } from 'util';
-import { Router } from '@angular/router';
+  FormGroup,
+  FormControl,
+  Validators,
+  FormArray,
+  FormBuilder,
+} from "@angular/forms";
+import { isNullOrUndefined } from "util";
+import { Router } from "@angular/router";
 import {
-  FlatPropertyDefinition, PropertyType,
-} from 'app/main/content/_model/meta/property/property';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { FlatPropertyDefinitionService } from 'app/main/content/_service/meta/core/property/flat-property-definition.service';
-import { propertyNameUniqueValidator } from 'app/main/content/_validator/property-name-unique.validator';
-import { User } from 'app/main/content/_model/user';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { ConstraintType, PropertyConstraint } from 'app/main/content/_model/meta/constraint';
+  FlatPropertyDefinition,
+  PropertyType,
+} from "app/main/content/_model/meta/property/property";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { FlatPropertyDefinitionService } from "app/main/content/_service/meta/core/property/flat-property-definition.service";
+import { propertyNameUniqueValidator } from "app/main/content/_validator/property-name-unique.validator";
+import { User } from "app/main/content/_model/user";
+import { LoginService } from "app/main/content/_service/login.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
+import {
+  ConstraintType,
+  PropertyConstraint,
+} from "app/main/content/_model/meta/constraint";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 export interface PropertyTypeOption {
   type: PropertyType;
@@ -28,25 +37,59 @@ export interface ConstraintOption {
   display: boolean;
 }
 
-const availablePropertyTypes = [PropertyType.TEXT, PropertyType.LONG_TEXT, PropertyType.WHOLE_NUMBER, PropertyType.FLOAT_NUMBER, PropertyType.BOOL, PropertyType.DATE];
-const availableConstraints = [
-  { type: PropertyType.TEXT, constraints: [ConstraintType.MAX_LENGTH, ConstraintType.MIN_LENGTH, ConstraintType.PATTERN] },
-  { type: PropertyType.LONG_TEXT, constraints: [ConstraintType.MAX_LENGTH, ConstraintType.MIN_LENGTH, ConstraintType.PATTERN] },
-  { type: PropertyType.WHOLE_NUMBER, constraints: [ConstraintType.MAX, ConstraintType.MIN, ConstraintType.MAX_LENGTH, ConstraintType.MIN_LENGTH] },
-  { type: PropertyType.FLOAT_NUMBER, constraints: [ConstraintType.MAX, ConstraintType.MIN] },
-  { type: PropertyType.BOOL, constraints: [] },
-  { type: PropertyType.DATE, constraints: [ConstraintType.MAX, ConstraintType.MIN] }
+const availablePropertyTypes = [
+  PropertyType.TEXT,
+  PropertyType.LONG_TEXT,
+  PropertyType.WHOLE_NUMBER,
+  PropertyType.FLOAT_NUMBER,
+  PropertyType.BOOL,
+  PropertyType.DATE,
 ];
-
+const availableConstraints = [
+  {
+    type: PropertyType.TEXT,
+    constraints: [
+      ConstraintType.MAX_LENGTH,
+      ConstraintType.MIN_LENGTH,
+      ConstraintType.PATTERN,
+    ],
+  },
+  {
+    type: PropertyType.LONG_TEXT,
+    constraints: [
+      ConstraintType.MAX_LENGTH,
+      ConstraintType.MIN_LENGTH,
+      ConstraintType.PATTERN,
+    ],
+  },
+  {
+    type: PropertyType.WHOLE_NUMBER,
+    constraints: [
+      ConstraintType.MAX,
+      ConstraintType.MIN,
+      ConstraintType.MAX_LENGTH,
+      ConstraintType.MIN_LENGTH,
+    ],
+  },
+  {
+    type: PropertyType.FLOAT_NUMBER,
+    constraints: [ConstraintType.MAX, ConstraintType.MIN],
+  },
+  { type: PropertyType.BOOL, constraints: [] },
+  {
+    type: PropertyType.DATE,
+    constraints: [ConstraintType.MAX, ConstraintType.MIN],
+  },
+];
 
 @Component({
   selector: "app-flat-property-builder",
-  templateUrl: './flat-property-builder.component.html',
-  styleUrls: ['./flat-property-builder.component.scss'],
+  templateUrl: "./flat-property-builder.component.html",
+  styleUrls: ["./flat-property-builder.component.scss"],
 })
 export class FlatPropertyBuilderComponent implements OnInit {
   @Input() marketplace: Marketplace;
-  @Input() tenantAdmin: User;
+  @Input() userInfo: UserInfo;
   @Input() entryId: string;
   @Input() sourceString: string;
   @Output() result: EventEmitter<{
@@ -75,16 +118,14 @@ export class FlatPropertyBuilderComponent implements OnInit {
     private router: Router,
     private propertyDefinitionService: FlatPropertyDefinitionService,
     private loginService: LoginService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.preparePropertyTypeOptions();
     this.clearForm();
 
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.tenant = globalInfo.tenants[0];
+    const globalInfo = this.loginService.getGlobalInfo();
+    this.tenant = globalInfo.currentTenants[0];
 
     this.dropdownToggled = false;
 
@@ -130,7 +171,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
       this.propertyTypeOptions.push({
         type: propertyType,
         label: PropertyType.getLabelForPropertyType(propertyType),
-        display: true
+        display: true,
       });
     }
   }
@@ -142,13 +183,15 @@ export class FlatPropertyBuilderComponent implements OnInit {
       return;
     }
 
-    const constraintsForType = availableConstraints.find(c => c.type === propertyType);
+    const constraintsForType = availableConstraints.find(
+      (c) => c.type === propertyType
+    );
 
     for (const constraint of constraintsForType.constraints) {
       this.currentConstraintOptions.push({
         type: constraint,
         label: ConstraintType.getLabelForConstraintType(constraint),
-        display: true
+        display: true,
       });
     }
   }
@@ -156,26 +199,26 @@ export class FlatPropertyBuilderComponent implements OnInit {
   handleTypeSelectionChange() {
     this.clearAllowedValues();
     this.clearConstraints();
-    this.prepareConstraintTypeOptions(this.form.controls['type'].value);
+    this.prepareConstraintTypeOptions(this.form.controls["type"].value);
   }
 
   clearForm() {
     this.form = this.formBuilder.group({
-      name: this.formBuilder.control('', [
+      name: this.formBuilder.control("", [
         Validators.required,
         propertyNameUniqueValidator(
           this.allPropertyDefinitions,
           this.propertyDefinition
         ),
       ]),
-      type: this.formBuilder.control('', Validators.required),
+      type: this.formBuilder.control("", Validators.required),
       allowedValues: this.formBuilder.array([]),
 
-      description: this.formBuilder.control(''),
+      description: this.formBuilder.control(""),
 
-      required: this.formBuilder.control(''),
-      requiredMessage: this.formBuilder.control(''),
-      constraints: this.formBuilder.array([])
+      required: this.formBuilder.control(""),
+      requiredMessage: this.formBuilder.control(""),
+      constraints: this.formBuilder.array([]),
     });
 
     if (!isNullOrUndefined(this.propertyDefinition)) {
@@ -184,38 +227,63 @@ export class FlatPropertyBuilderComponent implements OnInit {
   }
 
   populateForm() {
-    this.form.get('name').setValue(this.propertyDefinition.name);
-    this.form.get('type').setValue(this.propertyDefinition.type);
-    this.form.get('description').setValue(this.propertyDefinition.description);
+    this.form.get("name").setValue(this.propertyDefinition.name);
+    this.form.get("type").setValue(this.propertyDefinition.type);
+    this.form.get("description").setValue(this.propertyDefinition.description);
 
-    if (!isNullOrUndefined(this.propertyDefinition.allowedValues) && this.propertyDefinition.allowedValues.length > 0) {
+    if (
+      !isNullOrUndefined(this.propertyDefinition.allowedValues) &&
+      this.propertyDefinition.allowedValues.length > 0
+    ) {
       this.dropdownToggled = true;
       let i = 0;
       for (const value of this.propertyDefinition.allowedValues) {
         this.addAllowedValue();
-        this.form.get('allowedValues').get('' + i).get('value').setValue(value);
+        this.form
+          .get("allowedValues")
+          .get("" + i)
+          .get("value")
+          .setValue(value);
         i++;
       }
     }
 
-    this.constraintsToggled = this.propertyDefinition.required || this.propertyDefinition.propertyConstraints.length > 0;
+    this.constraintsToggled =
+      this.propertyDefinition.required ||
+      this.propertyDefinition.propertyConstraints.length > 0;
 
-    this.form.get('required').setValue(this.propertyDefinition.required);
-    this.form.get('requiredMessage').setValue(this.propertyDefinition.requiredMessage);
+    this.form.get("required").setValue(this.propertyDefinition.required);
+    this.form
+      .get("requiredMessage")
+      .setValue(this.propertyDefinition.requiredMessage);
 
-    if (!isNullOrUndefined(this.propertyDefinition.propertyConstraints) && this.propertyDefinition.propertyConstraints.length > 0) {
+    if (
+      !isNullOrUndefined(this.propertyDefinition.propertyConstraints) &&
+      this.propertyDefinition.propertyConstraints.length > 0
+    ) {
       let i = 0;
       this.prepareConstraintTypeOptions(this.propertyDefinition.type);
       for (const constraint of this.propertyDefinition.propertyConstraints) {
         this.addConstraint();
-        this.form.get('constraints').get('' + i).get('type').setValue(constraint.constraintType);
-        this.form.get('constraints').get('' + i).get('value').setValue(constraint.value);
-        this.form.get('constraints').get('' + i).get('message').setValue(constraint.message);
+        this.form
+          .get("constraints")
+          .get("" + i)
+          .get("type")
+          .setValue(constraint.constraintType);
+        this.form
+          .get("constraints")
+          .get("" + i)
+          .get("value")
+          .setValue(constraint.value);
+        this.form
+          .get("constraints")
+          .get("" + i)
+          .get("message")
+          .setValue(constraint.message);
         i++;
       }
     }
   }
-
 
   clearFormArrays() {
     this.clearAllowedValues();
@@ -227,10 +295,9 @@ export class FlatPropertyBuilderComponent implements OnInit {
   // ----------------------------------------------------
 
   addAllowedValue() {
-    this.allowedValues = this.form.get('allowedValues') as FormArray;
+    this.allowedValues = this.form.get("allowedValues") as FormArray;
     this.allowedValues.push(this.createAllowedValue());
   }
-
 
   createAllowedValue(): FormGroup {
     return this.formBuilder.group({
@@ -239,12 +306,12 @@ export class FlatPropertyBuilderComponent implements OnInit {
   }
 
   markAllowedValuesAsTouched() {
-    if (!isNullOrUndefined(this.form.get('allowedValues'))) {
+    if (!isNullOrUndefined(this.form.get("allowedValues"))) {
       Object.keys(
-        (this.form.get('allowedValues') as FormArray).controls
+        (this.form.get("allowedValues") as FormArray).controls
       ).forEach((key) => {
         (this.form
-          .get('allowedValues')
+          .get("allowedValues")
           .get(key) as FormGroup).controls.value.markAsTouched();
       });
     }
@@ -255,25 +322,24 @@ export class FlatPropertyBuilderComponent implements OnInit {
   }
 
   clearAllowedValues() {
-    this.form.removeControl('allowedValues');
-    this.form.addControl('allowedValues', this.formBuilder.array([]));
+    this.form.removeControl("allowedValues");
+    this.form.addControl("allowedValues", this.formBuilder.array([]));
   }
 
   // ----------------------------------------------------
   // -----------------Constraint Array-------------------
   // ----------------------------------------------------
 
-
   addConstraint() {
-    this.constraints = this.form.get('constraints') as FormArray;
+    this.constraints = this.form.get("constraints") as FormArray;
     this.constraints.push(this.createConstraintValue());
   }
 
   createConstraintValue(): FormGroup {
     return this.formBuilder.group({
-      type: ['', Validators.required],
-      value: ['', Validators.required],
-      message: ['']
+      type: ["", Validators.required],
+      value: ["", Validators.required],
+      message: [""],
     });
   }
 
@@ -282,32 +348,33 @@ export class FlatPropertyBuilderComponent implements OnInit {
   }
 
   clearConstraints() {
-    this.form.removeControl('constraints');
-    this.form.addControl('constraints', this.formBuilder.array([]));
+    this.form.removeControl("constraints");
+    this.form.addControl("constraints", this.formBuilder.array([]));
   }
 
   checkConstraintTypeVisiblity(type: ConstraintType) {
-
-    for (const control of (this.form.get('constraints') as FormArray).controls) {
-      if (control.get('type').value === type) { return true; }
+    for (const control of (this.form.get("constraints") as FormArray)
+      .controls) {
+      if (control.get("type").value === type) {
+        return true;
+      }
     }
     return false;
   }
 
   markConstraintsAsTouched() {
-    if (!isNullOrUndefined(this.form.get('constraints'))) {
-      Object.keys(
-        (this.form.get('constraints') as FormArray).controls
-      ).forEach((key) => {
-        Object.keys((this.form
-          .get('constraints')
-          .get(key) as FormGroup).controls).forEach(innerKey => {
-            this.form.get('constraints').get(key).get(innerKey).markAsTouched();
+    if (!isNullOrUndefined(this.form.get("constraints"))) {
+      Object.keys((this.form.get("constraints") as FormArray).controls).forEach(
+        (key) => {
+          Object.keys(
+            (this.form.get("constraints").get(key) as FormGroup).controls
+          ).forEach((innerKey) => {
+            this.form.get("constraints").get(key).get(innerKey).markAsTouched();
           });
-      });
+        }
+      );
     }
   }
-
 
   // --Validity Checks and Queries
 
@@ -319,7 +386,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
   }
 
   isDropdownListDisplayed() {
-    return this.dropdownToggled && this.form.get('type').value !== '';
+    return this.dropdownToggled && this.form.get("type").value !== "";
   }
 
   // ---
@@ -337,7 +404,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
         .toPromise()
         .then((ret: FlatPropertyDefinition<any>[]) => {
           if (!isNullOrUndefined(ret) && ret.length > 0) {
-            this.result.emit({ builderType: 'property', value: ret[0] });
+            this.result.emit({ builderType: "property", value: ret[0] });
           } else {
             this.result.emit(undefined);
           }
@@ -353,7 +420,9 @@ export class FlatPropertyBuilderComponent implements OnInit {
   }
 
   createPropertyFromForm(): FlatPropertyDefinition<any> {
-    const property: FlatPropertyDefinition<any> = new FlatPropertyDefinition<any>();
+    const property: FlatPropertyDefinition<any> = new FlatPropertyDefinition<
+      any
+    >();
     property.tenantId = this.tenant.id;
     property.custom = true;
 
@@ -363,30 +432,34 @@ export class FlatPropertyBuilderComponent implements OnInit {
       property.id = this.propertyDefinition.id;
     }
 
-    property.name = this.form.get('name').value;
+    property.name = this.form.get("name").value;
     property.allowedValues = [];
-    if (!isNullOrUndefined(this.form.get('allowedValues'))) {
-      for (const value of (this.form.get('allowedValues') as FormArray).value) {
+    if (!isNullOrUndefined(this.form.get("allowedValues"))) {
+      for (const value of (this.form.get("allowedValues") as FormArray).value) {
         property.allowedValues.push(value.value);
       }
     }
-    property.type = this.form.get('type').value;
-    property.description = this.form.get('description').value;
+    property.type = this.form.get("type").value;
+    property.description = this.form.get("description").value;
 
     property.propertyConstraints = [];
 
-    property.required = this.form.get('required').value;
+    property.required = this.form.get("required").value;
     if (property.required) {
-      property.requiredMessage = this.form.get('requiredMessage').value;
+      property.requiredMessage = this.form.get("requiredMessage").value;
     }
 
-    if (!isNullOrUndefined(this.form.get('constraints'))) {
-      for (const control of (this.form.get('constraints') as FormArray).controls) {
+    if (!isNullOrUndefined(this.form.get("constraints"))) {
+      for (const control of (this.form.get("constraints") as FormArray)
+        .controls) {
         const propertyConstraint = new PropertyConstraint<any>();
-        propertyConstraint.constraintType = control.get('type').value;
-        propertyConstraint.value = control.get('value').value;
-        if (!isNullOrUndefined(control.get('message').value) && control.get('message').value.length > 0) {
-          propertyConstraint.message = control.get('message').value;
+        propertyConstraint.constraintType = control.get("type").value;
+        propertyConstraint.value = control.get("value").value;
+        if (
+          !isNullOrUndefined(control.get("message").value) &&
+          control.get("message").value.length > 0
+        ) {
+          propertyConstraint.message = control.get("message").value;
         }
         propertyConstraint.propertyType = property.type;
 

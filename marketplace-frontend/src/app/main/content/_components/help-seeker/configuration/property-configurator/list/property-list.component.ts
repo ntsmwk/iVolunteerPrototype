@@ -1,22 +1,23 @@
 import {
   PropertyType,
   FlatPropertyDefinition,
-} from 'app/main/content/_model/meta/property/property';
-import { Component, OnInit } from '@angular/core';
-import { fuseAnimations } from '@fuse/animations';
-import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
-import { MatTableDataSource } from '@angular/material';
-import { Marketplace } from 'app/main/content/_model/marketplace';
+} from "app/main/content/_model/meta/property/property";
+import { Component, OnInit } from "@angular/core";
+import { fuseAnimations } from "@fuse/animations";
+import { DialogFactoryDirective } from "app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component";
+import { MatTableDataSource } from "@angular/material";
+import { Marketplace } from "app/main/content/_model/marketplace";
 
-import { TreePropertyDefinition } from 'app/main/content/_model/meta/property/tree-property';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FlatPropertyDefinitionService } from 'app/main/content/_service/meta/core/property/flat-property-definition.service';
-import { TreePropertyDefinitionService } from 'app/main/content/_service/meta/core/property/tree-property-definition.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { isNullOrUndefined } from 'util';
-import { User } from 'app/main/content/_model/user';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { Tenant } from 'app/main/content/_model/tenant';
+import { TreePropertyDefinition } from "app/main/content/_model/meta/property/tree-property";
+import { Router, ActivatedRoute } from "@angular/router";
+import { FlatPropertyDefinitionService } from "app/main/content/_service/meta/core/property/flat-property-definition.service";
+import { TreePropertyDefinitionService } from "app/main/content/_service/meta/core/property/tree-property-definition.service";
+import { LoginService } from "app/main/content/_service/login.service";
+import { isNullOrUndefined } from "util";
+import { User } from "app/main/content/_model/user";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 export interface PropertyEntry {
   id: string;
@@ -27,17 +28,17 @@ export interface PropertyEntry {
 
 @Component({
   selector: "app-property-list",
-  templateUrl: './property-list.component.html',
-  styleUrls: ['./property-list.component.scss'],
+  templateUrl: "./property-list.component.html",
+  styleUrls: ["./property-list.component.scss"],
   animations: fuseAnimations,
   providers: [DialogFactoryDirective],
 })
 export class PropertyListComponent implements OnInit {
   dataSource = new MatTableDataSource<PropertyEntry>();
-  displayedColumns = ['type', 'name', 'filler', 'actions'];
+  displayedColumns = ["type", "name", "filler", "actions"];
 
   marketplace: Marketplace;
-  tenantAdmin: User;
+  userInfo: UserInfo;
   tenants: Tenant[];
 
   propertyDefinitions: FlatPropertyDefinition<any>[];
@@ -56,11 +57,11 @@ export class PropertyListComponent implements OnInit {
     private treePropertyDefinitionService: TreePropertyDefinitionService,
     private loginService: LoginService,
     private dialogFactory: DialogFactoryDirective
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.isLoaded = false;
-    this.dropdownFilterValue = 'all';
+    this.dropdownFilterValue = "all";
     this.dataSource.filterPredicate = function (data, filter: string): boolean {
       return data.name.toLowerCase().includes(filter);
     };
@@ -75,17 +76,16 @@ export class PropertyListComponent implements OnInit {
 
   onRowSelect(p: FlatPropertyDefinition<any>) {
     this.router.navigate([
-      '/main/properties/' + this.marketplace.id + '/' + p.id,
+      "/main/properties/" + this.marketplace.id + "/" + p.id,
     ]);
   }
 
   async loadAllProperties() {
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.marketplace = globalInfo.marketplace;
-    this.tenantAdmin = globalInfo.user;
-    this.tenants = globalInfo.tenants;
+    const globalInfo = this.loginService.getGlobalInfo();
+
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.userInfo = globalInfo.userInfo;
+    this.tenants = globalInfo.currentTenants;
 
     Promise.all([
       this.flatPropertyDefinitionService
@@ -95,7 +95,10 @@ export class PropertyListComponent implements OnInit {
           this.propertyDefinitions = propertyDefinitions;
         }),
       this.treePropertyDefinitionService
-        .getAllPropertyDefinitionsForTenant(this.marketplace, this.tenants[0].id)
+        .getAllPropertyDefinitionsForTenant(
+          this.marketplace,
+          this.tenants[0].id
+        )
         .toPromise()
         .then((treePropertyDefinitions: TreePropertyDefinition[]) => {
           this.treePropertyDefinitions = treePropertyDefinitions;
@@ -123,23 +126,23 @@ export class PropertyListComponent implements OnInit {
 
   applyTypeFilter() {
     switch (this.dropdownFilterValue) {
-      case 'all':
+      case "all":
         this.dataSource.data = this.propertyEntries;
         break;
-      case 'flat':
+      case "flat":
         this.dataSource.data = this.propertyEntries.filter(
           (entry: PropertyEntry) => entry.type !== PropertyType.TREE
         );
         break;
-      case 'tree':
+      case "tree":
         this.dataSource.data = this.propertyEntries.filter(
           (entry: PropertyEntry) => entry.type === PropertyType.TREE
         );
         break;
       default:
-        console.error('undefined type');
+        console.error("undefined type");
     }
-    this.patchFilterParam('filter', this.dropdownFilterValue);
+    this.patchFilterParam("filter", this.dropdownFilterValue);
   }
 
   handleTextFilterEvent(event: Event) {
@@ -149,21 +152,21 @@ export class PropertyListComponent implements OnInit {
   applyTextFilter(filterValue: string) {
     if (isNullOrUndefined(filterValue) || filterValue.length <= 0) {
       this.dataSource.filter = null;
-      this.patchFilterParam('searchString', null);
+      this.patchFilterParam("searchString", null);
     } else {
       this.dataSource.filter = filterValue.trim().toLowerCase();
-      this.patchFilterParam('searchString', filterValue);
+      this.patchFilterParam("searchString", filterValue);
     }
   }
 
   applyFilters(params) {
-    if (!isNullOrUndefined(params['filter'])) {
-      this.dropdownFilterValue = params['filter'];
+    if (!isNullOrUndefined(params["filter"])) {
+      this.dropdownFilterValue = params["filter"];
       this.applyTypeFilter();
     }
-    if (!isNullOrUndefined(params['searchString'])) {
-      this.applyTextFilter(params['searchString']);
-      this.textSearchValue = params['searchString'];
+    if (!isNullOrUndefined(params["searchString"])) {
+      this.applyTextFilter(params["searchString"]);
+      this.textSearchValue = params["searchString"];
     }
   }
 
@@ -171,28 +174,28 @@ export class PropertyListComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { [key]: value },
-      queryParamsHandling: 'merge',
+      queryParamsHandling: "merge",
       skipLocationChange: true,
     });
   }
 
   viewPropertyAction(property: FlatPropertyDefinition<any>) {
     this.router.navigate(
-      ['main/property/detail/view/' + this.marketplace.id + '/' + property.id],
-      { queryParams: { ref: 'list' } }
+      ["main/property/detail/view/" + this.marketplace.id + "/" + property.id],
+      { queryParams: { ref: "list" } }
     );
   }
 
   newAction(key: string) {
-    this.router.navigate(['main/property-builder/' + this.marketplace.id], {
+    this.router.navigate(["main/property-builder/" + this.marketplace.id], {
       queryParams: { type: key },
     });
   }
 
   editAction(entry: PropertyEntry) {
-    const builderType = entry.type === PropertyType.TREE ? 'tree' : 'flat';
+    const builderType = entry.type === PropertyType.TREE ? "tree" : "flat";
     this.router.navigate(
-      ['main/property-builder/' + this.marketplace.id + '/' + entry.id],
+      ["main/property-builder/" + this.marketplace.id + "/" + entry.id],
       { queryParams: { type: builderType } }
     );
   }
@@ -200,8 +203,8 @@ export class PropertyListComponent implements OnInit {
   deleteAction(entry: PropertyEntry) {
     this.dialogFactory
       .confirmationDialog(
-        'Löschen',
-        'Dieser Vorgang kann nicht rückgeängig gemacht werden'
+        "Löschen",
+        "Dieser Vorgang kann nicht rückgeängig gemacht werden"
       )
       .then((ret) => {
         if (ret && entry.type !== PropertyType.TREE) {
@@ -209,26 +212,24 @@ export class PropertyListComponent implements OnInit {
             .deletePropertyDefinition(this.marketplace, entry.id)
             .toPromise()
             .then(() => {
-              this.deleteFromLists('flat', entry.id);
+              this.deleteFromLists("flat", entry.id);
             });
         } else if (ret && entry.type === PropertyType.TREE) {
           this.treePropertyDefinitionService
             .deletePropertyDefinition(this.marketplace, entry.id)
             .toPromise()
             .then(() => {
-              this.deleteFromLists('tree', entry.id);
+              this.deleteFromLists("tree", entry.id);
             });
         }
       });
   }
 
-  deleteFromLists(key: 'tree' | 'flat', id: string) {
-    key === 'tree'
+  deleteFromLists(key: "tree" | "flat", id: string) {
+    key === "tree"
       ? this.treePropertyDefinitions.filter((e) => e.id !== id)
       : this.propertyDefinitions.filter((e) => e.id !== id);
-    this.propertyEntries = this.propertyEntries.filter(
-      (e) => e.id !== id
-    );
+    this.propertyEntries = this.propertyEntries.filter((e) => e.id !== id);
     this.dataSource.data = this.dataSource.data.filter((e) => e.id !== id);
   }
 

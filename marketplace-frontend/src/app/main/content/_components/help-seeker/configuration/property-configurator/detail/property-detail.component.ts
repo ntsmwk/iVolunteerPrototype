@@ -1,24 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { UserRole, User } from 'app/main/content/_model/user';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { UserRole, User } from "app/main/content/_model/user";
 import {
-  FlatPropertyDefinition, PropertyParentTemplate, PropertyParentSubTemplate,
-} from 'app/main/content/_model/meta/property/property';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
-import { FlatPropertyDefinitionService } from 'app/main/content/_service/meta/core/property/flat-property-definition.service';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { Tenant } from 'app/main/content/_model/tenant';
+  FlatPropertyDefinition,
+  PropertyParentTemplate,
+  PropertyParentSubTemplate,
+} from "app/main/content/_model/meta/property/property";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { LoginService } from "app/main/content/_service/login.service";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { FlatPropertyDefinitionService } from "app/main/content/_service/meta/core/property/flat-property-definition.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { Tenant } from "app/main/content/_model/tenant";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "app-property-detail",
-  templateUrl: './property-detail.component.html',
-  styleUrls: ['./property-detail.component.scss'],
+  templateUrl: "./property-detail.component.html",
+  styleUrls: ["./property-detail.component.scss"],
 })
 export class PropertyDetailComponent implements OnInit {
   role: UserRole;
-  tenantAdmin: User;
+  userInfo: UserInfo;
   marketplace: Marketplace;
   tenant: Tenant;
   propertyDefintion: FlatPropertyDefinition<any>;
@@ -27,7 +30,7 @@ export class PropertyDetailComponent implements OnInit {
   subtemplateItem: PropertyParentSubTemplate;
 
   isLoaded: boolean;
-  columnsToDisplay = ['value'];
+  columnsToDisplay = ["value"];
 
   constructor(
     private route: ActivatedRoute,
@@ -39,12 +42,11 @@ export class PropertyDetailComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.role = globalInfo.userRole;
-    this.tenantAdmin = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
+    const globalInfo = this.loginService.getGlobalInfo();
+
+    this.role = globalInfo.currentRole;
+    this.userInfo = globalInfo.userInfo;
+    this.tenant = globalInfo.currentTenants[0];
 
     let parameters;
     let queryParameters;
@@ -58,11 +60,11 @@ export class PropertyDetailComponent implements OnInit {
       }),
     ]).then(() => {
       this.loadProperty(
-        parameters['marketplaceId'],
-        parameters['templateId'],
-        parameters['subtemplateId'],
-        parameters['propertyId'],
-        queryParameters['ref']
+        parameters["marketplaceId"],
+        parameters["templateId"],
+        parameters["subtemplateId"],
+        parameters["propertyId"],
+        queryParameters["ref"]
       );
     });
   }
@@ -80,7 +82,7 @@ export class PropertyDetailComponent implements OnInit {
       .then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
 
-        if (ref === 'list') {
+        if (ref === "list") {
           this.propertyDefinitionService
             .getPropertyDefinitionById(marketplace, propId, this.tenant.id)
             .toPromise()
@@ -90,8 +92,8 @@ export class PropertyDetailComponent implements OnInit {
             .then(() => {
               this.isLoaded = true;
             });
-        } else if (ref === 'template') {
-        } else if (ref === 'subtemplate') {
+        } else if (ref === "template") {
+        } else if (ref === "subtemplate") {
           // this.userDefinedTaskTemplateService
           //   .getPropertyFromSubTemplate(
           //     this.marketplace,

@@ -7,13 +7,13 @@ import {
   FormControl,
   Validators,
   FormArrayName,
-  FormArray
+  FormArray,
 } from "@angular/forms";
 import {
   DerivationRule,
   GeneralCondition,
   ClassCondition,
-  ClassAction
+  ClassAction,
 } from "app/main/content/_model/derivation-rule";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -26,14 +26,15 @@ import { DerivationRuleValidators } from "app/main/content/_validator/derivation
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { isNullOrUndefined } from "util";
 import { RuleExecution } from "app/main/content/_model/derivation-rule-execution";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   templateUrl: "./rule-configurator.component.html",
   styleUrls: ["./rule-configurator.component.scss"],
-  providers: []
+  providers: [],
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
-  tenantAdmin: User;
+  userInfo: UserInfo;
   marketplace: Marketplace;
   role: UserRole;
   tenant: Tenant;
@@ -66,10 +67,10 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       id: new FormControl(undefined),
       name: new FormControl(undefined, [
         Validators.required,
-        Validators.minLength(5)
+        Validators.minLength(5),
       ]),
       genConditionForms: new FormArray([]),
-      classConditionForms: new FormArray([])
+      classConditionForms: new FormArray([]),
     });
   }
 
@@ -77,15 +78,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     let genConditionForms = <FormArray>(
       this.ruleForm.controls["genConditionForms"]
     );
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    const globalInfo = this.loginService.getGlobalInfo();
 
-    this.tenantAdmin = globalInfo.user;
-    this.marketplace = globalInfo.marketplace;
-    this.tenant = globalInfo.tenants[0];
+    this.userInfo = globalInfo.userInfo;
+    this.marketplace = globalInfo.currentMarketplaces[0];
+    this.tenant = globalInfo.currentTenants[0];
 
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.loadDerivationRule(this.marketplace, params["ruleId"]);
     });
 
@@ -105,7 +104,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           this.derivationRule = rule;
           this.ruleForm.patchValue({
             id: this.derivationRule.id,
-            name: this.derivationRule.name
+            name: this.derivationRule.name,
           });
         });
       this.deactivateSubmit = true;

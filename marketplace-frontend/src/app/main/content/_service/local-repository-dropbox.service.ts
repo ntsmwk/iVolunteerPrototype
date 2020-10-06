@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { User } from "../_model/user";
 import { Observable } from "rxjs";
 import { LocalRepository } from "../_model/local-repository";
 import { ClassInstance } from "../_model/meta/class";
 import { Dropbox } from "dropbox";
 import { LocalRepositoryService } from "./local-repository.service";
+import { UserInfo } from "../_model/userInfo";
 
 @Injectable({
   providedIn: "root",
@@ -17,7 +17,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
     super();
   }
 
-  private findByVolunteer(volunteer: User) {
+  private findByVolunteer(volunteerInfo: UserInfo) {
     const observable = new Observable((subscriber) => {
       const successFunction = (localRepository: LocalRepository) => {
         subscriber.next(localRepository);
@@ -30,8 +30,8 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
       };
 
       try {
-        if (volunteer.dropboxToken) {
-          let dbx = new Dropbox({ accessToken: volunteer.dropboxToken });
+        if (volunteerInfo.dropboxToken) {
+          let dbx = new Dropbox({ accessToken: volunteerInfo.dropboxToken });
 
           dbx.filesListFolder({ path: "" }).then((filesList) => {
             if (
@@ -64,22 +64,22 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
 
                       if (
                         this.localRepositorys.findIndex(
-                          (l) => l.id === volunteer.id
+                          (l) => l.id === volunteerInfo.id
                         ) === -1
                       ) {
                         let newRepo = new LocalRepository(
-                          volunteer.id,
-                          volunteer.username
+                          volunteerInfo.id,
+                          volunteerInfo.username
                         );
 
                         this.localRepositorys.push(newRepo);
-                        this.saveToDropbox(volunteer);
+                        this.saveToDropbox(volunteerInfo);
                         successFunction(newRepo);
                       } else {
                         successFunction(
                           this.localRepositorys.find(
                             (localRepository: LocalRepository) => {
-                              return localRepository.id === volunteer.id;
+                              return localRepository.id === volunteerInfo.id;
                             }
                           )
                         );
@@ -109,22 +109,22 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
 
                   if (
                     this.localRepositorys.findIndex(
-                      (l) => l.id === volunteer.id
+                      (l) => l.id === volunteerInfo.id
                     ) === -1
                   ) {
                     let newRepo = new LocalRepository(
-                      volunteer.id,
-                      volunteer.username
+                      volunteerInfo.id,
+                      volunteerInfo.username
                     );
 
                     this.localRepositorys.push(newRepo);
-                    this.saveToDropbox(volunteer);
+                    this.saveToDropbox(volunteerInfo);
                     successFunction(newRepo);
                   } else {
                     successFunction(
                       this.localRepositorys.find(
                         (localRepository: LocalRepository) => {
-                          return localRepository.id === volunteer.id;
+                          return localRepository.id === volunteerInfo.id;
                         }
                       )
                     );
@@ -144,7 +144,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
     return observable;
   }
 
-  public findClassInstancesByVolunteer(volunteer: User) {
+  public findClassInstancesByVolunteer(volunteerInfo: UserInfo) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -160,7 +160,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
         }
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) =>
           successFunction(localRepository)
@@ -172,7 +172,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
   }
 
   public synchronizeSingleClassInstance(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstance: ClassInstance
   ) {
     const observable = new Observable((subscriber) => {
@@ -181,7 +181,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -192,7 +192,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
                 this.localRepositorys[index] = localRepository;
               }
             });
-            this.saveToDropbox(volunteer);
+            this.saveToDropbox(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -205,14 +205,17 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
     return observable;
   }
 
-  public getSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public getSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           let classInstance = localRepository.classInstances.find((ci) => {
@@ -228,7 +231,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
   }
 
   public synchronizeClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   ) {
     const observable = new Observable((subscriber) => {
@@ -237,7 +240,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -252,7 +255,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToDropbox(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -266,7 +269,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
   }
 
   public overrideClassInstances(
-    volunteer: User,
+    volunteerInfo: UserInfo,
     classInstances: ClassInstance[]
   ) {
     const observable = new Observable((subscriber) => {
@@ -275,7 +278,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -287,7 +290,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToDropbox(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -300,14 +303,17 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
     return observable;
   }
 
-  public removeSingleClassInstance(volunteer: User, classInstanceId: string) {
+  public removeSingleClassInstance(
+    volunteerInfo: UserInfo,
+    classInstanceId: string
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -323,7 +329,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToDropbox(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -336,14 +342,17 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
     return observable;
   }
 
-  public removeClassInstances(volunteer: User, classInstanceIds: string[]) {
+  public removeClassInstances(
+    volunteerInfo: UserInfo,
+    classInstanceIds: string[]
+  ) {
     const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
       };
 
-      this.findByVolunteer(volunteer)
+      this.findByVolunteer(volunteerInfo)
         .toPromise()
         .then((localRepository: LocalRepository) => {
           try {
@@ -357,7 +366,7 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
               }
             });
 
-            this.saveToDropbox(volunteer);
+            this.saveToDropbox(volunteerInfo);
             subscriber.next(localRepository.classInstances);
             subscriber.complete();
           } catch (error) {
@@ -370,8 +379,8 @@ export class LocalRepositoryDropboxService extends LocalRepositoryService {
     return observable;
   }
 
-  private saveToDropbox(volunteer: User) {
-    let dbx = new Dropbox({ accessToken: volunteer.dropboxToken });
+  private saveToDropbox(volunteerInfo: UserInfo) {
+    let dbx = new Dropbox({ accessToken: volunteerInfo.dropboxToken });
     let content = { repository: this.localRepositorys };
 
     dbx

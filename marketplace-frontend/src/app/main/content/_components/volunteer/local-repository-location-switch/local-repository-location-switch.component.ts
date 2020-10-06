@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { DropboxUtils } from "./dropbox-utils";
 import { Dropbox } from "dropbox";
 import { LoginService } from "app/main/content/_service/login.service";
-import { User, LocalRepositoryLocation } from "app/main/content/_model/user";
+import { LocalRepositoryLocation, User } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { CoreUserService } from "app/main/content/_service/core-user.service";
 import { LocalRepositoryJsonServerService } from "app/main/content/_service/local-repository-jsonServer.service";
@@ -18,6 +18,7 @@ import {
 import { NextcloudCredentials } from "app/main/content/_model/nextcloud-credentials";
 import { LocalRepositoryNextcloudService } from "app/main/content/_service/local-repository-nextcloud.service";
 import { environment } from "environments/environment";
+import { UserInfo } from "app/main/content/_model/userInfo";
 
 @Component({
   selector: "app-local-repository-location-switch",
@@ -25,11 +26,12 @@ import { environment } from "environments/environment";
   styleUrls: ["./local-repository-location-switch.component.scss"],
 })
 export class LocalRepositoryLocationSwitchComponent implements OnInit {
+  @Input() user: User;
+
   DROPBOX_CLIENT_ID: string = "ky4bainncqhjjn8";
   REDIRECT_URI = environment.REDIRECT_URI;
 
   globalInfo: GlobalInfo;
-  user: User;
   FILE_NAME: string = "db.json";
 
   isJsonServerConnected: boolean = false;
@@ -54,10 +56,8 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
-    this.user = this.globalInfo.user;
+    this.globalInfo = <GlobalInfo>this.loginService.getGlobalInfo();
+    // this.user = this.globalInfo.userInfo;
 
     let dbx = new Dropbox({ clientId: this.DROPBOX_CLIENT_ID });
     this.dropboxAuthUrl = dbx.getAuthenticationUrl(this.REDIRECT_URI);
@@ -187,8 +187,8 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
     await this.coreUserService.updateUser(this.user, true).toPromise();
 
     this.loginService.generateGlobalInfo(
-      this.globalInfo.userRole,
-      this.globalInfo.tenants.map((t) => t.id)
+      this.globalInfo.currentRole,
+      this.globalInfo.currentTenants.map((t) => t.id)
     );
   }
 }

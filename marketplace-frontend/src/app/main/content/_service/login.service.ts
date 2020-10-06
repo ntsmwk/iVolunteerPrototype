@@ -8,9 +8,12 @@ import { Router } from "@angular/router";
 import { LocalRepositoryJsonServerService } from "./local-repository-jsonServer.service";
 import { LocalRepositoryDropboxService } from "./local-repository-dropbox.service";
 import { LocalRepositoryNextcloudService } from "./local-repository-nextcloud.service";
+import { Tenant } from "../_model/tenant";
+import { Marketplace } from "../_model/marketplace";
+import { UserInfo } from "../_model/userInfo";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class LoginService {
   constructor(
@@ -36,30 +39,30 @@ export class LoginService {
   }
 
   getActivationStatus(username: string) {
-    return this.http.put("/core/login/activation-status", username);
+    return this.http.put("/core/activation-status", username);
   }
 
-  getLoggedIn() {
-    let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
+  getLoggedIn(): Observable<UserInfo> {
+    let globalInfo: GlobalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable(subscriber => {
-        subscriber.next(globalInfo.user);
+      return new Observable((subscriber) => {
+        subscriber.next(globalInfo.userInfo);
         subscriber.complete();
       });
     } else {
-      return this.http.get("/core/login");
+      return <Observable<UserInfo>>this.http.get("/core/userinfo");
     }
   }
 
-  getLoggedInUserRole() {
+  getLoggedInUserRole(): Observable<UserRole> {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable(subscriber => {
+      return new Observable((subscriber) => {
         subscriber.next(globalInfo.userRole);
         subscriber.complete();
       });
     } else {
-      return new Observable(subscriber => {
+      return new Observable((subscriber) => {
         subscriber.next(UserRole.NONE);
         subscriber.complete();
       });
@@ -67,7 +70,7 @@ export class LoginService {
   }
 
   refreshAccessToken(refreshToken: string) {
-    return this.http.post("/core/login/refreshToken", refreshToken).pipe(
+    return this.http.post("/core/refreshToken", refreshToken).pipe(
       tap(
         (response: any) => {
           let accessToken: string = response.accessToken;
@@ -80,7 +83,7 @@ export class LoginService {
             localStorage.setItem("refreshToken", refreshToken);
           }
         },
-        error => {
+        (error) => {
           this.logout();
         }
       )
@@ -95,8 +98,41 @@ export class LoginService {
     return localStorage.getItem("accessToken");
   }
 
-  getGlobalInfo() {
-    const observable = new Observable(subscriber => {
+  // getGlobalInfo() {
+  //   const observable = new Observable((subscriber) => {
+  //     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
+  //     if (globalInfo) {
+  //       subscriber.next(globalInfo);
+  //       subscriber.complete();
+  //     } else {
+  //       subscriber.error();
+  //     }
+  //   });
+  //   return observable;
+  // }
+
+  // async generateGlobalInfo(role: UserRole, tenantIds: string[]) {
+  //   let globalInfo = <GlobalInfo>(
+  //     await this.httpClient
+  //       .put(`/core/globalInfo/role/${role}`, tenantIds)
+  //       .toPromise()
+  //   );
+
+  //   localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
+  // }
+
+  getGlobalInfo(): GlobalInfo {
+    let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
+    if (!globalInfo) {
+      return null;
+      // eventually generate global info with role none!?
+    } else {
+      return globalInfo;
+    }
+  }
+
+  getGlobalInfo2() {
+    const observable = new Observable((subscriber) => {
       let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
       if (globalInfo) {
         subscriber.next(globalInfo);
@@ -109,18 +145,38 @@ export class LoginService {
     return observable;
   }
 
-  async generateGlobalInfo(role: UserRole, tenantIds: string[]) {
+  async generateGlobalInfo(currentRole: UserRole, currentTenantIds: String[]) {
     let globalInfo = <GlobalInfo>(
-      await this.httpClient
-        .put(`/core/login/globalInfo/role/${role}`, tenantIds)
-        .toPromise()
+      await this.http.get("/core/globalInfo").toPromise()
     );
+
+    globalInfo.currentRole = currentRole;
+    globalInfo.currentTenants = globalInfo.userSubscriptions
+      .filter((s) => currentTenantIds.indexOf(s.tenant.id) != -1)
+      .map((s) => s.tenant);
+    globalInfo.currentMarketplaces = [
+      ...new Set(globalInfo.userSubscriptions.map((s) => s.marketplace)),
+    ];
 
     localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
   }
 
-  getLocalRepositoryService(volunteer: User) {
-    switch (volunteer.localRepositoryLocation) {
+  updateGlobalInfoRole(currentRole: UserRole, currentTenantIds: String[]) {
+    let globalInfo: GlobalInfo = JSON.parse(localStorage.getItem("globalInfo"));
+
+    globalInfo.currentRole = currentRole;
+    globalInfo.currentTenants = globalInfo.userSubscriptions
+      .filter((s) => currentTenantIds.indexOf(s.tenant.id) != -1)
+      .map((s) => s.tenant);
+    globalInfo.currentMarketplaces = [
+      ...new Set(globalInfo.userSubscriptions.map((s) => s.marketplace)),
+    ];
+
+    localStorage.setItem("globalInfo", JSON.stringify(globalInfo));
+  }
+
+  getLocalRepositoryService(volunteerInfo: UserInfo) {
+    switch (volunteerInfo.localRepositoryLocation) {
       case LocalRepositoryLocation.LOCAL:
         return this.lrJsonServerService;
       case LocalRepositoryLocation.DROPBOX:
