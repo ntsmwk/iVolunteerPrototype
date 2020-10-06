@@ -129,17 +129,17 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 		
 		if (tenant == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such tenant"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such tenant"));
 
 		}
 		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId() , tenantId, UserRole.VOLUNTEER, authorization, true);
 		
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("Subscribe failed"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("Subscribe failed"));
 
 		}
 		
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 	
 //	 * put core/tenant/{tid}/unsubscribe
@@ -150,36 +150,36 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 
 		if (tenant == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such tenant"), HttpStatus.BAD_REQUEST);
+			 ResponseEntity.badRequest().body(new ErrorResponse("No such tenant"));
 		}
 		
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.VOLUNTEER, authorization, true);
 		
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("Unsubscribe failed"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("Unsubscribe failed"));
 		}
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 	
 
 	@PostMapping("/new")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("Tenant must not be null"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
 		}
 		Tenant ret = tenantService.createTenant(tenant);
 		
 		 Map<String, Object> returnMap = Collections.singletonMap("id", ret.getId());
-		return new ResponseEntity<Object>(returnMap, HttpStatus.OK);
+		return ResponseEntity.ok(returnMap);
 	}
 
 	@PutMapping("/update")
 	public ResponseEntity<Object> updateTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("Tenant must not be null"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
 		}
 		tenantService.updateTenant(tenant);
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 
 	}
 	

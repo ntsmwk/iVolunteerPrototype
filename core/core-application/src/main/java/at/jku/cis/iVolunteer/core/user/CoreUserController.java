@@ -98,11 +98,11 @@ public class CoreUserController {
 	private ResponseEntity<Object> updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("User must not be null"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("User must not be null"));
 		}
 		
 		user = coreUserService.updateUser(user, authorization, updateMarketplaces);
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/user/subscribe/{tenantId}")
@@ -111,11 +111,11 @@ public class CoreUserController {
 		Tenant tenant = tenantService.getTenantById(tenantId);
 		
 		if (user == null || tenant == null || role == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such user and / or tenant and / or role"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such user and / or tenant and / or role"));
 		}
 		
 		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 
 	}
 
@@ -126,11 +126,11 @@ public class CoreUserController {
 		Tenant tenant = tenantService.getTenantById(tenantId);
 		
 		if (user == null || tenant == null || role == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such user and / or tenant and / or role"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such user and / or tenant and / or role"));
 		}
 		
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping("/user/subscribe/{tenantId}/user/{userId}")
@@ -139,7 +139,7 @@ public class CoreUserController {
 		CoreUser user = coreLoginService.getLoggedInUser();
 		Tenant tenant = tenantService.getTenantById(tenantId);
 		if (user == null || tenant == null || role == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such user and / or tenant and / or role"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such user and / or tenant and / or role"));
 		}
 		if (user.getSubscribedTenants().stream().noneMatch(tus -> tus.getTenantId().equals(tenantId) && (tus.getRole().equals(UserRole.TENANT_ADMIN) || tus.getRole().equals(UserRole.ADMIN)))) {
 			return new ResponseEntity<Object>(new ErrorResponse("Only (tenant) admins my change other users subscriptions"), HttpStatus.FORBIDDEN);
@@ -148,11 +148,11 @@ public class CoreUserController {
 		CoreUser changeUser = getByUserId(userId);
 
 		if (changeUser == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such user"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such user"));
 		}
 		
 		changeUser = coreUserService.subscribeUserToTenant(changeUser.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 
 	}
 
@@ -163,7 +163,7 @@ public class CoreUserController {
 		Tenant tenant = tenantService.getTenantById(tenantId);
 		
 		if (user == null || tenant == null || role == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such user and / or tenant and / or role"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such user and / or tenant and / or role"));
 		}
 		if (user.getSubscribedTenants().stream().noneMatch(tus -> tus.getTenantId().equals(tenantId) && (tus.getRole().equals(UserRole.TENANT_ADMIN) || tus.getRole().equals(UserRole.ADMIN)))) {
 			return new ResponseEntity<Object>(new ErrorResponse("Only (tenant) admins my change other users subscriptions"), HttpStatus.FORBIDDEN);
@@ -172,10 +172,10 @@ public class CoreUserController {
 		CoreUser changeUser = getByUserId(userId);
 
 		if (changeUser == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("No such user"), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such user"));
 		}		
 		user = coreUserService.unsubscribeUserFromTenant(changeUser.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 
 }
