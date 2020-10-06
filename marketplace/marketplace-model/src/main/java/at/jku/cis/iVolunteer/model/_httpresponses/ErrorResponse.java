@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.core.security.model;
+package at.jku.cis.iVolunteer.model._httpresponses;
 
 public class ErrorResponse {
     public ErrorResponse(String error) {

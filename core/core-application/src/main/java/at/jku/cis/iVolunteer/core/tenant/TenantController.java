@@ -26,6 +26,7 @@ import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -128,13 +129,13 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 		
 		if (tenant == null) {
-			return new ResponseEntity<Object>("No such tenant", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse("No such tenant"), HttpStatus.BAD_REQUEST);
 
 		}
 		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId() , tenantId, UserRole.VOLUNTEER, authorization, true);
 		
 		if (user == null) {
-			return new ResponseEntity<Object>("Subscribe failed", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse("Subscribe failed"), HttpStatus.BAD_REQUEST);
 
 		}
 		
@@ -149,13 +150,13 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 
 		if (tenant == null) {
-			return new ResponseEntity<Object>("No such tenant", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse("No such tenant"), HttpStatus.BAD_REQUEST);
 		}
 		
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.VOLUNTEER, authorization, true);
 		
 		if (user == null) {
-			return new ResponseEntity<Object>("Unsubscribe failed", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse("Unsubscribe failed"), HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Object>("", HttpStatus.OK);
 	}
@@ -164,7 +165,7 @@ public class TenantController {
 	@PostMapping("/new")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return new ResponseEntity<Object>("Tenant must not be null", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse("Tenant must not be null"), HttpStatus.BAD_REQUEST);
 		}
 		Tenant ret = tenantService.createTenant(tenant);
 		
@@ -175,7 +176,7 @@ public class TenantController {
 	@PutMapping("/update")
 	public ResponseEntity<Object> updateTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return new ResponseEntity<Object>("Tenant must not be null", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse("Tenant must not be null"), HttpStatus.BAD_REQUEST);
 		}
 		tenantService.updateTenant(tenant);
 		return new ResponseEntity<Object>("", HttpStatus.OK);
