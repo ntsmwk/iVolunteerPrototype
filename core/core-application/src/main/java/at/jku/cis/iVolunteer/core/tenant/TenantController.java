@@ -128,7 +128,7 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 		
 		if (tenant == null) {
-			return new ResponseEntity<Object>("No such tenant", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Object>("No such tenant", HttpStatus.BAD_REQUEST);
 
 		}
 		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId() , tenantId, UserRole.VOLUNTEER, authorization, true);
@@ -149,7 +149,7 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 
 		if (tenant == null) {
-			return new ResponseEntity<Object>("No such tenant", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Object>("No such tenant", HttpStatus.BAD_REQUEST);
 		}
 		
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.VOLUNTEER, authorization, true);
@@ -161,7 +161,6 @@ public class TenantController {
 	}
 	
 
-	// /new ..TODO
 	@PostMapping("/new")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
@@ -173,7 +172,6 @@ public class TenantController {
 		return new ResponseEntity<Object>(returnMap, HttpStatus.OK);
 	}
 
-	// /update ... TODO
 	@PutMapping("/update")
 	public ResponseEntity<Object> updateTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {

@@ -27,14 +27,14 @@ public class CoreRegistrationController {
 	public ResponseEntity<Object> registerUser(@RequestBody CoreUser user, @RequestParam("type") AccountType type) {
 		if (type != AccountType.ORGANIZATION && type != AccountType.PERSON) {
 			System.out.println("invalid registrationtype - either 'organization' or 'person'");
-			return new ResponseEntity<Object>(new ErrorResponse("invalid registrationtype - either 'organization' or 'person'"), HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Object>(new ErrorResponse("invalid registrationtype - either 'organization' or 'person'"), HttpStatus.BAD_REQUEST);
 		}
 		RegisterResponseMessage responseMessage = coreRegistrationService.registerUser(user, type);
 		
 		if (responseMessage.getResponse() == RegisterResponse.OK) {
 			return new ResponseEntity<Object>("", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Object>(responseMessage, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Object>(responseMessage, HttpStatus.BAD_REQUEST);
 		}
 	}
 

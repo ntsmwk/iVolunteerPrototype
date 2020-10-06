@@ -141,7 +141,7 @@ public class CoreUserController {
 			return new ResponseEntity<Object>("No such user and / or tenant and / or role", HttpStatus.BAD_REQUEST);
 		}
 		if (user.getSubscribedTenants().stream().noneMatch(tus -> tus.getTenantId().equals(tenantId) && (tus.getRole().equals(UserRole.TENANT_ADMIN) || tus.getRole().equals(UserRole.ADMIN)))) {
-			return new ResponseEntity<Object>("Only (tenant) admins my change other users subscriptions", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>("Only (tenant) admins my change other users subscriptions", HttpStatus.FORBIDDEN);
 		}
 		
 		CoreUser changeUser = getByUserId(userId);
@@ -165,7 +165,7 @@ public class CoreUserController {
 			return new ResponseEntity<Object>("No such user and / or tenant and / or role", HttpStatus.BAD_REQUEST);
 		}
 		if (user.getSubscribedTenants().stream().noneMatch(tus -> tus.getTenantId().equals(tenantId) && (tus.getRole().equals(UserRole.TENANT_ADMIN) || tus.getRole().equals(UserRole.ADMIN)))) {
-			return new ResponseEntity<Object>("Only (tenant) admins my change other users subscriptions", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>("Only (tenant) admins my change other users subscriptions", HttpStatus.FORBIDDEN);
 		}
 		
 		CoreUser changeUser = getByUserId(userId);
