@@ -1,12 +1,15 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -147,30 +150,39 @@ public class TenantController {
 
 		if (tenant == null) {
 			return new ResponseEntity<Object>("No such tenant", HttpStatus.NOT_ACCEPTABLE);
-
 		}
 		
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.VOLUNTEER, authorization, true);
 		
 		if (user == null) {
 			return new ResponseEntity<Object>("Unsubscribe failed", HttpStatus.BAD_REQUEST);
-
 		}
-		
 		return new ResponseEntity<Object>("", HttpStatus.OK);
 	}
 	
 
 	// /new ..TODO
 	@PostMapping("/new")
-	public Tenant createTenant(@RequestBody Tenant tenant) {
-		return tenantService.createTenant(tenant);
+	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
+		System.out.println("new tenant");
+		if (tenant == null) {
+			return new ResponseEntity<Object>("Tenant must not be null", HttpStatus.BAD_REQUEST);
+		}
+		Tenant ret = tenantService.createTenant(tenant);
+		
+		 Map<String, Object> returnMap = Collections.singletonMap("id", ret.getId());
+		return new ResponseEntity<Object>(returnMap, HttpStatus.OK);
 	}
 
 	// /update ... TODO
 	@PutMapping("/update")
-	public Tenant updateTenant(@RequestBody Tenant tenant) {
-		return tenantService.updateTenant(tenant);
+	public ResponseEntity<Object> updateTenant(@RequestBody Tenant tenant) {
+		if (tenant == null) {
+			return new ResponseEntity<Object>("Tenant must not be null", HttpStatus.BAD_REQUEST);
+		}
+		tenantService.updateTenant(tenant);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
+
 	}
 	
 	

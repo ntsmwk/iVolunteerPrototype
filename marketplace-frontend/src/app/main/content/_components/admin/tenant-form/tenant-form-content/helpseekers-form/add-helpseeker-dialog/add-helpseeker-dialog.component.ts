@@ -77,10 +77,10 @@ export class AddHelpseekerDialogComponent implements OnInit {
   async onSubmit() {
     const addedUsers = <User[]>await Promise.all(
       this.selection.selected.map(async elem => {
-        const user = <User>await this.coreUserService
+        await this.coreUserService
           .subscribeOtherUserToTenant(this.globalInfo.tenants[0].id, UserRole.HELP_SEEKER, elem.id)
           .toPromise();
-        return user;
+        return elem;
       })
     );
     this.data.helpseekers = addedUsers;

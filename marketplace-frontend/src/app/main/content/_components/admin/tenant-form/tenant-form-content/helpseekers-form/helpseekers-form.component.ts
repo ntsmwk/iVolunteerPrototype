@@ -8,6 +8,7 @@ import { isNullOrUndefined } from 'util';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: "tenant-helpseekers-form",
@@ -49,9 +50,11 @@ export class TenantHelpseekersFormComponent implements OnInit {
   addHelpseeker() {
     this.dialogFactory.openAddHelpseekerDialog(this.helpseekers).then(ret => {
       if (!isNullOrUndefined(ret)) {
-        this.helpseekers = ret.helpseekers;
+        this.helpseekers.push(...ret.helpseekers);
         this.dataSource.data = this.helpseekers;
       }
+    }).catch((response: HttpErrorResponse) => {
+      console.error(response);
     });
   }
 
@@ -61,6 +64,8 @@ export class TenantHelpseekersFormComponent implements OnInit {
         this.helpseekers = this.helpseekers.filter(h => h.id !== ret.id);
         this.dataSource.data = this.helpseekers;
       }
+    }).catch((response: HttpErrorResponse) => {
+      console.error(response);
     });
   }
 
