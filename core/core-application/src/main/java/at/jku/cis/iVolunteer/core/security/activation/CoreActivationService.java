@@ -21,9 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
-import at.jku.cis.iVolunteer.model._httpresponses.ActivationResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.registration.ActivationLinkClickedResponse;
+import at.jku.cis.iVolunteer.model.registration.ActivationResponse;
 import at.jku.cis.iVolunteer.model.registration.PendingActivation;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
 

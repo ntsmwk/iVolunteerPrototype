@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model._httpresponses;
+package at.jku.cis.iVolunteer.model.registration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

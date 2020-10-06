@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.model.registration;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model._httpresponses.ActivationResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 @Document

@@ -35,13 +35,6 @@ public class TaskInstanceController {
 	@Autowired private LoginService loginService;
 	@Autowired private ClassInstanceToTaskInstanceMapper classInstanceToTaskInstanceMapper;
 	
-	/** ADD OR REDO
-	 * task/all 
-	 * task/tenantId/tid/all
-	 * task/tenantId/tid/subscribed
-	 * task/tenantId/tid/unsubscribed
-	 */
-	
 	@GetMapping("/all")
 	public List<TaskInstance> getAllTaskInstances() {
 		List<ClassInstance> classInstances = classInstanceService.getAllClassInstances();
@@ -114,16 +107,12 @@ public class TaskInstanceController {
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
 
-
-	
-	
 	@GetMapping("/{taskId}")
 	public TaskInstance getTask(@PathVariable String taskId) {
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
 		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 	
-
 	@PutMapping("/{taskId}/subscribe")
 	 public ResponseEntity<Object> subscribeToTask(@PathVariable String taskId) {
 		if (taskId == null) {
