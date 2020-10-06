@@ -49,9 +49,10 @@ export class TenantOverviewComponent implements OnInit {
   }
 
   async unsubscribe(tenant: Tenant, role: UserRole) {
-    this.user = <User>(
-      await this.coreUserService.unsubscribeUserFromTenant(tenant.id, role).toPromise()
-    );
+    // NOT NEEDED?
+    // this.user = <User>(
+    await this.coreUserService.unsubscribeUserFromTenant(tenant.id, role).toPromise()
+    // );
 
     if (this.user.subscribedTenants.length === 0) {
       this.loginService.generateGlobalInfo(UserRole.NONE, []).then(() => {
@@ -90,9 +91,10 @@ export class TenantOverviewComponent implements OnInit {
   }
 
   async subscribe(tenant: Tenant, role: UserRole) {
-    this.user = <User>(
-      await this.coreUserService.subscribeUserToTenant(tenant.id, role).toPromise()
-    );
+    // not needed?
+    // this.user = <User>(
+    await this.coreUserService.subscribeUserToTenant(tenant.id, role).toPromise()
+    // );
 
     if (this.currentRole === UserRole.NONE) {
       this.loginService.generateGlobalInfo(role, [tenant.id]).then(() => {

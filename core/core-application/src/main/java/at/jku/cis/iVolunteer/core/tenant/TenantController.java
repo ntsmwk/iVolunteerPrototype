@@ -164,7 +164,6 @@ public class TenantController {
 	// /new ..TODO
 	@PostMapping("/new")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
-		System.out.println("new tenant");
 		if (tenant == null) {
 			return new ResponseEntity<Object>("Tenant must not be null", HttpStatus.BAD_REQUEST);
 		}

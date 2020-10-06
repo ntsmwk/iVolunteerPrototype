@@ -114,7 +114,7 @@ public class CoreUserController {
 		}
 		
 		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
 
 	}
 
@@ -129,7 +129,7 @@ public class CoreUserController {
 		}
 		
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
 	}
 	
 	@PutMapping("/user/subscribe/{tenantId}/user/{userId}")
@@ -151,7 +151,7 @@ public class CoreUserController {
 		}
 		
 		changeUser = coreUserService.subscribeUserToTenant(changeUser.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
 
 	}
 
@@ -174,7 +174,7 @@ public class CoreUserController {
 			return new ResponseEntity<Object>("No such user", HttpStatus.BAD_REQUEST);
 		}		
 		user = coreUserService.unsubscribeUserFromTenant(changeUser.getId(), tenant.getMarketplaceId(), tenantId, UserRole.getUserRole(role), authorization, true);
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
 	}
 
 }

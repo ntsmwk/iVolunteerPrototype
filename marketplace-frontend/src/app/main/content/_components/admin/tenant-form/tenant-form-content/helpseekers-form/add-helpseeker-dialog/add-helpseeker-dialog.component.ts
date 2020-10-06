@@ -8,6 +8,7 @@ import { Tenant } from 'app/main/content/_model/tenant';
 import { User, UserRole } from 'app/main/content/_model/user';
 import { CoreUserService } from 'app/main/content/_service/core-user.service';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export interface AddHelpseekerDialogData {
   helpseekers: User[];
@@ -77,10 +78,16 @@ export class AddHelpseekerDialogComponent implements OnInit {
   async onSubmit() {
     const addedUsers = <User[]>await Promise.all(
       this.selection.selected.map(async elem => {
-        await this.coreUserService
-          .subscribeOtherUserToTenant(this.globalInfo.tenants[0].id, UserRole.HELP_SEEKER, elem.id)
-          .toPromise();
-        return elem;
+        try {
+          await this.coreUserService
+            .subscribeOtherUserToTenant(this.globalInfo.tenants[0].id, UserRole.HELP_SEEKER, elem.id)
+            .toPromise();
+          return elem;
+
+        } catch (error) {
+          console.error(error);
+          return [];
+        }
       })
     );
     this.data.helpseekers = addedUsers;
