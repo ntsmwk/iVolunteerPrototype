@@ -2,15 +2,23 @@ import { Injectable } from "@angular/core";
 import { CanActivate, Router } from "@angular/router";
 import { LoginService } from "../_service/login.service";
 import { UserRole } from "../_model/user";
+import { GlobalInfo } from "../_model/global-info";
 
 @Injectable({
   providedIn: "root",
 })
 export class LoginGuard implements CanActivate {
-  constructor(private router: Router, private loginService: LoginService) {}
+  constructor(private loginService: LoginService) {}
 
   canActivate(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
+      let globalInfo: GlobalInfo = JSON.parse(
+        localStorage.getItem("globalInfo")
+      );
+      if (globalInfo == null || globalInfo.user == null) {
+        this.loginService.logout();
+      }
+
       this.loginService
         .getLoggedInUserRole()
         .toPromise()
