@@ -1,12 +1,15 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +25,8 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
-import at.jku.cis.iVolunteer.model.UserSubscription;
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -128,18 +132,18 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 
 		if (tenant == null) {
-			return new ResponseEntity<Object>("No such tenant", HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such tenant"));
 
 		}
 		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId(), tenantId,
 				UserRole.VOLUNTEER, authorization, true);
 
 		if (user == null) {
-			return new ResponseEntity<Object>("Subscribe failed", HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(new ErrorResponse("Subscribe failed"));
 
 		}
 
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 
 	// * put core/tenant/{tid}/unsubscribe
@@ -151,31 +155,37 @@ public class TenantController {
 		Tenant tenant = getTenantById(tenantId);
 
 		if (tenant == null) {
-			return new ResponseEntity<Object>("No such tenant", HttpStatus.NOT_ACCEPTABLE);
-
+			ResponseEntity.badRequest().body(new ErrorResponse("No such tenant"));
 		}
 
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId,
 				UserRole.VOLUNTEER, authorization, true);
 
 		if (user == null) {
-			return new ResponseEntity<Object>("Unsubscribe failed", HttpStatus.BAD_REQUEST);
-
+			return ResponseEntity.badRequest().body(new ErrorResponse("Unsubscribe failed"));
 		}
-
-		return new ResponseEntity<Object>("", HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 
-	// /new ..TODO
 	@PostMapping("/new")
-	public Tenant createTenant(@RequestBody Tenant tenant) {
-		return tenantService.createTenant(tenant);
+	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
+		if (tenant == null) {
+			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
+		}
+		Tenant ret = tenantService.createTenant(tenant);
+
+		Map<String, Object> returnMap = Collections.singletonMap("id", ret.getId());
+		return ResponseEntity.ok(returnMap);
 	}
 
-	// /update ... TODO
 	@PutMapping("/update")
-	public Tenant updateTenant(@RequestBody Tenant tenant) {
-		return tenantService.updateTenant(tenant);
+	public ResponseEntity<Object> updateTenant(@RequestBody Tenant tenant) {
+		if (tenant == null) {
+			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
+		}
+		tenantService.updateTenant(tenant);
+		return ResponseEntity.ok().build();
+
 	}
 
 }

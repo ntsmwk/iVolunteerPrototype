@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace._mapper.task.ClassInstanceToTaskInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
+import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.task.TaskInstance;
@@ -31,13 +34,6 @@ public class TaskInstanceController {
 	@Autowired private ClassInstanceService classInstanceService;
 	@Autowired private LoginService loginService;
 	@Autowired private ClassInstanceToTaskInstanceMapper classInstanceToTaskInstanceMapper;
-	
-	/** ADD OR REDO
-	 * task/all 
-	 * task/tenantId/tid/all
-	 * task/tenantId/tid/subscribed
-	 * task/tenantId/tid/unsubscribed
-	 */
 	
 	@GetMapping("/all")
 	public List<TaskInstance> getAllTaskInstances() {
@@ -111,66 +107,67 @@ public class TaskInstanceController {
 		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
 	}
 
-
-	
-	
 	@GetMapping("/{taskId}")
 	public TaskInstance getTask(@PathVariable String taskId) {
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
 		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
 	}
 	
-
 	@PutMapping("/{taskId}/subscribe")
 	 public ResponseEntity<Object> subscribeToTask(@PathVariable String taskId) {
 		if (taskId == null) {
-			return new ResponseEntity<Object>("taskId must not be null", HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.badRequest().body(new ErrorResponse("TaskId must not be null"));
 		}
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
 		if (classInstance == null) {
-			return new ResponseEntity<Object>("no such task", HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such task"));
 		}
 		
 		classInstance.setSubscribed(true);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
-		
+		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping("/{taskId}/unsubscribe")
 	 public ResponseEntity<Object> unsubscribeFromTask(@PathVariable String taskId) {
 		if (taskId == null) {
-			return new ResponseEntity<Object>("taskId must not be null", HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.badRequest().body(new ErrorResponse("TaskId must not be null"));
 		}
 		
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
 		if (classInstance == null) {
-			return new ResponseEntity<Object>("no such task", HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.badRequest().body(new ErrorResponse("No such task"));
 		}
 		
 		classInstance.setSubscribed(false);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
+		return ResponseEntity.ok().build();
 	}
 	
 	
 	@PostMapping("/new") 
-	public TaskInstance createTask(@RequestBody TaskInstance task) {
+	public ResponseEntity<Object> createTask(@RequestBody TaskInstance task) {
+		if (task == null) {
+			return ResponseEntity.badRequest().body(new ErrorResponse("Task must not be null"));
+		}
+		
 		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
+		
+		Map<String, Object> retMap = Collections.singletonMap("id", classInstance.getId());
+		return ResponseEntity.ok(retMap);
 	}
 
-	@PostMapping("/{taskId}")
+	@PostMapping("/{taskId}/update")
 	public ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody TaskInstance task) {
 		if (task == null || taskId == null) {
-			return new ResponseEntity<Object>("task / taskId must not be null", HttpStatus.NOT_ACCEPTABLE);
+			return ResponseEntity.badRequest().body(new ErrorResponse("Task/TaskId must not be null"));
 		}
 		
 		task.getRequired().setId(taskId);
 		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
+		return ResponseEntity.ok().build();
 
 	}
 }

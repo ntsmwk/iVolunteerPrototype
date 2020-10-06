@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.global.GlobalInfo;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.core.security.model.ErrorResponse;
 import at.jku.cis.iVolunteer.core.security.model.TokenResponse;
 import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserInfo;
 import at.jku.cis.iVolunteer.model.user.UserRole;

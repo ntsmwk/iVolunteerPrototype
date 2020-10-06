@@ -33,10 +33,11 @@ export class TenantService {
     return this.http.get(`/core/tenant/marketplace/${marketplaceId}`);
   }
 
-  saveTenant(tenant: Tenant) {
-    if (tenant.id == null) {
-      return this.http.post(`/core/tenant/new`, tenant);
-    }
+  createTenant(tenant: Tenant) {
+    return this.http.post(`/core/tenant/new`, tenant);
+  }
+
+  updateTenant(tenant: Tenant) {
     return this.http.put(`/core/tenant/update`, tenant);
   }
 
