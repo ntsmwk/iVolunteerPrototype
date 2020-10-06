@@ -21,7 +21,7 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
-import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.UserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.image.Image;
@@ -44,12 +44,18 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private TenantRepository coreTenantRepository;
-	@Autowired private CoreUserService coreUserService;
-	@Autowired private ImageController imageController;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private TenantRepository coreTenantRepository;
+	@Autowired
+	private CoreUserService coreUserService;
+	@Autowired
+	private ImageController imageController;
 
 	public void initVolunteers() {
 
@@ -127,7 +133,7 @@ public class CoreVolunteerInitializationService {
 
 		for (int i = 0; i < volunteers.size(); i++) {
 			CoreUser volunteer = volunteers.get(i);
-			volunteer.setSubscribedTenants(new ArrayList<TenantUserSubscription>());
+			volunteer.setSubscribedTenants(new ArrayList<UserSubscription>());
 			for (Tenant t : tenants) {
 				volunteer.addSubscribedTenant(mp.getId(), t.getId(), UserRole.VOLUNTEER);
 			}

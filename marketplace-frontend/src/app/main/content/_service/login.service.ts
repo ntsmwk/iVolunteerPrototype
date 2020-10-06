@@ -8,10 +8,10 @@ import { Router } from "@angular/router";
 import { LocalRepositoryJsonServerService } from "./local-repository-jsonServer.service";
 import { LocalRepositoryDropboxService } from "./local-repository-dropbox.service";
 import { LocalRepositoryNextcloudService } from "./local-repository-nextcloud.service";
-import { Marketplace } from '../_model/marketplace';
+import { Marketplace } from "../_model/marketplace";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class LoginService {
   constructor(
@@ -21,7 +21,7 @@ export class LoginService {
     private lrDropboxService: LocalRepositoryDropboxService,
     private lrJsonServerService: LocalRepositoryJsonServerService,
     private lrNextcloudService: LocalRepositoryNextcloudService
-  ) { }
+  ) {}
 
   login(username: string, password: string) {
     return this.http.post(
@@ -37,30 +37,30 @@ export class LoginService {
   }
 
   getActivationStatus(username: string) {
-    return this.http.put("/core/login/activation-status", username);
+    return this.http.put("/core/activation-status", username);
   }
 
   getLoggedIn() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable(subscriber => {
+      return new Observable((subscriber) => {
         subscriber.next(globalInfo.user);
         subscriber.complete();
       });
     } else {
-      return this.http.get("/core/login");
+      return this.http.get("/core/user");
     }
   }
 
   getLoggedInUserRole() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable(subscriber => {
+      return new Observable((subscriber) => {
         subscriber.next(globalInfo.userRole);
         subscriber.complete();
       });
     } else {
-      return new Observable(subscriber => {
+      return new Observable((subscriber) => {
         subscriber.next(UserRole.NONE);
         subscriber.complete();
       });
@@ -68,7 +68,7 @@ export class LoginService {
   }
 
   refreshAccessToken(refreshToken: string) {
-    return this.http.post("/core/login/refreshToken", refreshToken).pipe(
+    return this.http.post("/core/refreshToken", refreshToken).pipe(
       tap(
         (response: any) => {
           let accessToken: string = response.accessToken;
@@ -81,7 +81,7 @@ export class LoginService {
             localStorage.setItem("refreshToken", refreshToken);
           }
         },
-        error => {
+        (error) => {
           this.logout();
         }
       )
@@ -97,14 +97,11 @@ export class LoginService {
   }
 
   getGlobalInfo() {
-    const observable = new Observable(subscriber => {
+    const observable = new Observable((subscriber) => {
       let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
       if (globalInfo) {
         subscriber.next(globalInfo);
         subscriber.complete();
-      } else {
-        // TODO @
-        this.httpClient.get(`/core/login/globalInfo/`);
       }
     });
     return observable;
@@ -113,7 +110,7 @@ export class LoginService {
   async generateGlobalInfo(role: UserRole, tenantIds: string[]) {
     let globalInfo = <GlobalInfo>(
       await this.httpClient
-        .put(`/core/login/globalInfo/role/${role}`, tenantIds)
+        .put(`/core/globalInfo/role/${role}`, tenantIds)
         .toPromise()
     );
 
@@ -130,5 +127,4 @@ export class LoginService {
         return this.lrNextcloudService;
     }
   }
-
 }

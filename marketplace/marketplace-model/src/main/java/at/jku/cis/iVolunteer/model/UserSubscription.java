@@ -2,20 +2,20 @@ package at.jku.cis.iVolunteer.model;
 
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
-public class TenantUserSubscription {
+public class UserSubscription {
     private String marketplaceId;
     private String tenantId;
     private UserRole role;
 
-    public TenantUserSubscription() {
+    public UserSubscription() {
     }
 
     // TODO xnet
-    
-    
-//	 * TenantUserSubscripition: -> statt <marketplaceId, tenantId, role> -> <tenantId, role>
 
-    public TenantUserSubscription(String marketplaceId, String tenantId, UserRole role) {
+    // * UserSubscripition: -> statt <marketplaceId, tenantId, role> -> <tena
+    // tId, role>
+
+    public UserSubscription(String marketplaceId, String tenantId, UserRole role) {
         this.marketplaceId = marketplaceId;
         this.tenantId = tenantId;
         this.role = role;
@@ -44,6 +44,5 @@ public class TenantUserSubscription {
     public void setRole(UserRole role) {
         this.role = role;
     }
-    
 
 }
