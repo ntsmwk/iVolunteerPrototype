@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -134,7 +136,7 @@ public class TaskInstanceController {
 		
 		classInstance.setSubscribed(true);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
 		
 	}
 	
@@ -151,18 +153,24 @@ public class TaskInstanceController {
 		
 		classInstance.setSubscribed(false);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return new ResponseEntity<Object>(classInstanceToTaskInstanceMapper.toTarget(classInstance), HttpStatus.OK);
+		return new ResponseEntity<Object>("", HttpStatus.OK);
 	}
 	
 	
 	@PostMapping("/new") 
-	public TaskInstance createTask(@RequestBody TaskInstance task) {
+	public ResponseEntity<Object> createTask(@RequestBody TaskInstance task) {
+		if (task == null) {
+			return new ResponseEntity<Object>(new ErrorResponse("task must not be null"), HttpStatus.BAD_REQUEST);
+		}
+		
 		ClassInstance classInstance = classInstanceToTaskInstanceMapper.toSource(task);
 		classInstance = classInstanceService.saveClassInstance(classInstance);
-		return classInstanceToTaskInstanceMapper.toTarget(classInstance);
+		
+		Map<String, Object> retMap = Collections.singletonMap("id", classInstance.getId());
+		return new ResponseEntity<Object>(retMap, HttpStatus.OK);
 	}
 
-	@PostMapping("/{taskId}")
+	@PostMapping("/{taskId}/update")
 	public ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody TaskInstance task) {
 		if (task == null || taskId == null) {
 			return new ResponseEntity<Object>(new ErrorResponse("task / taskId must not be null"), HttpStatus.BAD_REQUEST);
