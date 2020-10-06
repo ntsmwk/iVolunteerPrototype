@@ -145,6 +145,7 @@ export class TenantFormContentComponent implements OnInit {
     this.tenant.landingpageImageId = landingPageImage.id;
     this.tenant.tags = this.addedTags;
 
+    console.log(this.tenant);
     if (isNullOrUndefined(this.tenant.id)) {
       this.tenantService.createTenant(this.tenant).toPromise().then((response: { id: string }) => {
         this.tenant.id = response.id;
@@ -159,7 +160,6 @@ export class TenantFormContentComponent implements OnInit {
         console.error(error);
       });
     } else {
-
       this.tenantService.updateTenant(this.tenant).toPromise().then(() => {
         this.loginService.generateGlobalInfo(this.globalInfo.userRole, this.globalInfo.tenants.map(t => t.id)).then(() => {
           this.tenantForm.enable();
