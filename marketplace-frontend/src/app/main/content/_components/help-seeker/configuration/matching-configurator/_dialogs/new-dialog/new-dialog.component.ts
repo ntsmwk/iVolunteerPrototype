@@ -15,7 +15,9 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 
 export interface NewMatchingDialogData {
   leftClassConfiguration: ClassConfiguration;
+  leftIsUser: boolean;
   rightClassConfiguration: ClassConfiguration;
+  rightIsUser: boolean;
   label: string;
 }
 
@@ -74,16 +76,22 @@ export class NewMatchingDialogComponent implements OnInit {
           this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 4);
         }
 
+        console.log(this.data);
+
         this.loaded = true;
       });
   }
 
   leftItemSelected(c: ClassConfiguration) {
+    this.data.leftIsUser = false;
     this.data.leftClassConfiguration = c;
+    console.log(this.data);
   }
 
   rightItemSelected(c: ClassConfiguration) {
+    this.data.rightIsUser = false;
     this.data.rightClassConfiguration = c;
+    console.log(this.data);
   }
 
   onNoClick(): void {
@@ -134,6 +142,18 @@ export class NewMatchingDialogComponent implements OnInit {
 
   handleBrowseBackClick() {
     this.browseMode = false;
+  }
+
+  handleUseUserClick(sourceReference: 'LEFT' | 'RIGHT') {
+    if (sourceReference === 'LEFT') {
+      this.data.leftClassConfiguration = undefined;
+      this.data.leftIsUser = true;
+    } else if (sourceReference === 'RIGHT') {
+      this.data.rightClassConfiguration = undefined;
+      this.data.rightIsUser = true;
+    }
+
+    console.log(this.data);
   }
 
 
