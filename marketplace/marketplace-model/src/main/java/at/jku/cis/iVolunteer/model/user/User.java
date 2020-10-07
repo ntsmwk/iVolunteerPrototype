@@ -10,8 +10,7 @@ import at.jku.cis.iVolunteer.model.UserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 public class User {
-	@Id
-	private String id;
+	@Id private String id;
 	private String username;
 	private String password;
 	private String loginEmail;
@@ -38,7 +37,7 @@ public class User {
 	private List<String> websites;
 	private List<String> emails;
 
-	private String imageId;
+	private String profileFileName;
 
 	private List<UserSubscription> subscribedTenants = new ArrayList<UserSubscription>();
 
@@ -70,7 +69,7 @@ public class User {
 		this.phoneNumbers = coreUser.getPhoneNumbers();
 		this.websites = coreUser.getWebsites();
 		this.emails = coreUser.getEmails();
-		this.imageId = coreUser.getImageId();
+		this.profileFileName = coreUser.getProfileFileName();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
@@ -279,12 +278,12 @@ public class User {
 		this.nextcloudCredentials = nextcloudCredentials;
 	}
 
-	public String getImageId() {
-		return imageId;
+	public String getProfileFileName() {
+		return profileFileName;
 	}
 
-	public void setImageId(String imageId) {
-		this.imageId = imageId;
+	public void setProfileFileName(String profileFileName) {
+		this.profileFileName = profileFileName;
 	}
 
 	public List<UserSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,

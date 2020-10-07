@@ -20,6 +20,7 @@ import at.jku.cis.iVolunteer.model.image.Image;
 import at.jku.cis.iVolunteer.model.image.UserImage;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
+@Deprecated
 @RestController
 public class ImageController {
 

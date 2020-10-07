@@ -1,15 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Tenant } from "../_model/tenant";
-import { ImageService } from "./image.service";
-import { Image } from "../_model/image";
-import { UserRole } from '../_model/user';
+import { FileService } from "./file.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class TenantService {
-  constructor(private http: HttpClient, private imageService: ImageService) { }
+  constructor(private http: HttpClient, private fileService: FileService) {}
 
   findAll() {
     return this.http.get(`/core/tenant`);
@@ -41,44 +39,12 @@ export class TenantService {
     return this.http.put(`/core/tenant/update`, tenant);
   }
 
-
-  async getTenantImage(tenant: Tenant) {
-    // let img: Image = <Image>await this.imageService.findById(tenant.imageId);
-    // if (!img) {
-    //   return "/assets/images/avatars/profile.jpg";
-    // }
-
-    //TODO fucked
-    // let profileImg: Image = <Image>(
-    //   await this.imageService.findById(tenant.imageId).toPromise()
-    // );
-    // const ret = this.imageService.getImgSourceFromImageWrapper(
-    //   profileImg.imageWrapper
-    // );
-    // if (ret == null) {
-    return "/assets/images/avatars/profile.jpg";
-    // } else {
-    //   return ret;
-    // }
+  getImagePath(tenant: Tenant) {
+    return this.fileService.getFullFilePath(tenant.imageFileName);
   }
 
-  //TODO fucked helpseeker - header
-  async getTenantProfileImage(tenant: Tenant) {
-    return "/assets/images/avatars/profile.jpg";
-
-  }
-
-  async getTenantLandingPageImage(tenant: Tenant) {
-    //TODO fucked
-    // let landingImg: Image = <Image>(
-    //   await this.imageService.findById(tenant.landingpageImageId).toPromise()
-    // );
-
-    // return this.imageService.getImgSourceFromImageWrapper(
-    //   landingImg.imageWrapper
-    // );
-
-    return "/assets/images/avatars/profile.jpg";
+  getLandingpageImagePath(tenant: Tenant) {
+    return this.fileService.getFullFilePath(tenant.landingpageImageFileName);
   }
 
   initHeader(tenant: Tenant) {

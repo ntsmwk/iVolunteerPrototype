@@ -4,9 +4,8 @@ import {
   User,
   UserRole,
   RoleTenantMapping,
-  AccountType,
+  AccountType
 } from "app/main/content/_model/user";
-import { ImageService } from "app/main/content/_service/image.service";
 import { fuseAnimations } from "@fuse/animations";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
@@ -18,7 +17,7 @@ import { isNullOrUndefined } from "util";
   selector: "app-role-switch",
   templateUrl: "./role-switch.component.html",
   styleUrls: ["./role-switch.component.scss"],
-  animations: fuseAnimations,
+  animations: fuseAnimations
 })
 export class RoleSwitchComponent implements OnInit {
   user: User;
@@ -30,7 +29,6 @@ export class RoleSwitchComponent implements OnInit {
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private imageService: ImageService,
     private tenantService: TenantService,
     private roleChangeService: RoleChangeService
   ) {}
@@ -83,16 +81,16 @@ export class RoleSwitchComponent implements OnInit {
   }
 
   async getTenantImageByTenantId(tenantId: string) {
-    let tenant = this.allTenants.find((t) => t.id === tenantId)[0];
-    // return this.imageService.findById(tenant.imageId);
+    let tenant = this.allTenants.find(t => t.id === tenantId)[0];
+    return this.tenantService.getImagePath(tenant);
   }
 
   getTenant(tenantId: string) {
-    return this.allTenants.filter((t) => t.id === tenantId);
+    return this.allTenants.filter(t => t.id === tenantId);
   }
 
   getTenantNameString(tenantId: string) {
-    const tenant = this.allTenants.find((t) => t.id === tenantId);
+    const tenant = this.allTenants.find(t => t.id === tenantId);
     return tenant.name;
   }
 

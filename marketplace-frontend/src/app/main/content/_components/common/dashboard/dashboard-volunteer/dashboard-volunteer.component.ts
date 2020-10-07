@@ -24,9 +24,7 @@ import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User } from "app/main/content/_model/user";
 import { LoginService } from "app/main/content/_service/login.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
-import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
-import { UserImage, Image } from "app/main/content/_model/image";
-import { ImageService } from "app/main/content/_service/image.service";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -37,7 +35,6 @@ HC_venn(Highcharts);
 })
 export class DashboardVolunteerComponent implements OnInit {
   volunteer: User;
-  volunteerImage: UserImage;
   marketplace: Marketplace;
   localRepositoryService: LocalRepositoryService;
 
@@ -102,8 +99,7 @@ export class DashboardVolunteerComponent implements OnInit {
     private iconRegistry: MatIconRegistry,
     private dialogFactory: DialogFactoryDirective,
     private loginService: LoginService,
-    private userImageService: CoreUserImageService,
-    private imageService: ImageService
+    private userService: CoreUserService
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -134,13 +130,7 @@ export class DashboardVolunteerComponent implements OnInit {
     this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
-
-    // Don't wait for image...
-    // this.imageService.findById(this.volunteer.imageId)
-    //   .then((userImage: UserImage) => {
-    //     this.volunteerImage = userImage;
-    //     this.setVolunteerImage();
-    //   });
+    this.image = this.userService.getUserProfileImage(this.volunteer);
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
     this.localRepositoryService = this.loginService.getLocalRepositoryService(
@@ -213,17 +203,13 @@ export class DashboardVolunteerComponent implements OnInit {
     this.isLoaded = true;
   }
 
-  async getTenantImage(tenant: Tenant) {
-    // return this.imageService.findById(tenant.imageId);
+  getTenantImage(tenant: Tenant) {
+    return this.tenantService.getImagePath(tenant);
   }
 
   async getTenantImageById(tenantId: string) {
-    let tenant = this.allTenants.find(t => t.id === tenantId)[0]
+    let tenant = this.allTenants.find(t => t.id === tenantId)[0];
     return this.getTenantImage(tenant);
-  }
-
-  setVolunteerImage() {
-    this.image = this.userImageService.getUserProfileImage(this.volunteerImage);
   }
 
   navigateToClassInstanceDetails(row) {
@@ -252,7 +238,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" }
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -712,7 +698,7 @@ export class DashboardVolunteerComponent implements OnInit {
     ];
     Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) { }
+  onVennClicked(event) {}
 }
 
 export interface DialogData {

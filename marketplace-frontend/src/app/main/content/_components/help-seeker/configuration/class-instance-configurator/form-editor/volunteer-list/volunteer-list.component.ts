@@ -10,15 +10,12 @@ import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { isNullOrUndefined } from "util";
 import { User, UserRole } from "app/main/content/_model/user";
 import { SelectionModel } from "@angular/cdk/collections";
-import { ImageService } from "app/main/content/_service/image.service";
 import { CoreUserService } from "app/main/content/_service/core-user.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LoginGuard } from "app/main/content/_guard/login.guard";
 import { LoginService } from "app/main/content/_service/login.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { UserService } from "app/main/content/_service/user.service";
-import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
-import { UserImage } from "app/main/content/_model/image";
 
 @Component({
   selector: "app-instance-creation-volunteer-list",
@@ -35,7 +32,6 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
   displayedColumns = ["checkbox", "image", "name", "nickname", "username"];
   selection = new SelectionModel<User>(true, []);
   volunteers: User[];
-  volunteerImages: UserImage[];
 
   loaded: boolean;
 
@@ -43,14 +39,12 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
 
   constructor(
     private coreUserService: CoreUserService,
-    private userImageService: CoreUserImageService,
     private loginService: LoginService,
-    private userService: UserService
+    private userService: CoreUserService
   ) {}
 
   async ngOnInit() {
     this.volunteers = [];
-    this.volunteerImages = [];
     this.datasource = new MatTableDataSource();
 
     const globalInfo = <GlobalInfo>(
@@ -59,30 +53,20 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
 
     this.tenant = globalInfo.tenants[0];
 
-    Promise.all([
-      this.coreUserService
-        .findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER)
-        .toPromise()
-        .then((volunteers: User[]) => {
-          this.volunteers = volunteers;
-          this.paginator.length = volunteers.length;
-          this.datasource.paginator = this.paginator;
-          this.datasource.data = volunteers;
-        }),
-      this.userImageService
-        .findByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER)
-        .toPromise()
-        .then((volunteerImages: UserImage[]) => {
-          this.volunteerImages = volunteerImages;
-        })
-    ]).then(() => {
-      this.loaded = true;
-    });
+    this.coreUserService
+      .findAllByRoleAndTenantId(this.tenant.id, UserRole.VOLUNTEER)
+      .toPromise()
+      .then((volunteers: User[]) => {
+        this.volunteers = volunteers;
+        this.paginator.length = volunteers.length;
+        this.datasource.paginator = this.paginator;
+        this.datasource.data = volunteers;
+        this.loaded = true;
+      });
   }
 
-  getImage(userId: string) {
-    const userImage = this.volunteerImages.find(v => v.userId === userId);
-    return this.userImageService.getUserProfileImage(userImage);
+  getProfile(user: User) {
+    return this.userService.getUserProfileImage(user);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

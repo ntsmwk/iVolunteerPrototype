@@ -67,8 +67,7 @@
 
       <div class="address-label"> Timeslots </div>
       <fieldset class="section-border">
-        <div formArrayName="timeslots" *ngFor="let control of profileForm.get('timeslots').controls; let i = index"
-          class="m-20">
+        <div formArrayName="timeslots" *ngFor="let control of profileForm.get('timeslots').controls; let i = index" class="m-20">
 
           <mat-error *ngIf="control.invalid">
             Bitte korrektes Uhrzeitformat verwenden: 24h (H)H:MM
@@ -76,8 +75,7 @@
           <div [formGroupName]="i">
             <div class="allowed-value-row" fxLayout="row wrap" fxLayoutAlign="start center">
 
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="handleTimeslotCheckboxClicked(i, 'active')"
-                [checked]="control.value.active" class="m-4">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="handleTimeslotCheckboxClicked(i, 'active')" [checked]="control.value.active" class="m-4">
               </mat-checkbox>
 
               <div class="weekday-label">{{getWeekdayLabel(control.value.weekday)}}</div>
@@ -99,9 +97,7 @@
               </div>
 
               <div class="time-mid-label">
-                <mat-checkbox (click)="$event.stopPropagation()"
-                  (change)="handleTimeslotCheckboxClicked(i, 'secondActive')" [checked]="control.value.secondActive"
-                  labelPosition="before" [disabled]="!control.value.active">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="handleTimeslotCheckboxClicked(i, 'secondActive')" [checked]="control.value.secondActive" labelPosition="before" [disabled]="!control.value.active">
                   <div *ngIf="control.value.secondActive" class="und-label">
                     und
                   </div>
@@ -136,8 +132,7 @@
       </fieldset>
 
 
-      <button type="button" mat-stroked-button class="primary-button-dark mt-16" (click)="save()" aria-label="Speichern"
-        [disabled]="profileForm.invalid">
+      <button type="button" mat-stroked-button class="primary-button-dark mt-16" (click)="save()" aria-label="Speichern" [disabled]="profileForm.invalid">
         <div *ngIf="!saveSuccessful">
           Speichern
         </div>

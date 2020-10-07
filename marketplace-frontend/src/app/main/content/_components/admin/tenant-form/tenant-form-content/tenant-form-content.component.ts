@@ -10,11 +10,10 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { isNullOrUndefined } from "util";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { LoginService } from "app/main/content/_service/login.service";
-import { ImageService } from "app/main/content/_service/image.service";
-import { ImageWrapper } from "app/main/content/_model/image";
 import { isString } from "highcharts";
 import { RoleChangeService } from "app/main/content/_service/role-change.service";
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
+import { FileService } from "app/main/content/_service/file.service";
 
 @Component({
   selector: "tenant-form-content",
@@ -42,9 +41,11 @@ export class TenantFormContentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private tenantService: TenantService,
     private loginService: LoginService,
-    private imageService: ImageService,
+    private fileService: FileService,
     private roleChangeService: RoleChangeService
-  ) { }
+  ) {}
+
+  // TODO MWE/AK fix files....
 
   async ngOnInit() {
     this.loaded = false;
@@ -93,7 +94,7 @@ export class TenantFormContentComponent implements OnInit {
 
     console.log(this.tenantForm.value);
 
-    this.previewProfileImage = this.tenantService.getTenantImage(this.tenant);
+    this.previewProfileImage = this.tenantService.getImagePath(this.tenant);
     this.addedTags = this.tenant.tags;
   }
 
@@ -112,7 +113,7 @@ export class TenantFormContentComponent implements OnInit {
 
     const tenantId = this.tenant.id;
 
-
+    // TODO fix if necessary....
     // const oldProfileImage = await this.imageService.findById(
     //   this.tenant.imageId
     // );
@@ -132,8 +133,8 @@ export class TenantFormContentComponent implements OnInit {
       // oldProfileImage
       undefined
     );
-    profileImage = await this.imageService.createImage(profileImage);
-    this.tenant.imageId = profileImage.id;
+    profileImage = await this.fileService.uploadFile(profileImage);
+    this.tenant.imageFileName = "<<filenameWithoutPath.png>>";
 
     let landingPageImage = this.assignCurrentImage(
       this.landingPageImage,
@@ -141,35 +142,52 @@ export class TenantFormContentComponent implements OnInit {
       // oldLandingPageImage
       undefined
     );
-    landingPageImage = await this.imageService.createImage(landingPageImage);
-    this.tenant.landingpageImageId = landingPageImage.id;
+    landingPageImage = await this.fileService.uploadFile(landingPageImage);
+    this.tenant.landingpageImageFileName = "<<filenameWithoutPath.png>>";
     this.tenant.tags = this.addedTags;
 
     console.log(this.tenant);
     if (isNullOrUndefined(this.tenant.id)) {
-      this.tenantService.createTenant(this.tenant).toPromise().then((response: { id: string }) => {
-        this.tenant.id = response.id;
-        this.loginService.generateGlobalInfo(this.globalInfo.userRole, this.globalInfo.tenants.map(t => t.id))
-          .then(() => {
-            this.tenantForm.enable();
-            this.roleChangeService.update();
-            this.tenantSaved.emit(this.tenant);
-            this.ngOnInit();
-          });
-      }).catch((error: HttpErrorResponse) => {
-        console.error(error);
-      });
-    } else {
-      this.tenantService.updateTenant(this.tenant).toPromise().then(() => {
-        this.loginService.generateGlobalInfo(this.globalInfo.userRole, this.globalInfo.tenants.map(t => t.id)).then(() => {
-          this.tenantForm.enable();
-          this.roleChangeService.update();
-          this.tenantSaved.emit(this.tenant);
-          this.ngOnInit();
+      this.tenantService
+        .createTenant(this.tenant)
+        .toPromise()
+        .then((response: { id: string }) => {
+          this.tenant.id = response.id;
+          this.loginService
+            .generateGlobalInfo(
+              this.globalInfo.userRole,
+              this.globalInfo.tenants.map(t => t.id)
+            )
+            .then(() => {
+              this.tenantForm.enable();
+              this.roleChangeService.update();
+              this.tenantSaved.emit(this.tenant);
+              this.ngOnInit();
+            });
+        })
+        .catch((error: HttpErrorResponse) => {
+          console.error(error);
         });
-      }).catch((error: HttpErrorResponse) => {
-        console.error(error);
-      });
+    } else {
+      this.tenantService
+        .updateTenant(this.tenant)
+        .toPromise()
+        .then(() => {
+          this.loginService
+            .generateGlobalInfo(
+              this.globalInfo.userRole,
+              this.globalInfo.tenants.map(t => t.id)
+            )
+            .then(() => {
+              this.tenantForm.enable();
+              this.roleChangeService.update();
+              this.tenantSaved.emit(this.tenant);
+              this.ngOnInit();
+            });
+        })
+        .catch((error: HttpErrorResponse) => {
+          console.error(error);
+        });
     }
   }
 
@@ -185,8 +203,12 @@ export class TenantFormContentComponent implements OnInit {
         return null;
       }
 
-      const imageWrapper = new ImageWrapper({ imageInfo: splitResult[0], data: splitResult[1] });
-      return imageWrapper;
+      // TODO MWE/AK fix
+      // const imageWrapper = new ImageWrapper({
+      //   imageInfo: splitResult[0],
+      //   data: splitResult[1]
+      // });
+      // return imageWrapper;
     }
     return null;
   }

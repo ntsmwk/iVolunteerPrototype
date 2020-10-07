@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.model.matching;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelationship;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingEntityMappingConfiguration;
@@ -10,17 +9,16 @@ import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingEnt
 public class MatchingDataRequestDTO {
 
 	MatchingConfiguration matchingConfiguration;
-	
+
 	List<MatchingOperatorRelationship> relationships;
-	
+
 	MatchingEntityMappingConfiguration leftMappingConfigurations;
 	MatchingEntityMappingConfiguration rightMappingConfigurations;
-	
+
 	String pathDelimiter;
-	
+
 //	ClassConfiguration leftClassConfiguration;
 //	ClassConfiguration rightClassConfiguration;
-
 
 	public MatchingConfiguration getMatchingConfiguration() {
 		return matchingConfiguration;
@@ -61,13 +59,11 @@ public class MatchingDataRequestDTO {
 	public void setPathDelimiter(String pathDelimiter) {
 		this.pathDelimiter = pathDelimiter;
 	}
-	
-	
 
 //	public ClassConfiguration getLeftClassConfiguration() {
 //		return leftClassConfiguration;
 //	}
-	
+
 //
 //	public void setLeftClassConfiguration(ClassConfiguration leftClassConfiguration) {
 //		this.leftClassConfiguration = leftClassConfiguration;
@@ -80,15 +76,5 @@ public class MatchingDataRequestDTO {
 //	public void setRightClassConfiguration(ClassConfiguration rightClassConfiguration) {
 //		this.rightClassConfiguration = rightClassConfiguration;
 //	}
-
-	
-	
-
-
-	
-	
-	
-
-	
 
 }

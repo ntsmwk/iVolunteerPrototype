@@ -1,16 +1,13 @@
 <div id="profile" class="page-layout simple tabbed" *ngIf="loaded">
-  <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-    fxLayoutAlign.gt-sm="space-between end">
-    <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-      fxLayoutAlign.gt-sm="start center">
+  <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between end">
+    <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start center">
 
       <div class="profile-image-container avatar huge" (click)="handleProfileImageClick()">
         <div class="profile-image-overlay avatar huge">
           <mat-icon>edit</mat-icon>
         </div>
 
-        <img class="profile-image avatar huge" [src]="getProfileImage()"
-          [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }" />
+        <img class="profile-image avatar huge" [src]="getProfileImage()" [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }" />
 
       </div>
       <div class="name" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">
@@ -21,7 +18,7 @@
 
 
   <div class="content pt-16">
-    <profile-form [user]="user" [userImage]="userImage"></profile-form>
+    <profile-form [user]="user"></profile-form>
     <app-local-repository-location-switch *ngIf="hasVolunteerRole()"></app-local-repository-location-switch>
   </div>
 </div>

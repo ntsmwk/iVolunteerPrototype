@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import at.jku.cis.iVolunteer.core.file.StorageService;
 import at.jku.cis.iVolunteer.core.image.ImageRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
@@ -25,6 +28,7 @@ public class CoreTenantInitializationService {
 	@Autowired protected TenantRepository coreTenantRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
 	@Autowired private ImageRepository imageRepository;
+	@Autowired private StorageService storageService;
 
 	public void initTenants() {
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
@@ -63,35 +67,17 @@ public class CoreTenantInitializationService {
 	private void setTenantProfileImage(String fileName, Tenant tenant) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
-			try {
-				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				Image img = new Image(new ImageWrapper("data:image/png;base64", binaryData));
-				img = imageRepository.save(img);
-				tenant.setImageId(img.getId());
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			fileName = storageService.store(classPathResource);
+			tenant.setImageFileName(fileName);
 		}
 	}
 
 	private void setTenantLandingPageImage(String fileName, Tenant tenant) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
-			try {
+			fileName = storageService.store(classPathResource);
+			tenant.setLandingpageImageFileName(fileName);
 
-				String fileInfo = "data:image/png;base64";
-				if (fileName.endsWith(".jpg")) {
-					fileInfo = "data:image/jpg;base64";
-				}
-				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				Image img = new Image(new ImageWrapper(fileInfo, binaryData));
-				img = imageRepository.save(img);
-				tenant.setLandingpageImageId(img.getId());
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }

@@ -14,22 +14,22 @@ public class Tenant {
 
 	private String homepage;
 
-	private String imageId; //TODO xnet rename "logo"? low prio
+	private String imageFileName;// TODO xnet rename "logo"? low prio
+
 	private String primaryColor;
 	private String secondaryColor;
 
 	private String marketplaceId;
-	
-	
+
 //	TODO xnet adresse hinzufügen
 //  TODO xnet mitglieder volunteers: User[] (würden wir im Frontend später erwarten) aktuell kann das einfach leer sein.. nur die wichtigsten infos beim user
-	
+
 	private List<String> tags = new ArrayList<>();
 
 	private String landingpageTitle;
 	private String landingpageMessage;
 	private String landingpageText;
-	private String landingpageImageId;
+	private String landingpageImageFileName;
 
 	private List<SubscriptionRule> subscriptionRules = new ArrayList<>();
 
@@ -129,6 +129,22 @@ public class Tenant {
 		this.subscriptionRules = subscriptionRules;
 	}
 
+	public String getImageFileName() {
+		return imageFileName;
+	}
+
+	public void setImageFileName(String imageFileName) {
+		this.imageFileName = imageFileName;
+	}
+	
+	public String getLandingpageImageFileName() {
+		return landingpageImageFileName;
+	}
+
+	public void setLandingpageImageFileName(String landingpageImageFileName) {
+		this.landingpageImageFileName = landingpageImageFileName;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)
@@ -146,20 +162,6 @@ public class Tenant {
 		return Objects.hash(id, name, marketplaceId);
 	}
 
-	public String getImageId() {
-		return imageId;
-	}
 
-	public void setImageId(String imageId) {
-		this.imageId = imageId;
-	}
-
-	public String getLandingpageImageId() {
-		return landingpageImageId;
-	}
-
-	public void setLandingpageImageId(String landingpageImageId) {
-		this.landingpageImageId = landingpageImageId;
-	}
 
 }

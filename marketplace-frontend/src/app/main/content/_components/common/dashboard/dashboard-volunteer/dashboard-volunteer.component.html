@@ -70,8 +70,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Aussteller</mat-header-cell>
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <!-- TODO MWE comment -->
-              <!-- <img class="avatar" [src]="getTenantImage() | async" /> -->
+              <img class="avatar" [src]="getTenantImage()" />
               <div style="align-self: center">
                 {{ getIssuerName(entry.tenantId) }}
               </div>
@@ -126,8 +125,7 @@
                   <ng-container *ngIf="isSynced(entry)">
                     <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstanceToOthers(entry, tenant)">
                       <div fxLayout="row" fxLayoutAlign="start center">
-                        <!-- TODO MWE comment -->
-                        <!-- <img class="avatar" [src]="getTenantImage(tenant) | async" /> -->
+                        <img class="avatar" [src]="getTenantImage(tenant)" />
                         <div>{{ tenant.name }}</div>
                       </div>
                     </button>
@@ -140,11 +138,10 @@
                   </button>
                   <button *ngIf="!isSynced(entry)" mat-menu-item (click)="shareClassInstanceToIssuer(entry)">
                     <div fxLayout="row" fxLayoutAlign="start center">
-                      <!-- TODO MWE comment -->
-                      <!-- <img
+                      <img
                         class="avatar"
-                        [src]="getTenantImageById(entry.tenantId) | async"
-                      /> -->
+                        [src]="getTenantImageById(entry.tenantId)"
+                      />
                       <div>{{ getTenantName(entry.tenantId) }}</div>
                     </div>
                   </button>

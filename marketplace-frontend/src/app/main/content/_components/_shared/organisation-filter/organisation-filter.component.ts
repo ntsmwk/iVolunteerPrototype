@@ -5,8 +5,6 @@ import { TenantService } from "../../../_service/core-tenant.service";
 import { User } from "../../../_model/user";
 import { Marketplace } from "../../../_model/marketplace";
 import { Tenant } from "../../../_model/tenant";
-import { ImageService } from "../../../_service/image.service";
-import { Image } from "app/main/content/_model/image";
 
 @Component({
   selector: "organisation-filter",
@@ -23,9 +21,8 @@ export class OrganisationFilterComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private tenantService: TenantService,
-    private imageService: ImageService
-  ) { }
+    private tenantService: TenantService
+  ) {}
 
   async ngOnInit() {
     this.volunteer = <User>await this.loginService.getLoggedIn().toPromise();
@@ -34,10 +31,6 @@ export class OrganisationFilterComponent implements OnInit {
     );
     this.selectedTenants = [...this.tenants];
     this.tenantSelectionChanged.emit(this.selectedTenants);
-  }
-
-  async getTenantImage(tenant: Tenant) {
-    // return this.imageService.findById(tenant.imageId);
   }
 
   tenantClicked(tenant: Tenant) {
