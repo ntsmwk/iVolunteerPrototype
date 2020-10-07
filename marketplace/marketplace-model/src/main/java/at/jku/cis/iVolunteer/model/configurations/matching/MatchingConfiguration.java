@@ -13,11 +13,13 @@ public class MatchingConfiguration extends IVolunteerObject {
 
 	private String leftClassConfigurationId;
 	private String leftClassConfigurationName;
+	private boolean leftIsUser;
 	
 	private List<String> leftAddedClassDefinitionPaths = new ArrayList<>();
 
 	private String rightClassConfigurationId;
 	private String rightClassConfigurationName;
+	private boolean rightIsUser;
 	
 	private List<String> rightAddedClassDefinitionPaths = new ArrayList<>();
 	
@@ -85,6 +87,23 @@ public class MatchingConfiguration extends IVolunteerObject {
 
 	public void setHash(String hash) {
 		this.hash = hash;
+	}
+	
+
+	public boolean isLeftIsUser() {
+		return leftIsUser;
+	}
+
+	public void setLeftIsUser(boolean leftIsUser) {
+		this.leftIsUser = leftIsUser;
+	}
+
+	public boolean isRightIsUser() {
+		return rightIsUser;
+	}
+
+	public void setRightIsUser(boolean rightIsUser) {
+		this.rightIsUser = rightIsUser;
 	}
 
 	@Override

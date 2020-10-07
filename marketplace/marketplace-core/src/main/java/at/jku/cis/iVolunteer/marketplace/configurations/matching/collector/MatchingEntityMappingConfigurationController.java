@@ -45,16 +45,16 @@ public class MatchingEntityMappingConfigurationController {
 //		return collectionService.collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(slotId);
 //	}
 	
-	@GetMapping("matching-entity-data/{id1}/{id2}")
-	private MatchingDataRequestDTO getMatchingEntityData(@PathVariable("id1") String idLeft, @PathVariable("id2") String idRight) {
+// TODO alex change to support user 
+	@PutMapping("matching-entity-data")
+	private MatchingDataRequestDTO getMatchingEntityData(@RequestBody MatchingConfiguration mc) {
 		
-		MatchingEntityMappingConfiguration leftMappings = matchingEntityMappingConfigurationRepository.findOne(idLeft);
-		MatchingEntityMappingConfiguration rightMappings = matchingEntityMappingConfigurationRepository.findOne(idRight);
+		MatchingEntityMappingConfiguration leftMappings = matchingEntityMappingConfigurationRepository.findOne(mc.getLeftClassConfigurationId());
+		MatchingEntityMappingConfiguration rightMappings = matchingEntityMappingConfigurationRepository.findOne(mc.getRightClassConfigurationId());
 
-		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(idLeft, idRight);
+		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(mc.getLeftClassConfigurationId(), mc.getRightClassConfigurationId());
 		
-		
-	
+
 		List<MatchingOperatorRelationship> matchingOperatorRelationships = new ArrayList<MatchingOperatorRelationship>();
 		matchingOperatorRelationshipRepository.findByMatchingConfigurationId(matchingConfiguration.getId()).forEach(matchingOperatorRelationships::add);
 		
