@@ -7,7 +7,7 @@ export class FileService {
   constructor(private http: HttpClient) {}
 
   getFullFilePath(fileName: string) {
-    return environment.CORE_URL + "/" + fileName;
+    return environment.CORE_URL + "/file/" + fileName;
   }
 
   retrieveFile(fileName) {
