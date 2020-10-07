@@ -22,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
-import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
-import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
