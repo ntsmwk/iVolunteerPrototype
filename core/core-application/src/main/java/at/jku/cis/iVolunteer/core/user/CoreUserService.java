@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
-import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.UserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
@@ -132,14 +132,14 @@ public class CoreUserService {
 		return this.findRegisteredMarketplaces(userId).get(0);
 	}
 
-	//TODO xnet
+	// TODO xnet
 	/**
-	 * Core - Marketplace Kommunikation sync von usern core / marketplace - 
-	 * Wie soll gehandelt werden, wenn marketplace nicht erreichbar ist?
+	 * Core - Marketplace Kommunikation sync von usern core / marketplace - Wie soll
+	 * gehandelt werden, wenn marketplace nicht erreichbar ist?
 	 * 
 	 * retry? rollback? automatischer sync bei jedem zugriff auf marketplace?
 	 */
-	
+
 	public CoreUser registerToMarketplace(String userId, String marketplaceId, String authorization) {
 		CoreUser coreUser = coreUserRepository.findOne(userId);
 		Marketplace marketplace = marketplaceService.findById(marketplaceId);
@@ -183,7 +183,7 @@ public class CoreUserService {
 		List<Marketplace> marketplaces = this.findRegisteredMarketplaces(coreUser.getId());
 
 		User user = new User(coreUser);
-		
+
 		for (Marketplace marketplace : marketplaces) {
 			coreMarketplaceRestClient.registerOrUpdateMarketplaceUser(marketplace.getUrl(), authorization, user);
 		}

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.global.GlobalInfo;
@@ -26,14 +25,13 @@ import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.user.UserInfo;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;;
 
-
 //TODO xnet
 @RestController
-@RequestMapping("/login")
 public class CoreLoginController {
 	@Autowired
 	private TenantService tenantService;
@@ -46,24 +44,37 @@ public class CoreLoginController {
 
 	private JWTTokenProvider tokenProvider = new JWTTokenProvider();
 
-	@GetMapping
-	public CoreUser getLoggedInUser() {
-		final CoreUser user = loginService.getLoggedInUser();
-		return user;
+	@GetMapping("/user")
+	public ResponseEntity<Object> getLoggedInUser() {
+		CoreUser user = loginService.getLoggedInUser();
+
+		if (user == null) {
+			return new ResponseEntity<Object>(new ErrorResponse("user does not exist"), HttpStatus.NOT_FOUND);
+		}
+
+		return ResponseEntity.ok(user);
 	}
 
-	
-	/*Get core/userinfo
-	 * 
-	 * return user aber statt "subscribedTenants" "tenantRoles" 
-	 * "tenantroles enthält liste von tenantUserSubscriptions ohne "Volunteer" roles
-	 * TenantUserSubscripition: -> statt <marketplaceId, tenantId, role> -> <tenantId, role>
-	 * */
-	
-	
-	
+	@GetMapping("/userinfo")
+	public ResponseEntity<Object> getLoggedInUserInfo() {
+		CoreUser user = loginService.getLoggedInUser();
 
-	
+		if (user == null) {
+			return new ResponseEntity<Object>(new ErrorResponse("user does not exist"), HttpStatus.NOT_FOUND);
+		}
+
+		return ResponseEntity.ok((new UserInfo(user)));
+	}
+
+	/*
+	 * Get core/userinfo
+	 * 
+	 * return user aber statt "subscribedTenants" "tenantRoles"
+	 * "tenantroles enthält liste von tenantUserSubscriptions ohne "Volunteer" roles
+	 * TenantUserSubscripition: -> statt <marketplaceId, tenantId, role> ->
+	 * <tenantId, role>
+	 */
+
 	@PutMapping("/activation-status")
 	public boolean checkActivationStatus(@RequestBody String username) {
 		final CoreUser user = userRepository.findByUsername(username);
@@ -94,11 +105,10 @@ public class CoreLoginController {
 		}
 	}
 
-	
-	
 	/**
 	 * 
-	 * User Roles nach Rechten staffeln, falls das möglich ist Volunteer < Recruiter < Helpseeker < Tenant_aDmin < Admin
+	 * User Roles nach Rechten staffeln, falls das möglich ist Volunteer < Recruiter
+	 * < Helpseeker < Tenant_aDmin < Admin
 	 * 
 	 */
 	@PutMapping("/globalInfo/role/{role}")

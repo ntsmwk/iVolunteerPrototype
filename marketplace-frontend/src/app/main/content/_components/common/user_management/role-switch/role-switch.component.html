@@ -1,13 +1,11 @@
 <link type="text/css" rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
 
-
 <div *ngIf="!isLoaded" class="center-vh">
   <mat-spinner></mat-spinner>
 </div>
 
-<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll;"
-  *ngIf="roleTenantMappings.length > 1">
+<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll" *ngIf="roleTenantMappings.length > 1">
   <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
     fxLayoutAlign.gt-sm="space-between end">
     <div *ngIf="user" class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
@@ -26,8 +24,12 @@
         </mat-card-header>
         <mat-card-content>
           <div *ngFor="let tenantId of mapping.tenantIds" fxLayout="row" fxLayoutAlign="start center"
-            style="margin-left: 40px;">
-            <!-- <img class="avatar" [src]="getTenantImageByTenantId(tenantId) | async" /> -->
+            style="margin-left: 40px">
+            <!-- TODO:  -->
+            <!-- <img
+              class="avatar"
+              [src]="getTenantImageByTenantId(tenantId) | async"
+            /> -->
             <p>
               {{ getTenantNameString(tenantId) }}
             </p>
