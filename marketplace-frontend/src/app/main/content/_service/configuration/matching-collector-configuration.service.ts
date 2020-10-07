@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from '../../_model/marketplace';
 import { Injectable } from '@angular/core';
-import { MatchingEntityMappings } from '../../_model/matching';
 import { MatchingConfiguration } from '../../_model/meta/configurations';
 
 @Injectable({

@@ -1,24 +1,20 @@
 package at.jku.cis.iVolunteer.marketplace._mapper.clazz;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
+import org.springframework.stereotype.Component;
+
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.user.User;
 
-public class UserToClassDefinitionMapper implements OneWayMapper<User, ClassDefinition> {
+@Component
+public class UserToClassDefinitionMapper {
 
-	@Override
-	public ClassDefinition toTarget(User source) {
-		if (source == null) {return null;}
-		
+	public ClassDefinition toTarget() {
 		ClassDefinition cd = new ClassDefinition();
-		cd.setId(source.getId());
-		cd.setName(source.getFirstname() + " " + source.getLastname());
-		
+		cd.setId("user");
+		cd.setName("Benutzer");
 		cd.setProperties(new LinkedList<>());
 		
 		cd.getProperties().add(new ClassProperty<Object>("id", "ID", PropertyType.TEXT));
@@ -55,21 +51,7 @@ public class UserToClassDefinitionMapper implements OneWayMapper<User, ClassDefi
 
 		cd.getProperties().add(new ClassProperty<Object>("localRepositoryLocation", "Local Repository Referenz", PropertyType.TEXT));
 
-		
 		return cd;
 	}
-
-	@Override
-	public List<ClassDefinition> toTargets(List<User> sources) {
-		if (sources == null) {return null;}
-		
-		List<ClassDefinition> classDefinitions = new LinkedList<ClassDefinition>();
-		for (User user : sources) {
-			classDefinitions.add(toTarget(user));
-		}
-
-		return classDefinitions;
-	}
-
 
 }

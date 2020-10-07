@@ -89,7 +89,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.tenant = globalInfo.tenants[0];
   }
 
-  // async loadClassesAndRelationships(leftClassConfigurationId: string, rightClassConfigurationId: string) {
   async loadClassesAndRelationships(matchingConfiguration: MatchingConfiguration) {
     this.matchingCollectorConfigurationService
       .getMatchingData(this.marketplace, matchingConfiguration)
@@ -98,8 +97,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
         if (isNullOrUndefined(data.matchingConfiguration)) {
           this.data.matchingConfiguration = new MatchingConfiguration();
-          this.data.matchingConfiguration.rightClassConfigurationId = matchingConfiguration.rightClassConfigurationId;
-          this.data.matchingConfiguration.leftClassConfigurationId = matchingConfiguration.leftClassConfigurationId;
+          this.data.matchingConfiguration.rightSideId = matchingConfiguration.rightSideId;
+          this.data.matchingConfiguration.leftSideId = matchingConfiguration.leftSideId;
           this.data.relationships = [];
         }
         this.redrawContent();
@@ -187,6 +186,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   redrawContent() {
+    console.log(this.data.matchingConfiguration);
     this.clearEditor();
     this.insertClassDefinitionsLeft();
     this.insertClassDefinitionsRight();
@@ -195,7 +195,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private insertClassDefinitionsLeft() {
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'left_header', this.data.matchingConfiguration.leftClassConfigurationName,
+      this.graph.getDefaultParent(), 'left_header', this.data.matchingConfiguration.leftSideName,
       SPACE_X, HEADER_Y, HEADER_WIDTH, HEADER_HEIGHT,
       CConstants.mxStyles.matchingRowHeader
     );
@@ -230,7 +230,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let y = HEADER_Y;
 
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'right_header', this.data.matchingConfiguration.rightClassConfigurationName,
+      this.graph.getDefaultParent(), 'right_header', this.data.matchingConfiguration.rightSideName,
       xHeader, y, HEADER_WIDTH, HEADER_HEIGHT, CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
@@ -494,8 +494,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   performNew(leftClassConfiguration: ClassConfiguration, rightClassConfiguration: ClassConfiguration, name: string) {
     const matchingConfiguration = new MatchingConfiguration();
-    matchingConfiguration.rightClassConfigurationId = rightClassConfiguration.id;
-    matchingConfiguration.leftClassConfigurationId = leftClassConfiguration.id;
+    matchingConfiguration.rightSideId = rightClassConfiguration.id;
+    matchingConfiguration.rightSideName = rightClassConfiguration.name;
+    matchingConfiguration.leftSideId = leftClassConfiguration.id;
+    matchingConfiguration.leftSideName = leftClassConfiguration.name;
     matchingConfiguration.name = name;
     matchingConfiguration.tenantId = this.tenant.id;
     this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration)

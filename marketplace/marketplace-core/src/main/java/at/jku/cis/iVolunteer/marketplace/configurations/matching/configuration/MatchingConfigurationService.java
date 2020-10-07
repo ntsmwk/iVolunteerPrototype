@@ -16,10 +16,9 @@ public class MatchingConfigurationService {
 	@Autowired private ClassConfigurationRepository configuratorRepository;
 	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
 
-	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(String leftClassConfigurationId,
-			String rightClassConfigurationId) {
-		return matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(
-				leftClassConfigurationId, rightClassConfigurationId);
+	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(String leftSideId,
+			String rightSideId) {
+		return matchingConfigurationRepository.findByLeftSideIdAndRightSideId(leftSideId, rightSideId);
 	}
 
 	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIdsUnordered(String classConfigurationId1,
@@ -45,16 +44,16 @@ public class MatchingConfigurationService {
 
 	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
 		if (matchingConfiguration.getId() == null) {
-			String leftClassConfigurationId = matchingConfiguration.getLeftClassConfigurationId();
-			String rightClassConfigurationId = matchingConfiguration.getRightClassConfigurationId();
+			String leftClassConfigurationId = matchingConfiguration.getLeftSideId();
+			String rightClassConfigurationId = matchingConfiguration.getRightSideId();
 			String hash = createHashFromClassConfigurationIds(leftClassConfigurationId, rightClassConfigurationId);
 			matchingConfiguration.setHash(hash);
 
 			ClassConfiguration leftConfiguration = configuratorRepository.findOne(leftClassConfigurationId);
 			ClassConfiguration rightConfiguration = configuratorRepository.findOne(rightClassConfigurationId);
 
-			matchingConfiguration.setLeftClassConfigurationName(leftConfiguration.getName());
-			matchingConfiguration.setRightClassConfigurationName(rightConfiguration.getName());
+			matchingConfiguration.setLeftSideName(leftConfiguration.getName());
+			matchingConfiguration.setRightSideName(rightConfiguration.getName());
 
 			if (matchingConfiguration.getName() == null) {
 				matchingConfiguration.setName(leftConfiguration.getName() + " --> " + rightConfiguration.getName());

@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace._mapper.clazz.UserToClassDefinitionMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
@@ -31,6 +32,7 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
+import at.jku.cis.iVolunteer.model.user.User;
 
 @Service
 public class CollectionService {
@@ -42,6 +44,7 @@ public class CollectionService {
 	@Autowired RelationshipRepository relationshipRepository;
 	@Autowired FlatPropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired UserToClassDefinitionMapper userToClassDefinitionMapper;
 
 	public List<ClassDefinition> assignLevelsToClassDefinitions(List<ClassDefinition> classDefinitions, List<Relationship> relationships) {
 		if (classDefinitions == null || relationships == null) {
@@ -84,6 +87,25 @@ public class CollectionService {
 		
 		return mapping;
 	}
+	
+	public MatchingEntityMappings collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(User user) {
+		MatchingEntityMappings mapping = new MatchingEntityMappings();
+		ClassDefinition classDefinition = userToClassDefinitionMapper.toTarget();
+		
+		mapping.setPathDelimiter(PATH_DELIMITER);	
+		mapping.setEntities(new ArrayList<MatchingMappingEntry>());
+		mapping.getEntities().add(new MatchingMappingEntry(classDefinition, classDefinition.getId(), PATH_DELIMITER));
+		mapping.getEntities().addAll(this.getMatchingMappingEntryFromClassDefinitionDFS(classDefinition, 0, new ArrayList<>(), classDefinition.getId()));				
+		
+
+		for (MatchingMappingEntry entry : mapping.getEntities()) {
+			mapping.setNumberOfProperties(mapping.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
+		}
+		mapping.setNumberOfDefinitions(mapping.getEntities().size());
+		
+		return mapping;
+	}
+	
 
 //	private String getPathFromRoot(ClassDefinition classDefinition) {
 //		ArrayList<String> pathArray = new ArrayList<>();
