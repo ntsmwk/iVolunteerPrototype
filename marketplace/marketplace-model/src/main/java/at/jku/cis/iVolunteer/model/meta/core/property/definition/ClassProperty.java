@@ -38,6 +38,12 @@ public class ClassProperty<T> {
 
 	public ClassProperty() {
 	}
+	
+	// only use for user property generation
+	public ClassProperty(String id, String name, PropertyType type) {
+		this.id = id;
+		this.name = name;
+	}
 
 	public String getId() {
 		return id;
