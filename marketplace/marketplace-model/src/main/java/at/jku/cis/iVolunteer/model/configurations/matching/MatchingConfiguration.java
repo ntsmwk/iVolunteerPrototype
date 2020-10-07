@@ -11,13 +11,15 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 public class MatchingConfiguration extends IVolunteerObject {
 	private String name;
 
-	private String leftClassConfigurationId;
-	private String leftClassConfigurationName;
+	private String leftSideId;
+	private String leftSideName;
+	private boolean leftIsUser;
 	
 	private List<String> leftAddedClassDefinitionPaths = new ArrayList<>();
 
-	private String rightClassConfigurationId;
-	private String rightClassConfigurationName;
+	private String rightSideId;
+	private String rightSideName;
+	private boolean rightIsUser;
 	
 	private List<String> rightAddedClassDefinitionPaths = new ArrayList<>();
 	
@@ -31,38 +33,39 @@ public class MatchingConfiguration extends IVolunteerObject {
 		this.name = name;
 	}
 
-	public String getLeftClassConfigurationId() {
-		return leftClassConfigurationId;
+
+	public String getLeftSideId() {
+		return leftSideId;
 	}
 
-	public void setLeftClassConfigurationId(String leftClassConfigurationId) {
-		this.leftClassConfigurationId = leftClassConfigurationId;
+	public void setLeftSideId(String leftSideId) {
+		this.leftSideId = leftSideId;
 	}
 
-	public String getLeftClassConfigurationName() {
-		return leftClassConfigurationName;
+	public String getLeftSideName() {
+		return leftSideName;
 	}
 
-	public void setLeftClassConfigurationName(String leftClassConfigurationName) {
-		this.leftClassConfigurationName = leftClassConfigurationName;
+	public void setLeftSideName(String leftSideName) {
+		this.leftSideName = leftSideName;
 	}
 
-	public String getRightClassConfigurationId() {
-		return rightClassConfigurationId;
+	public String getRightSideId() {
+		return rightSideId;
 	}
 
-	public void setRightClassConfigurationId(String rightClassConfigurationId) {
-		this.rightClassConfigurationId = rightClassConfigurationId;
+	public void setRightSideId(String rightSideId) {
+		this.rightSideId = rightSideId;
 	}
 
-	public String getRightClassConfigurationName() {
-		return rightClassConfigurationName;
+	public String getRightSideName() {
+		return rightSideName;
 	}
 
-	public void setRightClassConfigurationName(String rightClassConfigurationName) {
-		this.rightClassConfigurationName = rightClassConfigurationName;
+	public void setRightSideName(String rightSideName) {
+		this.rightSideName = rightSideName;
 	}
-	
+
 	public List<String> getLeftAddedClassDefinitionPaths() {
 		return leftAddedClassDefinitionPaths;
 	}
@@ -85,6 +88,23 @@ public class MatchingConfiguration extends IVolunteerObject {
 
 	public void setHash(String hash) {
 		this.hash = hash;
+	}
+	
+
+	public boolean isLeftIsUser() {
+		return leftIsUser;
+	}
+
+	public void setLeftIsUser(boolean leftIsUser) {
+		this.leftIsUser = leftIsUser;
+	}
+
+	public boolean isRightIsUser() {
+		return rightIsUser;
+	}
+
+	public void setRightIsUser(boolean rightIsUser) {
+		this.rightIsUser = rightIsUser;
 	}
 
 	@Override

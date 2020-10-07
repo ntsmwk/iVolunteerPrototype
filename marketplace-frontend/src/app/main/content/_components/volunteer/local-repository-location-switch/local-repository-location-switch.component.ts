@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Location } from "@angular/common";
 import { DropboxUtils } from "./dropbox-utils";
 import { Dropbox } from "dropbox";
@@ -18,6 +18,8 @@ import {
 import { NextcloudCredentials } from "app/main/content/_model/nextcloud-credentials";
 import { LocalRepositoryNextcloudService } from "app/main/content/_service/local-repository-nextcloud.service";
 import { environment } from "environments/environment";
+import { DialogFactoryDirective } from "../../_shared/dialogs/_dialog-factory/dialog-factory.component";
+import { MatRadioButton } from "@angular/material";
 
 @Component({
   selector: "app-local-repository-location-switch",
@@ -40,6 +42,9 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
   isNextcloudConnected: boolean = false;
   nextcloudLoginForm: FormGroup;
   nextcloudLoginError: boolean;
+  isNextcloudLoginInProgress: boolean;
+
+  radioButtonForm: FormGroup;
 
   isLoaded: boolean = false;
 
@@ -50,7 +55,8 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
     private formBuilder: FormBuilder,
     private localRepoJsonServerService: LocalRepositoryJsonServerService,
     private localRepoDropboxService: LocalRepositoryDropboxService,
-    private localRepoNextcloudService: LocalRepositoryNextcloudService
+    private localRepoNextcloudService: LocalRepositoryNextcloudService,
+    private dialogFactory: DialogFactoryDirective
   ) {}
 
   async ngOnInit() {
@@ -85,45 +91,70 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
     });
     this.nextcloudLoginError = false;
 
+    this.radioButtonForm = this.formBuilder.group({
+      radioButtonValue: new FormControl(null, {
+        validators: Validators.required,
+      }),
+    });
+
     this.location.replaceState("/main/profile");
     this.isLoaded = true;
     this.isJsonServerConnected = await this.localRepoJsonServerService.isConnected();
   }
 
-  async localRepositoryLocationChange(newLocation: LocalRepositoryLocation) {
-    if (this.user.localRepositoryLocation != newLocation) {
-      let sourceService = this.getService(this.user.localRepositoryLocation);
-      let destService = this.getService(newLocation);
-
-      if (sourceService == null) {
-        // no location set yet
-        this.user.localRepositoryLocation = newLocation;
-        this.updateUserAndGlobalInfo();
-      } else {
-        if (sourceService && destService) {
-          try {
-            let classInstances = <ClassInstance[]>(
-              await sourceService
-                .findClassInstancesByVolunteer(this.user)
-                .toPromise()
+  localRepositoryLocationChange(newLocation: LocalRepositoryLocation) {
+    this.dialogFactory
+      .confirmationDialog(
+        "Änderung bestätigen",
+        "Soll der Speicherort wirklich gewechselt werden?"
+      )
+      .then(async (ret: boolean) => {
+        if (ret) {
+          if (this.user.localRepositoryLocation != newLocation) {
+            let sourceService = this.getService(
+              this.user.localRepositoryLocation
             );
+            let destService = this.getService(newLocation);
 
-            await destService
-              .overrideClassInstances(this.user, classInstances)
-              .toPromise();
-          } catch (error) {
-            alert("Fehler bei der Datenübertragung!");
+            if (sourceService == null) {
+              // no location set yet
+              this.user.localRepositoryLocation = newLocation;
+              this.updateUserAndGlobalInfo();
+            } else {
+              if (sourceService && destService) {
+                try {
+                  let classInstances = <ClassInstance[]>(
+                    await sourceService
+                      .findClassInstancesByVolunteer(this.user)
+                      .toPromise()
+                  );
+
+                  await destService
+                    .overrideClassInstances(this.user, classInstances)
+                    .toPromise();
+
+                  this.user.localRepositoryLocation = newLocation;
+                  this.updateUserAndGlobalInfo();
+                } catch (error) {
+                  alert("Fehler bei der Datenübertragung!");
+                  this.radioButtonForm.patchValue({
+                    radioButtonValue: this.user.localRepositoryLocation,
+                  });
+                }
+              } else {
+                alert("Fehler: Service nicht verfügbar!");
+                this.radioButtonForm.patchValue({
+                  radioButtonValue: this.user.localRepositoryLocation,
+                });
+              }
+            }
           }
-
-          this.user.localRepositoryLocation = newLocation;
-          this.updateUserAndGlobalInfo();
         } else {
-          alert("Fehler: Service nicht verfügbar!");
-          // TODO: select old radio button: this.user.localRepositoryLocation
-          // or refresh radio buttons... (since data hasnt changed)
+          this.radioButtonForm.patchValue({
+            radioButtonValue: this.user.localRepositoryLocation,
+          });
         }
-      }
-    }
+      });
   }
 
   private getService(localRepositoryLocation: LocalRepositoryLocation) {
@@ -144,6 +175,7 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
   }
 
   async loginNextcloud() {
+    this.isNextcloudLoginInProgress = true;
     if (this.nextcloudLoginForm.valid) {
       let nextcloudCredentials: NextcloudCredentials = new NextcloudCredentials(
         this.nextcloudLoginForm.value.domain,
@@ -163,6 +195,8 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
         this.nextcloudLoginError = true;
       }
     }
+
+    this.isNextcloudLoginInProgress = false;
   }
 
   async removeNextcloud() {

@@ -89,6 +89,9 @@ export class DashboardVolunteerComponent implements OnInit {
     ["localRepository", this.colors.get("localRepository") + "66"]
   ]);
 
+  isAllSyncing: boolean = false;
+  isAllDesyncing: boolean = false;
+
   constructor(
     public dialog: MatDialog,
     private classInstanceService: ClassInstanceService,
@@ -340,6 +343,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
                 this.generateVennData();
               });
+          } else {
           }
         });
     } else {
@@ -358,6 +362,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async syncAllToLocalRepository() {
+    this.isAllSyncing = true;
     const missingCiDTOs: ClassInstanceDTO[] = [];
     this.filteredClassInstanceDTOs.forEach(ci => {
       if (!(this.localClassInstanceDTOs.findIndex(t => t.id === ci.id) >= 0)) {
@@ -387,10 +392,12 @@ export class DashboardVolunteerComponent implements OnInit {
         );
 
         this.generateVennData();
+        this.isAllSyncing = false;
       });
   }
 
   async removeAllFromLocalRepository() {
+    this.isAllDesyncing = true;
     let filteredClassInstances = <ClassInstance[]>(
       await this.classInstanceService
         .getClassInstancesById(
@@ -416,6 +423,7 @@ export class DashboardVolunteerComponent implements OnInit {
         );
 
         this.generateVennData();
+        this.isAllDesyncing = false;
       });
   }
 

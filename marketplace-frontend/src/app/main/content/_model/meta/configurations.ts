@@ -25,13 +25,15 @@ export class MatchingConfiguration {
   timestamp: Date;
   tenantId: string;
 
-  leftClassConfigurationId: string;
-  leftClassConfigurationName: string;
+  leftSideId: string;
+  leftSideName: string;
+  leftIsUser: boolean;
 
   leftAddedClassDefinitionPaths: string[] = [];
 
-  rightClassConfigurationId: string;
-  rightClassConfigurationName: string;
+  rightSideId: string;
+  rightSideName: string;
+  rightIsUser: boolean;
 
   rightAddedClassDefinitionPaths: string[] = [];
 }

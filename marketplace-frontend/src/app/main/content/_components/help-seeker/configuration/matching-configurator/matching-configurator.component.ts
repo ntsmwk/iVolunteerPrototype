@@ -84,22 +84,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.confirmDelete = true;
     this.includeConnectors = true;
 
-    const globalInfo = <GlobalInfo>(
-      await this.loginService.getGlobalInfo().toPromise()
-    );
+    const globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
   }
 
-  async loadClassesAndRelationships(leftClassConfigurationId: string, rightClassConfigurationId: string) {
+  async loadClassesAndRelationships(matchingConfiguration: MatchingConfiguration) {
     this.matchingCollectorConfigurationService
-      .getMatchingData(this.marketplace, leftClassConfigurationId, rightClassConfigurationId).toPromise().then((data: MatchingDataRequestDTO) => {
+      .getMatchingData(this.marketplace, matchingConfiguration)
+      .toPromise().then((data: MatchingDataRequestDTO) => {
         this.data = data;
 
         if (isNullOrUndefined(data.matchingConfiguration)) {
           this.data.matchingConfiguration = new MatchingConfiguration();
-          this.data.matchingConfiguration.rightClassConfigurationId = rightClassConfigurationId;
-          this.data.matchingConfiguration.leftClassConfigurationId = leftClassConfigurationId;
+          this.data.matchingConfiguration.rightSideId = matchingConfiguration.rightSideId;
+          this.data.matchingConfiguration.leftSideId = matchingConfiguration.leftSideId;
           this.data.relationships = [];
         }
         this.redrawContent();
@@ -187,6 +186,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   redrawContent() {
+    console.log(this.data.matchingConfiguration);
     this.clearEditor();
     this.insertClassDefinitionsLeft();
     this.insertClassDefinitionsRight();
@@ -195,7 +195,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private insertClassDefinitionsLeft() {
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'left_header', this.data.matchingConfiguration.leftClassConfigurationName,
+      this.graph.getDefaultParent(), 'left_header', this.data.matchingConfiguration.leftSideName,
       SPACE_X, HEADER_Y, HEADER_WIDTH, HEADER_HEIGHT,
       CConstants.mxStyles.matchingRowHeader
     );
@@ -230,7 +230,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let y = HEADER_Y;
 
     const title = this.graph.insertVertex(
-      this.graph.getDefaultParent(), 'right_header', this.data.matchingConfiguration.rightClassConfigurationName,
+      this.graph.getDefaultParent(), 'right_header', this.data.matchingConfiguration.rightSideName,
       xHeader, y, HEADER_WIDTH, HEADER_HEIGHT, CConstants.mxStyles.matchingRowHeader
     );
     title.setConnectable(false);
@@ -439,7 +439,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const updatedRelationships: MatchingOperatorRelationship[] = [];
 
     for (const operatorCell of matchingOperatorCells) {
-
       if (isNullOrUndefined(operatorCell.edges)) {
         continue;
       }
@@ -490,21 +489,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   performOpen(matchingConfiguration: MatchingConfiguration) {
-    this.loadClassesAndRelationships(
-      matchingConfiguration.leftClassConfigurationId,
-      matchingConfiguration.rightClassConfigurationId
-    );
+    this.loadClassesAndRelationships(matchingConfiguration);
   }
 
   performNew(leftClassConfiguration: ClassConfiguration, rightClassConfiguration: ClassConfiguration, name: string) {
     const matchingConfiguration = new MatchingConfiguration();
-    matchingConfiguration.rightClassConfigurationId = rightClassConfiguration.id;
-    matchingConfiguration.leftClassConfigurationId = leftClassConfiguration.id;
+    matchingConfiguration.rightSideId = rightClassConfiguration.id;
+    matchingConfiguration.rightSideName = rightClassConfiguration.name;
+    matchingConfiguration.leftSideId = leftClassConfiguration.id;
+    matchingConfiguration.leftSideName = leftClassConfiguration.name;
     matchingConfiguration.name = name;
     matchingConfiguration.tenantId = this.tenant.id;
     this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration)
       .toPromise().then((ret: MatchingConfiguration) => {
-        this.loadClassesAndRelationships(leftClassConfiguration.id, rightClassConfiguration.id);
+        this.loadClassesAndRelationships(matchingConfiguration);
       });
   }
 
@@ -759,7 +757,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   /**
    * ...........Key Handler..............
    */
-
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Delete') {

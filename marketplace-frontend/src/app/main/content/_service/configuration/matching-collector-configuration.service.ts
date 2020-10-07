@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from '../../_model/marketplace';
 import { Injectable } from '@angular/core';
-import { MatchingEntityMappings } from '../../_model/matching';
+import { MatchingConfiguration } from '../../_model/meta/configurations';
 
 @Injectable({
     providedIn: 'root'
@@ -20,8 +20,8 @@ export class MatchingEntityDataService {
     //     return this.http.get(`${marketplace.url}/matching-collector-configuration/${classConfiguratorId}/aggregate-in-collections`);
     // }
 
-    getMatchingData(marketplace: Marketplace, leftClassConfiguratorId: string, rightClassConfiguratorId: string) {
-        return this.http.get(`${marketplace.url}/matching-entity-data/${leftClassConfiguratorId}/${rightClassConfiguratorId}`);
+    getMatchingData(marketplace: Marketplace, matchingConfiguration: MatchingConfiguration) {
+        return this.http.put(`${marketplace.url}/matching-entity-data/`, matchingConfiguration);
     }
 
     // getSavedMatchingCollectorConfiguration(marketplace: Marketplace, classConfiguratorId: string) {

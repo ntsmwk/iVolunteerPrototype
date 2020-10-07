@@ -1,23 +1,40 @@
-<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
+<link
+  type="text/css"
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans"
+/>
 
-<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll">
+<div
+  class="page-layout blank p-24"
+  fusePerfectScrollbar
+  style="overflow: scroll"
+>
   <div style="padding-top: 12px"></div>
 
-  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+  <div
+    class="header mat-accent-bg p-16 p-sm-24"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+  >
     <h1>Mein FreiwilligenPASS</h1>
-    <div style="position: relative; width: 120px; height: 120px; padding-top: 0px">
-      <img style="object-fit: contain; max-width: 100%; max-height: 100%" [src]="image" />
+    <div
+      style="position: relative; width: 120px; height: 120px; padding-top: 0px"
+    >
+      <img
+        style="object-fit: contain; max-width: 100%; max-height: 100%"
+        [src]="image"
+      />
     </div>
   </div>
 
   <div style="padding-top: 20px"></div>
 
   <mat-card class="infoText">
-
     <h2 style="font-weight: 500">
       Verwalte deinen digitalen Freiwilligenpass und Organisationen.
     </h2>
-    Synchronisiere Freiwilligenpass-Einträge in deinen digitalen Freiwilligenpass oder teile sie mit anderen Organisationen.
+    Synchronisiere Freiwilligenpass-Einträge in deinen digitalen
+    Freiwilligenpass oder teile sie mit anderen Organisationen.
   </mat-card>
 
   <div style="padding-top: 10px"></div>
@@ -25,28 +42,56 @@
   <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
     <div fxLayout="row" fxLayoutAlign="space-between start">
-      <div fxLayout="column" fxLayoutAlign="space-between start" class="optionHeader">
+      <div
+        fxLayout="column"
+        fxLayoutAlign="space-between start"
+        class="optionHeader"
+      >
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)" *ngIf="subscribedTenants.length > 0">
+          <organisation-filter
+            (tenantSelectionChanged)="tenantSelectionChanged($event)"
+            *ngIf="subscribedTenants.length > 0"
+          >
           </organisation-filter>
 
           <h2 *ngIf="subscribedTenants.length == 0">
             Du bist noch keiner Organisation beigetreten:
           </h2>
         </div>
-        <div fxLayout="column" fxLayoutAlign="start   center" *ngIf="
+        <div
+          fxLayout="column"
+          fxLayoutAlign="start   center"
+          *ngIf="
             filteredClassInstanceDTOs.length > 0 &&
             isLocalRepositoryConnected &&
             selectedTenants.length > 0
-          ">
+          "
+        >
           <div>FreiwilligenPass</div>
           <div fxLayout="row" fxLayoutAlign="end center">
-            <button mat-raised-button color="primary" (click)="syncAllToLocalRepository()">
+            <button
+              mat-raised-button
+              class="syncButton"
+              color="primary"
+              (click)="syncAllToLocalRepository()"
+            >
               Auswahl synchronisieren
+              <mat-icon *ngIf="isAllSyncing"
+                ><mat-spinner color="accent" diameter="20"> </mat-spinner
+              ></mat-icon>
             </button>
 
-            <button mat-raised-button color="primary" (click)="removeAllFromLocalRepository()" style="margin-left: 20px">
+            <button
+              mat-raised-button
+              class="syncButton"
+              color="primary"
+              (click)="removeAllFromLocalRepository()"
+              style="margin-left: 20px"
+            >
               Auswahl desynchronisieren
+              <mat-icon *ngIf="isAllDesyncing"
+                ><mat-spinner color="accent" diameter="20"> </mat-spinner
+              ></mat-icon>
             </button>
           </div>
         </div>
@@ -57,17 +102,30 @@
     </div>
   </mat-card>
 
-  <div *ngIf="
+  <div
+    *ngIf="
       filteredClassInstanceDTOs.length > 0 &&
       isLocalRepositoryConnected &&
       selectedTenants.length > 0
-    " class="mat-card p-20" fxLayout="column">
+    "
+    class="mat-card p-20"
+    fxLayout="column"
+  >
     <div fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
-      <mat-table #table matSort class="localRepoTable" [dataSource]="dataSource" style="width: 100%" (matSortChange)="sortData($event)">
+      <mat-table
+        #table
+        matSort
+        class="localRepoTable"
+        [dataSource]="dataSource"
+        style="width: 100%"
+        (matSortChange)="sortData($event)"
+      >
         <ng-container matColumnDef="issuer">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Aussteller</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Aussteller</mat-header-cell
+          >
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
               <img class="avatar" [src]="getTenantImage()" />
@@ -97,46 +155,94 @@
         </ng-container>
 
         <ng-container matColumnDef="date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Datum</mat-header-cell
+          >
           <mat-cell *matCellDef="let entry">
             {{ entry.dateFrom | date: "dd.MM.yyyy hh:mm" }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Aktionen</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Aktionen</mat-header-cell
+          >
           <mat-cell *matCellDef="let entry">
-            <mat-icon style="cursor: pointer" (click)="navigateToClassInstanceDetails(entry)" svgIcon="info" matTooltip="Details"></mat-icon>
+            <mat-icon
+              style="cursor: pointer"
+              (click)="navigateToClassInstanceDetails(entry)"
+              svgIcon="info"
+              matTooltip="Details"
+            ></mat-icon>
 
-            <mat-icon *ngIf="!isInLocalRepository(entry)" (click)="syncOneToLocalRepository(entry)" svgIcon="plus" style="cursor: pointer; margin-left: 20px" matTooltip="Zum lokalen Freiwilligenpass hinzufügen">
+            <mat-icon
+              *ngIf="!isInLocalRepository(entry)"
+              (click)="syncOneToLocalRepository(entry)"
+              svgIcon="plus"
+              style="cursor: pointer; margin-left: 20px"
+              matTooltip="Zum lokalen Freiwilligenpass hinzufügen"
+            >
             </mat-icon>
 
-            <mat-icon *ngIf="isInLocalRepository(entry)" (click)="removeOneFromLocalRepository(entry)" svgIcon="minus" style="cursor: pointer; margin-left: 20px" matTooltip="Vom lokalen Freiwilligenpass entfernen">
+            <mat-icon
+              *ngIf="isInLocalRepository(entry)"
+              (click)="removeOneFromLocalRepository(entry)"
+              svgIcon="minus"
+              style="cursor: pointer; margin-left: 20px"
+              matTooltip="Vom lokalen Freiwilligenpass entfernen"
+            >
             </mat-icon>
 
-            <mat-icon *ngIf="isSynced(entry)" (click)="removeOneFromMarketplace(entry)" svgIcon="storeSlash" style="cursor: pointer; margin-left: 20px" matTooltip="Vom Marketplace entfernen">
+            <mat-icon
+              *ngIf="isSynced(entry)"
+              (click)="removeOneFromMarketplace(entry)"
+              svgIcon="storeSlash"
+              style="cursor: pointer; margin-left: 20px"
+              matTooltip="Vom Marketplace entfernen"
+            >
             </mat-icon>
 
             <div *ngIf="isInLocalRepository(entry)">
-              <mat-icon svgIcon="share" style="cursor: pointer; margin-left: 20px" matTooltip="Teilen mit..." [matMenuTriggerFor]="shareMenu">
+              <mat-icon
+                svgIcon="share"
+                style="cursor: pointer; margin-left: 20px"
+                matTooltip="Teilen mit..."
+                [matMenuTriggerFor]="shareMenu"
+              >
               </mat-icon>
-              <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+              <mat-menu
+                #shareMenu="matMenu"
+                xPosition="after"
+                yPosition="below"
+                [overlapTrigger]="false"
+              >
                 <ng-template matMenuContent>
                   <ng-container *ngIf="isSynced(entry)">
-                    <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstanceToOthers(entry, tenant)">
+                    <button
+                      *ngFor="let tenant of getShareableTenants(entry)"
+                      mat-menu-item
+                      (click)="shareClassInstanceToOthers(entry, tenant)"
+                    >
                       <div fxLayout="row" fxLayoutAlign="start center">
                         <img class="avatar" [src]="getTenantImage(tenant)" />
                         <div>{{ tenant.name }}</div>
                       </div>
                     </button>
                   </ng-container>
-                  <button *ngIf="
+                  <button
+                    *ngIf="
                       getShareableTenants(entry) &&
                       getShareableTenants(entry).length === 0
-                    " mat-menu-item>
+                    "
+                    mat-menu-item
+                  >
                     Bereits an alle geteilt!
                   </button>
-                  <button *ngIf="!isSynced(entry)" mat-menu-item (click)="shareClassInstanceToIssuer(entry)">
+                  <button
+                    *ngIf="!isSynced(entry)"
+                    mat-menu-item
+                    (click)="shareClassInstanceToIssuer(entry)"
+                  >
                     <div fxLayout="row" fxLayoutAlign="start center">
                       <img
                         class="avatar"
@@ -156,9 +262,17 @@
           <mat-cell *matCellDef="let entry">
             <!-- TODO MWE comment -->
             <!-- <img *ngFor="let tenant of getSharedWithTenants(entry)" class="avatar" matTooltip="{{ tenant.name }}" [src]="getTenantImage(tenant) | async" style="cursor: pointer" [matMenuTriggerFor]="revokeMenu" [matMenuTriggerData]="{ tenant: tenant }" /> -->
-            <mat-menu #revokeMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+            <mat-menu
+              #revokeMenu="matMenu"
+              xPosition="after"
+              yPosition="below"
+              [overlapTrigger]="false"
+            >
               <ng-template matMenuContent let-tenant="tenant">
-                <button mat-menu-item (click)="revokeSharedClassInstance(entry, tenant)">
+                <button
+                  mat-menu-item
+                  (click)="revokeSharedClassInstance(entry, tenant)"
+                >
                   Zurückziehen
                 </button>
               </ng-template>
@@ -166,8 +280,13 @@
           </mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
-        <mat-row *matRowDef="let element; let row; columns: displayedColumnsRepository" [ngStyle]="getTableRowColor(element)"></mat-row>
+        <mat-header-row
+          *matHeaderRowDef="displayedColumnsRepository"
+        ></mat-header-row>
+        <mat-row
+          *matRowDef="let element; let row; columns: displayedColumnsRepository"
+          [ngStyle]="getTableRowColor(element)"
+        ></mat-row>
       </mat-table>
     </div>
   </div>
@@ -176,30 +295,45 @@
     <mat-spinner></mat-spinner>
   </div>
 
-  <mat-paginator *ngIf="isLocalRepositoryConnected" [pageSize]="12" id="paginator" showFirstLastButtons>
+  <mat-paginator
+    *ngIf="isLocalRepositoryConnected"
+    [pageSize]="12"
+    id="paginator"
+    showFirstLastButtons
+  >
   </mat-paginator>
 
   <div style="padding-top: 20px"></div>
 
   <p *ngIf="isLoaded && !isLocalRepositoryConnected" class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Kein Speicherort für dein Lokalen Freiwilligenpass ausgewählt, oder keine Verbindung möglich!
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Kein Speicherort für deinen
+    Lokalen Freiwilligenpass ausgewählt, oder keine Verbindung möglich, siehe
+    <a [routerLink]="['/main/profile']"> Profile</a>!
   </p>
 
-  <p *ngIf="
+  <p
+    *ngIf="
       isLoaded &&
       selectedTenants.length === 0 &&
       isLocalRepositoryConnected &&
       subscribedTenants.length != 0
-    " class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
+    "
+    class="alert alert-info"
+  >
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation
+    ausgewählt!
   </p>
 
-  <p *ngIf="
+  <p
+    *ngIf="
       isLoaded &&
       filteredClassInstanceDTOs.length === 0 &&
       selectedTenants.length > 0 &&
       isLocalRepositoryConnected
-    " class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine Daten in deinem lokalen Freiwilligenpass!
+    "
+    class="alert alert-info"
+  >
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine
+    Daten in deinem lokalen Freiwilligenpass!
   </p>
 </div>

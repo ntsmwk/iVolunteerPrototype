@@ -17,13 +17,18 @@ import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.M
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
+import at.jku.cis.iVolunteer.marketplace.user.UserController;
+import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
+import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelationship;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingEntityMappingConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingDataRequestDTO;
 import at.jku.cis.iVolunteer.model.matching.MatchingEntityMappings;
+import at.jku.cis.iVolunteer.model.matching.MatchingMappingEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.user.User;
 
 @RestController
 public class MatchingEntityMappingConfigurationController {
@@ -33,64 +38,51 @@ public class MatchingEntityMappingConfigurationController {
 	@Autowired MatchingConfigurationRepository matchingConfigurationRepository;
 	@Autowired MatchingOperatorRelationshipRepository matchingOperatorRelationshipRepository;
 	@Autowired ClassConfigurationRepository classConfigurationRepository;
-
-//	@GetMapping("matching-collector-configuration/{slotId}/aggregate-in-single")
-//	private List<ClassDefinition> aggregateInSingleMatchingCollectorConfiguration(
-//			@PathVariable("slotId") String slotId) {
-//		return collectionService.collectAllClassDefinitionsWithPropertiesAsList(slotId);
-//	}
-//
-//	@GetMapping("matching-collector-configuration/{slotId}/aggregate-in-collections")
-//	private List<MatchingEntityMappings> aggregateInMultipleCollectorsConfiguration(@PathVariable("slotId") String slotId) {
-//		return collectionService.collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(slotId);
-//	}
+	@Autowired UserController userController;
 	
-	@GetMapping("matching-entity-data/{id1}/{id2}")
-	private MatchingDataRequestDTO getMatchingEntityData(@PathVariable("id1") String idLeft, @PathVariable("id2") String idRight) {
+// TODO alex change to support user 
+	@PutMapping("matching-entity-data")
+	private MatchingDataRequestDTO getMatchingEntityData(@RequestBody MatchingConfiguration mc) {
 		
-		MatchingEntityMappingConfiguration leftMappings = matchingEntityMappingConfigurationRepository.findOne(idLeft);
-		MatchingEntityMappingConfiguration rightMappings = matchingEntityMappingConfigurationRepository.findOne(idRight);
-
-		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(idLeft, idRight);
+		MatchingEntityMappingConfiguration leftMapping = null;
+		MatchingEntityMappingConfiguration rightMapping = null;
 		
+		if (!mc.isLeftIsUser()) {
+			leftMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getLeftSideId());
+		} else {
+			User user = userController.findUserById(mc.getLeftSideId());
+			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
+			matchingCollectorConfiguration.setId(user.getId());
+			matchingCollectorConfiguration.setClassConfigurationId(user.getId());
+			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(user);
+			matchingCollectorConfiguration.setMappings(mappings);
+			leftMapping = matchingCollectorConfiguration;
+		}
 		
-	
+		if (!mc.isRightIsUser()) {
+			rightMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getRightSideId());
+		} else {
+			User user = userController.findUserById(mc.getLeftSideId());
+			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
+			matchingCollectorConfiguration.setId(user.getId());
+			matchingCollectorConfiguration.setClassConfigurationId(user.getId());
+			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(user);
+			matchingCollectorConfiguration.setMappings(mappings);
+			rightMapping = matchingCollectorConfiguration;
+		}
+//		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(mc.getLeftClassConfigurationId(), mc.getRightClassConfigurationId());
+		
 		List<MatchingOperatorRelationship> matchingOperatorRelationships = new ArrayList<MatchingOperatorRelationship>();
-		matchingOperatorRelationshipRepository.findByMatchingConfigurationId(matchingConfiguration.getId()).forEach(matchingOperatorRelationships::add);
+		matchingOperatorRelationshipRepository.findByMatchingConfigurationId(mc.getId()).forEach(matchingOperatorRelationships::add);
 		
 		MatchingDataRequestDTO dto = new MatchingDataRequestDTO();
-		dto.setLeftMappingConfigurations(leftMappings);
-		dto.setRightMappingConfigurations(rightMappings);
-		dto.setMatchingConfiguration(matchingConfiguration);
+		dto.setLeftMappingConfigurations(leftMapping);
+		dto.setRightMappingConfigurations(rightMapping);
+		dto.setMatchingConfiguration(mc);
 		dto.setRelationships(matchingOperatorRelationships);
 		dto.setPathDelimiter(CollectionService.PATH_DELIMITER);
 		
-		
 		return dto;
 	}
-	
-//	@GetMapping("matching-collector-configuration/{id}/saved-configuration")
-//	private MatchingEntityMappingConfiguration getSavedMatchingCollectorConfiguration(@PathVariable("id") String id) {
-//		return matchingEntityMappingConfigurationRepository.findOne(id);
-//	}
-//
-//	@PostMapping("matching-collector-configuration/new")
-//	private MatchingEntityMappingConfiguration createMatchingCollectorConfiguration(@RequestBody MatchingEntityMappingConfiguration configuration) {
-//		return updateMatchingCollectorConfiguration(configuration);
-//	}
-//
-//	@PutMapping("matching-collector-configuration/update")
-//	private MatchingEntityMappingConfiguration updateMatchingCollectorConfiguration(@RequestBody MatchingEntityMappingConfiguration configuration) {
-//		return matchingEntityMappingConfigurationRepository.save(configuration);
-//	}
-//	
-//	@DeleteMapping("matching-collector-configuration/{id}/delete")
-//	private void deleteMatchingCollectorConfiguration(@PathVariable("id") String id) {
-//		matchingEntityMappingConfigurationRepository.delete(id);
-//	}
-	
-	
-	
-	
 	
 }

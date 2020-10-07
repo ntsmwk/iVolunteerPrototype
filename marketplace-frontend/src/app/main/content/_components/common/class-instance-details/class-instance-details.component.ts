@@ -78,10 +78,6 @@ export class ClassInstanceDetailsComponent implements OnInit {
     this.marketplace = globalInfo.marketplace;
     this.tenant = globalInfo.tenants[0];
 
-    this.localRepositoryService = this.loginService.getLocalRepositoryService(
-      this.volunteer
-    );
-
     this.classInstance = <ClassInstance>(
       await this.classInstanceService
         .getClassInstanceById(this.marketplace, this.id)
@@ -89,7 +85,12 @@ export class ClassInstanceDetailsComponent implements OnInit {
     );
 
     if (this.classInstance === null) {
+      // ci does not exist on mp, go for local storage
       if (this.role === UserRole.VOLUNTEER) {
+        this.localRepositoryService = this.loginService.getLocalRepositoryService(
+          this.user
+        );
+
         this.classInstance = <ClassInstance>(
           await this.localRepositoryService
             .getSingleClassInstance(this.user, this.id)
@@ -113,7 +114,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
   }
 
   getClassInstanceName() {
-    return this.classInstance.properties.find((p) => p.name === "name")
+    return this.classInstance.properties.find((p) => p.name === "Name")
       .values[0];
   }
 
