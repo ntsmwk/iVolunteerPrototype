@@ -5,44 +5,50 @@
     </mat-card-title>
     <mat-card-content>
       <!-- local repo location radio buttons -->
-      <mat-radio-group
-        class="radioButtons"
-        (change)="localRepositoryLocationChange($event.value)"
-      >
-        <div
-          matTooltip="Nicht verknüpft"
-          [matTooltipDisabled]="isJsonServerConnected"
+      <form [formGroup]="radioButtonForm">
+        <mat-radio-group
+          class="radioButtons"
+          (change)="localRepositoryLocationChange($event.value)"
+          formControlName="radioButtonValue"
         >
-          <mat-radio-button
-            value="LOCAL"
-            [disabled]="!isJsonServerConnected"
-            [checked]="getChecked('LOCAL')"
-            >Lokal (json-server)</mat-radio-button
+          <div
+            matTooltip="Nicht verknüpft"
+            [matTooltipDisabled]="isJsonServerConnected"
           >
-        </div>
-        <div
-          matTooltip="Nicht verknüpft"
-          [matTooltipDisabled]="isDropboxConnected"
-        >
-          <mat-radio-button
-            value="DROPBOX"
-            [disabled]="!isDropboxConnected"
-            [checked]="getChecked('DROPBOX')"
-            >Dropbox</mat-radio-button
+            <mat-radio-button
+              #local
+              value="LOCAL"
+              [disabled]="!isJsonServerConnected"
+              [checked]="getChecked('LOCAL')"
+              >Lokal (json-server)</mat-radio-button
+            >
+          </div>
+          <div
+            matTooltip="Nicht verknüpft"
+            [matTooltipDisabled]="isDropboxConnected"
           >
-        </div>
-        <div
-          matTooltip="Nicht verknüpft"
-          [matTooltipDisabled]="isNextcloudConnected"
-        >
-          <mat-radio-button
-            value="NEXTCLOUD"
-            [disabled]="!isNextcloudConnected"
-            [checked]="getChecked('NEXTCLOUD')"
-            >Nextcloud</mat-radio-button
+            <mat-radio-button
+              #dropbox
+              value="DROPBOX"
+              [disabled]="!isDropboxConnected"
+              [checked]="getChecked('DROPBOX')"
+              >Dropbox</mat-radio-button
+            >
+          </div>
+          <div
+            matTooltip="Nicht verknüpft"
+            [matTooltipDisabled]="isNextcloudConnected"
           >
-        </div>
-      </mat-radio-group>
+            <mat-radio-button
+              #nextcloud
+              value="NEXTCLOUD"
+              [disabled]="!isNextcloudConnected"
+              [checked]="getChecked('NEXTCLOUD')"
+              >Nextcloud</mat-radio-button
+            >
+          </div>
+        </mat-radio-group>
+      </form>
 
       <div style="height: 30px"></div>
 
@@ -100,6 +106,9 @@
               [disabled]="nextcloudLoginForm.invalid"
             >
               Nextcloud Konto verknüpfen
+              <mat-icon *ngIf="isNextcloudLoginInProgress"
+                ><mat-spinner color="accent" diameter="20"> </mat-spinner
+              ></mat-icon>
             </button>
           </form>
           <div
