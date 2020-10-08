@@ -54,9 +54,14 @@ export class ProfileFormComponent implements OnInit {
 
     this.profileForm = this.formBuilder.group({
       formOfAddress: new FormControl('', Validators.required),
+      titleBefore: new FormControl(''),
       firstname: new FormControl('', Validators.required),
       lastname: new FormControl('', Validators.required),
+      titleAfter: new FormControl(''),
+      nickname: new FormControl(''),
+
       birthday: new FormControl('', Validators.required),
+
       address: this.formBuilder.group({
         street: new FormControl(''),
         houseNumber: new FormControl(''),
@@ -64,6 +69,18 @@ export class ProfileFormComponent implements OnInit {
         city: new FormControl(''),
         country: new FormControl(''),
       }),
+      about: new FormControl(),
+      phoneNumber1: new FormControl(),
+      phoneNumber2: new FormControl(),
+      phoneNumber3: new FormControl(),
+      website1: new FormControl(),
+      website2: new FormControl(),
+      website3: new FormControl(),
+
+      loginEmail: new FormControl(),
+      email2: new FormControl(),
+      email3: new FormControl(),
+
       timeslots: this.formBuilder.array([]),
     });
 
@@ -107,11 +124,24 @@ export class ProfileFormComponent implements OnInit {
 
     this.profileForm.setValue({
       formOfAddress: this.user.formOfAddress,
+      titleBefore: this.user.titleBefore,
       firstname: this.user.firstname,
       lastname: this.user.lastname,
+      titleAfter: this.user.titleAfter,
+      nickname: this.user.nickname,
       birthday: new Date(this.user.birthday),
       address: !isNullOrUndefined(this.user.address) ? this.user.address : this.profileForm.value.address,
       timeslots: timeslotsConvert,
+      about: this.user.about,
+      phoneNumber1: this.user.phoneNumbers[0],
+      phoneNumber2: this.user.phoneNumbers[1],
+      phoneNumber3: this.user.phoneNumbers[2],
+      website1: this.user.websites[0],
+      website2: this.user.websites[1],
+      website3: this.user.websites[2],
+      loginEmail: this.user.emails[0],
+      email2: this.user.emails[1],
+      email3: this.user.emails[2],
 
     });
 
@@ -127,10 +157,25 @@ export class ProfileFormComponent implements OnInit {
 
   async save() {
     this.user.formOfAddress = this.profileForm.value.formOfAddress;
+    this.user.titleBefore = this.profileForm.value.titleBefore;
     this.user.firstname = this.profileForm.value.firstname;
     this.user.lastname = this.profileForm.value.lastname;
+    this.user.titleAfter = this.profileForm.value.titleAfter;
+    this.user.nickname = this.profileForm.value.nickname;
     this.user.birthday = this.profileForm.value.birthday;
     this.user.address = this.profileForm.value.address;
+
+    this.user.about = this.profileForm.value.about;
+    this.user.phoneNumbers[0] = this.profileForm.value.phoneNumber1;
+    this.user.phoneNumbers[1] = this.profileForm.value.phoneNumber2;
+    this.user.phoneNumbers[2] = this.profileForm.value.phoneNumber3;
+    this.user.websites[0] = this.profileForm.value.website1;
+    this.user.websites[1] = this.profileForm.value.website2;
+    this.user.websites[2] = this.profileForm.value.website3;
+    this.user.emails[0] = this.profileForm.value.loginEmail;
+    this.user.loginEmail = this.profileForm.value.loginEmail;
+    this.user.emails[1] = this.profileForm.value.email2;
+    this.user.emails[2] = this.profileForm.value.email3;
 
     this.profileForm.get('timeslots').enable();
     const formTimeslots = this.profileForm.value.timeslots as FormTimeSlot[];
