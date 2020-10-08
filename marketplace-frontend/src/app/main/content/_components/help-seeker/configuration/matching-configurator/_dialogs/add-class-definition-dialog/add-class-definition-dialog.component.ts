@@ -51,23 +51,18 @@ export class AddClassDefinitionDialogComponent implements OnInit {
   async ngOnInit() {
     this.tabIndex = 0;
 
-    this.data.matchingEntityConfiguration.id
     this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
 
     this.tenant = this.globalInfo.tenants[0];
-
     this.dataSource.data = this.data.matchingEntityConfiguration.mappings.entities;
-
     this.selection = new SelectionModel<MatchingEntity>(true, []);
-
     const entities = this.dataSource.data.filter(e => this.data.existingEntityPaths.find(path => path === e.path));
 
     if (!isNullOrUndefined(entities)) {
       this.selection.select(...entities);
     }
-    console.log(this.data);
     this.loaded = true;
   }
 
