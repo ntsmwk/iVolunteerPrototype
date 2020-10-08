@@ -50,27 +50,27 @@ public class MatchingEntityMappingConfigurationController {
 		if (!mc.isLeftIsUser()) {
 			leftMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getLeftSideId());
 		} else {
-			User user = userController.findUserById(mc.getLeftSideId());
 			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
-			matchingCollectorConfiguration.setId(user.getId());
-			matchingCollectorConfiguration.setClassConfigurationId(user.getId());
-			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(user);
+			matchingCollectorConfiguration.setId(mc.getLeftSideId());
+			matchingCollectorConfiguration.setClassConfigurationId(mc.getLeftSideId());
+			
+			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings();
 			matchingCollectorConfiguration.setMappings(mappings);
+			
 			leftMapping = matchingCollectorConfiguration;
+
 		}
 		
 		if (!mc.isRightIsUser()) {
 			rightMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getRightSideId());
 		} else {
-			User user = userController.findUserById(mc.getLeftSideId());
 			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
-			matchingCollectorConfiguration.setId(user.getId());
-			matchingCollectorConfiguration.setClassConfigurationId(user.getId());
-			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(user);
+			matchingCollectorConfiguration.setId(mc.getRightSideId());
+			matchingCollectorConfiguration.setClassConfigurationId(mc.getRightSideId());
+			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings();
 			matchingCollectorConfiguration.setMappings(mappings);
 			rightMapping = matchingCollectorConfiguration;
 		}
-//		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(mc.getLeftClassConfigurationId(), mc.getRightClassConfigurationId());
 		
 		List<MatchingOperatorRelationship> matchingOperatorRelationships = new ArrayList<MatchingOperatorRelationship>();
 		matchingOperatorRelationshipRepository.findByMatchingConfigurationId(mc.getId()).forEach(matchingOperatorRelationships::add);
