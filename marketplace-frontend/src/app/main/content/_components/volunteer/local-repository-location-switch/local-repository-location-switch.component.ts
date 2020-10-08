@@ -103,24 +103,22 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
   }
 
   localRepositoryLocationChange(newLocation: LocalRepositoryLocation) {
-    this.dialogFactory
-      .confirmationDialog(
-        "Änderung bestätigen",
-        "Soll der Speicherort wirklich gewechselt werden?"
-      )
-      .then(async (ret: boolean) => {
-        if (ret) {
-          if (this.user.localRepositoryLocation != newLocation) {
-            let sourceService = this.getService(
-              this.user.localRepositoryLocation
-            );
-            let destService = this.getService(newLocation);
+    if (this.user.localRepositoryLocation != newLocation) {
+      let sourceService = this.getService(this.user.localRepositoryLocation);
+      let destService = this.getService(newLocation);
 
-            if (sourceService == null) {
-              // no location set yet
-              this.user.localRepositoryLocation = newLocation;
-              this.updateUserAndGlobalInfo();
-            } else {
+      if (sourceService == null) {
+        // no location set yet
+        this.user.localRepositoryLocation = newLocation;
+        this.updateUserAndGlobalInfo();
+      } else {
+        this.dialogFactory
+          .confirmationDialog(
+            "Änderung bestätigen",
+            "Soll der Speicherort wirklich gewechselt werden?"
+          )
+          .then(async (ret: boolean) => {
+            if (ret) {
               if (sourceService && destService) {
                 try {
                   let classInstances = <ClassInstance[]>(
@@ -147,14 +145,14 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
                   radioButtonValue: this.user.localRepositoryLocation,
                 });
               }
+            } else {
+              this.radioButtonForm.patchValue({
+                radioButtonValue: this.user.localRepositoryLocation,
+              });
             }
-          }
-        } else {
-          this.radioButtonForm.patchValue({
-            radioButtonValue: this.user.localRepositoryLocation,
           });
-        }
-      });
+      }
+    }
   }
 
   private getService(localRepositoryLocation: LocalRepositoryLocation) {
@@ -162,15 +160,15 @@ export class LocalRepositoryLocationSwitchComponent implements OnInit {
       case LocalRepositoryLocation.LOCAL:
         return this.isJsonServerConnected
           ? this.localRepoJsonServerService
-          : false;
+          : null;
 
       case LocalRepositoryLocation.DROPBOX:
-        return this.isDropboxConnected ? this.localRepoDropboxService : false;
+        return this.isDropboxConnected ? this.localRepoDropboxService : null;
 
       case LocalRepositoryLocation.NEXTCLOUD:
         return this.isNextcloudConnected
           ? this.localRepoNextcloudService
-          : false;
+          : null;
     }
   }
 

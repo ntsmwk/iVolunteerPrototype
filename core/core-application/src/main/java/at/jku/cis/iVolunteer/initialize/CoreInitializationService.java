@@ -13,7 +13,7 @@ import at.jku.cis.iVolunteer.core.security.activation.CorePendingActivationRepos
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.tenant.tags.TagRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
-import at.jku.cis.iVolunteer.model.UserSubscription;
+import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tag;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
@@ -81,7 +81,7 @@ public class CoreInitializationService {
 		CoreUser recruiter = coreUserRepository.findByUsername(RECRUITER);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		recruiter.setSubscribedTenants(Collections
-				.singletonList(new UserSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
+				.singletonList(new TenantSubscription(marketplace.getId(), "!notenantId?", UserRole.RECRUITER)));
 		coreUserRepository.save(recruiter);
 	}
 
@@ -116,7 +116,7 @@ public class CoreInitializationService {
 		CoreUser admin = coreUserRepository.findByUsername(ADMIN);
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		admin.setSubscribedTenants(
-				Collections.singletonList(new UserSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
+				Collections.singletonList(new TenantSubscription(marketplace.getId(), "!notenantId?", UserRole.ADMIN)));
 		coreUserRepository.save(admin);
 	}
 
@@ -139,7 +139,8 @@ public class CoreInitializationService {
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
 			// TODO: needs proper registration
-			fpUser.setSubscribedTenants(Collections.singletonList(new UserSubscription(null, null, UserRole.FLEXPROD)));
+			fpUser.setSubscribedTenants(
+					Collections.singletonList(new TenantSubscription(null, null, UserRole.FLEXPROD)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 

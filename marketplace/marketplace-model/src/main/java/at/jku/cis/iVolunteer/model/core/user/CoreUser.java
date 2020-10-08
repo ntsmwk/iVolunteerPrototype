@@ -17,6 +17,100 @@ public class CoreUser extends User {
 	private boolean activated;
 	private AccountType accountType;
 
+	public static CoreUser updateCoreUser(CoreUser original, CoreUser update) {
+		if (update.getId() != null)
+			original.setId(update.getId());
+
+		if (update.getUsername() != null)
+			original.setUsername(update.getUsername());
+
+		if (update.getPassword() != null)
+			original.setPassword(update.getPassword());
+
+		if (update.getLoginEmail() != null)
+			original.setLoginEmail(update.getLoginEmail());
+
+		if (update.getFormOfAddress() != null)
+			original.setFormOfAddress(update.getFormOfAddress());
+
+		if (update.getTitleBefore() != null)
+			original.setTitleBefore(update.getTitleBefore());
+
+		if (update.getFirstname() != null)
+			original.setFirstname(update.getFirstname());
+
+		if (update.getLastname() != null)
+			original.setLastname(update.getLastname());
+
+		if (update.getTitleAfter() != null)
+			original.setTitleAfter(update.getTitleAfter());
+
+		if (update.getNickname() != null)
+			original.setNickname(update.getNickname());
+
+		if (update.getOrganizationPosition() != null)
+			original.setOrganizationPosition(update.getOrganizationPosition());
+
+		if (update.getOrganizationName() != null)
+			original.setOrganizationName(update.getOrganizationName());
+
+		if (update.getBirthday() != null)
+			original.setBirthday(update.getBirthday());
+
+		if (update.getLocations() != null)
+			original.setLocations(update.getLocations());
+
+		if (update.getAbout() != null)
+			original.setAbout(update.getAbout());
+
+		if (update.getAddress() != null)
+			original.setAddress(update.getAddress());
+
+		if (update.getTimeslots() != null)
+			original.setTimeslots(update.getTimeslots());
+
+		if (update.getPhoneNumbers() != null)
+			original.setPhoneNumbers(update.getPhoneNumbers());
+
+		if (update.getWebsites() != null)
+			original.setWebsites(update.getWebsites());
+
+		if (update.getEmails() != null)
+			original.setEmails(update.getEmails());
+
+		if (update.getImageId() != null)
+			original.setImageId(update.getImageId());
+
+		if (update.getSubscribedTenants() != null)
+			original.setSubscribedTenants(update.getSubscribedTenants());
+
+		if (update.getLocalRepositoryLocation() != null)
+			original.setLocalRepositoryLocation(update.getLocalRepositoryLocation());
+
+		if (update.getDropboxToken() != null)
+			original.setDropboxToken(update.getDropboxToken());
+
+		if (update.getNextcloudCredentials() != null)
+			original.setNextcloudCredentials(update.getNextcloudCredentials());
+
+		if (update.getFollower() != null)
+			original.setFollower(update.getFollower());
+
+		if (update.getRegisteredMarketplaceIds() != null)
+			original.setRegisteredMarketplaceIds(update.getRegisteredMarketplaceIds());
+
+		// TODO Philipp: PROBLEM
+		// once set to true, it can't be set to false any more...
+		if (update.isActivated())
+			original.setActivated(update.isActivated());
+
+		if (update.getAccountType() != null)
+			original.setAccountType(update.getAccountType());
+
+		return original;
+
+	}
+
 	public List<String> getRegisteredMarketplaceIds() {
 		return registeredMarketplaceIds;
 	}
@@ -48,7 +142,5 @@ public class CoreUser extends User {
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
 	}
-	
-	
-	
+
 }

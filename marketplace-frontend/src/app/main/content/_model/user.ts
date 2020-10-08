@@ -1,6 +1,6 @@
-import { ImageWrapper } from './image';
-import { NextcloudCredentials } from './nextcloud-credentials';
-import { FormTimeSlot } from '../_components/common/profile/profile-form/profile-form.component';
+import { ImageWrapper } from "./image";
+import { NextcloudCredentials } from "./nextcloud-credentials";
+import { FormTimeSlot } from "../_components/common/profile/profile-form/profile-form.component";
 
 export class User {
   id: string;
@@ -31,7 +31,7 @@ export class User {
   imageId: string;
 
   registeredMarketplaceIds: string[];
-  subscribedTenants: TenantUserSubscription[];
+  subscribedTenants: TenantSubscription[];
 
   // image: ImageWrapper;
 
@@ -48,7 +48,7 @@ export class Address {
   houseNumber: string;
   postcode: string;
   city: string;
-  country: string;
+  countryCode: number;
 }
 
 export class Timeslot {
@@ -71,10 +71,10 @@ export class Timeslot {
     this.active = formTimeslot.active;
     this.secondActive = formTimeslot.secondActive;
 
-    const from1 = formTimeslot.from1.split(':');
-    const from2 = formTimeslot.from2.split(':');
-    const to1 = formTimeslot.to1.split(':');
-    const to2 = formTimeslot.to2.split(':');
+    const from1 = formTimeslot.from1.split(":");
+    const from2 = formTimeslot.from2.split(":");
+    const to1 = formTimeslot.to1.split(":");
+    const to2 = formTimeslot.to2.split(":");
 
     this.fromHours1 = Number(from1[0]);
     this.fromHours2 = Number(from2[0]);
@@ -85,24 +85,28 @@ export class Timeslot {
     this.toHours2 = Number(to2[0]);
     this.toMins1 = Number(to1[1]);
     this.toMins2 = Number(to2[1]);
-
   }
 }
 
 export enum Weekday {
-  MONDAY = 'MONDAY', TUESDAY = 'TUESDAY', WEDNESDAY = 'WEDNESDAY', THURSDAY = 'THURSDAY', FRIDAY = 'FRIDAY',
-  SATURDAY = 'SATURDAY', SUNDAY = 'SUNDAY'
+  MONDAY = "MONDAY",
+  TUESDAY = "TUESDAY",
+  WEDNESDAY = "WEDNESDAY",
+  THURSDAY = "THURSDAY",
+  FRIDAY = "FRIDAY",
+  SATURDAY = "SATURDAY",
+  SUNDAY = "SUNDAY",
 }
 
 export namespace Weekday {
   const translationLabels = {
-    'MONDAY': 'Montag',
-    'TUESDAY': 'Dienstag',
-    'WEDNESDAY': 'Mittwoch',
-    'THURSDAY': 'Donnerstag',
-    'FRIDAY': 'Freitag',
-    'SATURDAY': 'Samstag',
-    'SUNDAY': 'Sonntag',
+    MONDAY: "Montag",
+    TUESDAY: "Dienstag",
+    WEDNESDAY: "Mittwoch",
+    THURSDAY: "Donnerstag",
+    FRIDAY: "Freitag",
+    SATURDAY: "Samstag",
+    SUNDAY: "Sonntag",
   };
 
   export function getWeekdayLabel(weekday: Weekday) {
@@ -111,22 +115,22 @@ export namespace Weekday {
 }
 
 export enum UserRole {
-  VOLUNTEER = 'VOLUNTEER',
-  HELP_SEEKER = 'HELP_SEEKER',
-  TENANT_ADMIN = 'TENANT_ADMIN',
-  ADMIN = 'ADMIN',
-  RECRUITER = 'RECRUITER',
-  FLEXPROD = 'FLEXPROD',
-  NONE = 'NONE'
+  VOLUNTEER = "VOLUNTEER",
+  HELP_SEEKER = "HELP_SEEKER",
+  TENANT_ADMIN = "TENANT_ADMIN",
+  ADMIN = "ADMIN",
+  RECRUITER = "RECRUITER",
+  FLEXPROD = "FLEXPROD",
+  NONE = "NONE",
 }
 
 export enum LocalRepositoryLocation {
-  LOCAL = 'LOCAL',
-  DROPBOX = 'DROPBOX',
-  NEXTCLOUD = 'NEXTCLOUD'
+  LOCAL = "LOCAL",
+  DROPBOX = "DROPBOX",
+  NEXTCLOUD = "NEXTCLOUD",
 }
 
-export class TenantUserSubscription {
+export class TenantSubscription {
   marketplaceId: string;
   tenantId: string;
   role: UserRole;
@@ -138,6 +142,6 @@ export class RoleTenantMapping {
 }
 
 export enum AccountType {
-  PERSON = 'PERSON',
-  ORGANIZATION = 'ORGANIZATION',
+  PERSON = "PERSON",
+  ORGANIZATION = "ORGANIZATION",
 }
