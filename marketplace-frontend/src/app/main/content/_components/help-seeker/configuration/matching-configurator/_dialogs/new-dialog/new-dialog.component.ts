@@ -76,8 +76,6 @@ export class NewMatchingDialogComponent implements OnInit {
           this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 4);
         }
 
-        console.log(this.data);
-
         this.loaded = true;
       });
   }
@@ -85,13 +83,11 @@ export class NewMatchingDialogComponent implements OnInit {
   leftItemSelected(c: ClassConfiguration) {
     this.data.leftIsUser = false;
     this.data.leftClassConfiguration = c;
-    console.log(this.data);
   }
 
   rightItemSelected(c: ClassConfiguration) {
     this.data.rightIsUser = false;
     this.data.rightClassConfiguration = c;
-    console.log(this.data);
   }
 
   onNoClick(): void {
@@ -102,12 +98,16 @@ export class NewMatchingDialogComponent implements OnInit {
     this.showDuplicateError = false;
     this.data.label = this.dialogForm.controls['label'].value;
     if (
-      !isNullOrUndefined(this.data.leftClassConfiguration) &&
-      !isNullOrUndefined(this.data.rightClassConfiguration) &&
+      (!isNullOrUndefined(this.data.leftClassConfiguration) || this.data.leftIsUser) &&
+      (!isNullOrUndefined(this.data.rightClassConfiguration) || this.data.rightIsUser) &&
       !isNullOrUndefined(this.data.label)
     ) {
+
+      const leftId = this.data.leftClassConfiguration.id;
+      const rightId = this.data.rightClassConfiguration.id;
+
       this.matchingConfigurationService.getMatchingConfigurationByUnorderedClassConfigurationIds(
-        this.globalInfo.marketplace, this.data.leftClassConfiguration.id, this.data.rightClassConfiguration.id)
+        this.globalInfo.marketplace, leftId, rightId)
         .toPromise().then((ret: MatchingConfiguration) => {
           if (isNullOrUndefined(ret)) {
             this.dialogRef.close(this.data);
@@ -145,15 +145,20 @@ export class NewMatchingDialogComponent implements OnInit {
   }
 
   handleUseUserClick(sourceReference: 'LEFT' | 'RIGHT') {
+    const classConfiguration = new ClassConfiguration();
+    classConfiguration.id = 'user';
+    classConfiguration.name = 'Benutzer';
+
+
     if (sourceReference === 'LEFT') {
-      this.data.leftClassConfiguration = undefined;
+      this.data.leftClassConfiguration = classConfiguration;
+
       this.data.leftIsUser = true;
     } else if (sourceReference === 'RIGHT') {
-      this.data.rightClassConfiguration = undefined;
+      this.data.rightClassConfiguration = classConfiguration;
       this.data.rightIsUser = true;
     }
 
-    console.log(this.data);
   }
 
 

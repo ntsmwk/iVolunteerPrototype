@@ -52,7 +52,8 @@
 
     <div class="center-button-container"
       style="display: flex; align-content: center; justify-content: center; padding-top: 4px">
-      <button class="secondary-button-dark-small" mat-stroked-button type="button" (click)="openGraphDialog()">Aus
+      <button class="secondary-button-dark-small" mat-stroked-button type="button" (click)="openGraphDialog()"
+        [disabled]="data.matchingEntityConfiguration.id === 'user'">Aus
         Graphen auswählen</button>
     </div>
 

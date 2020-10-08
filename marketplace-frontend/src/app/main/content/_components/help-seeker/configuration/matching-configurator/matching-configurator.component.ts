@@ -7,7 +7,7 @@ import { MatchingConfigurationService } from 'app/main/content/_service/configur
 import { MatchingOperatorRelationshipService } from 'app/main/content/_service/configuration/matching-operator-relationship.service';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassConfiguration, MatchingConfiguration, MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
+import { MatchingConfiguration, MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { CConstants } from '../class-configurator/utils-and-constants';
 import { MatchingOperatorRelationship, MatchingEntityType, MatchingEntityMappings, MatchingEntity, MatchingDataRequestDTO } from 'app/main/content/_model/matching';
 import { Tenant } from 'app/main/content/_model/tenant';
@@ -17,6 +17,7 @@ import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { NewMatchingDialogData } from './_dialogs/new-dialog/new-dialog.component';
 
 const HEADER_WIDTH = 400;
 const HEADER_HEIGHT = 50;
@@ -94,13 +95,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       .getMatchingData(this.marketplace, matchingConfiguration)
       .toPromise().then((data: MatchingDataRequestDTO) => {
         this.data = data;
-
-        if (isNullOrUndefined(data.matchingConfiguration)) {
-          this.data.matchingConfiguration = new MatchingConfiguration();
-          this.data.matchingConfiguration.rightSideId = matchingConfiguration.rightSideId;
-          this.data.matchingConfiguration.leftSideId = matchingConfiguration.leftSideId;
-          this.data.relationships = [];
-        }
+        this.data.matchingConfiguration = matchingConfiguration;
         this.redrawContent();
       });
   }
@@ -186,7 +181,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   redrawContent() {
-    console.log(this.data.matchingConfiguration);
     this.clearEditor();
     this.insertClassDefinitionsLeft();
     this.insertClassDefinitionsRight();
@@ -420,7 +414,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         this.performOpen(event.payload);
         break;
       case 'editor_new':
-        this.performNew(event.payload.leftClassConfiguration, event.payload.rightClassConfiguration, event.payload.label);
+        this.performNew(event.payload);
         break;
     }
   }
@@ -492,16 +486,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.loadClassesAndRelationships(matchingConfiguration);
   }
 
-  performNew(leftClassConfiguration: ClassConfiguration, rightClassConfiguration: ClassConfiguration, name: string) {
+  performNew(dialogData: NewMatchingDialogData) {
     const matchingConfiguration = new MatchingConfiguration();
-    matchingConfiguration.rightSideId = rightClassConfiguration.id;
-    matchingConfiguration.rightSideName = rightClassConfiguration.name;
-    matchingConfiguration.leftSideId = leftClassConfiguration.id;
-    matchingConfiguration.leftSideName = leftClassConfiguration.name;
-    matchingConfiguration.name = name;
+    matchingConfiguration.rightSideId = dialogData.rightClassConfiguration.id;
+    matchingConfiguration.rightSideName = dialogData.rightClassConfiguration.name;
+    matchingConfiguration.rightIsUser = dialogData.rightIsUser;
+    matchingConfiguration.leftSideId = dialogData.leftClassConfiguration.id;
+    matchingConfiguration.leftSideName = dialogData.leftClassConfiguration.name;
+    matchingConfiguration.leftIsUser = dialogData.leftIsUser;
+    matchingConfiguration.name = dialogData.label;
     matchingConfiguration.tenantId = this.tenant.id;
+
+    // TODO
     this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration)
-      .toPromise().then((ret: MatchingConfiguration) => {
+      .toPromise().then(() => {
         this.loadClassesAndRelationships(matchingConfiguration);
       });
   }
@@ -622,14 +620,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON) {
 
         let entityMappingConfiguration: MatchingEntityMappingConfiguration;
+        let matchingConfiguration: MatchingConfiguration;
         const existingEntityPaths: string[] = [];
 
         if (cell.id === 'left_add') {
+
           entityMappingConfiguration = this.data.leftMappingConfigurations;
+          matchingConfiguration = this.data.matchingConfiguration;
           existingEntityPaths.push(...this.data.matchingConfiguration.leftAddedClassDefinitionPaths);
+
 
         } else {
           entityMappingConfiguration = this.data.rightMappingConfigurations;
+          matchingConfiguration = this.data.matchingConfiguration;
           existingEntityPaths.push(...this.data.matchingConfiguration.rightAddedClassDefinitionPaths);
         }
 

@@ -10,7 +10,7 @@ import { isNullOrUndefined } from 'util';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Tenant } from 'app/main/content/_model/tenant';
-import { MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
+import { MatchingEntityMappingConfiguration, MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { MatchingEntity } from 'app/main/content/_model/matching';
 import { AddClassDefinitionGraphDialogComponent, AddClassDefinitionGraphDialogData } from '../add-class-definition-graph-dialog/add-class-definition-graph-dialog.component';
 
@@ -51,6 +51,7 @@ export class AddClassDefinitionDialogComponent implements OnInit {
   async ngOnInit() {
     this.tabIndex = 0;
 
+    this.data.matchingEntityConfiguration.id
     this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
@@ -66,6 +67,7 @@ export class AddClassDefinitionDialogComponent implements OnInit {
     if (!isNullOrUndefined(entities)) {
       this.selection.select(...entities);
     }
+    console.log(this.data);
     this.loaded = true;
   }
 
@@ -90,7 +92,6 @@ export class AddClassDefinitionDialogComponent implements OnInit {
   }
 
   openGraphDialog() {
-    console.log('opengraphdialog');
     this.openAddClassDefinitionDialog(this.data, this.selection.selected).then((ret: AddClassDefinitionGraphDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.selection.clear();
