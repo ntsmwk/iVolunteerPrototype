@@ -50,26 +50,13 @@ public class MatchingEntityMappingConfigurationController {
 		if (!mc.isLeftIsUser()) {
 			leftMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getLeftSideId());
 		} else {
-			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
-			matchingCollectorConfiguration.setId(mc.getLeftSideId());
-			matchingCollectorConfiguration.setClassConfigurationId(mc.getLeftSideId());
-			
-			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings();
-			matchingCollectorConfiguration.setMappings(mappings);
-			
-			leftMapping = matchingCollectorConfiguration;
-
+			leftMapping = getMatchingEntityMappingConfiguration(mc.getLeftSideId());
 		}
 		
 		if (!mc.isRightIsUser()) {
 			rightMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getRightSideId());
 		} else {
-			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
-			matchingCollectorConfiguration.setId(mc.getRightSideId());
-			matchingCollectorConfiguration.setClassConfigurationId(mc.getRightSideId());
-			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings();
-			matchingCollectorConfiguration.setMappings(mappings);
-			rightMapping = matchingCollectorConfiguration;
+			rightMapping = getMatchingEntityMappingConfiguration(mc.getRightSideId());
 		}
 		
 		List<MatchingOperatorRelationship> matchingOperatorRelationships = new ArrayList<MatchingOperatorRelationship>();
@@ -84,5 +71,16 @@ public class MatchingEntityMappingConfigurationController {
 		
 		return dto;
 	}
+
+public MatchingEntityMappingConfiguration getMatchingEntityMappingConfiguration(String id) {
+	MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
+	matchingCollectorConfiguration.setId(id);
+	matchingCollectorConfiguration.setClassConfigurationId(id);
+	MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings();
+	matchingCollectorConfiguration.setMappings(mappings);
+	return matchingCollectorConfiguration;
+}
+	
+	
 	
 }
