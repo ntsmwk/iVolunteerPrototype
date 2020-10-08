@@ -1,18 +1,11 @@
 package at.jku.cis.iVolunteer.model.user;
 
 public class Address {
-	// address: {
-	// street: string,
-	// plz: string
-	// houseNumber: string,
-	// country: number (ID) --> Bitte Länderliste
-	// }
-
 	String street;
 	String houseNumber;
 	String postcode;
 	String city;
-	Integer countryCode;
+	int countryCode;
 
 	public String getStreet() {
 		return street;
@@ -46,12 +39,12 @@ public class Address {
 		this.city = city;
 	}
 
-	public Integer getCountry() {
+	public int getCountry() {
 		return countryCode;
 	}
 
-	public void setCountry(Integer country) {
-		this.countryCode = country;
+	public void setCountry(int countryCode) {
+		this.countryCode = countryCode;
 	}
 
 }
