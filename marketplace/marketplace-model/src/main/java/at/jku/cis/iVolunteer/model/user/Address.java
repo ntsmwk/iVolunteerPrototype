@@ -12,7 +12,7 @@ public class Address {
 	String houseNumber;
 	String postcode;
 	String city;
-	Integer countryCode;
+	int countryCode;
 
 	public String getStreet() {
 		return street;
@@ -46,11 +46,11 @@ public class Address {
 		this.city = city;
 	}
 
-	public Integer getCountry() {
+	public int getCountry() {
 		return countryCode;
 	}
 
-	public void setCountry(Integer country) {
+	public void setCountry(int country) {
 		this.countryCode = country;
 	}
 
