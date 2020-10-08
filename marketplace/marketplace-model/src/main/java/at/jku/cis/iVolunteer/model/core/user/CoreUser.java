@@ -14,7 +14,8 @@ public class CoreUser extends User {
 	@DBRef
 	private List<CoreUser> follower = new ArrayList<>();
 	private List<String> registeredMarketplaceIds = new ArrayList<>();
-	private boolean activated;
+	// TODO Philipp: boolean vs Boolean
+	private Boolean activated;
 	private AccountType accountType;
 
 	public static CoreUser updateCoreUser(CoreUser original, CoreUser update) {
@@ -99,9 +100,7 @@ public class CoreUser extends User {
 		if (update.getRegisteredMarketplaceIds() != null)
 			original.setRegisteredMarketplaceIds(update.getRegisteredMarketplaceIds());
 
-		// TODO Philipp: PROBLEM
-		// once set to true, it can't be set to false any more...
-		if (update.isActivated())
+		if (update.isActivated() != null)
 			original.setActivated(update.isActivated());
 
 		if (update.getAccountType() != null)
@@ -127,7 +126,7 @@ public class CoreUser extends User {
 		this.follower = follower;
 	}
 
-	public boolean isActivated() {
+	public Boolean isActivated() {
 		return activated;
 	}
 

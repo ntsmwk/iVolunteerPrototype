@@ -95,7 +95,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       .getMatchingData(this.marketplace, matchingConfiguration)
       .toPromise().then((data: MatchingDataRequestDTO) => {
         this.data = data;
-        this.data.matchingConfiguration = matchingConfiguration;
         this.redrawContent();
       });
   }
@@ -105,7 +104,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
-
       return (this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0);
     };
 
@@ -258,7 +256,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       cell = this.insertClassDefinition(id, mapping, geometry, pathPrefix);
       geometry = new mx.mxGeometry(cell.geometry.x, cell.geometry.y + cell.geometry.height + CLASSDEFINTIION_SPACE_Y, cell.geometry.width, cell.geometry.height);
     }
-
     return cell;
   }
 
@@ -487,17 +484,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   performNew(dialogData: NewMatchingDialogData) {
-    const matchingConfiguration = new MatchingConfiguration();
-    matchingConfiguration.rightSideId = dialogData.rightClassConfiguration.id;
-    matchingConfiguration.rightSideName = dialogData.rightClassConfiguration.name;
-    matchingConfiguration.rightIsUser = dialogData.rightIsUser;
-    matchingConfiguration.leftSideId = dialogData.leftClassConfiguration.id;
-    matchingConfiguration.leftSideName = dialogData.leftClassConfiguration.name;
-    matchingConfiguration.leftIsUser = dialogData.leftIsUser;
-    matchingConfiguration.name = dialogData.label;
-    matchingConfiguration.tenantId = this.tenant.id;
+    const { rightClassConfiguration, rightIsUser, leftClassConfiguration, leftIsUser, label } = dialogData;
+    const matchingConfiguration = new MatchingConfiguration({
+      rightSideId: rightClassConfiguration.id, rightSideName: rightClassConfiguration.name, rightIsUser,
+      leftSideId: leftClassConfiguration.id, leftSideName: leftClassConfiguration.name, leftIsUser,
+      name: label, tenantId: this.tenant.id
+    });
 
-    // TODO
     this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration)
       .toPromise().then(() => {
         this.loadClassesAndRelationships(matchingConfiguration);
@@ -611,7 +604,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   handleClickEvent(event: mxgraph.mxEventObject) {
     const cell = event.properties.cell as MyMxCell;
-
     if (isNullOrUndefined(cell) || isNullOrUndefined(cell.cellType) || this.displayOverlay) {
       return;
     }
@@ -624,12 +616,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         const existingEntityPaths: string[] = [];
 
         if (cell.id === 'left_add') {
-
           entityMappingConfiguration = this.data.leftMappingConfigurations;
           matchingConfiguration = this.data.matchingConfiguration;
           existingEntityPaths.push(...this.data.matchingConfiguration.leftAddedClassDefinitionPaths);
-
-
         } else {
           entityMappingConfiguration = this.data.rightMappingConfigurations;
           matchingConfiguration = this.data.matchingConfiguration;
@@ -670,10 +659,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    * ...........Delete Mode..............
    */
 
-  deleteOperators(cells: MyMxCell[]) {
-    const cellsToRemove: MyMxCell[] = cells.filter(
-      c => c.cellType === MyMxCellType.MATCHING_OPERATOR
-    );
+  handleDeleteRelationship(cells: MyMxCell[]) {
+    const operatorsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_OPERATOR);
+    this.deleteOperators(operatorsToRemove);
+    const connectorsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_CONNECTOR);
+    this.deleteConnectors(connectorsToRemove);
+  }
+
+  private deleteOperators(cells: MyMxCell[]) {
+    // const cellsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_OPERATOR);
+    const cellsToRemove = cells;
 
     try {
       this.graph.getModel().beginUpdate();
@@ -687,7 +682,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  deleteClassDefinitionCell(deleteCell: MyMxCell) {
+  private deleteConnectors(cells: MyMxCell[]) {
+    const cellsToRemove = cells;
+
+    try {
+      this.graph.getModel().beginUpdate();
+      const removeCells = this.graph.removeCells(cellsToRemove, false);
+      // this.data.relationships = this.data.relationships.
+
+    } finally {
+      this.graph.getModel().endUpdate();
+    }
+
+  }
+
+  private deleteClassDefinitionCell(deleteCell: MyMxCell) {
     this.updateModel();
     try {
       this.graph.getModel().beginUpdate();
@@ -767,14 +776,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       if (this.confirmDelete) {
         this.dialogFactory.confirmationDialog(
           'Löschen bestätigen',
-          'Soll der Operator wirklich gelöscht werden?'
+          'Soll das Objekt wirklich gelöscht werden?'
         ).then((ret: boolean) => {
           if (ret) {
-            this.deleteOperators(cells);
+            this.handleDeleteRelationship(cells);
           }
         });
       } else {
-        this.deleteOperators(cells);
+        this.handleDeleteRelationship(cells);
       }
     }
   }
