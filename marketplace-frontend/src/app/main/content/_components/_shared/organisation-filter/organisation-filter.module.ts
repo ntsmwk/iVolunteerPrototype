@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 
 import { OrganisationFilterComponent } from "./organisation-filter.component";
-import { ImageService } from "../../../_service/image.service";
 import { CommonModule } from "@angular/common";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { MatButtonModule, MatTooltipModule } from "@angular/material";
@@ -12,4 +11,4 @@ import { MatButtonModule, MatTooltipModule } from "@angular/material";
   declarations: [OrganisationFilterComponent],
   providers: []
 })
-export class OrganisationFilterModule { }
+export class OrganisationFilterModule {}

@@ -59,6 +59,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/register/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/tenant").permitAll()
 			.antMatchers(HttpMethod.GET, "/tenant/name/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/file/**").permitAll()
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenProvider))
 				.addFilter(new JWTAuthorizationFilter(authenticationManager(), tokenProvider)).sessionManagement()

@@ -1,4 +1,3 @@
-import { ImageWrapper } from "./image";
 import { NextcloudCredentials } from "./nextcloud-credentials";
 import { FormTimeSlot } from "../_components/common/profile/profile-form/profile-form.component";
 
@@ -13,6 +12,7 @@ export class User {
   firstname: string;
   lastname: string;
   titleAfter: string;
+  profileFileName: string;
 
   nickname: string;
 
@@ -28,12 +28,8 @@ export class User {
   websites: string[] = [];
   emails: string[] = [];
 
-  imageId: string;
-
   registeredMarketplaceIds: string[];
   subscribedTenants: TenantSubscription[];
-
-  // image: ImageWrapper;
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
@@ -95,7 +91,7 @@ export enum Weekday {
   THURSDAY = "THURSDAY",
   FRIDAY = "FRIDAY",
   SATURDAY = "SATURDAY",
-  SUNDAY = "SUNDAY",
+  SUNDAY = "SUNDAY"
 }
 
 export namespace Weekday {
@@ -106,7 +102,7 @@ export namespace Weekday {
     THURSDAY: "Donnerstag",
     FRIDAY: "Freitag",
     SATURDAY: "Samstag",
-    SUNDAY: "Sonntag",
+    SUNDAY: "Sonntag"
   };
 
   export function getWeekdayLabel(weekday: Weekday) {
@@ -121,13 +117,13 @@ export enum UserRole {
   ADMIN = "ADMIN",
   RECRUITER = "RECRUITER",
   FLEXPROD = "FLEXPROD",
-  NONE = "NONE",
+  NONE = "NONE"
 }
 
 export enum LocalRepositoryLocation {
   LOCAL = "LOCAL",
   DROPBOX = "DROPBOX",
-  NEXTCLOUD = "NEXTCLOUD",
+  NEXTCLOUD = "NEXTCLOUD"
 }
 
 export class TenantSubscription {
@@ -143,5 +139,5 @@ export class RoleTenantMapping {
 
 export enum AccountType {
   PERSON = "PERSON",
-  ORGANIZATION = "ORGANIZATION",
+  ORGANIZATION = "ORGANIZATION"
 }

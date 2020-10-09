@@ -1,16 +1,16 @@
-import { OnInit, Component } from '@angular/core';
-import { fuseAnimations } from '@fuse/animations';
-import { User } from '../../../../_model/user';
-import { LoginService } from '../../../../_service/login.service';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
+import { OnInit, Component } from "@angular/core";
+import { fuseAnimations } from "@fuse/animations";
+import { User } from "../../../../_model/user";
+import { LoginService } from "../../../../_service/login.service";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { Tenant } from "app/main/content/_model/tenant";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "dashboard-helpseeker-tenantAdmin",
-  templateUrl: './dashboard-helpseeker-tenantAdmin.component.html',
-  styleUrls: ['dashboard-helpseeker-tenantAdmin.component.scss'],
-  animations: fuseAnimations,
+  templateUrl: "./dashboard-helpseeker-tenantAdmin.component.html",
+  styleUrls: ["dashboard-helpseeker-tenantAdmin.component.scss"],
+  animations: fuseAnimations
 })
 export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
   user: User;
@@ -20,8 +20,8 @@ export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private tenantService: TenantService,
-  ) { }
+    private tenantService: TenantService
+  ) {}
 
   async ngOnInit() {
     this.loaded = false;
@@ -35,6 +35,6 @@ export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
   }
 
   getTitleImage() {
-    return this.tenantService.getTenantLandingPageImage(this.tenant);
+    return this.tenantService.getLandingpageImagePath(this.tenant);
   }
 }

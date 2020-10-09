@@ -11,10 +11,8 @@ import { Router } from "@angular/router";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { ImageService } from "app/main/content/_service/image.service";
 import { UserService } from "app/main/content/_service/user.service";
-import { UserImage, Image } from "app/main/content/_model/image";
-import { CoreUserImageService } from "app/main/content/_service/core-user-image.service";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
 
 @Component({
   selector: "app-role-menu",
@@ -23,7 +21,6 @@ import { CoreUserImageService } from "app/main/content/_service/core-user-image.
 })
 export class RoleMenuComponent implements OnInit, OnDestroy {
   user: User;
-  userImage: UserImage;
   role: UserRole;
   allTenants: Tenant[] = [];
 
@@ -40,8 +37,7 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private roleChangeService: RoleChangeService,
     private tenantService: TenantService,
-    private userImageService: CoreUserImageService,
-    private imageService: ImageService
+    private userService: CoreUserService
   ) {
     this.onRoleChanged = this.roleChangeService.onRoleChanged.subscribe(() => {
       this.ngOnInit();
@@ -58,10 +54,6 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     );
     this.user = globalInfo.user;
     this.role = globalInfo.userRole;
-
-    // Don't wait for image...
-    // this.imageService.findById(this.user.imageId)
-    //   .then((userImage: UserImage) => (this.userImage = userImage));
 
     await Promise.all([
       (this.allTenants = <Tenant[]>(
@@ -115,28 +107,16 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     return this.roleChangeService.getRoleNameString(role);
   }
 
-  async getCurrentTenantImage() {
-    const tenant = this.allTenants.find(
+  getCurrentTenantImage() {
+    let tenant = this.allTenants.find(
       t => t.id === this.currentMapping.tenantIds[0]
     );
-    // let img: Image = <Image>await this.imageService.findById(tenant.imageId);
-    // return img.imageWrapper;
+    return this.tenantService.getImagePath(tenant);
   }
 
-  // async getTenantImageByTenantId(tenantId: string) {
-  //   const tenant = this.allTenants.find(t => t.id === tenantId);
-  //   return this.imageService.findById(tenant.id);
-  // }
-
-  // async getTenantImage(mapping: RoleTenantMapping) {
-  //   if (mapping.role === UserRole.VOLUNTEER) {
-  //     return this.userImageService.getUserProfileImage(this.userImage);
-  //   }
-
-  //   const tenant = this.allTenants.find(t => t.id === mapping.tenantIds[0]);
-  //   let img: Image = <Image>await this.imageService.findById(tenant.imageId);
-  //   return img.imageWrapper;
-  // }
+  getImage(tenant: Tenant) {
+    return this.tenantService.getImagePath(tenant);
+  }
 
   isSameMapping(a: RoleTenantMapping, b: RoleTenantMapping) {
     if (a.role !== b.role) {

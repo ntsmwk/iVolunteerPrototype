@@ -14,11 +14,10 @@ import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "tenant-profile-image-upload",
-  templateUrl: 'tenant-profile-image-upload.component.html',
-  styleUrls: ['./tenant-profile-image-upload.component.scss'],
+  templateUrl: "tenant-profile-image-upload.component.html",
+  styleUrls: ["./tenant-profile-image-upload.component.scss"]
 })
 export class TenantProfileImageUploadComponent implements OnInit {
-
   @Input() tenant: Tenant;
   @Output() uploadedImage: EventEmitter<{
     key: string;
@@ -32,6 +31,8 @@ export class TenantProfileImageUploadComponent implements OnInit {
   oldImage: any;
 
   loaded: boolean;
+
+  // TODO MWE/AK fix for new file upload
 
   constructor(
     private tenantService: TenantService,
@@ -53,11 +54,8 @@ export class TenantProfileImageUploadComponent implements OnInit {
     if (isNullOrUndefined(tenant)) {
       return;
     }
-    this.previewImage = this.tenantService.getTenantImage(this.tenant);
-    this.oldImage = this.sanitizer.sanitize(
-      SecurityContext.URL,
-      this.previewImage
-    );
+    this.previewImage = this.tenantService.getImagePath(this.tenant);
+    this.oldImage = this.previewImage;
   }
 
   uploadImage() {

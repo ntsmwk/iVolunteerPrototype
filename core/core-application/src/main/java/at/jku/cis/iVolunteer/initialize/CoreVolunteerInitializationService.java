@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import at.jku.cis.iVolunteer.core.file.StorageService;
 import at.jku.cis.iVolunteer.core.image.ImageController;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
@@ -44,18 +45,13 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreUserRepository coreUserRepository;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private TenantRepository coreTenantRepository;
-	@Autowired
-	private CoreUserService coreUserService;
-	@Autowired
-	private ImageController imageController;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreUserRepository coreUserRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private TenantRepository coreTenantRepository;
+	@Autowired private CoreUserService coreUserService;
+	@Autowired private ImageController imageController;
+	@Autowired private StorageService storageService;
 
 	public void initVolunteers() {
 
@@ -99,28 +95,18 @@ public class CoreVolunteerInitializationService {
 
 			volunteer.setActivated(true);
 			volunteer.setAccountType(AccountType.PERSON);
+			setImage(fileName, volunteer);
 			volunteer = coreUserService.addNewUser(volunteer, "", false);
-			Image img = setImage(fileName, volunteer);
-			if (img != null) {
-				volunteer.setImageId(img.getId());
-			}
-			volunteer = coreUserService.updateUser(volunteer, "", false);
 		}
 		return volunteer;
 	}
 
-	private Image setImage(String fileName, CoreUser volunteer) {
+	private void setImage(String fileName, CoreUser volunteer) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
-			try {
-				byte[] binaryData = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-				return imageController.addNewImage(
-						new UserImage(volunteer.getId(), new ImageWrapper("data:image/png;base64", binaryData)));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			fileName = storageService.store(classPathResource);
 		}
-		return null;
+		volunteer.setProfileFileName(fileName);
 	}
 
 	protected void subscribeVolunteersToAllTenants() {

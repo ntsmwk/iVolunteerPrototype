@@ -9,8 +9,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <textarea matInput type="text" formControlName="description" placeholder="Kurzbeschreibung der Organisation"
-          matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 required></textarea>
+        <textarea matInput type="text" formControlName="description" placeholder="Kurzbeschreibung der Organisation" matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 required></textarea>
       </mat-form-field>
 
       <mat-form-field>
@@ -38,8 +37,7 @@
         </div>
       </div>
 
-      <tenant-profile-image-upload *ngIf="showProfileImageForm" [tenant]="tenant"
-        (uploadedImage)="handleProfileImageUploadEvent($event)">
+      <tenant-profile-image-upload *ngIf="showProfileImageForm" [tenant]="tenant" (uploadedImage)="handleProfileImageUploadEvent($event)">
       </tenant-profile-image-upload>
 
 
@@ -47,8 +45,7 @@
 
 
       <mat-form-field>
-        <input matInput type="text" formControlName="landingpageMessage"
-          placeholder="Begrüßungstext der im Header angezeigt werden soll" />
+        <input matInput type="text" formControlName="landingpageMessage" placeholder="Begrüßungstext der im Header angezeigt werden soll" />
       </mat-form-field>
 
       <mat-form-field>
@@ -57,24 +54,19 @@
 
 
       <mat-form-field appearance="outline">
-        <textarea matInput type="text" formControlName="landingpageText" placeholder="Kurzer Fließtext"
-          matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
+        <textarea matInput type="text" formControlName="landingpageText" placeholder="Kurzer Fließtext" matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
       </mat-form-field>
 
 
-      <tenant-landing-page-image-upload *ngIf="showLandingPageImageForm" [tenant]="tenant"
-        (uploadedImage)="handleLandingPageImageUploadEvent($event)">
+      <tenant-landing-page-image-upload *ngIf="showLandingPageImageForm" [tenant]="tenant" (uploadedImage)="handleLandingPageImageUploadEvent($event)">
       </tenant-landing-page-image-upload>
-
-
 
 
       <h2>Zuordnungsoptionen</h2>
 
       <tenant-tag-form [addedTags]="addedTags" (tags)="addedTags = $event"></tenant-tag-form>
 
-      <button class="primary-button-dark mt-32" type="button" (click)="save()" mat-stroked-button
-        [disabled]="tenantForm.disabled">Speichern</button>
+      <button class="primary-button-dark mt-32" type="button" (click)="save()" mat-stroked-button [disabled]="tenantForm.disabled">Speichern</button>
     </div>
   </form>
 </div>

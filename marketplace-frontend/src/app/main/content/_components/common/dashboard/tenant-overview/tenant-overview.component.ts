@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { ImageService } from "app/main/content/_service/image.service";
 import { LoginService } from "app/main/content/_service/login.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { User, UserRole } from "app/main/content/_model/user";
@@ -25,19 +24,14 @@ export class TenantOverviewComponent implements OnInit {
     private loginService: LoginService,
     private tenantService: TenantService,
     private coreUserService: CoreUserService,
-    private roleChangeService: RoleChangeService,
-    private imageService: ImageService
-  ) { }
+    private roleChangeService: RoleChangeService
+  ) {}
 
   async ngOnInit() {
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
     this.updateCurrentInfo();
 
     this.isLoaded = true;
-  }
-
-  async getTenantImage(tenant: Tenant) {
-    // return this.imageService.findById(tenant.imageId);
   }
 
   isSubscribed(tenant: Tenant, role: UserRole) {
@@ -51,7 +45,9 @@ export class TenantOverviewComponent implements OnInit {
   async unsubscribe(tenant: Tenant, role: UserRole) {
     // NOT NEEDED?
     // this.user = <User>(
-    await this.coreUserService.unsubscribeUserFromTenant(tenant.id, role).toPromise()
+    await this.coreUserService
+      .unsubscribeUserFromTenant(tenant.id, role)
+      .toPromise();
     // );
 
     if (this.user.subscribedTenants.length === 0) {
@@ -93,7 +89,9 @@ export class TenantOverviewComponent implements OnInit {
   async subscribe(tenant: Tenant, role: UserRole) {
     // not needed?
     // this.user = <User>(
-    await this.coreUserService.subscribeUserToTenant(tenant.id, role).toPromise()
+    await this.coreUserService
+      .subscribeUserToTenant(tenant.id, role)
+      .toPromise();
     // );
 
     if (this.currentRole === UserRole.NONE) {
@@ -102,10 +100,15 @@ export class TenantOverviewComponent implements OnInit {
         this.updateCurrentInfo();
       });
     } else {
-      this.loginService.generateGlobalInfo(this.currentRole, this.currentTenants.map(t => t.id)).then(() => {
-        this.roleChangeService.update();
-        this.updateCurrentInfo();
-      });
+      this.loginService
+        .generateGlobalInfo(
+          this.currentRole,
+          this.currentTenants.map(t => t.id)
+        )
+        .then(() => {
+          this.roleChangeService.update();
+          this.updateCurrentInfo();
+        });
     }
   }
 

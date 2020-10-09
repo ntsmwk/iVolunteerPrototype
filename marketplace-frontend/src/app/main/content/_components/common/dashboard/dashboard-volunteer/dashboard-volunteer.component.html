@@ -128,8 +128,7 @@
           >
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <!-- TODO MWE comment -->
-              <!-- <img class="avatar" [src]="getTenantImage() | async" /> -->
+              <img class="avatar" [src]="getTenantImage()" />
               <div style="align-self: center">
                 {{ getIssuerName(entry.tenantId) }}
               </div>
@@ -225,8 +224,7 @@
                       (click)="shareClassInstanceToOthers(entry, tenant)"
                     >
                       <div fxLayout="row" fxLayoutAlign="start center">
-                        <!-- TODO MWE comment -->
-                        <!-- <img class="avatar" [src]="getTenantImage(tenant) | async" /> -->
+                        <img class="avatar" [src]="getTenantImage(tenant)" />
                         <div>{{ tenant.name }}</div>
                       </div>
                     </button>
@@ -246,11 +244,10 @@
                     (click)="shareClassInstanceToIssuer(entry)"
                   >
                     <div fxLayout="row" fxLayoutAlign="start center">
-                      <!-- TODO MWE comment -->
-                      <!-- <img
+                      <img
                         class="avatar"
-                        [src]="getTenantImageById(entry.tenantId) | async"
-                      /> -->
+                        [src]="getTenantImageById(entry.tenantId)"
+                      />
                       <div>{{ getTenantName(entry.tenantId) }}</div>
                     </div>
                   </button>

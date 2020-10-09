@@ -7,6 +7,7 @@ import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.image.Image;
 
+@Deprecated
 @Service
 public class ImageService {
 	@Autowired private ImageRepository imageRepository;

@@ -1,15 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Marketplace } from '../_model/marketplace';
-import { UserRole, User } from '../_model/user';
-import { ImageService } from './image.service';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Marketplace } from "../_model/marketplace";
+import { UserRole } from "../_model/user";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root"
 })
 export class UserService {
-  constructor(private http: HttpClient,
-    private imageService: ImageService) { }
+  constructor(private http: HttpClient) {}
 
   findAll(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/user/all`);
@@ -23,8 +21,14 @@ export class UserService {
     return this.http.get(`${marketplace.url}/user/all/tenant/${tenantId}`);
   }
 
-  findAllByRoleAndTenantId(marketplace: Marketplace, role: UserRole, tenantId: string) {
-    return this.http.get(`${marketplace.url}/user/all/tenant/${tenantId}/role/${role}`);
+  findAllByRoleAndTenantId(
+    marketplace: Marketplace,
+    role: UserRole,
+    tenantId: string
+  ) {
+    return this.http.get(
+      `${marketplace.url}/user/all/tenant/${tenantId}/role/${role}`
+    );
   }
 
   findById(marketplace: Marketplace, id: string) {
@@ -34,5 +38,4 @@ export class UserService {
   findByName(marketplace: Marketplace, name: string) {
     return this.http.get(`${marketplace.url}/user/username/${name}`);
   }
-
 }
