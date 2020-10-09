@@ -16,6 +16,7 @@ public class XDynamicField {
 	boolean multiple;
 	PropertyType type;
 	List<Object> allowedValues = new ArrayList<>();
+	List<Object> values = new ArrayList<>();
 	String unit;
 	boolean required;
 	String requiredMessage;
@@ -65,6 +66,12 @@ public class XDynamicField {
 	}
 	public void setAllowedValues(List<Object> allowedValues) {
 		this.allowedValues = allowedValues;
+	}
+	public List<Object> getValues() {
+		return values;
+	}
+	public void setValues(List<Object> values) {
+		this.values = values;
 	}
 	public String getUnit() {
 		return unit;

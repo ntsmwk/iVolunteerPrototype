@@ -6,15 +6,16 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Document
-public class PropertyInstance<T> {
+public class PropertyInstance<T> extends IVolunteerObject{
 
 	@Id String id;
 	String name;
-
+	
 	List<T> values = new ArrayList<>();
 	List<T> allowedValues = new ArrayList<>();
 	

@@ -19,6 +19,7 @@ public class XTaskSerialized {
 	boolean closed;
 	XGeoInfo geoInfo;
 	List<XDynamicField> dynamicFields = new ArrayList<>();
+	
 	public String getId() {
 		return id;
 	}

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.task.ClassInstanceToTaskInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.xnet.ClassInstanceToTaskInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
@@ -65,7 +65,7 @@ import at.jku.cis.iVolunteer.model.user.User;
 //TODO xnet done - test
 @RestController
 @RequestMapping("/task")
-public class TaskInstanceController {
+public class XTaskController {
 
 	@Autowired private ClassInstanceService classInstanceService;
 	@Autowired private LoginService loginService;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.task.FormEntryToTaskDefinitionMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.xnet.FormEntryToTaskDefinitionMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
@@ -27,7 +27,7 @@ import at.jku.cis.iVolunteer.model.task.TaskDefinition;
 
 @RestController
 @RequestMapping("tasktemplate")
-public class TaskDefinitionController {
+public class XTaskTemplateController {
 
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassConfigurationController classConfigurationController;
