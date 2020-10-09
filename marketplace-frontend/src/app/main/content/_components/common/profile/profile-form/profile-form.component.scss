@@ -142,3 +142,30 @@ mat-divider {
     margin-right: 20vw;
   }
 }
+
+mat-accordion {
+  margin: 12px 2px;
+}
+
+mat-expansion-panel {
+  box-shadow: none !important;
+  border: 1px black solid;
+}
+
+mat-expansion-panel-header {
+  padding: 8px;
+}
+
+mat-expansion-panel-header:hover,
+mat-expansion-panel-header.mat-expanded {
+  background-color: rgb(4, 123, 202) !important;
+  border-radius: 0;
+
+  mat-panel-title {
+    color: white;
+  }
+
+  mat-panel-description {
+    color: white;
+  }
+}

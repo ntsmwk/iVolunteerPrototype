@@ -7,7 +7,7 @@ import { MatchingConfigurationService } from 'app/main/content/_service/configur
 import { MatchingOperatorRelationshipService } from 'app/main/content/_service/configuration/matching-operator-relationship.service';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassConfiguration, MatchingConfiguration, MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
+import { MatchingConfiguration, MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { CConstants } from '../class-configurator/utils-and-constants';
 import { MatchingOperatorRelationship, MatchingEntityType, MatchingEntityMappings, MatchingEntity, MatchingDataRequestDTO } from 'app/main/content/_model/matching';
 import { Tenant } from 'app/main/content/_model/tenant';
@@ -17,6 +17,7 @@ import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { PropertyType } from 'app/main/content/_model/meta/property/property';
 import { isNullOrUndefined } from 'util';
 import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { NewMatchingDialogData } from './_dialogs/new-dialog/new-dialog.component';
 
 const HEADER_WIDTH = 400;
 const HEADER_HEIGHT = 50;
@@ -94,13 +95,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       .getMatchingData(this.marketplace, matchingConfiguration)
       .toPromise().then((data: MatchingDataRequestDTO) => {
         this.data = data;
-
-        if (isNullOrUndefined(data.matchingConfiguration)) {
-          this.data.matchingConfiguration = new MatchingConfiguration();
-          this.data.matchingConfiguration.rightSideId = matchingConfiguration.rightSideId;
-          this.data.matchingConfiguration.leftSideId = matchingConfiguration.leftSideId;
-          this.data.relationships = [];
-        }
         this.redrawContent();
       });
   }
@@ -110,7 +104,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
       const style = state != null ? state.style : this.getCellStyle(cell);
-
       return (this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0);
     };
 
@@ -186,7 +179,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   redrawContent() {
-    console.log(this.data.matchingConfiguration);
     this.clearEditor();
     this.insertClassDefinitionsLeft();
     this.insertClassDefinitionsRight();
@@ -264,7 +256,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       cell = this.insertClassDefinition(id, mapping, geometry, pathPrefix);
       geometry = new mx.mxGeometry(cell.geometry.x, cell.geometry.y + cell.geometry.height + CLASSDEFINTIION_SPACE_Y, cell.geometry.width, cell.geometry.height);
     }
-
     return cell;
   }
 
@@ -420,7 +411,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         this.performOpen(event.payload);
         break;
       case 'editor_new':
-        this.performNew(event.payload.leftClassConfiguration, event.payload.rightClassConfiguration, event.payload.label);
+        this.performNew(event.payload);
         break;
     }
   }
@@ -492,16 +483,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.loadClassesAndRelationships(matchingConfiguration);
   }
 
-  performNew(leftClassConfiguration: ClassConfiguration, rightClassConfiguration: ClassConfiguration, name: string) {
-    const matchingConfiguration = new MatchingConfiguration();
-    matchingConfiguration.rightSideId = rightClassConfiguration.id;
-    matchingConfiguration.rightSideName = rightClassConfiguration.name;
-    matchingConfiguration.leftSideId = leftClassConfiguration.id;
-    matchingConfiguration.leftSideName = leftClassConfiguration.name;
-    matchingConfiguration.name = name;
-    matchingConfiguration.tenantId = this.tenant.id;
+  performNew(dialogData: NewMatchingDialogData) {
+    const { rightClassConfiguration, rightIsUser, leftClassConfiguration, leftIsUser, label } = dialogData;
+    const matchingConfiguration = new MatchingConfiguration({
+      rightSideId: rightClassConfiguration.id, rightSideName: rightClassConfiguration.name, rightIsUser,
+      leftSideId: leftClassConfiguration.id, leftSideName: leftClassConfiguration.name, leftIsUser,
+      name: label, tenantId: this.tenant.id
+    });
+
     this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration)
-      .toPromise().then((ret: MatchingConfiguration) => {
+      .toPromise().then(() => {
         this.loadClassesAndRelationships(matchingConfiguration);
       });
   }
@@ -613,7 +604,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   handleClickEvent(event: mxgraph.mxEventObject) {
     const cell = event.properties.cell as MyMxCell;
-
     if (isNullOrUndefined(cell) || isNullOrUndefined(cell.cellType) || this.displayOverlay) {
       return;
     }
@@ -622,14 +612,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       if (cell.cellType === MyMxCellType.ADD_CLASS_BUTTON) {
 
         let entityMappingConfiguration: MatchingEntityMappingConfiguration;
+        let matchingConfiguration: MatchingConfiguration;
         const existingEntityPaths: string[] = [];
 
         if (cell.id === 'left_add') {
           entityMappingConfiguration = this.data.leftMappingConfigurations;
+          matchingConfiguration = this.data.matchingConfiguration;
           existingEntityPaths.push(...this.data.matchingConfiguration.leftAddedClassDefinitionPaths);
-
         } else {
           entityMappingConfiguration = this.data.rightMappingConfigurations;
+          matchingConfiguration = this.data.matchingConfiguration;
           existingEntityPaths.push(...this.data.matchingConfiguration.rightAddedClassDefinitionPaths);
         }
 
@@ -667,10 +659,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    * ...........Delete Mode..............
    */
 
-  deleteOperators(cells: MyMxCell[]) {
-    const cellsToRemove: MyMxCell[] = cells.filter(
-      c => c.cellType === MyMxCellType.MATCHING_OPERATOR
-    );
+  handleDeleteRelationship(cells: MyMxCell[]) {
+    const operatorsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_OPERATOR);
+    this.deleteOperators(operatorsToRemove);
+    const connectorsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_CONNECTOR);
+    this.deleteConnectors(connectorsToRemove);
+  }
+
+  private deleteOperators(cells: MyMxCell[]) {
+    // const cellsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_OPERATOR);
+    const cellsToRemove = cells;
 
     try {
       this.graph.getModel().beginUpdate();
@@ -684,7 +682,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  deleteClassDefinitionCell(deleteCell: MyMxCell) {
+  private deleteConnectors(cells: MyMxCell[]) {
+    const cellsToRemove = cells;
+
+    try {
+      this.graph.getModel().beginUpdate();
+      const removeCells = this.graph.removeCells(cellsToRemove, false);
+      // this.data.relationships = this.data.relationships.
+
+    } finally {
+      this.graph.getModel().endUpdate();
+    }
+
+  }
+
+  private deleteClassDefinitionCell(deleteCell: MyMxCell) {
     this.updateModel();
     try {
       this.graph.getModel().beginUpdate();
@@ -764,14 +776,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       if (this.confirmDelete) {
         this.dialogFactory.confirmationDialog(
           'Löschen bestätigen',
-          'Soll der Operator wirklich gelöscht werden?'
+          'Soll das Objekt wirklich gelöscht werden?'
         ).then((ret: boolean) => {
           if (ret) {
-            this.deleteOperators(cells);
+            this.handleDeleteRelationship(cells);
           }
         });
       } else {
-        this.deleteOperators(cells);
+        this.handleDeleteRelationship(cells);
       }
     }
   }

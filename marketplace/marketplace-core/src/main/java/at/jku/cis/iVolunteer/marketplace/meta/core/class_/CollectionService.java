@@ -88,16 +88,115 @@ public class CollectionService {
 		return mapping;
 	}
 	
-	public MatchingEntityMappings collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(User user) {
+	public MatchingEntityMappings collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings() {
 		MatchingEntityMappings mapping = new MatchingEntityMappings();
 		ClassDefinition classDefinition = userToClassDefinitionMapper.toTarget();
 		
 		mapping.setPathDelimiter(PATH_DELIMITER);	
 		mapping.setEntities(new ArrayList<MatchingMappingEntry>());
-		mapping.getEntities().add(new MatchingMappingEntry(classDefinition, classDefinition.getId(), PATH_DELIMITER));
-		mapping.getEntities().addAll(this.getMatchingMappingEntryFromClassDefinitionDFS(classDefinition, 0, new ArrayList<>(), classDefinition.getId()));				
 		
+		/* -General-
+		 * ID
+		 * Username
+		 * Login-Email
+		 */
+		ClassDefinition generalDefinition = new ClassDefinition();
+		generalDefinition.setId("general");
+		generalDefinition.setName("General");
+		generalDefinition.setProperties(classDefinition.getProperties().stream()
+				.filter(p -> p.getId().equals("id") || p.getId().equals("username") || p.getId().equals("loginEmail"))
+				.collect(Collectors.toList()));
+		
+		MatchingMappingEntry general = new MatchingMappingEntry(generalDefinition, generalDefinition.getId(), PATH_DELIMITER);
+		mapping.getEntities().add(general);
 
+		/* 
+		 * -Benutzer-
+		 * Anrede
+		 * Vorgestellter Titel
+		 * Vorname
+		 * Nachname
+		 * Nachgestellter Titel
+		 * Spitzname
+		 */
+		ClassDefinition userDefinition = new ClassDefinition();
+		userDefinition.setId("user");
+		userDefinition.setName("Benutzer");
+		userDefinition.setProperties(classDefinition.getProperties().stream()
+				.filter(p -> p.getId().equals("formOfAddress") || p.getId().equals("titleBefore") || p.getId().equals("firstname") ||
+						p.getId().equals("lastname") ||p.getId().equals("titleAfter") ||p.getId().equals("nickname"))
+				.collect(Collectors.toList()));
+		
+		MatchingMappingEntry user = new MatchingMappingEntry(userDefinition, userDefinition.getId(), PATH_DELIMITER);
+		mapping.getEntities().add(user);
+		
+		 /* 
+		 * -Weitere-
+		 * Position
+		 * Geburtstag
+		 * Übermich
+		 */
+		ClassDefinition userOtherDefinition = new ClassDefinition();
+		userOtherDefinition.setId("userOther");
+		userOtherDefinition.setName("Benutzer Weitere");
+		userOtherDefinition.setProperties(classDefinition.getProperties().stream()
+				.filter(p -> p.getId().equals("position") || p.getId().equals("birthday") || p.getId().equals("about") || p.getId().equals("timeslots"))
+				.collect(Collectors.toList()));
+		
+		MatchingMappingEntry userOther = new MatchingMappingEntry(userOtherDefinition, userOtherDefinition.getId(), PATH_DELIMITER);
+		mapping.getEntities().add(userOther);
+		
+		 /* 
+		 * -Adresse-
+		 * Straßenname
+		 * Hausnummer
+		 * PLZ
+		 * Stadt
+		 * Land
+		 */
+		ClassDefinition addressDefinition = new ClassDefinition();
+		addressDefinition.setId("address");
+		addressDefinition.setName("Adresse");
+		addressDefinition.setProperties(classDefinition.getProperties().stream()
+				.filter(p -> p.getId().equals("streetName") || p.getId().equals("housenumber") || p.getId().equals("postcode") ||
+						p.getId().equals("city") ||p.getId().equals("country"))
+				.collect(Collectors.toList()));
+		
+		MatchingMappingEntry address = new MatchingMappingEntry(addressDefinition, addressDefinition.getId(), PATH_DELIMITER);
+		mapping.getEntities().add(address);
+		
+		 /*
+		 *-Kontakt-
+		 * Telefonnummern
+		 * Webseiten
+		 * E-Mails
+		 */
+		ClassDefinition contactDefinition = new ClassDefinition();
+		contactDefinition.setId("contact");
+		contactDefinition.setName("Kontakt");
+		contactDefinition.setProperties(classDefinition.getProperties().stream()
+				.filter(p -> p.getId().equals("phonenumber") || p.getId().equals("websites") || p.getId().equals("emails"))
+			.collect(Collectors.toList()));
+
+		MatchingMappingEntry contact = new MatchingMappingEntry(contactDefinition, contactDefinition.getId(), PATH_DELIMITER);
+		mapping.getEntities().add(contact);
+		
+		 /*
+		 *-Sonstiges-
+		 * Profilbild
+		 * Abonnements
+		 * Local Repository Referenz 
+		 */
+		ClassDefinition otherDefinition = new ClassDefinition();
+		otherDefinition.setId("other");
+		otherDefinition.setName("Sonstiges");
+		otherDefinition.setProperties(classDefinition.getProperties().stream()
+				.filter(p -> p.getId().equals("imageId") || p.getId().equals("subscribedTenants") || p.getId().equals("localRepositoryLocation"))
+				.collect(Collectors.toList()));
+		
+		MatchingMappingEntry other = new MatchingMappingEntry(otherDefinition, otherDefinition.getId(), PATH_DELIMITER);
+		mapping.getEntities().add(other);
+		
 		for (MatchingMappingEntry entry : mapping.getEntities()) {
 			mapping.setNumberOfProperties(mapping.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
 		}
@@ -105,29 +204,6 @@ public class CollectionService {
 		
 		return mapping;
 	}
-	
-
-//	private String getPathFromRoot(ClassDefinition classDefinition) {
-//		ArrayList<String> pathArray = new ArrayList<>();
-//		pathArray.add(classDefinition.getId());
-//
-//		while (!classDefinition.isRoot()) {
-//			List<Relationship> relationships = this.relationshipRepository.findByTarget(classDefinition.getId());
-//
-////			relationships = relationships.stream()
-////					.filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
-////							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
-////					.collect(Collectors.toList());
-//
-//			if (relationships.size() >= 1) {
-//				classDefinition = classDefinitionRepository.findOne(relationships.get(0).getSource());
-//				pathArray.add(PATH_DELIMITER);
-//				pathArray.add(classDefinition.getId());
-//			}
-//		}
-//		Collections.reverse(pathArray);
-//		return String.join("", pathArray);
-//	}
 
 	List<ClassDefinition> getAndUpdateClassDefinitions(ClassDefinition root, int currentLevel, List<ClassDefinition> classDefinitions, List<Relationship> allRelationships) {
 		root.setLevel(currentLevel);
@@ -162,9 +238,6 @@ public class CollectionService {
 	List<MatchingMappingEntry> getMatchingMappingEntryFromClassDefinitionDFS(ClassDefinition root, int level, List<MatchingMappingEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
-//		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.ASSOCIATION)
-//				|| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
-
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
 

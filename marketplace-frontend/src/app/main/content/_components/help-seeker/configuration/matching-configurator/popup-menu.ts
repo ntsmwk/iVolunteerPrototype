@@ -38,7 +38,7 @@ export class MatchingConfiguratorPopupMenu {
       if (cell.cellType === MyMxCellType.MATCHING_OPERATOR || cell.cellType === MyMxCellType.MATCHING_CONNECTOR) {
         const deleteItem = menu.addItem('Delete', null, function () {
 
-          outer.editorInstance.deleteOperators([cell]);
+          outer.editorInstance.handleDeleteRelationship([cell]);
 
 
         }, null, null, true, true);

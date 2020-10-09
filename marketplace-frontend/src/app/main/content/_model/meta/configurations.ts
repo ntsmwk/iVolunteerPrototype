@@ -36,6 +36,10 @@ export class MatchingConfiguration {
   rightIsUser: boolean;
 
   rightAddedClassDefinitionPaths: string[] = [];
+
+  public constructor(init?: Partial<MatchingConfiguration>) {
+    Object.assign(this, init);
+  }
 }
 
 export class MatchingEntityMappingConfiguration {

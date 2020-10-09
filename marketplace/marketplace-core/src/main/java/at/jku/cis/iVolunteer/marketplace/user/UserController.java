@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.UserSubscription;
+import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -105,7 +105,7 @@ public class UserController {
 		return user;
 	}
 
-	private UserSubscription findTenantUserSubscription(User user, String marketplaceId, String tenantId,
+	private TenantSubscription findTenantUserSubscription(User user, String marketplaceId, String tenantId,
 			UserRole role) {
 		return user.getSubscribedTenants().stream().filter(st -> st.getMarketplaceId().equals(marketplaceId)
 				&& st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().get();

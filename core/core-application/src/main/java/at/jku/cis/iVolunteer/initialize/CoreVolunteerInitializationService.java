@@ -22,7 +22,7 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
-import at.jku.cis.iVolunteer.model.UserSubscription;
+import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.image.Image;
@@ -119,7 +119,7 @@ public class CoreVolunteerInitializationService {
 
 		for (int i = 0; i < volunteers.size(); i++) {
 			CoreUser volunteer = volunteers.get(i);
-			volunteer.setSubscribedTenants(new ArrayList<UserSubscription>());
+			volunteer.setSubscribedTenants(new ArrayList<TenantSubscription>());
 			for (Tenant t : tenants) {
 				volunteer.addSubscribedTenant(mp.getId(), t.getId(), UserRole.VOLUNTEER);
 			}

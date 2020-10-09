@@ -39,50 +39,47 @@ public class MatchingEntityMappingConfigurationController {
 	@Autowired MatchingOperatorRelationshipRepository matchingOperatorRelationshipRepository;
 	@Autowired ClassConfigurationRepository classConfigurationRepository;
 	@Autowired UserController userController;
-	
-// TODO alex change to support user 
+
 	@PutMapping("matching-entity-data")
 	private MatchingDataRequestDTO getMatchingEntityData(@RequestBody MatchingConfiguration mc) {
-		
+
 		MatchingEntityMappingConfiguration leftMapping = null;
 		MatchingEntityMappingConfiguration rightMapping = null;
-		
+
 		if (!mc.isLeftIsUser()) {
 			leftMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getLeftSideId());
 		} else {
-			User user = userController.findUserById(mc.getLeftSideId());
-			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
-			matchingCollectorConfiguration.setId(user.getId());
-			matchingCollectorConfiguration.setClassConfigurationId(user.getId());
-			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(user);
-			matchingCollectorConfiguration.setMappings(mappings);
-			leftMapping = matchingCollectorConfiguration;
+			leftMapping = getMatchingEntityMappingConfiguration(mc.getLeftSideId());
 		}
-		
+
 		if (!mc.isRightIsUser()) {
 			rightMapping = matchingEntityMappingConfigurationRepository.findOne(mc.getRightSideId());
 		} else {
-			User user = userController.findUserById(mc.getLeftSideId());
-			MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
-			matchingCollectorConfiguration.setId(user.getId());
-			matchingCollectorConfiguration.setClassConfigurationId(user.getId());
-			MatchingEntityMappings mappings = collectionService.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings(user);
-			matchingCollectorConfiguration.setMappings(mappings);
-			rightMapping = matchingCollectorConfiguration;
+			rightMapping = getMatchingEntityMappingConfiguration(mc.getRightSideId());
 		}
-//		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findByLeftClassConfigurationIdAndRightClassConfigurationId(mc.getLeftClassConfigurationId(), mc.getRightClassConfigurationId());
-		
+
 		List<MatchingOperatorRelationship> matchingOperatorRelationships = new ArrayList<MatchingOperatorRelationship>();
-		matchingOperatorRelationshipRepository.findByMatchingConfigurationId(mc.getId()).forEach(matchingOperatorRelationships::add);
-		
+		matchingOperatorRelationshipRepository.findByMatchingConfigurationId(mc.getId())
+				.forEach(matchingOperatorRelationships::add);
+
 		MatchingDataRequestDTO dto = new MatchingDataRequestDTO();
 		dto.setLeftMappingConfigurations(leftMapping);
 		dto.setRightMappingConfigurations(rightMapping);
 		dto.setMatchingConfiguration(mc);
 		dto.setRelationships(matchingOperatorRelationships);
 		dto.setPathDelimiter(CollectionService.PATH_DELIMITER);
-		
+
 		return dto;
 	}
-	
+
+	public MatchingEntityMappingConfiguration getMatchingEntityMappingConfiguration(String id) {
+		MatchingEntityMappingConfiguration matchingCollectorConfiguration = new MatchingEntityMappingConfiguration();
+		matchingCollectorConfiguration.setId(id);
+		matchingCollectorConfiguration.setClassConfigurationId(id);
+		MatchingEntityMappings mappings = collectionService
+				.collectUserClassDefinitionWithPropertiesAsMatchingEntityMappings();
+		matchingCollectorConfiguration.setMappings(mappings);
+		return matchingCollectorConfiguration;
+	}
+
 }

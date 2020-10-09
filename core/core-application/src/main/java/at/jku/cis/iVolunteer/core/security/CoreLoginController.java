@@ -25,12 +25,10 @@ import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.user.UserInfo;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;;
 
-//TODO xnet
 @RestController
 public class CoreLoginController {
 	@Autowired
@@ -54,26 +52,6 @@ public class CoreLoginController {
 
 		return ResponseEntity.ok(user);
 	}
-
-	@GetMapping("/userinfo")
-	public ResponseEntity<Object> getLoggedInUserInfo() {
-		CoreUser user = loginService.getLoggedInUser();
-
-		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("user does not exist"), HttpStatus.NOT_FOUND);
-		}
-
-		return ResponseEntity.ok((new UserInfo(user)));
-	}
-
-	/*
-	 * Get core/userinfo
-	 * 
-	 * return user aber statt "subscribedTenants" "tenantRoles"
-	 * "tenantroles enthält liste von tenantUserSubscriptions ohne "Volunteer" roles
-	 * TenantUserSubscripition: -> statt <marketplaceId, tenantId, role> ->
-	 * <tenantId, role>
-	 */
 
 	@PutMapping("/activation-status")
 	public boolean checkActivationStatus(@RequestBody String username) {
@@ -105,12 +83,6 @@ public class CoreLoginController {
 		}
 	}
 
-	/**
-	 * 
-	 * User Roles nach Rechten staffeln, falls das möglich ist Volunteer < Recruiter
-	 * < Helpseeker < Tenant_aDmin < Admin
-	 * 
-	 */
 	@PutMapping("/globalInfo/role/{role}")
 	public GlobalInfo getGlobalInfo(@PathVariable("role") UserRole role, @RequestBody List<String> tenantIds) {
 		GlobalInfo globalInfo = new GlobalInfo();

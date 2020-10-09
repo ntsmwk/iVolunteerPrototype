@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
-import at.jku.cis.iVolunteer.model.UserSubscription;
+import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 public class User {
@@ -39,7 +39,7 @@ public class User {
 
 	private String profileFileName;
 
-	private List<UserSubscription> subscribedTenants = new ArrayList<UserSubscription>();
+	private List<TenantSubscription> subscribedTenants = new ArrayList<TenantSubscription>();
 
 	private LocalRepositoryLocation localRepositoryLocation;
 	private String dropboxToken;
@@ -246,11 +246,11 @@ public class User {
 		this.birthday = birthday;
 	}
 
-	public List<UserSubscription> getSubscribedTenants() {
+	public List<TenantSubscription> getSubscribedTenants() {
 		return this.subscribedTenants;
 	}
 
-	public void setSubscribedTenants(final List<UserSubscription> subscribedTenants) {
+	public void setSubscribedTenants(final List<TenantSubscription> subscribedTenants) {
 		this.subscribedTenants = subscribedTenants;
 	}
 
@@ -286,22 +286,22 @@ public class User {
 		this.profileFileName = profileFileName;
 	}
 
-	public List<UserSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
+	public List<TenantSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
 			final UserRole role) {
-		final UserSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
+		final TenantSubscription tenantUserSubscription = findTenantUserSubscription(marketplaceId, tenantId, role);
 		if (tenantUserSubscription == null) {
-			this.subscribedTenants.add(new UserSubscription(marketplaceId, tenantId, role));
+			this.subscribedTenants.add(new TenantSubscription(marketplaceId, tenantId, role));
 		}
 		return this.subscribedTenants;
 	}
 
-	private UserSubscription findTenantUserSubscription(final String marketplaceId, final String tenantId,
+	private TenantSubscription findTenantUserSubscription(final String marketplaceId, final String tenantId,
 			final UserRole role) {
 		return this.subscribedTenants.stream().filter(st -> st.getMarketplaceId().equals(marketplaceId)
 				&& st.getTenantId().equals(tenantId) && st.getRole().equals(role)).findFirst().map(f -> f).orElse(null);
 	}
 
-	public List<UserSubscription> removeSubscribedTenant(final String marketplaceId, final String tenantId,
+	public List<TenantSubscription> removeSubscribedTenant(final String marketplaceId, final String tenantId,
 			final UserRole role) {
 		this.subscribedTenants.removeIf(s -> s.getTenantId().equals(tenantId)
 				&& s.getMarketplaceId().equals(marketplaceId) && s.getRole().equals(role));

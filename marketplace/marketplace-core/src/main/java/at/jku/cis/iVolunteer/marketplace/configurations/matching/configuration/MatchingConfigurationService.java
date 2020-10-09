@@ -36,11 +36,13 @@ public class MatchingConfigurationService {
 		return null;
 	}
 	
-	public List<MatchingConfiguration> getByTenantId(String tenantId){
-		
-		
-		return null;
-	}
+	
+	
+//	public List<MatchingConfiguration> getByTenantId(String tenantId){
+//		
+//		
+//		return null;
+//	}
 
 	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
 		if (matchingConfiguration.getId() == null) {
@@ -48,16 +50,16 @@ public class MatchingConfigurationService {
 			String rightClassConfigurationId = matchingConfiguration.getRightSideId();
 			String hash = createHashFromClassConfigurationIds(leftClassConfigurationId, rightClassConfigurationId);
 			matchingConfiguration.setHash(hash);
-
-			ClassConfiguration leftConfiguration = configuratorRepository.findOne(leftClassConfigurationId);
-			ClassConfiguration rightConfiguration = configuratorRepository.findOne(rightClassConfigurationId);
-
-			matchingConfiguration.setLeftSideName(leftConfiguration.getName());
-			matchingConfiguration.setRightSideName(rightConfiguration.getName());
-
-			if (matchingConfiguration.getName() == null) {
-				matchingConfiguration.setName(leftConfiguration.getName() + " --> " + rightConfiguration.getName());
-			}
+			
+//			ClassConfiguration leftConfiguration = configuratorRepository.findOne(leftClassConfigurationId);
+//			ClassConfiguration rightConfiguration = configuratorRepository.findOne(rightClassConfigurationId);
+//
+//			matchingConfiguration.setLeftSideName(leftConfiguration.getName());
+//			matchingConfiguration.setRightSideName(rightConfiguration.getName());
+//
+//			if (matchingConfiguration.getName() == null) {
+//				matchingConfiguration.setName(leftConfiguration.getName() + " --> " + rightConfiguration.getName());
+//			}
 		}
 
 		matchingConfiguration.setTimestamp(new Date());

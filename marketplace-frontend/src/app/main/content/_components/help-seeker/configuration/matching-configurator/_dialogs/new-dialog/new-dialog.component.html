@@ -29,8 +29,12 @@
             Auswahl
           </div>
 
-          <div class="configuration-no-selection" *ngIf="!data.leftClassConfiguration">
+          <div class="configuration-no-selection" *ngIf="!data.leftClassConfiguration && !data.leftIsUser">
             keine Auswahl
+          </div>
+
+          <div class="configuration-selection" *ngIf="!data.leftClassConfiguration && data.leftIsUser">
+            User
           </div>
 
           <div class="configuration-selection" *ngIf="data.leftClassConfiguration">
@@ -54,6 +58,12 @@
               Durchsuchen
             </button>
           </div>
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleUseUserClick('LEFT')">
+              User verwenden
+            </button>
+          </div>
 
         </div>
       </div>
@@ -74,8 +84,12 @@
             Auswahl
           </div>
 
-          <div class="configuration-no-selection" *ngIf="!data.rightClassConfiguration">
+          <div class="configuration-no-selection" *ngIf="!data.rightClassConfiguration && !data.rightIsUser">
             keine Auswahl
+          </div>
+
+          <div class="configuration-selection" *ngIf="!data.rightClassConfiguration && data.rightIsUser">
+            User
           </div>
 
           <div class="configuration-selection" *ngIf="data.rightClassConfiguration">
@@ -97,6 +111,13 @@
             <button class="secondary-button-light-small" mat-stroked-button type="button"
               (click)="handleBrowseClick('RIGHT')">
               Durchsuchen
+            </button>
+          </div>
+
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleUseUserClick('RIGHT')">
+              User verwenden
             </button>
           </div>
 

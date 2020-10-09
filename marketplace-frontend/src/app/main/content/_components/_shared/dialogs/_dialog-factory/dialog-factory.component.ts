@@ -451,8 +451,8 @@ export class DialogFactoryDirective {
       height: '418px',
       minHeight: '418px',
       data: {
-        matchingEntityConfiguration: matchingEntityConfiguration,
-        existingEntityPaths: existingEntityPaths,
+        matchingEntityConfiguration,
+        existingEntityPaths,
         addedEntities: [],
       },
     });

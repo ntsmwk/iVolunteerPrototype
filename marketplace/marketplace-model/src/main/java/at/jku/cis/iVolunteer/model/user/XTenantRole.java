@@ -2,14 +2,14 @@ package at.jku.cis.iVolunteer.model.user;
 
 import java.util.List;
 
-public class TenantRoles {
+public class XTenantRole {
     private String tenantId;
     private List<UserRole> roles;
 
-    public TenantRoles() {
+    public XTenantRole() {
     }
 
-    public TenantRoles(String tenantId, List<UserRole> roles) {
+    public XTenantRole(String tenantId, List<UserRole> roles) {
         this.tenantId = tenantId;
         this.roles = roles;
     }

@@ -29,7 +29,7 @@ export class User {
   emails: string[] = [];
 
   registeredMarketplaceIds: string[];
-  subscribedTenants: TenantUserSubscription[];
+  subscribedTenants: TenantSubscription[];
 
   localRepositoryLocation: LocalRepositoryLocation;
   dropboxToken: string;
@@ -44,7 +44,7 @@ export class Address {
   houseNumber: string;
   postcode: string;
   city: string;
-  country: string;
+  countryCode: number;
 }
 
 export class Timeslot {
@@ -126,7 +126,7 @@ export enum LocalRepositoryLocation {
   NEXTCLOUD = "NEXTCLOUD"
 }
 
-export class TenantUserSubscription {
+export class TenantSubscription {
   marketplaceId: string;
   tenantId: string;
   role: UserRole;

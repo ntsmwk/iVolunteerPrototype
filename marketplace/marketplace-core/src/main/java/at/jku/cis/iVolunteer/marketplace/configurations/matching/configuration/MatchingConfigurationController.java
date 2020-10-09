@@ -23,7 +23,7 @@ public class MatchingConfigurationController {
 	public List<MatchingConfiguration> getAllMatchingConfigurations() {
 		return matchingConfigurationRepository.findAll();
 	}
-
+	
 	@GetMapping("matching-configuration/{id}")
 	public MatchingConfiguration getAllMatchingConfigurationsById(@PathVariable("id") String id) {
 		return matchingConfigurationRepository.findOne(id);
@@ -44,6 +44,7 @@ public class MatchingConfigurationController {
 		return matchingConfigurationService
 				.getMatchingConfiguratorByClassConfigurationIdsUnordered(classConfigurationId1, classConfigurationId2);
 	}
+	
 
 	@PostMapping("matching-configuration/save")
 	MatchingConfiguration saveMatchingConfiguration(@RequestBody MatchingConfiguration matchingConfiguration) {
