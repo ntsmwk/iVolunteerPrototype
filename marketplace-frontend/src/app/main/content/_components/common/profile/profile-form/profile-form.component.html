@@ -90,7 +90,7 @@
             <input matInput placeholder="Stadt" formControlName="city" />
           </mat-form-field>
         </div>
-        <!-- 
+
         <mat-form-field fxFlex class="ml-4">
           <input matInput placeholder="Land" formControlName="country" value="Österreich" />
         </mat-form-field>
@@ -103,71 +103,70 @@
           </mat-expansion-panel-header>
 
           <!-- <fieldset class="section-border"> -->
-        <div formArrayName="timeslots" *ngFor=" let control of profileForm.get('timeslots').controls; let i = index" class="m-20">
-          <mat-error *ngIf="control.invalid">
-            Bitte korrektes Uhrzeitformat verwenden: 24h (H)H:MM
-          </mat-error>
-          <div [formGroupName]="i">
-            <div class="allowed-value-row" fxLayout="row wrap" fxLayoutAlign="start center">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="handleTimeslotCheckboxClicked(i, 'active')" [checked]="control.value.active" class="m-4">
-              </mat-checkbox>
+          <div formArrayName="timeslots" *ngFor=" let control of profileForm.get('timeslots').controls; let i = index" class="m-20">
+            <mat-error *ngIf="control.invalid">
+              Bitte korrektes Uhrzeitformat verwenden: 24h (H)H:MM
+            </mat-error>
+            <div [formGroupName]="i">
+              <div class="allowed-value-row" fxLayout="row wrap" fxLayoutAlign="start center">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="handleTimeslotCheckboxClicked(i, 'active')" [checked]="control.value.active" class="m-4">
+                </mat-checkbox>
 
-              <div class="weekday-label">
-                {{ getWeekdayLabel(control.value.weekday) }}
-              </div>
+                <div class="weekday-label">
+                  {{ getWeekdayLabel(control.value.weekday) }}
+                </div>
 
-              <div class="time-container">
-                <mat-form-field class="time-field ml-4">
-                  <input matInput placeholder="Von" formControlName="from1" />
-                  <mat-error *ngIf="control.get('from1').invalid">
-                    {{ showErrorMessage(control.get("from1"), "from1") }}
-                  </mat-error>
-                </mat-form-field>
+                <div class="time-container">
+                  <mat-form-field class="time-field ml-4">
+                    <input matInput placeholder="Von" formControlName="from1" />
+                    <mat-error *ngIf="control.get('from1').invalid">
+                      {{ showErrorMessage(control.get("from1"), "from1") }}
+                    </mat-error>
+                  </mat-form-field>
 
-                <mat-form-field class="time-field ml-4">
-                  <input matInput placeholder="Bis" formControlName="to1" />
-                  <mat-error *ngIf="control.get('to1').invalid">
-                    {{ showErrorMessage(control.get("to1"), "to1") }}
-                  </mat-error>
-                </mat-form-field>
-              </div>
+                  <mat-form-field class="time-field ml-4">
+                    <input matInput placeholder="Bis" formControlName="to1" />
+                    <mat-error *ngIf="control.get('to1').invalid">
+                      {{ showErrorMessage(control.get("to1"), "to1") }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
 
-              <div class="time-mid-label">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="
+                <div class="time-mid-label">
+                  <mat-checkbox (click)="$event.stopPropagation()" (change)="
                         handleTimeslotCheckboxClicked(i, 'secondActive')
                       " [checked]="control.value.secondActive" labelPosition="before" [disabled]="!control.value.active">
-                  <div *ngIf="control.value.secondActive" class="und-label">
-                    und
-                  </div>
-                  <div *ngIf="!control.value.secondActive" class="und-label">
-                    und?
-                  </div>
-                </mat-checkbox>
+                    <div *ngIf="control.value.secondActive" class="und-label">
+                      und
+                    </div>
+                    <div *ngIf="!control.value.secondActive" class="und-label">
+                      und?
+                    </div>
+                  </mat-checkbox>
+                </div>
+
+                <div class="time-container" *ngIf="control.value.secondActive">
+                  <mat-form-field class="time-field ml-4">
+                    <input matInput placeholder="Von" formControlName="from2" />
+                    <mat-error *ngIf="control.get('from2').invalid">
+                      {{ showErrorMessage(control.get("from2"), "from2") }}
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="time-field ml-4">
+                    <input matInput placeholder="Bis" formControlName="to2" />
+                    <mat-error *ngIf="control.get('to2').invalid">
+                      {{ showErrorMessage(control.get("to2"), "to2") }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div *ngIf="i < 6" class="pt-12 divider-100-20"></div>
               </div>
-
-              <div class="time-container" *ngIf="control.value.secondActive">
-                <mat-form-field class="time-field ml-4">
-                  <input matInput placeholder="Von" formControlName="from2" />
-                  <mat-error *ngIf="control.get('from2').invalid">
-                    {{ showErrorMessage(control.get("from2"), "from2") }}
-                  </mat-error>
-                </mat-form-field>
-
-                <mat-form-field class="time-field ml-4">
-                  <input matInput placeholder="Bis" formControlName="to2" />
-                  <mat-error *ngIf="control.get('to2').invalid">
-                    {{ showErrorMessage(control.get("to2"), "to2") }}
-                  </mat-error>
-                </mat-form-field>
-              </div>
-
-              <div *ngIf="i < 6" class="pt-12 divider-100-20"></div>
             </div>
           </div>
-      </fieldset>
-      </div>
-      <!-- </fieldset> -->
-      </mat-expansion-panel>
+          <!-- </fieldset> -->
+        </mat-expansion-panel>
       </mat-accordion>
 
       <button type="button" mat-stroked-button mat-raised-button color="primary" (click)="save()" aria-label="Speichern" [disabled]="profileForm.invalid">
