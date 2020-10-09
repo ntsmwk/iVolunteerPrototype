@@ -170,7 +170,6 @@ public class CoreUserService {
 			user.setPassword(existingUser.getPassword());
 		}
 		user = this.coreUserRepository.save(user);
-
 		if (updateMarketplaces) {
 			this.updateMarketplaces(user, authorization);
 		}

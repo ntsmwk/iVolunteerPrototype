@@ -97,11 +97,14 @@ public class CoreUserController {
 	@PutMapping("/user/update")
 	private ResponseEntity<Object> updateUser(@RequestBody CoreUser user, @RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "updateMarketplaces", required = false) boolean updateMarketplaces) {
+		
+		System.out.println("Updating user");
 		if (user == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse("User must not be null"));
 		}
 		
 		user = coreUserService.updateUser(user, authorization, updateMarketplaces);
+		
 		return ResponseEntity.ok().build();
 	}
 

@@ -10,8 +10,7 @@ import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 public class User {
-	@Id
-	private String id;
+	@Id private String id;
 	private String username;
 	private String password;
 	private String loginEmail;
@@ -29,14 +28,14 @@ public class User {
 
 	private Date birthday;
 
-	private List<String> locations;
+	private List<String> locations = new ArrayList<>();
 	private String about;
 	private Address address;
 	private List<Timeslot> timeslots = initTimeslots();
 
-	private List<String> phoneNumbers;
-	private List<String> websites;
-	private List<String> emails;
+	private List<String> phoneNumbers = new ArrayList<>(3);
+	private List<String> websites = new ArrayList<>(3);
+	private List<String> emails = new ArrayList<>(3);
 
 	private String imageId;
 

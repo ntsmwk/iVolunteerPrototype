@@ -69,17 +69,17 @@ export class ProfileFormComponent implements OnInit {
         city: new FormControl(''),
         country: new FormControl(''),
       }),
-      about: new FormControl(),
-      phoneNumber1: new FormControl(),
-      phoneNumber2: new FormControl(),
-      phoneNumber3: new FormControl(),
-      website1: new FormControl(),
-      website2: new FormControl(),
-      website3: new FormControl(),
+      about: new FormControl(''),
+      phoneNumber1: new FormControl(''),
+      phoneNumber2: new FormControl(''),
+      phoneNumber3: new FormControl(''),
+      website1: new FormControl(''),
+      website2: new FormControl(''),
+      website3: new FormControl(''),
 
-      loginEmail: new FormControl(),
-      email2: new FormControl(),
-      email3: new FormControl(),
+      loginEmail: new FormControl('', Validators.required),
+      email2: new FormControl(''),
+      email3: new FormControl(''),
 
       timeslots: this.formBuilder.array([]),
     });
@@ -133,15 +133,15 @@ export class ProfileFormComponent implements OnInit {
       address: !isNullOrUndefined(this.user.address) ? this.user.address : this.profileForm.value.address,
       timeslots: timeslotsConvert,
       about: this.user.about,
-      phoneNumber1: this.user.phoneNumbers[0],
-      phoneNumber2: this.user.phoneNumbers[1],
-      phoneNumber3: this.user.phoneNumbers[2],
-      website1: this.user.websites[0],
-      website2: this.user.websites[1],
-      website3: this.user.websites[2],
-      loginEmail: this.user.emails[0],
-      email2: this.user.emails[1],
-      email3: this.user.emails[2],
+      phoneNumber1: !isNullOrUndefined(this.user.phoneNumbers[0]) ? this.user.phoneNumbers[0] : null,
+      phoneNumber2: !isNullOrUndefined(this.user.phoneNumbers[1]) ? this.user.phoneNumbers[1] : null,
+      phoneNumber3: !isNullOrUndefined(this.user.phoneNumbers[2]) ? this.user.phoneNumbers[2] : null,
+      website1: !isNullOrUndefined(this.user.websites[0]) ? this.user.websites[0] : null,
+      website2: !isNullOrUndefined(this.user.websites[1]) ? this.user.websites[1] : null,
+      website3: !isNullOrUndefined(this.user.websites[2]) ? this.user.websites[2] : null,
+      loginEmail: !isNullOrUndefined(this.user.emails[0]) ? this.user.emails[0] : null,
+      email2: !isNullOrUndefined(this.user.emails[1]) ? this.user.emails[1] : null,
+      email3: !isNullOrUndefined(this.user.emails[2]) ? this.user.emails[2] : null,
 
     });
 
@@ -166,12 +166,20 @@ export class ProfileFormComponent implements OnInit {
     this.user.address = this.profileForm.value.address;
 
     this.user.about = this.profileForm.value.about;
+    this.user.phoneNumbers = [];
+    this.user.phoneNumbers.fill(undefined, 0, 2);
     this.user.phoneNumbers[0] = this.profileForm.value.phoneNumber1;
     this.user.phoneNumbers[1] = this.profileForm.value.phoneNumber2;
     this.user.phoneNumbers[2] = this.profileForm.value.phoneNumber3;
+
+    this.user.websites = [];
+    this.user.websites.fill(undefined, 0, 2);
     this.user.websites[0] = this.profileForm.value.website1;
     this.user.websites[1] = this.profileForm.value.website2;
     this.user.websites[2] = this.profileForm.value.website3;
+
+    this.user.emails = [];
+    this.user.emails.fill(undefined, 0, 2);
     this.user.emails[0] = this.profileForm.value.loginEmail;
     this.user.loginEmail = this.profileForm.value.loginEmail;
     this.user.emails[1] = this.profileForm.value.email2;
@@ -188,17 +196,20 @@ export class ProfileFormComponent implements OnInit {
 
     this.user.timeslots = convertedTimeslots;
 
-    await this.coreUserService.updateUser(this.user, true).toPromise();
+    try {
+      await this.coreUserService.updateUser(this.user, true).toPromise();
+      this.loginService.generateGlobalInfo(
+        this.globalInfo.userRole,
+        this.globalInfo.tenants.map((t) => t.id)
+      );
 
-    this.loginService.generateGlobalInfo(
-      this.globalInfo.userRole,
-      this.globalInfo.tenants.map((t) => t.id)
-    );
+      this.reload();
 
+      this.saveSuccessful = true;
+    } catch (error) {
+      console.log(error);
+    }
 
-    this.reload();
-
-    this.saveSuccessful = true;
 
   }
 
