@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +23,44 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.task.TaskInstance;
 import at.jku.cis.iVolunteer.model.user.User;
 
+
+
+/**
+ * 
+
+	GET TASK BY ID
+	GET {marketplaceUrl}/task/{taskId}/
+	Req: {}
+	Res: Task
+	CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
+	POST {marketplaceUrl}/task/new/
+	Req: { Task }
+	Res: 200 (OK), 500 (FAILED)
+	CREATE NEW CLOSED TASK (Fields already copied from TASKTEMPLATE inside Task)
+	(Creates Task and also creates TaskCertificate & BadgeCertificate for every subscribedUser and Task is automatically closed)
+	POST {marketplaceUrl}/task/new/closed
+	Req: { Task }
+	Res: 200 (OK), 500 (FAILED)
+	FINALIZE / CLOSE TASK
+	(Creates TaskCertificate & BadgeCertificate for every subscribedUser and Task gets closed)
+	GET {marketplaceUrl}/task/close/
+	Req: {}
+	Res: 200 (OK), 500 (FAILED)
+	UPDATE TASK (schicken nur die änderung des felds oder ganzes objekt wie sie wollen)
+	(ONLY POSSIBLE IF TASK NOT CLOSED! --> Bitte Errormessage liefern bzw. ErrorCode für diesen Fall)
+	POST {marketplaceUrl}/task/update/{taskId}
+	Req: { key: value, key2: value2,...} (ONLY CHANGED TASK DATA)
+	Res: 200 (OK), 500 (FAILED), 400 { message: "z.b: Kann nicht aktualisiert werden da.."}
+	SUBSCRIBE TASK BY ID
+	POST {marketplaceUrl}/task/{taskId}/subscribe/
+	Req: {}
+	Res: 200 (OK), 500 (FAILED)
+	UNSUBSCRIBE TASK BY ID
+	POST {marketplaceUrl}/task/{taskId}/unsubscribe/
+	Req: {}
+	Res: 200 (OK), 500 (FAILED)
+ *
+ */
 
 //TODO xnet done - test
 @RestController
