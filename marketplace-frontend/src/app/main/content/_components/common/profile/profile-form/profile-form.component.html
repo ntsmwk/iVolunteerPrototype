@@ -69,6 +69,13 @@
             {{ showErrorMessage(profileForm.get("birthday"), "birthday") }}
           </mat-error>
         </mat-form-field>
+
+        <div fxFlex>
+          <mat-form-field fxFlex>
+            <textarea matInput placeholder="Erzähle über dich" formControlName="about" matTextareaAutosize
+              matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
+          </mat-form-field>
+        </div>
       </fieldset>
 
       <div class="address-label">Adresse</div>
@@ -96,8 +103,60 @@
         </mat-form-field>
       </fieldset>
 
-      <mat-accordion>
+      <mat-accordion multi="true">
+
         <mat-expansion-panel>
+          <mat-expansion-panel-header expandedHeight="40px" collapsedHeight="40px">
+            <mat-panel-title>Kontaktmöglichkeiten</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="m-12 mt-0">
+            <div class="address-label">Telefon</div>
+            <fieldset class="section-border">
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Telefonnummer" formControlName="phoneNumber1" />
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Weitere Telefonnummer" formControlName="phoneNumber2" />
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Weitere Telefonnummer" formControlName="phoneNumber3" />
+              </mat-form-field>
+            </fieldset>
+
+            <div class="address-label">Webseiten</div>
+            <fieldset class="section-border">
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Webseite" formControlName="website1" />
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Weitere Webseite" formControlName="website2" />
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Weitere Webseite" formControlName="website3" />
+              </mat-form-field>
+            </fieldset>
+
+            <div class="address-label">E-Mail-Adressen</div>
+            <fieldset class="section-border">
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Primäre E-Mail-Adresse" formControlName="loginEmail" />
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Weitere E-Mail-Adresse" formControlName="email2" />
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                <input matInput placeholder="Weitere E-Mail-Adresse" formControlName="email3" />
+              </mat-form-field>
+            </fieldset>
+
+
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="mt-12">
           <mat-expansion-panel-header expandedHeight="40px" collapsedHeight="40px">
             <mat-panel-title> Timeslots </mat-panel-title>
           </mat-expansion-panel-header>
