@@ -18,7 +18,7 @@ public class XTaskSerialized {
 	String imagePath;
 	boolean closed;
 	XGeoInfo geoInfo;
-	List<XDynamicField> dynamicFields = new ArrayList<>();
+	List<XDynamicFieldBlock> dynamicFields = new ArrayList<>();
 	
 	public String getId() {
 		return id;
@@ -68,12 +68,13 @@ public class XTaskSerialized {
 	public void setGeoInfo(XGeoInfo geoInfo) {
 		this.geoInfo = geoInfo;
 	}
-	public List<XDynamicField> getDynamicFields() {
+	public List<XDynamicFieldBlock> getDynamicFields() {
 		return dynamicFields;
 	}
-	public void setDynamicFields(List<XDynamicField> dynamicFields) {
+	public void setDynamicFields(List<XDynamicFieldBlock> dynamicFields) {
 		this.dynamicFields = dynamicFields;
 	}
+
 	
 	
 	

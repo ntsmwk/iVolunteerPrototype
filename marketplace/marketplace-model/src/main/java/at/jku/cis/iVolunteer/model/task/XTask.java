@@ -33,7 +33,7 @@ public class XTask {
 	boolean closed;
 	XGeoInfo geoInfo;
 	
-	List<XDynamicField> dynamicFields = new ArrayList<>();
+	List<XDynamicFieldBlock> dynamicFields = new ArrayList<>();
 	List<XUser> subscribedUsers;
 	List<XBadgeTemplate> badges = new ArrayList<>();
 	public String getId() {
@@ -90,10 +90,10 @@ public class XTask {
 	public void setGeoInfo(XGeoInfo geoInfo) {
 		this.geoInfo = geoInfo;
 	}
-	public List<XDynamicField> getDynamicFields() {
+	public List<XDynamicFieldBlock> getDynamicFields() {
 		return dynamicFields;
 	}
-	public void setDynamicFields(List<XDynamicField> dynamicFields) {
+	public void setDynamicFields(List<XDynamicFieldBlock> dynamicFields) {
 		this.dynamicFields = dynamicFields;
 	}
 	public List<XUser> getSubscribedUsers() {

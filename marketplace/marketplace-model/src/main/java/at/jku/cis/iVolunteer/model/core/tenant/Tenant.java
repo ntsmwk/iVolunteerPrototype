@@ -29,7 +29,7 @@ public class Tenant {
 	private String landingpageTitle;
 	private String landingpageMessage;
 	private String landingpageText;
-	private String landingpageImageFileName;
+	private String landingpageImagePath;
 
 	private List<SubscriptionRule> subscriptionRules = new ArrayList<>();
 
@@ -137,12 +137,12 @@ public class Tenant {
 		this.imagePath = imagePath;
 	}
 
-	public String getLandingpageImageFileName() {
-		return landingpageImageFileName;
+	public String getLandingpageImagePath() {
+		return landingpageImagePath;
 	}
 
-	public void setLandingpageImageFileName(String landingpageImageFileName) {
-		this.landingpageImageFileName = landingpageImageFileName;
+	public void setLandingpageImagePath(String landingpageImagePath) {
+		this.landingpageImagePath = landingpageImagePath;
 	}
 
 	@Override

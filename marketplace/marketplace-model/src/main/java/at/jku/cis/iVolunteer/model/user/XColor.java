@@ -1,11 +1,16 @@
 package at.jku.cis.iVolunteer.model.user;
 
+
 public class XColor {
 	private String name;
 	private String hex;
 	private String rgb;
 
 	public XColor() {
+	}
+	
+	public XColor(String ourColor) {
+		this.hex = ourColor;
 	}
 
 	public XColor(String name, String hex, String rgb) {

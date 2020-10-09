@@ -76,7 +76,7 @@ public class CoreTenantInitializationService {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			fileName = storageService.store(classPathResource);
-			tenant.setLandingpageImageFileName(fileName);
+			tenant.setLandingpageImagePath(fileName);
 
 		}
 	}

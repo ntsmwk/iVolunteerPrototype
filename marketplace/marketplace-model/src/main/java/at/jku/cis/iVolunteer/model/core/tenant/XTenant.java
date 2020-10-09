@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.core.tenant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.user.XColor;
@@ -23,7 +24,8 @@ public class XTenant {
 	private String landingpageText;
 	private String landingpageImagePath;
 	private XGeoInfo geoInfo;
-	private List<XUser> subscribeVolunteers;
+	private List<XUser> subscribedVolunteers;
+	
 
 	public String getId() {
 		return id;
@@ -144,13 +146,12 @@ public class XTenant {
 	public void setGeoInfo(XGeoInfo geoInfo) {
 		this.geoInfo = geoInfo;
 	}
-
-	public List<XUser> getSubscribeVolunteers() {
-		return subscribeVolunteers;
+	public List<XUser> getSubscribedVolunteers() {
+		return subscribedVolunteers;
+	}
+	public void setSubscribedVolunteers(List<XUser> subscribedVolunteers) {
+		this.subscribedVolunteers = subscribedVolunteers;
 	}
 
-	public void setSubscribeVolunteers(List<XUser> subscribeVolunteers) {
-		this.subscribeVolunteers = subscribeVolunteers;
-	}
 
 }
