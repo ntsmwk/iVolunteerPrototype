@@ -155,15 +155,21 @@ export class ProfileFormComponent implements OnInit {
         : this.profileForm.value.address,
       timeslots: timeslotsConvert,
       about: this.user.about,
-      phoneNumber1: this.user.phoneNumbers[0],
-      phoneNumber2: this.user.phoneNumbers[1],
-      phoneNumber3: this.user.phoneNumbers[2],
-      website1: this.user.websites[0],
-      website2: this.user.websites[1],
-      website3: this.user.websites[2],
-      loginEmail: this.user.emails[0],
-      email2: this.user.emails[1],
-      email3: this.user.emails[2]
+      phoneNumber1: this.user.phoneNumbers
+        ? this.user.phoneNumbers[0] || ""
+        : "",
+      phoneNumber2: this.user.phoneNumbers
+        ? this.user.phoneNumbers[1] || ""
+        : "",
+      phoneNumber3: this.user.phoneNumbers
+        ? this.user.phoneNumbers[2] || ""
+        : "",
+      website1: this.user.websites ? this.user.websites[0] || "" : "",
+      website2: this.user.websites ? this.user.websites[1] || "" : "",
+      website3: this.user.websites ? this.user.websites[2] || "" : "",
+      loginEmail: this.user.emails ? this.user.emails[0] || "" : "",
+      email2: this.user.emails ? this.user.emails[1] || "" : "",
+      email3: this.user.emails ? this.user.emails[2] || "" : ""
     });
 
     for (let i = 0; i < 7; i++) {
