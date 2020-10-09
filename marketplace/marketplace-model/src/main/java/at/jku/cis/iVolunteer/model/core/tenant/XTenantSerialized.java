@@ -19,6 +19,8 @@ public class XTenantSerialized {
 	XColor secondaryColor;
 	List<String> tags = new ArrayList<>();
 	XGeoInfo geoInfo;
+	
+	
 	public String getId() {
 		return id;
 	}

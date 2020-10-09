@@ -14,7 +14,7 @@ public class Tenant {
 
 	private String homepage;
 
-	private String imageFileName;// TODO xnet rename "logo"? low prio
+	private String imagePath;// TODO xnet rename "logo"? low prio
 
 	private String primaryColor;
 	private String secondaryColor;
@@ -129,14 +129,14 @@ public class Tenant {
 		this.subscriptionRules = subscriptionRules;
 	}
 
-	public String getImageFileName() {
-		return imageFileName;
+	public String getImagePath() {
+		return imagePath;
 	}
 
-	public void setImageFileName(String imageFileName) {
-		this.imageFileName = imageFileName;
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
-	
+
 	public String getLandingpageImageFileName() {
 		return landingpageImageFileName;
 	}
