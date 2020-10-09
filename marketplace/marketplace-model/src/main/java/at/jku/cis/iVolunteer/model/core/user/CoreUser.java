@@ -79,8 +79,8 @@ public class CoreUser extends User {
 		if (update.getEmails() != null)
 			original.setEmails(update.getEmails());
 
-		if (update.getImageId() != null)
-			original.setImageId(update.getImageId());
+		if (update.getProfileFileName() != null)
+			original.setProfileFileName(update.getProfileFileName());
 
 		if (update.getSubscribedTenants() != null)
 			original.setSubscribedTenants(update.getSubscribedTenants());
