@@ -145,37 +145,18 @@
                 </div>
               </div>
             </div>
-            <<<<<<< HEAD </div>
-              </div>
-          </fieldset>
 
-
-          <button type="button" mat-stroked-button class="primary-button-dark mt-16" (click)="save()" aria-label="Speichern" [disabled]="profileForm.invalid">
-        <div *ngIf="!saveSuccessful">
-          Speichern
-        </div>
-        <div *ngIf="saveSuccessful" fxLayout="row" fxLayoutAlign="center center">
-=======
           </fieldset>
         </mat-expansion-panel>
       </mat-accordion>
 
-      <button
-        type="button"
-        mat-stroked-button
-        mat-raised-button
-        color="primary"
-        (click)="save()"
-        aria-label="Speichern"
-        [disabled]="profileForm.invalid"
-      >
+      <button type="button" mat-stroked-button mat-raised-button color="primary" (click)="save()" aria-label="Speichern" [disabled]="profileForm.invalid">
         <div *ngIf="!saveSuccessful">Speichern</div>
         <div
           *ngIf="saveSuccessful"
           fxLayout="row"
           fxLayoutAlign="center center"
         >
->>>>>>> a31caa8823e90b2cef2bbe1fddd2c5745ef34cc8
           <mat-icon>done</mat-icon>
           <div>Gespeichert</div>
         </div>
