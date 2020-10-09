@@ -142,7 +142,7 @@ export class TenantFormContentComponent implements OnInit {
       // oldLandingPageImage
       undefined
     );
-    landingPageImage = await this.fileService.uploadFile(landingPageImage);
+    await this.fileService.uploadFile(landingPageImage);
     this.tenant.landingpageImageFileName = "<<filenameWithoutPath.png>>";
     this.tenant.tags = this.addedTags;
 
@@ -213,13 +213,23 @@ export class TenantFormContentComponent implements OnInit {
     return null;
   }
 
-  handleProfileImageUploadEvent(event: { key: string; image: any }) {
+  handleProfileImageUploadEvent(event: {
+    key: string;
+    image: any;
+    fileName: string;
+  }) {
+    console.error("tenantform content component");
+    console.error(event);
     this.previewProfileImageDirty = true;
-    this.previewProfileImage = event.image;
+    this.previewProfileImage = event.fileName;
   }
 
-  handleLandingPageImageUploadEvent(event: { key: string; image: any }) {
+  handleLandingPageImageUploadEvent(event: {
+    key: string;
+    image: any;
+    fileName: string;
+  }) {
     this.landingPageImageDirty = true;
-    this.landingPageImage = event.image;
+    this.landingPageImage = event.fileName;
   }
 }

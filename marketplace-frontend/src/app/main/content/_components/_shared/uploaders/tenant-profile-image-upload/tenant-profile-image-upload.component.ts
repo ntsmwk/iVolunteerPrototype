@@ -22,6 +22,7 @@ export class TenantProfileImageUploadComponent implements OnInit {
   @Output() uploadedImage: EventEmitter<{
     key: string;
     image: any;
+    fileName: string;
   }> = new EventEmitter();
 
   imageFileInput: FileInput;
@@ -65,21 +66,31 @@ export class TenantProfileImageUploadComponent implements OnInit {
       const image = fileReader.result;
       this.uploadingImage = false;
       this.previewImage = image;
-      this.uploadedImage.emit({ key: "uploaded", image });
+      console.error(image);
+      console.error(this.imageFileInput.files[0]);
+      this.uploadedImage.emit({
+        key: "uploaded",
+        image: image,
+        fileName: this.imageFileInput.files[0].name
+      });
     };
-    fileReader.readAsDataURL(this.imageFileInput.files[0]);
+    fileReader.readAsBinaryString(this.imageFileInput.files[0]);
   }
 
   deleteImage() {
     this.imageFileInput = undefined;
     this.previewImage = undefined;
-    this.uploadedImage.emit({ key: "clear", image: null });
+    this.uploadedImage.emit({ key: "clear", image: null, fileName: "" });
   }
 
   revertImage() {
     this.imageFileInput = undefined;
     this.uploadingImage = false;
     this.previewImage = this.oldImage;
-    this.uploadedImage.emit({ key: "reverted", image: this.oldImage });
+    this.uploadedImage.emit({
+      key: "reverted",
+      image: this.oldImage,
+      fileName: ""
+    });
   }
 }
