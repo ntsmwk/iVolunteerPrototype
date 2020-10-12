@@ -25,7 +25,7 @@ public class XUserPasswordMapper implements AbstractMapper<User, XUserPassword> 
 		user.setFirstname(source.getFirstname());
 		user.setLastname(source.getLastname());
 		user.setTitleAfter(source.getTitleAfter());
-		user.setBirthday(source.getBirthday());
+		user.setBirthDate(source.getBirthday());
 		user.setAddress(new XAddress());// TODO
 		user.setPhoneNumbers(source.getPhoneNumbers());
 		user.setEmails(source.getEmails());
@@ -59,7 +59,7 @@ public class XUserPasswordMapper implements AbstractMapper<User, XUserPassword> 
 		user.setFirstname(target.getFirstname());
 		user.setLastname(target.getLastname());
 		user.setTitleAfter(target.getTitleAfter());
-		user.setBirthday(target.getBirthday());
+		user.setBirthday(target.getBirthDate());
 		user.setAddress(new Address());// TODO
 		user.setPhoneNumbers(target.getPhoneNumbers());
 		user.setEmails(target.getEmails());
