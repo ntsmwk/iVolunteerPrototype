@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
+package at.jku.cis.iVolunteer.model._mapper.xnet;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,7 +24,7 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 		XTenant xt = new XTenant();	
 		xt.setId(source.getId());
 		xt.setName(source.getName());
-		xt.setAbbreviation("todo"); //TODO
+		xt.setAbbreviation("todo"); // TODO
 		xt.setDescription(source.getDescription());
 		xt.setHomepage(source.getHomepage());
 		xt.setImagePath(source.getImagePath());
@@ -36,9 +36,9 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 		xt.setLandingpageTitle(source.getLandingpageTitle());
 		xt.setLandingpageText(source.getLandingpageText());
 		xt.setLandingpageImagePath(source.getLandingpageImagePath());
-		xt.setGeoInfo(new XGeoInfo()); //TODO
-		xt.setSubscribedVolunteers(new ArrayList<>()); //TODO
-		
+		xt.setGeoInfo(new XGeoInfo()); // TODO
+		xt.setSubscribedVolunteers(new ArrayList<>()); // TODO
+
 		return xt;
 	}
 

@@ -13,11 +13,11 @@ import at.jku.cis.iVolunteer.core.security.activation.CorePendingActivationRepos
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.tenant.tags.TagRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
-import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tag;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
+import at.jku.cis.iVolunteer.model.user.TenantSubscription;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service

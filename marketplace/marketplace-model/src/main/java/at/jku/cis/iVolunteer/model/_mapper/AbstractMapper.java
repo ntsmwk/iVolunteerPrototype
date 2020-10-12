@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace._mapper;
+package at.jku.cis.iVolunteer.model._mapper;
 
 import java.util.List;
 

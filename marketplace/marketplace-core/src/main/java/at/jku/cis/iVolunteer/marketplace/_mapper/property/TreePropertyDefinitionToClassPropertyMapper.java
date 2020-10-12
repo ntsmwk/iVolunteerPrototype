@@ -6,18 +6,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
+import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyEntry;
 
 @Component
-public class TreePropertyDefinitionToClassPropertyMapper implements OneWayMapper<TreePropertyDefinition, ClassProperty<Object>> {
+public class TreePropertyDefinitionToClassPropertyMapper
+		implements OneWayMapper<TreePropertyDefinition, ClassProperty<Object>> {
 
-	@Autowired CollectionService collectionService;
-	
+	@Autowired
+	CollectionService collectionService;
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public ClassProperty<Object> toTarget(TreePropertyDefinition source) {
@@ -25,7 +27,7 @@ public class TreePropertyDefinitionToClassPropertyMapper implements OneWayMapper
 		if (source == null) {
 			return null;
 		}
-		
+
 		@SuppressWarnings("rawtypes")
 		ClassProperty classProperty = new ClassProperty<TreePropertyEntry>();
 
@@ -36,32 +38,31 @@ public class TreePropertyDefinitionToClassPropertyMapper implements OneWayMapper
 
 		classProperty.setType(PropertyType.TREE);
 
-//		if (source.getPropertyConstraints() != null) {
-//			classProperty
-//					.setPropertyConstraints(new ArrayList<PropertyConstraint<Object>>(source.getPropertyConstraints()));
-//		}
+		// if (source.getPropertyConstraints() != null) {
+		// classProperty
+		// .setPropertyConstraints(new
+		// ArrayList<PropertyConstraint<Object>>(source.getPropertyConstraints()));
+		// }
 
 		classProperty.setMultiple(source.isMultiple());
 		classProperty.setRequired(source.isRequired());
-		
+
 		return classProperty;
 	}
 
 	@Override
 	public List<ClassProperty<Object>> toTargets(List<TreePropertyDefinition> sources) {
-			
+
 		if (sources == null) {
 			return null;
 		}
-		
+
 		List<ClassProperty<Object>> classProperties = new ArrayList<>();
 		for (TreePropertyDefinition enumDefinition : sources) {
 			toTarget(enumDefinition);
 		}
-		
+
 		return classProperties;
 	}
-
-	
 
 }

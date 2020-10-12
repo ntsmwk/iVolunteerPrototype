@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipDTO;
 
@@ -14,11 +14,11 @@ public class AssociationRelationshipDTOMapper implements AbstractMapper<Associat
 
 	@Override
 	public RelationshipDTO toTarget(Association source) {
-		
+
 		if (source == null) {
 			return null;
 		}
-		
+
 		RelationshipDTO dto = new RelationshipDTO();
 		dto.setId(source.getId());
 		dto.setRelationshipType(source.getRelationshipType());
@@ -26,7 +26,7 @@ public class AssociationRelationshipDTOMapper implements AbstractMapper<Associat
 		dto.setSourceCardinality(source.getSourceCardinality());
 		dto.setTarget(source.getTarget());
 		dto.setTargetCardinality(source.getTargetCardinality());
-		
+
 		return dto;
 	}
 
@@ -36,22 +36,22 @@ public class AssociationRelationshipDTOMapper implements AbstractMapper<Associat
 		if (sources == null) {
 			return null;
 		}
-		
+
 		List<RelationshipDTO> targets = new LinkedList<RelationshipDTO>();
 		for (Association a : sources) {
 			targets.add(this.toTarget(a));
 		}
-		
+
 		return targets;
 	}
 
 	@Override
 	public Association toSource(RelationshipDTO target) {
-		
+
 		if (target == null) {
 			return null;
 		}
-		
+
 		Association association = new Association();
 		association.setId(target.getId());
 		association.setRelationshipType(target.getRelationshipType());
@@ -59,7 +59,7 @@ public class AssociationRelationshipDTOMapper implements AbstractMapper<Associat
 		association.setSourceCardinality(target.getSourceCardinality());
 		association.setTarget(target.getTarget());
 		association.setTargetCardinality(target.getTargetCardinality());
-		
+
 		return association;
 	}
 
@@ -68,12 +68,12 @@ public class AssociationRelationshipDTOMapper implements AbstractMapper<Associat
 		if (targets == null) {
 			return null;
 		}
-		
+
 		List<Association> sources = new LinkedList<Association>();
 		for (RelationshipDTO dto : targets) {
 			sources.add(this.toSource(dto));
 		}
-		
+
 		return sources;
 	}
 
