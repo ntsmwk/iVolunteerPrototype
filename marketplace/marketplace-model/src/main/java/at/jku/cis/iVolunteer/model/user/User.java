@@ -37,7 +37,7 @@ public class User {
 	private List<String> websites = new ArrayList<>(3);
 	private List<String> emails = new ArrayList<>(3);
 
-	private String profileFileName;
+	private String profileImagePath;
 
 	private List<TenantSubscription> subscribedTenants = new ArrayList<TenantSubscription>();
 
@@ -69,7 +69,7 @@ public class User {
 		this.phoneNumbers = coreUser.getPhoneNumbers();
 		this.websites = coreUser.getWebsites();
 		this.emails = coreUser.getEmails();
-		this.profileFileName = coreUser.getProfileFileName();
+		this.profileImagePath = coreUser.getProfileImagePath();
 		this.subscribedTenants = coreUser.getSubscribedTenants();
 		this.localRepositoryLocation = coreUser.getLocalRepositoryLocation();
 		this.dropboxToken = coreUser.getDropboxToken();
@@ -278,12 +278,12 @@ public class User {
 		this.nextcloudCredentials = nextcloudCredentials;
 	}
 
-	public String getProfileFileName() {
-		return profileFileName;
+	public String getProfileImagePath() {
+		return profileImagePath;
 	}
 
-	public void setProfileFileName(String profileFileName) {
-		this.profileFileName = profileFileName;
+	public void setProfileImagePath(String profileImagePath) {
+		this.profileImagePath = profileImagePath;
 	}
 
 	public List<TenantSubscription> addSubscribedTenant(final String marketplaceId, final String tenantId,
