@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
+import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
@@ -38,7 +38,7 @@ public class PropertyDefinitionToClassPropertyMapper
 
 		classProperty.setMultiple(source.isMultiple());
 		classProperty.setRequired(source.isRequired());
-		
+
 		return classProperty;
 	}
 

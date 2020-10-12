@@ -8,7 +8,7 @@ import javax.ws.rs.NotAcceptableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
@@ -19,9 +19,12 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 @Component
 public class RelationshipMapper implements AbstractMapper<Relationship, RelationshipDTO> {
 
-	@Autowired AssociationRelationshipDTOMapper associationMapper;
-	@Autowired InheritanceRelationshipDTOMapper inheritanceMapper;
-	@Autowired AggregationRelationshipDTOMapper aggregationMapper;
+	@Autowired
+	AssociationRelationshipDTOMapper associationMapper;
+	@Autowired
+	InheritanceRelationshipDTOMapper inheritanceMapper;
+	@Autowired
+	AggregationRelationshipDTOMapper aggregationMapper;
 
 	@Override
 	public RelationshipDTO toTarget(Relationship source) {

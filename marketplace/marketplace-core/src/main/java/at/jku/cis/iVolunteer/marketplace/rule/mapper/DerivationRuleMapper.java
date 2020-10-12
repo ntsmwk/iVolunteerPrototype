@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
+import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.rule.Condition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MultipleConditions;
@@ -17,11 +17,15 @@ import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
 
 @Component
 public class DerivationRuleMapper implements AbstractMapper<DerivationRule, DerivationRuleDTO> {
-	
-	@Autowired private DerivationRuleRepository derivationRuleRepository;
-	@Autowired private GeneralConditionMapper generalConditionMapper;
-	@Autowired private ClassConditionMapper classConditionMapper;
-	@Autowired private ClassActionMapper classActionMapper;
+
+	@Autowired
+	private DerivationRuleRepository derivationRuleRepository;
+	@Autowired
+	private GeneralConditionMapper generalConditionMapper;
+	@Autowired
+	private ClassConditionMapper classConditionMapper;
+	@Autowired
+	private ClassActionMapper classActionMapper;
 
 	@Override
 	public DerivationRuleDTO toTarget(DerivationRule source) {
@@ -35,12 +39,13 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		dto.setFireNumOfTimes(source.getFireNumOfTimes());
 		dto.setGeneralConditions(generalConditionMapper.toTargets(source.getGeneralConditions(), source.getTenantId()));
 		if (!source.getConditions().isEmpty()) {
-			// only one multiple condition is set --> in frontend only conjunctions possible so far
+			// only one multiple condition is set --> in frontend only conjunctions possible
+			// so far
 			MultipleConditions multiCond = (MultipleConditions) source.getConditions().get(0);
 			dto.setConditions(classConditionMapper.toTargets(multiCond.getConditions(), source.getTenantId()));
 		}
 		dto.setClassActions(classActionMapper.toTargets(source.getActions(), source.getTenantId()));
-		return dto;		 
+		return dto;
 	}
 
 	@Override
@@ -66,14 +71,15 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		derivationRule.setGeneralConditions(generalConditionMapper.toSources(target.getGeneralConditions()));
 		if (target.getConditions().size() > 0) {
 			ArrayList<Condition> conditions = new ArrayList<Condition>();
-			// we create a conjunction of all conditions --> might change in future if disjunctions and negations possible
+			// we create a conjunction of all conditions --> might change in future if
+			// disjunctions and negations possible
 			MultipleConditions multipleCondition = new MultipleConditions(LogicalOperatorType.AND);
 			multipleCondition.setConditions(classConditionMapper.toSources(target.getConditions()));
 			conditions.add(multipleCondition);
 			derivationRule.setConditions(conditions);
-		} 
-		derivationRule.setActions(classActionMapper.toSources(target.getClassActions()));	  
-		derivationRule.setTimestamp(target.getTimestamp());	
+		}
+		derivationRule.setActions(classActionMapper.toSources(target.getClassActions()));
+		derivationRule.setTimestamp(target.getTimestamp());
 		return derivationRule;
 	}
 

@@ -1,9 +1,9 @@
-package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
+package at.jku.cis.iVolunteer.model._mapper.xnet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.user.XColor;
@@ -13,25 +13,27 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 
 	@Override
 	public XTenant toTarget(Tenant source) {
-		if (source == null) {return null;}
-		XTenant xt = new XTenant();	
+		if (source == null) {
+			return null;
+		}
+		XTenant xt = new XTenant();
 		xt.setId(source.getId());
 		xt.setName(source.getName());
-		xt.setAbbreviation("todo"); //TODO
+		xt.setAbbreviation("todo"); // TODO
 		xt.setDescription(source.getDescription());
 		xt.setHomepage(source.getHomepage());
 		xt.setImagePath(source.getImagePath());
-		xt.setPrimaryColor(new XColor(source.getPrimaryColor())); //TODO
-		xt.setSecondaryColor(new XColor(source.getSecondaryColor())); //TODO
+		xt.setPrimaryColor(new XColor(source.getPrimaryColor())); // TODO
+		xt.setSecondaryColor(new XColor(source.getSecondaryColor())); // TODO
 		xt.setMarketplaceURL(source.getMarketplaceId());
 		xt.setTags(source.getTags());
 		xt.setLandingpageMessage(source.getLandingpageMessage());
 		xt.setLandingpageTitle(source.getLandingpageTitle());
 		xt.setLandingpageText(source.getLandingpageText());
 		xt.setLandingpageImagePath(source.getLandingpageImagePath());
-		xt.setGeoInfo(new XGeoInfo()); //TODO
-		xt.setSubscribedVolunteers(new ArrayList<>()); //TODO
-		
+		xt.setGeoInfo(new XGeoInfo()); // TODO
+		xt.setSubscribedVolunteers(new ArrayList<>()); // TODO
+
 		return xt;
 	}
 

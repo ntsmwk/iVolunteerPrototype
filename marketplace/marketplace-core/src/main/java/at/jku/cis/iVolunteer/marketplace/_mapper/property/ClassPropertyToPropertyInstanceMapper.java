@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
+import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
@@ -34,7 +34,7 @@ public class ClassPropertyToPropertyInstanceMapper
 
 		propertyInstance
 				.setPropertyConstraints(new ArrayList<PropertyConstraint<Object>>(source.getPropertyConstraints()));
-		
+
 		propertyInstance.setTabId(source.getTabId());
 		propertyInstance.setVisible(source.isVisible());
 		propertyInstance.setLevel(source.getLevel());

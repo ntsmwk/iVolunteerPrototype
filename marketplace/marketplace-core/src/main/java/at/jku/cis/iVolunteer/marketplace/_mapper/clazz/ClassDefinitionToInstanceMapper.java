@@ -7,9 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
+import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
@@ -22,8 +22,10 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 @Component
 public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefinition, ClassInstance> {
 
-	@Autowired ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
-	@Autowired ClassDefinitionService classDefinitionService;
+	@Autowired
+	ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+	@Autowired
+	ClassDefinitionService classDefinitionService;
 
 	@Override
 	public ClassInstance toTarget(ClassDefinition source) {
@@ -33,20 +35,20 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		ClassInstance classInstance = null;
 
 		switch (source.getClassArchetype()) {
-		case ACHIEVEMENT:
-			classInstance = new AchievementClassInstance();
-			break;
-		case COMPETENCE:
-			classInstance = new CompetenceClassInstance();
-			break;
-		case FUNCTION:
-			classInstance = new FunctionClassInstance();
-			break;
-		case TASK:
-			classInstance = new TaskClassInstance();
-			break;
-		default:
-			break;
+			case ACHIEVEMENT:
+				classInstance = new AchievementClassInstance();
+				break;
+			case COMPETENCE:
+				classInstance = new CompetenceClassInstance();
+				break;
+			case FUNCTION:
+				classInstance = new FunctionClassInstance();
+				break;
+			case TASK:
+				classInstance = new TaskClassInstance();
+				break;
+			default:
+				break;
 
 		}
 

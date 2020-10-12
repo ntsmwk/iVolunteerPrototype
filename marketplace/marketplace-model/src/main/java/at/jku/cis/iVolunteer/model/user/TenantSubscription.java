@@ -1,6 +1,4 @@
-package at.jku.cis.iVolunteer.model;
-
-import at.jku.cis.iVolunteer.model.user.UserRole;
+package at.jku.cis.iVolunteer.model.user;
 
 public class TenantSubscription {
     private String marketplaceId;

@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
-import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 public class User {
-	@Id private String id;
+	@Id
+	private String id;
 	private String username;
 	private String password;
 	private String loginEmail;
