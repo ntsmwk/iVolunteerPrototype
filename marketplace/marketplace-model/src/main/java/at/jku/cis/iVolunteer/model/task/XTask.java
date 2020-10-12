@@ -9,20 +9,6 @@ import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 import at.jku.cis.iVolunteer.model.user.XUser;
 
 public class XTask {
-//	
-//	id: string,
-//	tenant: Tenant
-//	title: string,
-//	description: string,
-//	startDate: date,
-//	endDate: date,
-//	imagePath: string,
-//	closed: boolean,
-//	geoInfo: GeoInfo,
-//	dynamicFields: DynamicField<any>[],
-//	subscribedUsers: User[],
-//	badges: BadgeTemplate[]
-
 	String id;
 	String title;
 	String tenant;
@@ -36,6 +22,7 @@ public class XTask {
 	List<XDynamicFieldBlock> dynamicFields = new ArrayList<>();
 	List<XUser> subscribedUsers;
 	List<XBadgeTemplate> badges = new ArrayList<>();
+	
 	public String getId() {
 		return id;
 	}
