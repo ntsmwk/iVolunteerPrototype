@@ -24,7 +24,8 @@ public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, X
 		}
 
 		XTaskTemplate template = new XTaskTemplate();
-		template.setId(source.getId());
+		
+		template.setId(source.getClassDefinitions().get(0).getId());
 		template.setTenant(source.getClassDefinitions().get(0).getTenantId());
 		
 		
