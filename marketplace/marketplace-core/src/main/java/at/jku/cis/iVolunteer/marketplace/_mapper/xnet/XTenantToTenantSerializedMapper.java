@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenantSerialized;
@@ -13,6 +15,7 @@ import at.jku.cis.iVolunteer.model.task.XTaskSerialized;
 import at.jku.cis.iVolunteer.model.user.XColor;
 import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
+@Component
 public class XTenantToTenantSerializedMapper implements OneWayMapper<Tenant, XTenantSerialized> {
 
 	@Override

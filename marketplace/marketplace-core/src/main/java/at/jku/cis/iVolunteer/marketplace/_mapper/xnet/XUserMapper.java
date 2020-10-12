@@ -6,6 +6,8 @@ import static java.util.Arrays.asList;
 
 import org.springframework.stereotype.Component;
 
+import org.springframework.stereotype.Component;
+
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.user.Address;
 import at.jku.cis.iVolunteer.model.user.User;

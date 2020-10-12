@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.user.UserController;
@@ -14,6 +15,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
 import at.jku.cis.iVolunteer.model.user.User;
 
+@Component
 public class XClassInstanceToTaskCertificateMapper implements OneWayMapper<ClassInstance, XTaskCertificate> {
 
 	@Autowired
