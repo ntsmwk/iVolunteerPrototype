@@ -57,7 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/trustifier/contractor/classInstances").permitAll()
 			.antMatchers("/login/**").permitAll()
 			.antMatchers("/register/**").permitAll()
-			.antMatchers(HttpMethod.GET, "/tenant").permitAll()
+			.antMatchers(HttpMethod.GET, "/tenant/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/tenant/name/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/file/**").permitAll()
 			.anyRequest().authenticated();
