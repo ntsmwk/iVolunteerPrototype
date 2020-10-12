@@ -106,7 +106,7 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			fileName = storageService.store(classPathResource);
 		}
-		volunteer.setProfileFileName(fileName);
+		volunteer.setProfileImagePath(fileName);
 	}
 
 	protected void subscribeVolunteersToAllTenants() {

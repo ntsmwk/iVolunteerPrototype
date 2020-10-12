@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
@@ -37,20 +38,47 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 
 	@Override
 	public List<XTenant> toTargets(List<Tenant> sources) {
-		// TODO Auto-generated method stub
-		return null;
+		if (sources == null) {return null; }
+		
+		List<XTenant> targets = new LinkedList<>();
+		for (Tenant source : sources) {
+			targets.add(toTarget(source));
+		}
+		return targets;
 	}
 
 	@Override
 	public Tenant toSource(XTenant target) {
-		// TODO Auto-generated method stub
-		return null;
+		if (target == null) {return null;}
+		
+		Tenant tenant = new Tenant();
+		tenant.setId(target.getId());
+		tenant.setName(target.getName());
+//		tenant.setAbbreviation("todo"); //TODO
+		tenant.setDescription(target.getDescription());
+		tenant.setHomepage(target.getHomepage());
+		tenant.setImagePath(target.getImagePath());
+		tenant.setPrimaryColor(null); //TODO
+		tenant.setSecondaryColor(null); //TODO
+		tenant.setMarketplaceId(null);
+		tenant.setTags(target.getTags());
+		tenant.setLandingpageMessage(target.getLandingpageMessage());
+		tenant.setLandingpageTitle(target.getLandingpageTitle());
+		tenant.setLandingpageText(target.getLandingpageText());
+		tenant.setLandingpageImagePath(target.getLandingpageImagePath());
+//		tenant.setGeoInfo(new XGeoInfo()); //TODO
+		return tenant;
 	}
 
 	@Override
 	public List<Tenant> toSources(List<XTenant> targets) {
-		// TODO Auto-generated method stub
-		return null;
+		if (targets == null) {return null;}
+		
+		List<Tenant> sources = new ArrayList<>();
+		for (XTenant target : targets) {
+			sources.add(toSource(target));
+		}
+		return sources;
 	}
 
 }
