@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer._mappers.xnet.XUserToCoreUserMapper;
+import at.jku.cis.iVolunteer._mappers.xnet.XUserMapper;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -26,7 +26,7 @@ public class XUserDataController {
     @Autowired
     private CoreUserService coreUserService;
     @Autowired
-    private XUserToCoreUserMapper xUserMapper;
+    private XUserMapper xUserMapper;
 
     @GetMapping("/userInfo")
     public ResponseEntity<Object> getUserInfo() {
@@ -36,14 +36,14 @@ public class XUserDataController {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(xUserMapper.toSource(user));
+        return ResponseEntity.ok(xUserMapper.toTarget(user));
     }
 
     @PutMapping("/userInfo/update")
     public ResponseEntity<Object> upadteUserInfo(@RequestBody XUser xUser,
             @RequestHeader("Authorization") String authorization) {
         CoreUser existingUser = loginService.getLoggedInUser();
-        CoreUser updatingUser = xUserMapper.toTarget(xUser);
+        CoreUser updatingUser = xUserMapper.toSource(xUser);
 
         if (existingUser == null) {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);

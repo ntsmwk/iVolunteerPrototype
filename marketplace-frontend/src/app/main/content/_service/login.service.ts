@@ -25,7 +25,7 @@ export class LoginService {
 
   login(username: string, password: string) {
     return this.http.post(
-      "/core/login",
+      "/core/auth/login",
       { username: username, password: password },
       { observe: "response" }
     );
@@ -68,7 +68,7 @@ export class LoginService {
   }
 
   refreshAccessToken(refreshToken: string) {
-    return this.http.post("/core/refreshToken", refreshToken).pipe(
+    return this.http.post("/core/auth/refreshToken", refreshToken).pipe(
       tap(
         (response: any) => {
           let accessToken: string = response.accessToken;

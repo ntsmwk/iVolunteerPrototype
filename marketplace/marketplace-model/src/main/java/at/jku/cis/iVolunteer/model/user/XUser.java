@@ -16,9 +16,9 @@ public class XUser {
 	private Date birthDate;
 
 	private XAddress address;
+	private String email;
 
 	private List<String> phoneNumbers = new ArrayList<>(3);
-	private List<String> emails = new ArrayList<>(3);
 
 	private String profileImagePath;
 
@@ -86,20 +86,20 @@ public class XUser {
 		this.address = address;
 	}
 
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public List<String> getPhoneNumbers() {
 		return phoneNumbers;
 	}
 
 	public void setPhoneNumbers(List<String> phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
-	}
-
-	public List<String> getEmails() {
-		return this.emails;
-	}
-
-	public void setEmails(List<String> emails) {
-		this.emails = emails;
 	}
 
 	public String getProfileImagePath() {
