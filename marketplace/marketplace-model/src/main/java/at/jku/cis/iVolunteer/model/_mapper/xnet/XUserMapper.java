@@ -1,21 +1,23 @@
-package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
+package at.jku.cis.iVolunteer.model._mapper.xnet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.user.Address;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.XAddress;
-import at.jku.cis.iVolunteer.model.user.XUser;
+import at.jku.cis.iVolunteer.model.user.XUserPassword;
 
-public class XUserMapper implements AbstractMapper<User, XUser> {
+public class XUserMapper implements AbstractMapper<User, XUserPassword> {
 
 	@Override
-	public XUser toTarget(User source) {
-		if (source == null) {return null;}
-		
-		XUser user = new XUser();
+	public XUserPassword toTarget(User source) {
+		if (source == null) {
+			return null;
+		}
+
+		XUserPassword user = new XUserPassword();
 		user.setId(source.getId());
 		user.setUsername(source.getUsername());
 		user.setPassword(source.getPassword());
@@ -24,18 +26,20 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
 		user.setLastname(source.getLastname());
 		user.setTitleAfter(source.getTitleAfter());
 		user.setBirthday(source.getBirthday());
-		user.setAddress(new XAddress());//TODO
+		user.setAddress(new XAddress());// TODO
 		user.setPhoneNumbers(source.getPhoneNumbers());
-		user.setWebsites(source.getWebsites());
+		user.setEmails(source.getEmails());
 		user.setProfileImagePath(source.getProfileImagePath());
-		
+
 		return user;
 	}
 
 	@Override
-	public List<XUser> toTargets(List<User> sources) {
-		if (sources == null) {return null;}
-		List<XUser> targets = new ArrayList<>();
+	public List<XUserPassword> toTargets(List<User> sources) {
+		if (sources == null) {
+			return null;
+		}
+		List<XUserPassword> targets = new ArrayList<>();
 		for (User source : sources) {
 			targets.add(toTarget(source));
 		}
@@ -43,8 +47,10 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
 	}
 
 	@Override
-	public User toSource(XUser target) {
-		if (target == null) {return null;}
+	public User toSource(XUserPassword target) {
+		if (target == null) {
+			return null;
+		}
 		User user = new User();
 		user.setId(target.getId());
 		user.setUsername(target.getUsername());
@@ -54,19 +60,21 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
 		user.setLastname(target.getLastname());
 		user.setTitleAfter(target.getTitleAfter());
 		user.setBirthday(target.getBirthday());
-		user.setAddress(new Address());//TODO
+		user.setAddress(new Address());// TODO
 		user.setPhoneNumbers(target.getPhoneNumbers());
-		user.setWebsites(target.getWebsites());
+		user.setEmails(target.getEmails());
 		user.setProfileImagePath(target.getProfileImagePath());
 		return user;
-		
+
 	}
 
 	@Override
-	public List<User> toSources(List<XUser> targets) {
-		if (targets == null) {return null;}
+	public List<User> toSources(List<XUserPassword> targets) {
+		if (targets == null) {
+			return null;
+		}
 		List<User> sources = new ArrayList<>();
-		for (XUser target : targets) {
+		for (XUserPassword target : targets) {
 			sources.add(toSource(target));
 		}
 		return sources;

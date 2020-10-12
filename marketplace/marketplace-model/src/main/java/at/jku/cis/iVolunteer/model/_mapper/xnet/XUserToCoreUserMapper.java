@@ -29,7 +29,7 @@ public class XUserToCoreUserMapper implements AbstractMapper<XUser, CoreUser> {
         coreUser.setBirthday(source.getBirthday());
         coreUser.setPhoneNumbers(source.getPhoneNumbers());
         coreUser.setEmails(source.getEmails());
-        coreUser.setProfileFileName(source.getProfileImagePath()); // TODO Markus, Philipp: uniform naming
+        coreUser.setProfileImagePath(source.getProfileImagePath());
 
         return coreUser;
     }
@@ -59,7 +59,7 @@ public class XUserToCoreUserMapper implements AbstractMapper<XUser, CoreUser> {
         xUser.setBirthday(target.getBirthday());
         xUser.setPhoneNumbers(target.getPhoneNumbers());
         xUser.setEmails(target.getEmails());
-        xUser.setProfileImagePath(target.getProfileFileName()); // TODO Markus, Philipp: uniform naming
+        xUser.setProfileImagePath(target.getProfileImagePath());
 
         return xUser;
     }
