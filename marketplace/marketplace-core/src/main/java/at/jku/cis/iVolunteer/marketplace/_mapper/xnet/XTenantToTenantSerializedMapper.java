@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model._mapper.xnet;
+package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,8 @@ public class XTenantToTenantSerializedMapper implements OneWayMapper<Tenant, XTe
 		ts.setDescription(source.getDescription());
 		ts.setHomepage(source.getHomepage());
 		ts.setImagePath(source.getImagePath());
-		ts.setPrimaryColor(null);
-		ts.setSecondaryColor(null);
+		ts.setPrimaryColor(new XColor(source.getPrimaryColor()));
+		ts.setSecondaryColor(new XColor(source.getSecondaryColor()));
 		ts.setTags(source.getTags());
 		ts.setGeoInfo(null);
 

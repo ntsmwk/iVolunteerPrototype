@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace._mapper.xnet.FormEntryToTaskDefinitionMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipController;
-import at.jku.cis.iVolunteer.model._mapper.xnet.FormEntryToTaskDefinitionMapper;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;

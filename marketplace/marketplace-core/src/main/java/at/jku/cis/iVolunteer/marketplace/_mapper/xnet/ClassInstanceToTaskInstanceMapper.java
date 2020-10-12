@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
-import at.jku.cis.iVolunteer.model._mapper.xnet.PropertyInstanceToTaskFieldMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;

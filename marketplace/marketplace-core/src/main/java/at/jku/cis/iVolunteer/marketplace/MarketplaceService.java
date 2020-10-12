@@ -7,8 +7,13 @@ import org.springframework.stereotype.Service;
 public class MarketplaceService {
 
 	@Value("${marketplace.identifier}") private String marketplaceId;
+	@Value("${marketplace.uri}") private String marketplaceURL;
 
 	public String getMarketplaceId() {
 		return this.marketplaceId;
+	}
+	
+	public String getMarketplaceURI() {
+		return marketplaceURL;
 	}
 }
