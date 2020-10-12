@@ -13,7 +13,6 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @Document
 public class PropertyInstance<T> extends IVolunteerObject{
 
-	@Id String id;
 	String name;
 	
 	List<T> values = new ArrayList<>();
