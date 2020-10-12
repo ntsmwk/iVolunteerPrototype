@@ -30,11 +30,7 @@ export class DashboardHelpSeekerTenantAdminComponent implements OnInit {
     );
     this.user = globalInfo.user;
     this.tenant = globalInfo.tenants[0];
-    this.image = this.getTitleImage();
+    this.image = this.tenant.landingpageImagePath;
     this.loaded = true;
-  }
-
-  getTitleImage() {
-    return this.tenantService.getLandingpageImagePath(this.tenant);
   }
 }

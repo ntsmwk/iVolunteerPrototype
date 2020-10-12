@@ -55,7 +55,7 @@ export class TenantProfileImageUploadComponent implements OnInit {
     if (isNullOrUndefined(tenant)) {
       return;
     }
-    this.previewImage = this.tenantService.getImagePath(this.tenant);
+    this.previewImage = this.tenant.imagePath;
     this.oldImage = this.previewImage;
   }
 

@@ -48,10 +48,10 @@ export class CoreUserService {
   }
 
   getUserProfileImage(user: User) {
-    if (isNullOrUndefined(user.profileFileName)) {
+    if (isNullOrUndefined(user.profileImagePath)) {
       return "/assets/images/avatars/profile.jpg";
     }
-    return this.fileService.getFullFilePath(user.profileFileName);
+    return user.profileImagePath;
   }
 
   registerMarketplace(userId: string, marketplaceId: string) {

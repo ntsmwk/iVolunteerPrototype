@@ -11,8 +11,7 @@ import at.jku.cis.iVolunteer.model.user.User;
 
 @Document
 public class CoreUser extends User {
-	@DBRef
-	private List<CoreUser> follower = new ArrayList<>();
+	@DBRef private List<CoreUser> follower = new ArrayList<>();
 	private List<String> registeredMarketplaceIds = new ArrayList<>();
 	// TODO Philipp: boolean vs Boolean
 	private Boolean activated;
@@ -79,8 +78,8 @@ public class CoreUser extends User {
 		if (update.getEmails() != null)
 			original.setEmails(update.getEmails());
 
-		if (update.getProfileFileName() != null)
-			original.setProfileFileName(update.getProfileFileName());
+		if (update.getProfileImagePath() != null)
+			original.setProfileImagePath(update.getProfileImagePath());
 
 		if (update.getSubscribedTenants() != null)
 			original.setSubscribedTenants(update.getSubscribedTenants());

@@ -3,7 +3,7 @@ export class Tenant {
   name: string;
   description: string;
   homepage: string;
-  imageFileName: string;
+  imagePath: string;
   primaryColor: string;
   secondaryColor: string;
   marketplaceId: string;
@@ -12,7 +12,7 @@ export class Tenant {
   landingpageMessage: string;
   landingpageTitle: string;
   landingpageText: string;
-  landingpageImageFileName: string;
+  landingpageImagePath: string;
 
   public constructor(init?: Partial<Tenant>) {
     Object.assign(this, init);

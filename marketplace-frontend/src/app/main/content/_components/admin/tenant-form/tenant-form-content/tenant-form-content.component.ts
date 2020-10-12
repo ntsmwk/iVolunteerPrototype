@@ -94,7 +94,7 @@ export class TenantFormContentComponent implements OnInit {
 
     console.log(this.tenantForm.value);
 
-    this.previewProfileImage = this.tenantService.getImagePath(this.tenant);
+    this.previewProfileImage = this.tenant.imagePath;
     this.addedTags = this.tenant.tags;
   }
 
@@ -134,7 +134,7 @@ export class TenantFormContentComponent implements OnInit {
       undefined
     );
     profileImage = await this.fileService.uploadFile(profileImage);
-    this.tenant.imageFileName = "<<filenameWithoutPath.png>>";
+    this.tenant.imagePath = "<<filenameWithoutPath.png>>";
 
     let landingPageImage = this.assignCurrentImage(
       this.landingPageImage,
@@ -143,7 +143,7 @@ export class TenantFormContentComponent implements OnInit {
       undefined
     );
     await this.fileService.uploadFile(landingPageImage);
-    this.tenant.landingpageImageFileName = "<<filenameWithoutPath.png>>";
+    this.tenant.landingpageImagePath = "<<filenameWithoutPath.png>>";
     this.tenant.tags = this.addedTags;
 
     console.log(this.tenant);
