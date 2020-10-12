@@ -22,7 +22,6 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
-import at.jku.cis.iVolunteer.model.TenantSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.image.Image;
@@ -30,6 +29,7 @@ import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.image.UserImage;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
+import at.jku.cis.iVolunteer.model.user.TenantSubscription;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -45,13 +45,20 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private TenantRepository coreTenantRepository;
-	@Autowired private CoreUserService coreUserService;
-	@Autowired private ImageController imageController;
-	@Autowired private StorageService storageService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private TenantRepository coreTenantRepository;
+	@Autowired
+	private CoreUserService coreUserService;
+	@Autowired
+	private ImageController imageController;
+	@Autowired
+	private StorageService storageService;
 
 	public void initVolunteers() {
 
@@ -106,7 +113,6 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			fileName = storageService.store(classPathResource);
 		}
-//		TODO MWE set FilePath
 		volunteer.setProfileImagePath(fileName);
 	}
 

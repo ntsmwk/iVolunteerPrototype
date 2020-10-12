@@ -106,7 +106,6 @@ public class CoreUser extends User {
 			original.setAccountType(update.getAccountType());
 
 		return original;
-
 	}
 
 	public List<String> getRegisteredMarketplaceIds() {

@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
+import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenantSerialized;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -17,23 +17,25 @@ public class XTenantToTenantSerializedMapper implements OneWayMapper<Tenant, XTe
 
 	@Override
 	public XTenantSerialized toTarget(Tenant source) {
-		if (source==null) {return null;}
-		
+		if (source == null) {
+			return null;
+		}
+
 		XTenantSerialized ts = new XTenantSerialized();
-		
+
 		ts.setId(source.getId());
 		ts.setName(source.getName());
 		ts.setAbbreviation(null);
 		ts.setDescription(source.getDescription());
 		ts.setHomepage(source.getHomepage());
 		ts.setImagePath(source.getImagePath());
-		ts.setPrimaryColor(null);
-		ts.setSecondaryColor(null);
+		ts.setPrimaryColor(new XColor(source.getPrimaryColor()));
+		ts.setSecondaryColor(new XColor(source.getSecondaryColor()));
 		ts.setTags(source.getTags());
 		ts.setGeoInfo(null);
-		
+
 		return ts;
-	
+
 	}
 
 	@Override
@@ -47,7 +49,5 @@ public class XTenantToTenantSerializedMapper implements OneWayMapper<Tenant, XTe
 		}
 		return targets;
 	}
-
-	
 
 }

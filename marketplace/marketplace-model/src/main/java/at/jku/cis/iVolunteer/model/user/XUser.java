@@ -4,15 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-
-import at.jku.cis.iVolunteer.model.TenantSubscription;
-import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-
 public class XUser {
 	private String id;
 	private String username;
-	private String password;
 
 	private String titleBefore;
 	private String firstname;
@@ -24,7 +18,7 @@ public class XUser {
 	private XAddress address;
 
 	private List<String> phoneNumbers = new ArrayList<>(3);
-	private List<String> websites = new ArrayList<>(3);
+	private List<String> emails = new ArrayList<>(3);
 
 	private String profileImagePath;
 
@@ -42,14 +36,6 @@ public class XUser {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getTitleBefore() {
@@ -108,12 +94,12 @@ public class XUser {
 		this.phoneNumbers = phoneNumbers;
 	}
 
-	public List<String> getWebsites() {
-		return websites;
+	public List<String> getEmails() {
+		return this.emails;
 	}
 
-	public void setWebsites(List<String> websites) {
-		this.websites = websites;
+	public void setEmails(List<String> emails) {
+		this.emails = emails;
 	}
 
 	public String getProfileImagePath() {
@@ -123,7 +109,5 @@ public class XUser {
 	public void setProfileImagePath(String profileImagePath) {
 		this.profileImagePath = profileImagePath;
 	}
-
-
 
 }

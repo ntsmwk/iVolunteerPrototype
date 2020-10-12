@@ -39,6 +39,10 @@ public class MarketplaceService {
 		return marketplaces.get(0);
 	}
 	
+	public Marketplace findByUrl(String url) {
+		return marketplaceRepository.findByUrl(url);
+	}
+	
 	
 
 	public Marketplace createMarketplace(@RequestBody Marketplace marketplace) {
