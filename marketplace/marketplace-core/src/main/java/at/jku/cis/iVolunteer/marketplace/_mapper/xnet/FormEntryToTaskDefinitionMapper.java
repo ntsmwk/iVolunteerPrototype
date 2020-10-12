@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model._mapper.xnet;
+package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

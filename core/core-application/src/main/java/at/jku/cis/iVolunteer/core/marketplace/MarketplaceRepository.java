@@ -7,4 +7,5 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 public interface MarketplaceRepository extends MongoRepository<Marketplace, String> {
 
 	Marketplace findByName(String name);
+	Marketplace findByUrl(String url);
 }

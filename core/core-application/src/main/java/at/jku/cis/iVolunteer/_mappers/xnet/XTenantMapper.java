@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model._mapper.xnet;
+package at.jku.cis.iVolunteer._mappers.xnet;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -6,10 +6,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
-import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.XColor;
 import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
@@ -20,7 +21,7 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 	@Override
 	public XTenant toTarget(Tenant source) {
 		
-		if (source == null) {return null;}
+		if (source == null) {return null; }
 		XTenant xt = new XTenant();	
 		xt.setId(source.getId());
 		xt.setName(source.getName());
@@ -30,7 +31,11 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 		xt.setImagePath(source.getImagePath());
 		xt.setPrimaryColor(new XColor(source.getPrimaryColor()));
 		xt.setSecondaryColor(new XColor(source.getSecondaryColor()));
-		xt.setMarketplaceURL(marketplaceService.getMarketplaceURI());
+		
+		Marketplace mp = marketplaceService.findById(source.getMarketplaceId());
+		if (mp != null) {
+			xt.setMarketplaceURL(mp.getUrl());
+		}
 		xt.setTags(source.getTags());
 		xt.setLandingpageMessage(source.getLandingpageMessage());
 		xt.setLandingpageTitle(source.getLandingpageTitle());
@@ -55,7 +60,7 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 
 	@Override
 	public Tenant toSource(XTenant target) {
-		if (target == null) {return null;}
+		if (target == null) {return null; }
 		
 		Tenant tenant = new Tenant();
 		tenant.setId(target.getId());
@@ -66,7 +71,12 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 		tenant.setImagePath(target.getImagePath());
 		tenant.setPrimaryColor(target.getPrimaryColor().getHex());
 		tenant.setSecondaryColor(target.getSecondaryColor().getHex());
-		tenant.setMarketplaceId(marketplaceService.getMarketplaceId());
+		
+		Marketplace mp = marketplaceService.findById(target.getMarketplaceURL());
+		if (mp != null) {
+			tenant.setMarketplaceId(mp.getId());
+		}
+		
 		tenant.setTags(target.getTags());
 		tenant.setLandingpageMessage(target.getLandingpageMessage());
 		tenant.setLandingpageTitle(target.getLandingpageTitle());

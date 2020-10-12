@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer._mappers.xnet.XUserToCoreUserMapper;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
-import at.jku.cis.iVolunteer.model._mapper.xnet.XUserToCoreUserMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.XUser;
 

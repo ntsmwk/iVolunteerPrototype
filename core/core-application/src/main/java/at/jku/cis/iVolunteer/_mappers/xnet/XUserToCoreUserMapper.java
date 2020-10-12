@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model._mapper.xnet;
+package at.jku.cis.iVolunteer._mappers.xnet;
 
 import java.util.List;
 
