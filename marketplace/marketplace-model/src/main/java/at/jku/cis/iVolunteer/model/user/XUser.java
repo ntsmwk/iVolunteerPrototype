@@ -13,7 +13,7 @@ public class XUser {
 	private String lastname;
 	private String titleAfter;
 
-	private Date birthday;
+	private Date birthDate;
 
 	private XAddress address;
 
@@ -70,12 +70,12 @@ public class XUser {
 		this.titleAfter = titleAfter;
 	}
 
-	public Date getBirthday() {
-		return birthday;
+	public Date getBirthDate() {
+		return birthDate;
 	}
 
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
+	public void setBirthDate(Date birthday) {
+		this.birthDate = birthday;
 	}
 
 	public XAddress getAddress() {

@@ -26,7 +26,7 @@ public class XUserToCoreUserMapper implements AbstractMapper<XUser, CoreUser> {
         coreUser.setTitleAfter(source.getTitleAfter());
         // user.setAddress(source.getAddress()); // TODO Alexander, Philipp:
         // Address mapper
-        coreUser.setBirthday(source.getBirthday());
+        coreUser.setBirthday(source.getBirthDate());
         coreUser.setPhoneNumbers(source.getPhoneNumbers());
         coreUser.setEmails(source.getEmails());
         coreUser.setProfileImagePath(source.getProfileImagePath());
@@ -56,7 +56,7 @@ public class XUserToCoreUserMapper implements AbstractMapper<XUser, CoreUser> {
         xUser.setTitleAfter(target.getTitleAfter());
         // xUser.setAddress(target.getAddress()); // TODO Alexander, Philipp:
         // Address mapper
-        xUser.setBirthday(target.getBirthday());
+        xUser.setBirthDate(target.getBirthday());
         xUser.setPhoneNumbers(target.getPhoneNumbers());
         xUser.setEmails(target.getEmails());
         xUser.setProfileImagePath(target.getProfileImagePath());
