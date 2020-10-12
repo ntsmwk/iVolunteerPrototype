@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.model.meta.core.property.instance;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -11,10 +12,11 @@ import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Document
-public class PropertyInstance<T> extends IVolunteerObject{
+public class PropertyInstance<T> {
 
 	@Id String id;
 	String name;
+	String description;
 	
 	List<T> values = new ArrayList<>();
 	List<T> allowedValues = new ArrayList<>();
@@ -34,6 +36,8 @@ public class PropertyInstance<T> extends IVolunteerObject{
 	boolean visible;
 	int tabId;
 	int level;
+	
+	Date timestamp;
 
 	public PropertyInstance() {
 	}
@@ -52,6 +56,14 @@ public class PropertyInstance<T> extends IVolunteerObject{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public List<T> getValues() {
@@ -148,6 +160,14 @@ public class PropertyInstance<T> extends IVolunteerObject{
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+	
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@Override
