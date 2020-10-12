@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,9 +46,7 @@ public class CoreVolunteerInitializationService {
 	@Autowired private TenantRepository coreTenantRepository;
 	@Autowired private CoreUserService coreUserService;
 	@Autowired private StorageService storageService;
-	@Autowired private Environment environment;
 	@Value("${spring.data.server.uri}") private String serverUrl;
-
 
 	public void initVolunteers() {
 
@@ -104,11 +101,6 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			fileName = storageService.store(classPathResource);
 		}
-//		if(environment.acceptsProfiles("dev")) {
-//			System.out.println("dev");
-//		}else if(environment.acceptsProfiles("prod")) {
-//			System.out.println("prod");
-//		}
 		String fileUrl = serverUrl + "/file/" + fileName;
 		volunteer.setProfileImagePath(fileUrl);
 	}

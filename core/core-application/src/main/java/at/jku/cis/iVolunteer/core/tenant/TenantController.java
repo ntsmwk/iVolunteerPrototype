@@ -35,16 +35,11 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @RequestMapping("/tenant")
 public class TenantController {
 
-	@Autowired
-	private TenantService tenantService;
-	@Autowired
-	private LoginService loginService;
-	@Autowired
-	private TenantRepository tenantRepository;
-	@Autowired
-	private CoreUserService coreUserService;
-	@Autowired
-	private MarketplaceService marketplaceService;
+	@Autowired private TenantService tenantService;
+	@Autowired private LoginService loginService;
+	@Autowired private TenantRepository tenantRepository;
+	@Autowired private CoreUserService coreUserService;
+	@Autowired private MarketplaceService marketplaceService;
 
 	/**
 	 * Da core/userinfo keine Volunteers enthalten soll, sollten mit den Folgeden
