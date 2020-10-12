@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.relationship.RelationshipMapper;
-import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinitionDTO;
@@ -29,7 +27,7 @@ public class ClassDefinitionController {
 	@Autowired private RelationshipMapper relationshipMapper;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassDefinitionMapper classDefinitionMapper;
-	
+
 //	@PreAuthorize("hasAnyRole('TENANT_ADMIN', 'HELP_SEEKER')")
 	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")
 	private List<ClassDefinition> getAllClassDefinitions(@PathVariable("tenantId") String tenantId) {
@@ -121,23 +119,23 @@ public class ClassDefinitionController {
 
 	@PutMapping("meta/core/class/definition/form-configuration-preview")
 	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
-		
+
 		List<Relationship> relationships = relationshipMapper.toSources(request.getRelationships());
-		
+
 		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(),
 				relationships, request.getRootClassDefinition());
 		return ret;
 	}
-	
+
 	@PutMapping("meta/core/class/definition/form-configuration-chunk")
 	private FormEntry getFormConfigurationChunk(@RequestBody String[] params) {
 		final String pathPrefix = params[0];
 		final String choiceId = params[1];
 		String[] split = pathPrefix.split("\\.");
-		
+
 		assert (split.length >= 1);
-		final String startClassDefinitionId = split[split.length-1];
-		
+		final String startClassDefinitionId = split[split.length - 1];
+
 		return classDefinitionService.getClassDefinitionChunk(pathPrefix, startClassDefinitionId, choiceId);
 	}
 
