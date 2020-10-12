@@ -12,7 +12,7 @@ export class User {
   firstname: string;
   lastname: string;
   titleAfter: string;
-  profileFileName: string;
+  profileImagePath: string;
 
   nickname: string;
 

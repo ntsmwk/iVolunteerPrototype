@@ -56,7 +56,7 @@ export class UserProfileImageUploadComponent implements OnInit {
     if (isNullOrUndefined(user)) {
       return;
     }
-    const userImagePath = this.user.profileFileName;
+    const userImagePath = this.user.profileImagePath;
     this.previewImage = this.userService.getUserProfileImage(this.user);
 
     this.oldImage = this.previewImage;

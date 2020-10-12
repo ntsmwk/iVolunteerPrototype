@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.initialize;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -11,22 +10,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 
 import at.jku.cis.iVolunteer.core.file.StorageService;
-import at.jku.cis.iVolunteer.core.image.ImageController;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.image.Image;
-import at.jku.cis.iVolunteer.model.image.ImageWrapper;
-import at.jku.cis.iVolunteer.model.image.UserImage;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.registration.AccountType;
 import at.jku.cis.iVolunteer.model.user.TenantSubscription;
@@ -45,20 +41,15 @@ public class CoreVolunteerInitializationService {
 	private static final String[] USERNAMES = { BROISER, PSTARZER, MWEISSENBEK, MWEIXLBAUMER, "AKop", "WRet", "WSch",
 			"BProe", "KKof", "CVoj", "KBauer", "EWagner", "WHaube", "MJacks" };
 
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreUserRepository coreUserRepository;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private TenantRepository coreTenantRepository;
-	@Autowired
-	private CoreUserService coreUserService;
-	@Autowired
-	private ImageController imageController;
-	@Autowired
-	private StorageService storageService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreUserRepository coreUserRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private TenantRepository coreTenantRepository;
+	@Autowired private CoreUserService coreUserService;
+	@Autowired private StorageService storageService;
+	@Autowired private Environment environment;
+	@Value("${spring.data.server.uri}") private String serverUrl;
+
 
 	public void initVolunteers() {
 
@@ -113,7 +104,13 @@ public class CoreVolunteerInitializationService {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			fileName = storageService.store(classPathResource);
 		}
-		volunteer.setProfileImagePath(fileName);
+//		if(environment.acceptsProfiles("dev")) {
+//			System.out.println("dev");
+//		}else if(environment.acceptsProfiles("prod")) {
+//			System.out.println("prod");
+//		}
+		String fileUrl = serverUrl + "/file/" + fileName;
+		volunteer.setProfileImagePath(fileUrl);
 	}
 
 	protected void subscribeVolunteersToAllTenants() {

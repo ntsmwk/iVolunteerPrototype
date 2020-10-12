@@ -111,11 +111,15 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     let tenant = this.allTenants.find(
       t => t.id === this.currentMapping.tenantIds[0]
     );
-    return this.tenantService.getImagePath(tenant);
+    return tenant.imagePath;
   }
 
-  getImage(tenant: Tenant) {
-    return this.tenantService.getImagePath(tenant);
+  getImage(tenantId: string) {
+    let tenant = this.allTenants.find(t => t.id === tenantId);
+    if (tenant) {
+      return tenant.imagePath;
+    }
+    return "";
   }
 
   isSameMapping(a: RoleTenantMapping, b: RoleTenantMapping) {

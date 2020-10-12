@@ -1,21 +1,14 @@
 package at.jku.cis.iVolunteer.initialize;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import at.jku.cis.iVolunteer.core.file.StorageService;
-import at.jku.cis.iVolunteer.core.image.ImageRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.image.Image;
-import at.jku.cis.iVolunteer.model.image.ImageWrapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @Service
@@ -27,8 +20,8 @@ public class CoreTenantInitializationService {
 
 	@Autowired protected TenantRepository coreTenantRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private ImageRepository imageRepository;
 	@Autowired private StorageService storageService;
+	@Value("${spring.data.server.uri}") private String serverUrl;
 
 	public void initTenants() {
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
@@ -68,7 +61,8 @@ public class CoreTenantInitializationService {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			fileName = storageService.store(classPathResource);
-			tenant.setImagePath(fileName);
+			String fileUrl = serverUrl + "/file/" + fileName;
+			tenant.setImagePath(fileUrl);
 		}
 	}
 
@@ -76,8 +70,8 @@ public class CoreTenantInitializationService {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
 			fileName = storageService.store(classPathResource);
-			tenant.setLandingpageImagePath(fileName);
-
+			String fileUrl = serverUrl + "/file/" + fileName;
+			tenant.setLandingpageImagePath(fileUrl);
 		}
 	}
 }

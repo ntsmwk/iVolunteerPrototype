@@ -52,7 +52,7 @@ export class LandingPageImageUploadComponent implements OnInit {
     if (isNullOrUndefined(tenant)) {
       return;
     }
-    this.previewImage = this.tenantService.getLandingpageImagePath(this.tenant);
+    this.previewImage = this.tenant.landingpageImagePath;
     this.oldImage = this.previewImage;
   }
 

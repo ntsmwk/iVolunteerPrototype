@@ -39,13 +39,13 @@ export class TenantService {
     return this.http.put(`/core/tenant/update`, tenant);
   }
 
-  getImagePath(tenant: Tenant) {
-    return this.fileService.getFullFilePath(tenant.imageFileName);
-  }
+  // getImagePath(tenant: Tenant) {
+  //   return this.fileService.getFullFilePath(tenant.imageFileName);
+  // }
 
-  getLandingpageImagePath(tenant: Tenant) {
-    return this.fileService.getFullFilePath(tenant.landingpageImageFileName);
-  }
+  // getLandingpageImagePath(tenant: Tenant) {
+  //   return this.fileService.getFullFilePath(tenant.landingpageImageFileName);
+  // }
 
   initHeader(tenant: Tenant) {
     (<HTMLElement>document.querySelector(".header")).style.background =
