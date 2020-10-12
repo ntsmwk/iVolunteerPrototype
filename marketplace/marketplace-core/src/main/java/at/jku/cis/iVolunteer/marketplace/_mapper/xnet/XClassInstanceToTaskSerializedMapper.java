@@ -3,10 +3,13 @@ package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.task.XTaskSerialized;
 
+@Component
 public class XClassInstanceToTaskSerializedMapper implements OneWayMapper<ClassInstance, XTaskSerialized> {
 
 	@Override

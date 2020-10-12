@@ -52,6 +52,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				//TODO TEST
 				.antMatchers("/task/**").permitAll()
 				.antMatchers("/tasktemplate/**").permitAll()
+				.antMatchers("/taskCertificate/**").permitAll()
+//				END TEST
 				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()

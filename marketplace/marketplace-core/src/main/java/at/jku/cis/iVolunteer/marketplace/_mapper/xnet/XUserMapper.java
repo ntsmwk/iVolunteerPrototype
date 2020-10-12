@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.user.Address;
 import at.jku.cis.iVolunteer.model.user.User;
@@ -10,6 +12,7 @@ import at.jku.cis.iVolunteer.model.user.XAddress;
 import at.jku.cis.iVolunteer.model.user.XUser;
 import at.jku.cis.iVolunteer.model.user.XUserPassword;
 
+@Component
 public class XUserMapper implements AbstractMapper<User, XUser> {
 
 	@Override
