@@ -9,16 +9,16 @@ public class XUser {
 	private String username;
 
 	private String titleBefore;
-	private String firstname;
-	private String lastname;
+	private String firstName;
+	private String lastName;
 	private String titleAfter;
 
 	private Date birthDate;
 
 	private XAddress address;
+	private String email;
 
 	private List<String> phoneNumbers = new ArrayList<>(3);
-	private List<String> emails = new ArrayList<>(3);
 
 	private String profileImagePath;
 
@@ -46,20 +46,20 @@ public class XUser {
 		this.titleBefore = titleBefore;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getTitleAfter() {
@@ -86,20 +86,20 @@ public class XUser {
 		this.address = address;
 	}
 
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public List<String> getPhoneNumbers() {
 		return phoneNumbers;
 	}
 
 	public void setPhoneNumbers(List<String> phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
-	}
-
-	public List<String> getEmails() {
-		return this.emails;
-	}
-
-	public void setEmails(List<String> emails) {
-		this.emails = emails;
 	}
 
 	public String getProfileImagePath() {

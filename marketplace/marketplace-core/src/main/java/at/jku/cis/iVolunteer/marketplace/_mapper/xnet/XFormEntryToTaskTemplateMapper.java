@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 import at.jku.cis.iVolunteer.model.task.XDynamicFieldBlock;
 import at.jku.cis.iVolunteer.model.task.XTaskTemplate;
 
+@Component
 public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, XTaskTemplate> {
 	
 	@Autowired XClassPropertyDynamicFieldMapper classPropertyToDynamicFieldMapper;
@@ -22,7 +24,8 @@ public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, X
 		}
 
 		XTaskTemplate template = new XTaskTemplate();
-		template.setId(source.getId());
+		
+		template.setId(source.getClassDefinitions().get(0).getId());
 		template.setTenant(source.getClassDefinitions().get(0).getTenantId());
 		
 		

@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.user.UserController;
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
 import at.jku.cis.iVolunteer.model.user.User;
 
+@Component
 public class XClassInstanceToTaskCertificateMapper implements OneWayMapper<ClassInstance, XTaskCertificate> {
 
 	@Autowired
@@ -41,7 +44,7 @@ public class XClassInstanceToTaskCertificateMapper implements OneWayMapper<Class
 		taskCertificate.setTenantSerialized(tenantToTenantSerializedMapper.toTarget(tenant));
 
 		User user = userController.findUserById(source.getId());
-		taskCertificate.setUser(userMapper.toTarget(user));
+		taskCertificate.setUser(userMapper.toTarget((CoreUser) user));
 
 		return taskCertificate;
 	}

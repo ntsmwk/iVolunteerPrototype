@@ -59,7 +59,7 @@ public class CoreLoginController {
 		return (user != null && user.isActivated()) || user == null;
 	}
 
-	@PostMapping("/refreshToken")
+	@PostMapping("/auth/refreshToken")
 	public ResponseEntity<Object> refreshToken(@RequestBody String rawRefreshToken) throws Exception {
 		try {
 			if (StringUtils.hasText(rawRefreshToken) && this.tokenProvider.validateRefreshToken(rawRefreshToken)) {

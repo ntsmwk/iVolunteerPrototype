@@ -50,8 +50,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //				.antMatchers("/user/unsubscribe").permitAll()
 				.antMatchers("/rule/engine/**").permitAll()
 				//TODO TEST
-//				.antMatchers("/task/**").permitAll()
-//				.antMatchers("/tasktemplate/**").permitAll()
+				.antMatchers("/task/**").permitAll()
+				.antMatchers("/tasktemplate/**").permitAll()
+				.antMatchers("/taskCertificate/**").permitAll()
+//				END TEST
 				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()

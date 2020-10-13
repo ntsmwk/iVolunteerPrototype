@@ -62,6 +62,7 @@ public class PersonTaskService {
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskId())));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskName())));
+		
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskType1"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskType1())));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskType2"))
@@ -124,6 +125,7 @@ public class PersonTaskService {
 		personTaskClassInstance.setBlockchainDate(new Date());
 		personTaskClassInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
 		personTaskClassInstance.setIssued(true);
+		personTaskClassInstance.setName(personTask.getTaskName());
 
 		personTaskClassInstance.setTimestamp(new Date());
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.xnet.ClassInstanceToTaskInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.xnet.XClassInstanceToTaskCertificateMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
@@ -31,6 +32,7 @@ public class XTaskCertificateController {
 	@Autowired private ClassInstanceService classInstanceService;
 	@Autowired private LoginService loginService;
 	@Autowired private ClassInstanceToTaskInstanceMapper classInstanceToTaskInstanceMapper;
+	@Autowired private XClassInstanceToTaskCertificateMapper classInstanceToTaskCertificateMapper;
 
 	// GET TASKCERTIFICATE OF ONE TENANT BY ID (BEI 1 TENANT ZEIGE ALLE TASKS IN UI)
 	// (Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
@@ -38,14 +40,12 @@ public class XTaskCertificateController {
 	// Req: {}
 	// Res: TaskCertificate[]
 	@GetMapping("taskCertificate/tenant/{tenantId}")
-	public List<XTaskCertificate> getTaskClassInstancesByTenantId(@PathVariable String tenantId) {
+	public List<XTaskCertificate> getTaskCertificatesByTenantId(@PathVariable String tenantId) {
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK,
 				tenantId);
-//		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
-//TODO
 		
-		
-		return null;
+		List<XTaskCertificate> certs = classInstanceToTaskCertificateMapper.toTargets(classInstances);
+		return certs;
 
 	}
 
@@ -54,11 +54,10 @@ public class XTaskCertificateController {
 	// Req: {}
 	// Res: TaskCertificate
 	@GetMapping("taskCertificate/{taskId}")
-	public XTaskCertificate getTask(@PathVariable String taskId) {
+	public XTaskCertificate getTaskCertificate(@PathVariable String taskId) {
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
-//		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
-//TODO
-		return null;
+		XTaskCertificate cert = classInstanceToTaskCertificateMapper.toTarget(classInstance);
+		return cert;
 	}
 
 }

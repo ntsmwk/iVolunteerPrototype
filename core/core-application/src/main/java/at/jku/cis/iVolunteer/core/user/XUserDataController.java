@@ -5,15 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer._mappers.xnet.XUserToCoreUserMapper;
+import at.jku.cis.iVolunteer._mappers.xnet.XUserMapper;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.XUser;
 
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -26,7 +26,7 @@ public class XUserDataController {
     @Autowired
     private CoreUserService coreUserService;
     @Autowired
-    private XUserToCoreUserMapper xUserMapper;
+    private XUserMapper xUserMapper;
 
     @GetMapping("/userInfo")
     public ResponseEntity<Object> getUserInfo() {
@@ -36,14 +36,14 @@ public class XUserDataController {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(xUserMapper.toSource(user));
+        return ResponseEntity.ok(xUserMapper.toTarget(user));
     }
 
-    @PutMapping("/userInfo/update")
+    @PostMapping("/userInfo/update")
     public ResponseEntity<Object> upadteUserInfo(@RequestBody XUser xUser,
             @RequestHeader("Authorization") String authorization) {
         CoreUser existingUser = loginService.getLoggedInUser();
-        CoreUser updatingUser = xUserMapper.toTarget(xUser);
+        CoreUser updatingUser = xUserMapper.toSource(xUser);
 
         if (existingUser == null) {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
@@ -55,7 +55,7 @@ public class XUserDataController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/user/tenantRole")
+    @GetMapping("/userInfo/tenantRole")
     public ResponseEntity<Object> getTenantRole() {
         CoreUser user = loginService.getLoggedInUser();
 
@@ -67,7 +67,7 @@ public class XUserDataController {
 
     }
 
-    @GetMapping("/user/tenantSubscription")
+    @GetMapping("/userInfo/tenantSubscription")
     public ResponseEntity<Object> getTenantSubscription() {
         CoreUser user = loginService.getLoggedInUser();
 
@@ -78,28 +78,31 @@ public class XUserDataController {
         return ResponseEntity.ok((user.getSubscribedTenants()));
     }
 
-    @GetMapping("/user/badges")
-    public ResponseEntity<Object> getBadges() {
-        CoreUser user = loginService.getLoggedInUser();
+    // @GetMapping("/userInfo/badges")
+    // public ResponseEntity<Object> getBadges() {
+    // CoreUser user = loginService.getLoggedInUser();
 
-        if (user == null) {
-            return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
-        }
+    // if (user == null) {
+    // return new ResponseEntity<Object>(new ErrorResponse("User does not exist"),
+    // HttpStatus.BAD_REQUEST);
+    // }
 
-        // TODO return user's badges
-        return null;
-    }
+    // // TODO return user's badges
+    // return null;
+    // }
 
-    @GetMapping("/user/{userId}/badges")
-    public ResponseEntity<Object> getBadgesOfOtherUser(@PathVariable("userId") String userId) {
-        CoreUser user = coreUserService.getByUserId(userId);
+    // @GetMapping("/userInfo/{userId}/badges")
+    // public ResponseEntity<Object> getBadgesOfOtherUser(@PathVariable("userId")
+    // String userId) {
+    // CoreUser user = coreUserService.getByUserId(userId);
 
-        if (user == null) {
-            return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
-        }
+    // if (user == null) {
+    // return new ResponseEntity<Object>(new ErrorResponse("User does not exist"),
+    // HttpStatus.BAD_REQUEST);
+    // }
 
-        // TODO return user's badges
-        return null;
-    }
+    // // TODO return user's badges
+    // return null;
+    // }
 
 }
