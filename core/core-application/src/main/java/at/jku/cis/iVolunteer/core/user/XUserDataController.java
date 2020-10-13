@@ -49,7 +49,7 @@ public class XUserDataController {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
         }
 
-        existingUser = CoreUser.updateCoreUser(existingUser, updatingUser);
+        existingUser = existingUser.updateCoreUser(updatingUser);
         coreUserService.updateUser(existingUser, authorization, true);
 
         return ResponseEntity.ok().build();

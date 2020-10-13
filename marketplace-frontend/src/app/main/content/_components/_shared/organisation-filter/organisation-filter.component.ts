@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { LoginService } from "../../../_service/login.service";
-import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { TenantService } from "../../../_service/core-tenant.service";
 import { User } from "../../../_model/user";
 import { Marketplace } from "../../../_model/marketplace";

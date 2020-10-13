@@ -17,95 +17,95 @@ public class CoreUser extends User {
 	private Boolean activated;
 	private AccountType accountType;
 
-	public static CoreUser updateCoreUser(CoreUser original, CoreUser update) {
+	public CoreUser updateCoreUser(CoreUser update) {
 		if (update.getId() != null)
-			original.setId(update.getId());
+			this.setId(update.getId());
 
 		if (update.getUsername() != null)
-			original.setUsername(update.getUsername());
+			this.setUsername(update.getUsername());
 
 		if (update.getPassword() != null)
-			original.setPassword(update.getPassword());
+			this.setPassword(update.getPassword());
 
 		if (update.getLoginEmail() != null)
-			original.setLoginEmail(update.getLoginEmail());
+			this.setLoginEmail(update.getLoginEmail());
 
 		if (update.getFormOfAddress() != null)
-			original.setFormOfAddress(update.getFormOfAddress());
+			this.setFormOfAddress(update.getFormOfAddress());
 
 		if (update.getTitleBefore() != null)
-			original.setTitleBefore(update.getTitleBefore());
+			this.setTitleBefore(update.getTitleBefore());
 
 		if (update.getFirstname() != null)
-			original.setFirstname(update.getFirstname());
+			this.setFirstname(update.getFirstname());
 
 		if (update.getLastname() != null)
-			original.setLastname(update.getLastname());
+			this.setLastname(update.getLastname());
 
 		if (update.getTitleAfter() != null)
-			original.setTitleAfter(update.getTitleAfter());
+			this.setTitleAfter(update.getTitleAfter());
 
 		if (update.getNickname() != null)
-			original.setNickname(update.getNickname());
+			this.setNickname(update.getNickname());
 
 		if (update.getOrganizationPosition() != null)
-			original.setOrganizationPosition(update.getOrganizationPosition());
+			this.setOrganizationPosition(update.getOrganizationPosition());
 
 		if (update.getOrganizationName() != null)
-			original.setOrganizationName(update.getOrganizationName());
+			this.setOrganizationName(update.getOrganizationName());
 
 		if (update.getBirthday() != null)
-			original.setBirthday(update.getBirthday());
+			this.setBirthday(update.getBirthday());
 
 		if (update.getLocations() != null)
-			original.setLocations(update.getLocations());
+			this.setLocations(update.getLocations());
 
 		if (update.getAbout() != null)
-			original.setAbout(update.getAbout());
+			this.setAbout(update.getAbout());
 
 		if (update.getAddress() != null)
-			original.setAddress(update.getAddress());
+			this.setAddress(update.getAddress());
 
 		if (update.getTimeslots() != null)
-			original.setTimeslots(update.getTimeslots());
+			this.setTimeslots(update.getTimeslots());
 
 		if (update.getPhoneNumbers() != null)
-			original.setPhoneNumbers(update.getPhoneNumbers());
+			this.setPhoneNumbers(update.getPhoneNumbers());
 
 		if (update.getWebsites() != null)
-			original.setWebsites(update.getWebsites());
+			this.setWebsites(update.getWebsites());
 
 		if (update.getEmails() != null)
-			original.setEmails(update.getEmails());
+			this.setEmails(update.getEmails());
 
 		if (update.getProfileImagePath() != null)
-			original.setProfileImagePath(update.getProfileImagePath());
+			this.setProfileImagePath(update.getProfileImagePath());
 
 		if (update.getSubscribedTenants() != null)
-			original.setSubscribedTenants(update.getSubscribedTenants());
+			this.setSubscribedTenants(update.getSubscribedTenants());
 
 		if (update.getLocalRepositoryLocation() != null)
-			original.setLocalRepositoryLocation(update.getLocalRepositoryLocation());
+			this.setLocalRepositoryLocation(update.getLocalRepositoryLocation());
 
 		if (update.getDropboxToken() != null)
-			original.setDropboxToken(update.getDropboxToken());
+			this.setDropboxToken(update.getDropboxToken());
 
 		if (update.getNextcloudCredentials() != null)
-			original.setNextcloudCredentials(update.getNextcloudCredentials());
+			this.setNextcloudCredentials(update.getNextcloudCredentials());
 
 		if (update.getFollower() != null)
-			original.setFollower(update.getFollower());
+			this.setFollower(update.getFollower());
 
 		if (update.getRegisteredMarketplaceIds() != null)
-			original.setRegisteredMarketplaceIds(update.getRegisteredMarketplaceIds());
+			this.setRegisteredMarketplaceIds(update.getRegisteredMarketplaceIds());
 
 		if (update.isActivated() != null)
-			original.setActivated(update.isActivated());
+			this.setActivated(update.isActivated());
 
 		if (update.getAccountType() != null)
-			original.setAccountType(update.getAccountType());
+			this.setAccountType(update.getAccountType());
 
-		return original;
+		return this;
 	}
 
 	public List<String> getRegisteredMarketplaceIds() {

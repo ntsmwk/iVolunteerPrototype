@@ -5,7 +5,6 @@ import { User, UserRole } from "../../../_model/user";
 import { ClassInstanceDTO, ClassArchetype } from "../../../_model/meta/class";
 import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
 import { isNullOrUndefined } from "util";
-import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { LoginService } from "../../../_service/login.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { Tenant } from "app/main/content/_model/tenant";
@@ -38,7 +37,6 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private classInstanceService: ClassInstanceService,
-    private marketplaceService: MarketplaceService,
     private userService: UserService
   ) {}
 

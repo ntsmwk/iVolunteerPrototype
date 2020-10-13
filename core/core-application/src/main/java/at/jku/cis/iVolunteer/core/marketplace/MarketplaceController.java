@@ -1,9 +1,10 @@
 package at.jku.cis.iVolunteer.core.marketplace;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,14 +25,16 @@ public class MarketplaceController {
 	@Autowired private LoginService loginService;
 
 	@GetMapping
-	public List<String> findAll() {
-		return marketplaceService.findAll().stream().map(mp -> mp.getId()).collect(Collectors.toList());
+	public List<Marketplace> findAll() {
+		return marketplaceService.findAll();
 	}
 
 	@GetMapping("/subscribed")
-	public List<String> getSubscribedMarketplaces() {
-		CoreUser user = loginService.getLoggedInUser();
-		return user.getRegisteredMarketplaceIds();
+	public List<Marketplace> getSubscribedMarketplaces() {
+		CoreUser loggedInUser = loginService.getLoggedInUser();
+		List<String> marketplaceIds = loggedInUser.getRegisteredMarketplaceIds();
+		return marketplaceService.findAll(marketplaceIds);
+
 	}
 
 	@GetMapping("{marketplaceId}")
@@ -39,15 +42,28 @@ public class MarketplaceController {
 		return marketplaceService.findById(marketplaceId);
 	}
 
-	@PostMapping
-	public Marketplace createMarketplace(@RequestBody Marketplace marketplace) {
-		return marketplaceService.createMarketplace(marketplace);
+	@PostMapping("{marketplaceId}/update")
+	public ResponseEntity<Void> updateMarketplaceById(@PathVariable("marketplaceId") String marketplaceId,
+			@RequestBody Marketplace marketplace) {
+		try {
+			marketplaceService.updateMarketplace(marketplaceId, marketplace);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		return ResponseEntity.ok().build();
 	}
+
+//	END X-Net Endpoints
 
 	@PutMapping("{marketplaceId}")
 	public Marketplace updateMarketplace(@PathVariable("marketplaceId") String marketplaceId,
 			@RequestBody Marketplace marketplace) {
 		return marketplaceService.updateMarketplace(marketplaceId, marketplace);
+	}
+
+	@PostMapping
+	public Marketplace createMarketplace(@RequestBody Marketplace marketplace) {
+		return marketplaceService.createMarketplace(marketplace);
 	}
 
 	@DeleteMapping("{marketplaceId}")
