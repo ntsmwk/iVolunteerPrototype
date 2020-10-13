@@ -27,8 +27,8 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
         user.setId(source.getId());
         user.setUsername(source.getUsername());
         user.setTitleBefore(source.getTitleBefore());
-        user.setFirstname(source.getFirstname());
-        user.setLastname(source.getLastname());
+        user.setFirstName(source.getFirstname());
+        user.setLastName(source.getLastname());
         user.setTitleAfter(source.getTitleAfter());
         user.setBirthDate(source.getBirthday());
         user.setAddress(new XAddress());// TODO
@@ -60,8 +60,8 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
         user.setId(target.getId());
         user.setUsername(target.getUsername());
         user.setTitleBefore(target.getTitleBefore());
-        user.setFirstname(target.getFirstname());
-        user.setLastname(target.getLastname());
+        user.setFirstname(target.getFirstName());
+        user.setLastname(target.getLastName());
         user.setTitleAfter(target.getTitleAfter());
         user.setBirthday(target.getBirthDate());
         user.setAddress(new Address());// TODO
