@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer._mappers.xnet.XUserMapper;
@@ -39,7 +40,7 @@ public class XUserDataController {
         return ResponseEntity.ok(xUserMapper.toTarget(user));
     }
 
-    @PutMapping("/userInfo/update")
+    @PostMapping("/userInfo/update")
     public ResponseEntity<Object> upadteUserInfo(@RequestBody XUser xUser,
             @RequestHeader("Authorization") String authorization) {
         CoreUser existingUser = loginService.getLoggedInUser();
