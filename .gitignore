@@ -19,3 +19,5 @@ marketplace-frontend/src/app/main/content/_components/help-seeker/task-managemen
 
 **/.vscode/
 **/node_modules/
+
+upload-dir/**

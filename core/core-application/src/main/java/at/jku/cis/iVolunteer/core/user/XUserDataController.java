@@ -1,5 +1,10 @@
 package at.jku.cis.iVolunteer.core.user;
 
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer._mappers.xnet.XUserMapper;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
+import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.XUser;
 
@@ -21,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public class XUserDataController {
     @Autowired
     private CoreLoginService loginService;
+    @Autowired
+    private TenantService tenantService;
     @Autowired
     private XUserDataService userDataService;
     @Autowired
@@ -57,7 +66,8 @@ public class XUserDataController {
 
     @GetMapping("/userInfo/tenantRole")
     public ResponseEntity<Object> getTenantRole() {
-        CoreUser user = loginService.getLoggedInUser();
+        // CoreUser user = loginService.getLoggedInUser();
+        CoreUser user = coreUserService.getByUserName("mweixlbaumer");
 
         if (user == null) {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
@@ -69,13 +79,18 @@ public class XUserDataController {
 
     @GetMapping("/userInfo/tenantSubscription")
     public ResponseEntity<Object> getTenantSubscription() {
-        CoreUser user = loginService.getLoggedInUser();
+        // CoreUser user = loginService.getLoggedInUser();
+        CoreUser user = coreUserService.getByUserName("mweixlbaumer");
 
         if (user == null) {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok((user.getSubscribedTenants()));
+        List<Tenant> tenants = new ArrayList<>();
+        tenants = user.getSubscribedTenants().stream().map(s -> s.getTenantId())
+                .map(id -> tenantService.getTenantById(id)).collect(Collectors.toList());
+
+        return ResponseEntity.ok(tenants);
     }
 
     // @GetMapping("/userInfo/badges")

@@ -20,9 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class StorageService {
-	
-	private String folderName = "upload-dir";
 
+	private String folderName = "upload-dir";
 
 	private final Path rootLocation;
 

@@ -2,24 +2,26 @@ package at.jku.cis.iVolunteer.model.user;
 
 import java.util.List;
 
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+
 public class XTenantRole {
-    private String tenantId;
+    private Tenant tenant;
     private List<UserRole> roles;
 
     public XTenantRole() {
     }
 
-    public XTenantRole(String tenantId, List<UserRole> roles) {
-        this.tenantId = tenantId;
+    public XTenantRole(Tenant tenant, List<UserRole> roles) {
+        this.tenant = tenant;
         this.roles = roles;
     }
 
-    public String getTenantId() {
-        return this.tenantId;
+    public Tenant getTenantId() {
+        return this.tenant;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setTenantId(Tenant tenant) {
+        this.tenant = tenant;
     }
 
     public List<UserRole> getRoles() {
