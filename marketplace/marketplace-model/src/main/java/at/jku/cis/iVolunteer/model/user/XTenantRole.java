@@ -16,11 +16,11 @@ public class XTenantRole {
         this.roles = roles;
     }
 
-    public Tenant getTenantId() {
+    public Tenant getTenant() {
         return this.tenant;
     }
 
-    public void setTenantId(Tenant tenant) {
+    public void setTenant(Tenant tenant) {
         this.tenant = tenant;
     }
 

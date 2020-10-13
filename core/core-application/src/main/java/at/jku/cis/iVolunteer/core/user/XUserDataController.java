@@ -19,6 +19,7 @@ import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,8 +67,7 @@ public class XUserDataController {
 
     @GetMapping("/userInfo/tenantRole")
     public ResponseEntity<Object> getTenantRole() {
-        // CoreUser user = loginService.getLoggedInUser();
-        CoreUser user = coreUserService.getByUserName("mweixlbaumer");
+        CoreUser user = loginService.getLoggedInUser();
 
         if (user == null) {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
@@ -79,16 +79,15 @@ public class XUserDataController {
 
     @GetMapping("/userInfo/tenantSubscription")
     public ResponseEntity<Object> getTenantSubscription() {
-        // CoreUser user = loginService.getLoggedInUser();
-        CoreUser user = coreUserService.getByUserName("mweixlbaumer");
+        CoreUser user = loginService.getLoggedInUser();
 
         if (user == null) {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
         }
 
         List<Tenant> tenants = new ArrayList<>();
-        tenants = user.getSubscribedTenants().stream().map(s -> s.getTenantId())
-                .map(id -> tenantService.getTenantById(id)).collect(Collectors.toList());
+        tenants = user.getSubscribedTenants().stream().filter(s -> s.getRole().equals(UserRole.VOLUNTEER))
+                .map(s -> s.getTenantId()).map(id -> tenantService.getTenantById(id)).collect(Collectors.toList());
 
         return ResponseEntity.ok(tenants);
     }

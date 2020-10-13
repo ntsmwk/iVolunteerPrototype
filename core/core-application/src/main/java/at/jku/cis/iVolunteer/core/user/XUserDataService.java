@@ -27,7 +27,7 @@ public class XUserDataService {
         List<XTenantRole> tenantRoles = new ArrayList<>();
         uniqueTenantIds.forEach(id -> {
             XTenantRole t = new XTenantRole();
-            t.setTenantId(tenantService.getTenantById(id));
+            t.setTenant(tenantService.getTenantById(id));
             t.setRoles(subs.stream().filter(s -> s.getTenantId().equals(id)).map(s -> s.getRole())
                     .collect(Collectors.toList()));
             tenantRoles.add(t);
