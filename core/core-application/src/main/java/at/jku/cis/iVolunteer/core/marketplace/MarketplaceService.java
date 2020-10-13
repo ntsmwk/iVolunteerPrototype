@@ -49,16 +49,13 @@ public class MarketplaceService {
 		return marketplaceRepository.insert(marketplace);
 	}
 
-	public Marketplace updateMarketplace(@PathVariable("marketplaceId") String marketplaceId,
-			@RequestBody Marketplace marketplace) {
-		Marketplace orginalMarketplace = marketplaceRepository.findOne(marketplaceId);
-		if (orginalMarketplace == null) {
+	public Marketplace updateMarketplace(String marketplaceId, Marketplace marketplace) {
+		Marketplace originalMarketplace = marketplaceRepository.findOne(marketplaceId);
+		if (originalMarketplace == null) {
 			throw new NotAcceptableException();
 		}
-		orginalMarketplace.setName(marketplace.getName());
-		orginalMarketplace.setShortName(marketplace.getShortName());
-		orginalMarketplace.setUrl(marketplace.getUrl());
-		return marketplaceRepository.save(orginalMarketplace);
+		originalMarketplace = originalMarketplace.updateMarketplace(marketplace);
+		return marketplaceRepository.save(originalMarketplace);
 	}
 
 	public void delete(@PathVariable("marketplaceId") String marketplaceId) {

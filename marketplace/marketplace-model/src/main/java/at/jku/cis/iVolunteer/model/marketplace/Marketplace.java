@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.model.marketplace;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+
 @Document
 public class Marketplace {
 
@@ -15,6 +17,13 @@ public class Marketplace {
 	public Marketplace() {
 	}
 
+	public Marketplace updateMarketplace(Marketplace update) {
+		this.name = update.getName() != null ? update.getName() : this.name;
+		this.shortName = update.getShortName() != null ? update.getShortName() : this.shortName;
+		this.url = update.getUrl() != null ? update.getUrl() : this.url;
+		return this;
+	}
+	
 	public String getId() {
 		return id;
 	}

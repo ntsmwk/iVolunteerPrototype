@@ -20,14 +20,10 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @Service
 public class CoreUserService {
 
-	@Autowired
-	private CoreUserRepository coreUserRepository;
-	@Autowired
-	private TenantRepository tenantRepository;
-	@Autowired
-	private CoreMarketplaceRestClient coreMarketplaceRestClient;
-	@Autowired
-	private MarketplaceService marketplaceService;
+	@Autowired private CoreUserRepository coreUserRepository;
+	@Autowired private TenantRepository tenantRepository;
+	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired private MarketplaceService marketplaceService;
 
 	public List<CoreUser> findAll() {
 		return coreUserRepository.findAll();

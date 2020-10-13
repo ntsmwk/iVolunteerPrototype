@@ -61,6 +61,10 @@ public class StorageService {
 				throw new StorageException(
 						"Cannot store file with relative path outside current directory " + filename);
 			}
+			System.out.println(this.rootLocation);
+			if (!Files.exists(this.rootLocation)) {
+				Files.createDirectory(this.rootLocation);
+			}
 			Files.copy(inputStream, this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			throw new StorageException("Failed to store file " + filename, e);
