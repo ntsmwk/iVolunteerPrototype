@@ -12,6 +12,7 @@ import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
 public class TenantService {
@@ -64,6 +65,27 @@ public class TenantService {
 //		orginalTenant.setSecondaryColor(tenant.getSecondaryColor());
 //		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
 		return tenantRepository.save(tenant);
+	}
+	
+	public List<Tenant> getSubscribedTenants(CoreUser user) {
+		List<String> tenantIds = user.getSubscribedTenants().stream()
+				.filter(t -> t.getRole().equals(UserRole.VOLUNTEER)).map(t -> t.getTenantId())
+				.collect(Collectors.toList());
+
+		List<Tenant> ret = new ArrayList<>();
+		tenantRepository.findAll(tenantIds).forEach(ret::add);
+		return ret;
+	}
+	
+	public List<Tenant> getUnsubscribedTenants(CoreUser user) {
+		List<String> subscribedTenantIds = user.getSubscribedTenants().stream()
+				.filter(t -> t.getRole().equals(UserRole.VOLUNTEER)).map(t -> t.getTenantId())
+				.collect(Collectors.toList());
+
+		List<Tenant> ret = getAllTenants().stream()
+				.filter(t -> subscribedTenantIds.stream().noneMatch(id -> t.getId().equals(id)))
+				.collect(Collectors.toList());
+		return ret;
 	}
 
 }
