@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+
 public class Tenant {
 
 	@Id private String id;
@@ -33,6 +35,23 @@ public class Tenant {
 
 	private List<SubscriptionRule> subscriptionRules = new ArrayList<>();
 
+	
+	public Tenant updateTenant(Tenant update) {
+		this.name = update.getName() != null ? update.getName() : this.name;
+		this.description = update.getDescription() != null ? update.getDescription() : this.description;
+		this.homepage = update.getHomepage() != null ? update.getHomepage() : this.homepage;
+		this.imagePath = update.getImagePath() != null ? update.getImagePath() : this.imagePath;
+		this.primaryColor = update.getPrimaryColor() != null ? update.getPrimaryColor() : this.primaryColor;
+		this.secondaryColor = update.getSecondaryColor() != null ? update.getSecondaryColor() : this.secondaryColor;
+		this.marketplaceId = update.getMarketplaceId() != null ? update.getMarketplaceId() : this.marketplaceId;
+		this.landingpageTitle = update.getLandingpageTitle() != null ? update.getLandingpageTitle() : this.landingpageTitle;
+		this.landingpageMessage = update.getLandingpageMessage() != null ? update.getLandingpageMessage() : this.landingpageMessage;
+		this.landingpageText = update.getLandingpageText() != null ? update.getLandingpageText() : this.landingpageText;
+		this.landingpageImagePath = update.getLandingpageImagePath() != null ? update.getLandingpageImagePath() : this.landingpageImagePath;
+		return this;
+	}
+	
+	
 	public String getId() {
 		return id;
 	}

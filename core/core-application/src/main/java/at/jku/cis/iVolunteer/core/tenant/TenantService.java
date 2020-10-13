@@ -54,15 +54,7 @@ public class TenantService {
 		return tenantRepository.save(tenant);
 	}
 
-	public Tenant updateTenant(/*String tenantId,*/ @RequestBody Tenant tenant) {
-//		Tenant orginalTenant = tenantRepository.findOne(tenantId);
-//		if (orginalTenant == null) {
-//			throw new NotAcceptableException();
-//		}
-//		orginalTenant.setName(tenant.getName());
-//		orginalTenant.setPrimaryColor(tenant.getPrimaryColor());
-//		orginalTenant.setSecondaryColor(tenant.getSecondaryColor());
-//		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
+	public Tenant updateTenant(Tenant tenant) {
 		return tenantRepository.save(tenant);
 	}
 
