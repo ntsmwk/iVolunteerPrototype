@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
+package at.jku.cis.iVolunteer.model._mapper.xnet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
-import at.jku.cis.iVolunteer.marketplace.user.UserController;
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -16,21 +14,17 @@ import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
 import at.jku.cis.iVolunteer.model.user.User;
 
 @Component
-public class XClassInstanceToTaskCertificateMapper implements OneWayMapper<ClassInstance, XTaskCertificate> {
+public class XClassInstanceToTaskCertificateMapper {
 
 	@Autowired
 	XClassInstanceToTaskSerializedMapper classInstanceToTaskSerializedMapper;
 	@Autowired
 	XTenantToTenantSerializedMapper tenantToTenantSerializedMapper;
-	@Autowired
-	CoreTenantRestClient tenantRestClient;
-	@Autowired
-	UserController userController;
+
 	@Autowired
 	XUserMapper userMapper;
 
-	@Override
-	public XTaskCertificate toTarget(ClassInstance source) {
+	public XTaskCertificate toTarget(ClassInstance source, Tenant tenant, User user) {
 		if (source == null) {
 			return null;
 		}
@@ -39,27 +33,15 @@ public class XClassInstanceToTaskCertificateMapper implements OneWayMapper<Class
 		taskCertificate.setId(source.getId());
 		taskCertificate.setTaskId("todo");
 		taskCertificate.setTaskSerialized(classInstanceToTaskSerializedMapper.toTarget(source));
-
-		Tenant tenant = tenantRestClient.getTenantById(source.getTenantId());
+		
+//		Tenant tenant = tenantRestClient.getTenantById(source.getTenantId());
 		taskCertificate.setTenantSerialized(tenantToTenantSerializedMapper.toTarget(tenant));
 
-		User user = userController.findUserById(source.getId());
+//		User user = userController.findUserById(source.getId());
 		taskCertificate.setUser(userMapper.toTarget((CoreUser) user));
 
 		return taskCertificate;
 	}
 
-	@Override
-	public List<XTaskCertificate> toTargets(List<ClassInstance> sources) {
-		if (sources == null) {
-			return null;
-		}
-		List<XTaskCertificate> targets = new ArrayList<>();
-
-		for (ClassInstance source : sources) {
-			targets.add(toTarget(source));
-		}
-		return targets;
-	}
 
 }
