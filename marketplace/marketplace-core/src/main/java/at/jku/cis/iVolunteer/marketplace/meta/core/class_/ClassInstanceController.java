@@ -90,6 +90,11 @@ public class ClassInstanceController {
 		classInstanceRepository.getByClassArchetypeAndTenantId(classArchetype, tenantId);
 		return classInstances;
 	}
+	
+	@GetMapping("/meta/core/class/instance/all/tenant/{tenantId}/archetype/{archetype}/user/{userId}")
+	private List<ClassInstance> getClassInstanceByTenantIdAndArchetype(String tenantId, ClassArchetype classArchetype, String userId) {
+		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserId(classArchetype, tenantId, userId);
+	}
 
 	@PostMapping("/meta/core/class/instance/from-definition/{classDefinitionId}/user/{volunteerId}")
 	public ClassInstance createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
@@ -130,27 +135,27 @@ public class ClassInstanceController {
 
 		return null;
 	}
-
-	@GetMapping("/meta/core/class/instance/in-issuer-inbox")
-	private List<ClassInstanceDTO> getClassInstanceInIssuerInbox(
-			@RequestParam(value = "tId", required = true) String tenantId) {
-		List<ClassInstance> instances = classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
-		return classInstanceMapper.mapToDTO(instances);
-	}
-
-	@PutMapping("/meta/core/class/instance/issue")
-	private List<ClassInstance> issueClassInstance(
-			@RequestBody List<String> classInstanceIds, @RequestHeader("Authorization") String authorization) {
-		List<ClassInstance> classInstances = new ArrayList<>();
-		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
-
-		for (ClassInstance classInstance : classInstances) {
-			classInstance.setIssued(true);
-		}
-		
-		contractorPublishingRestClient.publishClassInstances(classInstances, authorization);
-		return classInstanceRepository.save(classInstances);
-	}
+//
+//	@GetMapping("/meta/core/class/instance/in-issuer-inbox")
+//	private List<ClassInstanceDTO> getClassInstanceInIssuerInbox(
+//			@RequestParam(value = "tId", required = true) String tenantId) {
+//		List<ClassInstance> instances = classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
+//		return classInstanceMapper.mapToDTO(instances);
+//	}
+//
+//	@PutMapping("/meta/core/class/instance/issue")
+//	private List<ClassInstance> issueClassInstance(
+//			@RequestBody List<String> classInstanceIds, @RequestHeader("Authorization") String authorization) {
+//		List<ClassInstance> classInstances = new ArrayList<>();
+//		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+//
+//		for (ClassInstance classInstance : classInstances) {
+//			classInstance.setIssued(true);
+//		}
+//		
+//		contractorPublishingRestClient.publishClassInstances(classInstances, authorization);
+//		return classInstanceRepository.save(classInstances);
+//	}
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {

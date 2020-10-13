@@ -58,28 +58,13 @@ public class TenantController {
 	@GetMapping("/subscribed")
 	public List<XTenant> getSubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
-
-		List<String> tenantIds = user.getSubscribedTenants().stream()
-				.filter(t -> t.getRole().equals(UserRole.VOLUNTEER)).map(t -> t.getTenantId())
-				.collect(Collectors.toList());
-
-		List<Tenant> ret = new ArrayList<>();
-		tenantRepository.findAll(tenantIds).forEach(ret::add);
-		return xTenantMapper.toTargets(ret);
+		return xTenantMapper.toTargets(tenantService.getSubscribedTenants(user));
 	}
 
 	@GetMapping("/unsubscribed")
 	public List<XTenant> getUnsubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
-
-		List<String> subscribedTenantIds = user.getSubscribedTenants().stream()
-				.filter(t -> t.getRole().equals(UserRole.VOLUNTEER)).map(t -> t.getTenantId())
-				.collect(Collectors.toList());
-
-		List<Tenant> ret = getAllTenants().stream()
-				.filter(t -> subscribedTenantIds.stream().noneMatch(id -> t.getId().equals(id)))
-				.collect(Collectors.toList());
-		return xTenantMapper.toTargets(ret);
+		return xTenantMapper.toTargets(tenantService.getUnsubscribedTenants(user));
 	}
 
 	@PostMapping("/create")
