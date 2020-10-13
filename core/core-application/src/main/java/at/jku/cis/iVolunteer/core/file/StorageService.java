@@ -20,9 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class StorageService {
-	
-	private String folderName = "upload-dir";
 
+	private String folderName = "upload-dir";
 
 	private final Path rootLocation;
 
@@ -61,6 +60,10 @@ public class StorageService {
 				// This is a security check
 				throw new StorageException(
 						"Cannot store file with relative path outside current directory " + filename);
+			}
+			System.out.println(this.rootLocation);
+			if (!Files.exists(this.rootLocation)) {
+				Files.createDirectory(this.rootLocation);
 			}
 			Files.copy(inputStream, this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
