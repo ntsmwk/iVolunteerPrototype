@@ -4,13 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
@@ -40,6 +38,7 @@ public class TenantController {
 	@Autowired private TenantRepository tenantRepository;
 	@Autowired private CoreUserService coreUserService;
 	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private XTenantMapper xTenantMapper;
 
 	/**
 	 * Da core/userinfo keine Volunteers enthalten soll, sollten mit den Folgeden
@@ -60,14 +59,18 @@ public class TenantController {
 	 * 
 	 */
 
-	// TODO xnet mapping /all
 	@GetMapping
 	public List<Tenant> getAllTenants() {
 		return tenantService.getAllTenants();
 	}
 
+	@GetMapping("/all")
+	public List<XTenant> getAllTenantsX() {
+		return xTenantMapper.toTargets(tenantService.getAllTenants());
+	}
+
 	@GetMapping("/subscribed")
-	public List<Tenant> getSubscribedTenants() {
+	public List<XTenant> getSubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
 
 		List<String> tenantIds = user.getSubscribedTenants().stream()
@@ -76,24 +79,33 @@ public class TenantController {
 
 		List<Tenant> ret = new ArrayList<>();
 		tenantRepository.findAll(tenantIds).forEach(ret::add);
-		return ret;
+		return xTenantMapper.toTargets(ret);
 	}
 
 	@GetMapping("/unsubscribed")
-	List<Tenant> getUnsubscribedTenants() {
+	public List<XTenant> getUnsubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
 
 		List<String> subscribedTenantIds = user.getSubscribedTenants().stream()
 				.filter(t -> t.getRole().equals(UserRole.VOLUNTEER)).map(t -> t.getTenantId())
 				.collect(Collectors.toList());
 
-		List<Tenant> allTenants = getAllTenants();
-
-		List<Tenant> ret = allTenants.stream()
+		List<Tenant> ret = getAllTenants().stream()
 				.filter(t -> subscribedTenantIds.stream().noneMatch(id -> t.getId().equals(id)))
 				.collect(Collectors.toList());
+		return xTenantMapper.toTargets(ret);
+	}
 
-		return ret;
+	@PostMapping("/create")
+	public ResponseEntity<Void> createTenantX(@RequestBody CreateTenantPayload payload) {
+		if (payload.getTenant() == null) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		Tenant tenant = xTenantMapper.toSource(payload.getTenant());
+		tenant.setMarketplaceId(payload.getMarketplaceId());
+		tenantService.createTenant(xTenantMapper.toSource(payload.getTenant()));
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/name/{tenantName}")

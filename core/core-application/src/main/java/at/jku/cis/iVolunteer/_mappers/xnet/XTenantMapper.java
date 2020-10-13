@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
@@ -14,6 +15,7 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.XColor;
 import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
+@Component
 public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 	
 	@Autowired MarketplaceService marketplaceService;
