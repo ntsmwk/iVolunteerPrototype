@@ -60,8 +60,7 @@ public class CoreTenantInitializationService {
 	private void setTenantProfileImage(String fileName, Tenant tenant) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
-			fileName = storageService.store(classPathResource);
-			String fileUrl = serverUrl + "/file/" + fileName;
+			String fileUrl = storageService.store(classPathResource);
 			tenant.setImagePath(fileUrl);
 		}
 	}
@@ -69,8 +68,7 @@ public class CoreTenantInitializationService {
 	private void setTenantLandingPageImage(String fileName, Tenant tenant) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
-			fileName = storageService.store(classPathResource);
-			String fileUrl = serverUrl + "/file/" + fileName;
+			String fileUrl = storageService.store(classPathResource);
 			tenant.setLandingpageImagePath(fileUrl);
 		}
 	}

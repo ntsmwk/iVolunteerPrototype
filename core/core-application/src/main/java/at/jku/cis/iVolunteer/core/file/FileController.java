@@ -1,10 +1,10 @@
 package at.jku.cis.iVolunteer.core.file;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,30 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
+
 @RestController
 public class FileController {
 
-	private final StorageService storageService;
+	@Autowired private StorageService storageService;
 
-	@Autowired
-	public FileController(StorageService storageService) {
-		this.storageService = storageService;
-	}
-
-//	@GetMapping("/")
-//	public String listUploadedFiles(Model model) throws IOException {
-//
-//		model.addAttribute("files",
-//				storageService.loadAll()
-//						.map(path -> MvcUriComponentsBuilder
-//								.fromMethodName(FileController.class, "serveFile", path.getFileName().toString())
-//								.build().toUri().toString())
-//						.collect(Collectors.toList()));
-//
-//		return "uploadForm";
-//	}
-
-	@GetMapping(value="/file/{filename:.+}")
+	@GetMapping(value = "/file/{filename:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 		Resource file = storageService.loadAsResource(filename);
@@ -47,11 +31,11 @@ public class FileController {
 				.body(file);
 	}
 
-	@PostMapping("/file")
-	public ResponseEntity<Void> handleFileUpload(@RequestParam("file") MultipartFile file) {
+	@PostMapping(value = "/file", produces = "application/json; charset=utf-8")
+	public ResponseEntity<StringResponse> handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
-			storageService.store(file);
-			return ResponseEntity.ok().build();
+			String fileUrl = storageService.store(file);
+			return ResponseEntity.ok(new StringResponse(fileUrl));
 		} catch (StorageException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}

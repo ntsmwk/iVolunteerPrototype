@@ -11,6 +11,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { isNullOrUndefined } from "util";
 import { FileInput } from "ngx-material-file-input";
 import { DomSanitizer } from "@angular/platform-browser";
+import { FileService } from "app/main/content/_service/file.service";
 
 @Component({
   selector: "tenant-landing-page-image-upload",
@@ -21,7 +22,7 @@ export class LandingPageImageUploadComponent implements OnInit {
   @Input() tenant: Tenant;
   @Output() uploadedImage: EventEmitter<{
     key: string;
-    image: any;
+    url: any;
   }> = new EventEmitter();
 
   imageFileInput: FileInput;
@@ -34,6 +35,7 @@ export class LandingPageImageUploadComponent implements OnInit {
 
   constructor(
     private tenantService: TenantService,
+    private fileService: FileService,
     private sanitizer: DomSanitizer
   ) {}
 
@@ -62,22 +64,31 @@ export class LandingPageImageUploadComponent implements OnInit {
     fileReader.onload = async e => {
       const image = fileReader.result;
       this.uploadingImage = false;
-      this.previewImage = image;
-      this.uploadedImage.emit({ key: "uploaded", image });
+      let payload: any = await this.fileService
+        .uploadFile(this.imageFileInput.files[0])
+        .toPromise();
+      this.previewImage = payload.message;
+      this.uploadedImage.emit({
+        key: "uploaded",
+        url: payload.message
+      });
     };
-    fileReader.readAsDataURL(this.imageFileInput.files[0]);
+    fileReader.readAsBinaryString(this.imageFileInput.files[0]);
   }
 
   deleteImage() {
     this.imageFileInput = undefined;
     this.previewImage = undefined;
-    this.uploadedImage.emit({ key: "clear", image: undefined });
+    this.uploadedImage.emit({ key: "clear", url: "" });
   }
 
   revertImage() {
     this.imageFileInput = undefined;
     this.uploadingImage = false;
     this.previewImage = this.oldImage;
-    this.uploadedImage.emit({ key: "reverted", image: this.oldImage });
+    this.uploadedImage.emit({
+      key: "reverted",
+      url: this.oldImage
+    });
   }
 }

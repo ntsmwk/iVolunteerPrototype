@@ -6,20 +6,14 @@ import { environment } from "environments/environment";
 export class FileService {
   constructor(private http: HttpClient) {}
 
-  // getFullFilePath(fileName: string) {
-  //   return environment.CORE_URL + "/file/" + fileName;
-  // }
-
   retrieveFile(filePath) {
     return this.http.get(filePath);
   }
 
-  // retrieveFile(fileName) {
-  //   return this.http.get(`/core/file/${fileName}`);
-  // }
-
   uploadFile(file) {
-    return this.http.post(`/core/file`, file);
+    const formData: FormData = new FormData();
+    formData.append("file", file, file.name);
+    return this.http.post(`/core/file`, formData);
   }
 
   deleteFile(imageId: string) {

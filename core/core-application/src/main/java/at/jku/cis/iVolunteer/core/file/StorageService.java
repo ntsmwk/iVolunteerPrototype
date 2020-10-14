@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,6 +25,8 @@ public class StorageService {
 	private String folderName = "upload-dir";
 
 	private final Path rootLocation;
+
+	@Value("${spring.data.server.uri}") private String serverUrl;
 
 	@Autowired
 	public StorageService() {
@@ -61,7 +64,6 @@ public class StorageService {
 				throw new StorageException(
 						"Cannot store file with relative path outside current directory " + filename);
 			}
-			System.out.println(this.rootLocation);
 			if (!Files.exists(this.rootLocation)) {
 				Files.createDirectory(this.rootLocation);
 			}
@@ -69,7 +71,7 @@ public class StorageService {
 		} catch (IOException e) {
 			throw new StorageException("Failed to store file " + filename, e);
 		}
-		return filename;
+		return this.serverUrl + "/file/" + filename;
 	}
 
 	public Stream<Path> loadAll() {
