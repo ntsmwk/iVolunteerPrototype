@@ -21,54 +21,32 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.user.User;
 
+//CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
+//POST {marketplaceUrl}/task/new/
+//Req: { Task }
+//Res: 200 (OK), 500 (FAILED)
 
 
-/**
- * 
+//CREATE NEW CLOSED TASK (Fields already copied from TASKTEMPLATE inside Task)
+//(Creates Task and also creates TaskCertificate & BadgeCertificate for every subscribedUser and Task is automatically closed)
+//POST {marketplaceUrl}/task/new/closed
+//Req: { Task }
+//Res: 200 (OK), 500 (FAILED)
 
-	GET TASK BY ID
-	GET {marketplaceUrl}/task/{taskId}/
-	Req: {}
-	Res: Task
-	CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
-	POST {marketplaceUrl}/task/new/
-	Req: { Task }
-	Res: 200 (OK), 500 (FAILED)
-	CREATE NEW CLOSED TASK (Fields already copied from TASKTEMPLATE inside Task)
-	(Creates Task and also creates TaskCertificate & BadgeCertificate for every subscribedUser and Task is automatically closed)
-	POST {marketplaceUrl}/task/new/closed
-	Req: { Task }
-	Res: 200 (OK), 500 (FAILED)
-	FINALIZE / CLOSE TASK
-	(Creates TaskCertificate & BadgeCertificate for every subscribedUser and Task gets closed)
-	GET {marketplaceUrl}/task/close/
-	Req: {}
-	Res: 200 (OK), 500 (FAILED)
-	UPDATE TASK (schicken nur die änderung des felds oder ganzes objekt wie sie wollen)
-	(ONLY POSSIBLE IF TASK NOT CLOSED! --> Bitte Errormessage liefern bzw. ErrorCode für diesen Fall)
-	POST {marketplaceUrl}/task/update/{taskId}
-	Req: { key: value, key2: value2,...} (ONLY CHANGED TASK DATA)
-	Res: 200 (OK), 500 (FAILED), 400 { message: "z.b: Kann nicht aktualisiert werden da.."}
-	SUBSCRIBE TASK BY ID
-	POST {marketplaceUrl}/task/{taskId}/subscribe/
-	Req: {}
-	Res: 200 (OK), 500 (FAILED)
-	UNSUBSCRIBE TASK BY ID
-	POST {marketplaceUrl}/task/{taskId}/unsubscribe/
-	Req: {}
-	Res: 200 (OK), 500 (FAILED)
- *
- */
+//FINALIZE / CLOSE TASK
+//(Creates TaskCertificate & BadgeCertificate for every subscribedUser and Task gets closed)
+//GET {marketplaceUrl}/task/close/
+//Req: {}
+//Res: 200 (OK), 500 (FAILED)
 
 //TODO xnet done - test
 @RestController
 @RequestMapping("/task")
 public class XTaskController {
 
-//	@Autowired private ClassInstanceService classInstanceService;
-//	@Autowired private LoginService loginService;
-//	@Autowired private ClassInstanceToTaskInstanceMapper classInstanceToTaskInstanceMapper;
-//	
+	@Autowired private ClassInstanceService classInstanceService;
+	@Autowired private LoginService loginService;
+	
 //	@GetMapping("/all")
 //	public List<TaskInstance> getAllTaskInstances() {
 //		List<ClassInstance> classInstances = classInstanceService.getAllClassInstances();
