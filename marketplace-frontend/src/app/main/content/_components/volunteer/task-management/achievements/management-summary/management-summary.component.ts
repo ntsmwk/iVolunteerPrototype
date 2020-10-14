@@ -76,7 +76,7 @@ export class ManagementSummaryComponent implements OnInit {
     private tenantService: TenantService,
     private lrDropboxService: LocalRepositoryDropboxService,
     private lrJsonServerService: LocalRepositoryJsonServerService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     let globalInfo = <GlobalInfo>(
@@ -120,8 +120,8 @@ export class ManagementSummaryComponent implements OnInit {
               this.marketplace,
               "TASK",
               this.volunteer.id,
-              this.volunteer.subscribedTenants.map((s) => s.tenantId),
-              true
+              this.volunteer.subscribedTenants.map((s) => s.tenantId)
+
             )
             .toPromise()
         );

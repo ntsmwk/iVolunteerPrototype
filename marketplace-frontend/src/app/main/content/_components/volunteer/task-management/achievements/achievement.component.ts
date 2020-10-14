@@ -85,8 +85,8 @@ export class AchievementsComponent implements OnInit {
               this.marketplace,
               "TASK",
               this.volunteer.id,
-              this.subscribedTenants.map(t => t.id),
-              true
+              this.subscribedTenants.map(t => t.id)
+
             )
             .toPromise()
         );

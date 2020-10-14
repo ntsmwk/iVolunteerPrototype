@@ -31,10 +31,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private boolean visible;
 	private int tabId;
 	
-	private boolean issued;
-	private boolean expired;
-	private boolean subscribed;
-	
 	private Date blockchainDate;
 
 
@@ -172,24 +168,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
 	}
-	
-	public Boolean isIssued() {
-		return issued;
-	}
-
-	public void setIssued(boolean issued) {
-		this.issued = issued;
-	}
-	
-	
-	
-	public Boolean isSubscribed() {
-		return subscribed;
-	}
-
-	public void setSubscribed(boolean subscribed) {
-		this.subscribed = subscribed;
-	}
 
 	public void setDerivationRuleId(String derivationRuleId) {
 		this.derivationRuleId = derivationRuleId;
@@ -215,13 +193,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.level = level;
 	}
 
-	public Boolean isExpired() {
-		return expired;
-	}
-
-	public void setExpired(boolean expired) {
-		this.expired = expired;
-	}
 
 	@Override
 	public String toHashObject() {

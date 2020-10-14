@@ -78,14 +78,14 @@ public class ClassInstanceService {
 		return classInstanceRepository.getByClassArchetypeAndUserId(classArchetype, userId);
 	}
 	
-	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed) {
-		return classInstanceRepository.getByClassArchetypeAndUserIdAndSubscribed(classArchetype, userId, subscribed);
-	}
-	
-	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype classArchetype, String userId, String tenantId, boolean subscribed) {
-		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(classArchetype, tenantId, userId, subscribed);
-
-	}
+//	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed) {
+//		return classInstanceRepository.getByClassArchetypeAndUserIdAndSubscribed(classArchetype, userId, subscribed);
+//	}
+//	
+//	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype classArchetype, String userId, String tenantId, boolean subscribed) {
+//		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(classArchetype, tenantId, userId, subscribed);
+//
+//	}
 	
 	
 

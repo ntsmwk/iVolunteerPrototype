@@ -19,25 +19,10 @@ import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.task.XTask;
 import at.jku.cis.iVolunteer.model.user.User;
 
-//CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
-//POST {marketplaceUrl}/task/new/
-//Req: { Task }
-//Res: 200 (OK), 500 (FAILED)
 
-
-//CREATE NEW CLOSED TASK (Fields already copied from TASKTEMPLATE inside Task)
-//(Creates Task and also creates TaskCertificate & BadgeCertificate for every subscribedUser and Task is automatically closed)
-//POST {marketplaceUrl}/task/new/closed
-//Req: { Task }
-//Res: 200 (OK), 500 (FAILED)
-
-//FINALIZE / CLOSE TASK
-//(Creates TaskCertificate & BadgeCertificate for every subscribedUser and Task gets closed)
-//GET {marketplaceUrl}/task/close/
-//Req: {}
-//Res: 200 (OK), 500 (FAILED)
 
 //TODO xnet done - test
 @RestController
@@ -46,6 +31,37 @@ public class XTaskController {
 
 	@Autowired private ClassInstanceService classInstanceService;
 	@Autowired private LoginService loginService;
+	
+	
+	//CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
+	//POST {marketplaceUrl}/task/new/
+	//Req: { Task }
+	//Res: 200 (OK), 500 (FAILED)
+	@PostMapping("/new")
+	private ResponseEntity<Object> createOpenedTask(@RequestBody XTask task) {
+		if (task == null) {
+			return ResponseEntity.badRequest().body(new ErrorResponse("Task must not be null"));
+		}
+		
+		return null;
+	}
+	
+	
+
+	//CREATE NEW CLOSED TASK (Fields already copied from TASKTEMPLATE inside Task)
+	//(Creates Task and also creates TaskCertificate & BadgeCertificate for every subscribedUser and Task is automatically closed)
+	//POST {marketplaceUrl}/task/new/closed
+	//Req: { Task }
+	//Res: 200 (OK), 500 (FAILED)
+
+	//FINALIZE / CLOSE TASK
+	//(Creates TaskCertificate & BadgeCertificate for every subscribedUser and Task gets closed)
+	//GET {marketplaceUrl}/task/close/
+	//Req: {}
+	//Res: 200 (OK), 500 (FAILED)
+	
+	
+	
 	
 //	@GetMapping("/all")
 //	public List<TaskInstance> getAllTaskInstances() {
