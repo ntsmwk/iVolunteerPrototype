@@ -5,13 +5,13 @@ import org.springframework.security.core.GrantedAuthority;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum UserRole implements GrantedAuthority {
-	VOLUNTEER, HELP_SEEKER, TENANT_ADMIN, FLEXPROD, RECRUITER, ADMIN, NONE, ROLE_TEST;
+	VOLUNTEER, HELP_SEEKER, TENANT_ADMIN, FLEXPROD, RECRUITER, ADMIN, NONE;
 
 	@Override
 	public String getAuthority() {
 		return name().toUpperCase();
 	}
-	
+
 	private final String role;
 
 	private UserRole() {

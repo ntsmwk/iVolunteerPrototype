@@ -47,7 +47,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http.cors().and().csrf().disable();
-		http.authorizeRequests()		
+		http.authorizeRequests()	
 			.antMatchers("/api/**").permitAll() 
 			.antMatchers("/v2/api-docs").permitAll() 
 			.antMatchers("/swagger-resources/**").permitAll() 
@@ -57,6 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/trustifier/contractor/classInstances").permitAll()
 			.antMatchers("/auth/login").permitAll()
 			.antMatchers("/auth/signup").permitAll() 
+			.antMatchers("/auth/signup/").permitAll() 
 			.antMatchers("/register/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/tenant/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/tenant/name/**").permitAll()

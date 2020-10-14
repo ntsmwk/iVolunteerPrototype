@@ -6,12 +6,12 @@ import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 
 public class XTenantRole {
     private Tenant tenant;
-    private List<UserRole> roles;
+    private List<XUserRole> roles;
 
     public XTenantRole() {
     }
 
-    public XTenantRole(Tenant tenant, List<UserRole> roles) {
+    public XTenantRole(Tenant tenant, List<XUserRole> roles) {
         this.tenant = tenant;
         this.roles = roles;
     }
@@ -24,11 +24,11 @@ public class XTenantRole {
         this.tenant = tenant;
     }
 
-    public List<UserRole> getRoles() {
+    public List<XUserRole> getRoles() {
         return this.roles;
     }
 
-    public void setRoles(List<UserRole> roles) {
+    public void setRoles(List<XUserRole> roles) {
         this.roles = roles;
     }
 
