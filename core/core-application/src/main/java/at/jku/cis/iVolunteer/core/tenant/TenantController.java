@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
-import at.jku.cis.iVolunteer._mappers.xnet.XUserMapper;
+import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
@@ -43,7 +43,7 @@ public class TenantController {
 	@Autowired private CoreUserService coreUserService;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private XTenantMapper xTenantMapper;
-	@Autowired private XUserMapper xUserMapper;
+	@Autowired private XCoreUserMapper xUserMapper;
 
 	@GetMapping
 	public List<Tenant> getAllTenants() {

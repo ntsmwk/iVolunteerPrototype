@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer._mappers.xnet.XUserMapper;
+import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
@@ -34,7 +34,7 @@ public class XUserDataController {
     @Autowired
     private CoreUserService coreUserService;
     @Autowired
-    private XUserMapper xUserMapper;
+    private XCoreUserMapper xUserMapper;
 
     @GetMapping("/userInfo")
     public ResponseEntity<Object> getUserInfo() {

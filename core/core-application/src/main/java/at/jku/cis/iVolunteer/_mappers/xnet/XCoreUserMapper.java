@@ -10,7 +10,7 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.XUser;
 
 @Component
-public class XUserMapper implements AbstractMapper<CoreUser, XUser> {
+public class XCoreUserMapper implements AbstractMapper<CoreUser, XUser> {
 
     @Override
     public XUser toTarget(CoreUser source) {
