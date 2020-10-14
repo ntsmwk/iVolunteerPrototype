@@ -20,7 +20,7 @@ export class TenantService {
   }
 
   findById(tenantId: string) {
-    return this.http.get(`/core/tenant/${tenantId}`);
+    return this.http.get(`/core/tenant/id/${tenantId}`);
   }
 
   findByUserId(userId: string) {
@@ -38,14 +38,6 @@ export class TenantService {
   updateTenant(tenant: Tenant) {
     return this.http.put(`/core/tenant/update`, tenant);
   }
-
-  // getImagePath(tenant: Tenant) {
-  //   return this.fileService.getFullFilePath(tenant.imageFileName);
-  // }
-
-  // getLandingpageImagePath(tenant: Tenant) {
-  //   return this.fileService.getFullFilePath(tenant.landingpageImageFileName);
-  // }
 
   initHeader(tenant: Tenant) {
     (<HTMLElement>document.querySelector(".header")).style.background =

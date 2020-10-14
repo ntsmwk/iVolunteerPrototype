@@ -9,23 +9,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.tenant.TenantController;
+import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httprequests.GetAllTaskCertificateRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
+import at.jku.cis.iVolunteer.model._mapper.xnet.XClassInstanceToTaskCertificateMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
 
 @RestController
-public class TaskCertificateController {
+public class XTaskCertificateController {
 
 	
 	@Autowired LoginService loginService;
-	@Autowired TenantController tenantController;
+	@Autowired TenantService tenantService;
+	@Autowired ClassInstanceRestClient classInstanceRestClient;
+	@Autowired MarketplaceService marketplaceService;
+	@Autowired XClassInstanceToTaskCertificateMapper classInstanceToTaskCertificateMapper;
 		
 	//	GET ALL TASKCERTIFICATE (PUBLIC TENANTS + PRIVATE TENANTS)
 	//	(Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
@@ -36,7 +46,7 @@ public class TaskCertificateController {
 	//	}
 	//	Res: TaskCertificate[]
 	@GetMapping("taskCertificate/all/tenant")
-	private ResponseEntity<Object> getAllTaskCertificates(@RequestBody GetAllTaskCertificateRequest body) {
+	private ResponseEntity<Object> getAllTaskCertificates(@RequestBody GetAllTaskCertificateRequest body, @RequestHeader("Authorization") String authorization) {
 		if (body == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse("body must not be null"));
 		}
@@ -49,15 +59,27 @@ public class TaskCertificateController {
 		
 		List<Tenant> tenants = new ArrayList<>();
 //		tenantController.getSubscribedTenants();
-		
-		
-		
-		
+		if (body.getTaskType().equals("ALL")) {
+			tenants = tenantService.getTenantsByUser(user.getId());
+		} else if (body.getTaskType().equals("SUBSCRIBED")) {
+			tenants = tenantService.getSubscribedTenants(user);
+		} else if (body.getTaskType().equals("UNSUBSCRIBED")) {
+			tenants = tenantService.getUnsubscribedTenants(user);
+		}
 		
 		List<XTaskCertificate> certificates = new LinkedList<>();
+		if (tenants.size() > 0) {
+			for (Tenant tenant : tenants) {
+				List<ClassInstance> classInstances = new LinkedList<>();
+				Marketplace mp = marketplaceService.findById(tenant.getMarketplaceId());
+				classInstances.addAll(classInstanceRestClient.getClassInstancesByUserAndTenant(mp.getUrl(), authorization, ClassArchetype.TASK, user.getId(), tenant.getId()));
+				for (ClassInstance ci : classInstances) {
+					certificates.add(classInstanceToTaskCertificateMapper.toTarget(ci, tenant, user));
+				}
+			}
+		}
 		
-		
-		return null;
+		return ResponseEntity.ok(certificates);
 	}
 
 }
