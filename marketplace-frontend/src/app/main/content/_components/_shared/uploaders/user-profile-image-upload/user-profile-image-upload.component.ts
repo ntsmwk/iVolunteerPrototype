@@ -20,10 +20,7 @@ import { CoreUserService } from "app/main/content/_service/core-user.service";
 })
 export class UserProfileImageUploadComponent implements OnInit {
   @Input() user: User;
-  @Output() uploadedImage: EventEmitter<{
-    key: string;
-    image: any;
-  }> = new EventEmitter();
+  @Output() onSave = new EventEmitter();
 
   imageFileInput: FileInput;
   previewImage: any;
@@ -38,8 +35,6 @@ export class UserProfileImageUploadComponent implements OnInit {
     private userService: CoreUserService,
     private fileService: FileService
   ) {}
-
-  // TODO MWE/AK fix ....
 
   async ngOnInit() {
     this.loaded = false;
@@ -56,8 +51,7 @@ export class UserProfileImageUploadComponent implements OnInit {
     if (isNullOrUndefined(user)) {
       return;
     }
-    const userImagePath = this.user.profileImagePath;
-    this.previewImage = this.userService.getUserProfileImage(this.user);
+    this.previewImage = this.user.profileImagePath;
 
     this.oldImage = this.previewImage;
   }
@@ -68,8 +62,10 @@ export class UserProfileImageUploadComponent implements OnInit {
     fileReader.onload = async e => {
       const image = fileReader.result;
       this.uploadingImage = false;
-      this.previewImage = image;
-      this.uploadedImage.emit({ key: "uploaded", image });
+      let payload: any = await this.fileService
+        .uploadFile(this.imageFileInput.files[0])
+        .toPromise();
+      this.previewImage = payload.message;
     };
     fileReader.readAsDataURL(this.imageFileInput.files[0]);
   }
@@ -77,13 +73,17 @@ export class UserProfileImageUploadComponent implements OnInit {
   deleteImage() {
     this.imageFileInput = undefined;
     this.previewImage = undefined;
-    this.uploadedImage.emit({ key: "clear", image: null });
   }
 
   revertImage() {
     this.imageFileInput = undefined;
     this.uploadingImage = false;
     this.previewImage = this.oldImage;
-    this.uploadedImage.emit({ key: "reverted", image: this.oldImage });
+  }
+
+  async saveProfileImg() {
+    this.user.profileImagePath = this.previewImage;
+    await this.userService.updateUser(this.user, true).toPromise();
+    this.onSave.emit();
   }
 }

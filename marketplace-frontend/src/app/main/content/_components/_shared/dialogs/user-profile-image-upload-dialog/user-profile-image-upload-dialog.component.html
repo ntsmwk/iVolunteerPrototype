@@ -5,7 +5,7 @@
 
 <mat-dialog-content>
 
-  <user-profile-image-upload [user]="user"></user-profile-image-upload>
+  <user-profile-image-upload *ngIf="user" [user]="user" (onSave)="handleOnSave($event)"></user-profile-image-upload>
 </mat-dialog-content>
 
 <!-- <mat-dialog-actions *ngIf="loaded">

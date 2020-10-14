@@ -113,13 +113,6 @@ export class TenantFormContentComponent implements OnInit {
 
     const tenantId = this.tenant.id;
 
-    // TODO fix if necessary....
-    // const oldProfileImage = await this.imageService.findById(
-    //   this.tenant.imageId
-    // );
-    // const oldLandingPageImage = await this.imageService.findById(
-    //   this.tenant.landingpageImageId
-    // );
     this.tenant = new Tenant(this.tenantForm.value);
     this.tenant.id = tenantId;
     this.tenant.marketplaceId = this.globalInfo.marketplace.id;
@@ -131,19 +124,17 @@ export class TenantFormContentComponent implements OnInit {
       this.previewProfileImage,
       this.previewProfileImageDirty,
       // oldProfileImage
-      undefined
+      ""
     );
-    profileImage = await this.fileService.uploadFile(profileImage);
-    this.tenant.imagePath = "<<filenameWithoutPath.png>>";
+    this.tenant.imagePath = profileImage;
 
     let landingPageImage = this.assignCurrentImage(
       this.landingPageImage,
       this.landingPageImageDirty,
       // oldLandingPageImage
-      undefined
+      ""
     );
-    await this.fileService.uploadFile(landingPageImage);
-    this.tenant.landingpageImagePath = "<<filenameWithoutPath.png>>";
+    this.tenant.landingpageImagePath = landingPageImage;
     this.tenant.tags = this.addedTags;
 
     console.log(this.tenant);
@@ -195,41 +186,16 @@ export class TenantFormContentComponent implements OnInit {
     if (!imageDirty) {
       return originalImage;
     }
-
-    if (!isNullOrUndefined(newImage) && isString(newImage)) {
-      const splitResult = (newImage as string).split(",");
-
-      if (splitResult.length !== 2) {
-        return null;
-      }
-
-      // TODO MWE/AK fix
-      // const imageWrapper = new ImageWrapper({
-      //   imageInfo: splitResult[0],
-      //   data: splitResult[1]
-      // });
-      // return imageWrapper;
-    }
-    return null;
+    return newImage;
   }
 
-  handleProfileImageUploadEvent(event: {
-    key: string;
-    image: any;
-    fileName: string;
-  }) {
-    console.error("tenantform content component");
-    console.error(event);
+  handleProfileImageUploadEvent(event: { key: string; url: string }) {
     this.previewProfileImageDirty = true;
-    this.previewProfileImage = event.fileName;
+    this.previewProfileImage = event.url;
   }
 
-  handleLandingPageImageUploadEvent(event: {
-    key: string;
-    image: any;
-    fileName: string;
-  }) {
+  handleLandingPageImageUploadEvent(event: { key: string; url: string }) {
     this.landingPageImageDirty = true;
-    this.landingPageImage = event.fileName;
+    this.landingPageImage = event.url;
   }
 }

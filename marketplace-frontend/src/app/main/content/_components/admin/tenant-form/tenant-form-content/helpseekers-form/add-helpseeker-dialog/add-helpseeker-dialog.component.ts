@@ -1,14 +1,18 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, } from '@angular/material/dialog';
-import { MatTableDataSource, MatSort } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { Tenant } from 'app/main/content/_model/tenant';
-import { User, UserRole } from 'app/main/content/_model/user';
-import { CoreUserService } from 'app/main/content/_service/core-user.service';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog
+} from "@angular/material/dialog";
+import { MatTableDataSource, MatSort } from "@angular/material";
+import { SelectionModel } from "@angular/cdk/collections";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { LoginService } from "app/main/content/_service/login.service";
+import { Tenant } from "app/main/content/_model/tenant";
+import { User, UserRole } from "app/main/content/_model/user";
+import { CoreUserService } from "app/main/content/_service/core-user.service";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 export interface AddHelpseekerDialogData {
   helpseekers: User[];
@@ -16,8 +20,8 @@ export interface AddHelpseekerDialogData {
 
 @Component({
   selector: "add-helpseeker-dialog",
-  templateUrl: './add-helpseeker-dialog.component.html',
-  styleUrls: ['./add-helpseeker-dialog.component.scss'],
+  templateUrl: "./add-helpseeker-dialog.component.html",
+  styleUrls: ["./add-helpseeker-dialog.component.scss"]
 })
 export class AddHelpseekerDialogComponent implements OnInit {
   constructor(
@@ -27,11 +31,11 @@ export class AddHelpseekerDialogComponent implements OnInit {
     public dialog: MatDialog,
     private loginService: LoginService,
     private coreUserService: CoreUserService,
-    private tenantService: TenantService,
-  ) { }
+    private tenantService: TenantService
+  ) {}
 
   datasource = new MatTableDataSource<User>();
-  displayedColumns = ['checkbox', 'name'];
+  displayedColumns = ["checkbox", "name"];
 
   allHelpseekers: User[];
 
@@ -45,24 +49,28 @@ export class AddHelpseekerDialogComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   async ngOnInit() {
-
     this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
 
     this.tenant = this.globalInfo.tenants[0];
 
+    this.coreUserService
+      .findAllByRoles(
+        [UserRole.NONE, UserRole.VOLUNTEER, UserRole.HELP_SEEKER],
+        true
+      )
+      .toPromise()
+      .then((ret: User[]) => {
+        console.log(ret);
+        this.allHelpseekers = ret;
+        this.allHelpseekers = this.allHelpseekers.filter(
+          h => this.data.helpseekers.findIndex(f => f.id === h.id) === -1
+        );
+        this.datasource.data = this.allHelpseekers;
 
-    this.coreUserService.findAllByRoles([UserRole.NONE, UserRole.VOLUNTEER, UserRole.HELP_SEEKER], true).toPromise().then((ret: User[]) => {
-      console.log(ret);
-      this.allHelpseekers = ret;
-      this.allHelpseekers = this.allHelpseekers.filter(h => this.data.helpseekers.findIndex(f => f.id === h.id) === -1);
-      this.datasource.data = this.allHelpseekers;
-
-
-      this.loaded = true;
-    });
-
+        this.loaded = true;
+      });
   }
 
   applyFilter(event: Event) {
@@ -71,8 +79,9 @@ export class AddHelpseekerDialogComponent implements OnInit {
   }
 
   onRowClick(row: User) {
-
-    this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row);
+    this.selection.isSelected(row)
+      ? this.selection.deselect(row)
+      : this.selection.select(row);
   }
 
   async onSubmit() {
@@ -80,12 +89,14 @@ export class AddHelpseekerDialogComponent implements OnInit {
       this.selection.selected.map(async elem => {
         try {
           await this.coreUserService
-            .subscribeOtherUserToTenant(this.globalInfo.tenants[0].id, UserRole.HELP_SEEKER, elem.id)
+            .subscribeOtherUserToTenant(
+              this.globalInfo.tenants[0].id,
+              UserRole.HELP_SEEKER,
+              elem.id
+            )
             .toPromise();
           return elem;
-
         } catch (error) {
-          console.error(error);
           return [];
         }
       })
@@ -93,6 +104,4 @@ export class AddHelpseekerDialogComponent implements OnInit {
     this.data.helpseekers = addedUsers;
     this.dialogRef.close(this.data);
   }
-
-
 }
