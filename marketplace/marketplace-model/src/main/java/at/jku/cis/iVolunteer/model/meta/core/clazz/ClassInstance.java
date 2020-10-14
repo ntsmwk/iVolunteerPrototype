@@ -157,7 +157,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.childClassInstances = childClassInstances;
 	}
 
-	public boolean isVisible() {
+	public Boolean isVisible() {
 		return visible;
 	}
 
@@ -165,7 +165,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.visible = visible;
 	}
 
-	public int getTabId() {
+	public Integer getTabId() {
 		return tabId;
 	}
 
@@ -173,7 +173,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.tabId = tabId;
 	}
 	
-	public boolean isIssued() {
+	public Boolean isIssued() {
 		return issued;
 	}
 
@@ -183,7 +183,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	
 	
 	
-	public boolean isSubscribed() {
+	public Boolean isSubscribed() {
 		return subscribed;
 	}
 
@@ -207,7 +207,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.blockchainDate = blockchainDate;
 	}
 
-	public int getLevel() {
+	public Integer getLevel() {
 		return level;
 	}
 
@@ -215,7 +215,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.level = level;
 	}
 
-	public boolean isExpired() {
+	public Boolean isExpired() {
 		return expired;
 	}
 

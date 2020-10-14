@@ -100,14 +100,14 @@ public class ClassInstanceMapper {
 					dto.setDuration((String) duration.getValues().get(0));
 				}
 			}
-
-			PropertyInstance<Object> location = ci.getProperties().stream().filter(p -> "Location".equals(p.getName()))
-					.findFirst().orElse(null);
-			if (location != null) {
-				if (location.getValues().size() > 0) {
-					dto.setLocation((String) location.getValues().get(0));
-				}
-			}
+// Alex TODO
+//			PropertyInstance<Object> location = ci.getProperties().stream().filter(p -> "Location".equals(p.getName()))
+//					.findFirst().orElse(null);
+//			if (location != null) {
+//				if (location.getValues().size() > 0) {
+//					dto.setLocation((String) location.getValues().get(0));
+//				}
+//			}
 
 			PropertyInstance<Object> description = ci.getProperties().stream()
 					.filter(p -> "Description".equals(p.getName())).findFirst().orElse(null);
