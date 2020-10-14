@@ -11,9 +11,9 @@ import at.jku.cis.iVolunteer.model.user.User;
 
 @Document
 public class CoreUser extends User {
-	@DBRef private List<CoreUser> follower = new ArrayList<>();
+	@DBRef
+	private List<CoreUser> follower = new ArrayList<>();
 	private List<String> registeredMarketplaceIds = new ArrayList<>();
-	// TODO Philipp: boolean vs Boolean
 	private Boolean activated;
 	private AccountType accountType;
 
