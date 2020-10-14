@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
     this.dialogFactory
       .openProfileImageUploadDialog(this.user)
       .then((ret: UserProfileImageUploadDialogData) => {
-        console.log(ret);
+        // console.log(ret);
       });
   }
 }
