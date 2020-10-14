@@ -44,8 +44,8 @@ public class XUserRoleMapper implements AbstractMapper<UserRole, XUserRole> {
 
     @Override
     public XUserRole toTarget(UserRole source) {
-        XUserRoleRelevance xUserRole = this.toTargetRelevance(source);
-        return new XUserRole(xUserRole.getName(), xUserRole.getNameShort());
+        XUserRoleRelevance xUserRoleRelevance = this.toTargetRelevance(source);
+        return new XUserRole(xUserRoleRelevance.getName(), xUserRoleRelevance.getNameShort());
     }
 
     @Override

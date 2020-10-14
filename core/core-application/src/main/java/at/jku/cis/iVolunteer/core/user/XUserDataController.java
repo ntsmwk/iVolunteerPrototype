@@ -65,8 +65,7 @@ public class XUserDataController {
 
     @GetMapping("/userInfo/tenantRole")
     public ResponseEntity<Object> getTenantRole() {
-        // CoreUser user = loginService.getLoggedInUser();
-        CoreUser user = coreUserService.getByUserName("mweixlbaumer");
+        CoreUser user = loginService.getLoggedInUser();
 
         if (user == null) {
             return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);

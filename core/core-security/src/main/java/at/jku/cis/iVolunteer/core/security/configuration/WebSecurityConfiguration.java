@@ -48,10 +48,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()	
-		.antMatchers("/userInfo/tenantRole").permitAll() 
-
-
-		
 			.antMatchers("/api/**").permitAll() 
 			.antMatchers("/v2/api-docs").permitAll() 
 			.antMatchers("/swagger-resources/**").permitAll() 
