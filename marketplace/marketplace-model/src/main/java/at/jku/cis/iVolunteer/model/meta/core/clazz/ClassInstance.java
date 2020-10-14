@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.JsonObject;
@@ -39,6 +40,27 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private int level;
 	
 	public ClassInstance() {
+	}
+	
+	public ClassInstance(TaskInstance ti) {
+		this.setId(ti.getId());
+		this.setTenantId(ti.getTenantId());
+		this.setMarketplaceId(ti.getMarketplaceId());
+		this.setTimestamp(ti.getTimestamp());
+		this.setDescription(ti.getDescription());
+		this.classDefinitionId = ti.getClassDefinitionId();
+		this.name = ti.getName();
+		this.properties = ti.getProperties();
+		this.userId = ti.getUserId();
+		this.issuerId = ti.getIssuerId();
+		this.imagePath = ti.getImagePath();
+		this.classArchetype = ti.getClassArchetype();
+		this.childClassInstances = ti.getChildClassInstances();
+		this.visible = ti.isVisible();
+		this.tabId = ti.getTabId();
+		this.blockchainDate = ti.getBlockchainDate();
+		this.derivationRuleId = ti.getDerivationRuleId();
+		this.level = ti.getLevel();
 	}
 
 	public String getId() {

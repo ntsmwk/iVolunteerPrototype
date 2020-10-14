@@ -25,7 +25,6 @@ public class XTenant {
 	private String landingpageImagePath;
 	private XGeoInfo geoInfo;
 	private List<XUser> subscribedVolunteers;
-	
 
 	public String getId() {
 		return id;
@@ -146,12 +145,13 @@ public class XTenant {
 	public void setGeoInfo(XGeoInfo geoInfo) {
 		this.geoInfo = geoInfo;
 	}
+
 	public List<XUser> getSubscribedVolunteers() {
 		return subscribedVolunteers;
 	}
+
 	public void setSubscribedVolunteers(List<XUser> subscribedVolunteers) {
 		this.subscribedVolunteers = subscribedVolunteers;
 	}
-
 
 }
