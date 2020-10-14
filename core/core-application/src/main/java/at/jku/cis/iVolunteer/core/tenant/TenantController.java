@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
+import at.jku.cis.iVolunteer._mappers.xnet.XUserRoleMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
@@ -30,6 +31,7 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.TenantSubscription;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
+import at.jku.cis.iVolunteer.model.user.XUserRole;
 
 //TODO xnet done - test
 
@@ -44,6 +46,7 @@ public class TenantController {
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private XTenantMapper xTenantMapper;
 	@Autowired private XCoreUserMapper xUserMapper;
+	@Autowired private XUserRoleMapper xUserRoleMapper;
 
 	@GetMapping
 	public List<Tenant> getAllTenants() {
@@ -141,22 +144,23 @@ public class TenantController {
 	}
 
 	@GetMapping("/{tenantId}/userRole")
-	public List<UserRole> getCurrentUserRolesForTenantX(@PathVariable String tenantId) {
+	public List<XUserRole> getCurrentUserRolesForTenantX(@PathVariable String tenantId) {
 		CoreUser user = loginService.getLoggedInUser();
 		List<UserRole> list = user.getSubscribedTenants().stream().filter(ts -> ts.getTenantId().equals(tenantId))
 				.map(ts -> ts.getRole()).collect(Collectors.toList());
-		return list;
+		return xUserRoleMapper.toTargets(list);
 	}
 
 	@PostMapping("/{tenantId}/userRole/add")
-	public ResponseEntity<Void> addUserRoleToTenantX(@PathVariable String tenantId, @RequestBody List<UserRole> roles,
+	public ResponseEntity<Void> addUserRoleToTenantX(@PathVariable String tenantId, @RequestBody List<XUserRole> roles,
 			@RequestHeader("Authorization") String authorization) {
 		CoreUser user = loginService.getLoggedInUser();
 		Tenant tenant = tenantService.getTenantById(tenantId);
 		if (user == null || tenant == null) {
 			return ResponseEntity.badRequest().build();
 		}
-		for (UserRole role : roles) {
+		List<UserRole> userRoles = xUserRoleMapper.toSources(roles);
+		for (UserRole role : userRoles) {
 			boolean alreadySubscribed = user.getSubscribedTenants().stream()
 					.filter(ts -> ts.getTenantId().equals(tenantId) && ts.getRole() == role).findAny()
 					.orElse(null) != null;
@@ -171,13 +175,15 @@ public class TenantController {
 
 	@PostMapping("/{tenantId}/userRole/remove")
 	public ResponseEntity<Void> removeUserRoleToTenantX(@PathVariable String tenantId,
-			@RequestBody List<UserRole> roles, @RequestHeader("Authorization") String authorization) {
+			@RequestBody List<XUserRole> roles, @RequestHeader("Authorization") String authorization) {
 		CoreUser user = loginService.getLoggedInUser();
 		Tenant tenant = tenantService.getTenantById(tenantId);
 		if (user == null || tenant == null) {
 			return ResponseEntity.badRequest().build();
 		}
-		for (UserRole role : roles) {
+		List<UserRole> userRoles = xUserRoleMapper.toSources(roles);
+
+		for (UserRole role : userRoles) {
 			boolean notSubscribed = user.getSubscribedTenants().stream()
 					.filter(ts -> ts.getTenantId().equals(tenantId) && ts.getRole() == role).findAny()
 					.orElse(null) == null;
