@@ -110,8 +110,8 @@ public class XTaskController {
 	//Res: 200 (OK), 500 (FAILED)
 	
 	
-	@GetMapping("{taskId}/close")
-	private ResponseEntity<Object> finalizeTask(@RequestParam("taskId") String taskId) {
+	@GetMapping("/{taskId}/close")
+	private ResponseEntity<Object> finalizeTask(@PathVariable("taskId") String taskId) {
 		TaskInstance taskInstance = xTaskInstanceService.getTaskInstance(taskId);
 		if (taskInstance == null) {
 			return ResponseEntity.badRequest().body("no Task with requested TaskID");

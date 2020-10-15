@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.google.gson.JsonObject;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Document
@@ -61,6 +63,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.blockchainDate = ti.getBlockchainDate();
 		this.derivationRuleId = ti.getDerivationRuleId();
 		this.level = ti.getLevel();
+		this.properties = ti.getProperties();
 	}
 
 	public String getId() {
