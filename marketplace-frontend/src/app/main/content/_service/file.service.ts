@@ -13,10 +13,10 @@ export class FileService {
   uploadFile(file) {
     const formData: FormData = new FormData();
     formData.append("file", file, file.name);
-    return this.http.post(`/core/file`, formData);
+    return this.http.post(`${environment.CORE_URL}/file`, formData);
   }
 
   deleteFile(imageId: string) {
-    return this.http.delete(`/core/image/${imageId}`);
+    return this.http.delete(`${environment.CORE_URL}/image/${imageId}`);
   }
 }
