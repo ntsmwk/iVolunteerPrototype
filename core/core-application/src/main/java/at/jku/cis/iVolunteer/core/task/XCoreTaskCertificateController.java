@@ -38,7 +38,7 @@ public class XCoreTaskCertificateController {
 	@Autowired MarketplaceService marketplaceService;
 	@Autowired XClassInstanceToTaskCertificateMapper classInstanceToTaskCertificateMapper;
 	@Autowired CoreUserService coreUserService;
-//	@Autowired TaskInstanceRestClient taskInstanceRestClient;
+	@Autowired TaskInstanceRestClient taskInstanceRestClient;
 		
 	//	GET ALL TASKCERTIFICATE (PUBLIC TENANTS + PRIVATE TENANTS)
 	//	(Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
@@ -58,7 +58,9 @@ public class XCoreTaskCertificateController {
 		
 		
 		//DEBUG
-		user = coreUserService.getByUserName("mweixlbaumer");
+		if (user == null) {
+			user = coreUserService.getByUserName("mweixlbaumer");
+		}
 		//----		
 		
 		if (user == null) {
@@ -82,7 +84,7 @@ public class XCoreTaskCertificateController {
 				Marketplace mp = marketplaceService.findById(tenant.getMarketplaceId());
 				classInstances.addAll(classInstanceRestClient.getClassInstancesByUserAndTenant(mp.getUrl(), authorization, ClassArchetype.TASK, user.getId(), tenant.getId()));
 				for (ClassInstance ci : classInstances) {
-					TaskInstance ti = null; //TODO
+					TaskInstance ti = taskInstanceRestClient.getTaskInstanceById(mp.getUrl(), authorization, ci.getId());
 					certificates.add(classInstanceToTaskCertificateMapper.toTarget(ci, ti, tenant, user));
 				}
 			}

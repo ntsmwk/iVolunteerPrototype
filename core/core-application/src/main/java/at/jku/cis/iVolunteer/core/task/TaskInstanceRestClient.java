@@ -22,19 +22,18 @@ import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
-public class ClassInstanceRestClient {
+public class TaskInstanceRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
 
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	public List<ClassInstance> getClassInstancesByUserAndTenant(String marketplaceURL, String authorization, ClassArchetype archetype, String userId, String tenantId) {
-		String preUrl = "{0}/meta/core/class/instance/all/tenant/{1}/archetype/{2}/user/{3}";
-		String url = format(preUrl, marketplaceURL,tenantId, archetype, userId );
-		ResponseEntity<ClassInstance[]> resp = restTemplate.exchange(url, HttpMethod.GET, buildEntity(null, authorization), ClassInstance[].class);
-		List<ClassInstance> ret = Arrays.asList(resp.getBody());
-		return ret;
+	public TaskInstance getTaskInstanceById(String marketplaceURL, String authorization, String id) {
+		String preUrl = "{0}/meta/core/task-instance/{1}";
+		String url = format(preUrl, marketplaceURL, id );
+		ResponseEntity<TaskInstance> resp = restTemplate.exchange(url, HttpMethod.GET, buildEntity(null, authorization), TaskInstance.class);
+		return resp.getBody();
 	}
 
 	private HttpEntity<?> buildEntity(Object body, String authorization) {
