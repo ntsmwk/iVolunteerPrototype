@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { Property } from 'app/main/content/_model/properties/Property';
 import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
@@ -14,20 +14,12 @@ import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } f
   templateUrl: './dialog-factory.component.html',
   styleUrls: ['./dialog-factory.component.scss']
 })
-export class DialogFactoryComponent implements OnInit {
-
+export class DialogFactoryComponent {
 
   constructor(public dialog: MatDialog) { }
-
-  ngOnInit() {
-
-    
-  }
-
   
-  ////TODO EXPAND DIALOG FACTORY
+  //TODO EXPAND DIALOG FACTORY
   
-
   /**
    * ADD PROPERTY DIALOG
    * 
@@ -51,8 +43,7 @@ export class DialogFactoryComponent implements OnInit {
 
         for (let s of result.checkboxStates) {
           if (s.dirty) {
-            propIds.push(s.property.id);
-            
+            propIds.push(s.property.id); 
           } 
         }
       }
@@ -64,9 +55,7 @@ export class DialogFactoryComponent implements OnInit {
 
   }
 
-  private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, properties: Property<any>[]): AddOrRemoveDialogData {
-    console.log("entered prepareDataForAdd");
-    
+  private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, properties: Property<any>[]): AddOrRemoveDialogData {    
     let states: {property: Property<any>, disabled: boolean, checked: boolean, dirty: boolean}[] = [];
 
     for (let p of properties) {
@@ -78,7 +67,6 @@ export class DialogFactoryComponent implements OnInit {
         } 
       }
     }
-    console.log("finished");
     
     let data: AddOrRemoveDialogData = { label: label, checkboxStates: states}
     console.log(data);
@@ -86,7 +74,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   removePropertyDialog(template: UserDefinedTaskTemplate) {
-    console.log("clicked remove properies");
     const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
       width: '500px',
       data: this.prepareDataForRemove('Remove Properties', template)
@@ -96,19 +83,13 @@ export class DialogFactoryComponent implements OnInit {
 
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
-        console.log("dialog closed..." + result.label);
-        console.log(result.checkboxStates);
-        console.log("======");
-        
         propIds = [];
         for (let s of result.checkboxStates) {
           if (s.dirty) {
-            console.log(s.property.name + " has changed and marked to be removed" + s.dirty);
             propIds.push(s.property.id);
           }
         }
       } 
-
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
@@ -137,8 +118,6 @@ export class DialogFactoryComponent implements OnInit {
    */
 
   editTemplateDescriptionDialog(template: UserDefinedTaskTemplate) {
-    console.log("entered edit Description Dialog");
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {label: 'Edit Description', 
@@ -162,7 +141,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   editTemplateNameDialog(template: UserDefinedTaskTemplate) {
-    console.log("Entered edit Name Dialog");
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {label: 'Edit Name', 
@@ -184,8 +162,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   newTaskTemplateDialog() {
-    console.log("clicked new nested Task Template");
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {label: 'New Template',
@@ -214,8 +190,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   confirmationDialog(title: string, description: string) {
-    console.log("clicked delete template");
-
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       data: {title: title, description: description}
@@ -235,8 +209,6 @@ export class DialogFactoryComponent implements OnInit {
   }
   
   changePropertyOrderDialog(properties: Property<any>[]) {
-    console.log("clicked order properties");
-
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
       data: {order: properties, label: "Change Property Order"}
@@ -245,8 +217,6 @@ export class DialogFactoryComponent implements OnInit {
     let ret: any = undefined;
     
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log("Dialog closed - displayed result");
-      console.log(result);
       ret = result;
     });
 
@@ -265,9 +235,7 @@ export class DialogFactoryComponent implements OnInit {
 
     let ret: {copyId: string, newName: string, newDescription: string} = undefined;
     dialogRef.beforeClose().toPromise().then((result: ChooseTemplateToCopyDialogData) => {
-      console.log("result = ");
       ret = {copyId: result.returnId, newName: result.newLabel, newDescription: result.newDescription};
-      console.log(ret);
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {

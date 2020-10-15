@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter }  from '@angular/core';
-import { FormGroup, AbstractControl }                 from '@angular/forms';
+import { FormGroup, AbstractControl }  from '@angular/forms';
  
-import { QuestionBase }              from '../../../_model/dynamic-forms/questions';
-import { QuestionControlService }    from '../../../_service/question-control.service';
+import { QuestionBase }  from '../../../_model/dynamic-forms/questions';
+import { QuestionControlService }  from '../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
+
 declare var $:JQueryStatic;
 
 @Component({
@@ -27,9 +28,7 @@ export class DynamicFormComponent implements OnInit {
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
 
-
     if (this.formDisabled) {
-      console.log("Disabling form");
       this.form.disable();
     }
 
@@ -42,22 +41,12 @@ export class DynamicFormComponent implements OnInit {
 
     if (this.form.valid) {
       this.output = JSON.stringify(this.form.value);
-      
-
-      console.log("Values")
-      console.log(this.form.value);
-  
       this.fireResultEvent();
       
-    } else {
-      console.log("not valid - try again");
-
-      let firstKey: string;
-      
+    } else { 
       //Mark errornous Fields
       this.markFormAsTouched(this.questions, this.form);
       
-
       //focus on first error using jQuery
       $('input.ng-invalid').first().focus();
 
@@ -66,15 +55,11 @@ export class DynamicFormComponent implements OnInit {
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
     for (let q of questions) {
-      // console.log("Q: " + q.key);
-      // console.log(q);
-      // console.log("========");
       control.get(q.key).markAsTouched()
       if (q.controlType == 'multiple' && !isNullOrUndefined(q.subQuestions)) {
         this.markFormAsTouched(q.subQuestions, control.get(q.key));
       }
     }    
-
   }
 
   fireResultEvent() {

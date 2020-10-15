@@ -37,20 +37,15 @@ public class TaskController {
 	@Autowired private TaskInteractionRepository taskInteractionRepository;
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private TaskService taskService;
-
 	@Autowired private LoginService loginService;
-	
-	@GetMapping("/task")
-	public List<TaskDTO> findAll(
-			@RequestParam(value = "projectId", required = false) String projectId,
-			@RequestParam(value = "participantId", required = false) String participantId,
-			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly,
-			@RequestParam(value = "engagedOnly", defaultValue = "false", required = false) boolean engagedOnly){
-		
-		return taskService.findAll(projectId, participantId, availableOnly, engagedOnly);
-	}
 
-	
+	@GetMapping("/task")
+	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
+			@RequestParam(value = "participantId", required = false) String participantId,
+
+			@RequestParam(value = "status", required = false) String status) {
+		return taskService.findAll(projectId, participantId, status);
+	}
 
 	@GetMapping("/task/{id}")
 	public TaskDTO findById(@PathVariable("id") String id) {

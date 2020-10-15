@@ -8,16 +8,9 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.OneWayDtoMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
-import at.jku.cis.iVolunteer.model.property.Property;
-import at.jku.cis.iVolunteer.model.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyParentItemDTO;
-import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
-import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class PropertyParentItemMapper implements OneWayDtoMapper<UserDefinedTaskTemplate, PropertyParentItemDTO>{
 

@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.property;
 
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +8,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.StandardProperties;
 import at.jku.cis.iVolunteer.mapper.property.MultiplePropertyRetMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyListItemMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
@@ -26,8 +22,6 @@ import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
-
-
 @RestController
 public class PropertyController {
 	
@@ -36,22 +30,17 @@ public class PropertyController {
 	
 	@Autowired private PropertyRepository propertyRepository;
 	@Autowired private MultiplePropertyRetMapper multiplePropertyRetMapper;
-	
-	@Autowired StandardProperties sp;
-	
+			
 	@GetMapping("/properties/list") 
 	public List<PropertyListItemDTO<Object>> getPropertiesList() {
-
-		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
-			
-		return retVal;
+		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());		
+		return retVal;	
 	}
 	
 	@GetMapping("/properties/full")
 	public List<PropertyDTO<Object>> getPropertiesFull() {
 
 		List<PropertyDTO<Object>> retVal = propertyMapper.toDTOs(propertyRepository.findAll());
-
 		return retVal;
 	}
 	
@@ -62,48 +51,34 @@ public class PropertyController {
 	
 	@PostMapping("/properties/new/single")
 	public void addSingleProperty(@RequestBody PropertyDTO<Object> dto) {
-		System.out.println("Adding Single Property");
-		
-		System.out.println("DTO");
-		System.out.println(dto.getLegalValues().size());
-		System.out.println(dto.getDefaultValues().size());
-		
 		SingleProperty<Object> p = (SingleProperty<Object>) propertyMapper.toEntity(dto);
 		
-		
 		//fix the ids for Default Values
-		if (p.getLegalValues() != null && p.getDefaultValues() != null) {
-			for (ListEntry<Object> val : p.getLegalValues()) {
-				
-				try {
-					ListEntry<Object> defaultValue = p.getDefaultValues().stream().filter(entry -> entry.value.equals(val.value)).findFirst().get();
-					defaultValue.id = val.id;
-				} catch (NoSuchElementException e) {
-					System.out.println("No such Element - " + val.getId() +": " + val.getValue());
-					System.out.println("Continue");
-					continue;
-				}
-			}	
-		}
-
+//		if (p.getLegalValues() != null && p.getDefaultValues() != null) {
+//			for (ListEntry<Object> val : p.getLegalValues()) {
+//				
+//				try {
+//					ListEntry<Object> defaultValue = p.getDefaultValues().stream().filter(entry -> entry.value.equals(val.value)).findFirst().get();
+//					defaultValue.id = val.id;
+//				} catch (NoSuchElementException e) {
+//					continue;
+//				}
+//			}	
+//		}
 		p.setCustom(true);
 		this.propertyRepository.save(p);
 					
 	}
 	
 	@PostMapping("/properties/new/multiple")
-	public void addMultipleProperty(@RequestBody MultiplePropertyRetDTO dto) {
-		System.out.println("Adding Multiple Property");
-		
+	public void addMultipleProperty(@RequestBody MultiplePropertyRetDTO dto) {		
 		MultipleProperty mp = new MultipleProperty(multiplePropertyRetMapper.toEntity(dto));
 				
 		for (String id : dto.getPropertyIDs()) {		
 			Property p = propertyRepository.findOne(id);			
 			mp.getProperties().add(p);
 		}
-		
 		this.propertyRepository.save(mp);
-		
 	}
 	
 	@DeleteMapping("/properties/{id}")
@@ -216,4 +191,5 @@ public class PropertyController {
 //	
 //	
 //}
+
 }

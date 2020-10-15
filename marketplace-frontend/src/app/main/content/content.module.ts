@@ -86,7 +86,6 @@ const routes: Route[] = [
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-
   { path: 'main/properties/all',
     loadChildren: './property-list/property-list.module#PropertyListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
@@ -135,7 +134,6 @@ const routes: Route[] = [
     loadChildren: './_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module#MapPropertyTestModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-
   {
     path: 'main/task-template-form',
     loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
