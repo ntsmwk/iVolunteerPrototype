@@ -156,8 +156,7 @@
         <ng-container matColumnDef="share">
           <mat-header-cell *matHeaderCellDef> Geteilt mit </mat-header-cell>
           <mat-cell *matCellDef="let entry">
-            <!-- TODO MWE comment -->
-            <!-- <img *ngFor="let tenant of getSharedWithTenants(entry)" class="avatar" matTooltip="{{ tenant.name }}" [src]="getTenantImage(tenant) | async" style="cursor: pointer" [matMenuTriggerFor]="revokeMenu" [matMenuTriggerData]="{ tenant: tenant }" /> -->
+            <img *ngFor="let tenant of getSharedWithTenants(entry)" class="avatar" matTooltip="{{ tenant.name }}" [src]="tenant.imagePath" style="cursor: pointer" [matMenuTriggerFor]="revokeMenu" [matMenuTriggerData]="{ tenant: tenant }" />
             <mat-menu #revokeMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
               <ng-template matMenuContent let-tenant="tenant">
                 <button mat-menu-item (click)="revokeSharedClassInstance(entry, tenant)">
