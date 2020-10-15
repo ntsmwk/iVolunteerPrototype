@@ -107,6 +107,10 @@ export class RoleMenuComponent implements OnInit, OnDestroy {
     return this.roleChangeService.getRoleNameString(role);
   }
 
+  getUserImage() {
+    return this.userService.getUserProfileImage(this.user);
+  }
+
   getCurrentTenantImage() {
     let tenant = this.allTenants.find(
       t => t.id === this.currentMapping.tenantIds[0]
