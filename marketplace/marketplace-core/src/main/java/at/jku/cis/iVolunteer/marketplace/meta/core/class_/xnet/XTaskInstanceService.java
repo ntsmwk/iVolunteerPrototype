@@ -25,6 +25,14 @@ public class XTaskInstanceService {
 		return instances;
 	}
 	
+	public List<TaskInstance> getTaskInstanceByTenantId(String tenantId) {
+		if (tenantId == null) {
+			return null;
+		}
+		List<TaskInstance> instances = xTaskInstanceRepository.findByIssuerId(tenantId);
+		return instances;
+	}
+	
 	public TaskInstance addOrOverwriteTaskInstance(TaskInstance taskInstance) {
 		if (taskInstance == null) {
 			return null;

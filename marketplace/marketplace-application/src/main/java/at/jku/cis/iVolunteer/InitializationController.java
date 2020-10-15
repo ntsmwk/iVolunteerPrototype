@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.user.User;
@@ -20,6 +21,7 @@ public class InitializationController {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
 	@Autowired private MatchingOperatorRelationshipRepository matchingOperatorRelationshipRepository;
+	@Autowired private XTaskInstanceRepository xTaskInstanceRepository;
 	
 	@Autowired private InitializationService initializationService;
 	@Autowired private APIInitializationService apiInitializationService;
@@ -176,6 +178,11 @@ public class InitializationController {
 		matchingConfigurationRepository.deleteAll();
 		matchingOperatorRelationshipRepository.deleteAll();
 	}
+	
+	@PutMapping("/init/taskinstance/delete")
+	public void deleteTaskInstances() {
+		xTaskInstanceRepository.deleteAll();
+	}
 
 	
 	@PutMapping("/init/wipe-marketplace")
@@ -190,6 +197,7 @@ public class InitializationController {
 		deleteEnumDefinitions();
 		deleteUserMappings();
 		deleteMatchingConfigurations();
+		deleteTaskInstances();
 		
 	}
 	

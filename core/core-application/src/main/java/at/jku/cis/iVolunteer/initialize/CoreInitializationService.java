@@ -43,6 +43,7 @@ public class CoreInitializationService {
 	private TenantRepository tenantRepository;
 	@Autowired
 	private ImageRepository imageRepository;
+	
 
 	protected void createMarketplace() {
 		Marketplace marketplace = this.marketplaceRepository.findByName("Marketplace 1");
