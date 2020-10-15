@@ -90,7 +90,12 @@ public class TenantController {
 	public XTenant getTenantByIdX(@PathVariable String tenantId) {
 		return xTenantMapper.toTarget(tenantService.getTenantById(tenantId));
 	}
-
+	
+	@GetMapping("/{tenantId}/not-x")
+	public Tenant getTenantByIdNotX(@PathVariable String tenantId) {
+		return tenantService.getTenantById(tenantId);
+	}
+	
 	@PostMapping("/{tenantId}")
 	public ResponseEntity<Void> updateTenantX(@PathVariable String tenantId, @RequestBody XTenant tenant) {
 		if (tenant == null) {

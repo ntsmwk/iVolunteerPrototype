@@ -50,5 +50,21 @@ public class TaskInstance extends ClassInstance {
 		this.setStatus(newTaskInstance.getStatus() != null ? newTaskInstance.getStatus() : this.getStatus());
 		return this;
 	}
+	
+	public TaskInstance updateTaskInstance(ClassInstance newTaskInstance) {
+		this.setClassDefinitionId(newTaskInstance.getClassDefinitionId() != null ? newTaskInstance.getClassDefinitionId() : this.getClassDefinitionId());
+		this.setName(newTaskInstance.getName() != null ? newTaskInstance.getClassDefinitionId() : this.getClassDefinitionId());
+		this.setProperties(newTaskInstance.getProperties() != null ? newTaskInstance.getProperties() : this.getProperties());
+		this.setUserId(newTaskInstance.getUserId() != null ? newTaskInstance.getUserId() : this.getUserId());
+		this.setIssuerId(newTaskInstance.getIssuerId() != null ? newTaskInstance.getIssuerId() : this.getIssuerId());
+		this.setImagePath(newTaskInstance.getImagePath() != null ? newTaskInstance.getImagePath() : this.getImagePath());
+		this.setClassArchetype(newTaskInstance.getClassArchetype() != null ? newTaskInstance.getClassArchetype() : this.getClassArchetype());
+		this.setChildClassInstances(newTaskInstance.getChildClassInstances() != null ? newTaskInstance.getChildClassInstances() : this.getChildClassInstances());
+		this.setVisible(newTaskInstance.isVisible() != null ? newTaskInstance.isVisible() : this.isVisible());
+		this.setTabId(newTaskInstance.getTabId() != null ? newTaskInstance.getTabId() : this.getTabId());
+		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate() : this.getBlockchainDate());
+		this.setLevel(newTaskInstance.getLevel() != null ? newTaskInstance.getLevel() : this.getLevel());
+		return this;
+	}
 
 }

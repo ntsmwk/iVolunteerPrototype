@@ -92,7 +92,7 @@ public class ClassInstanceController {
 	}
 	
 	@GetMapping("/meta/core/class/instance/all/tenant/{tenantId}/archetype/{archetype}/user/{userId}")
-	private List<ClassInstance> getClassInstanceByTenantIdAndArchetype(String tenantId, ClassArchetype classArchetype, String userId) {
+	private List<ClassInstance> getClassInstanceByTenantIdAndArchetype(@PathVariable("tenantId") String tenantId,@PathVariable("archetype") ClassArchetype classArchetype,@PathVariable("userId")  String userId) {
 		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserId(classArchetype, tenantId, userId);
 	}
 

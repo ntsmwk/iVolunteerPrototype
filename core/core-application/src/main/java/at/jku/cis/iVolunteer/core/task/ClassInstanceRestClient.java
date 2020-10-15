@@ -33,8 +33,7 @@ public class ClassInstanceRestClient {
 
 	public List<ClassInstance> getClassInstancesByUserAndTenant(String marketplaceURL, String authorization, ClassArchetype archetype, String userId, String tenantId) {
 		String preUrl = "{0}/meta/core/class/instance/all/tenant/{1}/archetype/{2}/user/{3}";
-		
-		String url = format(preUrl, marketplaceURL, archetype, userId);
+		String url = format(preUrl, marketplaceURL,tenantId, archetype, userId );
 		restTemplate.exchange(url, HttpMethod.GET, buildEntity(null, authorization), ClassInstance[].class);
 		ClassInstance[] retArr = restTemplate.getForObject(url, ClassInstance[].class);
 		List<ClassInstance> ret = Arrays.asList(retArr);

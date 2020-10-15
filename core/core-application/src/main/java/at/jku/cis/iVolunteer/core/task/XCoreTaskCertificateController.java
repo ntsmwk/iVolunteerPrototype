@@ -25,10 +25,11 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
 
 @RestController
-public class XTaskCertificateController {
+public class XCoreTaskCertificateController {
 
 	
 	@Autowired LoginService loginService;
@@ -36,6 +37,8 @@ public class XTaskCertificateController {
 	@Autowired ClassInstanceRestClient classInstanceRestClient;
 	@Autowired MarketplaceService marketplaceService;
 	@Autowired XClassInstanceToTaskCertificateMapper classInstanceToTaskCertificateMapper;
+	@Autowired CoreUserService coreUserService;
+//	@Autowired TaskInstanceRestClient taskInstanceRestClient;
 		
 	//	GET ALL TASKCERTIFICATE (PUBLIC TENANTS + PRIVATE TENANTS)
 	//	(Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
@@ -46,12 +49,17 @@ public class XTaskCertificateController {
 	//	}
 	//	Res: TaskCertificate[]
 	@GetMapping("taskCertificate/all/tenant")
-	private ResponseEntity<Object> getAllTaskCertificates(@RequestBody GetAllTaskCertificateRequest body, @RequestHeader("Authorization") String authorization) {
+	private ResponseEntity<Object> getAllTaskCertificates(@RequestBody GetAllTaskCertificateRequest body, @RequestHeader("Authorization") String authorization) {		
 		if (body == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse("body must not be null"));
 		}
 		
 		CoreUser user = loginService.getLoggedInUser();
+		
+		
+		//DEBUG
+		user = coreUserService.getByUserName("mweixlbaumer");
+		//----		
 		
 		if (user == null) {
 			return new ResponseEntity<Object>(new ErrorResponse("user must be logged in"), HttpStatus.UNAUTHORIZED);
@@ -74,7 +82,8 @@ public class XTaskCertificateController {
 				Marketplace mp = marketplaceService.findById(tenant.getMarketplaceId());
 				classInstances.addAll(classInstanceRestClient.getClassInstancesByUserAndTenant(mp.getUrl(), authorization, ClassArchetype.TASK, user.getId(), tenant.getId()));
 				for (ClassInstance ci : classInstances) {
-					certificates.add(classInstanceToTaskCertificateMapper.toTarget(ci, tenant, user));
+					TaskInstance ti = null; //TODO
+					certificates.add(classInstanceToTaskCertificateMapper.toTarget(ci, ti, tenant, user));
 				}
 			}
 		}

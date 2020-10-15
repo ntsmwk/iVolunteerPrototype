@@ -10,6 +10,7 @@ import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
 import at.jku.cis.iVolunteer.model.user.User;
 
@@ -17,22 +18,21 @@ import at.jku.cis.iVolunteer.model.user.User;
 public class XClassInstanceToTaskCertificateMapper {
 
 	@Autowired
-	XClassInstanceToTaskSerializedMapper classInstanceToTaskSerializedMapper;
+	XTaskInstanceToTaskSerializedMapper taskInstanceToTaskSerializedMapper;
 	@Autowired
 	XTenantToTenantSerializedMapper tenantToTenantSerializedMapper;
-
 	@Autowired
 	XUserMapper userMapper;
 
-	public XTaskCertificate toTarget(ClassInstance source, Tenant tenant, User user) {
+	public XTaskCertificate toTarget(ClassInstance source, TaskInstance taskInstance, Tenant tenant, User user) {
 		if (source == null) {
 			return null;
 		}
 
 		XTaskCertificate taskCertificate = new XTaskCertificate();
 		taskCertificate.setId(source.getId());
-		taskCertificate.setTaskId("todo");
-		taskCertificate.setTaskSerialized(classInstanceToTaskSerializedMapper.toTarget(source));
+		taskCertificate.setTaskId(taskInstance != null ? taskInstance.getId() : null);
+		taskCertificate.setTaskSerialized(taskInstanceToTaskSerializedMapper.toTarget(taskInstance));
 		
 //		Tenant tenant = tenantRestClient.getTenantById(source.getTenantId());
 		taskCertificate.setTenantSerialized(tenantToTenantSerializedMapper.toTarget(tenant));
