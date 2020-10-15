@@ -141,20 +141,55 @@ public class XTaskController {
 		}
 		
 	}
+//	
+//	GET TASKS OF ONE TENANT BY ID (BEI 1 TENANT ZEIGE ALLE TASKS IN UI)
+//	(Sortierung: nach Startdatum - die die am frühesten starten zuerst)
+//	GET {marketplaceUrl}/task/tenant/{tenantId}/
+//	Req: {}
+//	Res: Task[]
+	@GetMapping("/tenant/{tenantId}")
+	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
+		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
+		return xTaskInstanceToTaskMapper.toTargets(tasks);
+	}
+	
+//	GET TASK BY ID
+//	GET {marketplaceUrl}/task/{taskId}/
+//	Req: {}
+//	Res: Task
+	@GetMapping("/{taskId}")
+	public XTask getTask(@PathVariable String taskId) {
+		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
+		return xTaskInstanceToTaskMapper.toTarget(task);
+	}
+
+//	TODO UPDATE TASK (schicken nur die änderung des felds oder ganzes objekt wie sie wollen)
+//	(ONLY POSSIBLE IF TASK NOT CLOSED! --> Bitte Errormessage liefern bzw. ErrorCode für diesen Fall)
+//	POST {marketplaceUrl}/task/update/{taskId}
+//	Req: { key: value, key2: value2,...} (ONLY CHANGED TASK DATA)
+//	Res: 200 (OK), 500 (FAILED), 400 { message: "z.b: Kann nicht aktualisiert werden da.."}
 	
 	
 	
-//	@GetMapping("/all")
-//	public List<TaskInstance> getAllTaskInstances() {
-//		List<ClassInstance> classInstances = classInstanceService.getAllClassInstances();
-//		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
-//	}
-//
-//	@GetMapping("/tenant/{tenantId}/all")
-//	public List<TaskInstance> getTaskClassInstancesByTenantId(@PathVariable String tenantId) {
-//		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK, tenantId);
-//		return classInstanceToTaskInstanceMapper.toTargets(classInstances);
-//	}
+	
+//  TODO SUBSCRIBE TASK BY ID
+//	POST {marketplaceUrl}/task/{taskId}/subscribe/
+//	Req: {}
+//	Res: 200 (OK), 500 (FAILED)
+	
+	
+	
+//	TODO UNSUBSCRIBE TASK BY ID
+//	POST {marketplaceUrl}/task/{taskId}/unsubscribe/
+//	Req: {}
+//	Res: 200 (OK), 500 (FAILED)
+	
+	
+	
+	
+	
+	
+	
 //
 //	@GetMapping("/tenant/{tenantId}/subscribed")
 //	public List<TaskInstance> getSubscribedTaskClassInstancesByTenantId(@PathVariable String tenantId) {

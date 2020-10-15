@@ -43,10 +43,11 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
 		task.setDynamicFields(new ArrayList<>());
-		task.setStartDate((Date) xPropertyInstanceToDynamicFieldMapper
-				.toTarget(findProperty("Starting Date", source.getProperties())).getValues().get(0));
-		task.setEndDate((Date) xPropertyInstanceToDynamicFieldMapper
-				.toTarget(findProperty("End Date", source.getProperties())).getValues().get(0));
+		
+		PropertyInstance<Object> startDateField = findProperty("Starting Date", source.getProperties());
+		task.setStartDate(startDateField == null || startDateField.getValues().size() == 0 ? null :  new Date((Long) startDateField.getValues().get(0)));
+		PropertyInstance<Object> endDateField =  findProperty("End Date", source.getProperties());
+		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null :  new Date((Long) endDateField.getValues().get(0)));
 
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
