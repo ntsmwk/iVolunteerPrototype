@@ -1,5 +1,4 @@
-<link type="text/css" rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
 
 <div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll">
   <div style="padding-top: 12px"></div>
@@ -17,8 +16,7 @@
     <h2 style="font-weight: 500">
       Verwalte deinen digitalen Freiwilligenpass und Organisationen.
     </h2>
-    Synchronisiere Freiwilligenpass-Einträge in deinen digitalen
-    Freiwilligenpass oder teile sie mit anderen Organisationen.
+    Synchronisiere Freiwilligenpass-Einträge in deinen digitalen Freiwilligenpass oder teile sie mit anderen Organisationen.
   </mat-card>
 
   <div style="padding-top: 10px"></div>
@@ -28,8 +26,7 @@
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxLayout="column" fxLayoutAlign="space-between start" class="optionHeader">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)"
-            *ngIf="subscribedTenants.length > 0">
+          <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)" *ngIf="subscribedTenants.length > 0">
           </organisation-filter>
 
           <h2 *ngIf="subscribedTenants.length == 0">
@@ -50,8 +47,7 @@
               </mat-icon>
             </button>
 
-            <button mat-raised-button class="syncButton" color="primary" (click)="removeAllFromLocalRepository()"
-              style="margin-left: 20px">
+            <button mat-raised-button class="syncButton" color="primary" (click)="removeAllFromLocalRepository()" style="margin-left: 20px">
               Auswahl desynchronisieren
               <mat-icon *ngIf="isAllDesyncing">
                 <mat-spinner color="accent" diameter="20"> </mat-spinner>
@@ -74,8 +70,7 @@
     <div fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
-      <mat-table #table matSort class="localRepoTable" [dataSource]="dataSource" style="width: 100%"
-        (matSortChange)="sortData($event)">
+      <mat-table #table matSort class="localRepoTable" [dataSource]="dataSource" style="width: 100%" (matSortChange)="sortData($event)">
         <ng-container matColumnDef="issuer">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Aussteller</mat-header-cell>
           <mat-cell *matCellDef="let entry">
@@ -116,32 +111,26 @@
         <ng-container matColumnDef="action">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Aktionen</mat-header-cell>
           <mat-cell *matCellDef="let entry">
-            <mat-icon style="cursor: pointer" (click)="navigateToClassInstanceDetails(entry)" svgIcon="info"
-              matTooltip="Details"></mat-icon>
+            <mat-icon style="cursor: pointer" (click)="navigateToClassInstanceDetails(entry)" svgIcon="info" matTooltip="Details"></mat-icon>
 
-            <mat-icon *ngIf="!isInLocalRepository(entry)" (click)="syncOneToLocalRepository(entry)" svgIcon="plus"
-              style="cursor: pointer; margin-left: 20px" matTooltip="Zum lokalen Freiwilligenpass hinzufügen">
+            <mat-icon *ngIf="!isInLocalRepository(entry)" (click)="syncOneToLocalRepository(entry)" svgIcon="plus" style="cursor: pointer; margin-left: 20px" matTooltip="Zum lokalen Freiwilligenpass hinzufügen">
             </mat-icon>
 
-            <mat-icon *ngIf="isInLocalRepository(entry)" (click)="removeOneFromLocalRepository(entry)" svgIcon="minus"
-              style="cursor: pointer; margin-left: 20px" matTooltip="Vom lokalen Freiwilligenpass entfernen">
+            <mat-icon *ngIf="isInLocalRepository(entry)" (click)="removeOneFromLocalRepository(entry)" svgIcon="minus" style="cursor: pointer; margin-left: 20px" matTooltip="Vom lokalen Freiwilligenpass entfernen">
             </mat-icon>
 
-            <mat-icon *ngIf="isSynced(entry)" (click)="removeOneFromMarketplace(entry)" svgIcon="storeSlash"
-              style="cursor: pointer; margin-left: 20px" matTooltip="Vom Marketplace entfernen">
+            <mat-icon *ngIf="isSynced(entry)" (click)="removeOneFromMarketplace(entry)" svgIcon="storeSlash" style="cursor: pointer; margin-left: 20px" matTooltip="Vom Marketplace entfernen">
             </mat-icon>
 
             <div *ngIf="isInLocalRepository(entry)">
-              <mat-icon svgIcon="share" style="cursor: pointer; margin-left: 20px" matTooltip="Teilen mit..."
-                [matMenuTriggerFor]="shareMenu">
+              <mat-icon svgIcon="share" style="cursor: pointer; margin-left: 20px" matTooltip="Teilen mit..." [matMenuTriggerFor]="shareMenu">
               </mat-icon>
               <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
                 <ng-template matMenuContent>
                   <ng-container *ngIf="isSynced(entry)">
-                    <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item
-                      (click)="shareClassInstanceToOthers(entry, tenant)">
+                    <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstanceToOthers(entry, tenant)">
                       <div fxLayout="row" fxLayoutAlign="start center">
-                        <img class="avatar" [src]="getTenantImageById(tenant.id)" />
+                        <img class="avatar" [src]="tenant.imagePath" />
                         <div>{{ tenant.name }}</div>
                       </div>
                     </button>
@@ -180,8 +169,7 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
-        <mat-row *matRowDef="let element; let row; columns: displayedColumnsRepository"
-          [ngStyle]="getTableRowColor(element)"></mat-row>
+        <mat-row *matRowDef="let element; let row; columns: displayedColumnsRepository" [ngStyle]="getTableRowColor(element)"></mat-row>
       </mat-table>
     </div>
   </div>
@@ -196,8 +184,7 @@
   <div style="padding-top: 20px"></div>
 
   <p *ngIf="isLoaded && !isLocalRepositoryConnected" class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Kein Speicherort für deinen
-    Lokalen Freiwilligenpass ausgewählt, oder keine Verbindung möglich, siehe
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Kein Speicherort für deinen Lokalen Freiwilligenpass ausgewählt, oder keine Verbindung möglich, siehe
     <a [routerLink]="['/main/profile']"> Profile</a>!
   </p>
 
@@ -207,8 +194,7 @@
       isLocalRepositoryConnected &&
       subscribedTenants.length != 0
     " class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation
-    ausgewählt!
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
   </p>
 
   <p *ngIf="
@@ -217,7 +203,6 @@
       selectedTenants.length > 0 &&
       isLocalRepositoryConnected
     " class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine
-    Daten in deinem lokalen Freiwilligenpass!
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine Daten in deinem lokalen Freiwilligenpass!
   </p>
 </div>
