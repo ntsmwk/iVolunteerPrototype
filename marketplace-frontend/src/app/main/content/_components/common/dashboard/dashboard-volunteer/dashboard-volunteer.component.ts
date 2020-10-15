@@ -206,8 +206,9 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async getTenantImageById(tenantId: string) {
-    let tenant = this.allTenants.find(t => t.id === tenantId)[0];
-    return tenant.imagePath;
+    const tenant = this.allTenants.find(t => t.id === tenantId);
+
+    return !isNullOrUndefined(tenant) ? tenant.imagePath : null;
   }
 
   navigateToClassInstanceDetails(row) {
