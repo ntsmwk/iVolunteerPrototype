@@ -57,7 +57,7 @@ public class XTaskController {
 		instance.setStatus("OPEN");
 		instance = xTaskInstanceService.addOrOverwriteTaskInstance(instance);
 		
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(Collections.singletonMap("id", instance.getId()));
 	}
 	
 	
@@ -85,6 +85,7 @@ public class XTaskController {
 				ClassInstance classInstance = new ClassInstance(taskInstance);
 				
 				classInstance.setUserId(user.getId());
+				classInstance.setIssuerId(task.getTenant());
 				classInstance.setId(null);
 				addedClassInstances.add(classInstance);
 				//TODO BadgeCertificates ausstellen
@@ -92,11 +93,11 @@ public class XTaskController {
 			
 			addedClassInstances = classInstanceController.createNewClassInstances(addedClassInstances);
 			
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(Collections.singletonMap("id", taskInstance.getId()));
 			
 		} else {
 			System.out.println("subscribedusers are null");
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(Collections.singletonMap("id", taskInstance.getId()));
 		}
 
 	}

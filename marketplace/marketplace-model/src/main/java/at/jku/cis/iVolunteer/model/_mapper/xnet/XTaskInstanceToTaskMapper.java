@@ -36,7 +36,7 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		task.setStartDate(null);
 		task.setEndDate(null);
 		task.setImagePath(source.getImagePath());
-		task.setClosed(false);
+		task.setClosed(source.getStatus().equals("CLOSED"));
 // TODO
 		task.setGeoInfo(null);
 //		task.(propertyInstanceToTaskFieldMapper.toTarget(findProperty("Location", source.getProperties())));
@@ -94,23 +94,28 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		instance.setBlockchainDate(new Date());
 		instance.setLevel(0);
 		instance.setSubscribedVolunteerIds(null);
-		instance.setStatus("status");
-
-//	 TODO DynamicFieldBlocks
-		instance.setProperties(null);
+		instance.setStatus(target.isClosed() ? "CLOSED" : "OPEN");
+		instance.setTenantId(target.getTenant());
 
 		PropertyInstance<Object> startDate = new PropertyInstance<Object>();
-		startDate.setValues(Collections.singletonList(target.getStartDate()));
+		
+		startDate.setValues(Collections.singletonList(target.getStartDate().getTime()));
+		startDate.setName("Starting Date");
 		startDate.setType(PropertyType.DATE);
 		startDate.setLevel(1);
 
 //findAndReplaceProperty(startDate, classInstance);
 
 		PropertyInstance<Object> endDate = new PropertyInstance<Object>();
-		endDate.setValues(Collections.singletonList(target.getEndDate()));
+		endDate.setValues(Collections.singletonList(target.getEndDate().getTime()));
+		endDate.setName("End Date");
 		endDate.setType(PropertyType.DATE);
 		endDate.setLevel(1);
-
+		
+		instance.getProperties().add(startDate);
+		instance.getProperties().add(endDate);
+		
+		
 //TODO from geoinfo
 //PropertyInstance<Object> location = propertyInstanceToTaskFieldMapper.toSource(target.getRequired().getPlace());
 
