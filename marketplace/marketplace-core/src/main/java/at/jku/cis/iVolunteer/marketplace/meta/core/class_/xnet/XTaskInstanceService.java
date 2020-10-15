@@ -14,8 +14,6 @@ public class XTaskInstanceService {
 
 	@Autowired XTaskInstanceRepository xTaskInstanceRepository;
 
-	
-	
 	public TaskInstance getTaskInstance(String id) {
 		return xTaskInstanceRepository.findOne(id);
 	}

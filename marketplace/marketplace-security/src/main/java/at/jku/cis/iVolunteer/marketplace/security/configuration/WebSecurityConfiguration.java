@@ -54,6 +54,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/tasktemplate/**").permitAll()
 				.antMatchers("/taskCertificate/**").permitAll()
 				.antMatchers("/meta/core/class/instance/**").permitAll()
+				.antMatchers("/meta/core/task-instance/**").permitAll()
 //				END TEST
 				.anyRequest().authenticated();
 
