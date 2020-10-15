@@ -45,8 +45,6 @@ export class TenantFormContentComponent implements OnInit {
     private roleChangeService: RoleChangeService
   ) {}
 
-  // TODO MWE/AK fix files....
-
   async ngOnInit() {
     this.loaded = false;
     this.previewProfileImageDirty = false;
