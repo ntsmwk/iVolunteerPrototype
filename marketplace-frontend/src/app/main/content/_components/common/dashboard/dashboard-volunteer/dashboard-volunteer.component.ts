@@ -146,8 +146,7 @@ export class DashboardVolunteerComponent implements OnInit {
           this.marketplace,
           "TASK",
           this.volunteer.id,
-          this.volunteer.subscribedTenants.map(s => s.tenantId),
-          true
+          this.volunteer.subscribedTenants.map(s => s.tenantId)
         )
         .toPromise()
     );
@@ -206,9 +205,10 @@ export class DashboardVolunteerComponent implements OnInit {
     this.isLoaded = true;
   }
 
-  async getTenantImageById(tenantId: string) {
-    let tenant = this.allTenants.find(t => t.id === tenantId)[0];
-    return tenant.imagePath;
+  getTenantImageById(tenantId: string) {
+    const tenant = this.allTenants.find(t => t.id === tenantId);
+
+    return !isNullOrUndefined(tenant) ? tenant.imagePath : null;
   }
 
   navigateToClassInstanceDetails(row) {

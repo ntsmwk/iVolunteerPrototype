@@ -12,7 +12,7 @@ public class XTask {
 	String id;
 	String title;
 	String tenant;
-	String descripiton;
+	String description;
 	Date startDate;
 	Date endDate;
 	String imagePath;
@@ -41,11 +41,11 @@ public class XTask {
 	public void setTenant(String tenant) {
 		this.tenant = tenant;
 	}
-	public String getDescripiton() {
-		return descripiton;
+	public String getDescription() {
+		return description;
 	}
-	public void setDescripiton(String descripiton) {
-		this.descripiton = descripiton;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public Date getStartDate() {
 		return startDate;

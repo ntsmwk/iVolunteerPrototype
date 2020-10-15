@@ -46,12 +46,12 @@ public class ClassInstanceController {
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
-			@PathVariable("userId") String userId, @RequestParam(value = "issued") boolean issued, @RequestBody List<String> tenantIds) {
+			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 
 		tenantIds.forEach(tenantId -> {
 			classInstances.addAll(
-					classInstanceRepository.getByUserIdAndClassArchetypeAndTenantIdAndIssued(userId, archeType, tenantId, issued));
+					classInstanceRepository.getByUserIdAndClassArchetypeAndTenantId(userId, archeType, tenantId));
 		});
 
 		return classInstanceMapper.mapToDTO(classInstances);
@@ -113,7 +113,7 @@ public class ClassInstanceController {
 			classInstance.setIssuerId(tenantId);
 			classInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
 			classInstance.setTimestamp(new Date());
-			classInstance.setIssued(false);
+//			classInstance.setIssued(false);
 
 			classInstance.getProperties().forEach(p -> {
 				if (properties.containsKey(p.getName())) {
@@ -181,7 +181,6 @@ public class ClassInstanceController {
 		ciNew.setTimestamp(ci.getTimestamp());
 		ciNew.setMarketplaceId(ci.getMarketplaceId());
 		ciNew.setTenantId(tenantId);
-		ciNew.setIssued(ci.isIssued());
 
 		return classInstanceMapper.mapToDTO(Collections.singletonList(this.classInstanceRepository.save(ciNew)))
 				.stream().findFirst().orElse(null);

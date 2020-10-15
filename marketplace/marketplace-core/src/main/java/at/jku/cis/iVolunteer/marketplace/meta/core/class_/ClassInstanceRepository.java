@@ -15,11 +15,11 @@ public interface ClassInstanceRepository extends HasTenantRepository<ClassInstan
 
 	List<ClassInstance> getByUserIdAndClassDefinitionIdAndTenantId(String userId, String classDefinitionId, String tenantId);
 
-	List<ClassInstance> getByUserIdAndClassArchetypeAndTenantIdAndIssued(String userId, ClassArchetype classArchetype, String tenantId, boolean issued);
+//	List<ClassInstance> getByUserIdAndClassArchetypeAndTenantIdAndIssued(String userId, ClassArchetype classArchetype, String tenantId, boolean issued);
 
 	List<ClassInstance> getByUserIdAndTenantId(String userId, String tenantId);
 
-	List<ClassInstance> getByIssuedAndTenantId(boolean issued, String tenantId);
+//	List<ClassInstance> getByIssuedAndTenantId(boolean issued, String tenantId);
 	
 	List<ClassInstance> getByUserIdAndDerivationRuleId(String userId, String derivationRuleId);
 
@@ -29,11 +29,12 @@ public interface ClassInstanceRepository extends HasTenantRepository<ClassInstan
 	
 	List<ClassInstance> getByClassArchetypeAndUserId(ClassArchetype classArchetype, String userId);
 	
-	List<ClassInstance> getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(ClassArchetype classArchetype, String tenantId, String userId, boolean subscribed);
+//	List<ClassInstance> getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(ClassArchetype classArchetype, String tenantId, String userId, boolean subscribed);
 
-	List<ClassInstance> getByClassArchetypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed);
+//	List<ClassInstance> getByClassArchetypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed);
 
 	List<ClassInstance> getByClassArchetypeAndTenantIdAndUserId(ClassArchetype classArchetype, String tenantId, String userId);
 
+	List<ClassInstance> getByUserIdAndClassArchetypeAndTenantId(String userId, ClassArchetype classArchetype, String tenantId);
 	
 }

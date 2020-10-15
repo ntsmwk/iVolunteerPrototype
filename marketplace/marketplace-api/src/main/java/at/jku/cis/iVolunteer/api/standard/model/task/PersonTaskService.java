@@ -124,7 +124,6 @@ public class PersonTaskService {
 		personTaskClassInstance.setTenantId(tenantId);
 		personTaskClassInstance.setBlockchainDate(new Date());
 		personTaskClassInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
-		personTaskClassInstance.setIssued(true);
 		personTaskClassInstance.setName(personTask.getTaskName());
 
 		personTaskClassInstance.setTimestamp(new Date());

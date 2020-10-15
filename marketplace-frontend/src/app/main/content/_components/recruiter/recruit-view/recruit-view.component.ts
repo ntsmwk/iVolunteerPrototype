@@ -116,8 +116,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
                 this.marketplace,
                 "TASK",
                 this.volunteer.id,
-                this.tenantId,
-                true
+                this.tenantId
               )
               .toPromise()
               .then((ret: ClassInstanceDTO[]) => {

@@ -11,17 +11,16 @@ import { User } from "app/main/content/_model/user";
   providedIn: "root"
 })
 export class ClassInstanceService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUserClassInstancesByArcheType(
     marketplace: Marketplace,
     archetype: string,
     userId: string,
-    tenantIds: string[],
-    issued: boolean
+    tenantIds: string[]
   ) {
     return this.http.post(
-      `${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user/${userId}?issued=${issued}`,
+      `${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user/${userId}`,
       tenantIds
     );
   }

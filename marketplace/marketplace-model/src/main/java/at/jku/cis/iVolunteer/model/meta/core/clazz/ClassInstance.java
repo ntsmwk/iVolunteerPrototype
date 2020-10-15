@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.JsonObject;
@@ -31,10 +32,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private boolean visible;
 	private int tabId;
 	
-	private boolean issued;
-	private boolean expired;
-	private boolean subscribed;
-	
 	private Date blockchainDate;
 
 
@@ -43,6 +40,27 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private int level;
 	
 	public ClassInstance() {
+	}
+	
+	public ClassInstance(TaskInstance ti) {
+		this.setId(ti.getId());
+		this.setTenantId(ti.getTenantId());
+		this.setMarketplaceId(ti.getMarketplaceId());
+		this.setTimestamp(ti.getTimestamp());
+		this.setDescription(ti.getDescription());
+		this.classDefinitionId = ti.getClassDefinitionId();
+		this.name = ti.getName();
+		this.properties = ti.getProperties();
+		this.userId = ti.getUserId();
+		this.issuerId = ti.getIssuerId();
+		this.imagePath = ti.getImagePath();
+		this.classArchetype = ti.getClassArchetype();
+		this.childClassInstances = ti.getChildClassInstances();
+		this.visible = ti.isVisible();
+		this.tabId = ti.getTabId();
+		this.blockchainDate = ti.getBlockchainDate();
+		this.derivationRuleId = ti.getDerivationRuleId();
+		this.level = ti.getLevel();
 	}
 
 	public String getId() {
@@ -172,24 +190,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
 	}
-	
-	public Boolean isIssued() {
-		return issued;
-	}
-
-	public void setIssued(boolean issued) {
-		this.issued = issued;
-	}
-	
-	
-	
-	public Boolean isSubscribed() {
-		return subscribed;
-	}
-
-	public void setSubscribed(boolean subscribed) {
-		this.subscribed = subscribed;
-	}
 
 	public void setDerivationRuleId(String derivationRuleId) {
 		this.derivationRuleId = derivationRuleId;
@@ -215,13 +215,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.level = level;
 	}
 
-	public Boolean isExpired() {
-		return expired;
-	}
-
-	public void setExpired(boolean expired) {
-		this.expired = expired;
-	}
 
 	@Override
 	public String toHashObject() {
