@@ -29,7 +29,7 @@ public class InitializationController {
 	public void addTestData() {
 		addFireBrigadeUserMapping();
 		addAllProperties();
-		addClassConfigurations();
+//		addClassConfigurations();
 		addAPIClassDefinitions();
 	}
 	
