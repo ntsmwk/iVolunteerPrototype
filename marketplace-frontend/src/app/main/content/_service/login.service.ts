@@ -9,9 +9,10 @@ import { LocalRepositoryJsonServerService } from "./local-repository-jsonServer.
 import { LocalRepositoryDropboxService } from "./local-repository-dropbox.service";
 import { LocalRepositoryNextcloudService } from "./local-repository-nextcloud.service";
 import { Marketplace } from "../_model/marketplace";
+import { environment } from "environments/environment";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class LoginService {
   constructor(
@@ -25,7 +26,7 @@ export class LoginService {
 
   login(username: string, password: string) {
     return this.http.post(
-      "/core/auth/login",
+      `${environment.CORE_URL}/auth/login`,
       { username: username, password: password },
       { observe: "response" }
     );
@@ -37,30 +38,30 @@ export class LoginService {
   }
 
   getActivationStatus(username: string) {
-    return this.http.put("/core/activation-status", username);
+    return this.http.put(`${environment.CORE_URL}/activation-status`, username);
   }
 
   getLoggedIn() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.user);
         subscriber.complete();
       });
     } else {
-      return this.http.get("/core/user");
+      return this.http.get(`${environment.CORE_URL}/user`);
     }
   }
 
   getLoggedInUserRole() {
     let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
     if (globalInfo) {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(globalInfo.userRole);
         subscriber.complete();
       });
     } else {
-      return new Observable((subscriber) => {
+      return new Observable(subscriber => {
         subscriber.next(UserRole.NONE);
         subscriber.complete();
       });
@@ -68,24 +69,26 @@ export class LoginService {
   }
 
   refreshAccessToken(refreshToken: string) {
-    return this.http.post("/core/auth/refreshToken", refreshToken).pipe(
-      tap(
-        (response: any) => {
-          let accessToken: string = response.accessToken;
-          let refreshToken: string = response.refreshToken;
+    return this.http
+      .post(`${environment.CORE_URL}/auth/refreshToken`, refreshToken)
+      .pipe(
+        tap(
+          (response: any) => {
+            let accessToken: string = response.accessToken;
+            let refreshToken: string = response.refreshToken;
 
-          if (accessToken == null || refreshToken == null) {
+            if (accessToken == null || refreshToken == null) {
+              this.logout();
+            } else {
+              localStorage.setItem("accessToken", accessToken);
+              localStorage.setItem("refreshToken", refreshToken);
+            }
+          },
+          error => {
             this.logout();
-          } else {
-            localStorage.setItem("accessToken", accessToken);
-            localStorage.setItem("refreshToken", refreshToken);
           }
-        },
-        (error) => {
-          this.logout();
-        }
-      )
-    );
+        )
+      );
   }
 
   getRefreshToken() {
@@ -97,7 +100,7 @@ export class LoginService {
   }
 
   getGlobalInfo() {
-    const observable = new Observable((subscriber) => {
+    const observable = new Observable(subscriber => {
       let globalInfo = JSON.parse(localStorage.getItem("globalInfo"));
       if (globalInfo) {
         subscriber.next(globalInfo);
@@ -110,7 +113,7 @@ export class LoginService {
   async generateGlobalInfo(role: UserRole, tenantIds: string[]) {
     let globalInfo = <GlobalInfo>(
       await this.httpClient
-        .put(`/core/globalInfo/role/${role}`, tenantIds)
+        .put(`${environment.CORE_URL}/globalInfo/role/${role}`, tenantIds)
         .toPromise()
     );
 
