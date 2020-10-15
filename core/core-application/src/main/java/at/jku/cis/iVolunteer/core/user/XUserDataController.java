@@ -41,7 +41,7 @@ public class XUserDataController {
         CoreUser user = loginService.getLoggedInUser();
 
         if (user == null) {
-            return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Object>(new ErrorResponse("Benutzer existiert nicht!"), HttpStatus.BAD_REQUEST);
         }
 
         return ResponseEntity.ok(xUserMapper.toTarget(user));
@@ -54,7 +54,7 @@ public class XUserDataController {
         CoreUser updatingUser = xUserMapper.toSource(xUser);
 
         if (existingUser == null) {
-            return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Object>(new ErrorResponse("Benutzer existiert nicht!"), HttpStatus.BAD_REQUEST);
         }
 
         existingUser = existingUser.updateCoreUser(updatingUser);
@@ -68,10 +68,10 @@ public class XUserDataController {
         CoreUser user = loginService.getLoggedInUser();
 
         if (user == null) {
-            return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Object>(new ErrorResponse("Benutzer existiert nicht!"), HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(userDataService.toTenantRoles(user.getSubscribedTenants()));
+        return ResponseEntity.ok(userDataService.toXTenantRoles(user.getSubscribedTenants()));
 
     }
 
@@ -80,7 +80,7 @@ public class XUserDataController {
         CoreUser user = loginService.getLoggedInUser();
 
         if (user == null) {
-            return new ResponseEntity<Object>(new ErrorResponse("User does not exist"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Object>(new ErrorResponse("Benutzer existiert nicht!"), HttpStatus.BAD_REQUEST);
         }
 
         List<Tenant> tenants = new ArrayList<>();
@@ -95,7 +95,8 @@ public class XUserDataController {
     // CoreUser user = loginService.getLoggedInUser();
 
     // if (user == null) {
-    // return new ResponseEntity<Object>(new ErrorResponse("User does not exist"),
+    // return new ResponseEntity<Object>(new ErrorResponse("Benutzer existiert
+    // nicht!"),
     // HttpStatus.BAD_REQUEST);
     // }
 
@@ -109,7 +110,8 @@ public class XUserDataController {
     // CoreUser user = coreUserService.getByUserId(userId);
 
     // if (user == null) {
-    // return new ResponseEntity<Object>(new ErrorResponse("User does not exist"),
+    // return new ResponseEntity<Object>(new ErrorResponse("Benutzer existiert
+    // nicht!"),
     // HttpStatus.BAD_REQUEST);
     // }
 
