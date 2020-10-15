@@ -117,7 +117,7 @@ public class RuleService {
 	public RuleExecution executeRules(String tenantId, String container, String volunteerId) {
 		KieSession ksession = getKieSession(tenantId, container);
 		User volunteer = userRepository.findOne(volunteerId);
-		Tenant tenant = coreTenantRestClient.getTenantById(tenantId);
+		Tenant tenant = coreTenantRestClient.getTenantById(tenantId, "");
 		
 		List<ClassInstance> volClassInstances = new ArrayList<ClassInstance>();
 

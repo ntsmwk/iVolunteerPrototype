@@ -15,8 +15,8 @@ public class XTenant {
 	private String description;
 	private String homepage;
 	private String imagePath;
-	private XColor primaryColor;
-	private XColor secondaryColor;
+	private String primaryColor;
+	private String secondaryColor;
 	private String marketplaceURL;
 	private List<String> tags;
 	private String landingpageMessage;
@@ -74,19 +74,19 @@ public class XTenant {
 		this.imagePath = imagePath;
 	}
 
-	public XColor getPrimaryColor() {
+	public String getPrimaryColor() {
 		return primaryColor;
 	}
 
-	public void setPrimaryColor(XColor primaryColor) {
+	public void setPrimaryColor(String primaryColor) {
 		this.primaryColor = primaryColor;
 	}
 
-	public XColor getSecondaryColor() {
+	public String getSecondaryColor() {
 		return secondaryColor;
 	}
 
-	public void setSecondaryColor(XColor secondaryColor) {
+	public void setSecondaryColor(String secondaryColor) {
 		this.secondaryColor = secondaryColor;
 	}
 

@@ -8,6 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +24,7 @@ public class CoreTenantRestClient {
 
 	@Autowired private RestTemplate restTemplate;
 	@Value("${core.uri}") private String url;
+	private static String AUTHORIZATION = "authorization";
 
 	private static Logger logger = LoggerFactory.getLogger(CoreTenantRestClient.class);
 
@@ -47,11 +53,12 @@ public class CoreTenantRestClient {
 		return Arrays.asList(tenants);
 	}
 
-	public Tenant getTenantById(String tenantId) {
-		String requestUrl = MessageFormat.format("{0}/tenant/{1}", url, tenantId);
+	public Tenant getTenantById(String tenantId, String authorization) {
+		String requestUrl = MessageFormat.format("{0}/tenant/{1}/not-x", url, tenantId);
 		Tenant tenant = null;
 		try {
-			tenant = restTemplate.getForObject(requestUrl, Tenant.class);
+			ResponseEntity<Tenant> response = restTemplate.exchange(requestUrl, HttpMethod.GET, buildEntity("", authorization), Tenant.class);
+			tenant = response.getBody();
 		} catch (Exception e) {
 			this.handleException(e);
 		}
@@ -66,6 +73,18 @@ public class CoreTenantRestClient {
 			logger.error(e.getMessage());
 
 		}
+	}
+	
+	private HttpEntity<?> buildEntity(Object body, String authorization) {
+		return new HttpEntity<>(body, buildAuthorizationHeader(authorization));
+	}
+
+	private HttpHeaders buildAuthorizationHeader(String authorization) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set(AUTHORIZATION, authorization);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return headers;
 	}
 
 }

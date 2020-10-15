@@ -15,8 +15,8 @@ public class XTenantSerialized {
 	String description;
 	String homepage;
 	String imagePath;
-	XColor primaryColor;
-	XColor secondaryColor;
+	String primaryColor;
+	String secondaryColor;
 	List<String> tags = new ArrayList<>();
 	XGeoInfo geoInfo;
 	
@@ -57,16 +57,16 @@ public class XTenantSerialized {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	public XColor getPrimaryColor() {
+	public String getPrimaryColor() {
 		return primaryColor;
 	}
-	public void setPrimaryColor(XColor primaryColor) {
+	public void setPrimaryColor(String primaryColor) {
 		this.primaryColor = primaryColor;
 	}
-	public XColor getSecondaryColor() {
+	public String getSecondaryColor() {
 		return secondaryColor;
 	}
-	public void setSecondaryColor(XColor secondaryColor) {
+	public void setSecondaryColor(String secondaryColor) {
 		this.secondaryColor = secondaryColor;
 	}
 	public List<String> getTags() {

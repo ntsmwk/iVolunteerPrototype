@@ -32,8 +32,8 @@ public class XTenantToTenantSerializedMapper implements OneWayMapper<Tenant, XTe
 		ts.setDescription(source.getDescription());
 		ts.setHomepage(source.getHomepage());
 		ts.setImagePath(source.getImagePath());
-		ts.setPrimaryColor(new XColor(source.getPrimaryColor()));
-		ts.setSecondaryColor(new XColor(source.getSecondaryColor()));
+		ts.setPrimaryColor(source.getPrimaryColor());
+		ts.setSecondaryColor(source.getSecondaryColor());
 		ts.setTags(source.getTags());
 		ts.setGeoInfo(null);
 

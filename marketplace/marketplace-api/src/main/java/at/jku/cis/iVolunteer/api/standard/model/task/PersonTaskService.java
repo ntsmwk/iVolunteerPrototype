@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.bson.types.ObjectId;
+import org.kie.internal.task.api.TaskInstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,11 @@ import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceService;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
@@ -33,6 +37,7 @@ public class PersonTaskService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
 	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private XTaskInstanceService xTaskInstanceService;
 	
 	private static final ArrayList<String> LEVEL0_PROPERTIES = new ArrayList<String>(Arrays.asList((new String[] {"ID", "Name", "Description"})));
 	private static final ArrayList<String> LEVEL1_PROPERTIES = new ArrayList<String>(Arrays.asList((new String[] {"Starting Date", "End Date", "Location"})));
@@ -48,7 +53,13 @@ public class PersonTaskService {
 				ClassInstance classInstance = createPersonTask(personTaskClassDefinition, personTask, tenantId);
 				assignLevels(classInstance);
 				classInstances.add(classInstance);
-				classInstanceRepository.save(classInstance);
+				classInstance = classInstanceRepository.save(classInstance);
+				
+				TaskInstance taskInstance = new TaskInstance();
+				taskInstance = taskInstance.updateTaskInstance(classInstance);
+				taskInstance.setId(classInstance.getId());
+				taskInstance.setStatus("CLOSED");
+				xTaskInstanceService.addOrOverwriteTaskInstance(taskInstance);
 			}
 		}
 	}
