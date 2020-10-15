@@ -29,10 +29,10 @@ public class CoreTenantInitializationService {
 			createTenant(FF_EIDENBERG, "www.ff-eidenberg.at", "/img/FF_Altenberg.jpg", "/img/FF_Eidenberg.png",
 					"#b20000", "#b2b2b2", "Freiwillige Feuerwehr Eidenberg", marketplace.getId());
 			createTenant(MV_SCHWERTBERG, "www.musikverein-schwertberg.at", "/img/musikvereinschwertberg.jpeg",
-					"/img/musicverein.jpg", "Musikverein Schwertberg", "#005900", "#b2b2b2", marketplace.getId());
+					"/img/musicverein.jpg",  "#005900", "#b2b2b2","Musikverein Schwertberg", marketplace.getId());
 			createTenant(RK_WILHERING,
 					"www.roteskreuz.at/ooe/dienststellen/eferding/die-bezirksstelle/die-ortsstellen/wilhering",
-					"/img/OERK_Sonderlogo_rgb_cropped.jpg", "", "#b2b2b2", "#b2b2b2", "", marketplace.getId());
+					"/img/OERK_Sonderlogo_rgb_cropped.jpg", "", "#b2b2b2", "#b2b2b2", "Rotes Kreuz", marketplace.getId());
 		}
 	}
 

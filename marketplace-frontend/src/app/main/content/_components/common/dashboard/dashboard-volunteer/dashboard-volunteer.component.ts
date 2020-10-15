@@ -199,13 +199,14 @@ export class DashboardVolunteerComponent implements OnInit {
 
       this.generateSharedTenantsMap();
       this.isLocalRepositoryConnected = true;
+
     } catch (e) {
       this.isLocalRepositoryConnected = false;
     }
     this.isLoaded = true;
   }
 
-  async getTenantImageById(tenantId: string) {
+  getTenantImageById(tenantId: string) {
     const tenant = this.allTenants.find(t => t.id === tenantId);
 
     return !isNullOrUndefined(tenant) ? tenant.imagePath : null;
@@ -237,7 +238,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" }
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -702,7 +703,7 @@ export class DashboardVolunteerComponent implements OnInit {
     ];
     Highcharts.chart("container", this.chartOptions);
   }
-  onVennClicked(event) { }
+  onVennClicked(event) {}
 }
 
 export interface DialogData {

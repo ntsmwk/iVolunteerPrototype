@@ -23,15 +23,15 @@ public class XUserDataService {
     @Autowired
     private XUserRoleMapper roleMapper;
 
-    public List<XTenantRole> toTenantRoles(List<TenantSubscription> subscriptions) {
+    public List<XTenantRole> toXTenantRoles(List<TenantSubscription> subscriptions) {
         List<TenantSubscription> subs = subscriptions.stream().filter(s -> (!s.getRole().equals(UserRole.VOLUNTEER)))
                 .collect(Collectors.toList());
 
         List<String> uniqueTenantIds = subs.stream().map(s -> s.getTenantId()).distinct().collect(Collectors.toList());
 
         List<XTenantRole> tenantRoles = new ArrayList<>();
-        uniqueTenantIds.forEach(id -> {
 
+        uniqueTenantIds.forEach(id -> {
             List<UserRole> roles = subs.stream().filter(s -> s.getTenantId().equals(id)).map(s -> s.getRole())
                     .collect(Collectors.toList());
 

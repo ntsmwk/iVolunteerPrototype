@@ -99,10 +99,9 @@ public class CoreVolunteerInitializationService {
 	private void setImage(String fileName, CoreUser volunteer) {
 		if (fileName != null && !fileName.equals("")) {
 			ClassPathResource classPathResource = new ClassPathResource(fileName);
-			fileName = storageService.store(classPathResource);
+			String fileUrl = storageService.store(classPathResource);
+			volunteer.setProfileImagePath(fileUrl);
 		}
-		String fileUrl = serverUrl + "/file/" + fileName;
-		volunteer.setProfileImagePath(fileUrl);
 	}
 
 	protected void subscribeVolunteersToAllTenants() {

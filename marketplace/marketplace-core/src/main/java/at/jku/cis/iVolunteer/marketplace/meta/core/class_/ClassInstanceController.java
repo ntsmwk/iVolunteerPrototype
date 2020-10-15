@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,18 +37,27 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private ClassInstanceMapper classInstanceMapper;
-	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
-	@Autowired private DateTimeService dateTimeService;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private ContractorPublishingRestClient contractorPublishingRestClient;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private ClassInstanceMapper classInstanceMapper;
+	@Autowired
+	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired
+	private DateTimeService dateTimeService;
+	@Autowired
+	private MarketplaceService marketplaceService;
+	@Autowired
+	private ContractorPublishingRestClient contractorPublishingRestClient;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
+
+		tenantIds = tenantIds.stream().distinct().collect(Collectors.toList());
 
 		tenantIds.forEach(tenantId -> {
 			classInstances.addAll(
@@ -57,9 +67,9 @@ public class ClassInstanceController {
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
-//	@PreAuthorize("hasAnyRole('VOLUNTEER')")
+	// @PreAuthorize("hasAnyRole('VOLUNTEER')")
 	@GetMapping("/meta/core/class/instance/all")
-	private List<ClassInstanceDTO> getAllClassInstances(@RequestParam(value = "tId", required=true) String tenantId) {
+	private List<ClassInstanceDTO> getAllClassInstances(@RequestParam(value = "tId", required = true) String tenantId) {
 		return classInstanceMapper.mapToDTO(classInstanceRepository.findByTenantId(tenantId));
 	}
 
@@ -90,7 +100,7 @@ public class ClassInstanceController {
 		classInstanceRepository.getByClassArchetypeAndTenantId(classArchetype, tenantId);
 		return classInstances;
 	}
-	
+
 	@GetMapping("/meta/core/class/instance/all/tenant/{tenantId}/archetype/{archetype}/user/{userId}")
 	private List<ClassInstance> getClassInstanceByTenantIdAndArchetype(@PathVariable("tenantId") String tenantId,@PathVariable("archetype") ClassArchetype classArchetype,@PathVariable("userId")  String userId) {
 		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserId(classArchetype, tenantId, userId);
@@ -113,7 +123,7 @@ public class ClassInstanceController {
 			classInstance.setIssuerId(tenantId);
 			classInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
 			classInstance.setTimestamp(new Date());
-//			classInstance.setIssued(false);
+			// classInstance.setIssued(false);
 
 			classInstance.getProperties().forEach(p -> {
 				if (properties.containsKey(p.getName())) {
@@ -135,27 +145,30 @@ public class ClassInstanceController {
 
 		return null;
 	}
-//
-//	@GetMapping("/meta/core/class/instance/in-issuer-inbox")
-//	private List<ClassInstanceDTO> getClassInstanceInIssuerInbox(
-//			@RequestParam(value = "tId", required = true) String tenantId) {
-//		List<ClassInstance> instances = classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
-//		return classInstanceMapper.mapToDTO(instances);
-//	}
-//
-//	@PutMapping("/meta/core/class/instance/issue")
-//	private List<ClassInstance> issueClassInstance(
-//			@RequestBody List<String> classInstanceIds, @RequestHeader("Authorization") String authorization) {
-//		List<ClassInstance> classInstances = new ArrayList<>();
-//		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
-//
-//		for (ClassInstance classInstance : classInstances) {
-//			classInstance.setIssued(true);
-//		}
-//		
-//		contractorPublishingRestClient.publishClassInstances(classInstances, authorization);
-//		return classInstanceRepository.save(classInstances);
-//	}
+	//
+	// @GetMapping("/meta/core/class/instance/in-issuer-inbox")
+	// private List<ClassInstanceDTO> getClassInstanceInIssuerInbox(
+	// @RequestParam(value = "tId", required = true) String tenantId) {
+	// List<ClassInstance> instances =
+	// classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
+	// return classInstanceMapper.mapToDTO(instances);
+	// }
+	//
+	// @PutMapping("/meta/core/class/instance/issue")
+	// private List<ClassInstance> issueClassInstance(
+	// @RequestBody List<String> classInstanceIds, @RequestHeader("Authorization")
+	// String authorization) {
+	// List<ClassInstance> classInstances = new ArrayList<>();
+	// classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+	//
+	// for (ClassInstance classInstance : classInstances) {
+	// classInstance.setIssued(true);
+	// }
+	//
+	// contractorPublishingRestClient.publishClassInstances(classInstances,
+	// authorization);
+	// return classInstanceRepository.save(classInstances);
+	// }
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {

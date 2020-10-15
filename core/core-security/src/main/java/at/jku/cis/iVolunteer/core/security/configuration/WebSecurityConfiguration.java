@@ -47,7 +47,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http.cors().and().csrf().disable();
-		http.authorizeRequests()	
+		http.authorizeRequests()
 			.antMatchers("/api/**").permitAll() 
 			.antMatchers("/v2/api-docs").permitAll() 
 			.antMatchers("/swagger-resources/**").permitAll() 
@@ -75,7 +75,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/refreshToken").and().ignoring().antMatchers("/activation-status");
+		web.ignoring().antMatchers("/auth/refreshToken").and().ignoring().antMatchers("/activation-status");
 	}
 
 	@Override
