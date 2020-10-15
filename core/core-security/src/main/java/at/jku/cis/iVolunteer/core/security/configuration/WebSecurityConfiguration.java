@@ -72,7 +72,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/refreshToken").and().ignoring().antMatchers("/activation-status");
+		web.ignoring().antMatchers("/auth/refreshToken").and().ignoring().antMatchers("/activation-status");
 	}
 
 	@Override

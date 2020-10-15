@@ -199,6 +199,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
       this.generateSharedTenantsMap();
       this.isLocalRepositoryConnected = true;
+
     } catch (e) {
       this.isLocalRepositoryConnected = false;
     }
