@@ -71,7 +71,6 @@ public class XCoreTaskCertificateController {
 		}
 		
 		List<Tenant> tenants = new ArrayList<>();
-//		tenantController.getSubscribedTenants();
 		if (body.getTaskType().equals("ALL")) {
 			tenants = tenantService.getTenantsByUser(user.getId());
 		} else if (body.getTaskType().equals("SUBSCRIBED")) {
@@ -83,16 +82,8 @@ public class XCoreTaskCertificateController {
 		List<XTaskCertificate> certificates = new LinkedList<>();
 		if (tenants.size() > 0) {
 			for (Tenant tenant : tenants) {
-				List<ClassInstance> classInstances = new LinkedList<>();
 				Marketplace mp = marketplaceService.findById(tenant.getMarketplaceId());
-				
 				certificates.addAll(aggregateDataRestClient.getClassAndTaskInstances(mp.getUrl(), authorization, new GetClassAndTaskInstancesRequest(tenant, user)));
-				
-//				classInstances.addAll(classInstanceRestClient.getClassInstancesByUserAndTenant(mp.getUrl(), authorization, ClassArchetype.TASK, user.getId(), tenant.getId()));
-//				for (ClassInstance ci : classInstances) {
-//					TaskInstance ti = taskInstanceRestClient.getTaskInstanceById(mp.getUrl(), authorization, ci.getId());
-//					certificates.add(classInstanceToTaskCertificateMapper.toTarget(ci, ti, tenant, user));
-//				}
 			}
 		}
 		
