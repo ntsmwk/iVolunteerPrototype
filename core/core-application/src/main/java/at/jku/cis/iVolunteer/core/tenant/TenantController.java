@@ -129,7 +129,7 @@ public class TenantController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PutMapping("/{tenantId}/unsubscribe")
+	@PostMapping("/{tenantId}/unsubscribe")
 	public ResponseEntity<Void> unsubscribeFromTenant(@PathVariable String tenantId,
 			@RequestHeader("Authorization") String authorization) {
 		CoreUser user = loginService.getLoggedInUser();
