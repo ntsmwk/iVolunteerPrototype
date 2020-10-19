@@ -20,7 +20,7 @@ public class XTask {
 	XGeoInfo geoInfo;
 	
 	List<XDynamicFieldBlock> dynamicFields = new ArrayList<>();
-	List<XUser> subscribedUsers;
+	List<XUser> subscribedUsers = new ArrayList<>();
 	List<XBadgeTemplate> badges = new ArrayList<>();
 	
 	public String getId() {

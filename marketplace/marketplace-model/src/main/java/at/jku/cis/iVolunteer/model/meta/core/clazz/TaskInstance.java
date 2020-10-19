@@ -1,12 +1,14 @@
 package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 public class TaskInstance extends ClassInstance {
 
-	private List<String> subscribedVolunteerIds;
+	private List<String> subscribedVolunteerIds = new ArrayList<>();
 	private TaskInstanceStatus status;
 
 	public List<String> getSubscribedVolunteerIds() {

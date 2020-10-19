@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,15 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XDynamicField;
 import at.jku.cis.iVolunteer.model.task.XDynamicFieldBlock;
 import at.jku.cis.iVolunteer.model.task.XTask;
+import at.jku.cis.iVolunteer.model.user.User;
 
 @Component
-public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, XTask> {
+public class XTaskInstanceToTaskMapper {
 
 	@Autowired XPropertyInstanceDynamicFieldMapper xPropertyInstanceToDynamicFieldMapper;
+	@Autowired XUserMapper xUserMapper;
 
-	@Override
-	public XTask toTarget(TaskInstance source) {
+	public XTask toTarget(TaskInstance source, List<User> subscribedUsers) {
 		if (source == null) {
 			return null;
 		}
@@ -36,8 +38,6 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		task.setDescription(source.getDescription());
 		task.setTenant(source.getTenantId());
 		task.setDescription(source.getDescription());
-		task.setStartDate(null);
-		task.setEndDate(null);
 		task.setImagePath(source.getImagePath());
 		task.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
 // TODO
@@ -60,28 +60,30 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 			task.getDynamicFields().add(dynamicBlock);
 		}
 
-		task.setSubscribedUsers(null);
+		if (subscribedUsers == null || subscribedUsers.size() <= 0) {
+			task.setSubscribedUsers(new ArrayList<>());
+		} else {
+			task.setSubscribedUsers(xUserMapper.toTargets(subscribedUsers));
+		}
 		task.setBadges(null);
 
 		return task;
 	}
 
-	@Override
-	public List<XTask> toTargets(List<TaskInstance> sources) {
-		if (sources == null) {
-			return null;
-		}
+//	public List<XTask> toTargets(List<TaskInstance> sources) {
+//		if (sources == null) {
+//			return null;
+//		}
+//
+//		List<XTask> targets = new ArrayList<>();
+//		for (TaskInstance source : sources) {
+//			targets.add(toTarget(source));
+//		}
+//
+//		return targets;
+//
+//	}
 
-		List<XTask> targets = new ArrayList<>();
-		for (TaskInstance source : sources) {
-			targets.add(toTarget(source));
-		}
-
-		return targets;
-
-	}
-
-	@Override
 	public TaskInstance toSource(XTask target) {
 		if (target == null) {
 			return null;
@@ -99,7 +101,12 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		instance.setTabId(0);
 		instance.setBlockchainDate(new Date());
 		instance.setLevel(0);
-		instance.setSubscribedVolunteerIds(null);
+		if (target.getSubscribedUsers() == null || target.getSubscribedUsers().size() <= 0) {
+			instance.setSubscribedVolunteerIds(new ArrayList<>());
+		} else {
+			instance.setSubscribedVolunteerIds(
+					target.getSubscribedUsers().stream().map(u -> u.getId()).collect(Collectors.toList()));
+		}
 		if (target.isClosed() != null) {
 			instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
 		}
@@ -143,7 +150,6 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		return instance;
 	}
 
-	@Override
 	public List<TaskInstance> toSources(List<XTask> targets) {
 		if (targets == null) {
 			return null;

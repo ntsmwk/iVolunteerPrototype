@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.marketplace.task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,25 +11,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
+import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToTaskMapper;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XTask;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.XUser;
@@ -40,11 +35,11 @@ import at.jku.cis.iVolunteer.model.user.XUser;
 @RequestMapping("/task")
 public class XTaskController {
 
-	@Autowired private ClassInstanceService classInstanceService;
 	@Autowired private ClassInstanceController classInstanceController;
 	@Autowired private LoginService loginService;
 	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
 	@Autowired private XTaskInstanceService xTaskInstanceService;
+	@Autowired private UserService userService;
 
 	// CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
 	// POST {marketplaceUrl}/task/new/
@@ -149,7 +144,12 @@ public class XTaskController {
 	@GetMapping("/tenant/{tenantId}")
 	private List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
-		return xTaskInstanceToTaskMapper.toTargets(tasks);
+		List<XTask> ret = new ArrayList<>();
+		for (TaskInstance task : tasks) {
+			List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
+			ret.add(xTaskInstanceToTaskMapper.toTarget(task, users));
+		}
+		return ret;
 	}
 
 //	GET TASK BY ID
@@ -159,7 +159,8 @@ public class XTaskController {
 	@GetMapping("/{taskId}")
 	public XTask getTask(@PathVariable String taskId) {
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
-		return xTaskInstanceToTaskMapper.toTarget(task);
+		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
+		return xTaskInstanceToTaskMapper.toTarget(task, users);
 	}
 
 //	TODO UPDATE TASK (schicken nur die änderung des felds oder ganzes objekt wie sie wollen)
