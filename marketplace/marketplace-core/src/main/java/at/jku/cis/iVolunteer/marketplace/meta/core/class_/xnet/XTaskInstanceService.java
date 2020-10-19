@@ -53,7 +53,6 @@ public class XTaskInstanceService {
 		if (newTaskInstance == null || existingTaskInstance == null) {
 			return null;
 		}
-		System.out.println(existingTaskInstance.getProperties().size());
 		TaskInstance updateInstance = existingTaskInstance.updateTaskInstance(newTaskInstance);
 		
 		return xTaskInstanceRepository.save(updateInstance);
