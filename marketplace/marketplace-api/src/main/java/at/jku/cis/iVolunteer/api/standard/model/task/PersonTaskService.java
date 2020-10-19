@@ -22,6 +22,7 @@ import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
@@ -58,7 +59,7 @@ public class PersonTaskService {
 				TaskInstance taskInstance = new TaskInstance();
 				taskInstance = taskInstance.updateTaskInstance(classInstance);
 				taskInstance.setId(classInstance.getId());
-				taskInstance.setStatus("CLOSED");
+				taskInstance.setStatus(TaskInstanceStatus.CLOSED);
 				xTaskInstanceService.addOrOverwriteTaskInstance(taskInstance);
 			}
 		}

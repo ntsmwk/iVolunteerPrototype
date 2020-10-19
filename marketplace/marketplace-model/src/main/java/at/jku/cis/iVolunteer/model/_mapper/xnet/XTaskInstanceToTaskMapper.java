@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XDynamicField;
@@ -36,7 +37,7 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		task.setStartDate(null);
 		task.setEndDate(null);
 		task.setImagePath(source.getImagePath());
-		task.setClosed(source.getStatus().equals("CLOSED"));
+		task.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
 // TODO
 		task.setGeoInfo(null);
 //		task.(propertyInstanceToTaskFieldMapper.toTarget(findProperty("Location", source.getProperties())));
@@ -94,7 +95,7 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		instance.setBlockchainDate(new Date());
 		instance.setLevel(0);
 		instance.setSubscribedVolunteerIds(null);
-		instance.setStatus(target.isClosed() ? "CLOSED" : "OPEN");
+		instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
 		instance.setTenantId(target.getTenant());
 
 		PropertyInstance<Object> startDate = new PropertyInstance<Object>();

@@ -6,7 +6,7 @@ import java.util.List;
 public class TaskInstance extends ClassInstance {
 
 	private List<String> subscribedVolunteerIds;
-	private String status;
+	private TaskInstanceStatus status;
 
 	public List<String> getSubscribedVolunteerIds() {
 		return subscribedVolunteerIds;
@@ -14,10 +14,10 @@ public class TaskInstance extends ClassInstance {
 	public void setSubscribedVolunteerIds(List<String> subscribedVolunteerIds) {
 		this.subscribedVolunteerIds = subscribedVolunteerIds;
 	}
-	public String getStatus() {
+	public TaskInstanceStatus getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(TaskInstanceStatus status) {
 		this.status = status;
 	}
 
