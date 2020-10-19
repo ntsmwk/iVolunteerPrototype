@@ -60,10 +60,10 @@ public class XCoreTaskCertificateController {
 		CoreUser user = loginService.getLoggedInUser();
 		
 		
-		//DEBUG
-		if (user == null) {
-			user = coreUserService.getByUserName("mweixlbaumer");
-		}
+		//TODO DEBUG
+//		if (user == null) {
+//			user = coreUserService.getByUserName("mweixlbaumer");
+//		}
 		//----		
 		
 		if (user == null) {
