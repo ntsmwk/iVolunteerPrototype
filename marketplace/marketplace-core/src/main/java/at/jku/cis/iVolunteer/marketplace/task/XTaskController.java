@@ -19,6 +19,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceControlle
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
+import at.jku.cis.iVolunteer.marketplace.user.UserController;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
@@ -40,6 +41,7 @@ public class XTaskController {
 	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
 	@Autowired private XTaskInstanceService xTaskInstanceService;
 	@Autowired private UserService userService;
+	@Autowired private UserController userController;
 
 	// CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
 	// POST {marketplaceUrl}/task/new/
@@ -185,9 +187,18 @@ public class XTaskController {
 //	POST {marketplaceUrl}/task/{taskId}/subscribe/
 //	Req: {}
 //	Res: 200 (OK), 500 (FAILED)
-	@PostMapping("{taskId}/subscribe/")
+	@PostMapping("{taskId}/subscribe")
 	private ResponseEntity<Object> subscribeUserToTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
+		
+		//*TODO debug
+			if (user == null) {
+				user = userService.getUserByName("mweixlbaumer");
+			}
+		//-----
+			
+		User finalUser = user;
+		
 		if (user == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN), HttpStatus.UNAUTHORIZED);
 		}
@@ -196,7 +207,7 @@ public class XTaskController {
 		if (existingTask == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NO_SUCH_TASK), HttpStatus.BAD_REQUEST);
 		}
-		if (existingTask.getSubscribedVolunteerIds().stream().anyMatch(id -> id.equals(user.getId()))) {
+		if (existingTask.getSubscribedVolunteerIds().stream().anyMatch(id -> id.equals(finalUser.getId()))) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_SUBSCRIBED), HttpStatus.BAD_REQUEST);
 		}
 
@@ -210,9 +221,18 @@ public class XTaskController {
 //	POST {marketplaceUrl}/task/{taskId}/unsubscribe/
 //	Req: {}
 //	Res: 200 (OK), 500 (FAILED)
-	@PostMapping("{taskId}/unsubscribe/")
+	@PostMapping("{taskId}/unsubscribe")
 	private ResponseEntity<Object> unsubscribeUserFromTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
+		
+		//*TODO debug
+			if (user == null) {
+				user = userService.getUserByName("mweixlbaumer");
+			}
+		//-----
+			
+		User finalUser = user;
+		
 		if (user == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN), HttpStatus.UNAUTHORIZED);
 		}
@@ -222,12 +242,12 @@ public class XTaskController {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NO_SUCH_TASK), HttpStatus.BAD_REQUEST);
 		}
 
-		if (existingTask.getSubscribedVolunteerIds().stream().noneMatch(id -> id.equals(user.getId()))) {
+		if (existingTask.getSubscribedVolunteerIds().stream().noneMatch(id -> id.equals(finalUser.getId()))) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_UNSUBSCRIBED), HttpStatus.BAD_REQUEST);
 		}
 
 		existingTask.setSubscribedVolunteerIds(existingTask.getSubscribedVolunteerIds().stream()
-				.filter(id -> !id.equals(user.getId())).collect(Collectors.toList()));
+				.filter(id -> !id.equals(finalUser.getId())).collect(Collectors.toList()));
 
 		xTaskInstanceService.addOrOverwriteTaskInstance(existingTask);
 

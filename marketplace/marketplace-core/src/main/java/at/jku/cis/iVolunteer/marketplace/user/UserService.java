@@ -24,6 +24,10 @@ public class UserService {
     	userRepository.findAll(ids).forEach(users::add);
     	return users;
     }
+    
+    public User getUserByName(String name) {
+    	return userRepository.findByUsername(name);
+    }
 
     public List<User> getUsersByRole(UserRole role) {
         List<User> allUsers = this.userRepository.findAll();
