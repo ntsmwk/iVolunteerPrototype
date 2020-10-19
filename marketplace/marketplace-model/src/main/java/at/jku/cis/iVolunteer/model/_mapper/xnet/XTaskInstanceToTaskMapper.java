@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,11 +45,13 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
 		task.setDynamicFields(new ArrayList<>());
-		
+
 		PropertyInstance<Object> startDateField = findProperty("Starting Date", source.getProperties());
-		task.setStartDate(startDateField == null || startDateField.getValues().size() == 0 ? null :  new Date((Long) startDateField.getValues().get(0)));
-		PropertyInstance<Object> endDateField =  findProperty("End Date", source.getProperties());
-		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null :  new Date((Long) endDateField.getValues().get(0)));
+		task.setStartDate(startDateField == null || startDateField.getValues().size() == 0 ? null
+				: new Date((Long) startDateField.getValues().get(0)));
+		PropertyInstance<Object> endDateField = findProperty("End Date", source.getProperties());
+		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
+				: new Date((Long) endDateField.getValues().get(0)));
 
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
@@ -95,28 +98,33 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		instance.setBlockchainDate(new Date());
 		instance.setLevel(0);
 		instance.setSubscribedVolunteerIds(null);
-		instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
+		if (target.isClosed() != null) {
+			instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
+		}
 		instance.setTenantId(target.getTenant());
 
 		PropertyInstance<Object> startDate = new PropertyInstance<Object>();
-		
-		startDate.setValues(Collections.singletonList(target.getStartDate().getTime()));
-		startDate.setName("Starting Date");
-		startDate.setType(PropertyType.DATE);
-		startDate.setLevel(1);
+
+		if (target.getStartDate() != null) {
+			startDate.setValues(Collections.singletonList(target.getStartDate().getTime()));
+			startDate.setId(new ObjectId().toHexString());
+			startDate.setName("Starting Date");
+			startDate.setType(PropertyType.DATE);
+			startDate.setLevel(1);
+			instance.getProperties().add(startDate);
+		}
 
 //findAndReplaceProperty(startDate, classInstance);
+		if (target.getEndDate() != null) {
+			PropertyInstance<Object> endDate = new PropertyInstance<Object>();
+			endDate.setId(new ObjectId().toHexString());
+			endDate.setValues(Collections.singletonList(target.getEndDate().getTime()));
+			endDate.setName("End Date");
+			endDate.setType(PropertyType.DATE);
+			endDate.setLevel(1);
+			instance.getProperties().add(endDate);
+		}
 
-		PropertyInstance<Object> endDate = new PropertyInstance<Object>();
-		endDate.setValues(Collections.singletonList(target.getEndDate().getTime()));
-		endDate.setName("End Date");
-		endDate.setType(PropertyType.DATE);
-		endDate.setLevel(1);
-		
-		instance.getProperties().add(startDate);
-		instance.getProperties().add(endDate);
-		
-		
 //TODO from geoinfo
 //PropertyInstance<Object> location = propertyInstanceToTaskFieldMapper.toSource(target.getRequired().getPlace());
 

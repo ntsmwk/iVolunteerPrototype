@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
+import at.jku.cis.iVolunteer.model.task.XTask;
 
 @Service
 public class XTaskInstanceService {
@@ -52,11 +53,12 @@ public class XTaskInstanceService {
 		if (newTaskInstance == null || existingTaskInstance == null) {
 			return null;
 		}
-		
+		System.out.println(existingTaskInstance.getProperties().size());
 		TaskInstance updateInstance = existingTaskInstance.updateTaskInstance(newTaskInstance);
 		
 		return xTaskInstanceRepository.save(updateInstance);
 	}
+
 	
 
 	

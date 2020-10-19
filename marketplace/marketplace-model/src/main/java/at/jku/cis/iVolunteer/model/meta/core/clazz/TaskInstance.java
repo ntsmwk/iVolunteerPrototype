@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.List;
 
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 public class TaskInstance extends ClassInstance {
 
@@ -35,8 +36,7 @@ public class TaskInstance extends ClassInstance {
 
 	public TaskInstance updateTaskInstance(TaskInstance newTaskInstance) {
 		this.setClassDefinitionId(newTaskInstance.getClassDefinitionId() != null ? newTaskInstance.getClassDefinitionId() : this.getClassDefinitionId());
-		this.setName(newTaskInstance.getName() != null ? newTaskInstance.getClassDefinitionId() : this.getClassDefinitionId());
-		this.setProperties(newTaskInstance.getProperties() != null ? newTaskInstance.getProperties() : this.getProperties());
+		this.setName(newTaskInstance.getName() != null ? newTaskInstance.getName() : this.getName());
 		this.setUserId(newTaskInstance.getUserId() != null ? newTaskInstance.getUserId() : this.getUserId());
 		this.setIssuerId(newTaskInstance.getIssuerId() != null ? newTaskInstance.getIssuerId() : this.getIssuerId());
 		this.setImagePath(newTaskInstance.getImagePath() != null ? newTaskInstance.getImagePath() : this.getImagePath());
@@ -46,6 +46,18 @@ public class TaskInstance extends ClassInstance {
 		this.setTabId(newTaskInstance.getTabId() != null ? newTaskInstance.getTabId() : this.getTabId());
 		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate() : this.getBlockchainDate());
 		this.setLevel(newTaskInstance.getLevel() != null ? newTaskInstance.getLevel() : this.getLevel());
+
+		if (newTaskInstance.getProperties() != null) {
+			for (PropertyInstance<Object> pi : newTaskInstance.getProperties()) {
+				if (this.containsProperty(pi.getId())) {
+					int i = this.getProperties().indexOf(pi);
+					this.getProperties().set(i, pi);
+				} else {
+					this.getProperties().add(pi);
+				}
+			}
+		}		
+		
 		this.setSubscribedVolunteerIds(newTaskInstance.getSubscribedVolunteerIds() != null ? newTaskInstance.getSubscribedVolunteerIds() : this.getSubscribedVolunteerIds());
 		this.setStatus(newTaskInstance.getStatus() != null ? newTaskInstance.getStatus() : this.getStatus());
 		return this;
@@ -64,6 +76,7 @@ public class TaskInstance extends ClassInstance {
 		this.setTabId(newTaskInstance.getTabId() != null ? newTaskInstance.getTabId() : this.getTabId());
 		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate() : this.getBlockchainDate());
 		this.setLevel(newTaskInstance.getLevel() != null ? newTaskInstance.getLevel() : this.getLevel());
+		this.setProperties(newTaskInstance.getProperties());
 		return this;
 	}
 

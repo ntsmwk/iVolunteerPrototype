@@ -16,7 +16,7 @@ public class XTask {
 	Date startDate;
 	Date endDate;
 	String imagePath;
-	boolean closed;
+	Boolean closed;
 	XGeoInfo geoInfo;
 	
 	List<XDynamicFieldBlock> dynamicFields = new ArrayList<>();
@@ -65,10 +65,10 @@ public class XTask {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	public boolean isClosed() {
+	public Boolean isClosed() {
 		return closed;
 	}
-	public void setClosed(boolean closed) {
+	public void setClosed(Boolean closed) {
 		this.closed = closed;
 	}
 	public XGeoInfo getGeoInfo() {

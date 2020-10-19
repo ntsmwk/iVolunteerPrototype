@@ -30,6 +30,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XTask;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.XUser;
@@ -167,15 +168,14 @@ public class XTaskController {
 //	Req: { key: value, key2: value2,...} (ONLY CHANGED TASK DATA)
 //	Res: 200 (OK), 500 (FAILED), 400 { message: "z.b: Kann nicht aktualisiert werden da.."}
 	@PostMapping("/update/{taskId}")
-	private ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody TaskInstance changes) {
+	private ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody XTask changes) {
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 		if (existingTask == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NO_SUCH_TASK), HttpStatus.BAD_REQUEST);
 		} else if (existingTask.getStatus().equals(TaskInstanceStatus.CLOSED)) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_CLOSED), HttpStatus.BAD_REQUEST);
 		}
-
-		existingTask = xTaskInstanceService.updateTaskInstance(changes, existingTask);
+		existingTask = xTaskInstanceService.updateTaskInstance(xTaskInstanceToTaskMapper.toSource(changes), existingTask);
 
 		return ResponseEntity.ok().build();
 	}

@@ -377,7 +377,7 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class DurationProperty extends TextPropertyDefinition {
+	public static class DurationProperty extends LongPropertyDefinition {
 
 		DurationProperty(String tenantId) {
 			inst(tenantId);
