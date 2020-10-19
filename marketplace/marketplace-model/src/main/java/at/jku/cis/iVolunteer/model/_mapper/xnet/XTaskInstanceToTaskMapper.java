@@ -33,6 +33,7 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		XTask task = new XTask();
 		task.setId(source.getId());
 		task.setTitle(source.getName());
+		task.setDescription(source.getDescription());
 		task.setTenant(source.getTenantId());
 		task.setDescription(source.getDescription());
 		task.setStartDate(null);
@@ -89,6 +90,7 @@ public class XTaskInstanceToTaskMapper implements AbstractMapper<TaskInstance, X
 		TaskInstance instance = new TaskInstance();
 		instance.setId(target.getId());
 		instance.setName(target.getTitle());
+		instance.setDescription(target.getDescription());
 		instance.setUserId(null);
 		instance.setIssuerId(target.getTenant());
 		instance.setImagePath(target.getImagePath());

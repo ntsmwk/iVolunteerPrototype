@@ -67,6 +67,7 @@ public class TaskInstance extends ClassInstance {
 	public TaskInstance updateTaskInstance(ClassInstance newTaskInstance) {
 		this.setClassDefinitionId(newTaskInstance.getClassDefinitionId() != null ? newTaskInstance.getClassDefinitionId() : this.getClassDefinitionId());
 		this.setName(newTaskInstance.getName() != null ? newTaskInstance.getName() : this.getName());
+		this.setDescription(newTaskInstance.getDescription() != null ? newTaskInstance.getDescription() : this.getDescription());
 		this.setProperties(newTaskInstance.getProperties() != null ? newTaskInstance.getProperties() : this.getProperties());
 		this.setUserId(newTaskInstance.getUserId() != null ? newTaskInstance.getUserId() : this.getUserId());
 		this.setIssuerId(newTaskInstance.getIssuerId() != null ? newTaskInstance.getIssuerId() : this.getIssuerId());
