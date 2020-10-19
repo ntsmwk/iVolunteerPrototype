@@ -43,7 +43,6 @@ public class XTaskCertificateController {
 				tenantId);
 		
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId, authorization);
-		System.out.println(tenant);
 		
 		List<XTaskCertificate> certs = new ArrayList<>();
 		for (ClassInstance classInstance : classInstances) {

@@ -24,6 +24,7 @@ public class UserController {
 	public User findUserById(@PathVariable("id") String id) {
 		return userRepository.findOne(id);
 	}
+	
 
 	@GetMapping("/user/all/role/{role}")
 	private List<User> findAllByRole(@PathVariable("role") UserRole role) {

@@ -31,8 +31,8 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	private List<ClassInstance> childClassInstances = new ArrayList<>();
 
-	private boolean visible;
-	private int tabId;
+	private Boolean visible;
+	private Integer tabId;
 	
 	private Date blockchainDate;
 

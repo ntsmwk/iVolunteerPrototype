@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.aggregate.AggregateDataRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.tenant.TenantController;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httprequests.GetAllTaskCertificateRequest;
+import at.jku.cis.iVolunteer.model._httprequests.GetClassAndTaskInstancesRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XClassInstanceToTaskCertificateMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
@@ -39,6 +41,7 @@ public class XCoreTaskCertificateController {
 	@Autowired XClassInstanceToTaskCertificateMapper classInstanceToTaskCertificateMapper;
 	@Autowired CoreUserService coreUserService;
 	@Autowired TaskInstanceRestClient taskInstanceRestClient;
+	@Autowired AggregateDataRestClient aggregateDataRestClient;
 		
 	//	GET ALL TASKCERTIFICATE (PUBLIC TENANTS + PRIVATE TENANTS)
 	//	(Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
@@ -57,10 +60,10 @@ public class XCoreTaskCertificateController {
 		CoreUser user = loginService.getLoggedInUser();
 		
 		
-		//DEBUG
-		if (user == null) {
-			user = coreUserService.getByUserName("mweixlbaumer");
-		}
+		//TODO DEBUG
+//		if (user == null) {
+//			user = coreUserService.getByUserName("mweixlbaumer");
+//		}
 		//----		
 		
 		if (user == null) {
@@ -68,7 +71,6 @@ public class XCoreTaskCertificateController {
 		}
 		
 		List<Tenant> tenants = new ArrayList<>();
-//		tenantController.getSubscribedTenants();
 		if (body.getTaskType().equals("ALL")) {
 			tenants = tenantService.getTenantsByUser(user.getId());
 		} else if (body.getTaskType().equals("SUBSCRIBED")) {
@@ -80,13 +82,8 @@ public class XCoreTaskCertificateController {
 		List<XTaskCertificate> certificates = new LinkedList<>();
 		if (tenants.size() > 0) {
 			for (Tenant tenant : tenants) {
-				List<ClassInstance> classInstances = new LinkedList<>();
 				Marketplace mp = marketplaceService.findById(tenant.getMarketplaceId());
-				classInstances.addAll(classInstanceRestClient.getClassInstancesByUserAndTenant(mp.getUrl(), authorization, ClassArchetype.TASK, user.getId(), tenant.getId()));
-				for (ClassInstance ci : classInstances) {
-					TaskInstance ti = taskInstanceRestClient.getTaskInstanceById(mp.getUrl(), authorization, ci.getId());
-					certificates.add(classInstanceToTaskCertificateMapper.toTarget(ci, ti, tenant, user));
-				}
+				certificates.addAll(aggregateDataRestClient.getClassAndTaskInstances(mp.getUrl(), authorization, new GetClassAndTaskInstancesRequest(tenant, user)));
 			}
 		}
 		

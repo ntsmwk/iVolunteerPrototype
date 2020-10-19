@@ -2,12 +2,14 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
+import at.jku.cis.iVolunteer.model.task.XTask;
 
 @Service
 public class XTaskInstanceService {
@@ -51,11 +53,11 @@ public class XTaskInstanceService {
 		if (newTaskInstance == null || existingTaskInstance == null) {
 			return null;
 		}
-		
 		TaskInstance updateInstance = existingTaskInstance.updateTaskInstance(newTaskInstance);
 		
 		return xTaskInstanceRepository.save(updateInstance);
 	}
+
 	
 
 	

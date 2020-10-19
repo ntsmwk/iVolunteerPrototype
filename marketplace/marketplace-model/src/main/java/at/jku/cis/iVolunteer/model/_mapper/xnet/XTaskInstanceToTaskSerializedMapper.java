@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XDynamicFieldBlock;
 import at.jku.cis.iVolunteer.model.task.XTaskSerialized;
@@ -32,7 +33,7 @@ public class XTaskInstanceToTaskSerializedMapper implements OneWayMapper<TaskIns
 		ts.setTitle(source.getName());
 		ts.setDescription(source.getDescription());
 		ts.setImagePath(source.getImagePath());
-		ts.setClosed(source.getStatus().equals("CLOSED"));
+		ts.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
 		ts.setGeoInfo(null); //TODO
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
