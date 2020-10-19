@@ -207,6 +207,8 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
 
     this.timelineChartData[0].series = data1;
     this.timelineChartData = [...this.timelineChartData];
+
+    console.error(this.timelineChartData);
   }
 
   updateSelectedYaxis() {
