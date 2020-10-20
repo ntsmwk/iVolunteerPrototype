@@ -25,6 +25,7 @@ import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.security.RefreshToken;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX;;
@@ -60,10 +61,12 @@ public class CoreLoginController {
 	}
 
 	@PostMapping("/auth/refreshToken")
-	public ResponseEntity<Object> refreshToken(@RequestBody String rawRefreshToken) throws Exception {
+	public ResponseEntity<Object> refreshToken(@RequestBody RefreshToken rawRefreshToken) throws Exception {
 		try {
-			if (StringUtils.hasText(rawRefreshToken) && this.tokenProvider.validateRefreshToken(rawRefreshToken)) {
-				String refreshToken = rawRefreshToken.substring(TOKEN_PREFIX.length(), rawRefreshToken.length());
+			if (StringUtils.hasText(rawRefreshToken.getRefreshToken())
+					&& this.tokenProvider.validateRefreshToken(rawRefreshToken.getRefreshToken())) {
+				String refreshToken = rawRefreshToken.getRefreshToken().substring(TOKEN_PREFIX.length(),
+						rawRefreshToken.getRefreshToken().length());
 
 				String username = this.tokenProvider.getUserNameFromRefreshToken(refreshToken);
 				CoreUser iVolUser = this.userRepository.findByUsername(username);
@@ -76,7 +79,8 @@ public class CoreLoginController {
 
 				return ResponseEntity.ok(new TokenResponse(accessToken, newRefreshToken).toString());
 			} else {
-				return new ResponseEntity<Object>(new ErrorResponse("Empty Refresh Token"), HttpStatus.NOT_ACCEPTABLE);
+				return new ResponseEntity<Object>(new ErrorResponse("Empty, malformed, or invalid Refresh Token"),
+						HttpStatus.NOT_ACCEPTABLE);
 			}
 		} catch (Exception ex) {
 			return new ResponseEntity<Object>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);

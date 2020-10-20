@@ -18,15 +18,15 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    
+
     public List<User> getUsers(List<String> ids) {
-    	List<User> users = new ArrayList<User>();
-    	userRepository.findAll(ids).forEach(users::add);
-    	return users;
+        List<User> users = new ArrayList<User>();
+        userRepository.findAll(ids).forEach(users::add);
+        return users;
     }
-    
+
     public User getUserByName(String name) {
-    	return userRepository.findByUsername(name);
+        return userRepository.findByUsername(name);
     }
 
     public List<User> getUsersByRole(UserRole role) {
@@ -34,7 +34,7 @@ public class UserService {
 
         List<User> users = new ArrayList<>();
         users.addAll(allUsers.stream().filter(u -> u.getSubscribedTenants().size() > 0)
-                .filter(u -> u.getSubscribedTenants().stream().allMatch(t -> t.getRole() == role))
+                .filter(u -> u.getSubscribedTenants().stream().anyMatch(t -> t.getRole() == role))
                 .collect(Collectors.toList()));
 
         if (role == UserRole.VOLUNTEER) {
