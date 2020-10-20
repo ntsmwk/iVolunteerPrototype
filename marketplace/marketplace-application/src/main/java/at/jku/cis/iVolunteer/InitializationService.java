@@ -43,7 +43,8 @@ public class InitializationService {
 	@Autowired protected TestDataInstances testDataInstances;
 
 	@PostConstruct
-	public void init() {}
+	public void init() {
+	}
 
 	private List<Tenant> getTenants() {
 		List<Tenant> tenants = new ArrayList<>();
@@ -66,7 +67,8 @@ public class InitializationService {
 	public void addFlexProdPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
-			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllFlexProdProperties(tenant.getId())) {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions
+					.getAllFlexProdProperties(tenant.getId())) {
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
