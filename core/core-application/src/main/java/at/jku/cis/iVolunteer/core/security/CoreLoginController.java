@@ -76,7 +76,8 @@ public class CoreLoginController {
 
 				return ResponseEntity.ok(new TokenResponse(accessToken, newRefreshToken).toString());
 			} else {
-				return new ResponseEntity<Object>(new ErrorResponse("Empty Refresh Token"), HttpStatus.NOT_ACCEPTABLE);
+				return new ResponseEntity<Object>(new ErrorResponse("Empty, malformed, or invalid Refresh Token"),
+						HttpStatus.NOT_ACCEPTABLE);
 			}
 		} catch (Exception ex) {
 			return new ResponseEntity<Object>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);

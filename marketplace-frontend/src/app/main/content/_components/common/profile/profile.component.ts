@@ -6,6 +6,8 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { DialogFactoryDirective } from "../../_shared/dialogs/_dialog-factory/dialog-factory.component";
 import { UserProfileImageUploadDialogData } from "../../_shared/dialogs/user-profile-image-upload-dialog/user-profile-image-upload-dialog.component";
 import { CoreUserService } from "app/main/content/_service/core-user.service";
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: "profile",
@@ -24,7 +26,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private userService: CoreUserService,
-    private dialogFactory: DialogFactoryDirective
+    private dialogFactory: DialogFactoryDirective,
+    private http: HttpClient
   ) {}
 
   async ngOnInit() {
@@ -52,5 +55,12 @@ export class ProfileComponent implements OnInit {
       .then((ret: UserProfileImageUploadDialogData) => {
         // console.log(ret);
       });
+  }
+
+
+  async getChartData() {
+    let chartDataSets = await (this.http.get(`${environment.CORE_URL}/chartdata`)).toPromise() ;
+    console.error(chartDataSets);
+
   }
 }
