@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
@@ -27,7 +28,7 @@ public class XTaskInstanceToTaskMapper {
 	@Autowired XPropertyInstanceDynamicFieldMapper xPropertyInstanceToDynamicFieldMapper;
 	@Autowired XUserMapper xUserMapper;
 
-	public XTask toTarget(TaskInstance source, List<User> subscribedUsers) {
+	public XTask toTarget(TaskInstance source, List<? extends User> subscribedUsers) {
 		if (source == null) {
 			return null;
 		}

@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet;
+package at.jku.cis.iVolunteer.marketplace.task;
 
 import org.springframework.stereotype.Repository;
 

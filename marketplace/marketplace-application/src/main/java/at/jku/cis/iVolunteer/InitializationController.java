@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.task.XTaskInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.user.User;

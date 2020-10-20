@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.core.user;
 
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,16 @@ public class CoreUserService {
 
 	public List<CoreUser> findAll() {
 		return coreUserRepository.findAll();
+	}
+	
+	public CoreUser findById(String id) {
+		return coreUserRepository.findOne(id);
+	}
+	
+	public List<CoreUser> findByIds(List<String> ids) {
+		List<CoreUser> users = new LinkedList<>();
+		coreUserRepository.findAll(ids).forEach(users::add);
+		return users;
 	}
 
 	public List<CoreUser> getAllByTenantId(String tenantId) {
