@@ -70,7 +70,7 @@ export class LoginService {
 
   refreshAccessToken(refreshToken: string) {
     return this.http
-      .post(`${environment.CORE_URL}/auth/refreshToken`, refreshToken)
+      .post(`${environment.CORE_URL}/auth/refreshToken`, {"refreshToken": refreshToken})
       .pipe(
         tap(
           (response: any) => {
