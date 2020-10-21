@@ -94,9 +94,9 @@ public class XCoreTaskController {
 		CoreUser user = loginService.getLoggedInUser();
 
 		// TODO DEBUG
-		if (user == null) {
-			user = coreUserService.getByUserName("mweixlbaumer");
-		}
+//		if (user == null) {
+//			user = coreUserService.getByUserName("mweixlbaumer");
+//		}
 		// ----
 
 		if (user == null) {
@@ -124,7 +124,8 @@ public class XCoreTaskController {
 
 		for (TaskInstance ti : taskInstances) {
 			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
-			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));		}
+			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));		
+		}
 		
 		return ResponseEntity.ok(tasks);
 	}
@@ -135,19 +136,46 @@ public class XCoreTaskController {
 //	Req: {}
 //	Res: Task[]
 	@GetMapping("/core/task/tenant/unsubscribed")
-	private ResponseEntity<Object> getTasksOfUnsubscribedTenants() {
+	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization) {
+		
+		List<Marketplace> marketplaces = marketplaceService.findAll();
+		if (marketplaces == null) {
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
+					HttpStatus.BAD_REQUEST);
+		}
 
 		CoreUser user = loginService.getLoggedInUser();
 
 		// TODO DEBUG
-		if (user == null) {
-			user = coreUserService.getByUserName("mweixlbaumer");
-		}
+//		if (user == null) {
+//			user = coreUserService.getByUserName("mweixlbaumer");
+//		}
 		// ----
 
 		List<Tenant> tenants = tenantService.getUnsubscribedTenants(user);
+		
+		if (tenants == null) {
+			return ResponseEntity.ok(new LinkedList<>());
+		}
 
-		return ResponseEntity.ok("todo");
+		List<TaskInstance> taskInstances = new LinkedList<>();
+
+		for (Marketplace mp : marketplaces) {
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenant(mp.getUrl(),
+					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), authorization);
+			if (ret != null) {
+				taskInstances.addAll(ret);
+			}
+		}
+		
+		List<XTask> tasks = new LinkedList<>();
+		
+		for (TaskInstance ti : taskInstances) {
+			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
+			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));		
+		}
+		
+		return ResponseEntity.ok(tasks);
 	}
 
 }

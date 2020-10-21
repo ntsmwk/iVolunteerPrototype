@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "../_model/marketplace";
 import { isNullOrUndefined } from "util";
-import { environment } from "environments/environment.hmr";
+import { environment } from "environments/environment";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class MarketplaceService {
   constructor(private http: HttpClient) {}

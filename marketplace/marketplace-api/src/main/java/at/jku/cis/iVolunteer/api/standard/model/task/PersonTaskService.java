@@ -60,6 +60,7 @@ public class PersonTaskService {
 				taskInstance = taskInstance.updateTaskInstance(classInstance);
 				taskInstance.setId(classInstance.getId());
 				taskInstance.setStatus(TaskInstanceStatus.CLOSED);
+				taskInstance.setTenantId(classInstance.getTenantId());
 				xTaskInstanceService.addOrOverwriteTaskInstance(taskInstance);
 			}
 		}

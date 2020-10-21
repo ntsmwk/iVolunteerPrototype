@@ -49,14 +49,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //				.antMatchers("/user/subscribe").permitAll()
 //				.antMatchers("/user/unsubscribe").permitAll()
 				.antMatchers("/rule/engine/**").permitAll()
-				//TODO TEST
-				.antMatchers("/task/**").permitAll()
-				.antMatchers("/tasktemplate/**").permitAll()
-				.antMatchers("/taskCertificate/**").permitAll()
-				.antMatchers("/meta/core/class/instance/**").permitAll()
-				.antMatchers("/meta/core/task-instance/**").permitAll()
-				.antMatchers("/aggregate/**").permitAll()
-//				END TEST
+				//TODO DEBUG
+//				.antMatchers("/task/**").permitAll()
+//				.antMatchers("/tasktemplate/**").permitAll()
+//				.antMatchers("/taskCertificate/**").permitAll()
+//				.antMatchers("/meta/core/class/instance/**").permitAll()
+//				.antMatchers("/meta/core/task-instance/**").permitAll()
+//				.antMatchers("/aggregate/**").permitAll()
+//				END DEBUG
 				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
