@@ -51,7 +51,7 @@ public class XCoreTaskCertificateController {
 	//	onlyOpened: boolean (OHNE PARAMTER IST: DEFAULT true)
 	//	}
 	//	Res: TaskCertificate[]
-	@GetMapping("/core/taskCertificate/all/tenant")
+	@GetMapping("/taskCertificate")
 	private ResponseEntity<Object> getAllTaskCertificates(@RequestBody GetAllTaskCertificateRequest body, @RequestHeader("Authorization") String authorization) {		
 		if (body == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse("body must not be null"));
