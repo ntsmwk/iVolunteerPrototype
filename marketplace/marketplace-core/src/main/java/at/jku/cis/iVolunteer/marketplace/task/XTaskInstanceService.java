@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet;
+package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +18,10 @@ public class XTaskInstanceService {
 
 	public TaskInstance getTaskInstance(String id) {
 		return xTaskInstanceRepository.findOne(id);
+	}
+	
+	public List<TaskInstance> getAll() {
+		return xTaskInstanceRepository.findAll();
 	}
 	
 	public List<TaskInstance> getTaskInstance(List<String> ids) {

@@ -8,12 +8,8 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenantSerialized;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
-import at.jku.cis.iVolunteer.model.task.XDynamicField;
-import at.jku.cis.iVolunteer.model.task.XTaskSerialized;
-import at.jku.cis.iVolunteer.model.user.XColor;
 import at.jku.cis.iVolunteer.model.user.XGeoInfo;
+
 
 @Component
 public class XTenantToTenantSerializedMapper implements OneWayMapper<Tenant, XTenantSerialized> {
@@ -28,14 +24,14 @@ public class XTenantToTenantSerializedMapper implements OneWayMapper<Tenant, XTe
 
 		ts.setId(source.getId());
 		ts.setName(source.getName());
-		ts.setAbbreviation(null);
+		ts.setAbbreviation(source.getAbbreviation());
 		ts.setDescription(source.getDescription());
 		ts.setHomepage(source.getHomepage());
 		ts.setImagePath(source.getImagePath());
 		ts.setPrimaryColor(source.getPrimaryColor());
 		ts.setSecondaryColor(source.getSecondaryColor());
 		ts.setTags(source.getTags());
-		ts.setGeoInfo(null);
+		ts.setGeoInfo(new XGeoInfo(source.getLocation()));
 
 		return ts;
 

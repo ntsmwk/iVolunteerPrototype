@@ -58,12 +58,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/auth/login").permitAll()
 			.antMatchers("/auth/signup").permitAll() 
 			.antMatchers("/auth/signup/").permitAll() 
-			.antMatchers("/register/**").permitAll()
+			.antMatchers("/auth/activation/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/tenant/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/tenant/name/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/file/**").permitAll()
 			//TODO debug
-			.antMatchers("/taskCertificate/all/tenant/**").permitAll()
+//			.antMatchers("/core/taskCertificate/all/tenant/**").permitAll()
+//			.antMatchers("/core/task/**").permitAll()
+
 			//....
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenProvider))

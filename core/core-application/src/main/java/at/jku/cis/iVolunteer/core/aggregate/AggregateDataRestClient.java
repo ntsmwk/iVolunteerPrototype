@@ -26,11 +26,7 @@ public class AggregateDataRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	//TODO
-	public List<GetClassAndTaskInstancesRequest> getClassAndTaskInstances(String marketplaceUrl, List<String> tenantIds, String userId, String authorization) {
-		return new ArrayList<>();
-	}
-	
+
 	public List<XTaskCertificate> getClassAndTaskInstances(String marketplaceURL, String authorization, GetClassAndTaskInstancesRequest body) {
 		String preUrl = "{0}/aggregate/class-and-task-instance";
 		String url = format(preUrl, marketplaceURL);
@@ -38,6 +34,7 @@ public class AggregateDataRestClient {
 		List<XTaskCertificate> ret = Arrays.asList(resp.getBody());
 		return ret;
 	}
+	
 
 	private HttpEntity<?> buildEntity(Object body, String authorization) {
 		HttpEntity<?> entity = new HttpEntity<>(body, buildHeaders(authorization));

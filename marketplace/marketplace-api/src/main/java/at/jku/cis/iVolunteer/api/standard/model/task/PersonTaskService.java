@@ -17,7 +17,7 @@ import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceService;
+import at.jku.cis.iVolunteer.marketplace.task.XTaskInstanceService;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -60,6 +60,7 @@ public class PersonTaskService {
 				taskInstance = taskInstance.updateTaskInstance(classInstance);
 				taskInstance.setId(classInstance.getId());
 				taskInstance.setStatus(TaskInstanceStatus.CLOSED);
+				taskInstance.setTenantId(classInstance.getTenantId());
 				xTaskInstanceService.addOrOverwriteTaskInstance(taskInstance);
 			}
 		}

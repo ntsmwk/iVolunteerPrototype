@@ -56,6 +56,9 @@ public class CoreInitializationService {
 			if (environment.acceptsProfiles("dev")) {
 				marketplace.setId("0eaf3a6281df11e8adc0fa7ae01bbebc");
 				marketplace.setUrl("http://localhost:8080");
+			} else {
+				marketplace.setId("5bc08399ae03711c3810e3cc");
+				marketplace.setUrl("http://140.78.92.58:8080");
 			}
 			this.marketplaceRepository.save(marketplace);
 		}

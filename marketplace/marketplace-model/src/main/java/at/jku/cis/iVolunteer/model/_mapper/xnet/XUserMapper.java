@@ -13,9 +13,9 @@ import at.jku.cis.iVolunteer.model.user.XAddress;
 import at.jku.cis.iVolunteer.model.user.XUser;
 
 @Component
-public class XUserMapper implements AbstractMapper<User, XUser> {
+public class XUserMapper {
 
-    @Override
+ 
     public XUser toTarget(User source) {
         if (source == null) {
             return null;
@@ -37,8 +37,7 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
         return user;
     }
 
-    @Override
-    public List<XUser> toTargets(List<User> sources) {
+    public List<XUser> toTargets(List<? extends User> sources) {
         if (sources == null) {
             return null;
         }
@@ -49,7 +48,6 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
         return targets;
     }
 
-    @Override
     public User toSource(XUser target) {
         if (target == null) {
             return null;
@@ -71,7 +69,6 @@ public class XUserMapper implements AbstractMapper<User, XUser> {
 
     }
 
-    @Override
     public List<User> toSources(List<XUser> targets) {
         if (targets == null) {
             return null;

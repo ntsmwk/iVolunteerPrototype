@@ -11,9 +11,11 @@ import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
+import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XDynamicFieldBlock;
 import at.jku.cis.iVolunteer.model.task.XTaskSerialized;
+import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
 @Component
 public class XTaskInstanceToTaskSerializedMapper implements OneWayMapper<TaskInstance, XTaskSerialized> {
@@ -34,7 +36,6 @@ public class XTaskInstanceToTaskSerializedMapper implements OneWayMapper<TaskIns
 		ts.setDescription(source.getDescription());
 		ts.setImagePath(source.getImagePath());
 		ts.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
-		ts.setGeoInfo(null); //TODO
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
 		ts.setDynamicFields(new ArrayList<>());
@@ -44,6 +45,11 @@ public class XTaskInstanceToTaskSerializedMapper implements OneWayMapper<TaskIns
 		PropertyInstance<Object> endDateField =  findProperty("End Date", source.getProperties());
 		ts.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null :  new Date((Long) endDateField.getValues().get(0)));
 
+		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
+		Location location = locationField == null || locationField.getValues().size() == 0 ? null :  (Location) locationField.getValues().get(0);
+
+		ts.setGeoInfo(new XGeoInfo(location));
+		
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
 			dynamicBlock.setFields(xPropertyInstanceToDynamicFieldMapper.toTargets(sortedFields.get(i)));

@@ -7,24 +7,27 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.meta.core.property.Location;
+import at.jku.cis.iVolunteer.model.user.Address;
 
 public class Tenant {
 
 	@Id private String id;
 	private String name;
 	private String description;
-
+	private String abbreviation;
+	
 	private String homepage;
 
-	private String imagePath;// TODO xnet rename "logo"? low prio
+	private String imagePath;
 
 	private String primaryColor;
 	private String secondaryColor;
 
 	private String marketplaceId;
-
-//	TODO xnet adresse hinzufügen
-//  TODO xnet mitglieder volunteers: User[] (würden wir im Frontend später erwarten) aktuell kann das einfach leer sein.. nur die wichtigsten infos beim user
+	
+	private Address address;
+	private Location location;
 
 	private List<String> tags = new ArrayList<>();
 
@@ -48,6 +51,9 @@ public class Tenant {
 		this.landingpageMessage = update.getLandingpageMessage() != null ? update.getLandingpageMessage() : this.landingpageMessage;
 		this.landingpageText = update.getLandingpageText() != null ? update.getLandingpageText() : this.landingpageText;
 		this.landingpageImagePath = update.getLandingpageImagePath() != null ? update.getLandingpageImagePath() : this.landingpageImagePath;
+		this.abbreviation = update.getAbbreviation() != null ? update.getAbbreviation() : this.abbreviation;
+		this.address = update.getAddress() != null ? update.getAddress() : this.address;
+		this.location = update.getLocation() != null ? update.getLocation() : this.location;
 		return this;
 	}
 	
@@ -163,6 +169,33 @@ public class Tenant {
 	public void setLandingpageImagePath(String landingpageImagePath) {
 		this.landingpageImagePath = landingpageImagePath;
 	}
+
+	public String getAbbreviation() {
+		return abbreviation;
+	}
+
+	public void setAbbreviation(String abbreviation) {
+		this.abbreviation = abbreviation;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
+	public Location getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
 
 	@Override
 	public boolean equals(Object o) {

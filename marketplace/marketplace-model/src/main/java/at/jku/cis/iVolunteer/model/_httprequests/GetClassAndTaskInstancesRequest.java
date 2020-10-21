@@ -13,13 +13,15 @@ public class GetClassAndTaskInstancesRequest {
 	
 	Tenant tenant;
 	CoreUser user;
+	boolean onlyOpened;
 
 	public GetClassAndTaskInstancesRequest() {
 	}
 
-	public GetClassAndTaskInstancesRequest(Tenant tenant, CoreUser user) {
+	public GetClassAndTaskInstancesRequest(Tenant tenant, CoreUser user, boolean onlyOpened) {
 		this.tenant = tenant;
 		this.user = user;
+		this.onlyOpened = onlyOpened;
 	}
 
 	public Tenant getTenant() {
@@ -37,6 +39,16 @@ public class GetClassAndTaskInstancesRequest {
 	public void setUser(CoreUser user) {
 		this.user = user;
 	}
+
+	public boolean isOnlyOpened() {
+		return onlyOpened;
+	}
+
+	public void setOnlyOpened(boolean onlyOpened) {
+		this.onlyOpened = onlyOpened;
+	}
+	
+	
 
 
 

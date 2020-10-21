@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +18,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XUserRoleMapper;
-import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
+import at.jku.cis.iVolunteer.model._httpresponses.TenantSubscribedResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -32,15 +35,12 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
 import at.jku.cis.iVolunteer.model.user.XUserRole;
 
-//TODO xnet done - test
-
 @RestController
 @RequestMapping("/tenant")
 public class TenantController {
 
 	@Autowired private TenantService tenantService;
 	@Autowired private LoginService loginService;
-	@Autowired private TenantRepository tenantRepository;
 	@Autowired private CoreUserService coreUserService;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private XTenantMapper xTenantMapper;
@@ -54,19 +54,24 @@ public class TenantController {
 
 	@GetMapping("/all")
 	public List<XTenant> getAllTenantsX() {
-		return xTenantMapper.toTargets(tenantService.getAllTenants());
+		List<Tenant> tenants = tenantService.getAllTenants();
+		return tenantService.toXTenantTargets(tenants);
 	}
 
 	@GetMapping("/subscribed")
 	public List<XTenant> getSubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
-		return xTenantMapper.toTargets(tenantService.getSubscribedTenants(user));
+		List<Tenant> tenants = tenantService.getSubscribedTenants(user);
+
+		return tenantService.toXTenantTargets(tenants);
 	}
 
 	@GetMapping("/unsubscribed")
 	public List<XTenant> getUnsubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
-		return xTenantMapper.toTargets(tenantService.getUnsubscribedTenants(user));
+		List<Tenant> tenants = tenantService.getUnsubscribedTenants(user);
+
+		return tenantService.toXTenantTargets(tenants);
 	}
 
 	@PostMapping("/create")
@@ -86,15 +91,20 @@ public class TenantController {
 	}
 
 	@GetMapping("/{tenantId}")
-	public XTenant getTenantByIdX(@PathVariable String tenantId) {
-		return xTenantMapper.toTarget(tenantService.getTenantById(tenantId));
+	public TenantSubscribedResponse getTenantByIdX(@PathVariable String tenantId) {
+		List<CoreUser> users = tenantService.getSubscribedUsers(tenantId);
+		XTenant tenant = xTenantMapper.toTarget(tenantService.getTenantById(tenantId), users);
+		CoreUser loggedInUser = loginService.getLoggedInUser();
+		boolean alreadySubscribed = loggedInUser.getSubscribedTenants().stream()
+				.anyMatch(t -> t.getTenantId().equals(tenantId));
+		return new TenantSubscribedResponse(tenant, alreadySubscribed);
 	}
-	
+
 	@GetMapping("/{tenantId}/not-x")
 	public Tenant getTenantByIdNotX(@PathVariable String tenantId) {
 		return tenantService.getTenantById(tenantId);
 	}
-	
+
 	@PostMapping("/{tenantId}")
 	public ResponseEntity<Void> updateTenantX(@PathVariable String tenantId, @RequestBody XTenant tenant) {
 		if (tenant == null) {
@@ -202,13 +212,7 @@ public class TenantController {
 
 	@GetMapping("/{tenantId}/subscribed")
 	public List<XUser> getAllSubscribedUsersX(@PathVariable String tenantId) {
-		List<CoreUser> users = coreUserService.findAll();
-		List<CoreUser> ret = users.stream().filter(u -> {
-			TenantSubscription tenantSubscription = u.getSubscribedTenants().stream()
-					.filter(ts -> ts.getTenantId().equals(tenantId) && ts.getRole() == UserRole.VOLUNTEER).findAny()
-					.orElse(null);
-			return tenantSubscription != null;
-		}).collect(Collectors.toList());
+		List<CoreUser> ret = tenantService.getSubscribedUsers(tenantId);
 		return xUserMapper.toTargets(ret);
 	}
 
@@ -237,7 +241,7 @@ public class TenantController {
 	@PostMapping("/new")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
+			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 		Tenant ret = tenantService.createTenant(tenant);
 
@@ -248,7 +252,7 @@ public class TenantController {
 	@PutMapping("/update")
 	public ResponseEntity<Object> updateTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
+			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 		tenantService.updateTenant(tenant);
 		return ResponseEntity.ok().build();

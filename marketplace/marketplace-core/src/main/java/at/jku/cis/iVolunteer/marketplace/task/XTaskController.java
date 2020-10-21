@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.user.UserController;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
@@ -110,7 +109,7 @@ public class XTaskController {
 	private ResponseEntity<Object> finalizeTask(@PathVariable("taskId") String taskId) {
 		TaskInstance taskInstance = xTaskInstanceService.getTaskInstance(taskId);
 		if (taskInstance == null) {
-			return ResponseEntity.badRequest().body(HttpErrorMessages.NO_SUCH_TASK);
+			return ResponseEntity.badRequest().body(HttpErrorMessages.NOT_FOUND_TASK);
 		}
 
 		taskInstance.setStatus(TaskInstanceStatus.CLOSED);
@@ -174,7 +173,7 @@ public class XTaskController {
 	private ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody XTask changes) {
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 		if (existingTask == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NO_SUCH_TASK), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.BAD_REQUEST);
 		} else if (existingTask.getStatus().equals(TaskInstanceStatus.CLOSED)) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_CLOSED), HttpStatus.BAD_REQUEST);
 		}
@@ -205,7 +204,7 @@ public class XTaskController {
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 
 		if (existingTask == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NO_SUCH_TASK), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.BAD_REQUEST);
 		}
 		if (existingTask.getSubscribedVolunteerIds().stream().anyMatch(id -> id.equals(finalUser.getId()))) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_SUBSCRIBED), HttpStatus.BAD_REQUEST);
@@ -239,7 +238,7 @@ public class XTaskController {
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 
 		if (existingTask == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NO_SUCH_TASK), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.BAD_REQUEST);
 		}
 
 		if (existingTask.getSubscribedVolunteerIds().stream().noneMatch(id -> id.equals(finalUser.getId()))) {

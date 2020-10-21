@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.xnet.XTaskInstanceService;
 import at.jku.cis.iVolunteer.marketplace.user.UserController;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XClassInstanceToTaskCertificateMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;

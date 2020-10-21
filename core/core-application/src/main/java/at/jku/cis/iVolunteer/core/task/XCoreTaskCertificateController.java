@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.aggregate.AggregateDataRestClient;
@@ -21,6 +22,7 @@ import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httprequests.GetAllTaskCertificateRequest;
 import at.jku.cis.iVolunteer.model._httprequests.GetClassAndTaskInstancesRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XClassInstanceToTaskCertificateMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -33,7 +35,6 @@ import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
 @RestController
 public class XCoreTaskCertificateController {
 
-	
 	@Autowired LoginService loginService;
 	@Autowired TenantService tenantService;
 	@Autowired ClassInstanceRestClient classInstanceRestClient;
@@ -42,51 +43,51 @@ public class XCoreTaskCertificateController {
 	@Autowired CoreUserService coreUserService;
 	@Autowired TaskInstanceRestClient taskInstanceRestClient;
 	@Autowired AggregateDataRestClient aggregateDataRestClient;
-		
-	//	GET ALL TASKCERTIFICATE (PUBLIC TENANTS + PRIVATE TENANTS)
-	//	(Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
-	//	GET /core/taskCertificate/all/tenant/
-	//	Req: {
-	//	taskType: 'SUBSCRIBED', 'UNSUBSCRIBED' (OHNE PARAMETER IST: DEFAULT ALL)
-	//	onlyOpened: boolean (OHNE PARAMTER IST: DEFAULT true)
-	//	}
-	//	Res: TaskCertificate[]
-	@GetMapping("taskCertificate/all/tenant")
-	private ResponseEntity<Object> getAllTaskCertificates(@RequestBody GetAllTaskCertificateRequest body, @RequestHeader("Authorization") String authorization) {		
-		if (body == null) {
-			return ResponseEntity.badRequest().body(new ErrorResponse("body must not be null"));
-		}
-		
+
+	// GET ALL TASKCERTIFICATE (PUBLIC TENANTS + PRIVATE TENANTS)
+	// (Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
+	// GET /core/taskCertificate/all/tenant/
+	// Req: {
+	// taskType: 'SUBSCRIBED', 'UNSUBSCRIBED' (OHNE PARAMETER IST: DEFAULT ALL)
+	// onlyOpened: boolean (OHNE PARAMTER IST: DEFAULT true)
+	// }
+	// Res: TaskCertificate[]
+	@GetMapping("/taskCertificate")
+	private ResponseEntity<Object> getAllTaskCertificates(@RequestHeader("Authorization") String authorization,
+			@RequestParam(value = "taskType", required = false, defaultValue = "ALL") String taskType,
+			@RequestParam(value = "onlyOpened", required = false, defaultValue = "true") boolean onlyOpened) {
+
 		CoreUser user = loginService.getLoggedInUser();
-		
-		
-		//TODO DEBUG
+
+		// TODO DEBUG
 //		if (user == null) {
 //			user = coreUserService.getByUserName("mweixlbaumer");
 //		}
-		//----		
-		
+		// ----
+
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("user must be logged in"), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
+					HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		List<Tenant> tenants = new ArrayList<>();
-		if (body.getTaskType().equals("ALL")) {
-			tenants = tenantService.getTenantsByUser(user.getId());
-		} else if (body.getTaskType().equals("SUBSCRIBED")) {
-			tenants = tenantService.getSubscribedTenants(user);
-		} else if (body.getTaskType().equals("UNSUBSCRIBED")) {
-			tenants = tenantService.getUnsubscribedTenants(user);
-		}
-		
+			if (taskType.equals("ALL")) {
+				tenants = tenantService.getTenantsByUser(user.getId());
+			} else if (taskType.equals("SUBSCRIBED")) {
+				tenants = tenantService.getSubscribedTenants(user);
+			} else if (taskType.equals("UNSUBSCRIBED")) {
+				tenants = tenantService.getUnsubscribedTenants(user);
+			}
+
 		List<XTaskCertificate> certificates = new LinkedList<>();
 		if (tenants.size() > 0) {
 			for (Tenant tenant : tenants) {
 				Marketplace mp = marketplaceService.findById(tenant.getMarketplaceId());
-				certificates.addAll(aggregateDataRestClient.getClassAndTaskInstances(mp.getUrl(), authorization, new GetClassAndTaskInstancesRequest(tenant, user)));
+				certificates.addAll(aggregateDataRestClient.getClassAndTaskInstances(mp.getUrl(), authorization,
+						new GetClassAndTaskInstancesRequest(tenant, user, onlyOpened)));
 			}
 		}
-		
+
 		return ResponseEntity.ok(certificates);
 	}
 

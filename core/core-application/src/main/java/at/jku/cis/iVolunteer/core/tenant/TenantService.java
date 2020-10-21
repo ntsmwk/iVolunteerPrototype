@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
+import at.jku.cis.iVolunteer.model.user.TenantSubscription;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
@@ -19,11 +23,11 @@ public class TenantService {
 
 	@Autowired
 	private TenantRepository tenantRepository;
-	@Autowired
-	private CoreUserRepository userRepository;
+	@Autowired CoreUserService coreUserService;
+	@Autowired XTenantMapper xTenantMapper;
 
 	public List<Tenant> getTenantsByUser(String userId) {
-		CoreUser user = userRepository.findOne(userId);
+		CoreUser user = coreUserService.findById(userId);
 		if (user != null) {
 			return user.getSubscribedTenants().stream().map(t -> t.getTenantId())
 					.map(tId -> tenantRepository.findOne(tId)).collect(Collectors.toList());
@@ -79,5 +83,28 @@ public class TenantService {
 				.collect(Collectors.toList());
 		return ret;
 	}
+	
+	public List<CoreUser> getSubscribedUsers(String tenantId) {
+		List<CoreUser> users = coreUserService.findAll();
+		List<CoreUser> ret = users.stream().filter(u -> {
+			TenantSubscription tenantSubscription = u.getSubscribedTenants().stream()
+					.filter(ts -> ts.getTenantId().equals(tenantId) && ts.getRole() == UserRole.VOLUNTEER).findAny()
+					.orElse(null);
+			return tenantSubscription != null;
+		}).collect(Collectors.toList());
+		
+		return ret;
+	}
+	
+	public List<XTenant> toXTenantTargets(List<Tenant> tenants) {
+		List<XTenant> ret = new ArrayList<>();
+		for (Tenant t : tenants) {
+			
+			List<CoreUser> users = getSubscribedUsers(t.getId());
+			ret.add(xTenantMapper.toTarget(t, users));
+		}
+		return ret;
+	}
+	
 
 }
