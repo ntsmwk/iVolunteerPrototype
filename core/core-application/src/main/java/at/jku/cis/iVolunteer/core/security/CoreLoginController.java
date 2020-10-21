@@ -24,7 +24,6 @@ import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
-import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.security.RefreshToken;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -33,14 +32,10 @@ import static at.jku.cis.iVolunteer.core.security.SecurityConstants.TOKEN_PREFIX
 
 @RestController
 public class CoreLoginController {
-	@Autowired
-	private TenantService tenantService;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private CoreLoginService loginService;
-	@Autowired
-	private CoreUserRepository userRepository;
+	@Autowired private TenantService tenantService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreLoginService loginService;
+	@Autowired private CoreUserRepository userRepository;
 
 	private JWTTokenProvider tokenProvider = new JWTTokenProvider();
 
@@ -49,7 +44,7 @@ public class CoreLoginController {
 		CoreUser user = loginService.getLoggedInUser();
 
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(new ErrorResponse("user does not exist"), HttpStatus.NOT_FOUND);
 		}
 
 		return ResponseEntity.ok(user);
