@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
       });
   }
 
-
+// TODO: just for testing /chartdata endpoint
   async getChartData() {
     let chartDataSets = await (this.http.get(`${environment.CORE_URL}/chartdata`)).toPromise() ;
     console.error(chartDataSets);

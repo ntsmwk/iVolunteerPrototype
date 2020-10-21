@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
-import at.jku.cis.iVolunteer.model.chart.xnet.XChartData;
-import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.chart.xnet.XChartDataSet;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 import org.springframework.http.HttpEntity;
@@ -28,30 +27,50 @@ public class XChartDataRestClient {
 
     @Autowired
     private RestTemplate restTemplate;
-
     @Autowired
     private MarketplaceService marketplaceService;
 
-    public List<XChartData> getChartDataByUser(String authorization, CoreUser user) {
-        List<Marketplace> marketplaces = new ArrayList<>();
-        user.getRegisteredMarketplaceIds().stream().map(id -> marketplaceService.findById(id))
-                .forEach(marketplaces::add);
-
+    public List<XChartDataSet> getChartDataFromMarketplaces() {
+        List<Marketplace> marketplaces = marketplaceService.findAll();
         marketplaces = marketplaces.stream().distinct().collect(Collectors.toList());
 
-        List<XChartData> datasets = new ArrayList<>();
+        List<XChartDataSet> datasets = new ArrayList<>();
         marketplaces.forEach(mp -> {
-            String preUrl = "{0}/chartdata/user/{1}";
-            String url = format(preUrl, mp.getUrl(), user.getId());
-            ResponseEntity<XChartData[]> resp = restTemplate.exchange(url, HttpMethod.GET,
-                    buildEntity(null, authorization), XChartData[].class);
-            List<XChartData> ret = Arrays.asList(resp.getBody());
+            String preUrl = "{0}/chartdata";
+            String url = format(preUrl, mp.getUrl());
+            ResponseEntity<XChartDataSet[]> resp = restTemplate.exchange(url, HttpMethod.GET, buildEntity(null, null),
+                    XChartDataSet[].class);
+            List<XChartDataSet> ret = Arrays.asList(resp.getBody());
 
             datasets.addAll(ret);
         });
 
         return datasets;
     }
+
+    // public List<XChartDataSet> getChartDataFromMarketplacesByUser(String
+    // authorization, CoreUser user) {
+    // List<Marketplace> marketplaces = new ArrayList<>();
+    // user.getRegisteredMarketplaceIds().stream().map(id ->
+    // marketplaceService.findById(id))
+    // .forEach(marketplaces::add);
+
+    // marketplaces = marketplaces.stream().distinct().collect(Collectors.toList());
+
+    // List<XChartDataSet> datasets = new ArrayList<>();
+    // marketplaces.forEach(mp -> {
+    // String preUrl = "{0}/chartdata/user/{1}";
+    // String url = format(preUrl, mp.getUrl(), user.getId());
+    // ResponseEntity<XChartDataSet[]> resp = restTemplate.exchange(url,
+    // HttpMethod.GET,
+    // buildEntity(null, authorization), XChartDataSet[].class);
+    // List<XChartDataSet> ret = Arrays.asList(resp.getBody());
+
+    // datasets.addAll(ret);
+    // });
+
+    // return datasets;
+    // }
 
     private HttpEntity<?> buildEntity(Object body, String authorization) {
         return new HttpEntity<>(body, buildAuthorizationHeader(authorization));
