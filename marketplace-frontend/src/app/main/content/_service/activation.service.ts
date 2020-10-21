@@ -8,21 +8,21 @@ export class ActivationService {
   constructor(private http: HttpClient) {}
   activate(activationId: string) {
     return this.http.post(
-      `${environment.CORE_URL}/auth/activate/${activationId}`,
+      `${environment.CORE_URL}/auth/activation/${activationId}`,
       ""
     );
   }
 
   createActivationLink(username: string, type: AccountType) {
     return this.http.post(
-      `${environment.CORE_URL}/auth/activate/generate-link/${username}/user?type=${type}`,
+      `${environment.CORE_URL}/auth/activation/generate-link/${username}/user?type=${type}`,
       ""
     );
   }
 
   createActivationLinkViaEmail(email: string, type: AccountType) {
     return this.http.post(
-      `${environment.CORE_URL}/auth/activate/generate-link/email?type=${type}`,
+      `${environment.CORE_URL}/auth/activation/generate-link/email?type=${type}`,
       email
     );
   }
