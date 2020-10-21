@@ -28,25 +28,12 @@ public class FileController {
 	@Autowired private StorageService storageService;
 
 	@GetMapping(value = "/file/{filename:.+}", produces = "image/*")
-//	@ResponseBody
 	public ResponseEntity<byte[]> serveFile(@PathVariable String filename) throws IOException {
 		Resource file = storageService.loadAsResource(filename);
-		
-		IOUtils.toByteArray(file.getInputStream());
-		
+				
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
 				.body(IOUtils.toByteArray(file.getInputStream()));
-		
-		
-//		InputStream in = file.getInputStream();
-//
-//	    final HttpHeaders headers = new HttpHeaders();
-//	    headers.setContentDispositionFormData("attachment", "filename=\"" + file.getFilename() + "\"");
-//
-//	    return new ResponseEntity<Resource>(in.toString().getBytes(), headers, HttpStatus.CREATED);
-//	
-		
 	}
 	
 

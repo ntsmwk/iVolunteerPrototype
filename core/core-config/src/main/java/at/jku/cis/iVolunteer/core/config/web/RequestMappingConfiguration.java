@@ -18,19 +18,15 @@ public class RequestMappingConfiguration extends RequestMappingHandlerAdapter {
 		RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 		
-		
 		List<MediaType> mediaTypeList = new ArrayList<>();
 		mediaTypeList.add(MediaType.APPLICATION_JSON);
 		converter.setSupportedMediaTypes(mediaTypeList);
-		
 		
 		ByteArrayHttpMessageConverter baConverter = new ByteArrayHttpMessageConverter();
 		List<MediaType> baMediaTypeList = new ArrayList<>();
 		baMediaTypeList.add(MediaType.IMAGE_GIF);
 		baMediaTypeList.add(MediaType.IMAGE_JPEG);
 		baMediaTypeList.add(MediaType.IMAGE_PNG);
-//		baMediaTypeList.add(MediaType.APPLICATION_OCTET_STREAM);
-
 
 		baConverter.setSupportedMediaTypes(baMediaTypeList);
 		adapter.getMessageConverters().add(baConverter);
