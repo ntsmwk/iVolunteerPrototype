@@ -53,12 +53,12 @@ public class XTaskInstanceToTaskMapper {
 		PropertyInstance<Object> endDateField = findProperty("End Date", source.getProperties());
 		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
 				: new Date((Long) endDateField.getValues().get(0)));
+//		
+//		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
+//		Location location = locationField == null || locationField.getValues().size() == 0 ? null
+//				: (Location) locationField.getValues().get(0);
 		
-		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
-		Location location = locationField == null || locationField.getValues().size() == 0 ? null
-				: (Location) locationField.getValues().get(0);
-		
-		task.setGeoInfo(new XGeoInfo(location));
+//		task.setGeoInfo(new XGeoInfo(location));
 
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
