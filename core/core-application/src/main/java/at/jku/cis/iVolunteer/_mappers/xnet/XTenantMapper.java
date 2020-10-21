@@ -49,15 +49,8 @@ public class XTenantMapper {
 		xt.setLandingpageTitle(source.getLandingpageTitle());
 		xt.setLandingpageText(source.getLandingpageText());
 		xt.setLandingpageImagePath(source.getLandingpageImagePath());
-		
-		
-		xt.setSubscribedVolunteers(xUserMapper.toTargets(users)); // TODO
-		
-		
-		
-		xt.setGeoInfo(new XGeoInfo(source.getLocation())); // TODO
-
-
+		xt.setSubscribedVolunteers(xUserMapper.toTargets(users));
+		xt.setGeoInfo(new XGeoInfo(source.getLocation())); 
 		return xt;
 	}
 

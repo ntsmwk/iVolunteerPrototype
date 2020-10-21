@@ -15,12 +15,14 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
+import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XDynamicField;
 import at.jku.cis.iVolunteer.model.task.XDynamicFieldBlock;
 import at.jku.cis.iVolunteer.model.task.XTask;
 import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
 @Component
 public class XTaskInstanceToTaskMapper {
@@ -41,9 +43,6 @@ public class XTaskInstanceToTaskMapper {
 		task.setDescription(source.getDescription());
 		task.setImagePath(source.getImagePath());
 		task.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
-// TODO
-		task.setGeoInfo(null);
-//		task.(propertyInstanceToTaskFieldMapper.toTarget(findProperty("Location", source.getProperties())));
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
 		task.setDynamicFields(new ArrayList<>());
@@ -54,6 +53,12 @@ public class XTaskInstanceToTaskMapper {
 		PropertyInstance<Object> endDateField = findProperty("End Date", source.getProperties());
 		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
 				: new Date((Long) endDateField.getValues().get(0)));
+		
+		PropertyInstance<Object> locationField = findProperty("Starting Date", source.getProperties());
+		Location location = locationField == null || locationField.getValues().size() == 0 ? null
+				: (Location) locationField.getValues().get(0);
+		
+		task.setGeoInfo(new XGeoInfo(location));
 
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
@@ -124,7 +129,6 @@ public class XTaskInstanceToTaskMapper {
 			instance.getProperties().add(startDate);
 		}
 
-//findAndReplaceProperty(startDate, classInstance);
 		if (target.getEndDate() != null) {
 			PropertyInstance<Object> endDate = new PropertyInstance<Object>();
 			endDate.setId(new ObjectId().toHexString());
@@ -134,9 +138,16 @@ public class XTaskInstanceToTaskMapper {
 			endDate.setLevel(1);
 			instance.getProperties().add(endDate);
 		}
-
-//TODO from geoinfo
-//PropertyInstance<Object> location = propertyInstanceToTaskFieldMapper.toSource(target.getRequired().getPlace());
+		
+		if (target.getGeoInfo() != null) {
+			PropertyInstance<Object> location = new PropertyInstance<Object>();
+			location.setId(new ObjectId().toHexString());
+			location.setValues(Collections.singletonList(new Location(target.getGeoInfo())));
+			location.setName("Location");
+			location.setType(PropertyType.LOCATION);
+			location.setLevel(1);
+			instance.getProperties().add(location);
+		}
 
 		for (int i = 0; i < target.getDynamicFields().size(); i++) {
 			XDynamicFieldBlock block = target.getDynamicFields().get(i);
