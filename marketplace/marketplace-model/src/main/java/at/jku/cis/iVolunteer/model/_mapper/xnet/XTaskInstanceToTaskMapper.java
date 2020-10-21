@@ -54,7 +54,7 @@ public class XTaskInstanceToTaskMapper {
 		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
 				: new Date((Long) endDateField.getValues().get(0)));
 		
-		PropertyInstance<Object> locationField = findProperty("Starting Date", source.getProperties());
+		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
 		Location location = locationField == null || locationField.getValues().size() == 0 ? null
 				: (Location) locationField.getValues().get(0);
 		
