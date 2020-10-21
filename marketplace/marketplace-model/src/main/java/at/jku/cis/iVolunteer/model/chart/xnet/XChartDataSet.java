@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.model.chart.xnet;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class XChartData {
+public class XChartDataSet {
     @Id
     private String id;
     private String name;
@@ -18,7 +17,7 @@ public class XChartData {
     private Date timestamp;
     private List<XDataPoint> datapoints;
 
-    public XChartData() {
+    public XChartDataSet() {
     }
 
     public String getId() {
@@ -53,7 +52,7 @@ public class XChartData {
         this.tenantId = tenantId;
     }
 
-    public XChartData(List<XDataPoint> datapoints) {
+    public XChartDataSet(List<XDataPoint> datapoints) {
         this.datapoints = datapoints;
     }
 
@@ -77,17 +76,17 @@ public class XChartData {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof XChartData)) {
+        if (!(o instanceof XChartDataSet)) {
             return false;
         }
-        XChartData xChartData = (XChartData) o;
+        XChartDataSet xChartData = (XChartDataSet) o;
         return Objects.equals(name, xChartData.name) && Objects.equals(tenantId, xChartData.tenantId)
                 && Objects.equals(userId, xChartData.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, userId, tenantId, timestamp, datapoints);
+        return Objects.hash(name, userId, tenantId);
     }
 
 }

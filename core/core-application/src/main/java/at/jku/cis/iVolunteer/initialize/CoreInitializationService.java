@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.core.chart.XChartDataSetRepository;
 import at.jku.cis.iVolunteer.core.image.ImageRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.security.activation.CorePendingActivationRepository;
@@ -27,14 +28,24 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CorePendingActivationRepository pendingActivationRepository;
-	@Autowired private Environment environment;
-	@Autowired private TagRepository tagRepository;
-	@Autowired private TenantRepository tenantRepository;
-	@Autowired private ImageRepository imageRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CorePendingActivationRepository pendingActivationRepository;
+	@Autowired
+	private Environment environment;
+	@Autowired
+	private TagRepository tagRepository;
+	@Autowired
+	private TenantRepository tenantRepository;
+	@Autowired
+	private XChartDataSetRepository chartDataSetRepository;
+	@Autowired
+	private ImageRepository imageRepository;
 
 	protected void createMarketplace() {
 		Marketplace marketplace = this.marketplaceRepository.findByName("Marketplace 1");
@@ -155,7 +166,7 @@ public class CoreInitializationService {
 		tenantRepository.deleteAll();
 		tagRepository.deleteAll();
 		imageRepository.deleteAll();
-
+		chartDataSetRepository.deleteAll();
 	}
 
 	public void deleteUsers() {
