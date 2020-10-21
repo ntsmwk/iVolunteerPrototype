@@ -28,13 +28,13 @@ public class MarketplaceController {
 	public List<Marketplace> findAll() {
 		return marketplaceService.findAll();
 	}
+	
 
 	@GetMapping("/subscribed")
 	public List<Marketplace> getSubscribedMarketplaces() {
 		CoreUser loggedInUser = loginService.getLoggedInUser();
 		List<String> marketplaceIds = loggedInUser.getRegisteredMarketplaceIds();
 		return marketplaceService.findAll(marketplaceIds);
-
 	}
 
 	@GetMapping("{marketplaceId}")
@@ -42,6 +42,7 @@ public class MarketplaceController {
 		return marketplaceService.findById(marketplaceId);
 	}
 
+	
 	@PostMapping("{marketplaceId}/update")
 	public ResponseEntity<Void> updateMarketplaceById(@PathVariable("marketplaceId") String marketplaceId,
 			@RequestBody Marketplace marketplace) {

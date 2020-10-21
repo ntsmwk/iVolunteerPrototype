@@ -17,14 +17,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XUserRoleMapper;
-import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
+import at.jku.cis.iVolunteer.model._httpresponses.TenantSubscribedResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -33,15 +34,12 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
 import at.jku.cis.iVolunteer.model.user.XUserRole;
 
-//TODO xnet done - test
-
 @RestController
 @RequestMapping("/tenant")
 public class TenantController {
 
 	@Autowired private TenantService tenantService;
 	@Autowired private LoginService loginService;
-	@Autowired private TenantRepository tenantRepository;
 	@Autowired private CoreUserService coreUserService;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private XTenantMapper xTenantMapper;
@@ -87,15 +85,19 @@ public class TenantController {
 	}
 
 	@GetMapping("/{tenantId}")
-	public XTenant getTenantByIdX(@PathVariable String tenantId) {
-		return xTenantMapper.toTarget(tenantService.getTenantById(tenantId));
+	public TenantSubscribedResponse getTenantByIdX(@PathVariable String tenantId) {
+		XTenant tenant = xTenantMapper.toTarget(tenantService.getTenantById(tenantId));
+		CoreUser loggedInUser = loginService.getLoggedInUser();
+		boolean alreadySubscribed = loggedInUser.getSubscribedTenants().stream()
+				.anyMatch(t -> t.getTenantId().equals(tenantId));
+		return new TenantSubscribedResponse(tenant, alreadySubscribed);
 	}
-	
+
 	@GetMapping("/{tenantId}/not-x")
 	public Tenant getTenantByIdNotX(@PathVariable String tenantId) {
 		return tenantService.getTenantById(tenantId);
 	}
-	
+
 	@PostMapping("/{tenantId}")
 	public ResponseEntity<Void> updateTenantX(@PathVariable String tenantId, @RequestBody XTenant tenant) {
 		if (tenant == null) {
