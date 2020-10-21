@@ -81,6 +81,8 @@ public class TaskInstance extends ClassInstance {
 		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate() : this.getBlockchainDate());
 		this.setLevel(newTaskInstance.getLevel() != null ? newTaskInstance.getLevel() : this.getLevel());
 		this.setProperties(newTaskInstance.getProperties());
+		this.setTenantId(newTaskInstance.getTenantId() != null ? newTaskInstance.getTenantId() : this.getTenantId());
+
 		return this;
 	}
 

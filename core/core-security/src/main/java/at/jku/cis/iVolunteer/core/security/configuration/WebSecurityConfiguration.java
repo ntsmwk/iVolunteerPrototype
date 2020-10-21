@@ -63,8 +63,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, "/tenant/name/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/file/**").permitAll()
 			//TODO debug
-			.antMatchers("/core/taskCertificate/all/tenant/**").permitAll()
-			.antMatchers("/core/task/**").permitAll()
+//			.antMatchers("/core/taskCertificate/all/tenant/**").permitAll()
+//			.antMatchers("/core/task/**").permitAll()
 
 			//....
 			.anyRequest().authenticated();
