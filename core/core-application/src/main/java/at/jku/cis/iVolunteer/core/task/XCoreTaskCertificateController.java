@@ -21,6 +21,7 @@ import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httprequests.GetAllTaskCertificateRequest;
 import at.jku.cis.iVolunteer.model._httprequests.GetClassAndTaskInstancesRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XClassInstanceToTaskCertificateMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -54,7 +55,7 @@ public class XCoreTaskCertificateController {
 	@GetMapping("/taskCertificate")
 	private ResponseEntity<Object> getAllTaskCertificates(@RequestBody GetAllTaskCertificateRequest body, @RequestHeader("Authorization") String authorization) {		
 		if (body == null) {
-			return ResponseEntity.badRequest().body(new ErrorResponse("body must not be null"));
+			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 		
 		CoreUser user = loginService.getLoggedInUser();
@@ -67,7 +68,7 @@ public class XCoreTaskCertificateController {
 		//----		
 		
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("user must be logged in"), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN), HttpStatus.UNAUTHORIZED);
 		}
 		
 		List<Tenant> tenants = new ArrayList<>();
