@@ -50,7 +50,7 @@ public class XCoreTaskController {
 //	Req: {}
 //	Res: Task[]
 
-	@GetMapping("/core/task")
+	@GetMapping("/task")
 	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization) {
 
 		List<Marketplace> marketplaces = marketplaceService.findAll();
@@ -83,7 +83,7 @@ public class XCoreTaskController {
 //	GET /core/task/tenant/subscribed
 //	Req: {}
 //	Res: Task[]
-	@GetMapping("/core/task/tenant/subscribed")
+	@GetMapping("/task/tenant/subscribed")
 	private ResponseEntity<Object> getTasksOfSubscribedTenants(@RequestHeader("Authorization") String authorization) {
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {

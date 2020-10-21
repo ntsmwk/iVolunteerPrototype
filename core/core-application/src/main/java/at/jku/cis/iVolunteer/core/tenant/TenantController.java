@@ -24,6 +24,7 @@ import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -237,7 +238,7 @@ public class TenantController {
 	@PostMapping("/new")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
+			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 		Tenant ret = tenantService.createTenant(tenant);
 
@@ -248,7 +249,7 @@ public class TenantController {
 	@PutMapping("/update")
 	public ResponseEntity<Object> updateTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
-			return ResponseEntity.badRequest().body(new ErrorResponse("Tenant must not be null"));
+			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 		tenantService.updateTenant(tenant);
 		return ResponseEntity.ok().build();

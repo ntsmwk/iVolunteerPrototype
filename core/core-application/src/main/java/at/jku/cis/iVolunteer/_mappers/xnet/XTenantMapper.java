@@ -27,12 +27,13 @@ public class XTenantMapper implements AbstractMapper<Tenant, XTenant> {
 		XTenant xt = new XTenant();	
 		xt.setId(source.getId());
 		xt.setName(source.getName());
-		xt.setAbbreviation("todo"); // TODO
+		xt.setAbbreviation(source.getAbbreviation()); // TODO
 		xt.setDescription(source.getDescription());
 		xt.setHomepage(source.getHomepage());
 		xt.setImagePath(source.getImagePath());
 		xt.setPrimaryColor(source.getPrimaryColor());
 		xt.setSecondaryColor(source.getSecondaryColor());
+		
 		
 		Marketplace mp = marketplaceService.findById(source.getMarketplaceId());
 		if (mp != null) {

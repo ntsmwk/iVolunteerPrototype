@@ -26,7 +26,6 @@ public class CoreRegistrationController {
 	@PostMapping
 	public ResponseEntity<Object> registerUser(@RequestBody CoreUser user, @RequestParam("type") AccountType type) {
 		if (type != AccountType.ORGANIZATION && type != AccountType.PERSON) {
-			System.out.println("invalid registrationtype - either 'organization' or 'person'");
 			return new ResponseEntity<Object>(new ErrorResponse("invalid registrationtype - either 'organization' or 'person'"), HttpStatus.BAD_REQUEST);
 		}
 		RegisterResponseMessage responseMessage = coreRegistrationService.registerUser(user, type);

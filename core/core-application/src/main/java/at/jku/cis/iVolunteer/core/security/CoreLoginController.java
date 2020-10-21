@@ -24,6 +24,7 @@ import at.jku.cis.iVolunteer.core.service.JWTTokenProvider;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.security.RefreshToken;
 import at.jku.cis.iVolunteer.model.user.UserRole;
@@ -48,7 +49,7 @@ public class CoreLoginController {
 		CoreUser user = loginService.getLoggedInUser();
 
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse("user does not exist"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN), HttpStatus.NOT_FOUND);
 		}
 
 		return ResponseEntity.ok(user);
