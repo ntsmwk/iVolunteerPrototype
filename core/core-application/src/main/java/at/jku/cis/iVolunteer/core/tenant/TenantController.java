@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,19 +56,24 @@ public class TenantController {
 
 	@GetMapping("/all")
 	public List<XTenant> getAllTenantsX() {
-		return xTenantMapper.toTargets(tenantService.getAllTenants());
+		List<Tenant> tenants = tenantService.getAllTenants();
+		return tenantService.toXTenantTargets(tenants);
 	}
 
 	@GetMapping("/subscribed")
 	public List<XTenant> getSubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
-		return xTenantMapper.toTargets(tenantService.getSubscribedTenants(user));
+		List<Tenant> tenants = tenantService.getSubscribedTenants(user);
+
+		return tenantService.toXTenantTargets(tenants);
 	}
 
 	@GetMapping("/unsubscribed")
 	public List<XTenant> getUnsubscribedTenantsX() {
 		CoreUser user = loginService.getLoggedInUser();
-		return xTenantMapper.toTargets(tenantService.getUnsubscribedTenants(user));
+		List<Tenant> tenants = tenantService.getUnsubscribedTenants(user);
+
+		return tenantService.toXTenantTargets(tenants);
 	}
 
 	@PostMapping("/create")
@@ -88,7 +94,10 @@ public class TenantController {
 
 	@GetMapping("/{tenantId}")
 	public XTenant getTenantByIdX(@PathVariable String tenantId) {
-		return xTenantMapper.toTarget(tenantService.getTenantById(tenantId));
+		
+		Tenant tenant = tenantService.getTenantById(tenantId);
+		List<CoreUser> users = tenantService.getSubscribedUsers(tenantId);
+		return xTenantMapper.toTarget(tenant , users);
 	}
 	
 	@GetMapping("/{tenantId}/not-x")
@@ -203,13 +212,7 @@ public class TenantController {
 
 	@GetMapping("/{tenantId}/subscribed")
 	public List<XUser> getAllSubscribedUsersX(@PathVariable String tenantId) {
-		List<CoreUser> users = coreUserService.findAll();
-		List<CoreUser> ret = users.stream().filter(u -> {
-			TenantSubscription tenantSubscription = u.getSubscribedTenants().stream()
-					.filter(ts -> ts.getTenantId().equals(tenantId) && ts.getRole() == UserRole.VOLUNTEER).findAny()
-					.orElse(null);
-			return tenantSubscription != null;
-		}).collect(Collectors.toList());
+		List<CoreUser> ret = tenantService.getSubscribedUsers(tenantId);
 		return xUserMapper.toTargets(ret);
 	}
 

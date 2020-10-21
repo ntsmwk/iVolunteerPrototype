@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 
 @Repository
 public interface ClassInstanceRepository extends HasTenantRepository<ClassInstance, String> {
@@ -26,7 +27,7 @@ public interface ClassInstanceRepository extends HasTenantRepository<ClassInstan
 	List<ClassInstance> getByClassArchetypeAndTenantId(ClassArchetype classArchetype, String tenantId);
 
 	List<ClassInstance> getByClassArchetypeAndUserIdAndTenantId(ClassArchetype classArchetype, String userId, String tenantId);
-	
+		
 	List<ClassInstance> getByClassArchetypeAndUserId(ClassArchetype classArchetype, String userId);
 	
 //	List<ClassInstance> getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(ClassArchetype classArchetype, String tenantId, String userId, boolean subscribed);

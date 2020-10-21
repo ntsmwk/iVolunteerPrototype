@@ -16,6 +16,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassInstance;

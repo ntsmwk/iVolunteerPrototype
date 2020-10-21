@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.user.Address;
 
 public class Tenant {
@@ -26,6 +27,7 @@ public class Tenant {
 	private String marketplaceId;
 	
 	private Address address;
+	private Location location;
 
 	private List<String> tags = new ArrayList<>();
 
@@ -51,6 +53,7 @@ public class Tenant {
 		this.landingpageImagePath = update.getLandingpageImagePath() != null ? update.getLandingpageImagePath() : this.landingpageImagePath;
 		this.abbreviation = update.getAbbreviation() != null ? update.getAbbreviation() : this.abbreviation;
 		this.address = update.getAddress() != null ? update.getAddress() : this.address;
+		this.location = update.getLocation() != null ? update.getLocation() : this.location;
 		return this;
 	}
 	
@@ -182,6 +185,15 @@ public class Tenant {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+	
+	public Location getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 

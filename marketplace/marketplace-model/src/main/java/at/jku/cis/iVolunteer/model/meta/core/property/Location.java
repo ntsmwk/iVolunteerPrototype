@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.model.meta.core.property;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.task.GeoInformation;
+import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
 @Document
 public class Location {
@@ -25,6 +26,15 @@ public class Location {
 			this.longLatEnabled = taskGeoInformation.isEnabled();
 			this.latitude = taskGeoInformation.getLatitude();
 			this.longitude = taskGeoInformation.getLongitude();
+		}
+	}
+	
+	public Location(XGeoInfo geoInfo) {
+		if (geoInfo != null) {
+			this.label = geoInfo.getName();
+			this.longLatEnabled = geoInfo.getLatitude() != null && geoInfo.getLongitude() != null;
+			this.longitude = geoInfo.getLongitude();
+			this.latitude = geoInfo.getLatitude();
 		}
 	}
 
