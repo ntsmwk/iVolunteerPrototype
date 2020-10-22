@@ -54,13 +54,22 @@ public class XTaskController {
 	// Req: { Task }
 	// Res: 200 (OK), 500 (FAILED)
 	@PostMapping("/new")
-	private ResponseEntity<Object> createOpenedTask(@RequestBody XTask task) {
+	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task, @RequestHeader("Authorization") String authorization) {
 		if (task == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 
-		TaskInstance instance = xTaskInstanceToTaskMapper.toSource(task);
+		TaskInstance instance = xTaskInstanceToPostTaskRequestMapper.toSource(task);
 		instance.setStatus(TaskInstanceStatus.OPEN);
+		ResponseEntity<StringResponse> resp = coreStorageRestClient.storeImageBase64(null, task.getImage(),
+				authorization);
+
+		if (!resp.getStatusCode().is2xxSuccessful()) {
+			return ResponseEntity.badRequest().body(new ErrorResponse(resp.getBody().getMessage()));
+		}
+
+		String imageUrl = resp.getBody().getMessage();
+		instance.setImagePath(imageUrl);
 		instance = xTaskInstanceService.addOrOverwriteTaskInstance(instance);
 
 		return ResponseEntity.ok(Collections.singletonMap("id", instance.getId()));
@@ -74,24 +83,26 @@ public class XTaskController {
 	// Res: 200 (OK), 500 (FAILED)
 
 	@PostMapping("/new/closed")
-	private ResponseEntity<Object> createClosedTask(@RequestBody PostTaskRequest task, @RequestHeader("Authorization") String authorization) {
+	private ResponseEntity<Object> createClosedTask(@RequestBody PostTaskRequest task,
+			@RequestHeader("Authorization") String authorization) {
 		if (task == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 
 		TaskInstance taskInstance = xTaskInstanceToPostTaskRequestMapper.toSource(task);
 		taskInstance.setStatus(TaskInstanceStatus.CLOSED);
-		
-		ResponseEntity<StringResponse> resp = coreStorageRestClient.storeImageBase64(null, task.getImage(), authorization);
-		
+
+		ResponseEntity<StringResponse> resp = coreStorageRestClient.storeImageBase64(null, task.getImage(),
+				authorization);
+
 		if (!resp.getStatusCode().is2xxSuccessful()) {
 			return ResponseEntity.badRequest().body(new ErrorResponse(resp.getBody().getMessage()));
 		}
-		
+
 		String imageUrl = resp.getBody().getMessage();
 		taskInstance.setImagePath(imageUrl);
 		taskInstance = xTaskInstanceService.addOrOverwriteTaskInstance(taskInstance);
-		
+
 		if (task.getSubscribedUsers() != null) {
 			List<ClassInstance> addedClassInstances = new ArrayList<>();
 			for (String userId : task.getSubscribedUsers()) {
@@ -106,11 +117,8 @@ public class XTaskController {
 
 			addedClassInstances = classInstanceController.createNewClassInstances(addedClassInstances);
 
-			return ResponseEntity.ok(Collections.singletonMap("id", taskInstance.getId()));
-
-		} else {
-			return ResponseEntity.ok(Collections.singletonMap("id", taskInstance.getId()));
 		}
+		return ResponseEntity.ok(Collections.singletonMap("id", taskInstance.getId()));
 
 	}
 
@@ -189,11 +197,14 @@ public class XTaskController {
 	private ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody XTask changes) {
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 		if (existingTask == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
+					HttpStatus.BAD_REQUEST);
 		} else if (existingTask.getStatus().equals(TaskInstanceStatus.CLOSED)) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_CLOSED), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_CLOSED),
+					HttpStatus.BAD_REQUEST);
 		}
-		existingTask = xTaskInstanceService.updateTaskInstance(xTaskInstanceToTaskMapper.toSource(changes), existingTask);
+		existingTask = xTaskInstanceService.updateTaskInstance(xTaskInstanceToTaskMapper.toSource(changes),
+				existingTask);
 
 		return ResponseEntity.ok().build();
 	}
@@ -205,25 +216,28 @@ public class XTaskController {
 	@PostMapping("{taskId}/subscribe")
 	private ResponseEntity<Object> subscribeUserToTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
-		
-		//*TODO debug
+
+		// *TODO debug
 //			if (user == null) {
 //				user = userService.getUserByName("mweixlbaumer");
 //			}
-		//-----
-			
+		// -----
+
 		User finalUser = user;
-		
+
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
+					HttpStatus.UNAUTHORIZED);
 		}
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 
 		if (existingTask == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
+					HttpStatus.BAD_REQUEST);
 		}
 		if (existingTask.getSubscribedVolunteerIds().stream().anyMatch(id -> id.equals(finalUser.getId()))) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_SUBSCRIBED), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_SUBSCRIBED),
+					HttpStatus.BAD_REQUEST);
 		}
 
 		existingTask.getSubscribedVolunteerIds().add(user.getId());
@@ -239,26 +253,29 @@ public class XTaskController {
 	@PostMapping("{taskId}/unsubscribe")
 	private ResponseEntity<Object> unsubscribeUserFromTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
-		
-		//*TODO debug
+
+		// *TODO debug
 //			if (user == null) {
 //				user = userService.getUserByName("mweixlbaumer");
 //			}
-		//-----
-			
+		// -----
+
 		User finalUser = user;
-		
+
 		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
+					HttpStatus.UNAUTHORIZED);
 		}
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 
 		if (existingTask == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
+					HttpStatus.BAD_REQUEST);
 		}
 
 		if (existingTask.getSubscribedVolunteerIds().stream().noneMatch(id -> id.equals(finalUser.getId()))) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_UNSUBSCRIBED), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_UNSUBSCRIBED),
+					HttpStatus.BAD_REQUEST);
 		}
 
 		existingTask.setSubscribedVolunteerIds(existingTask.getSubscribedVolunteerIds().stream()
