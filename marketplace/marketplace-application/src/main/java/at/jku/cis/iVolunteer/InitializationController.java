@@ -31,7 +31,7 @@ public class InitializationController {
 	public void addTestData() {
 		addFireBrigadeUserMapping();
 		addAllProperties();
-//		addClassConfigurations();
+		addClassConfigurations();
 		addAPIClassDefinitions();
 	}
 	
@@ -90,7 +90,7 @@ public class InitializationController {
 	
 	@PutMapping("/init/add-configurator-test-configurations") 
 	public void addClassConfigurations() {
-		initializationService.addClassConfigurations();
+		initializationService.addClassConfigurations(1);
 	}
 	
 	@PutMapping("/init/delete-class-definitions")

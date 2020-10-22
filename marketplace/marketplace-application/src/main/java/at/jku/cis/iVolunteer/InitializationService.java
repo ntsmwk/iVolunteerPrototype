@@ -98,11 +98,11 @@ public class InitializationService {
 		});
 	}
 
-	public void addClassConfigurations() {
+	public void addClassConfigurations(int noOfConfigurations) {
 		List<Tenant> tenants = getTenants();
 
 		for (Tenant t : tenants) {
-			for (int i = 1; i <= 5; i++) {
+			for (int i = 1; i <= noOfConfigurations; i++) {
 				this.classConfigurationController
 						.createNewClassConfiguration(new String[] { t.getId(), "slot" + i, "" });
 			}
