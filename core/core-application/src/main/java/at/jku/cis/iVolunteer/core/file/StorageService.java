@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.core.file;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -7,15 +9,23 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.spi.FileTypeDetector;
+import java.util.Base64;
 import java.util.stream.Stream;
+
+import javax.activation.FileTypeMap;
+import javax.activation.MimetypesFileTypeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
+import org.springframework.util.MimeType;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,6 +63,37 @@ public class StorageService {
 		try (InputStream inputStream = file.getInputStream()) {
 			return store(filename, inputStream);
 		} catch (IOException e) {
+			throw new StorageException("Failed to store file " + filename, e);
+		}
+	}
+
+	public String store(String filename, String image) {
+		try {
+
+			String[] splitImage = StringUtils.split(image, ",");
+
+			if (splitImage.length != 2) {
+				throw new IllegalArgumentException("invalid image string");
+			}
+
+			String extension = "";
+			if (splitImage[0].equals("data:image/gif;base64")) {
+				extension = "gif";
+			} else if (splitImage[0].equals("data:image/png;base64")) {
+				extension = "png";
+			} else if (splitImage[0].equals("data:image/jpg;base64") || splitImage[0].equals("data:image/jpeg;base64")) {
+				extension = "jpg";
+			} else {
+				throw new IllegalArgumentException("Unsupported Media Type: " + splitImage[0]
+						+ "\nSupported: data:image/png;base64, data:image/png;base64, data:image/jpg;base64, data:image/jpeg;base64");
+			}
+
+			byte[] imageByte = Base64.getDecoder().decode(splitImage[1]);
+
+			filename = StringUtils.cleanPath(filename + "." + extension);
+
+			return store(filename, new ByteArrayInputStream(imageByte));
+		} catch (Exception e) {
 			throw new StorageException("Failed to store file " + filename, e);
 		}
 	}
