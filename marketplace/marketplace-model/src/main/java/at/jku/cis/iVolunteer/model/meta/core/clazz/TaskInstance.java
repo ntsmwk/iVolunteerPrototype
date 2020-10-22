@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
+@Document
 public class TaskInstance extends ClassInstance {
 
 	private List<String> subscribedVolunteerIds = new ArrayList<>();

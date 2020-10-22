@@ -3,12 +3,15 @@ package at.jku.cis.iVolunteer.model._mapper.xnet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -29,6 +32,7 @@ public class XTaskInstanceToTaskMapper {
 
 	@Autowired XPropertyInstanceDynamicFieldMapper xPropertyInstanceToDynamicFieldMapper;
 	@Autowired XUserMapper xUserMapper;
+	@Autowired ObjectMapper objectMapper;
 
 	public XTask toTarget(TaskInstance source, List<? extends User> subscribedUsers) {
 		if (source == null) {
@@ -53,12 +57,15 @@ public class XTaskInstanceToTaskMapper {
 		PropertyInstance<Object> endDateField = findProperty("End Date", source.getProperties());
 		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
 				: new Date((Long) endDateField.getValues().get(0)));
-//		
-//		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
-//		Location location = locationField == null || locationField.getValues().size() == 0 ? null
-//				: (Location) locationField.getValues().get(0);
+
+		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
 		
-//		task.setGeoInfo(new XGeoInfo(location));
+		Location location = null;
+		if (locationField != null && locationField.getValues().size() > 0) {		
+			 location = objectMapper.convertValue(locationField.getValues().get(0), Location.class);
+		}
+		
+		task.setGeoInfo(new XGeoInfo(location));
 
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
@@ -138,7 +145,7 @@ public class XTaskInstanceToTaskMapper {
 			endDate.setLevel(1);
 			instance.getProperties().add(endDate);
 		}
-		
+
 		if (target.getGeoInfo() != null) {
 			PropertyInstance<Object> location = new PropertyInstance<Object>();
 			location.setId(new ObjectId().toHexString());
