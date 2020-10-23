@@ -1,0 +1,24 @@
+<fieldset *ngIf="loaded">
+
+  <h2>Location</h2>
+
+  <mat-form-field class="form-field" [formGroup]="locationGroup">
+    <input matInput placeholder="Bezeichnung" formControlName="label" id="label" />
+  </mat-form-field>
+
+  <mat-card [formGroup]="locationGroup">
+    <mat-slide-toggle class="slide-toggle-field" id="longLatEnabled" formControlName="longLatEnabled"
+      [checked]="locationGroup.value.longLatEnabled" (change)="handleLongLatEnabledChange()">
+      Longitude / Latitude verwenden
+    </mat-slide-toggle>
+  </mat-card>
+
+  <mat-form-field *ngIf="locationGroup.value.longLatEnabled" class="form-field" [formGroup]="locationGroup">
+    <input matInput placeholder="Longitude" formControlName="longitude" id="longitude" type="number" />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="locationGroup.value.longLatEnabled" class="form-field" [formGroup]="locationGroup">
+    <input matInput placeholder="Latitude" formControlName="latitude" id="latitude" type="number" />
+  </mat-form-field>
+
+</fieldset>

@@ -121,6 +121,8 @@ export class PropertyInstance<T> {
                     currentLevel--;
                 }
             }
+        } else if (classProperty.type === PropertyType.LOCATION) {
+            console.log(this.values)
         }
     }
 }
@@ -129,7 +131,7 @@ export class PropertyInstance<T> {
 export enum PropertyType {
     TEXT = 'TEXT', LONG_TEXT = 'LONG_TEXT', WHOLE_NUMBER = 'WHOLE_NUMBER', FLOAT_NUMBER = 'FLOAT_NUMBER', BOOL = 'BOOL',
     DATE = 'DATE', COMPETENCE = 'COMPETENCE', LIST = 'LIST', MAP = 'MAP', GRAPH = 'GRAPH', MULTI = 'MULTI',
-    TUPLE = 'TUPLE', TREE = 'TREE'
+    TUPLE = 'TUPLE', TREE = 'TREE', LOCATION = 'LOCATION',
 }
 
 export namespace PropertyType {
@@ -142,6 +144,7 @@ export namespace PropertyType {
         { type: PropertyType.DATE, label: 'Datum' },
         { type: PropertyType.TUPLE, label: 'Tupel' },
         { type: PropertyType.TREE, label: 'Tree-Property' },
+        { type: PropertyType.LOCATION, label: 'Ort' },
 
 
     ];

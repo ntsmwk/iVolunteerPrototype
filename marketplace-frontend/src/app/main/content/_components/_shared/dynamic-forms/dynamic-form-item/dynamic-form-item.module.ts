@@ -13,6 +13,7 @@ import {
 } from '@angular/material';
 import { MultipleSelectTreeItemModule } from './multiple-select-tree-item/multiple-select-tree-item.module';
 import { SingleSelectTreeItemModule } from './single-select-tree-item/single-select-tree-item.module';
+import { LocationItemModule } from './location-item/location-item.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { SingleSelectTreeItemModule } from './single-select-tree-item/single-sel
 
     MultipleSelectTreeItemModule,
     SingleSelectTreeItemModule,
+    LocationItemModule,
 
     FuseSharedModule,
   ],

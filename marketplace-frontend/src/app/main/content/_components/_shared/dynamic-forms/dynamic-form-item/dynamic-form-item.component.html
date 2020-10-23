@@ -106,6 +106,14 @@
         <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
 
+      <app-location-item *ngSwitchCase="'location'" [formItem]="formItem" [form]="form">
+
+      </app-location-item>
+
+      <div *ngSwitchCase="'computed'">
+
+      </div>
+
       <div *ngSwitchCase="'generic'">
         generic - formItem controlType not yet implemented: {{ formItem.label }}
       </div>

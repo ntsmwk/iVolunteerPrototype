@@ -77,8 +77,14 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
     if (this.form.valid) {
 
       for (const item of this.formItems) {
+
         if (item.controlType.startsWith('tree')) {
           this.form.controls[item.key].setValue(item.value);
+        }
+        if (item.controlType === 'location') {
+          console.log("SUBMIT LOC");
+          console.log(this.form.value[item.key]);
+          console.log(item);
         }
       }
 

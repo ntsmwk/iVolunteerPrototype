@@ -1,5 +1,6 @@
 import { ValidatorFn } from '@angular/forms';
 import { TreePropertyEntry } from '../meta/property/tree-property';
+import { Location } from '../meta/property/location';
 
 export class DynamicFormItemBase<T> {
   value: T;
@@ -195,6 +196,13 @@ export class TupleDropdownFormItem extends DynamicFormItemBase<any> {
   constructor(options: {} = {}) {
     super(options);
     this.options = options['options'] || [];
+  }
+}
+
+export class LocationFormItem extends DynamicFormItemBase<Location> {
+  controlType = 'location';
+  constructor(options: {} = {}) {
+    super(options);
   }
 }
 

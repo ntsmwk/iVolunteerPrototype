@@ -6,8 +6,9 @@ import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
 import {
   TextboxFormItem, DropdownMultipleFormItem, DropdownFormItem, DynamicFormItemBase, NumberBoxFormItem,
   SingleSelectionTreeFormItem, DatepickerFormItem, TupleDropdownFormItem, GenericFormItem,
-  MultipleSelectionTreeFormItem, SlideToggleFormItem, TextAreaFormItem, NumberDropdownFormItem
+  MultipleSelectionTreeFormItem, SlideToggleFormItem, TextAreaFormItem, NumberDropdownFormItem, LocationFormItem
 } from '../_model/dynamic-forms/item';
+import { Location } from '../_model/meta/property/location';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
@@ -140,11 +141,19 @@ export class DynamicFormItemService {
           value: ClassProperty.getDefaultValue(property)
         });
       }
+
+    } else if (property.type === PropertyType.LOCATION) {
+      formItem = new LocationFormItem({
+        options: property.allowedValues,
+        value: isNullOrUndefined(ClassProperty.getDefaultValue(property)) ? new Location() : ClassProperty.getDefaultValue(property),
+      });
+
     } else {
       console.log('property kind not implemented: ' + property.type);
       formItem = new GenericFormItem({
       });
     }
+
     return formItem;
   }
 

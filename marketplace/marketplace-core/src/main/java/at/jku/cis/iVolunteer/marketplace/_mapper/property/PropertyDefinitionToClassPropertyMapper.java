@@ -1,12 +1,15 @@
 package at.jku.cis.iVolunteer.marketplace._mapper.property;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
+import at.jku.cis.iVolunteer.model.meta.core.property.Location;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 
@@ -38,6 +41,9 @@ public class PropertyDefinitionToClassPropertyMapper
 
 		classProperty.setMultiple(source.isMultiple());
 		classProperty.setRequired(source.isRequired());
+		if (source.getType().equals(PropertyType.LOCATION)) {
+			classProperty.setDefaultValues(Collections.singletonList(new Location("Test", true, 1.555, 30.558)));
+		}
 
 		return classProperty;
 	}
