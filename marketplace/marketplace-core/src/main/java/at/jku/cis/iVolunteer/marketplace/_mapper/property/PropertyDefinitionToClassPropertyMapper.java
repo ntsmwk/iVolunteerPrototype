@@ -44,6 +44,7 @@ public class PropertyDefinitionToClassPropertyMapper
 		if (source.getType().equals(PropertyType.LOCATION)) {
 			classProperty.setDefaultValues(Collections.singletonList(new Location("Test", true, 1.555, 30.558)));
 		}
+		classProperty.setComputed(source.isComputed());
 
 		return classProperty;
 	}

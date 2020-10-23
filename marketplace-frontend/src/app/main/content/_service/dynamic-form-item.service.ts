@@ -6,7 +6,7 @@ import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
 import {
   TextboxFormItem, DropdownMultipleFormItem, DropdownFormItem, DynamicFormItemBase, NumberBoxFormItem,
   SingleSelectionTreeFormItem, DatepickerFormItem, TupleDropdownFormItem, GenericFormItem,
-  MultipleSelectionTreeFormItem, SlideToggleFormItem, TextAreaFormItem, NumberDropdownFormItem, LocationFormItem
+  MultipleSelectionTreeFormItem, SlideToggleFormItem, TextAreaFormItem, NumberDropdownFormItem, LocationFormItem, ComputedFormItem
 } from '../_model/dynamic-forms/item';
 import { Location } from '../_model/meta/property/location';
 
@@ -65,95 +65,102 @@ export class DynamicFormItemService {
 
   private createFormItemFromProperty(property: ClassProperty<any>): DynamicFormItemBase<any> {
     let formItem;
-    if (property.type === PropertyType.TEXT) {
-      if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
-        formItem = new TextboxFormItem({
-          value: ClassProperty.getDefaultValue(property),
-        });
-      } else {
-        if (property.multiple) {
-          formItem = new DropdownMultipleFormItem({
-            values: property.defaultValues,
-            options: this.setAsListValues(property.allowedValues)
-          });
-        } else {
-          formItem = new DropdownFormItem({
-            value: ClassProperty.getDefaultValue(property),
-            options: property.allowedValues
-          });
-        }
-      }
 
-    } else if (property.type === PropertyType.WHOLE_NUMBER || property.type === PropertyType.FLOAT_NUMBER) {
-
-      if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
-        formItem = new NumberBoxFormItem({
-          value: ClassProperty.getDefaultValue(property),
-        });
-
-      } else {
-        if (property.multiple) {
-          formItem = new DropdownMultipleFormItem({
-            values: property.defaultValues,
-            options: property.allowedValues
-
-          });
-        } else {
-          formItem = new NumberDropdownFormItem({
-            value: ClassProperty.getDefaultValue(property),
-            options: property.allowedValues
-          });
-        }
-      }
-
-    } else if (property.type === PropertyType.LONG_TEXT) {
-      formItem = new TextAreaFormItem({
-        value: ClassProperty.getDefaultValue(property),
+    if (property.computed) {
+      formItem = new ComputedFormItem({
+        value: isNullOrUndefined(ClassProperty.getDefaultValue(property)) ? '' : ClassProperty.getDefaultValue(property),
+        returnType: property.type,
       });
-
-    } else if (property.type === PropertyType.BOOL) {
-      formItem = new SlideToggleFormItem({
-        value: ClassProperty.getDefaultValue(property),
-      });
-
-    } else if (property.type === PropertyType.TREE) {
-      if (property.multiple) {
-        formItem = new MultipleSelectionTreeFormItem({
-          values: property.defaultValues,
-          options: property.allowedValues
-        });
-      } else {
-        formItem = new SingleSelectionTreeFormItem({
-          values: property.defaultValues,
-          value: ClassProperty.getDefaultValue(property),
-          options: property.allowedValues
-        });
-      }
-    } else if (property.type === PropertyType.DATE) {
-      formItem = new DatepickerFormItem({
-        value: this.setDateValue(ClassProperty.getDefaultValue(property)),
-      });
-
-    } else if (property.type === PropertyType.TUPLE) {
-      if (!isNullOrUndefined(property.allowedValues) && property.allowedValues.length > 0) {
-        formItem = new TupleDropdownFormItem({
-          options: property.allowedValues,
-          value: ClassProperty.getDefaultValue(property)
-        });
-      }
-
-    } else if (property.type === PropertyType.LOCATION) {
-      formItem = new LocationFormItem({
-        options: property.allowedValues,
-        value: isNullOrUndefined(ClassProperty.getDefaultValue(property)) ? new Location() : ClassProperty.getDefaultValue(property),
-      });
-
     } else {
-      console.log('property kind not implemented: ' + property.type);
-      formItem = new GenericFormItem({
-      });
-    }
+      if (property.type === PropertyType.TEXT) {
+        if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
+          formItem = new TextboxFormItem({
+            value: ClassProperty.getDefaultValue(property),
+          });
+        } else {
+          if (property.multiple) {
+            formItem = new DropdownMultipleFormItem({
+              values: property.defaultValues,
+              options: this.setAsListValues(property.allowedValues)
+            });
+          } else {
+            formItem = new DropdownFormItem({
+              value: ClassProperty.getDefaultValue(property),
+              options: property.allowedValues
+            });
+          }
+        }
 
+      } else if (property.type === PropertyType.WHOLE_NUMBER || property.type === PropertyType.FLOAT_NUMBER) {
+
+        if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
+          formItem = new NumberBoxFormItem({
+            value: ClassProperty.getDefaultValue(property),
+          });
+
+        } else {
+          if (property.multiple) {
+            formItem = new DropdownMultipleFormItem({
+              values: property.defaultValues,
+              options: property.allowedValues
+
+            });
+          } else {
+            formItem = new NumberDropdownFormItem({
+              value: ClassProperty.getDefaultValue(property),
+              options: property.allowedValues
+            });
+          }
+        }
+
+      } else if (property.type === PropertyType.LONG_TEXT) {
+        formItem = new TextAreaFormItem({
+          value: ClassProperty.getDefaultValue(property),
+        });
+
+      } else if (property.type === PropertyType.BOOL) {
+        formItem = new SlideToggleFormItem({
+          value: ClassProperty.getDefaultValue(property),
+        });
+
+      } else if (property.type === PropertyType.TREE) {
+        if (property.multiple) {
+          formItem = new MultipleSelectionTreeFormItem({
+            values: property.defaultValues,
+            options: property.allowedValues
+          });
+        } else {
+          formItem = new SingleSelectionTreeFormItem({
+            values: property.defaultValues,
+            value: ClassProperty.getDefaultValue(property),
+            options: property.allowedValues
+          });
+        }
+      } else if (property.type === PropertyType.DATE) {
+        formItem = new DatepickerFormItem({
+          value: this.setDateValue(ClassProperty.getDefaultValue(property)),
+        });
+
+      } else if (property.type === PropertyType.TUPLE) {
+        if (!isNullOrUndefined(property.allowedValues) && property.allowedValues.length > 0) {
+          formItem = new TupleDropdownFormItem({
+            options: property.allowedValues,
+            value: ClassProperty.getDefaultValue(property)
+          });
+        }
+
+      } else if (property.type === PropertyType.LOCATION) {
+        formItem = new LocationFormItem({
+          options: property.allowedValues,
+          value: isNullOrUndefined(ClassProperty.getDefaultValue(property)) ? new Location() : ClassProperty.getDefaultValue(property),
+        });
+
+      } else {
+        console.log('property kind not implemented: ' + property.type);
+        formItem = new GenericFormItem({
+        });
+      }
+    }
     return formItem;
   }
 

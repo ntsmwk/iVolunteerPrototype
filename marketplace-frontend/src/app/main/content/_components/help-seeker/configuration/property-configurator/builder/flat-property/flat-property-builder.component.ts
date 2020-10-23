@@ -81,12 +81,15 @@ export class FlatPropertyBuilderComponent implements OnInit {
     this.preparePropertyTypeOptions();
     this.clearForm();
 
+    console.log(this.form.value);
+
     const globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
     this.tenant = globalInfo.tenants[0];
 
     this.dropdownToggled = false;
+
 
     if (!isNullOrUndefined(this.entryId)) {
       Promise.all([
@@ -159,6 +162,11 @@ export class FlatPropertyBuilderComponent implements OnInit {
     this.prepareConstraintTypeOptions(this.form.controls['type'].value);
   }
 
+  handleComputedToggled() {
+    this.dropdownToggled = false;
+    this.clearFormArrays();
+  }
+
   clearForm() {
     this.form = this.formBuilder.group({
       name: this.formBuilder.control('', [
@@ -169,6 +177,9 @@ export class FlatPropertyBuilderComponent implements OnInit {
         ),
       ]),
       type: this.formBuilder.control('', Validators.required),
+      computed: this.formBuilder.control(false),
+
+
       allowedValues: this.formBuilder.array([]),
 
       description: this.formBuilder.control(''),
@@ -187,6 +198,7 @@ export class FlatPropertyBuilderComponent implements OnInit {
     this.form.get('name').setValue(this.propertyDefinition.name);
     this.form.get('type').setValue(this.propertyDefinition.type);
     this.form.get('description').setValue(this.propertyDefinition.description);
+    this.form.get('computed').setValue(this.propertyDefinition.computed);
 
     if (!isNullOrUndefined(this.propertyDefinition.allowedValues) && this.propertyDefinition.allowedValues.length > 0) {
       this.dropdownToggled = true;
@@ -356,6 +368,8 @@ export class FlatPropertyBuilderComponent implements OnInit {
     const property: FlatPropertyDefinition<any> = new FlatPropertyDefinition<any>();
     property.tenantId = this.tenant.id;
     property.custom = true;
+
+    property.computed = this.form.value.computed;
 
     if (isNullOrUndefined(this.propertyDefinition)) {
       property.id = null;

@@ -80,6 +80,7 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
         if (item.controlType.startsWith('tree')) {
           this.form.controls[item.key].setValue(item.value);
         }
+
       }
 
       this.fireResultEvent();

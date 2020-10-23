@@ -20,8 +20,12 @@
 
     <div class="pl-24"></div>
 
-    <mat-slide-toggle [(ngModel)]="dropdownToggled" (change)="clearFormArrays()" [ngModelOptions]="{ standalone: true }"
-      labelPosition="after">
+    <mat-slide-toggle class="pr-8" formControlName="computed" (change)="handleComputedToggled()" labelPosition="after">
+      Computed
+    </mat-slide-toggle>
+
+    <mat-slide-toggle [disabled]="form.value.computed" [(ngModel)]="dropdownToggled" (change)="clearFormArrays()"
+      [ngModelOptions]="{ standalone: true }" labelPosition="after">
       Dropdown
     </mat-slide-toggle>
   </div>
@@ -119,7 +123,7 @@
   <!-------------Constraints-------------->
   <!-------------------------------------->
 
-  <mat-accordion *ngIf="form.get('type').value != ''">
+  <mat-accordion *ngIf="form.value.type != '' && !form.value.computed">
     <mat-expansion-panel [expanded]="constraintsToggled">
       <mat-expansion-panel-header>
         <mat-panel-title>

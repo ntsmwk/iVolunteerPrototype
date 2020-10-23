@@ -38,6 +38,7 @@ public class ClassPropertyToPropertyInstanceMapper
 		propertyInstance.setTabId(source.getTabId());
 		propertyInstance.setVisible(source.isVisible());
 		propertyInstance.setLevel(source.getLevel());
+		propertyInstance.setComputed(source.isComputed());
 
 		return propertyInstance;
 	}

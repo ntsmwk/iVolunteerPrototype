@@ -110,9 +110,9 @@
 
       </app-location-item>
 
-      <div *ngSwitchCase="'computed'">
+      <app-computed-item *ngSwitchCase="'computed'" [formItem]="formItem" [form]="form">
 
-      </div>
+      </app-computed-item>
 
       <div *ngSwitchCase="'generic'">
         generic - formItem controlType not yet implemented: {{ formItem.label }}

@@ -32,6 +32,7 @@ public class PropertyDefinitionToPropertyInstanceMapper
 		}
 
 		propertyInstance.setRequired(source.isRequired());
+		propertyInstance.setComputed(source.isComputed());
 
 		return propertyInstance;
 	}

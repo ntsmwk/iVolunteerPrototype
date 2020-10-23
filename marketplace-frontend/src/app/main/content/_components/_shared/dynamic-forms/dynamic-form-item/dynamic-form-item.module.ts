@@ -14,6 +14,7 @@ import {
 import { MultipleSelectTreeItemModule } from './multiple-select-tree-item/multiple-select-tree-item.module';
 import { SingleSelectTreeItemModule } from './single-select-tree-item/single-select-tree-item.module';
 import { LocationItemModule } from './location-item/location-item.module';
+import { ComputedItemModule } from './computed-item/computed-item.module';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { LocationItemModule } from './location-item/location-item.module';
     MultipleSelectTreeItemModule,
     SingleSelectTreeItemModule,
     LocationItemModule,
+    ComputedItemModule,
 
     FuseSharedModule,
   ],

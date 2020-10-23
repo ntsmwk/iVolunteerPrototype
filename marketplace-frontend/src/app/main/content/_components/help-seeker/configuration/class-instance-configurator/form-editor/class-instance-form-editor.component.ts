@@ -329,9 +329,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
       let value = values[0][keys.find(k => k.endsWith(classProperty.id))];
 
-      if (classProperty.type === PropertyType.FLOAT_NUMBER) {
+
+
+      if (!classProperty.computed && classProperty.type === PropertyType.FLOAT_NUMBER) {
         value = Number(value);
-      } else if (classProperty.type === PropertyType.WHOLE_NUMBER) {
+      } else if (!classProperty.computed && classProperty.type === PropertyType.WHOLE_NUMBER) {
         value = Number.parseInt(value, 10);
       }
       const l = propertyInstances.push(

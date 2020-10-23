@@ -1,6 +1,7 @@
 import { ValidatorFn } from '@angular/forms';
 import { TreePropertyEntry } from '../meta/property/tree-property';
 import { Location } from '../meta/property/location';
+import { PropertyType } from '../meta/property/property';
 
 export class DynamicFormItemBase<T> {
   value: T;
@@ -203,6 +204,17 @@ export class LocationFormItem extends DynamicFormItemBase<Location> {
   controlType = 'location';
   constructor(options: {} = {}) {
     super(options);
+  }
+}
+
+export class ComputedFormItem extends DynamicFormItemBase<string> {
+  controlType = 'computed';
+  returnType: PropertyType;
+
+  constructor(options: {} = {}) {
+    super(options);
+    this.returnType = options['returnType'] || [];
+
   }
 }
 

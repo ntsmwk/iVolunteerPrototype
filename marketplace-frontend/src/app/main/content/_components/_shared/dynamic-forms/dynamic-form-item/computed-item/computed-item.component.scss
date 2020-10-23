@@ -1,0 +1,92 @@
+@import "@fuse/scss/core";
+
+.form-item-container-open {
+  padding: 8px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+.form-item-container-closed {
+  // padding: 8px;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.search-field {
+  // width: 100%;
+  margin: 0 8px;
+}
+
+.list-container {
+  margin: 8px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.list-item-container {
+  width: 100%;
+  line-height: 2;
+  color: grey;
+
+  .list-item-row {
+    background: #afcbe6;
+    width: 100%;
+  }
+
+  .list-item-value {
+    color: black;
+  }
+}
+
+.list-item-label-container {
+  cursor: pointer;
+
+  .list-item-label-row {
+    background: white;
+    width: 100%;
+  }
+
+  .list-item-label-value {
+    color: grey;
+  }
+}
+
+.list-item-container:hover {
+  .list-item-row {
+    background: rgb(62, 125, 219);
+    color: white;
+  }
+  .list-item-value {
+    color: white;
+  }
+}
+
+.list-item-row-padding {
+  background: white;
+}
+
+.subheader-item {
+  padding: 12px 0 0;
+}
+
+:host ::ng-deep .mat-list-item {
+  height: 35px !important;
+  mat-list-item-content {
+    padding: 0 4px;
+  }
+}
+
+:host ::ng-deep .mat-subheader {
+  height: 28px;
+  margin-top: 0;
+  font-size: 16px;
+}
+
+:host ::ng-deep .mat-subheader:first-child {
+  height: 28px;
+  margin-top: 0;
+  font-size: 16px;
+}
