@@ -35,6 +35,8 @@ public class ClassProperty<T> {
 	private int level;
 	
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
+	
+	private boolean computed;
 
 	public ClassProperty() {
 	}
@@ -164,6 +166,14 @@ public class ClassProperty<T> {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	public boolean isComputed() {
+		return computed;
+	}
+
+	public void setComputed(boolean computed) {
+		this.computed = computed;
 	}
 	
 	

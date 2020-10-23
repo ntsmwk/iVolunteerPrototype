@@ -25,6 +25,9 @@ export class FlatPropertyDefinition<T> {
     timestamp: Date;
     visible: boolean;
     tabId: number;
+
+    computed: boolean;
+
 }
 
 export class ClassProperty<T> {
@@ -50,6 +53,9 @@ export class ClassProperty<T> {
     tabId: number;
 
     propertyConstraints: PropertyConstraint<T>[];
+
+    computed: boolean;
+
 
     public static getDefaultValue(templateProperty: ClassProperty<any>): any {
         if (!isNullOrUndefined(templateProperty.defaultValues) && templateProperty.defaultValues.length >= 1) {
@@ -79,6 +85,8 @@ export class PropertyInstance<T> {
     tabId: number;
 
     propertyConstraints: PropertyConstraint<T>[];
+
+    computed: boolean;
 
     public static getValue(propertyInstance: PropertyInstance<any>): any {
         if (!isNullOrUndefined(propertyInstance.values) && propertyInstance.values.length >= 1) {

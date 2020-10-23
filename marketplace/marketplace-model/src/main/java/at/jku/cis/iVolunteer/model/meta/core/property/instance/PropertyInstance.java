@@ -38,6 +38,8 @@ public class PropertyInstance<T> {
 	int level;
 	
 	Date timestamp;
+	
+	boolean computed;
 
 	public PropertyInstance() {
 	}
@@ -186,5 +188,15 @@ public class PropertyInstance<T> {
 	public void resetValues() {
 		values = new ArrayList<T>();
 	}
+
+	public boolean isComputed() {
+		return computed;
+	}
+
+	public void setComputed(boolean computed) {
+		this.computed = computed;
+	}
+	
+	
 
 }

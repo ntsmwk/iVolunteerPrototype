@@ -28,6 +28,8 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	private boolean required;
 	private String requiredMessage;
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
+	
+	private boolean computed;
 
 	public FlatPropertyDefinition() {
 	}
@@ -116,5 +118,15 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	public void setPropertyConstraints(List<PropertyConstraint<Object>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
+
+	public boolean isComputed() {
+		return computed;
+	}
+
+	public void setComputed(boolean computed) {
+		this.computed = computed;
+	}
+	
+	
 
 }
