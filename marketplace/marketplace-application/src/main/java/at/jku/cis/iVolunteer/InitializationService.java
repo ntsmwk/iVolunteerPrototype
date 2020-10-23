@@ -104,7 +104,7 @@ public class InitializationService {
 		for (Tenant t : tenants) {
 			for (int i = 1; i <= noOfConfigurations; i++) {
 				this.classConfigurationController
-						.createNewClassConfiguration(new String[] { t.getId(), "slot" + i, "" });
+						.createNewClassConfiguration(new String[] { t.getId(), "Standardkonfiguration" + i, "" });
 			}
 		}
 	}

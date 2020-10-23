@@ -182,10 +182,16 @@ public class XTaskController {
 //	Req: {}
 //	Res: Task
 	@GetMapping("/{taskId}")
-	public XTask getTask(@PathVariable String taskId) {
+	public ResponseEntity<Object> getTask(@PathVariable String taskId) {
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
+		
+		if (task == null) {
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.NOT_FOUND);
+		}
+		
+		
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
-		return xTaskInstanceToTaskMapper.toTarget(task, users);
+		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
 	}
 
 //	TODO UPDATE TASK (schicken nur die änderung des felds oder ganzes objekt wie sie wollen)
@@ -198,7 +204,7 @@ public class XTaskController {
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 		if (existingTask == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.NOT_FOUND);
 		} else if (existingTask.getStatus().equals(TaskInstanceStatus.CLOSED)) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_CLOSED),
 					HttpStatus.BAD_REQUEST);
@@ -233,7 +239,7 @@ public class XTaskController {
 
 		if (existingTask == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.NOT_FOUND);
 		}
 		if (existingTask.getSubscribedVolunteerIds().stream().anyMatch(id -> id.equals(finalUser.getId()))) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.ALREADY_SUBSCRIBED),
@@ -270,7 +276,7 @@ public class XTaskController {
 
 		if (existingTask == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.NOT_FOUND);
 		}
 
 		if (existingTask.getSubscribedVolunteerIds().stream().noneMatch(id -> id.equals(finalUser.getId()))) {
