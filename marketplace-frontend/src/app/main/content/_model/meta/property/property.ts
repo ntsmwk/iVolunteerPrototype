@@ -103,7 +103,6 @@ export class PropertyInstance<T> {
         if (classProperty.type === PropertyType.TREE) {
 
             const rootValue = this.values[0] as unknown as TreePropertyEntry;
-            console.log(rootValue);
 
             if (isNullOrUndefined(rootValue)) {
                 return;
@@ -121,8 +120,6 @@ export class PropertyInstance<T> {
                     currentLevel--;
                 }
             }
-        } else if (classProperty.type === PropertyType.LOCATION) {
-            console.log(this.values)
         }
     }
 }

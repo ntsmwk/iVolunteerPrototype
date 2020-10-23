@@ -66,7 +66,6 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (this.finishClicked) {
       this.onSubmit();
-      this.finishClicked = false;
     }
   }
 
@@ -81,11 +80,6 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
         if (item.controlType.startsWith('tree')) {
           this.form.controls[item.key].setValue(item.value);
         }
-        if (item.controlType === 'location') {
-          console.log("SUBMIT LOC");
-          console.log(this.form.value[item.key]);
-          console.log(item);
-        }
       }
 
       this.fireResultEvent();
@@ -94,7 +88,6 @@ export class DynamicFormBlockComponent implements OnInit, OnChanges {
       // Mark errornous Fields
       this.markFormAsTouched(this.formItems, this.form);
 
-      console.log("emitting error event");
       this.errorEvent.emit(true);
 
       // focus on first error using jQuery

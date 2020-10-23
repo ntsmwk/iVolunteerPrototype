@@ -207,6 +207,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   handleErrorEvent(event: boolean) {
     this.errorOccurredInForm = this.errorOccurredInForm || event;
+    this.canSubmitForm = true;
+    this.finishClicked = false;
+
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
