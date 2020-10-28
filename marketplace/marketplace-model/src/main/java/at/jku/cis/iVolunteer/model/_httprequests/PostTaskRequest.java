@@ -19,7 +19,7 @@ public class PostTaskRequest {
 	private String imagePath;
 	private Boolean closed;
 	private XGeoInfo geoInfo;
-	private List<XDynamicFieldBlock> dynamicFields = new ArrayList<>();
+	private List<XDynamicFieldBlock> dynamicBlocks = new ArrayList<>();
 	private List<String> subscribedUsers = new ArrayList<>();
 	private List<String> badges = new ArrayList<>();
 	
@@ -72,12 +72,6 @@ public class PostTaskRequest {
 	public void setGeoInfo(XGeoInfo geoInfo) {
 		this.geoInfo = geoInfo;
 	}
-	public List<XDynamicFieldBlock> getDynamicFields() {
-		return dynamicFields;
-	}
-	public void setDynamicFields(List<XDynamicFieldBlock> dynamicFields) {
-		this.dynamicFields = dynamicFields;
-	}
 	public List<String> getSubscribedUsers() {
 		return subscribedUsers;
 	}
@@ -95,6 +89,12 @@ public class PostTaskRequest {
 	}
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+	public List<XDynamicFieldBlock> getDynamicBlocks() {
+		return dynamicBlocks;
+	}
+	public void setDynamicBlocks(List<XDynamicFieldBlock> dynamicBlocks) {
+		this.dynamicBlocks = dynamicBlocks;
 	}
 	
 	

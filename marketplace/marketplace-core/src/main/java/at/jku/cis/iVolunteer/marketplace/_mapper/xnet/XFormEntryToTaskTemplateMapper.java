@@ -13,7 +13,7 @@ import at.jku.cis.iVolunteer.model.task.XTaskTemplate;
 
 @Component
 public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, XTaskTemplate> {
-	
+
 	@Autowired XClassPropertyDynamicFieldMapper classPropertyToDynamicFieldMapper;
 
 	@Override
@@ -24,11 +24,10 @@ public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, X
 		}
 
 		XTaskTemplate template = new XTaskTemplate();
-		
+
 		template.setId(source.getClassDefinitions().get(0).getId());
-		template.setTenant(source.getClassDefinitions().get(0).getTenantId());
-		
-		
+		template.setTenantId(source.getClassDefinitions().get(0).getTenantId());
+
 		List<XDynamicFieldBlock> dynamic = new ArrayList<>();
 
 		int listEnd = source.getClassDefinitions().size() - 1;
@@ -38,8 +37,8 @@ public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, X
 				XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
 				dynamicBlock.setTitle(source.getClassDefinitions().get(i).getName());
 				dynamicBlock.setFields(new ArrayList<>());
-				dynamicBlock.getFields().addAll(
-						classPropertyToDynamicFieldMapper.toTargets(source.getClassDefinitions().get(i).getProperties()));
+				dynamicBlock.getFields().addAll(classPropertyToDynamicFieldMapper
+						.toTargets(source.getClassDefinitions().get(i).getProperties()));
 				dynamic.add(dynamicBlock);
 			}
 		}
@@ -58,7 +57,7 @@ public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, X
 //		required.setPlace(
 //				classPropertyToTaskFieldMapper.toTarget(findProperty("Location", source.getClassProperties())));
 //
-		template.setDynamicFields(dynamic);
+		template.setDynamicBlocks(dynamic);
 //		taskDefinition.setRequired(required);
 
 		return template;
@@ -66,13 +65,14 @@ public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, X
 
 	@Override
 	public List<XTaskTemplate> toTargets(List<FormEntry> sources) {
-		if (sources == null) {return null;}
+		if (sources == null) {
+			return null;
+		}
 		List<XTaskTemplate> targets = new ArrayList<>();
-		for(FormEntry source : sources) {
+		for (FormEntry source : sources) {
 			targets.add(toTarget(source));
 		}
 		return targets;
 	}
-
 
 }

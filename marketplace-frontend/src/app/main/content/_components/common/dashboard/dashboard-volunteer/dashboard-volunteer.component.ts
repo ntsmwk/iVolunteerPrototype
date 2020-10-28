@@ -199,11 +199,12 @@ export class DashboardVolunteerComponent implements OnInit {
 
       this.generateSharedTenantsMap();
       this.isLocalRepositoryConnected = true;
-
     } catch (e) {
       this.isLocalRepositoryConnected = false;
     }
     this.isLoaded = true;
+    console.error(this.dataSource.data);
+    console.error(this.volunteer);
   }
 
   getTenantImageById(tenantId: string) {
