@@ -49,7 +49,8 @@ public class XTaskCertificateController {
 			TaskInstance ti = xTaskInstanceService.getTaskInstance(classInstance.getId());
 			certs.add(classInstanceToTaskCertificateMapper.toTarget(classInstance, ti, tenant, user));
 		}
-		return certs;
+//		TODO MWE
+		return certs.subList(0, Math.min(50, certs.size()));
 
 	}
 

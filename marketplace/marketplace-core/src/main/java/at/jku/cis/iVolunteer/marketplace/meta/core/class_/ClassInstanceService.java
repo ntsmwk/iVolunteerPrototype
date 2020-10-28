@@ -130,6 +130,7 @@ public class ClassInstanceService {
 		case FUNCTION:
 			ci = new FunctionClassInstance();
 			break;
+			
 		default:
 			ci = null;
 		}
