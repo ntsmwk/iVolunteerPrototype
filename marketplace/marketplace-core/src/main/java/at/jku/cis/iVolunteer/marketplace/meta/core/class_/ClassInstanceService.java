@@ -115,7 +115,7 @@ public class ClassInstanceService {
 	}
 
 	public ClassInstance newClassInstance(User volunteer, String classDefinitionId, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId, tenantId);
+		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId);
 		ClassInstance ci;
 		switch (classDefinition.getClassArchetype()) {
 		case ACHIEVEMENT:

@@ -30,11 +30,11 @@ public class ClassDefinitionService {
 		return classDefinitionRepository.findByNameAndTenantId(name, tenantId);
 	}
 
-	public ClassDefinition getClassDefinitionById(String id, String tenantId) {
-		return classDefinitionRepository.getByIdAndTenantId(id, tenantId);
+	public ClassDefinition getClassDefinitionById(String id) {
+		return classDefinitionRepository.findOne(id);
 	}
 
-	public List<ClassDefinition> getClassDefinitonsById(List<String> ids, String tenantId) {
+	public List<ClassDefinition> getClassDefinitonsById(List<String> ids) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);

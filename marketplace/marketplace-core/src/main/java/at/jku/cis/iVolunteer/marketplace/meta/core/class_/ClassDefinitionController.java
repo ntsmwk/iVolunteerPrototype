@@ -47,7 +47,7 @@ public class ClassDefinitionController {
 	@GetMapping("/meta/core/class/definition/{id}/tenant/{tenantId}")
 	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id,
 			@PathVariable("tenantId") String tenantId) {
-		return classDefinitionService.getClassDefinitionById(id, tenantId);
+		return classDefinitionService.getClassDefinitionById(id);
 	}
 
 	@GetMapping("meta/core/class/definition/{slotId}/with-properties")
@@ -70,7 +70,7 @@ public class ClassDefinitionController {
 	@PutMapping("/meta/core/class/definition/multiple/tenant/{tenantId}")
 	private List<ClassDefinition> getClassDefinitonsById(@RequestBody List<String> ids,
 			@PathVariable("tenantId") String tenantId) {
-		return classDefinitionService.getClassDefinitonsById(ids, tenantId);
+		return classDefinitionService.getClassDefinitonsById(ids);
 	}
 
 	@PostMapping("/meta/core/class/definition/new")

@@ -111,8 +111,7 @@ public class ClassInstanceController {
 			@RequestParam(value = "tId", required = true) String tenantId, @PathVariable String volunteerId,
 			@RequestBody Map<String, String> properties) {
 
-		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId,
-				tenantId);
+		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId);
 
 		if (classDefinition != null) {
 
