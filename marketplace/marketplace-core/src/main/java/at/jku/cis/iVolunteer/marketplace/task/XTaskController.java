@@ -170,11 +170,11 @@ public class XTaskController {
 	private List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
 		List<XTask> ret = new ArrayList<>();
-		for (TaskInstance task : tasks) {
-			List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
-			ret.add(xTaskInstanceToTaskMapper.toTarget(task, users));
-		}
-		return ret;
+//		TODO fix multiple db accesses...
+		return tasks.stream().limit(50).map(t -> {
+			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
+			return xTaskInstanceToTaskMapper.toTarget(t, users);
+		}).collect(Collectors.toList());
 	}
 
 //	GET TASK BY ID
