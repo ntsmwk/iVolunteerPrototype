@@ -38,11 +38,14 @@ public class XChartDataRestClient {
         marketplaces.forEach(mp -> {
             String preUrl = "{0}/chartdata";
             String url = format(preUrl, mp.getUrl());
-            ResponseEntity<XChartDataSet[]> resp = restTemplate.exchange(url, HttpMethod.GET, buildEntity(null, null),
-                    XChartDataSet[].class);
-            List<XChartDataSet> ret = Arrays.asList(resp.getBody());
+            try {
+                ResponseEntity<XChartDataSet[]> resp = restTemplate.exchange(url, HttpMethod.GET,
+                        buildEntity(null, null), XChartDataSet[].class);
+                List<XChartDataSet> ret = Arrays.asList(resp.getBody());
+                datasets.addAll(ret);
+            } catch (Exception e) {
+            }
 
-            datasets.addAll(ret);
         });
 
         return datasets;
