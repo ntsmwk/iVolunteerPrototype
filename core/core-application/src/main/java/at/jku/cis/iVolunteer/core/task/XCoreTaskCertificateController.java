@@ -87,6 +87,8 @@ public class XCoreTaskCertificateController {
 						new GetClassAndTaskInstancesRequest(tenant, user, onlyOpened)));
 			}
 		}
+//		TODO change
+		certificates = certificates.subList(0, Math.min(50, certificates.size()));
 
 		return ResponseEntity.ok(certificates);
 	}

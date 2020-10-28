@@ -137,7 +137,7 @@ public class XCoreTaskController {
 //	GET /core/task/tenant/unsubscribed
 //	Req: {}
 //	Res: Task[]
-	@GetMapping("/core/task/tenant/unsubscribed")
+	@GetMapping("/task/tenant/unsubscribed")
 	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization) {
 		
 		List<Marketplace> marketplaces = marketplaceService.findAll();
