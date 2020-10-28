@@ -54,22 +54,25 @@ public class XTaskController {
 	// Req: { Task }
 	// Res: 200 (OK), 500 (FAILED)
 	@PostMapping("/new")
-	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task, @RequestHeader("Authorization") String authorization) {
+	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
+			@RequestHeader("Authorization") String authorization) {
 		if (task == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
 		}
 
 		TaskInstance instance = xTaskInstanceToPostTaskRequestMapper.toSource(task);
 		instance.setStatus(TaskInstanceStatus.OPEN);
-		ResponseEntity<StringResponse> resp = coreStorageRestClient.storeImageBase64(null, task.getImage(),
-				authorization);
+		if (task.getImage() != null && !task.getImage().isEmpty()) {
+			ResponseEntity<StringResponse> resp = coreStorageRestClient.storeImageBase64(null, task.getImage(),
+					authorization);
 
-		if (!resp.getStatusCode().is2xxSuccessful()) {
-			return ResponseEntity.badRequest().body(new ErrorResponse(resp.getBody().getMessage()));
+			if (!resp.getStatusCode().is2xxSuccessful()) {
+				return ResponseEntity.badRequest().body(new ErrorResponse(resp.getBody().getMessage()));
+			}
+
+			String imageUrl = resp.getBody().getMessage();
+			instance.setImagePath(imageUrl);
 		}
-
-		String imageUrl = resp.getBody().getMessage();
-		instance.setImagePath(imageUrl);
 		instance = xTaskInstanceService.addOrOverwriteTaskInstance(instance);
 
 		return ResponseEntity.ok(Collections.singletonMap("id", instance.getId()));
@@ -91,16 +94,18 @@ public class XTaskController {
 
 		TaskInstance taskInstance = xTaskInstanceToPostTaskRequestMapper.toSource(task);
 		taskInstance.setStatus(TaskInstanceStatus.CLOSED);
+		if (task.getImage() != null && !task.getImage().isEmpty()) {
 
-		ResponseEntity<StringResponse> resp = coreStorageRestClient.storeImageBase64(null, task.getImage(),
-				authorization);
+			ResponseEntity<StringResponse> resp = coreStorageRestClient.storeImageBase64(null, task.getImage(),
+					authorization);
 
-		if (!resp.getStatusCode().is2xxSuccessful()) {
-			return ResponseEntity.badRequest().body(new ErrorResponse(resp.getBody().getMessage()));
+			if (!resp.getStatusCode().is2xxSuccessful()) {
+				return ResponseEntity.badRequest().body(new ErrorResponse(resp.getBody().getMessage()));
+			}
+
+			String imageUrl = resp.getBody().getMessage();
+			taskInstance.setImagePath(imageUrl);
 		}
-
-		String imageUrl = resp.getBody().getMessage();
-		taskInstance.setImagePath(imageUrl);
 		taskInstance = xTaskInstanceService.addOrOverwriteTaskInstance(taskInstance);
 
 		if (task.getSubscribedUsers() != null) {
@@ -169,7 +174,6 @@ public class XTaskController {
 	@GetMapping("/tenant/{tenantId}")
 	private List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
-		List<XTask> ret = new ArrayList<>();
 //		TODO fix multiple db accesses...
 		return tasks.stream().limit(50).map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
@@ -184,12 +188,12 @@ public class XTaskController {
 	@GetMapping("/{taskId}")
 	public ResponseEntity<Object> getTask(@PathVariable String taskId) {
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
-		
+
 		if (task == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
+					HttpStatus.NOT_FOUND);
 		}
-		
-		
+
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
 		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
 	}
