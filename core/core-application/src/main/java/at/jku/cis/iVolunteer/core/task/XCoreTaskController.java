@@ -74,7 +74,8 @@ public class XCoreTaskController {
 			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
 			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
 		}
-
+//		TODO change
+		tasks = tasks.subList(0, Math.min(50, tasks.size()));
 		return ResponseEntity.ok(tasks);
 	}
 
@@ -126,7 +127,8 @@ public class XCoreTaskController {
 			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
 			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));		
 		}
-		
+//		TODO change
+		tasks = tasks.subList(0, Math.min(50, tasks.size()));
 		return ResponseEntity.ok(tasks);
 	}
 
@@ -174,7 +176,9 @@ public class XCoreTaskController {
 			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
 			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));		
 		}
-		
+//		TODO change
+		tasks = tasks.subList(0, Math.min(50, tasks.size()));
+
 		return ResponseEntity.ok(tasks);
 	}
 

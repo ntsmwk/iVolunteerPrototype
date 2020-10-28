@@ -1,7 +1,11 @@
 package at.jku.cis.iVolunteer._mappers.xnet;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.util.Arrays.asList;
+
+import java.util.Collections;
 
 import org.springframework.stereotype.Component;
 
@@ -37,8 +41,7 @@ public class XCoreUserMapper implements AbstractMapper<CoreUser, XUser> {
 
     @Override
     public List<XUser> toTargets(List<CoreUser> sources) {
-        // TODO Auto-generated method stub
-        return null;
+    	return sources.stream().map(u -> this.toTarget(u)).collect(Collectors.toList());
     }
 
     @Override
@@ -61,14 +64,12 @@ public class XCoreUserMapper implements AbstractMapper<CoreUser, XUser> {
         coreUser.setLoginEmail(target.getEmail());
         coreUser.setEmails(asList(target.getEmail()));
         coreUser.setProfileImagePath(target.getProfileImagePath());
-
         return coreUser;
     }
 
     @Override
     public List<CoreUser> toSources(List<XUser> targets) {
-        // TODO Auto-generated method stub
-        return null;
+    	return targets.stream().map(u -> this.toSource(u)).collect(Collectors.toList());
     }
 
 }
