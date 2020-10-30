@@ -1,21 +1,35 @@
 package at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty;
 
+import java.util.UUID;
+
 public class TreePropertyRelationship {
-	
+
 	String id;
 	String sourceId;
 	String targetId;
-	
+
 	public TreePropertyRelationship() {
-	
+
 	}
-	
+
 	public TreePropertyRelationship(String sourceId, String targetId) {
 		this.sourceId = sourceId;
 		this.targetId = targetId;
 	}
-	
+
+	public TreePropertyRelationship(String sourceId, String targetId, boolean generateId) {
+		this.id = UUID.randomUUID().toString();
+		this.sourceId = sourceId;
+		this.targetId = targetId;
+	}
+
 	public TreePropertyRelationship(TreePropertyEntry sourceEntry, TreePropertyEntry targetEntry) {
+		this.sourceId = sourceEntry.getId();
+		this.targetId = targetEntry.getId();
+	}
+
+	public TreePropertyRelationship(TreePropertyEntry sourceEntry, TreePropertyEntry targetEntry, boolean generateId) {
+		this.id = UUID.randomUUID().toString();
 		this.sourceId = sourceEntry.getId();
 		this.targetId = targetEntry.getId();
 	}
@@ -44,13 +58,4 @@ public class TreePropertyRelationship {
 		this.targetId = targetId;
 	}
 
-	
-	
-	
-	
-	
-
-
-
-	
 }

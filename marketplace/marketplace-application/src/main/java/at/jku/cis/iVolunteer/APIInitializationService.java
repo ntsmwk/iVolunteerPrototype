@@ -10,26 +10,35 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.TreePropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
 @Service
 public class APIInitializationService {
 
-	@Autowired private CoreTenantRestClient coreTenantRestClient;
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
+	@Autowired
+	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	private MarketplaceService marketplaceService;
+	@Autowired
+	private FlatPropertyDefinitionRepository flatPropertyDefinitionRepository;
+	@Autowired
+	private TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+	@Autowired
+	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private TreePropertyDefinitionToClassPropertyMapper treePropertyDefinitionToClassPropertyMapper;
 
 	private List<Tenant> getTenants() {
 		List<Tenant> tenants = new ArrayList<>();
@@ -60,7 +69,7 @@ public class APIInitializationService {
 		functionDefinition.setName("PersonRole");
 		functionDefinition.setTimestamp(new Date());
 		functionDefinition.setTenantId(tenantId);
-		List<FlatPropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
+		List<FlatPropertyDefinition<Object>> properties = flatPropertyDefinitionRepository.getAllByTenantId(tenantId);
 		functionDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonRoleProperties(properties)));
 		classDefinitionRepository.save(functionDefinition);
@@ -74,7 +83,7 @@ public class APIInitializationService {
 		achievementDefinition.setName("PersonBadge");
 		achievementDefinition.setTimestamp(new Date());
 		achievementDefinition.setTenantId(tenantId);
-		List<FlatPropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
+		List<FlatPropertyDefinition<Object>> properties = flatPropertyDefinitionRepository.getAllByTenantId(tenantId);
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonBadgeProperties(properties)));
 		classDefinitionRepository.save(achievementDefinition);
@@ -88,7 +97,7 @@ public class APIInitializationService {
 		achievementDefinition.setName("PersonCertificate");
 		achievementDefinition.setTimestamp(new Date());
 		achievementDefinition.setTenantId(tenantId);
-		List<FlatPropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
+		List<FlatPropertyDefinition<Object>> properties = flatPropertyDefinitionRepository.getAllByTenantId(tenantId);
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonCertificateProperties(properties)));
 		classDefinitionRepository.save(achievementDefinition);
@@ -102,13 +111,22 @@ public class APIInitializationService {
 		taskClassDefinition.setName("PersonTask");
 		taskClassDefinition.setTimestamp(new Date());
 		taskClassDefinition.setTenantId(tenantId);
-		List<FlatPropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
-		taskClassDefinition.setProperties(
-				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonTaskProperties(properties)));
+		List<TreePropertyDefinition> treeProperties = treePropertyDefinitionRepository.getAllByTenantId(tenantId);
+		List<FlatPropertyDefinition<Object>> flatProperties = flatPropertyDefinitionRepository
+				.getAllByTenantId(tenantId);
+
+		List<ClassProperty<Object>> classProperties = new ArrayList<>();
+		classProperties.addAll(
+				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonTaskFlatProperties(flatProperties)));
+		classProperties.addAll(
+				treePropertyDefinitionToClassPropertyMapper.toTargets(filterPersonTaskTreeProperties(treeProperties)));
+
+		taskClassDefinition.setProperties(classProperties);
 		classDefinitionRepository.save(taskClassDefinition);
 	}
 
-	private List<FlatPropertyDefinition<Object>> filterPersonRoleProperties(List<FlatPropertyDefinition<Object>> properties) {
+	private List<FlatPropertyDefinition<Object>> filterPersonRoleProperties(
+			List<FlatPropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
 				.filter(p -> p.getName().equals("RoleID") || p.getName().equals("Purpose") || p.getName().equals("Name")
@@ -120,7 +138,8 @@ public class APIInitializationService {
 		// @formatter:on
 	}
 
-	private List<FlatPropertyDefinition<Object>> filterPersonBadgeProperties(List<FlatPropertyDefinition<Object>> properties) {
+	private List<FlatPropertyDefinition<Object>> filterPersonBadgeProperties(
+			List<FlatPropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
 				.filter(p -> p.getName().equals("BadgeID") || p.getName().equals("Name")
@@ -143,11 +162,11 @@ public class APIInitializationService {
 		// @formatter:on
 	}
 
-	private List<FlatPropertyDefinition<Object>> filterPersonTaskProperties(List<FlatPropertyDefinition<Object>> properties) {
+	private List<FlatPropertyDefinition<Object>> filterPersonTaskFlatProperties(
+			List<FlatPropertyDefinition<Object>> properties) {
 		// @formatter:off
-		return properties.stream().filter(p -> p.getName().equals("TaskID") || p.getName().equals("Name")
-				|| p.getName().equals("TaskType1") || p.getName().equals("TaskType2") || p.getName().equals("TaskType3")
-				|| p.getName().equals("TaskType4") || p.getName().equals("Description") || p.getName().equals("Purpose")
+		return properties.stream().filter(p -> p.getName().equals("TaskID") || p.getName().equals("Name")	
+				|| p.getName().equals("Description") || p.getName().equals("Purpose")
 				|| p.getName().equals("Role") || p.getName().equals("Rank") || p.getName().equals("Phase")
 				|| p.getName().equals("Unit") || p.getName().equals("Level") || p.getName().equals("TaskCountAll")
 				|| p.getName().equals("Starting Date") || p.getName().equals("End Date")
@@ -157,6 +176,8 @@ public class APIInitializationService {
 		// @formatter:on
 	}
 
-
+	private List<TreePropertyDefinition> filterPersonTaskTreeProperties(List<TreePropertyDefinition> properties) {
+		return properties.stream().filter(p -> p.getName().equals("TaskType")).collect(Collectors.toList());
+	}
 
 }

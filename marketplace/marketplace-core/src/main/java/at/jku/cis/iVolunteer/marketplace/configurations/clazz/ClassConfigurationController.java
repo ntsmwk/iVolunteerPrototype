@@ -19,6 +19,7 @@ import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.Match
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurationDTO;
@@ -28,6 +29,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
@@ -35,14 +37,24 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 @RestController
 public class ClassConfigurationController {
 
-	@Autowired private ClassConfigurationRepository classConfigurationRepository;
-	@Autowired private CollectionService collectionService;
+	@Autowired
+	private ClassConfigurationRepository classConfigurationRepository;
+	@Autowired
+	private CollectionService collectionService;
 
-	@Autowired private MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired
+	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	private RelationshipRepository relationshipRepository;
+	@Autowired
+	private FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	private TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+
+	@Autowired
+	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
 	@GetMapping("class-configuration/all")
 	List<ClassConfiguration> getAllClassConfigurations() {
@@ -67,17 +79,18 @@ public class ClassConfigurationController {
 	@GetMapping("class-configuration/all-in-one/{id}")
 	public ClassConfigurationDTO getAllForClassConfigurationInOne(@PathVariable("id") String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
-		
+
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
-		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);;
-		
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
+		;
+
 		List<Relationship> relationships = new ArrayList<>();
 		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
-		
+
 		ClassConfigurationDTO dto = new ClassConfigurationDTO(classConfiguration, classDefinitions, relationships);
 		return dto;
 	}
-	
+
 	@PostMapping("class-configuration/new-empty")
 	public ClassConfiguration createNewEmptyClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 2) {
@@ -92,7 +105,6 @@ public class ClassConfigurationController {
 		return saveClassConfiguration(classConfiguration);
 	}
 
-	
 	@PostMapping("class-configuration/new")
 	public ClassConfiguration createNewClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 3) {
@@ -106,7 +118,7 @@ public class ClassConfigurationController {
 
 	@PutMapping("class-configuration/save")
 	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
-		
+
 		updatedClassConfiguration.setTimestamp(new Date());
 
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
@@ -114,13 +126,13 @@ public class ClassConfigurationController {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(updatedClassConfiguration.getClassDefinitionIds())
 				.forEach(classDefinitions::add);
-		
+
 		if (classDefinitions != null) {
 			classDefinitions = updateClassDefinitions(classDefinitions, classConfiguration);
 		}
-		
-		classDefinitionRepository.save(classDefinitions);		
-		
+
+		classDefinitionRepository.save(classDefinitions);
+
 		// Build MatchingCollector
 		MatchingEntityMappings mappings = collectionService
 				.collectAllClassDefinitionsWithPropertiesAsMatchingEntityMappings(classConfiguration.getId());
@@ -134,20 +146,21 @@ public class ClassConfigurationController {
 		return classConfiguration;
 	}
 
-	private List<ClassDefinition> updateClassDefinitions(List<ClassDefinition> classDefinitions, ClassConfiguration classConfiguration) {
-				
+	private List<ClassDefinition> updateClassDefinitions(List<ClassDefinition> classDefinitions,
+			ClassConfiguration classConfiguration) {
+
 		for (ClassDefinition cd : classDefinitions) {
 			cd.setConfigurationId(classConfiguration.getId());
 		}
-		
+
 		List<Relationship> relationships = new ArrayList<>();
 		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
-		
+
 		collectionService.assignLevelsToClassDefinitions(classDefinitions, relationships);
-		
+
 		return classDefinitions;
 	}
-	
+
 	@PutMapping("class-configuration/{id}/save-meta")
 	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
@@ -185,7 +198,9 @@ public class ClassConfigurationController {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();
 
-		List<FlatPropertyDefinition<Object>> properties = this.propertyDefinitionRepository.findByTenantId(tenantId);
+		List<FlatPropertyDefinition<Object>> flatProperties = this.propertyDefinitionRepository
+				.findByTenantId(tenantId);
+		List<TreePropertyDefinition> treeProperties = this.treePropertyDefinitionRepository.findByTenantId(tenantId);
 
 		ClassDefinition fwPassEintrag = new ClassDefinition();
 		fwPassEintrag.setId(new ObjectId().toHexString());
@@ -198,27 +213,30 @@ public class ClassConfigurationController {
 		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
 		fwPassEintrag.setLevel(0);
 
-		FlatPropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("ID")).findFirst().get();
+		FlatPropertyDefinition idProperty = flatProperties.stream().filter(p -> p.getName().equals("ID")).findFirst()
+				.get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(idProperty));
 
-		FlatPropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("Name")).findFirst().get();
+		FlatPropertyDefinition nameProperty = flatProperties.stream().filter(p -> p.getName().equals("Name"))
+				.findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(nameProperty));
 
-//		FlatPropertyDefinition evidenzProperty = properties.stream().filter(p -> p.getName().equals("evidenz")).findFirst()
-//				.get();
-//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
-		
-		FlatPropertyDefinition imageLinkProperty = properties.stream().filter(p -> p.getName().equals("Description")).findFirst().get();
+		// FlatPropertyDefinition evidenzProperty = properties.stream().filter(p ->
+		// p.getName().equals("evidenz")).findFirst()
+		// .get();
+		// fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
+
+		FlatPropertyDefinition imageLinkProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Description")).findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(imageLinkProperty));
-//		
-//		FlatPropertyDefinition descriptionProperty = properties.stream().filter(p -> p.getName().equals("Image Link")).findFirst().get();
-//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(descriptionProperty));
-//		
-//		FlatPropertyDefinition expiredProperty = properties.stream().filter(p -> p.getName().equals("Expired")).findFirst().get();
-//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
-	
-		
-		
+		//
+		// FlatPropertyDefinition descriptionProperty = properties.stream().filter(p ->
+		// p.getName().equals("Image Link")).findFirst().get();
+		// fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(descriptionProperty));
+		//
+		// FlatPropertyDefinition expiredProperty = properties.stream().filter(p ->
+		// p.getName().equals("Expired")).findFirst().get();
+		// fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
 
 		classDefinitions.add(fwPassEintrag);
 
@@ -231,16 +249,16 @@ public class ClassConfigurationController {
 		task.setProperties(new ArrayList<>());
 		task.setLevel(0);
 
-		FlatPropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date"))
-				.findFirst().get();
+		FlatPropertyDefinition dateFromProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Starting Date")).findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateFromProperty));
 
-		FlatPropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date")).findFirst()
-				.get();
+		FlatPropertyDefinition dateToProperty = flatProperties.stream().filter(p -> p.getName().equals("End Date"))
+				.findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
-		
-		FlatPropertyDefinition locationProperty = properties.stream().filter(p -> p.getName().equals("Location")).findFirst()
-				.get();
+
+		FlatPropertyDefinition locationProperty = flatProperties.stream().filter(p -> p.getName().equals("Location"))
+				.findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(locationProperty));
 
 		classDefinitions.add(task);
@@ -314,22 +332,27 @@ public class ClassConfigurationController {
 		myTask.setClassArchetype(ClassArchetype.TASK);
 		myTask.setProperties(new ArrayList<>());
 
-		FlatPropertyDefinition tt1 = properties.stream().filter(p -> p.getName().equals("TaskType1")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt1));
+		// FlatPropertyDefinition tt1 = properties.stream().filter(p ->
+		// p.getName().equals("TaskType1")).findFirst().get();
+		// myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt1));
 
-		FlatPropertyDefinition tt2 = properties.stream().filter(p -> p.getName().equals("TaskType2")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt2));
+		// FlatPropertyDefinition tt2 = properties.stream().filter(p ->
+		// p.getName().equals("TaskType2")).findFirst().get();
+		// myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt2));
 
-		FlatPropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("TaskType3")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
+		// FlatPropertyDefinition tt3 = properties.stream().filter(p ->
+		// p.getName().equals("TaskType3")).findFirst().get();
+		// myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
 
-//		FlatPropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
-//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
+		// FlatPropertyDefinition location = properties.stream().filter(p ->
+		// p.getName().equals("Location")).findFirst().get();
+		// myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
 
-		FlatPropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("Rank")).findFirst().get();
+		FlatPropertyDefinition rank = flatProperties.stream().filter(p -> p.getName().equals("Rank")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(rank));
 
-		FlatPropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("Duration")).findFirst().get();
+		FlatPropertyDefinition duration = flatProperties.stream().filter(p -> p.getName().equals("Duration"))
+				.findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(duration));
 
 		classDefinitions.add(myTask);

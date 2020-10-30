@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -21,17 +24,23 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.Fl
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.LongPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinitionTypes.TextPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyEntry;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyRelationship;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @Component
 public class StandardPropertyDefinitions {
 
-	@Autowired public FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired public CoreTenantRestClient coreTenantRestClient;
+	@Autowired
+	public FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	public CoreTenantRestClient coreTenantRestClient;
 
 	public StandardPropertyDefinitions() {
 
 	}
+
 	public List<FlatPropertyDefinition<Object>> getAlliVolunteer(String tenantId) {
 		List<FlatPropertyDefinition<Object>> properties = getAllHeader(tenantId);
 		properties.addAll(getAllGeneric(tenantId));
@@ -51,7 +60,7 @@ public class StandardPropertyDefinitions {
 		properties.add(new FlatPropertyDefinition<Object>("BadgeID", PropertyType.TEXT, tenantId));
 		properties.add(new FlatPropertyDefinition<Object>("CertificateID", PropertyType.TEXT, tenantId));
 		properties.add(new FlatPropertyDefinition<Object>("TaskID", PropertyType.TEXT, tenantId));
-		
+
 		return properties;
 	}
 
@@ -64,15 +73,22 @@ public class StandardPropertyDefinitions {
 		props.add(new DateToProperty(tenantId));
 		props.add(new ImageLinkProperty(tenantId));
 		props.add(new ExpiredProperty(tenantId));
-		props.add(new TaskType1Property(tenantId));
-		props.add(new TaskType2Property(tenantId));
-		props.add(new TaskType3Property(tenantId));
-		props.add(new TaskType4Property(tenantId));
+		// props.add(new TaskType1Property(tenantId));
+		// props.add(new TaskType2Property(tenantId));
+		// props.add(new TaskType3Property(tenantId));
+		// props.add(new TaskType4Property(tenantId));
 		props.add(new RankProperty(tenantId));
 		props.add(new DurationProperty(tenantId));
 
 		return new ArrayList(props);
 
+	}
+
+	public List<TreePropertyDefinition> getAllTreeProperties(String tenantId) {
+		List<TreePropertyDefinition> props = new LinkedList<>();
+		props.add(new TaskTypeProperty(tenantId));
+
+		return new ArrayList(props);
 	}
 
 	public List<FlatPropertyDefinition<Object>> getAllGeneric(String tenantId) {
@@ -128,7 +144,7 @@ public class StandardPropertyDefinitions {
 		list.add(new GluehzeitProperty(tenantId));
 		list.add(new DurchmesserProperty(tenantId));
 		list.add(new DurchsatzProperty(tenantId));
-		
+
 		list.add(new ChargierhilfeProperty(tenantId));
 		list.add(new WalzartProperty(tenantId));
 
@@ -171,35 +187,35 @@ public class StandardPropertyDefinitions {
 		list.add(new LieferdatumProperty(tenantId));
 		list.add(new WerkstoffBereitgestelltProperty(tenantId));
 		list.add(new BeschreibungZusatzinfoProperty(tenantId));
-		
+
 		list.add(new DurchmesserInnenProperty(tenantId));
 		list.add(new DurchmesserAussenProperty(tenantId));
 		list.add(new HoeheProperty(tenantId));
-		
+
 		list.add(new WerkstoffProperty(tenantId));
 		list.add(new WerkstoffFreitextProperty(tenantId));
 		list.add(new ZugfestigkeitProperty(tenantId));
-		
+
 		list.add(new SchutzgasProperty(tenantId));
 		list.add(new GluehreiseProperty(tenantId));
 		list.add(new TemperaturhomogenitaetProperty(tenantId));
-		
+
 		list.add(new OberflaechenqualitaetProperty(tenantId));
 		list.add(new ZusaetzlicheProduktinformationenProperty(tenantId));
-		
+
 		list.add(new IncotermsProperty(tenantId));
 		list.add(new LieferortProperty(tenantId));
 		list.add(new AbholortProperty(tenantId));
 		list.add(new VerpackungsvorgabenProperty(tenantId));
-		
+
 		list.add(new BandDickeProperty(tenantId));
-		
+
 		list.add(new DurchmesserKronenstockProperty(tenantId));
 		list.add(new MaximaldurchmesserBundProperty(tenantId));
-		
+
 		list.add(new DurchmesserDornProperty(tenantId));
 		list.add(new InnendurchmesserOfenProperty(tenantId));
-		
+
 		list.add(new OfenHoeheProperty(tenantId));
 		list.add(new MaxGluehtemperaturProperty(tenantId));
 		list.add(new TemperaturhomogenitaetProperty(tenantId));
@@ -209,8 +225,7 @@ public class StandardPropertyDefinitions {
 		list.add(new MaxAnteilH2Property(tenantId));
 		list.add(new KapazitaetProperty(tenantId));
 		list.add(new GluehprogrammVerfuegbarProperty(tenantId));
-		
-		
+
 		return new ArrayList(list);
 	}
 
@@ -245,7 +260,6 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	
 	public static class ImageLinkProperty extends TextPropertyDefinition {
 
 		ImageLinkProperty(String tenantId) {
@@ -258,7 +272,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class ExpiredProperty extends BooleanPropertyDefinition {
 
 		ExpiredProperty(String tenantId) {
@@ -271,7 +285,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class LocationProperty extends LocationPropertyDefinition {
 
 		LocationProperty(String tenantId) {
@@ -284,8 +298,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
-	
+
 	public static class DateFromProperty extends DatePropertyDefinition {
 
 		DateFromProperty(String tenantId) {
@@ -312,57 +325,290 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class TaskType1Property extends TextPropertyDefinition {
+	public static class TaskTypeProperty extends TreePropertyDefinition {
 
-		TaskType1Property(String tenantId) {
+		TaskTypeProperty(String tenantId) {
 			inst(tenantId);
 		}
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("TaskType1");
+			this.setName("TaskType");
 			this.setTenantId(tenantId);
+			this.setId(UUID.randomUUID().toString());
+
+			// Einsatz
+			TreePropertyEntry einsatz = new TreePropertyEntry("Einsatz", false, 1, true);
+			TreePropertyEntry technischerEinsatz = new TreePropertyEntry("Technischer Einsatz", false, 2, true);
+			TreePropertyEntry brandeinsatz = new TreePropertyEntry("Brandeinsatz", false, 2, true);
+			TreePropertyEntry t1 = new TreePropertyEntry("T1", true, 3, true);
+			TreePropertyEntry tbd = new TreePropertyEntry("TBD", true, 3, true);
+			TreePropertyEntry tbd2 = new TreePropertyEntry("TBD", true, 3, true);
+			TreePropertyRelationship relationshipEinsatz1 = new TreePropertyRelationship(einsatz, technischerEinsatz,
+					true);
+			TreePropertyRelationship relationshipEinsatz2 = new TreePropertyRelationship(einsatz, brandeinsatz, true);
+			TreePropertyRelationship relationshipEinsatz3 = new TreePropertyRelationship(technischerEinsatz, t1, true);
+			TreePropertyRelationship relationshipEinsatz4 = new TreePropertyRelationship(technischerEinsatz, tbd, true);
+			TreePropertyRelationship relationshipEinsatz5 = new TreePropertyRelationship(brandeinsatz, tbd2, true);
+			this.setEntries(Stream
+					.concat(this.getEntries().stream(),
+							List.of(einsatz, technischerEinsatz, t1, tbd, brandeinsatz, tbd2).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(), List.of(relationshipEinsatz1, relationshipEinsatz2,
+							relationshipEinsatz3, relationshipEinsatz4, relationshipEinsatz5).stream())
+					.collect(Collectors.toList()));
+
+			// Bewerb
+			TreePropertyEntry bewerb = new TreePropertyEntry("Bewerb", false, 1, true);
+			TreePropertyEntry teilnahme = new TreePropertyEntry("Teilnahme", false, 2, true);
+			TreePropertyEntry vorbereitung = new TreePropertyEntry("Vorbereitung", false, 2, true);
+			TreePropertyEntry pruefung = new TreePropertyEntry("Prüfung", false, 2, true);
+			TreePropertyEntry fla = new TreePropertyEntry("FLA", true, 3, true);
+			TreePropertyEntry thl = new TreePropertyEntry("THL", true, 3, true);
+			TreePropertyEntry fla2 = new TreePropertyEntry("FLA", true, 3, true);
+			TreePropertyEntry sonstiges = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry thl2 = new TreePropertyEntry("THL", true, 3, true);
+			TreePropertyEntry thl3 = new TreePropertyEntry("THL", true, 3, true);
+			TreePropertyRelationship relationshipBewerb1 = new TreePropertyRelationship(bewerb, teilnahme, true);
+			TreePropertyRelationship relationshipBewerb2 = new TreePropertyRelationship(bewerb, vorbereitung, true);
+			TreePropertyRelationship relationshipBewerb3 = new TreePropertyRelationship(bewerb, pruefung, true);
+			TreePropertyRelationship relationshipBewerb4 = new TreePropertyRelationship(vorbereitung, fla, true);
+			TreePropertyRelationship relationshipBewerb5 = new TreePropertyRelationship(vorbereitung, thl, true);
+			TreePropertyRelationship relationshipBewerb6 = new TreePropertyRelationship(teilnahme, fla2, true);
+			TreePropertyRelationship relationshipBewerb7 = new TreePropertyRelationship(teilnahme, sonstiges, true);
+			TreePropertyRelationship relationshipBewerb8 = new TreePropertyRelationship(teilnahme, thl2, true);
+			TreePropertyRelationship relationshipBewerb9 = new TreePropertyRelationship(pruefung, thl3, true);
+			this.setEntries(Stream.concat(this.getEntries().stream(),
+					List.of(bewerb, teilnahme, vorbereitung, pruefung, fla, thl, fla2, sonstiges, thl2, thl3).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream.concat(this.getRelationships().stream(),
+					List.of(relationshipBewerb1, relationshipBewerb2, relationshipBewerb3, relationshipBewerb4,
+							relationshipBewerb5, relationshipBewerb6, relationshipBewerb7, relationshipBewerb8,
+							relationshipBewerb9).stream())
+					.collect(Collectors.toList()));
+
+			// Ausbildung
+			TreePropertyEntry ausbildung = new TreePropertyEntry("Ausbildung (aktiv)", false, 1, true);
+			TreePropertyEntry schulung = new TreePropertyEntry("Schulung", false, 2, true);
+			TreePropertyEntry uebung = new TreePropertyEntry("Übung", false, 2, true);
+			TreePropertyEntry bd = new TreePropertyEntry("BD", true, 3, true);
+			TreePropertyEntry te = new TreePropertyEntry("TE", true, 3, true);
+			TreePropertyEntry so = new TreePropertyEntry("SO", true, 3, true);
+			TreePropertyEntry gk = new TreePropertyEntry("GK", true, 3, true);
+			TreePropertyEntry allgemein = new TreePropertyEntry("Allgemein", true, 3, true);
+			TreePropertyEntry bd2 = new TreePropertyEntry("BD", true, 3, true);
+			TreePropertyEntry te2 = new TreePropertyEntry("TE", true, 3, true);
+			TreePropertyEntry so2 = new TreePropertyEntry("SO", true, 3, true);
+			TreePropertyEntry allgemein2 = new TreePropertyEntry("Allgemein", true, 3, true);
+			TreePropertyRelationship relationshipAusbildung1 = new TreePropertyRelationship(ausbildung, schulung, true);
+			TreePropertyRelationship relationshipAusbildung2 = new TreePropertyRelationship(ausbildung, uebung, true);
+			TreePropertyRelationship relationshipAusbildung3 = new TreePropertyRelationship(schulung, bd, true);
+			TreePropertyRelationship relationshipAusbildung4 = new TreePropertyRelationship(schulung, te, true);
+			TreePropertyRelationship relationshipAusbildung5 = new TreePropertyRelationship(schulung, so, true);
+			TreePropertyRelationship relationshipAusbildung6 = new TreePropertyRelationship(schulung, gk, true);
+			TreePropertyRelationship relationshipAusbildung7 = new TreePropertyRelationship(schulung, allgemein, true);
+			TreePropertyRelationship relationshipAusbildung8 = new TreePropertyRelationship(uebung, bd2, true);
+			TreePropertyRelationship relationshipAusbildung9 = new TreePropertyRelationship(uebung, te2, true);
+			TreePropertyRelationship relationshipAusbildung10 = new TreePropertyRelationship(uebung, so2, true);
+			TreePropertyRelationship relationshipAusbildung11 = new TreePropertyRelationship(uebung, allgemein2, true);
+			this.setEntries(Stream.concat(this.getEntries().stream(), List
+					.of(ausbildung, schulung, uebung, bd, te, so, gk, allgemein, bd2, te2, so2, allgemein2).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(),
+							List.of(relationshipAusbildung1, relationshipAusbildung2, relationshipAusbildung3,
+									relationshipAusbildung4, relationshipAusbildung5, relationshipAusbildung6,
+									relationshipAusbildung7, relationshipAusbildung8, relationshipAusbildung9,
+									relationshipAusbildung10, relationshipAusbildung11).stream())
+					.collect(Collectors.toList()));
+
+			// Jugendarbeit
+			TreePropertyEntry jugendarbeit = new TreePropertyEntry("Jugendarbeit", false, 1, true);
+			TreePropertyEntry jugend = new TreePropertyEntry("Jugend", true, 2, true);
+			TreePropertyEntry bewerbsvorbereitung = new TreePropertyEntry("Bewerbsvorbereitung FjWtLA", true, 2, true);
+			TreePropertyEntry wissenstest = new TreePropertyEntry("Wissenstest", true, 2, true);
+			TreePropertyRelationship relationshipJugend1 = new TreePropertyRelationship(jugendarbeit, jugend);
+			TreePropertyRelationship relationshipJugend2 = new TreePropertyRelationship(jugendarbeit,
+					bewerbsvorbereitung);
+			TreePropertyRelationship relationshipJugend3 = new TreePropertyRelationship(jugendarbeit, wissenstest);
+			this.setEntries(Stream
+					.concat(this.getEntries().stream(),
+							List.of(jugendarbeit, jugend, bewerbsvorbereitung, wissenstest).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(),
+							List.of(relationshipJugend1, relationshipJugend2, relationshipJugend3).stream())
+					.collect(Collectors.toList()));
+
+			// Tätigkeit
+			TreePropertyEntry taetigkeit = new TreePropertyEntry("Tätigkeit", false, 1, true);
+			TreePropertyEntry arbeitenInDerFw = new TreePropertyEntry("Arbeiten in der FW", false, 2, true);
+			TreePropertyEntry feuerwehrhausbau = new TreePropertyEntry("Feuerwehrhausbau", true, 3, true);
+			TreePropertyEntry arbeitstag = new TreePropertyEntry("Arbeitstag", true, 3, true);
+			TreePropertyRelationship relationshipTaetigkeit1 = new TreePropertyRelationship(taetigkeit,
+					arbeitenInDerFw);
+			TreePropertyRelationship relationshipTaetigkeit2 = new TreePropertyRelationship(arbeitenInDerFw,
+					feuerwehrhausbau);
+			TreePropertyRelationship relationshipTaetigkeit3 = new TreePropertyRelationship(arbeitenInDerFw,
+					arbeitstag);
+			this.setEntries(Stream
+					.concat(this.getEntries().stream(),
+							List.of(taetigkeit, arbeitenInDerFw, feuerwehrhausbau, arbeitstag).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(),
+							List.of(relationshipTaetigkeit1, relationshipTaetigkeit2, relationshipTaetigkeit3).stream())
+					.collect(Collectors.toList()));
+
+			// Veranstaltung
+			TreePropertyEntry veranstaltung = new TreePropertyEntry("Veranstaltung", false, 1, true);
+
+			TreePropertyEntry organisation = new TreePropertyEntry("Organisation | Verwaltung", false, 2, true);
+			TreePropertyEntry sonstigeV = new TreePropertyEntry("Sonstige Veranstaltung", false, 2, true);
+			TreePropertyEntry atemschutzLt = new TreePropertyEntry("Atemschutz-Leistungstest", false, 2, true);
+			TreePropertyEntry dienstbespraechung = new TreePropertyEntry("Dienstbesprechung (Sitzung)", false, 2, true);
+			TreePropertyEntry ausflug = new TreePropertyEntry("Ausflug", false, 2, true);
+			TreePropertyEntry ferienpass = new TreePropertyEntry("Ferienpass", false, 2, true);
+			TreePropertyEntry fuehrung = new TreePropertyEntry("Führung", false, 2, true);
+			TreePropertyEntry sveNachbetreuung = new TreePropertyEntry("SVE Nachbetreuung", false, 2, true);
+			TreePropertyEntry sport = new TreePropertyEntry("Sport", false, 2, true);
+
+			TreePropertyEntry dienstbespraechung2 = new TreePropertyEntry("Dienstbesprechung (Sitzung)", true, 3, true);
+			TreePropertyEntry ausflug2 = new TreePropertyEntry("Ausflug", true, 3, true);
+			TreePropertyEntry kirchenausruekung = new TreePropertyEntry("Kirchenausrückung", true, 3, true);
+			TreePropertyEntry feuerwehrfest = new TreePropertyEntry("Feuerwehrfest / -ball", true, 3, true);
+			TreePropertyEntry ArbeitstagV = new TreePropertyEntry("Arbeitstag", true, 3, true);
+			TreePropertyEntry wahlveranstaltung = new TreePropertyEntry("Wahlveranstaltung", true, 3, true);
+			TreePropertyEntry sonstigeV2 = new TreePropertyEntry("Sonstige Veranstaltung", true, 3, true);
+			TreePropertyEntry vollversammlung = new TreePropertyEntry("Vollversammlung", true, 3, true);
+			TreePropertyEntry inspektion = new TreePropertyEntry("Inspektion", true, 3, true);
+			TreePropertyEntry bezirkstag = new TreePropertyEntry("Bezirkstagung", true, 3, true);
+			TreePropertyEntry mitgliederversammlung = new TreePropertyEntry("Mitgliederversammlung", true, 3, true);
+			TreePropertyEntry versammlung = new TreePropertyEntry("Versammlungen", true, 3, true);
+			TreePropertyEntry sonstigeV3 = new TreePropertyEntry("sonstige Veranstaltungen", true, 3, true);
+			TreePropertyEntry ausrueckung = new TreePropertyEntry("Ausrückung", true, 3, true);
+
+			TreePropertyEntry sonstiges2 = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry sonstiges3 = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry sonstiges4 = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry sonstiges5 = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry sonstiges6 = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry sonstiges7 = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry sonstiges8 = new TreePropertyEntry("Sonstiges", true, 3, true);
+			TreePropertyEntry sonstiges9 = new TreePropertyEntry("Sonstiges", true, 3, true);
+
+			TreePropertyRelationship rsVer1 = new TreePropertyRelationship(veranstaltung, organisation, true);
+			TreePropertyRelationship rsVer2 = new TreePropertyRelationship(veranstaltung, sonstigeV, true);
+			TreePropertyRelationship rsVer3 = new TreePropertyRelationship(veranstaltung, atemschutzLt, true);
+			TreePropertyRelationship rsVer4 = new TreePropertyRelationship(veranstaltung, dienstbespraechung, true);
+			TreePropertyRelationship rsVer5 = new TreePropertyRelationship(veranstaltung, ausflug, true);
+			TreePropertyRelationship rsVer6 = new TreePropertyRelationship(veranstaltung, ferienpass, true);
+			TreePropertyRelationship rsVer7 = new TreePropertyRelationship(veranstaltung, fuehrung, true);
+			TreePropertyRelationship rsVer8 = new TreePropertyRelationship(veranstaltung, sveNachbetreuung, true);
+			TreePropertyRelationship rsVer9 = new TreePropertyRelationship(veranstaltung, sport, true);
+			TreePropertyRelationship rsVer10 = new TreePropertyRelationship(organisation, dienstbespraechung2, true);
+			TreePropertyRelationship rsVer11 = new TreePropertyRelationship(organisation, ausflug2, true);
+			TreePropertyRelationship rsVer12 = new TreePropertyRelationship(organisation, kirchenausruekung, true);
+			TreePropertyRelationship rsVer13 = new TreePropertyRelationship(organisation, feuerwehrfest, true);
+			TreePropertyRelationship rsVer14 = new TreePropertyRelationship(organisation, ArbeitstagV, true);
+			TreePropertyRelationship rsVer15 = new TreePropertyRelationship(organisation, wahlveranstaltung, true);
+			TreePropertyRelationship rsVer16 = new TreePropertyRelationship(organisation, sonstigeV2, true);
+			TreePropertyRelationship rsVer17 = new TreePropertyRelationship(organisation, vollversammlung, true);
+			TreePropertyRelationship rsVer18 = new TreePropertyRelationship(organisation, inspektion, true);
+			TreePropertyRelationship rsVer19 = new TreePropertyRelationship(organisation, bezirkstag, true);
+			TreePropertyRelationship rsVer20 = new TreePropertyRelationship(organisation, mitgliederversammlung, true);
+			TreePropertyRelationship rsVer21 = new TreePropertyRelationship(organisation, versammlung, true);
+			TreePropertyRelationship rsVer22 = new TreePropertyRelationship(organisation, sonstigeV3, true);
+			TreePropertyRelationship rsVer23 = new TreePropertyRelationship(organisation, ausrueckung, true);
+			TreePropertyRelationship rsVer24 = new TreePropertyRelationship(sonstigeV, sonstiges2, true);
+			TreePropertyRelationship rsVer25 = new TreePropertyRelationship(atemschutzLt, sonstiges3, true);
+			TreePropertyRelationship rsVer26 = new TreePropertyRelationship(dienstbespraechung, sonstiges4, true);
+			TreePropertyRelationship rsVer27 = new TreePropertyRelationship(ausflug, sonstiges5, true);
+			TreePropertyRelationship rsVer28 = new TreePropertyRelationship(ferienpass, sonstiges6, true);
+			TreePropertyRelationship rsVer29 = new TreePropertyRelationship(fuehrung, sonstiges7, true);
+			TreePropertyRelationship rsVer30 = new TreePropertyRelationship(sveNachbetreuung, sonstiges8, true);
+			TreePropertyRelationship rsVer31 = new TreePropertyRelationship(sport, sonstiges9, true);
+
+			this.setEntries(Stream.concat(this.getEntries().stream(), List
+					.of(veranstaltung, organisation, sonstigeV, atemschutzLt, dienstbespraechung, ausflug, ferienpass,
+							fuehrung, sveNachbetreuung, sport, dienstbespraechung2, ausflug2, kirchenausruekung,
+							feuerwehrfest, ArbeitstagV, wahlveranstaltung, sonstigeV2, vollversammlung, inspektion,
+							bezirkstag, mitgliederversammlung, versammlung, sonstigeV3, ausrueckung, sonstiges2,
+							sonstiges3, sonstiges4, sonstiges5, sonstiges6, sonstiges7, sonstiges8, sonstiges9)
+					.stream()).collect(Collectors.toList()));
+			this.setRelationships(Stream.concat(this.getRelationships().stream(),
+					List.of(rsVer1, rsVer2, rsVer3, rsVer4, rsVer5, rsVer6, rsVer7, rsVer8, rsVer9, rsVer10, rsVer11,
+							rsVer12, rsVer13, rsVer14, rsVer15, rsVer16, rsVer17, rsVer18, rsVer19, rsVer20, rsVer21,
+							rsVer22, rsVer23, rsVer24, rsVer25, rsVer26, rsVer27, rsVer28, rsVer29, rsVer30, rsVer31)
+							.stream())
+					.collect(Collectors.toList()));
+
+			TreePropertyRelationship rel1 = new TreePropertyRelationship(this.getId(), einsatz.getId(), true);
+			TreePropertyRelationship rel2 = new TreePropertyRelationship(this.getId(), bewerb.getId(), true);
+			TreePropertyRelationship rel3 = new TreePropertyRelationship(this.getId(), jugendarbeit.getId(), true);
+			TreePropertyRelationship rel4 = new TreePropertyRelationship(this.getId(), taetigkeit.getId(), true);
+			TreePropertyRelationship rel5 = new TreePropertyRelationship(this.getId(), veranstaltung.getId(), true);
+			TreePropertyRelationship rel6 = new TreePropertyRelationship(this.getId(), ausbildung.getId(), true);
+
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(), List.of(rel1, rel2, rel3, rel4, rel5, rel6).stream())
+					.collect(Collectors.toList()));
+
 		}
 	}
 
-	public static class TaskType2Property extends TextPropertyDefinition {
+	// public static class TaskType1Property extends TextPropertyDefinition {
 
-		TaskType2Property(String tenantId) {
-			inst(tenantId);
-		}
+	// TaskType1Property(String tenantId) {
+	// inst(tenantId);
+	// }
 
-		@PostConstruct
-		public void inst(String tenantId) {
-			this.setName("TaskType2");
-			this.setTenantId(tenantId);
-		}
-	}
+	// @PostConstruct
+	// public void inst(String tenantId) {
+	// this.setName("TaskType1");
+	// this.setTenantId(tenantId);
+	// }
+	// }
 
-	public static class TaskType3Property extends TextPropertyDefinition {
+	// public static class TaskType2Property extends TextPropertyDefinition {
 
-		TaskType3Property(String tenantId) {
-			inst(tenantId);
-		}
+	// TaskType2Property(String tenantId) {
+	// inst(tenantId);
+	// }
 
-		@PostConstruct
-		public void inst(String tenantId) {
-			this.setName("TaskType3");
-			this.setTenantId(tenantId);
-		}
-	}
+	// @PostConstruct
+	// public void inst(String tenantId) {
+	// this.setName("TaskType2");
+	// this.setTenantId(tenantId);
+	// }
+	// }
 
-	public static class TaskType4Property extends TextPropertyDefinition {
+	// public static class TaskType3Property extends TextPropertyDefinition {
 
-		TaskType4Property(String tenantId) {
-			inst(tenantId);
-		}
+	// TaskType3Property(String tenantId) {
+	// inst(tenantId);
+	// }
 
-		@PostConstruct
-		public void inst(String tenantId) {
-			this.setName("TaskType4");
-			this.setTenantId(tenantId);
-		}
-	}
+	// @PostConstruct
+	// public void inst(String tenantId) {
+	// this.setName("TaskType3");
+	// this.setTenantId(tenantId);
+	// }
+	// }
+
+	// public static class TaskType4Property extends TextPropertyDefinition {
+
+	// TaskType4Property(String tenantId) {
+	// inst(tenantId);
+	// }
+
+	// @PostConstruct
+	// public void inst(String tenantId) {
+	// this.setName("TaskType4");
+	// this.setTenantId(tenantId);
+	// }
+	// }
 
 	public static class RankProperty extends TextPropertyDefinition {
 
@@ -395,7 +641,7 @@ public class StandardPropertyDefinitions {
 	 * Standard Properties
 	 *
 	 */
-	
+
 	// =========================================
 	// ========== Text Properties ==============
 	// =========================================
@@ -412,11 +658,11 @@ public class StandardPropertyDefinitions {
 			this.setRequired(false);
 			this.setTenantId(tenantId);
 
-//			List<PropertyConstraint<?>> constraints = new ArrayList<>();
-//			constraints.add(new MinimumTextLength(3));
-//			constraints.add(new MaximumTextLength(10));
-//			constraints.add(new TextPattern("^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*"));
-//			this.setPropertyConstraints(new ArrayList(constraints));
+			// List<PropertyConstraint<?>> constraints = new ArrayList<>();
+			// constraints.add(new MinimumTextLength(3));
+			// constraints.add(new MaximumTextLength(10));
+			// constraints.add(new TextPattern("^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*"));
+			// this.setPropertyConstraints(new ArrayList(constraints));
 
 		}
 	}
@@ -507,16 +753,16 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-//	public static class LocationProperty extends TextPropertyDefinition {
-//		public LocationProperty(String tenantId) {
-//			inst(tenantId);
-//		}
-//
-//		public void inst(String tenantId) {
-//			this.setName("Location");
-//			this.setTenantId(tenantId);
-//		}
-//	}
+	// public static class LocationProperty extends TextPropertyDefinition {
+	// public LocationProperty(String tenantId) {
+	// inst(tenantId);
+	// }
+	//
+	// public void inst(String tenantId) {
+	// this.setName("Location");
+	// this.setTenantId(tenantId);
+	// }
+	// }
 
 	public static class RequiredEquipmentProperty extends TextPropertyDefinition {
 		public RequiredEquipmentProperty(String tenantId) {

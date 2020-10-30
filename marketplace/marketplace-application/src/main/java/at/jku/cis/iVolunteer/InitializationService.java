@@ -21,26 +21,39 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataClasses;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
 @Service
 public class InitializationService {
 
-	@Autowired protected ClassDefinitionRepository classDefinitionRepository;
-	@Autowired protected RelationshipRepository relationshipRepository;
-	@Autowired protected FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired protected ClassConfigurationRepository classConfigurationRepository;
-	@Autowired protected MatchingConfigurationRepository matchingConfigurationRepository;
-	@Autowired protected MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
-	@Autowired protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+	@Autowired
+	protected ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	protected RelationshipRepository relationshipRepository;
+	@Autowired
+	protected FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	protected ClassConfigurationRepository classConfigurationRepository;
+	@Autowired
+	protected MatchingConfigurationRepository matchingConfigurationRepository;
+	@Autowired
+	protected MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired
+	protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 
-	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
 
-	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
+	@Autowired
+	public StandardPropertyDefinitions standardPropertyDefinitions;
 
-	@Autowired private ClassConfigurationController classConfigurationController;
+	@Autowired
+	private ClassConfigurationController classConfigurationController;
 
-	@Autowired protected TestDataClasses testDataClasses;
-	@Autowired protected TestDataInstances testDataInstances;
+	@Autowired
+	protected TestDataClasses testDataClasses;
+	@Autowired
+	protected TestDataInstances testDataInstances;
 
 	@PostConstruct
 	public void init() {
@@ -61,6 +74,13 @@ public class InitializationService {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
+
+			for (TreePropertyDefinition pd : standardPropertyDefinitions.getAllTreeProperties(tenant.getId())) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					treePropertyDefinitionRepository.save(pd);
+				}
+			}
+
 		});
 	}
 

@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TreePropertyEntry {
 	String id;
@@ -9,7 +10,7 @@ public class TreePropertyEntry {
 	boolean selectable;
 	int level;
 	int[] position;
-	
+
 	List<TreePropertyEntry> parents;
 
 	public TreePropertyEntry() {
@@ -27,10 +28,12 @@ public class TreePropertyEntry {
 		this.parents = new ArrayList<>();
 	}
 
-	public TreePropertyEntry(String value, boolean selectable, int level) {
+	public TreePropertyEntry(String value, boolean selectable, int level, boolean generateId) {
 		this.value = value;
 		this.selectable = selectable;
 		this.level = level;
+		this.id = UUID.randomUUID().toString();
+
 		this.parents = new ArrayList<>();
 	}
 
@@ -81,7 +84,5 @@ public class TreePropertyEntry {
 	public void setParents(List<TreePropertyEntry> parents) {
 		this.parents = parents;
 	}
-	
-	
 
 }
