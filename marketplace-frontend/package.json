@@ -8,6 +8,7 @@
     "start2": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng serve --host 0.0.0.0 --disable-host-check",
     "startprod2": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng serve --prod --host 0.0.0.0 --disable-host-check",
     "startprod": "ng serve --prod --host 0.0.0.0 --disable-host-check",
+    "startxnet": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng serve --host 0.0.0.0 --port 4000 --disable-host-check",
     "start-hmr": "ng serve --configuration hmr -sm=false --host 0.0.0.0",
     "start-hmr-sourcemaps": "ng serve --hmr -e=hmr --host 0.0.0.0",
     "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev",
