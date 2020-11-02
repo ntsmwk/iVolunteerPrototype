@@ -17,7 +17,7 @@ public class XTenant {
 	private String imagePath;
 	private String primaryColor;
 	private String secondaryColor;
-	private String marketplaceURL;
+	private String marketplaceUrl;
 	private List<String> tags;
 	private String landingpageMessage;
 	private String landingpageTitle;
@@ -90,13 +90,6 @@ public class XTenant {
 		this.secondaryColor = secondaryColor;
 	}
 
-	public String getMarketplaceURL() {
-		return marketplaceURL;
-	}
-
-	public void setMarketplaceURL(String marketplaceURL) {
-		this.marketplaceURL = marketplaceURL;
-	}
 
 	public List<String> getTags() {
 		return tags;
@@ -152,6 +145,14 @@ public class XTenant {
 
 	public void setSubscribedVolunteers(List<XUser> subscribedVolunteers) {
 		this.subscribedVolunteers = subscribedVolunteers;
+	}
+
+	public String getMarketplaceUrl() {
+		return marketplaceUrl;
+	}
+
+	public void setMarketplaceUrl(String marketplaceUrl) {
+		this.marketplaceUrl = marketplaceUrl;
 	}
 
 }

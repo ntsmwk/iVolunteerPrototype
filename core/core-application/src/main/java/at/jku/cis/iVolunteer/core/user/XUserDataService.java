@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XUserRoleMapper;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.TenantSubscription;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
@@ -22,6 +24,8 @@ public class XUserDataService {
 
     @Autowired
     private XUserRoleMapper roleMapper;
+    
+    @Autowired XTenantMapper tenantMapper;
 
     public List<XTenantRole> toXTenantRoles(List<TenantSubscription> subscriptions) {
         List<TenantSubscription> subs = subscriptions.stream().filter(s -> (!s.getRole().equals(UserRole.VOLUNTEER)))
@@ -36,7 +40,9 @@ public class XUserDataService {
                     .collect(Collectors.toList());
 
             XTenantRole t = new XTenantRole();
-            t.setTenant(tenantService.getTenantById(id));
+            
+			List<CoreUser> users = tenantService.getSubscribedUsers(id);
+            t.setTenant(tenantMapper.toTarget(tenantService.getTenantById(id), users));
             t.setRoles(roleMapper.toTargets(roles));
 
             tenantRoles.add(t);

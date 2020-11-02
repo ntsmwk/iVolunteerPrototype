@@ -44,7 +44,7 @@ public class XTenantMapper {
 
 		Marketplace mp = marketplaceService.findById(source.getMarketplaceId());
 		if (mp != null) {
-			xt.setMarketplaceURL(mp.getUrl());
+			xt.setMarketplaceUrl(mp.getUrl());
 		}
 		xt.setTags(source.getTags());
 		xt.setLandingpageMessage(source.getLandingpageMessage());
@@ -73,7 +73,7 @@ public class XTenantMapper {
 
 		Marketplace mp = marketplaceService.findById(source.getMarketplaceId());
 		if (mp != null) {
-			xt.setMarketplaceURL(mp.getUrl());
+			xt.setMarketplaceUrl(mp.getUrl());
 		}
 		xt.setTags(source.getTags());
 		xt.setLandingpageMessage(source.getLandingpageMessage());
@@ -111,7 +111,7 @@ public class XTenantMapper {
 		tenant.setPrimaryColor(target.getPrimaryColor());
 		tenant.setSecondaryColor(target.getSecondaryColor());
 
-		Marketplace mp = marketplaceService.findById(target.getMarketplaceURL());
+		Marketplace mp = marketplaceService.findById(target.getMarketplaceUrl());
 		if (mp != null) {
 			tenant.setMarketplaceId(mp.getId());
 		}
