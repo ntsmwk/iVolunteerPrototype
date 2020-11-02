@@ -63,6 +63,17 @@ public class InitializationService {
 			}
 		});
 	}
+	
+	public void addTestPropertyDefinitions() {
+		List<Tenant> tenants = getTenants();
+		tenants.forEach(tenant -> {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllTest(tenant.getId())) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					propertyDefinitionRepository.save(pd);
+				}
+			}
+		});
+	}
 
 	public void addFlexProdPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();

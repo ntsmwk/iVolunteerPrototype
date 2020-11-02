@@ -31,6 +31,7 @@ public class InitializationController {
 	public void addTestData() {
 		addFireBrigadeUserMapping();
 		addAllProperties();
+		addAllTestProperties();
 		addClassConfigurations();
 		addAPIClassDefinitions();
 	}
@@ -44,6 +45,11 @@ public class InitializationController {
 	/**
 	 * Properties
 	 */
+	
+	@PutMapping("/init/add-properties/test")
+	public void addAllTestProperties() {
+		initializationService.addTestPropertyDefinitions();
+	}
 	
 	@PutMapping("/init/add-properties/iVolunteer")
 	public void addAllProperties() {
