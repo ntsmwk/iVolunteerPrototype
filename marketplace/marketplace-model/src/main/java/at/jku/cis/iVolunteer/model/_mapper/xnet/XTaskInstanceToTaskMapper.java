@@ -51,14 +51,14 @@ public class XTaskInstanceToTaskMapper {
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
 		task.setDynamicBlocks(new ArrayList<>());
 
-		PropertyInstance<Object> startDateField = findProperty("Starting Date", source.getProperties());
+		PropertyInstance<Object> startDateField = source.findProperty("Starting Date");
 		task.setStartDate(startDateField == null || startDateField.getValues().size() == 0 ? null
 				: new Date((Long) startDateField.getValues().get(0)));
-		PropertyInstance<Object> endDateField = findProperty("End Date", source.getProperties());
+		PropertyInstance<Object> endDateField = source.findProperty("End Date");
 		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
 				: new Date((Long) endDateField.getValues().get(0)));
 
-		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
+		PropertyInstance<Object> locationField = source.findProperty("Location");
 		
 		Location location = null;
 		if (locationField != null && locationField.getValues().size() > 0) {		
@@ -178,12 +178,6 @@ public class XTaskInstanceToTaskMapper {
 			sources.add(toSource(target));
 		}
 		return sources;
-	}
-
-	private PropertyInstance<Object> findProperty(String name, List<PropertyInstance<Object>> properties) {
-		PropertyInstance<Object> property = properties.stream().filter(p -> p.getName().equals(name)).findAny()
-				.orElse(null);
-		return property;
 	}
 
 // private class MaxLevelReturn {

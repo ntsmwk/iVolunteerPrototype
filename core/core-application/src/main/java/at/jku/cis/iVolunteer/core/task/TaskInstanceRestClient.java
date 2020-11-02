@@ -40,7 +40,21 @@ public class TaskInstanceRestClient {
 
 		return Arrays.asList(resp.getBody());
 	}
+	
 
+	public List<TaskInstance> getTaskInstancesByYear(String marketplaceURL, int year, String authorization) {
+		String preUrl = "{0}/meta/core/task-instance/all/"+year;
+		String url = format(preUrl, marketplaceURL);
+
+		ResponseEntity<TaskInstance[]> resp = restTemplate.exchange(url, HttpMethod.GET,
+				buildEntity(null, authorization), TaskInstance[].class);
+		if (resp == null || resp.getBody() == null) {
+			return null;
+		}
+
+		return Arrays.asList(resp.getBody());
+	}
+	
 	public List<TaskInstance> getTaskInstancesByTenant(String marketplaceURL, List<String> tenantIds,
 			String authorization) {
 		String preUrl = "{0}/meta/core/task-instance/tenant";

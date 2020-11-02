@@ -65,6 +65,13 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.level = ti.getLevel();
 		this.properties = ti.getProperties();
 	}
+	
+	public PropertyInstance<Object> findProperty(String name) {
+		PropertyInstance<Object> property = this.properties.stream().filter(p -> p.getName().equals(name)).findAny()
+				.orElse(null);
+		return property;
+	}
+
 
 	public String getId() {
 		return id;

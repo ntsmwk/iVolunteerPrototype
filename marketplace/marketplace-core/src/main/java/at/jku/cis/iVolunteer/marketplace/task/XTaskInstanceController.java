@@ -29,6 +29,13 @@ public class XTaskInstanceController {
 
 	}
 	
+	@GetMapping("/meta/core/task-instance/all/{year}")
+	public List<TaskInstance> getTaskInstancesByYear(@PathVariable int year) {
+		return xTaskInstanceService.getAllByYear(year);
+
+	}
+	
+	
 	@PutMapping("/meta/core/task-instance/tenant")
 	public List<TaskInstance> getTaskInstancesByTenant(@RequestBody List<String> tenantIds) {
 		List<TaskInstance> instances = new LinkedList<>();

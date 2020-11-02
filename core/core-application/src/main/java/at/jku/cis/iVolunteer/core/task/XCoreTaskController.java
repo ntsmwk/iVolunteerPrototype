@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,18 +38,6 @@ public class XCoreTaskController {
 	@Autowired TenantService tenantService;
 	@Autowired LoginService loginService;
 
-//	CORE PART ##############
-//	(
-//	GILT FÜR ALLE 3 CALLS:
-//	PARAMETER taskType: 'SUBSCRIBED', 'UNSUBSCRIBED' (OHNE PARAMETER IST: DEFAULT 'ALL')
-//	PARAMETER onlyOpened: boolean (OHNE PARAMTER IST: DEFAULT true)
-//	)
-
-//	GET ALL TASKS (PUBLIC TENANTS + PRIVATE TENANTS)
-//	(Sortierung: nach Startdatum - die die am frühesten starten zuerst)
-//	GET /core/task
-//	Req: {}
-//	Res: Task[]
 
 	@GetMapping("/task")
 	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization) {
@@ -64,6 +53,35 @@ public class XCoreTaskController {
 
 		for (Marketplace mp : marketplaces) {
 			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstances(mp.getUrl(), authorization);
+			if (ret != null) {
+				taskInstances.addAll(ret);
+			}
+		}
+
+		List<XTask> tasks = new LinkedList<>();
+		for (TaskInstance ti : taskInstances) {
+			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
+			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
+		}
+//		TODO change
+		tasks = tasks.subList(0, Math.min(50, tasks.size()));
+		return ResponseEntity.ok(tasks);
+	}
+	
+	@GetMapping("/task/{year}")
+	private ResponseEntity<Object> getTasksByYear(@RequestHeader("Authorization") String authorization, @PathVariable("year") int year) {
+
+		List<Marketplace> marketplaces = marketplaceService.findAll();
+
+		if (marketplaces == null) {
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		List<TaskInstance> taskInstances = new ArrayList<>();
+
+		for (Marketplace mp : marketplaces) {
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByYear(mp.getUrl(), year, authorization);
 			if (ret != null) {
 				taskInstances.addAll(ret);
 			}
