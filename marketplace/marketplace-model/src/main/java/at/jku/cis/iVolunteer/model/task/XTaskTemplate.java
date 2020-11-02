@@ -9,6 +9,7 @@ public class XTaskTemplate {
 	private String tenantId;
 	private String title;
 	private String description;
+	private String configurationName;
 	private List<XDynamicFieldBlock> dynamicBlocks = new ArrayList<>();
 
 	public String getId() {
@@ -49,6 +50,14 @@ public class XTaskTemplate {
 
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
+	}
+
+	public String getConfigurationName() {
+		return configurationName;
+	}
+
+	public void setConfigurationName(String configurationName) {
+		this.configurationName = configurationName;
 	}
 
 }
