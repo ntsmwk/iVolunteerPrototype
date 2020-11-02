@@ -67,17 +67,17 @@ public class ClassConfigurationController {
 	@GetMapping("class-configuration/all-in-one/{id}")
 	public ClassConfigurationDTO getAllForClassConfigurationInOne(@PathVariable("id") String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
-		
+
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
-		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);;
-		
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
+
 		List<Relationship> relationships = new ArrayList<>();
 		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
-		
+
 		ClassConfigurationDTO dto = new ClassConfigurationDTO(classConfiguration, classDefinitions, relationships);
 		return dto;
 	}
-	
+
 	@PostMapping("class-configuration/new-empty")
 	public ClassConfiguration createNewEmptyClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 2) {
@@ -92,7 +92,6 @@ public class ClassConfigurationController {
 		return saveClassConfiguration(classConfiguration);
 	}
 
-	
 	@PostMapping("class-configuration/new")
 	public ClassConfiguration createNewClassConfiguration(@RequestBody String[] params) {
 		if (params.length != 3) {
@@ -106,7 +105,7 @@ public class ClassConfigurationController {
 
 	@PutMapping("class-configuration/save")
 	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
-		
+
 		updatedClassConfiguration.setTimestamp(new Date());
 
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
@@ -114,13 +113,13 @@ public class ClassConfigurationController {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(updatedClassConfiguration.getClassDefinitionIds())
 				.forEach(classDefinitions::add);
-		
+
 		if (classDefinitions != null) {
 			classDefinitions = updateClassDefinitions(classDefinitions, classConfiguration);
 		}
-		
-		classDefinitionRepository.save(classDefinitions);		
-		
+
+		classDefinitionRepository.save(classDefinitions);
+
 		// Build MatchingCollector
 		MatchingEntityMappings mappings = collectionService
 				.collectAllClassDefinitionsWithPropertiesAsMatchingEntityMappings(classConfiguration.getId());
@@ -134,20 +133,21 @@ public class ClassConfigurationController {
 		return classConfiguration;
 	}
 
-	private List<ClassDefinition> updateClassDefinitions(List<ClassDefinition> classDefinitions, ClassConfiguration classConfiguration) {
-				
+	private List<ClassDefinition> updateClassDefinitions(List<ClassDefinition> classDefinitions,
+			ClassConfiguration classConfiguration) {
+
 		for (ClassDefinition cd : classDefinitions) {
 			cd.setConfigurationId(classConfiguration.getId());
 		}
-		
+
 		List<Relationship> relationships = new ArrayList<>();
 		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
-		
+
 		collectionService.assignLevelsToClassDefinitions(classDefinitions, relationships);
-		
+
 		return classDefinitions;
 	}
-	
+
 	@PutMapping("class-configuration/{id}/save-meta")
 	public ClassConfiguration saveClassConfigurationMeta(@RequestBody String[] params, @PathVariable String id) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
@@ -201,14 +201,16 @@ public class ClassConfigurationController {
 		FlatPropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("ID")).findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(idProperty));
 
-		FlatPropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("Name")).findFirst().get();
+		FlatPropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("Name")).findFirst()
+				.get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(nameProperty));
 
 //		FlatPropertyDefinition evidenzProperty = properties.stream().filter(p -> p.getName().equals("evidenz")).findFirst()
 //				.get();
 //		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
-		
-		FlatPropertyDefinition imageLinkProperty = properties.stream().filter(p -> p.getName().equals("Description")).findFirst().get();
+
+		FlatPropertyDefinition imageLinkProperty = properties.stream().filter(p -> p.getName().equals("Description"))
+				.findFirst().get();
 		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(imageLinkProperty));
 //		
 //		FlatPropertyDefinition descriptionProperty = properties.stream().filter(p -> p.getName().equals("Image Link")).findFirst().get();
@@ -216,9 +218,6 @@ public class ClassConfigurationController {
 //		
 //		FlatPropertyDefinition expiredProperty = properties.stream().filter(p -> p.getName().equals("Expired")).findFirst().get();
 //		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
-	
-		
-		
 
 		classDefinitions.add(fwPassEintrag);
 
@@ -235,12 +234,12 @@ public class ClassConfigurationController {
 				.findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateFromProperty));
 
-		FlatPropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date")).findFirst()
-				.get();
+		FlatPropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date"))
+				.findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
-		
-		FlatPropertyDefinition locationProperty = properties.stream().filter(p -> p.getName().equals("Location")).findFirst()
-				.get();
+
+		FlatPropertyDefinition locationProperty = properties.stream().filter(p -> p.getName().equals("Location"))
+				.findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(locationProperty));
 
 		classDefinitions.add(task);
@@ -329,10 +328,13 @@ public class ClassConfigurationController {
 		FlatPropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("Rank")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(rank));
 
-		FlatPropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("Duration")).findFirst().get();
+		FlatPropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("Duration")).findFirst()
+				.get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(duration));
 
 		classDefinitions.add(myTask);
+
+
 
 		Inheritance r5 = new Inheritance();
 		r5.setRelationshipType(RelationshipType.INHERITANCE);
@@ -341,6 +343,53 @@ public class ClassConfigurationController {
 
 		relationships.add(r5);
 
+//		Test Task for Micha
+
+		ClassDefinition testTask = new ClassDefinition();
+		testTask.setId(new ObjectId().toHexString());
+		testTask.setTenantId(tenantId);
+		testTask.setName("xNet Test Task");
+		testTask.setClassArchetype(ClassArchetype.TASK);
+		testTask.setWriteProtected(true);
+		testTask.setProperties(new ArrayList<>());
+		testTask.setLevel(0);
+
+		FlatPropertyDefinition testTextProperty = properties.stream()
+				.filter(p -> p.getName().equals("Test TextProperty")).findFirst().get();
+		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testTextProperty));
+		
+		FlatPropertyDefinition testLongTextProperty = properties.stream()
+				.filter(p -> p.getName().equals("Test LongTextProperty")).findFirst().get();
+		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testLongTextProperty));
+		
+		FlatPropertyDefinition testWholeNumberProperty = properties.stream()
+				.filter(p -> p.getName().equals("Test WholeNumberProperty")).findFirst().get();
+		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testWholeNumberProperty));
+		
+		FlatPropertyDefinition testFloatNumberProperty = properties.stream()
+				.filter(p -> p.getName().equals("Test FloatNumberProperty")).findFirst().get();
+		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testFloatNumberProperty));
+		
+		FlatPropertyDefinition testBooleanProperty = properties.stream()
+				.filter(p -> p.getName().equals("Test BooleanProperty")).findFirst().get();
+		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testBooleanProperty));
+		
+		FlatPropertyDefinition testDateProperty = properties.stream()
+				.filter(p -> p.getName().equals("Test DateProperty")).findFirst().get();
+		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testDateProperty));
+
+
+		classDefinitions.add(testTask);
+		
+		
+		Inheritance r6 = new Inheritance();
+		r6.setRelationshipType(RelationshipType.INHERITANCE);
+		r6.setTarget(testTask.getId());
+		r6.setSource(myTask.getId());
+
+		relationships.add(r6);
+//		
+		
 		ClassConfiguration configurator = new ClassConfiguration();
 		configurator.setTimestamp(new Date());
 		configurator.setTenantId(tenantId);

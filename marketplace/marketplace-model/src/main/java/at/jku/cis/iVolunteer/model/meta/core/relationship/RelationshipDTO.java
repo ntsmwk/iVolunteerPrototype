@@ -13,6 +13,9 @@ public class RelationshipDTO {
 	private AssociationCardinality sourceCardinality;
 	private AssociationCardinality targetCardinality;
 	
+	public RelationshipDTO() {
+		
+	}
 	
 	public String getId() {
 		return id;

@@ -9,7 +9,7 @@ public class Inheritance extends Relationship {
 		this.relationshipType = RelationshipType.INHERITANCE;
 	}
 
-	public Inheritance(String child, String parent, String superClassId) {
+	public Inheritance(String child, String parent) {
 		super(child, parent);
 		this.relationshipType = RelationshipType.INHERITANCE;
 	}
@@ -18,11 +18,6 @@ public class Inheritance extends Relationship {
 		super(relationship.source, relationship.target);
 		this.id = relationship.getId();
 		this.relationshipType = relationship.getRelationshipType();
-	}
-	
-	//superclass is always targetclass!
-	public String getSuperClass() {
-		return this.target;
 	}
 
 }

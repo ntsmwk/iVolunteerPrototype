@@ -309,20 +309,16 @@ public class TestDataClasses {
 		classDefinitions.add(certClassDrivingLicenseMotorcycle);
 
 		// grouping and hierarchy in certificate "driving license"
-		Inheritance i1 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseCar.getId(),
-				certClassDrivingLicense.getId());
+		Inheritance i1 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseCar.getId());
 		i1.setId("drivingCarLicense");
 		relationships.add(i1);
-		Inheritance i2 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseTruck.getId(),
-				certClassDrivingLicense.getId());
+		Inheritance i2 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseTruck.getId());
 		i2.setId("drivingTruckLicense");
 		relationships.add(i2);
-		Inheritance i3 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseBus.getId(),
-				certClassDrivingLicense.getId());
+		Inheritance i3 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseBus.getId());
 		i3.setId("drivingBusLicense");
 		relationships.add(i3);
-		Inheritance i4 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseMotorcycle.getId(),
-				certClassDrivingLicense.getId());
+		Inheritance i4 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseMotorcycle.getId());
 		i4.setId("drivingMotorcycleLicense");
 		relationships.add(i4);
 
@@ -362,20 +358,16 @@ public class TestDataClasses {
 		relationships.add(a4);
 
 		// grouping and hierarchy in competence "driving"
-		Inheritance i5 = new Inheritance(compClassDriving.getId(), compClassDrivingCar.getId(),
-				compClassDriving.getId());
+		Inheritance i5 = new Inheritance(compClassDriving.getId(), compClassDrivingCar.getId());
 		i5.setId("drivingCar");
 		relationships.add(i5);
-		Inheritance i6 = new Inheritance(compClassDriving.getId(), compClassDrivingTruck.getId(),
-				compClassDriving.getId());
+		Inheritance i6 = new Inheritance(compClassDriving.getId(), compClassDrivingTruck.getId());
 		i6.setId("drivingTruck");
 		relationships.add(i6);
-		Inheritance i7 = new Inheritance(compClassDriving.getId(), compClassDrivingBus.getId(),
-				compClassDriving.getId());
+		Inheritance i7 = new Inheritance(compClassDriving.getId(), compClassDrivingBus.getId());
 		i7.setId("drivingBus");
 		relationships.add(i7);
-		Inheritance i8 = new Inheritance(compClassDriving.getId(), compClassDrivingMotorcycle.getId(),
-				compClassDriving.getId());
+		Inheritance i8 = new Inheritance(compClassDriving.getId(), compClassDrivingMotorcycle.getId());
 		i8.setId("drivingMotorcycle");
 		relationships.add(i8);
 

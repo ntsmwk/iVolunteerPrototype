@@ -74,6 +74,20 @@ public class StandardPropertyDefinitions {
 		return new ArrayList(props);
 
 	}
+	
+	public List<FlatPropertyDefinition<Object>> getAllTest(String tenantId) {
+		List<FlatPropertyDefinition<?>> props = new LinkedList<>();
+
+		props.add(new TestTextProperty(tenantId));
+		props.add(new TestLongTextProperty(tenantId));
+		props.add(new TestWholeNumberProperty(tenantId));
+		props.add(new TestFloatNumberProperty(tenantId));
+		props.add(new TestBooleanProperty(tenantId));
+		props.add(new TestDateProperty(tenantId));
+
+		return new ArrayList(props);
+
+	}
 
 	public List<FlatPropertyDefinition<Object>> getAllGeneric(String tenantId) {
 		List<FlatPropertyDefinition<?>> props = new LinkedList<>();
@@ -389,6 +403,93 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * TestProperties
+	 * 
+	 */
+	
+	public static class TestTextProperty extends TextPropertyDefinition {
+
+		TestTextProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Test TextProperty");
+			this.setTenantId(tenantId);
+		}
+	}
+
+	public static class TestLongTextProperty extends LongTextPropertyDefinition {
+
+		TestLongTextProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Test LongTextProperty");
+			this.setTenantId(tenantId);
+		}
+	}
+
+	public static class TestWholeNumberProperty extends LongPropertyDefinition  {
+
+		TestWholeNumberProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Test WholeNumberProperty");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class TestFloatNumberProperty extends DoublePropertyDefinition  {
+
+		TestFloatNumberProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Test FloatNumberProperty");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class TestBooleanProperty extends BooleanPropertyDefinition  {
+
+		TestBooleanProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Test BooleanProperty");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class TestDateProperty extends DatePropertyDefinition  {
+
+		TestDateProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Test DateProperty");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	
 
 	/**
 	 * 
