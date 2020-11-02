@@ -27,7 +27,8 @@ public class XFormEntryToTaskTemplateMapper implements OneWayMapper<FormEntry, X
 
 		template.setId(source.getClassDefinitions().get(0).getId());
 		template.setTenantId(source.getClassDefinitions().get(0).getTenantId());
-
+		template.setTitle(source.getClassDefinitions().get(0).getName());
+		template.setDescription(source.getClassDefinitions().get(0).getDescription());
 		List<XDynamicFieldBlock> dynamic = new ArrayList<>();
 
 		int listEnd = source.getClassDefinitions().size() - 1;
