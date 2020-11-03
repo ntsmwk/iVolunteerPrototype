@@ -35,7 +35,6 @@ import at.jku.cis.iVolunteer.model.task.XTask;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.XUser;
 
-//TODO xnet done - test
 @RestController
 @RequestMapping("/task")
 public class XTaskController {
@@ -49,10 +48,6 @@ public class XTaskController {
 	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
 	@Autowired private CoreStorageRestClient coreStorageRestClient;
 
-	// CREATE NEW OPENED TASK (Fields already copied from TASKTEMPLATE inside Task)
-	// POST {marketplaceUrl}/task/new/
-	// Req: { Task }
-	// Res: 200 (OK), 500 (FAILED)
 	@PostMapping("/new")
 	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
 			@RequestHeader("Authorization") String authorization) {
@@ -77,13 +72,6 @@ public class XTaskController {
 
 		return ResponseEntity.ok(Collections.singletonMap("id", instance.getId()));
 	}
-
-	// CREATE NEW CLOSED TASK (Fields already copied from TASKTEMPLATE inside Task)
-	// (Creates Task and also creates TaskCertificate & BadgeCertificate for every
-	// subscribedUser and Task is automatically closed)
-	// POST {marketplaceUrl}/task/new/closed
-	// Req: { Task }
-	// Res: 200 (OK), 500 (FAILED)
 
 	@PostMapping("/new/closed")
 	private ResponseEntity<Object> createClosedTask(@RequestBody PostTaskRequest task,
@@ -127,13 +115,6 @@ public class XTaskController {
 
 	}
 
-	// FINALIZE / CLOSE TASK
-	// (Creates TaskCertificate & BadgeCertificate for every subscribedUser and Task
-	// gets closed)
-	// GET {marketplaceUrl}/task/close/
-	// Req: {}
-	// Res: 200 (OK), 500 (FAILED)
-
 	@PostMapping("/{taskId}/close")
 	private ResponseEntity<Object> finalizeTask(@PathVariable("taskId") String taskId) {
 		TaskInstance taskInstance = xTaskInstanceService.getTaskInstance(taskId);
@@ -165,27 +146,26 @@ public class XTaskController {
 
 	}
 
-//	
-//	GET TASKS OF ONE TENANT BY ID (BEI 1 TENANT ZEIGE ALLE TASKS IN UI)
-//	(Sortierung: nach Startdatum - die die am frühesten starten zuerst)
-//	GET {marketplaceUrl}/task/tenant/{tenantId}/
-//	Req: {}
-//	Res: Task[]
 	@GetMapping("/tenant/{tenantId}")
-	private List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
+	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
 //		TODO fix multiple db accesses...
-		return tasks.stream().limit(50).map(t -> {
+		return tasks.stream().map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
 			return xTaskInstanceToTaskMapper.toTarget(t, users);
 		}).collect(Collectors.toList());
 	}
-
-//	GET TASK BY ID
-//	GET {marketplaceUrl}/task/{taskId}/
-//	Req: {}
-//	Res: Task
-	@GetMapping("/{taskId}")
+	
+	@GetMapping("/tenant/{tenantId}/{year}")
+	public List<XTask> getTaskInstancesByTenantIdByYear(@PathVariable String tenantId, @PathVariable int year) {
+		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantIdByYear(tenantId, year);
+//		TODO fix multiple db accesses...
+		return tasks.stream().map(t -> {
+			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
+			return xTaskInstanceToTaskMapper.toTarget(t, users);
+		}).collect(Collectors.toList());
+	}
+	
 	public ResponseEntity<Object> getTask(@PathVariable String taskId) {
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
 
@@ -197,14 +177,12 @@ public class XTaskController {
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
 		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
 	}
+	
+	
 
-//	TODO UPDATE TASK (schicken nur die änderung des felds oder ganzes objekt wie sie wollen)
-//	(ONLY POSSIBLE IF TASK NOT CLOSED! --> Bitte Errormessage liefern bzw. ErrorCode für diesen Fall)
-//	POST {marketplaceUrl}/task/update/{taskId}
-//	Req: { key: value, key2: value2,...} (ONLY CHANGED TASK DATA)
-//	Res: 200 (OK), 500 (FAILED), 400 { message: "z.b: Kann nicht aktualisiert werden da.."}
+
 	@PostMapping("/update/{taskId}")
-	private ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody XTask changes) {
+	public ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody XTask changes) {
 		TaskInstance existingTask = xTaskInstanceService.getTaskInstance(taskId);
 		if (existingTask == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_TASK),
@@ -218,21 +196,9 @@ public class XTaskController {
 
 		return ResponseEntity.ok().build();
 	}
-
-//  TODO SUBSCRIBE TASK BY ID
-//	POST {marketplaceUrl}/task/{taskId}/subscribe/
-//	Req: {}
-//	Res: 200 (OK), 500 (FAILED)
 	@PostMapping("{taskId}/subscribe")
-	private ResponseEntity<Object> subscribeUserToTask(@PathVariable String taskId) {
+	public ResponseEntity<Object> subscribeUserToTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
-
-		// *TODO debug
-//			if (user == null) {
-//				user = userService.getUserByName("mweixlbaumer");
-//			}
-		// -----
-
 		User finalUser = user;
 
 		if (user == null) {
@@ -256,19 +222,10 @@ public class XTaskController {
 		return ResponseEntity.ok().build();
 	}
 
-//	TODO UNSUBSCRIBE TASK BY ID
-//	POST {marketplaceUrl}/task/{taskId}/unsubscribe/
-//	Req: {}
-//	Res: 200 (OK), 500 (FAILED)
 	@PostMapping("{taskId}/unsubscribe")
-	private ResponseEntity<Object> unsubscribeUserFromTask(@PathVariable String taskId) {
+	public ResponseEntity<Object> unsubscribeUserFromTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
 
-		// *TODO debug
-//			if (user == null) {
-//				user = userService.getUserByName("mweixlbaumer");
-//			}
-		// -----
 
 		User finalUser = user;
 

@@ -2,8 +2,11 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
@@ -166,6 +170,19 @@ public class ClassInstanceService {
 
 	public List<ClassInstance> addOrUpdateClassDefinitions(List<ClassInstance> classInstances) {
 		return classInstanceRepository.save(classInstances);
+	}
+	
+	public List<ClassInstance> filterTaskInstancesByYear(int year, List<ClassInstance> classInstances) {
+		return classInstances.stream().filter(tI -> {
+			PropertyInstance<Object> startDateProperty = tI.findProperty("Starting Date");
+			if (startDateProperty != null && startDateProperty.getValues().size() == 1) {
+				Date date = new Date((long) startDateProperty.getValues().get(0));
+				Calendar calendar = new GregorianCalendar();
+				calendar.setTime(date);
+				return calendar.get(Calendar.YEAR) == year;
+			}
+			return false;
+		}).collect(Collectors.toList());
 	}
 
 }

@@ -98,5 +98,4 @@ public class XTaskInstanceService {
 		}).collect(Collectors.toList());
 		return filteredList;
 	}
-	
 }
