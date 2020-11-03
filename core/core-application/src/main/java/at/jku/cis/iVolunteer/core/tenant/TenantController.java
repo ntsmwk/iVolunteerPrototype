@@ -90,12 +90,12 @@ public class TenantController {
 
 	@GetMapping("/{tenantId}")
 	public XTenantSubscribedResponse getTenantByIdX(@PathVariable String tenantId) {
-		List<CoreUser> users = tenantService.getSubscribedUsers(tenantId);
+		List<CoreUser> subscribedUsers = tenantService.getSubscribedUsers(tenantId);
 		XTenantSubscribedResponse tenant = xTenantMapper
-				.toTenantSubscribedResponse(tenantService.getTenantById(tenantId), users);
+				.toTenantSubscribedResponse(tenantService.getTenantById(tenantId), subscribedUsers);
 		CoreUser loggedInUser = loginService.getLoggedInUser();
-		boolean alreadySubscribed = loggedInUser.getSubscribedTenants().stream()
-				.anyMatch(t -> t.getTenantId().equals(tenantId));
+	
+		boolean alreadySubscribed = subscribedUsers.stream().anyMatch(u -> u.getId().equals(loggedInUser.getId()));
 		tenant.setSubscribed(alreadySubscribed);
 		return tenant;
 	}
