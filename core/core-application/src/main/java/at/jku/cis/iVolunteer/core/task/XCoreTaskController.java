@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +25,6 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.task.XTask;
-import at.jku.cis.iVolunteer.model.user.User;
 
 @RestController
 public class XCoreTaskController {
@@ -37,7 +35,6 @@ public class XCoreTaskController {
 	@Autowired CoreUserService coreUserService;
 	@Autowired TenantService tenantService;
 	@Autowired LoginService loginService;
-
 
 	@GetMapping("/task")
 	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization) {
@@ -58,18 +55,13 @@ public class XCoreTaskController {
 			}
 		}
 
-		List<XTask> tasks = new LinkedList<>();
-		for (TaskInstance ti : taskInstances) {
-			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
-			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
-		}
-//		TODO change
-		tasks = tasks.subList(0, Math.min(50, tasks.size()));
+		List<XTask> tasks = mapToXTasks(taskInstances);
 		return ResponseEntity.ok(tasks);
 	}
-	
+
 	@GetMapping("/task/{year}")
-	private ResponseEntity<Object> getTasksByYear(@RequestHeader("Authorization") String authorization, @PathVariable("year") int year) {
+	private ResponseEntity<Object> getTasksByYear(@PathVariable("year") int year,
+			@RequestHeader("Authorization") String authorization) {
 
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 
@@ -87,21 +79,10 @@ public class XCoreTaskController {
 			}
 		}
 
-		List<XTask> tasks = new LinkedList<>();
-		for (TaskInstance ti : taskInstances) {
-			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
-			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
-		}
-//		TODO change
-		tasks = tasks.subList(0, Math.min(50, tasks.size()));
+		List<XTask> tasks = mapToXTasks(taskInstances);
 		return ResponseEntity.ok(tasks);
 	}
 
-//	GET ALL TASKS OF SUBSCRIBED TENANTS (MEINE TASKS LISTE UI)
-//	(Sortierung: nach Startdatum - die die am frühesten starten zuerst)
-//	GET /core/task/tenant/subscribed
-//	Req: {}
-//	Res: Task[]
 	@GetMapping("/task/tenant/subscribed")
 	private ResponseEntity<Object> getTasksOfSubscribedTenants(@RequestHeader("Authorization") String authorization) {
 		List<Marketplace> marketplaces = marketplaceService.findAll();
@@ -109,15 +90,7 @@ public class XCoreTaskController {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
 					HttpStatus.BAD_REQUEST);
 		}
-
 		CoreUser user = loginService.getLoggedInUser();
-
-		// TODO DEBUG
-//		if (user == null) {
-//			user = coreUserService.getByUserName("mweixlbaumer");
-//		}
-		// ----
-
 		if (user == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
 					HttpStatus.UNAUTHORIZED);
@@ -138,26 +111,13 @@ public class XCoreTaskController {
 				taskInstances.addAll(ret);
 			}
 		}
-		
-		List<XTask> tasks = new LinkedList<>();
-
-		for (TaskInstance ti : taskInstances) {
-			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
-			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));		
-		}
-//		TODO change
-		tasks = tasks.subList(0, Math.min(50, tasks.size()));
+		List<XTask> tasks = mapToXTasks(taskInstances);
 		return ResponseEntity.ok(tasks);
 	}
 
-//	GET ALL TASKS OF UNSUBSCRIBED TENANTS (ANDERE TENANT TASKS LISTE UI)
-//	(Sortierung: nach Startdatum - die die am frühesten starten zuerst)
-//	GET /core/task/tenant/unsubscribed
-//	Req: {}
-//	Res: Task[]
-	@GetMapping("/task/tenant/unsubscribed")
-	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization) {
-		
+	@GetMapping("/task/tenant/subscribed/{year}")
+	private ResponseEntity<Object> getTasksOfSubscribedTenantsByYear(@PathVariable("year") int year,
+			@RequestHeader("Authorization") String authorization) {
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
@@ -166,14 +126,44 @@ public class XCoreTaskController {
 
 		CoreUser user = loginService.getLoggedInUser();
 
-		// TODO DEBUG
-//		if (user == null) {
-//			user = coreUserService.getByUserName("mweixlbaumer");
-//		}
-		// ----
+		if (user == null) {
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
+					HttpStatus.UNAUTHORIZED);
+		}
+
+		List<Tenant> tenants = tenantService.getSubscribedTenants(user);
+
+		if (tenants == null) {
+			return ResponseEntity.ok().build();
+		}
+
+		List<TaskInstance> taskInstances = new LinkedList<>();
+
+		for (Marketplace mp : marketplaces) {
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenantByYear(mp.getUrl(),
+					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), year, authorization);
+			if (ret != null) {
+				taskInstances.addAll(ret);
+			}
+		}
+
+		List<XTask> tasks = mapToXTasks(taskInstances);
+		return ResponseEntity.ok(tasks);
+	}
+
+	@GetMapping("/task/tenant/unsubscribed")
+	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization) {
+
+		List<Marketplace> marketplaces = marketplaceService.findAll();
+		if (marketplaces == null) {
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		CoreUser user = loginService.getLoggedInUser();
 
 		List<Tenant> tenants = tenantService.getUnsubscribedTenants(user);
-		
+
 		if (tenants == null) {
 			return ResponseEntity.ok(new LinkedList<>());
 		}
@@ -187,17 +177,28 @@ public class XCoreTaskController {
 				taskInstances.addAll(ret);
 			}
 		}
-		
+
 		List<XTask> tasks = new LinkedList<>();
-		
+
 		for (TaskInstance ti : taskInstances) {
 			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
-			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));		
+			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
 		}
 //		TODO change
 		tasks = tasks.subList(0, Math.min(50, tasks.size()));
 
 		return ResponseEntity.ok(tasks);
 	}
+	
+
+	private List<XTask> mapToXTasks(List<TaskInstance> taskInstances) {
+		List<XTask> tasks = new LinkedList<>();
+		for (TaskInstance ti : taskInstances) {
+			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
+			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
+		}
+		return tasks;
+	}
+
 
 }

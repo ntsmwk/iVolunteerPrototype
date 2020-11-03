@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
-import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
@@ -15,6 +18,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 public class XTaskInstanceService {
 
 	@Autowired XTaskInstanceRepository xTaskInstanceRepository;
+	@Autowired DateTimeService dateTimeService;
 
 	public TaskInstance getTaskInstance(String id) {
 		return xTaskInstanceRepository.findOne(id);
@@ -26,16 +30,10 @@ public class XTaskInstanceService {
 
 	public List<TaskInstance> getAllByYear(int year) {
 		List<TaskInstance> taskInstances = xTaskInstanceRepository.findAll();
-		List<TaskInstance> filteredList = taskInstances.stream().filter(tI -> {
-			PropertyInstance<Object> startDateProperty = tI.findProperty("Starting Date");
-			if (startDateProperty != null && startDateProperty.getValues().size() == 1) {
-				LocalDate date = LocalDate.parse("" + startDateProperty.getValues().get(0));
-				return date.getYear() == year;
-			}
-			return false;
-		}).collect(Collectors.toList());
-		return filteredList;
+		return filterTaskInstancesByYear(year, taskInstances);
 	}
+
+
 
 	public List<TaskInstance> getTaskInstance(List<String> ids) {
 		if (ids == null) {
@@ -50,8 +48,16 @@ public class XTaskInstanceService {
 		if (tenantId == null) {
 			return null;
 		}
-		List<TaskInstance> instances = xTaskInstanceRepository.findByIssuerId(tenantId);
+		List<TaskInstance> instances = xTaskInstanceRepository.findByTenantId(tenantId);
 		return instances;
+	}
+	
+	public List<TaskInstance> getTaskInstanceByTenantIdByYear(String tenantId, int year) {
+		if (tenantId == null) {
+			return null;
+		}
+		List<TaskInstance> instances = xTaskInstanceRepository.findByTenantId(tenantId);
+		return this.filterTaskInstancesByYear(year, instances);
 	}
 
 	public TaskInstance addOrOverwriteTaskInstance(TaskInstance taskInstance) {
@@ -78,4 +84,19 @@ public class XTaskInstanceService {
 	public void deleteTaskInstance(String id) {
 		xTaskInstanceRepository.delete(id);
 	}
+	
+	private List<TaskInstance> filterTaskInstancesByYear(int year, List<TaskInstance> taskInstances) {
+		List<TaskInstance> filteredList = taskInstances.stream().filter(tI -> {
+			PropertyInstance<Object> startDateProperty = tI.findProperty("Starting Date");
+			if (startDateProperty != null && startDateProperty.getValues().size() == 1) {
+				Date date = new Date((long) startDateProperty.getValues().get(0));
+				Calendar calendar = new GregorianCalendar();
+				calendar.setTime(date);
+				return calendar.get(Calendar.YEAR) == year;
+			}
+			return false;
+		}).collect(Collectors.toList());
+		return filteredList;
+	}
+	
 }

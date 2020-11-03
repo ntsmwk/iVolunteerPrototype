@@ -67,6 +67,19 @@ public class TaskInstanceRestClient {
 
 		return Arrays.asList(resp.getBody());
 	}
+	
+	public List<TaskInstance> getTaskInstancesByTenantByYear(String marketplaceURL, List<String> tenantIds, int year,
+			String authorization) {
+		String preUrl = "{0}/meta/core/task-instance/tenant/"+year;
+		String url = format(preUrl, marketplaceURL);
+		ResponseEntity<TaskInstance[]> resp = restTemplate.exchange(url, HttpMethod.PUT,
+				buildEntity(tenantIds, authorization), TaskInstance[].class);
+		if (resp == null || resp.getBody() == null) {
+			return null;
+		}
+
+		return Arrays.asList(resp.getBody());
+	}
 
 	public TaskInstance getTaskInstanceById(String marketplaceURL, String authorization, String id) {
 		String preUrl = "{0}/meta/core/task-instance/{1}";
