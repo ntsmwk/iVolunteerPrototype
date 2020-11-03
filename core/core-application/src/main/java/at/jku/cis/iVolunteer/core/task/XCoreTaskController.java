@@ -178,18 +178,41 @@ public class XCoreTaskController {
 			}
 		}
 
-		List<XTask> tasks = new LinkedList<>();
-
-		for (TaskInstance ti : taskInstances) {
-			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
-			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
-		}
-//		TODO change
-		tasks = tasks.subList(0, Math.min(50, tasks.size()));
-
+		List<XTask> tasks = mapToXTasks(taskInstances);
 		return ResponseEntity.ok(tasks);
 	}
-	
+
+	@GetMapping("/task/tenant/unsubscribed/{year}")
+	private ResponseEntity<Object> getTasksOfUnsubscribedTenantsByYear(@PathVariable int year,
+			@RequestHeader("Authorization") String authorization) {
+
+		List<Marketplace> marketplaces = marketplaceService.findAll();
+		if (marketplaces == null) {
+			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		CoreUser user = loginService.getLoggedInUser();
+
+		List<Tenant> tenants = tenantService.getUnsubscribedTenants(user);
+
+		if (tenants == null) {
+			return ResponseEntity.ok(new LinkedList<>());
+		}
+
+		List<TaskInstance> taskInstances = new LinkedList<>();
+
+		for (Marketplace mp : marketplaces) {
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenantByYear(mp.getUrl(),
+					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), year, authorization);
+			if (ret != null) {
+				taskInstances.addAll(ret);
+			}
+		}
+
+		List<XTask> tasks = mapToXTasks(taskInstances);
+		return ResponseEntity.ok(tasks);
+	}
 
 	private List<XTask> mapToXTasks(List<TaskInstance> taskInstances) {
 		List<XTask> tasks = new LinkedList<>();
@@ -199,6 +222,5 @@ public class XCoreTaskController {
 		}
 		return tasks;
 	}
-
 
 }
