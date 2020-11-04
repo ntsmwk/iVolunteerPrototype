@@ -17,7 +17,8 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.Tr
 @RestController
 public class TreePropertyDefinitionController {
 
-	@Autowired TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+	@Autowired
+	TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 
 	@GetMapping("/meta/core/property-definition/tree/all")
 	private List<TreePropertyDefinition> getAllTreePropertyDefinitions() {
@@ -26,7 +27,8 @@ public class TreePropertyDefinitionController {
 	}
 
 	@GetMapping("/meta/core/property-definition/tree/all/{tenantId}")
-	private List<TreePropertyDefinition> getAllTreePropertyDefinitionssForTenant(@PathVariable("tenantId") String tenantId) {
+	private List<TreePropertyDefinition> getAllTreePropertyDefinitionssForTenant(
+			@PathVariable("tenantId") String tenantId) {
 		return treePropertyDefinitionRepository.findByTenantId(tenantId);
 	}
 
@@ -37,17 +39,19 @@ public class TreePropertyDefinitionController {
 
 	@GetMapping("/meta/core/property-definition/tree/by-name/{name}")
 	private TreePropertyDefinition getTreePropertyDefinitionByName(@PathVariable("name") String name) {
-		return treePropertyDefinitionRepository.findByName(name);
+		return treePropertyDefinitionRepository.getByName(name);
 	}
 
 	@PostMapping("/meta/core/property-definition/tree/new")
-	private TreePropertyDefinition newTreePropertyDefinition(@RequestBody TreePropertyDefinition treePropertyDefinition) {
+	private TreePropertyDefinition newTreePropertyDefinition(
+			@RequestBody TreePropertyDefinition treePropertyDefinition) {
 		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 
 	@PutMapping("/meta/core/property-definition/tree/save")
-	private TreePropertyDefinition replaceTreePropertyDefinition(@RequestBody TreePropertyDefinition treePropertyDefinition) {
-		
+	private TreePropertyDefinition replaceTreePropertyDefinition(
+			@RequestBody TreePropertyDefinition treePropertyDefinition) {
+
 		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 

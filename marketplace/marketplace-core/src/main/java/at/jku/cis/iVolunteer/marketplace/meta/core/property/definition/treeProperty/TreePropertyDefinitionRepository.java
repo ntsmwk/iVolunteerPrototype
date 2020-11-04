@@ -7,10 +7,10 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.Tr
 
 public interface TreePropertyDefinitionRepository extends HasTenantRepository<TreePropertyDefinition, String> {
 
-	public TreePropertyDefinition findByName(String name);
+	TreePropertyDefinition getByNameAndTenantId(String name, String tenantId);
 
-	public TreePropertyDefinition findByNameAndTenantId(String name, String tenantId);
+	TreePropertyDefinition getByName(String name);
 
-	public List<TreePropertyDefinition> getAllByTenantId(String tenantId);
+	List<TreePropertyDefinition> getAllByTenantId(String tenantId);
 
 }

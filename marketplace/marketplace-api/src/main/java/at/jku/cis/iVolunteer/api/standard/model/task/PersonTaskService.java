@@ -53,7 +53,7 @@ public class PersonTaskService {
 	private static final ArrayList<String> LEVEL1_PROPERTIES = new ArrayList<String>(
 			Arrays.asList((new String[] { "Starting Date", "End Date", "Location" })));
 	private static final ArrayList<String> LEVEL2_PROPERTIES = new ArrayList<String>(
-			Arrays.asList((new String[] { "TaskType1", "TaskType2", "TaskType3", "Rank", "Duration" })));
+			Arrays.asList((new String[] { "Rank", "Duration" })));
 	// Everything else Level3
 
 	public void savePersonTasks(List<PersonTask> personTasks, String tenantId) {
@@ -86,7 +86,7 @@ public class PersonTaskService {
 		// @formatter:on
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskType")).forEach(p -> {
 			TreePropertyDefinition propertyDefinition = treePropertyDefinitionRepository
-					.findByNameAndTenantId("TaskType", tenantId);
+					.getByNameAndTenantId("TaskType", tenantId);
 			List<TreePropertyEntry> allPropertyEntries = propertyDefinition.getEntries();
 
 			TreePropertyEntry entry1 = allPropertyEntries.stream()
@@ -100,36 +100,42 @@ public class PersonTaskService {
 			TreePropertyEntry entry2 = tt2Entries.stream().filter(e -> e.getValue().equals(personTask.getTaskType2()))
 					.findFirst().orElse(null);
 
-			List<String> tt3Ids = propertyDefinition.getRelationships().stream()
-					.filter(r -> r.getSourceId().equals(entry2.getId())).map(r -> r.getTargetId())
-					.collect(Collectors.toList());
-			List<TreePropertyEntry> tt3Entries = allPropertyEntries.stream().filter(e -> tt3Ids.contains(e.getId()))
-					.collect(Collectors.toList());
-			TreePropertyEntry entry3 = tt3Entries.stream().filter(e -> e.getValue().equals(personTask.getTaskType3()))
-					.findFirst().orElse(null);
-
-			if (entry3 != null) {
-				List<String> tt4Ids = propertyDefinition.getRelationships().stream()
-						.filter(r -> r.getSourceId().equals(entry3.getId())).map(r -> r.getTargetId())
+			if (entry2 != null) {
+				List<String> tt3Ids = propertyDefinition.getRelationships().stream()
+						.filter(r -> r.getSourceId().equals(entry2.getId())).map(r -> r.getTargetId())
 						.collect(Collectors.toList());
-				List<TreePropertyEntry> tt4Entries = allPropertyEntries.stream().filter(e -> tt4Ids.contains(e.getId()))
+				List<TreePropertyEntry> tt3Entries = allPropertyEntries.stream().filter(e -> tt3Ids.contains(e.getId()))
 						.collect(Collectors.toList());
-				TreePropertyEntry entry4 = tt4Entries.stream()
-						.filter(e -> e.getValue().equals(personTask.getTaskType4())).findFirst().orElse(null);
+				TreePropertyEntry entry3 = tt3Entries.stream()
+						.filter(e -> e.getValue().equals(personTask.getTaskType3())).findFirst().orElse(null);
 
-				if (entry4 != null) {
-					entry4.setParents(List.of(entry3, entry2, entry1));
-					p.setValues(Collections.singletonList(entry4));
+				if (entry3 != null) {
+					List<String> tt4Ids = propertyDefinition.getRelationships().stream()
+							.filter(r -> r.getSourceId().equals(entry3.getId())).map(r -> r.getTargetId())
+							.collect(Collectors.toList());
+					List<TreePropertyEntry> tt4Entries = allPropertyEntries.stream()
+							.filter(e -> tt4Ids.contains(e.getId())).collect(Collectors.toList());
+					TreePropertyEntry entry4 = tt4Entries.stream()
+							.filter(e -> e.getValue().equals(personTask.getTaskType4())).findFirst().orElse(null);
+
+					if (entry4 != null) {
+						entry4.setParents(List.of(entry3, entry2, entry1));
+						p.setValues(Collections.singletonList(entry4));
+					} else {
+						// entry 4 == null
+						entry3.setParents(List.of(entry2, entry1));
+						p.setValues(Collections.singletonList(entry3));
+					}
+
 				} else {
-					// entry 4 == null
-					entry3.setParents(List.of(entry2, entry1));
-					p.setValues(Collections.singletonList(entry3));
+					// entry3 == null
+					entry2.setParents(List.of(entry1));
+					p.setValues(Collections.singletonList(entry2));
 				}
 
 			} else {
-				// entry3 == null
-				entry2.setParents(List.of(entry1));
-				p.setValues(Collections.singletonList(entry2));
+				// entry 2 == null
+				p.setValues(Collections.singletonList(entry1));
 			}
 		});
 		// @formatter:off

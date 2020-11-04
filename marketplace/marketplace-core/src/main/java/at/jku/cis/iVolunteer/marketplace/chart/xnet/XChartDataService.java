@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.marketplace.chart.xnet;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model.chart.xnet.XChartDataSet;
@@ -26,6 +28,8 @@ public class XChartDataService {
     UserService userService;
     @Autowired
     ClassInstanceRepository classInstanceRepository;
+    @Autowired
+    private DateTimeService dateTimeService;
 
     // public List<XChartDataSet> getChartData() {
     // return chartDataRepository.findAll();
@@ -84,9 +88,26 @@ public class XChartDataService {
     private XChartDataSet calcTasksPerDayPerTenant(List<ClassInstance> classInstances, String userId, String tenantId) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Long> dataMap = classInstances.stream().collect(Collectors.groupingBy(ci -> {
-            Date startingDate = new Date((Long) ci.getProperties().stream()
-                    .filter(p -> p.getName().equals("Starting Date")).findAny().orElse(null).getValues().get(0));
-            return dateFormat.format(startingDate);
+
+            try {
+                Date startingDate = new Date((Long) ci.getProperties().stream()
+                        .filter(p -> p.getName().equals("Starting Date")).findAny().orElse(null).getValues().get(0));
+                return dateFormat.format(startingDate);
+            } catch (ClassCastException e) {
+                try {
+                    Date parsedDate = this.dateTimeService.parseMultipleDateFormats(
+                            (String) ci.getProperties().stream().filter(p -> p.getName().equals("Starting Date"))
+                                    .findAny().orElse(null).getValues().get(0));
+                    return dateFormat.format(parsedDate);
+                } catch (Exception f) {
+                    Instant instant = Instant.ofEpochMilli(
+                            (Long) ci.getProperties().stream().filter(p -> p.getName().equals("Starting Date"))
+                                    .findAny().orElse(null).getValues().get(0));
+                    Date d = Date.from(instant);
+                    return dateFormat.format(d);
+                }
+            }
+
         }, Collectors.counting()));
 
         List<XDataPoint> datapoints = new ArrayList<>();

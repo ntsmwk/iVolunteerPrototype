@@ -31,16 +31,15 @@ public class InitializationService {
 	@Autowired
 	protected RelationshipRepository relationshipRepository;
 	@Autowired
-	protected FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	protected FlatPropertyDefinitionRepository flatPropertyDefinitionRepository;
+	@Autowired
+	protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 	@Autowired
 	protected ClassConfigurationRepository classConfigurationRepository;
 	@Autowired
 	protected MatchingConfigurationRepository matchingConfigurationRepository;
 	@Autowired
 	protected MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
-	@Autowired
-	protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
-
 	@Autowired
 	private CoreTenantRestClient coreTenantRestClient;
 
@@ -69,15 +68,16 @@ public class InitializationService {
 	public void addiVolunteerPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
-			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+			for (FlatPropertyDefinition<Object> fpd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(fpd.getName(), fpd.getTenantId())
+						.size() == 0) {
+					flatPropertyDefinitionRepository.save(fpd);
 				}
 			}
 
-			for (TreePropertyDefinition pd : standardPropertyDefinitions.getAllTreeProperties(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					treePropertyDefinitionRepository.save(pd);
+			for (TreePropertyDefinition tpd : standardPropertyDefinitions.getAllTreeProperties(tenant.getId())) {
+				if (treePropertyDefinitionRepository.getByNameAndTenantId(tpd.getName(), tpd.getTenantId()) == null) {
+					treePropertyDefinitionRepository.save(tpd);
 				}
 			}
 
@@ -89,8 +89,8 @@ public class InitializationService {
 		tenants.forEach(tenant -> {
 			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions
 					.getAllFlexProdProperties(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					flatPropertyDefinitionRepository.save(pd);
 				}
 			}
 		});
@@ -100,8 +100,8 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllGeneric(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					flatPropertyDefinitionRepository.save(pd);
 				}
 			}
 		});
@@ -111,8 +111,8 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllHeader(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					flatPropertyDefinitionRepository.save(pd);
 				}
 			}
 		});
