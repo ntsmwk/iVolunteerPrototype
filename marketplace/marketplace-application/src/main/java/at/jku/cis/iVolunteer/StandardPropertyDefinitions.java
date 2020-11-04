@@ -34,10 +34,8 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.Tr
 @Component
 public class StandardPropertyDefinitions {
 
-	@Autowired
-	public FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	public CoreTenantRestClient coreTenantRestClient;
+	@Autowired public FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired public CoreTenantRestClient coreTenantRestClient;
 
 	private List<Tenant> getTenants() {
 		return coreTenantRestClient.getAllTenants();

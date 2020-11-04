@@ -45,6 +45,10 @@ public class APIInitializationService {
 		tenants = coreTenantRestClient.getAllTenants();
 		return tenants;
 	}
+	
+	public void addFlexProdClassDefinitions() {
+		// TODO Auto-generated method stub
+	}
 
 	public void addiVolunteerAPIClassDefinition() {
 		List<Tenant> tenants = getTenants();
@@ -179,5 +183,6 @@ public class APIInitializationService {
 	private List<TreePropertyDefinition> filterPersonTaskTreeProperties(List<TreePropertyDefinition> properties) {
 		return properties.stream().filter(p -> p.getName().equals("TaskType")).collect(Collectors.toList());
 	}
+
 
 }

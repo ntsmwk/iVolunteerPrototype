@@ -13,7 +13,6 @@ public class MatchingController {
 
 	@GetMapping("matching/test")
 	public void testMatching() {
-
 		matchingService.match(VOLUNTEER_ID, TENANT_ID);
 	}
 }
