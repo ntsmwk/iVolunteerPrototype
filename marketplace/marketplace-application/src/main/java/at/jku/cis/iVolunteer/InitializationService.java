@@ -21,26 +21,38 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataClasses;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
 @Service
 public class InitializationService {
 
-	@Autowired protected ClassDefinitionRepository classDefinitionRepository;
-	@Autowired protected RelationshipRepository relationshipRepository;
-	@Autowired protected FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired protected ClassConfigurationRepository classConfigurationRepository;
-	@Autowired protected MatchingConfigurationRepository matchingConfigurationRepository;
-	@Autowired protected MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
-	@Autowired protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+	@Autowired
+	protected ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	protected RelationshipRepository relationshipRepository;
+	@Autowired
+	protected FlatPropertyDefinitionRepository flatPropertyDefinitionRepository;
+	@Autowired
+	protected TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+	@Autowired
+	protected ClassConfigurationRepository classConfigurationRepository;
+	@Autowired
+	protected MatchingConfigurationRepository matchingConfigurationRepository;
+	@Autowired
+	protected MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
 
-	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired
+	public StandardPropertyDefinitions standardPropertyDefinitions;
 
-	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
+	@Autowired
+	private ClassConfigurationController classConfigurationController;
 
-	@Autowired private ClassConfigurationController classConfigurationController;
-
-	@Autowired protected TestDataClasses testDataClasses;
-	@Autowired protected TestDataInstances testDataInstances;
+	@Autowired
+	protected TestDataClasses testDataClasses;
+	@Autowired
+	protected TestDataInstances testDataInstances;
 
 	@PostConstruct
 	public void init() {
@@ -56,20 +68,28 @@ public class InitializationService {
 	public void addiVolunteerPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
-			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+			for (FlatPropertyDefinition<Object> fpd : standardPropertyDefinitions.getAlliVolunteer(tenant.getId())) {
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(fpd.getName(), fpd.getTenantId())
+						.size() == 0) {
+					flatPropertyDefinitionRepository.save(fpd);
 				}
 			}
+
+			for (TreePropertyDefinition tpd : standardPropertyDefinitions.getAllTreeProperties(tenant.getId())) {
+				if (treePropertyDefinitionRepository.getByNameAndTenantId(tpd.getName(), tpd.getTenantId()) == null) {
+					treePropertyDefinitionRepository.save(tpd);
+				}
+			}
+
 		});
 	}
-	
+
 	public void addTestPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllTest(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					flatPropertyDefinitionRepository.save(pd);
 				}
 			}
 		});
@@ -80,8 +100,8 @@ public class InitializationService {
 		tenants.forEach(tenant -> {
 			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions
 					.getAllFlexProdProperties(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					flatPropertyDefinitionRepository.save(pd);
 				}
 			}
 		});
@@ -91,8 +111,8 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllGeneric(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					flatPropertyDefinitionRepository.save(pd);
 				}
 			}
 		});
@@ -102,8 +122,8 @@ public class InitializationService {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
 			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllHeader(tenant.getId())) {
-				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					propertyDefinitionRepository.save(pd);
+				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					flatPropertyDefinitionRepository.save(pd);
 				}
 			}
 		});

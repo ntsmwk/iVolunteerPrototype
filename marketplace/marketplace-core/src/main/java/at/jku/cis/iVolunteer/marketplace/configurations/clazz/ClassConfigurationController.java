@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.TreePropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurationDTO;
@@ -28,21 +30,31 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 
 @RestController
 public class ClassConfigurationController {
-
-	@Autowired private ClassConfigurationRepository classConfigurationRepository;
-	@Autowired private CollectionService collectionService;
-
-	@Autowired private MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private ClassConfigurationRepository classConfigurationRepository;
+	@Autowired
+	private CollectionService collectionService;
+	@Autowired
+	private MatchingEntityMappingConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired
+	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	private RelationshipRepository relationshipRepository;
+	@Autowired
+	private FlatPropertyDefinitionRepository flatPropertyDefinitionRepository;
+	@Autowired
+	private TreePropertyDefinitionRepository treePropertyDefinitionRepository;
+	@Autowired
+	private PropertyDefinitionToClassPropertyMapper flatPropertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private TreePropertyDefinitionToClassPropertyMapper treePropertyDefinitionToClassPropertyMapper;
 
 	@GetMapping("class-configuration/all")
 	List<ClassConfiguration> getAllClassConfigurations() {
@@ -185,7 +197,9 @@ public class ClassConfigurationController {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();
 
-		List<FlatPropertyDefinition<Object>> properties = this.propertyDefinitionRepository.findByTenantId(tenantId);
+		List<FlatPropertyDefinition<Object>> flatProperties = this.flatPropertyDefinitionRepository
+				.findByTenantId(tenantId);
+		List<TreePropertyDefinition> treeProperties = this.treePropertyDefinitionRepository.findByTenantId(tenantId);
 
 		ClassDefinition fwPassEintrag = new ClassDefinition();
 		fwPassEintrag.setId(new ObjectId().toHexString());
@@ -198,26 +212,30 @@ public class ClassConfigurationController {
 		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
 		fwPassEintrag.setLevel(0);
 
-		FlatPropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("ID")).findFirst().get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(idProperty));
-
-		FlatPropertyDefinition nameProperty = properties.stream().filter(p -> p.getName().equals("Name")).findFirst()
+		FlatPropertyDefinition idProperty = flatProperties.stream().filter(p -> p.getName().equals("ID")).findFirst()
 				.get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(nameProperty));
+		fwPassEintrag.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(idProperty));
 
-//		FlatPropertyDefinition evidenzProperty = properties.stream().filter(p -> p.getName().equals("evidenz")).findFirst()
-//				.get();
-//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
-
-		FlatPropertyDefinition imageLinkProperty = properties.stream().filter(p -> p.getName().equals("Description"))
+		FlatPropertyDefinition nameProperty = flatProperties.stream().filter(p -> p.getName().equals("Name"))
 				.findFirst().get();
-		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(imageLinkProperty));
-//		
-//		FlatPropertyDefinition descriptionProperty = properties.stream().filter(p -> p.getName().equals("Image Link")).findFirst().get();
-//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(descriptionProperty));
-//		
-//		FlatPropertyDefinition expiredProperty = properties.stream().filter(p -> p.getName().equals("Expired")).findFirst().get();
-//		fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
+		fwPassEintrag.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(nameProperty));
+
+		// FlatPropertyDefinition evidenzProperty = properties.stream().filter(p ->
+		// p.getName().equals("evidenz")).findFirst()
+		// .get();
+		// fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(evidenzProperty));
+
+		FlatPropertyDefinition imageLinkProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Description")).findFirst().get();
+		fwPassEintrag.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(imageLinkProperty));
+		//
+		// FlatPropertyDefinition descriptionProperty = properties.stream().filter(p ->
+		// p.getName().equals("Image Link")).findFirst().get();
+		// fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(descriptionProperty));
+		//
+		// FlatPropertyDefinition expiredProperty = properties.stream().filter(p ->
+		// p.getName().equals("Expired")).findFirst().get();
+		// fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(expiredProperty));
 
 		classDefinitions.add(fwPassEintrag);
 
@@ -230,17 +248,17 @@ public class ClassConfigurationController {
 		task.setProperties(new ArrayList<>());
 		task.setLevel(0);
 
-		FlatPropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date"))
-				.findFirst().get();
-		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateFromProperty));
+		FlatPropertyDefinition dateFromProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Starting Date")).findFirst().get();
+		task.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(dateFromProperty));
 
-		FlatPropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date"))
+		FlatPropertyDefinition dateToProperty = flatProperties.stream().filter(p -> p.getName().equals("End Date"))
 				.findFirst().get();
-		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
+		task.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
 
-		FlatPropertyDefinition locationProperty = properties.stream().filter(p -> p.getName().equals("Location"))
+		FlatPropertyDefinition locationProperty = flatProperties.stream().filter(p -> p.getName().equals("Location"))
 				.findFirst().get();
-		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(locationProperty));
+		task.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(locationProperty));
 
 		classDefinitions.add(task);
 
@@ -313,28 +331,20 @@ public class ClassConfigurationController {
 		myTask.setClassArchetype(ClassArchetype.TASK);
 		myTask.setProperties(new ArrayList<>());
 
-		FlatPropertyDefinition tt1 = properties.stream().filter(p -> p.getName().equals("TaskType1")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt1));
+		TreePropertyDefinition taskType = treeProperties.stream().filter(p -> p.getName().equals("TaskType"))
+				.findFirst().orElse(null);
+		if (taskType != null) {
+			myTask.getProperties().add(treePropertyDefinitionToClassPropertyMapper.toTarget(taskType));
+		}
 
-		FlatPropertyDefinition tt2 = properties.stream().filter(p -> p.getName().equals("TaskType2")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt2));
+		FlatPropertyDefinition rank = flatProperties.stream().filter(p -> p.getName().equals("Rank")).findFirst().get();
+		myTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(rank));
 
-		FlatPropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("TaskType3")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
-
-//		FlatPropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
-//		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
-
-		FlatPropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("Rank")).findFirst().get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(rank));
-
-		FlatPropertyDefinition duration = properties.stream().filter(p -> p.getName().equals("Duration")).findFirst()
-				.get();
-		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(duration));
+		FlatPropertyDefinition duration = flatProperties.stream().filter(p -> p.getName().equals("Duration"))
+				.findFirst().get();
+		myTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(duration));
 
 		classDefinitions.add(myTask);
-
-
 
 		Inheritance r5 = new Inheritance();
 		r5.setRelationshipType(RelationshipType.INHERITANCE);
@@ -343,7 +353,7 @@ public class ClassConfigurationController {
 
 		relationships.add(r5);
 
-//		Test Task for Micha
+		// Test Task for Micha
 
 		ClassDefinition testTask = new ClassDefinition();
 		testTask.setId(new ObjectId().toHexString());
@@ -354,42 +364,40 @@ public class ClassConfigurationController {
 		testTask.setProperties(new ArrayList<>());
 		testTask.setLevel(0);
 
-		FlatPropertyDefinition testTextProperty = properties.stream()
+		FlatPropertyDefinition testTextProperty = flatProperties.stream()
 				.filter(p -> p.getName().equals("Test TextProperty")).findFirst().get();
-		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testTextProperty));
-		
-		FlatPropertyDefinition testLongTextProperty = properties.stream()
-				.filter(p -> p.getName().equals("Test LongTextProperty")).findFirst().get();
-		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testLongTextProperty));
-		
-		FlatPropertyDefinition testWholeNumberProperty = properties.stream()
-				.filter(p -> p.getName().equals("Test WholeNumberProperty")).findFirst().get();
-		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testWholeNumberProperty));
-		
-		FlatPropertyDefinition testFloatNumberProperty = properties.stream()
-				.filter(p -> p.getName().equals("Test FloatNumberProperty")).findFirst().get();
-		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testFloatNumberProperty));
-		
-		FlatPropertyDefinition testBooleanProperty = properties.stream()
-				.filter(p -> p.getName().equals("Test BooleanProperty")).findFirst().get();
-		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testBooleanProperty));
-		
-		FlatPropertyDefinition testDateProperty = properties.stream()
-				.filter(p -> p.getName().equals("Test DateProperty")).findFirst().get();
-		testTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(testDateProperty));
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testTextProperty));
 
+		FlatPropertyDefinition testLongTextProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test LongTextProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testLongTextProperty));
+
+		FlatPropertyDefinition testWholeNumberProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test WholeNumberProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testWholeNumberProperty));
+
+		FlatPropertyDefinition testFloatNumberProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test FloatNumberProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testFloatNumberProperty));
+
+		FlatPropertyDefinition testBooleanProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test BooleanProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testBooleanProperty));
+
+		FlatPropertyDefinition testDateProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test DateProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testDateProperty));
 
 		classDefinitions.add(testTask);
-		
-		
+
 		Inheritance r6 = new Inheritance();
 		r6.setRelationshipType(RelationshipType.INHERITANCE);
 		r6.setTarget(testTask.getId());
 		r6.setSource(myTask.getId());
 
 		relationships.add(r6);
-//		
-		
+		//
+
 		ClassConfiguration configurator = new ClassConfiguration();
 		configurator.setTimestamp(new Date());
 		configurator.setTenantId(tenantId);

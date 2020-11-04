@@ -52,14 +52,13 @@ public class TreePropertyDefinitionToClassPropertyMapper
 
 	@Override
 	public List<ClassProperty<Object>> toTargets(List<TreePropertyDefinition> sources) {
-
 		if (sources == null) {
 			return null;
 		}
 
 		List<ClassProperty<Object>> classProperties = new ArrayList<>();
 		for (TreePropertyDefinition enumDefinition : sources) {
-			toTarget(enumDefinition);
+			classProperties.add(toTarget(enumDefinition));
 		}
 
 		return classProperties;

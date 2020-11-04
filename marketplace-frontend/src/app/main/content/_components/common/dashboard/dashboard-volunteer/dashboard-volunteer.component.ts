@@ -203,8 +203,8 @@ export class DashboardVolunteerComponent implements OnInit {
       this.isLocalRepositoryConnected = false;
     }
     this.isLoaded = true;
-    console.error(this.dataSource.data);
-    console.error(this.volunteer);
+    // console.error(this.dataSource.data);
+    // console.error(this.volunteer);
   }
 
   getTenantImageById(tenantId: string) {
@@ -297,11 +297,14 @@ export class DashboardVolunteerComponent implements OnInit {
     const marketplace = <Marketplace>(
       await this.marketplaceService.findById(ciDTO.marketplaceId).toPromise()
     );
-    const ci = <ClassInstance>(
+    let ci = <ClassInstance>(
       await this.classInstanceService
         .getClassInstanceById(marketplace, ciDTO.id)
         .toPromise()
     );
+
+    // remove allowedValues, since too large for localRepository... 
+    ci.properties.forEach(p => p.allowedValues = [])
 
     this.localRepositoryService
       .synchronizeSingleClassInstance(this.volunteer, ci)
@@ -377,6 +380,11 @@ export class DashboardVolunteerComponent implements OnInit {
         missingCiDTOs.map(c => c.id)
       )
       .toPromise();
+
+      // remove allowedValues, since too large for localRepository... 
+      missingCis.forEach(ci => {
+        ci.properties.forEach(p => p.allowedValues = [])
+      });
 
     this.localRepositoryService
       .synchronizeClassInstances(this.volunteer, missingCis)

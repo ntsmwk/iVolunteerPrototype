@@ -1,9 +1,9 @@
 <div
   class="page-layout blank p-24"
   fusePerfectScrollbar
-  style="overflow: scroll;"
+  style="overflow: scroll"
 >
-  <div style="padding-top: 12px;"></div>
+  <div style="padding-top: 12px"></div>
 
   <customizable-header
     *ngIf="tenant && !isDialog"
@@ -47,7 +47,7 @@
       matSort
       class="table"
       [dataSource]="tableDataSource"
-      style="width: 100%;"
+      style="width: 100%"
       (matSortChange)="sortData($event)"
     >
       <ng-container matColumnDef="name">
@@ -60,9 +60,7 @@
       </ng-container>
 
       <ng-container matColumnDef="values">
-        <mat-header-cell *matHeaderCellDef>
-          Wert
-        </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Wert </mat-header-cell>
         <mat-cell *matCellDef="let element">
           <span *ngIf="element.type === 'DATE'"
             >{{ element.values[0] | date: "dd.MM.yyyy HH:mm" }}
@@ -72,9 +70,7 @@
       </ng-container>
 
       <ng-container matColumnDef="type">
-        <mat-header-cell *matHeaderCellDef>
-          Datentyp
-        </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Datentyp </mat-header-cell>
         <mat-cell *matCellDef="let element">
           <span>{{ element.type }} </span>
         </mat-cell>
@@ -87,7 +83,7 @@
     </mat-table>
   </div>
 
-  <p *ngIf="isLocal" style="margin-top: 20px;">
+  <p *ngIf="isLocal" style="margin-top: 20px">
     Die Informationen stammen aus dem lokalen Freiwilligenpass!
   </p>
 </div>

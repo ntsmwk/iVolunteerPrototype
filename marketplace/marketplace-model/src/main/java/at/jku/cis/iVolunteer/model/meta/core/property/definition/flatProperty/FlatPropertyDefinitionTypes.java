@@ -46,19 +46,20 @@ public class FlatPropertyDefinitionTypes {
 			this.type = PropertyType.DATE;
 		}
 	}
-	
-//	public static class EnumPropertyDefinition extends PropertyDefinition<EnumEntry> {
-//		public EnumPropertyDefinition() {
-//			this.type = PropertyType.ENUM;
-//		}
-//	}
-	
+
+	// public static class EnumPropertyDefinition extends
+	// PropertyDefinition<EnumEntry> {
+	// public EnumPropertyDefinition() {
+	// this.type = PropertyType.ENUM;
+	// }
+	// }
+
 	public static class TuplePropertyDefinition<X, Y> extends FlatPropertyDefinition<Tuple<X, Y>> {
 		public TuplePropertyDefinition() {
 			this.type = PropertyType.TUPLE;
 		}
 	}
-	
+
 	public static class LocationPropertyDefinition extends FlatPropertyDefinition<Location> {
 
 		public LocationPropertyDefinition() {

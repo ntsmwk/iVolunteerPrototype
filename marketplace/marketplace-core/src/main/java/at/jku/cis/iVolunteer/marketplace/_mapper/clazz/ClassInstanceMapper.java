@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.marketplace.hash.Hasher;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstanceDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyEntry;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Service
@@ -96,17 +99,24 @@ public class ClassInstanceMapper {
 					.findFirst().orElse(null);
 			if (duration != null) {
 				if (duration.getValues().size() > 0) {
-					dto.setDuration((String) duration.getValues().get(0));
+					try {
+						dto.setDuration((String) duration.getValues().get(0));
+
+					} catch (ClassCastException e) {
+						dto.setDuration(((Integer) duration.getValues().get(0)).toString());
+					}
 				}
 			}
-// Alex TODO
-//			PropertyInstance<Object> location = ci.getProperties().stream().filter(p -> "Location".equals(p.getName()))
-//					.findFirst().orElse(null);
-//			if (location != null) {
-//				if (location.getValues().size() > 0) {
-//					dto.setLocation((String) location.getValues().get(0));
-//				}
-//			}
+
+			// Alex TODO
+			// PropertyInstance<Object> location = ci.getProperties().stream().filter(p ->
+			// "Location".equals(p.getName()))
+			// .findFirst().orElse(null);
+			// if (location != null) {
+			// if (location.getValues().size() > 0) {
+			// dto.setLocation((String) location.getValues().get(0));
+			// }
+			// }
 
 			PropertyInstance<Object> description = ci.getProperties().stream()
 					.filter(p -> "Description".equals(p.getName())).findFirst().orElse(null);
@@ -124,27 +134,49 @@ public class ClassInstanceMapper {
 				}
 			}
 
-			PropertyInstance<Object> taskType1 = ci.getProperties().stream()
-					.filter(p -> "TaskType1".equals(p.getName())).findFirst().orElse(null);
-			if (taskType1 != null) {
-				if (taskType1.getValues().size() > 0) {
-					dto.setTaskType1((String) taskType1.getValues().get(0));
+			PropertyInstance<Object> taskType = ci.getProperties().stream().filter(p -> p.getName().equals("TaskType"))
+					.findFirst().orElse(null);
+			if (taskType != null) {
+				if (ci.getId().equals("5fa15bf3430116da3e8a4945")) {
+					System.out.println();
 				}
-			}
+				if (taskType.getValues().size() > 0) {
+					try {
+						ObjectMapper mapper = new ObjectMapper();
+						TreePropertyEntry entry = mapper.convertValue(taskType.getValues().get(0),
+								TreePropertyEntry.class);
 
-			PropertyInstance<Object> taskType2 = ci.getProperties().stream()
-					.filter(p -> "TaskType2".equals(p.getName())).findFirst().orElse(null);
-			if (taskType2 != null) {
-				if (taskType2.getValues().size() > 0) {
-					dto.setTaskType2((String) taskType2.getValues().get(0));
-				}
-			}
+						List<TreePropertyEntry> parents = entry.getParents();
+						TreePropertyEntry parent1 = parents.stream().filter(e -> e.getLevel() == 0).findFirst()
+								.orElse(null);
+						TreePropertyEntry parent2 = parents.stream().filter(e -> e.getLevel() == 1).findFirst()
+								.orElse(null);
 
-			PropertyInstance<Object> taskType3 = ci.getProperties().stream()
-					.filter(p -> "TaskType3".equals(p.getName())).findFirst().orElse(null);
-			if (taskType3 != null) {
-				if (taskType3.getValues().size() > 0) {
-					dto.setTaskType3((String) taskType3.getValues().get(0));
+						if (entry.getParents().size() >= 2) {
+							dto.setTaskType3(entry.getValue());
+
+							if (parent2 != null) {
+								dto.setTaskType2(parent2.getValue());
+							}
+							if (parent1 != null) {
+								dto.setTaskType1(parent1.getValue());
+							}
+
+						}
+						if (entry.getParents().size() == 1) {
+							dto.setTaskType2(entry.getValue());
+
+							if (parent1 != null) {
+								dto.setTaskType1(parent1.getValue());
+							}
+						}
+
+						if (entry.getParents().size() == 0) {
+							dto.setTaskType1(entry.getValue());
+						}
+					} catch (Exception e) {
+					}
+
 				}
 			}
 
