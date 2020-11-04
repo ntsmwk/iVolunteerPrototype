@@ -119,17 +119,17 @@ public class PersonTaskService {
 							.filter(e -> e.getValue().equals(personTask.getTaskType4())).findFirst().orElse(null);
 
 					if (entry4 != null) {
-						entry4.setParents(List.of(entry3, entry2, entry1));
+						entry4.setParents(Arrays.asList(entry3, entry2, entry1));
 						p.setValues(Collections.singletonList(entry4));
 					} else {
 						// entry 4 == null
-						entry3.setParents(List.of(entry2, entry1));
+						entry3.setParents(Arrays.asList(entry2, entry1));
 						p.setValues(Collections.singletonList(entry3));
 					}
 
 				} else {
 					// entry3 == null
-					entry2.setParents(List.of(entry1));
+					entry2.setParents(Arrays.asList(entry1));
 					p.setValues(Collections.singletonList(entry2));
 				}
 

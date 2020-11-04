@@ -101,7 +101,7 @@ public class InitializationController {
 		apiInitializationService.addiVolunteerAPIClassDefinition();
 	}
 
-	@PutMapping("/init/add-configurator-test-configurations")
+	@PutMapping("/init/add-configurator-test-configurations") 
 	public void addClassConfigurations() {
 		initializationService.addClassConfigurations(1);
 	}

@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -80,7 +81,7 @@ public class StandardPropertyDefinitions {
 		return new ArrayList(props);
 
 	}
-	
+
 	public List<FlatPropertyDefinition<Object>> getAllTest(String tenantId) {
 		List<FlatPropertyDefinition<?>> props = new LinkedList<>();
 
@@ -438,11 +439,10 @@ public class StandardPropertyDefinitions {
 					.concat(this.getEntries().stream(), List
 							.of(p, p1, p2, p3, p4, p1_1, p1_2, p2_1, p2_2, p2_3, p2_4, p3_1, p4_1, p4_2, p4_3).stream())
 					.collect(Collectors.toList()));
-			this.setRelationships(Stream
-					.concat(this.getRelationships().stream(),
-							List.of(relationshipP1, relationshipP2, relationshipP3, relationshipP4, relationshipP5,
-									relationshipP6, relationshipP7, relationshipP8, relationshipP9, relationshipP10,
-									relationshipP11, relationshipP12, relationshipP13, relationshipP14).stream())
+			this.setRelationships(Stream.concat(this.getRelationships().stream(),
+					Arrays.asList(relationshipP1, relationshipP2, relationshipP3, relationshipP4, relationshipP5,
+							relationshipP6, relationshipP7, relationshipP8, relationshipP9, relationshipP10,
+							relationshipP11, relationshipP12, relationshipP13, relationshipP14).stream())
 					.collect(Collectors.toList()));
 
 			// Tätigkeit
@@ -452,11 +452,11 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipT1 = new TreePropertyRelationship(t, t1, true);
 			TreePropertyRelationship relationshipT2 = new TreePropertyRelationship(t1, t1_1, true);
 
-			this.setEntries(Stream.concat(this.getEntries().stream(), List.of(t, t1, t1_1).stream())
+			this.setEntries(Stream.concat(this.getEntries().stream(), Arrays.asList(t, t1, t1_1).stream())
 					.collect(Collectors.toList()));
-			this.setRelationships(
-					Stream.concat(this.getRelationships().stream(), List.of(relationshipT1, relationshipT2).stream())
-							.collect(Collectors.toList()));
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(), Arrays.asList(relationshipT1, relationshipT2).stream())
+					.collect(Collectors.toList()));
 
 			// Veranstaltung
 			TreePropertyEntry v = new TreePropertyEntry("Veranstaltung", false, 0, true);
@@ -479,12 +479,13 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipV8 = new TreePropertyRelationship(v2, v2_4, true);
 
 			this.setEntries(Stream
-					.concat(this.getEntries().stream(), List.of(v, v1, v2, v1_1, v1_2, v2_1, v2_2, v2_3, v2_4).stream())
+					.concat(this.getEntries().stream(),
+							Arrays.asList(v, v1, v2, v1_1, v1_2, v2_1, v2_2, v2_3, v2_4).stream())
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream
 					.concat(this.getRelationships().stream(),
-							List.of(relationshipV1, relationshipV2, relationshipV3, relationshipV4, relationshipV5,
-									relationshipV6, relationshipV7, relationshipV8).stream())
+							Arrays.asList(relationshipV1, relationshipV2, relationshipV3, relationshipV4,
+									relationshipV5, relationshipV6, relationshipV7, relationshipV8).stream())
 					.collect(Collectors.toList()));
 
 			TreePropertyRelationship rel1 = new TreePropertyRelationship(this.getId(), a.getId(), true);
@@ -492,7 +493,7 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship rel3 = new TreePropertyRelationship(this.getId(), t.getId(), true);
 			TreePropertyRelationship rel4 = new TreePropertyRelationship(this.getId(), v.getId(), true);
 			this.setRelationships(
-					Stream.concat(this.getRelationships().stream(), List.of(rel1, rel2, rel3, rel4).stream())
+					Stream.concat(this.getRelationships().stream(), Arrays.asList(rel1, rel2, rel3, rel4).stream())
 							.collect(Collectors.toList()));
 		}
 	}
@@ -524,10 +525,10 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipEinsatz5 = new TreePropertyRelationship(brandeinsatz, tbd2, true);
 			this.setEntries(Stream
 					.concat(this.getEntries().stream(),
-							List.of(einsatz, technischerEinsatz, t1, tbd, brandeinsatz, tbd2).stream())
+							Arrays.asList(einsatz, technischerEinsatz, t1, tbd, brandeinsatz, tbd2).stream())
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream
-					.concat(this.getRelationships().stream(), List.of(relationshipEinsatz1, relationshipEinsatz2,
+					.concat(this.getRelationships().stream(), Arrays.asList(relationshipEinsatz1, relationshipEinsatz2,
 							relationshipEinsatz3, relationshipEinsatz4, relationshipEinsatz5).stream())
 					.collect(Collectors.toList()));
 
@@ -551,11 +552,11 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipBewerb7 = new TreePropertyRelationship(teilnahme, sonstiges, true);
 			TreePropertyRelationship relationshipBewerb8 = new TreePropertyRelationship(teilnahme, thl2, true);
 			TreePropertyRelationship relationshipBewerb9 = new TreePropertyRelationship(pruefung, thl3, true);
-			this.setEntries(Stream.concat(this.getEntries().stream(),
-					List.of(bewerb, teilnahme, vorbereitung, pruefung, fla, thl, fla2, sonstiges, thl2, thl3).stream())
+			this.setEntries(Stream.concat(this.getEntries().stream(), Arrays
+					.asList(bewerb, teilnahme, vorbereitung, pruefung, fla, thl, fla2, sonstiges, thl2, thl3).stream())
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream.concat(this.getRelationships().stream(),
-					List.of(relationshipBewerb1, relationshipBewerb2, relationshipBewerb3, relationshipBewerb4,
+					Arrays.asList(relationshipBewerb1, relationshipBewerb2, relationshipBewerb3, relationshipBewerb4,
 							relationshipBewerb5, relationshipBewerb6, relationshipBewerb7, relationshipBewerb8,
 							relationshipBewerb9).stream())
 					.collect(Collectors.toList()));
@@ -589,7 +590,7 @@ public class StandardPropertyDefinitions {
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream
 					.concat(this.getRelationships().stream(),
-							List.of(relationshipAusbildung1, relationshipAusbildung2, relationshipAusbildung3,
+							Arrays.asList(relationshipAusbildung1, relationshipAusbildung2, relationshipAusbildung3,
 									relationshipAusbildung4, relationshipAusbildung5, relationshipAusbildung6,
 									relationshipAusbildung7, relationshipAusbildung8, relationshipAusbildung9,
 									relationshipAusbildung10, relationshipAusbildung11).stream())
@@ -606,11 +607,11 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipJugend3 = new TreePropertyRelationship(jugendarbeit, wissenstest);
 			this.setEntries(Stream
 					.concat(this.getEntries().stream(),
-							List.of(jugendarbeit, jugend, bewerbsvorbereitung, wissenstest).stream())
+							Arrays.asList(jugendarbeit, jugend, bewerbsvorbereitung, wissenstest).stream())
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream
 					.concat(this.getRelationships().stream(),
-							List.of(relationshipJugend1, relationshipJugend2, relationshipJugend3).stream())
+							Arrays.asList(relationshipJugend1, relationshipJugend2, relationshipJugend3).stream())
 					.collect(Collectors.toList()));
 
 			// Tätigkeit
@@ -626,11 +627,11 @@ public class StandardPropertyDefinitions {
 					arbeitstag);
 			this.setEntries(Stream
 					.concat(this.getEntries().stream(),
-							List.of(taetigkeit, arbeitenInDerFw, feuerwehrhausbau, arbeitstag).stream())
+							Arrays.asList(taetigkeit, arbeitenInDerFw, feuerwehrhausbau, arbeitstag).stream())
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream
-					.concat(this.getRelationships().stream(),
-							List.of(relationshipTaetigkeit1, relationshipTaetigkeit2, relationshipTaetigkeit3).stream())
+					.concat(this.getRelationships().stream(), Arrays
+							.asList(relationshipTaetigkeit1, relationshipTaetigkeit2, relationshipTaetigkeit3).stream())
 					.collect(Collectors.toList()));
 
 			// Veranstaltung
@@ -709,12 +710,11 @@ public class StandardPropertyDefinitions {
 							bezirkstag, mitgliederversammlung, versammlung, sonstigeV3, ausrueckung, sonstiges2,
 							sonstiges3, sonstiges4, sonstiges5, sonstiges6, sonstiges7, sonstiges8, sonstiges9)
 					.stream()).collect(Collectors.toList()));
-			this.setRelationships(Stream.concat(this.getRelationships().stream(),
-					List.of(rsVer1, rsVer2, rsVer3, rsVer4, rsVer5, rsVer6, rsVer7, rsVer8, rsVer9, rsVer10, rsVer11,
+			this.setRelationships(Stream.concat(this.getRelationships().stream(), Arrays
+					.asList(rsVer1, rsVer2, rsVer3, rsVer4, rsVer5, rsVer6, rsVer7, rsVer8, rsVer9, rsVer10, rsVer11,
 							rsVer12, rsVer13, rsVer14, rsVer15, rsVer16, rsVer17, rsVer18, rsVer19, rsVer20, rsVer21,
 							rsVer22, rsVer23, rsVer24, rsVer25, rsVer26, rsVer27, rsVer28, rsVer29, rsVer30, rsVer31)
-							.stream())
-					.collect(Collectors.toList()));
+					.stream()).collect(Collectors.toList()));
 
 			TreePropertyRelationship rel1 = new TreePropertyRelationship(this.getId(), einsatz.getId(), true);
 			TreePropertyRelationship rel2 = new TreePropertyRelationship(this.getId(), bewerb.getId(), true);
@@ -723,9 +723,8 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship rel5 = new TreePropertyRelationship(this.getId(), veranstaltung.getId(), true);
 			TreePropertyRelationship rel6 = new TreePropertyRelationship(this.getId(), ausbildung.getId(), true);
 
-			this.setRelationships(Stream
-					.concat(this.getRelationships().stream(), List.of(rel1, rel2, rel3, rel4, rel5, rel6).stream())
-					.collect(Collectors.toList()));
+			this.setRelationships(Stream.concat(this.getRelationships().stream(),
+					Arrays.asList(rel1, rel2, rel3, rel4, rel5, rel6).stream()).collect(Collectors.toList()));
 		}
 	}
 
@@ -754,14 +753,13 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
-	
+
 	/**
 	 * 
 	 * TestProperties
 	 * 
 	 */
-	
+
 	public static class TestTextProperty extends TextPropertyDefinition {
 
 		TestTextProperty(String tenantId) {
@@ -788,7 +786,7 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class TestWholeNumberProperty extends LongPropertyDefinition  {
+	public static class TestWholeNumberProperty extends LongPropertyDefinition {
 
 		TestWholeNumberProperty(String tenantId) {
 			inst(tenantId);
@@ -800,8 +798,8 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
-	public static class TestFloatNumberProperty extends DoublePropertyDefinition  {
+
+	public static class TestFloatNumberProperty extends DoublePropertyDefinition {
 
 		TestFloatNumberProperty(String tenantId) {
 			inst(tenantId);
@@ -813,8 +811,8 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
-	public static class TestBooleanProperty extends BooleanPropertyDefinition  {
+
+	public static class TestBooleanProperty extends BooleanPropertyDefinition {
 
 		TestBooleanProperty(String tenantId) {
 			inst(tenantId);
@@ -826,8 +824,8 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
-	public static class TestDateProperty extends DatePropertyDefinition  {
+
+	public static class TestDateProperty extends DatePropertyDefinition {
 
 		TestDateProperty(String tenantId) {
 			inst(tenantId);
@@ -839,8 +837,6 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
-	
 
 	/**
 	 * 
