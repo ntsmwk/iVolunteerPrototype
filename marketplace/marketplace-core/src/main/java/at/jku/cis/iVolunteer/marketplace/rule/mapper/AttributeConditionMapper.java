@@ -21,7 +21,7 @@ public class AttributeConditionMapper {
 	@Autowired private ClassPropertyService classPropertyService;
 
 	public AttributeConditionDTO toTarget(AttributeCondition source, String tenantId, String classDefinitionId) {
-		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId, tenantId);
+		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId);
 		ClassProperty<Object> classProperty = classPropertyService.getClassPropertyFromAllClassProperties(classDefinitionId, source.getClassPropertyId());
 		
 		AttributeConditionDTO dto = new AttributeConditionDTO(classDefinition, classProperty, source.getValue(),

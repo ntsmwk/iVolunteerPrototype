@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.model._httpresponses.XTenantSubscribedResponse;
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XUserMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
@@ -22,14 +23,16 @@ import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
 @Component
 public class XTenantMapper {
-	
+
 	@Autowired MarketplaceService marketplaceService;
 	@Autowired XUserMapper xUserMapper;
 
 	public XTenant toTarget(Tenant source, List<CoreUser> users) {
-		
-		if (source == null) {return null; }
-		XTenant xt = new XTenant();	
+
+		if (source == null) {
+			return null;
+		}
+		XTenant xt = new XTenant();
 		xt.setId(source.getId());
 		xt.setName(source.getName());
 		xt.setAbbreviation(source.getAbbreviation());
@@ -38,11 +41,10 @@ public class XTenantMapper {
 		xt.setImagePath(source.getImagePath());
 		xt.setPrimaryColor(source.getPrimaryColor());
 		xt.setSecondaryColor(source.getSecondaryColor());
-		
-		
+
 		Marketplace mp = marketplaceService.findById(source.getMarketplaceId());
 		if (mp != null) {
-			xt.setMarketplaceURL(mp.getUrl());
+			xt.setMarketplaceUrl(mp.getUrl());
 		}
 		xt.setTags(source.getTags());
 		xt.setLandingpageMessage(source.getLandingpageMessage());
@@ -50,7 +52,36 @@ public class XTenantMapper {
 		xt.setLandingpageText(source.getLandingpageText());
 		xt.setLandingpageImagePath(source.getLandingpageImagePath());
 		xt.setSubscribedVolunteers(xUserMapper.toTargets(users));
-		xt.setGeoInfo(new XGeoInfo(source.getLocation())); 
+		xt.setGeoInfo(new XGeoInfo(source.getLocation()));
+		return xt;
+	}
+
+	public XTenantSubscribedResponse toTenantSubscribedResponse(Tenant source, List<CoreUser> users) {
+
+		if (source == null) {
+			return null;
+		}
+		XTenantSubscribedResponse xt = new XTenantSubscribedResponse();
+		xt.setId(source.getId());
+		xt.setName(source.getName());
+		xt.setAbbreviation(source.getAbbreviation());
+		xt.setDescription(source.getDescription());
+		xt.setHomepage(source.getHomepage());
+		xt.setImagePath(source.getImagePath());
+		xt.setPrimaryColor(source.getPrimaryColor());
+		xt.setSecondaryColor(source.getSecondaryColor());
+
+		Marketplace mp = marketplaceService.findById(source.getMarketplaceId());
+		if (mp != null) {
+			xt.setMarketplaceUrl(mp.getUrl());
+		}
+		xt.setTags(source.getTags());
+		xt.setLandingpageMessage(source.getLandingpageMessage());
+		xt.setLandingpageTitle(source.getLandingpageTitle());
+		xt.setLandingpageText(source.getLandingpageText());
+		xt.setLandingpageImagePath(source.getLandingpageImagePath());
+		xt.setSubscribedVolunteers(xUserMapper.toTargets(users));
+		xt.setGeoInfo(new XGeoInfo(source.getLocation()));
 		return xt;
 	}
 
@@ -66,36 +97,40 @@ public class XTenantMapper {
 //	}
 
 	public Tenant toSource(XTenant target) {
-		if (target == null) {return null; }
-		
+		if (target == null) {
+			return null;
+		}
+
 		Tenant tenant = new Tenant();
 		tenant.setId(target.getId());
 		tenant.setName(target.getName());
-		tenant.setAbbreviation(target.getAbbreviation()); //TODO
+		tenant.setAbbreviation(target.getAbbreviation()); // TODO
 		tenant.setDescription(target.getDescription());
 		tenant.setHomepage(target.getHomepage());
 		tenant.setImagePath(target.getImagePath());
 		tenant.setPrimaryColor(target.getPrimaryColor());
 		tenant.setSecondaryColor(target.getSecondaryColor());
-		
-		Marketplace mp = marketplaceService.findById(target.getMarketplaceURL());
+
+		Marketplace mp = marketplaceService.findById(target.getMarketplaceUrl());
 		if (mp != null) {
 			tenant.setMarketplaceId(mp.getId());
 		}
-		
+
 		tenant.setTags(target.getTags());
 		tenant.setLandingpageMessage(target.getLandingpageMessage());
 		tenant.setLandingpageTitle(target.getLandingpageTitle());
 		tenant.setLandingpageText(target.getLandingpageText());
 		tenant.setLandingpageImagePath(target.getLandingpageImagePath());
 		tenant.setLocation(new Location(target.getGeoInfo()));
-		
+
 		return tenant;
 	}
 
 	public List<Tenant> toSources(List<XTenant> targets) {
-		if (targets == null) {return null;}
-		
+		if (targets == null) {
+			return null;
+		}
+
 		List<Tenant> sources = new ArrayList<>();
 		for (XTenant target : targets) {
 			sources.add(toSource(target));

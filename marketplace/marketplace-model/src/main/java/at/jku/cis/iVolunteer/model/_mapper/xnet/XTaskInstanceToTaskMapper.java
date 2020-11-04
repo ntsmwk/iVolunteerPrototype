@@ -49,16 +49,16 @@ public class XTaskInstanceToTaskMapper {
 		task.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
-		task.setDynamicFields(new ArrayList<>());
+		task.setDynamicBlocks(new ArrayList<>());
 
-		PropertyInstance<Object> startDateField = findProperty("Starting Date", source.getProperties());
+		PropertyInstance<Object> startDateField = source.findProperty("Starting Date");
 		task.setStartDate(startDateField == null || startDateField.getValues().size() == 0 ? null
 				: new Date((Long) startDateField.getValues().get(0)));
-		PropertyInstance<Object> endDateField = findProperty("End Date", source.getProperties());
+		PropertyInstance<Object> endDateField = source.findProperty("End Date");
 		task.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
 				: new Date((Long) endDateField.getValues().get(0)));
 
-		PropertyInstance<Object> locationField = findProperty("Location", source.getProperties());
+		PropertyInstance<Object> locationField = source.findProperty("Location");
 		
 		Location location = null;
 		if (locationField != null && locationField.getValues().size() > 0) {		
@@ -70,7 +70,7 @@ public class XTaskInstanceToTaskMapper {
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
 			dynamicBlock.setFields(xPropertyInstanceToDynamicFieldMapper.toTargets(sortedFields.get(i)));
-			task.getDynamicFields().add(dynamicBlock);
+			task.getDynamicBlocks().add(dynamicBlock);
 		}
 
 		if (subscribedUsers == null || subscribedUsers.size() <= 0) {
@@ -156,8 +156,8 @@ public class XTaskInstanceToTaskMapper {
 			instance.getProperties().add(location);
 		}
 
-		for (int i = 0; i < target.getDynamicFields().size(); i++) {
-			XDynamicFieldBlock block = target.getDynamicFields().get(i);
+		for (int i = 0; i < target.getDynamicBlocks().size(); i++) {
+			XDynamicFieldBlock block = target.getDynamicBlocks().get(i);
 			for (XDynamicField field : block.getFields()) {
 
 				PropertyInstance<Object> pi = xPropertyInstanceToDynamicFieldMapper.toSource(field);
@@ -178,12 +178,6 @@ public class XTaskInstanceToTaskMapper {
 			sources.add(toSource(target));
 		}
 		return sources;
-	}
-
-	private PropertyInstance<Object> findProperty(String name, List<PropertyInstance<Object>> properties) {
-		PropertyInstance<Object> property = properties.stream().filter(p -> p.getName().equals(name)).findAny()
-				.orElse(null);
-		return property;
 	}
 
 // private class MaxLevelReturn {

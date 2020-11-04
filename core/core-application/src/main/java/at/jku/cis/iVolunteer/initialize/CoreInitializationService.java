@@ -56,7 +56,12 @@ public class CoreInitializationService {
 			if (environment.acceptsProfiles("dev")) {
 				marketplace.setId("0eaf3a6281df11e8adc0fa7ae01bbebc");
 				marketplace.setUrl("http://localhost:8080");
-			} else {
+			}
+			if (environment.acceptsProfiles("prodx")) {
+				marketplace.setId("0eaf3a6281df11e8adc0fa7ae01bbebc");
+				marketplace.setUrl("http://172.24.200.172:8080");
+			}
+			else if(environment.acceptsProfiles("prod")) {
 				marketplace.setId("5bc08399ae03711c3810e3cc");
 				marketplace.setUrl("http://140.78.92.58:8080");
 			}

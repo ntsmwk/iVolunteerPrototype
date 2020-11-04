@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.marketplace.configurations.clazz;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.TreePropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
-import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
@@ -27,7 +25,6 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurationDTO;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingEntityMappingConfiguration;
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.matching.MatchingEntityMappings;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -85,7 +82,6 @@ public class ClassConfigurationController {
 
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
-		;
 
 		List<Relationship> relationships = new ArrayList<>();
 		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
@@ -356,6 +352,51 @@ public class ClassConfigurationController {
 		r5.setSource(task.getId());
 
 		relationships.add(r5);
+
+		// Test Task for Micha
+
+		ClassDefinition testTask = new ClassDefinition();
+		testTask.setId(new ObjectId().toHexString());
+		testTask.setTenantId(tenantId);
+		testTask.setName("xNet Test Task");
+		testTask.setClassArchetype(ClassArchetype.TASK);
+		testTask.setWriteProtected(true);
+		testTask.setProperties(new ArrayList<>());
+		testTask.setLevel(0);
+
+		FlatPropertyDefinition testTextProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test TextProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testTextProperty));
+
+		FlatPropertyDefinition testLongTextProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test LongTextProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testLongTextProperty));
+
+		FlatPropertyDefinition testWholeNumberProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test WholeNumberProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testWholeNumberProperty));
+
+		FlatPropertyDefinition testFloatNumberProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test FloatNumberProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testFloatNumberProperty));
+
+		FlatPropertyDefinition testBooleanProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test BooleanProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testBooleanProperty));
+
+		FlatPropertyDefinition testDateProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Test DateProperty")).findFirst().get();
+		testTask.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(testDateProperty));
+
+		classDefinitions.add(testTask);
+
+		Inheritance r6 = new Inheritance();
+		r6.setRelationshipType(RelationshipType.INHERITANCE);
+		r6.setTarget(testTask.getId());
+		r6.setSource(myTask.getId());
+
+		relationships.add(r6);
+		//
 
 		ClassConfiguration configurator = new ClassConfiguration();
 		configurator.setTimestamp(new Date());

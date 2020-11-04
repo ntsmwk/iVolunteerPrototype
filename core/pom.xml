@@ -99,6 +99,12 @@
 				<spring.profiles.active>prod</spring.profiles.active>
 			</properties>
 		</profile>
+		<profile>
+			<id>prodx</id>
+			<properties>
+				<spring.profiles.active>prodx</spring.profiles.active>
+			</properties>
+		</profile>
 	</profiles>
 
 	<build>

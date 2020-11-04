@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +25,10 @@ import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
-import at.jku.cis.iVolunteer.model._httpresponses.TenantSubscribedResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.XTenantSubscribedResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.user.TenantSubscription;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
 import at.jku.cis.iVolunteer.model.user.XUserRole;
@@ -74,7 +72,7 @@ public class TenantController {
 		return tenantService.toXTenantTargets(tenants);
 	}
 
-	@PostMapping("/create")
+	@PostMapping
 	public ResponseEntity<Void> createTenantX(@RequestBody CreateTenantPayload payload) {
 		if (payload.getTenant() == null) {
 			return ResponseEntity.badRequest().build();
@@ -91,13 +89,15 @@ public class TenantController {
 	}
 
 	@GetMapping("/{tenantId}")
-	public TenantSubscribedResponse getTenantByIdX(@PathVariable String tenantId) {
-		List<CoreUser> users = tenantService.getSubscribedUsers(tenantId);
-		XTenant tenant = xTenantMapper.toTarget(tenantService.getTenantById(tenantId), users);
+	public XTenantSubscribedResponse getTenantByIdX(@PathVariable String tenantId) {
+		List<CoreUser> subscribedUsers = tenantService.getSubscribedUsers(tenantId);
+		XTenantSubscribedResponse tenant = xTenantMapper
+				.toTenantSubscribedResponse(tenantService.getTenantById(tenantId), subscribedUsers);
 		CoreUser loggedInUser = loginService.getLoggedInUser();
-		boolean alreadySubscribed = loggedInUser.getSubscribedTenants().stream()
-				.anyMatch(t -> t.getTenantId().equals(tenantId));
-		return new TenantSubscribedResponse(tenant, alreadySubscribed);
+	
+		boolean alreadySubscribed = subscribedUsers.stream().anyMatch(u -> u.getId().equals(loggedInUser.getId()));
+		tenant.setSubscribed(alreadySubscribed);
+		return tenant;
 	}
 
 	@GetMapping("/{tenantId}/not-x")

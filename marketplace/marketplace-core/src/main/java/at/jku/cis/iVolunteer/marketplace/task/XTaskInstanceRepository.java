@@ -11,4 +11,5 @@ import java.util.List;
 public interface XTaskInstanceRepository extends HasTenantRepository<TaskInstance, String> {
 
 	List<TaskInstance> findByIssuerId(String issuerid);
+	
 }

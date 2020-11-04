@@ -18,8 +18,7 @@ public class ClassActionMapper {
 	@Autowired private AttributeConditionMapper attributeConditionMapper;
 
 	public ClassActionDTO toTarget(ClassAction source, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(source.getClassDefinitionId(),
-				tenantId);
+		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(source.getClassDefinitionId());
 		ClassActionDTO dto = new ClassActionDTO(source.getType(), classDefinition);
 		dto.setAttributes(
 				attributeConditionMapper.toTargets(source.getAttributes(), tenantId, classDefinition.getId()));

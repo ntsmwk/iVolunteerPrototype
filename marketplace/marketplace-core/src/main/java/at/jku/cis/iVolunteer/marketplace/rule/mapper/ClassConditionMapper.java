@@ -23,8 +23,7 @@ public class ClassConditionMapper {
 	@Autowired private AttributeConditionMapper attributeConditionMapper;
 
 	public ClassConditionDTO toTarget(ClassCondition source, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(source.getClassDefinitionId(),
-				tenantId);
+		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(source.getClassDefinitionId());
 		ClassConditionDTO dto = new ClassConditionDTO(classDefinition, source.getValue(),
 				(AggregationOperatorType) source.getOperatorType());
 		if (source.getClassPropertyId() != null) {

@@ -38,7 +38,7 @@ public class XTaskInstanceToTaskSerializedMapper implements OneWayMapper<TaskIns
 		ts.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
-		ts.setDynamicFields(new ArrayList<>());
+		ts.setDynamicBlocks(new ArrayList<>());
 		PropertyInstance<Object> startDateField = findProperty("Starting Date", source.getProperties());
 		ts.setStartDate(startDateField == null || startDateField.getValues().size() == 0 ? null :  new Date((Long) startDateField.getValues().get(0)));
 		
@@ -53,7 +53,7 @@ public class XTaskInstanceToTaskSerializedMapper implements OneWayMapper<TaskIns
 		for (int i = 2; i < sortedFields.size(); i++) {
 			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
 			dynamicBlock.setFields(xPropertyInstanceToDynamicFieldMapper.toTargets(sortedFields.get(i)));
-			ts.getDynamicFields().add(dynamicBlock);
+			ts.getDynamicBlocks().add(dynamicBlock);
 		}
 
 		return ts;

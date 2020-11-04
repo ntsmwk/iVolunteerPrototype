@@ -28,7 +28,7 @@ import at.jku.cis.iVolunteer.model.task.TaskDefinition;
 import at.jku.cis.iVolunteer.model.task.XTaskTemplate;
 
 @RestController
-@RequestMapping("tasktemplate")
+@RequestMapping("taskTemplate")
 public class XTaskTemplateController {
 
 	@Autowired
@@ -55,7 +55,7 @@ public class XTaskTemplateController {
 
 		for (ClassConfiguration classConfiguration : allTenantClassConfigurations) {
 			List<ClassDefinition> allClassDefinitions = classDefinitionService
-					.getClassDefinitonsById(classConfiguration.getClassDefinitionIds(), tenantId);
+					.getClassDefinitonsById(classConfiguration.getClassDefinitionIds());
 			List<Relationship> allRelationships = relationshipController
 					.getRelationshipsById(classConfiguration.getRelationshipIds());
 			List<ClassDefinition> eligibleClassDefinitions = allClassDefinitions.stream()
@@ -75,14 +75,14 @@ public class XTaskTemplateController {
 //	GET {marketplaceUrl}/taskTemplate/{taskTemplateId}/
 //	Req: {}
 //	Res: TaskTemplate
-	@GetMapping("/tenant/{tenantId}/template/{templateId}")
-	public XTaskTemplate getClassDefinition(@PathVariable("tenantId") String tenantId,
+	@GetMapping("/{templateId}")
+	public XTaskTemplate getClassDefinition(
 			@PathVariable("templateId") String templateId) {
-		ClassDefinition currentClassDefinition = classDefinitionService.getClassDefinitionById(templateId, tenantId);
+		ClassDefinition currentClassDefinition = classDefinitionService.getClassDefinitionById(templateId);
 		ClassConfiguration classConfiguration = classConfigurationController
 				.getClassConfigurationById(currentClassDefinition.getConfigurationId());
 		List<ClassDefinition> allClassDefinitions = classDefinitionService
-				.getClassDefinitonsById(classConfiguration.getClassDefinitionIds(), tenantId);
+				.getClassDefinitonsById(classConfiguration.getClassDefinitionIds());
 		List<Relationship> allRelationships = relationshipController
 				.getRelationshipsById(classConfiguration.getRelationshipIds());
 

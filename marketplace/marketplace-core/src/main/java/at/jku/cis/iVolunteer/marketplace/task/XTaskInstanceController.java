@@ -22,22 +22,36 @@ public class XTaskInstanceController {
 	public TaskInstance getTaskInstance(@PathVariable("taskId") String id) {
 		return xTaskInstanceService.getTaskInstance(id);
 	}
-	
+
 	@GetMapping("/meta/core/task-instance/all")
 	public List<TaskInstance> getTaskInstances() {
 		return xTaskInstanceService.getAll();
 
 	}
-	
+
+	@GetMapping("/meta/core/task-instance/all/{year}")
+	public List<TaskInstance> getTaskInstancesByYear(@PathVariable int year) {
+		return xTaskInstanceService.getAllByYear(year);
+
+	}
+
 	@PutMapping("/meta/core/task-instance/tenant")
 	public List<TaskInstance> getTaskInstancesByTenant(@RequestBody List<String> tenantIds) {
 		List<TaskInstance> instances = new LinkedList<>();
-		
+
 		for (String id : tenantIds) {
 			instances.addAll(xTaskInstanceService.getTaskInstanceByTenantId(id));
 		}
-		
 		return instances;
 	}
 
+	@PutMapping("/meta/core/task-instance/tenant/{year}")
+	public List<TaskInstance> getTaskInstancesByTenantByYear(@RequestBody List<String> tenantIds, @PathVariable int year) {
+		List<TaskInstance> instances = new LinkedList<>();
+
+		for (String id : tenantIds) {
+			instances.addAll(xTaskInstanceService.getTaskInstanceByTenantIdByYear(id, year));
+		}
+		return instances;
+	}
 }

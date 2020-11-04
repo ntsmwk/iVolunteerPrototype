@@ -29,20 +29,15 @@ public class XTaskCertificateController {
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private UserController userController;
 	@Autowired private XTaskInstanceService xTaskInstanceService;
-	
-	
-	// GET TASKCERTIFICATE OF ONE TENANT BY ID (BEI 1 TENANT ZEIGE ALLE TASKS IN UI)
-	// (Sortierung: die zuletzt ausgestellten taskzertifikate als 1.)
-	// GET {marketplaceUrl}/taskCertificate/tenant/{tenantId}/
-	// Req: {}
-	// Res: TaskCertificate[]
+
 	@GetMapping("taskCertificate/tenant/{tenantId}")
-	public List<XTaskCertificate> getTaskCertificatesByTenantId(@PathVariable String tenantId, @RequestHeader("Authorization") String authorization) {
+	public List<XTaskCertificate> getTaskCertificatesByTenantId(@PathVariable String tenantId,
+			@RequestHeader("Authorization") String authorization) {
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK,
 				tenantId);
-		
+
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId, authorization);
-		
+
 		List<XTaskCertificate> certs = new ArrayList<>();
 		for (ClassInstance classInstance : classInstances) {
 			User user = userController.findUserById(classInstance.getId());
@@ -50,22 +45,36 @@ public class XTaskCertificateController {
 			certs.add(classInstanceToTaskCertificateMapper.toTarget(classInstance, ti, tenant, user));
 		}
 		return certs;
-
 	}
 
-	// GET TASKCERTIFICATE BY ID
-	// GET {marketplaceUrl}/taskCertificate/{taskId}/
-	// Req: {}
-	// Res: TaskCertificate
+	@GetMapping("taskCertificate/tenant/{tenantId}/{year}")
+	public List<XTaskCertificate> getTaskCertificatesByTenantIdByYear(@PathVariable String tenantId,
+			@PathVariable int year, @RequestHeader("Authorization") String authorization) {
+		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK,
+				tenantId);
+
+		classInstances = classInstanceService.filterTaskInstancesByYear(year, classInstances);
+
+		Tenant tenant = coreTenantRestClient.getTenantById(tenantId, authorization);
+
+		List<XTaskCertificate> certs = new ArrayList<>();
+		for (ClassInstance classInstance : classInstances) {
+			User user = userController.findUserById(classInstance.getId());
+			TaskInstance ti = xTaskInstanceService.getTaskInstance(classInstance.getId());
+			certs.add(classInstanceToTaskCertificateMapper.toTarget(classInstance, ti, tenant, user));
+		}
+		return certs;
+	}
+
 	@GetMapping("taskCertificate/{taskId}")
-	public XTaskCertificate getTaskCertificate(@PathVariable String taskId, @RequestHeader("Authorization") String authorization) {
+	public XTaskCertificate getTaskCertificate(@PathVariable String taskId,
+			@RequestHeader("Authorization") String authorization) {
 		ClassInstance classInstance = classInstanceService.getClassInstanceById(taskId);
 		TaskInstance ti = xTaskInstanceService.getTaskInstance(taskId);
 		Tenant tenant = coreTenantRestClient.getTenantById(classInstance.getTenantId(), authorization);
 		User user = userController.findUserById(classInstance.getUserId());
-		
+
 		XTaskCertificate cert = classInstanceToTaskCertificateMapper.toTarget(classInstance, ti, tenant, user);
 		return cert;
 	}
-
 }
