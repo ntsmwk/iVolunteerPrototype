@@ -36,6 +36,10 @@ public class APIInitializationService {
 		tenants = coreTenantRestClient.getAllTenants();
 		return tenants;
 	}
+	
+	public void addFlexProdClassDefinitions() {
+		// TODO Auto-generated method stub
+	}
 
 	public void addiVolunteerAPIClassDefinition() {
 		List<Tenant> tenants = getTenants();
@@ -156,6 +160,7 @@ public class APIInitializationService {
 				|| p.getName().equals("IVolunteerSource")).collect(Collectors.toList());
 		// @formatter:on
 	}
+
 
 
 

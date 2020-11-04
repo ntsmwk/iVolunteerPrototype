@@ -89,6 +89,11 @@ public class InitializationController {
 	 * Class-Definitions and Configurations
 	 */
 	
+	@PutMapping("/init/flexprod")
+	public void addFlexProdClassDefinitions() {
+		apiInitializationService.addFlexProdClassDefinitions();
+	}
+	
 	@PutMapping("/init/add-api-classdefinitions")
 	public void addAPIClassDefinitions() {
 		apiInitializationService.addiVolunteerAPIClassDefinition();
