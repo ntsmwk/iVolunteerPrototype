@@ -336,7 +336,7 @@ public class ClassConfigurationController {
 		myTask.setProperties(new ArrayList<>());
 
 		TreePropertyDefinition taskType = treeProperties.stream().filter(p -> p.getName().equals("TaskType"))
-				.findFirst().get();
+				.findFirst().orElse(null);
 		if (taskType != null) {
 			myTask.getProperties().add(treePropertyDefinitionToClassPropertyMapper.toTarget(taskType));
 		}

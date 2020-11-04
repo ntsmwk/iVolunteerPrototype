@@ -83,10 +83,15 @@ public class StandardPropertyDefinitions {
 
 	public List<TreePropertyDefinition> getAllTreeProperties(String tenantId) {
 		List<TreePropertyDefinition> props = new ArrayList<>();
+		List<Tenant> tenants = getTenants();
 
-		if (getTenants().stream().filter(t -> t.getName().equals("FF Eidenberg")).map(t -> t.getId())
+		if (tenants.stream().filter(t -> t.getName().equals("FF Eidenberg")).map(t -> t.getId())
 				.collect(Collectors.toList()).contains(tenantId)) {
-			props.add(new TaskTypeProperty(tenantId));
+			props.add(new TaskTypePropertyFF(tenantId));
+		}
+		if (tenants.stream().filter(t -> t.getName().equals("MV Schwertberg")).map(t -> t.getId())
+				.collect(Collectors.toList()).contains(tenantId)) {
+			props.add(new TaskTypePropertyMV(tenantId));
 		}
 
 		return props;
@@ -326,9 +331,161 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class TaskTypeProperty extends TreePropertyDefinition {
+	public static class TaskTypePropertyMV extends TreePropertyDefinition {
 
-		TaskTypeProperty(String tenantId) {
+		TaskTypePropertyMV(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("TaskType");
+			this.setTenantId(tenantId);
+			this.setId(UUID.randomUUID().toString());
+
+			// Ausrückung
+			TreePropertyEntry a = new TreePropertyEntry("Ausrückung", false, 0, true);
+			TreePropertyEntry a1 = new TreePropertyEntry("Bläsergruss", false, 1, true);
+			TreePropertyEntry a2 = new TreePropertyEntry("Kirche", false, 1, true);
+			TreePropertyEntry a3 = new TreePropertyEntry("Musikalische Gestaltung", false, 1, true);
+			TreePropertyEntry a4 = new TreePropertyEntry("Allgemein", true, 1, true);
+			TreePropertyEntry a5 = new TreePropertyEntry("Konzert", false, 1, true);
+			TreePropertyEntry a6 = new TreePropertyEntry("Wertung", false, 1, true);
+			TreePropertyEntry a1_1 = new TreePropertyEntry("Ganztägig Bläsergruß", true, 2, true);
+			TreePropertyEntry a2_1 = new TreePropertyEntry("Turmblasen (Gruppe)", true, 2, true);
+			TreePropertyEntry a2_2 = new TreePropertyEntry("Messe und Frühschoppen Geyer", true, 2, true);
+			TreePropertyEntry a2_3 = new TreePropertyEntry("Erstkommunion", true, 2, true);
+			TreePropertyEntry a2_4 = new TreePropertyEntry("Florianimesse", true, 2, true);
+			TreePropertyEntry a2_5 = new TreePropertyEntry("Palmweihe (Gruppe)", true, 2, true);
+			TreePropertyEntry a3_1 = new TreePropertyEntry("Bläserquartett Weihnachtsmarkt", true, 2, true);
+			TreePropertyEntry a3_2 = new TreePropertyEntry("Eröffnung Weihnachtsmarkt", true, 2, true);
+			TreePropertyEntry a5_1 = new TreePropertyEntry("Konzert im Schloß", true, 2, true);
+			TreePropertyEntry a6_1 = new TreePropertyEntry("Konzertwertung", true, 2, true);
+
+			TreePropertyRelationship relationshipA1 = new TreePropertyRelationship(a, a1, true);
+			TreePropertyRelationship relationshipA2 = new TreePropertyRelationship(a, a2, true);
+			TreePropertyRelationship relationshipA3 = new TreePropertyRelationship(a, a3, true);
+			TreePropertyRelationship relationshipA4 = new TreePropertyRelationship(a, a4, true);
+			TreePropertyRelationship relationshipA5 = new TreePropertyRelationship(a, a5, true);
+			TreePropertyRelationship relationshipA6 = new TreePropertyRelationship(a, a6, true);
+			TreePropertyRelationship relationshipA7 = new TreePropertyRelationship(a1, a1_1, true);
+			TreePropertyRelationship relationshipA8 = new TreePropertyRelationship(a2, a2_1, true);
+			TreePropertyRelationship relationshipA9 = new TreePropertyRelationship(a2, a2_2, true);
+			TreePropertyRelationship relationshipA10 = new TreePropertyRelationship(a2, a2_3, true);
+			TreePropertyRelationship relationshipA11 = new TreePropertyRelationship(a2, a2_4, true);
+			TreePropertyRelationship relationshipA12 = new TreePropertyRelationship(a2, a2_5, true);
+			TreePropertyRelationship relationshipA13 = new TreePropertyRelationship(a3, a3_1, true);
+			TreePropertyRelationship relationshipA14 = new TreePropertyRelationship(a3, a3_2, true);
+			TreePropertyRelationship relationshipA15 = new TreePropertyRelationship(a5, a5_1, true);
+			TreePropertyRelationship relationshipA16 = new TreePropertyRelationship(a6, a6_1, true);
+
+			this.setEntries(Stream.concat(this.getEntries().stream(), List
+					.of(a, a1, a2, a3, a4, a5, a6, a1_1, a2_1, a2_2, a2_3, a2_4, a2_5, a3_1, a3_2, a5_1, a6_1).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream.concat(this.getRelationships().stream(), List
+					.of(relationshipA1, relationshipA2, relationshipA3, relationshipA4, relationshipA5, relationshipA6,
+							relationshipA7, relationshipA8, relationshipA9, relationshipA10, relationshipA11,
+							relationshipA12, relationshipA13, relationshipA14, relationshipA15, relationshipA16)
+					.stream()).collect(Collectors.toList()));
+
+			// Probe
+			TreePropertyEntry p = new TreePropertyEntry("Probe", false, 0, true);
+			TreePropertyEntry p1 = new TreePropertyEntry("Jugendorchesterprobe", false, 1, true);
+			TreePropertyEntry p2 = new TreePropertyEntry("Musikprobe", false, 1, true);
+			TreePropertyEntry p3 = new TreePropertyEntry("Marschprobe", false, 1, true);
+			TreePropertyEntry p4 = new TreePropertyEntry("Registerprobe", false, 1, true);
+			TreePropertyEntry p1_1 = new TreePropertyEntry("Allgemein", true, 2, true);
+			TreePropertyEntry p1_2 = new TreePropertyEntry("Weihnachtsmarkt", true, 2, true);
+			TreePropertyEntry p2_1 = new TreePropertyEntry("Kekserlprobe", true, 2, true);
+			TreePropertyEntry p2_2 = new TreePropertyEntry("Lehre", true, 2, true);
+			TreePropertyEntry p2_3 = new TreePropertyEntry("Allgemein", true, 2, true);
+			TreePropertyEntry p2_4 = new TreePropertyEntry("Ständchen", true, 2, true);
+			TreePropertyEntry p3_1 = new TreePropertyEntry("Allgemein", true, 2, true);
+			TreePropertyEntry p4_1 = new TreePropertyEntry("Horn Sax", true, 2, true);
+			TreePropertyEntry p4_2 = new TreePropertyEntry("Trompete Horn", true, 2, true);
+			TreePropertyEntry p4_3 = new TreePropertyEntry("Tuba Tenor Bariton", true, 2, true);
+
+			TreePropertyRelationship relationshipP1 = new TreePropertyRelationship(p, p1, true);
+			TreePropertyRelationship relationshipP2 = new TreePropertyRelationship(p, p2, true);
+			TreePropertyRelationship relationshipP3 = new TreePropertyRelationship(p, p3, true);
+			TreePropertyRelationship relationshipP4 = new TreePropertyRelationship(p, p4, true);
+			TreePropertyRelationship relationshipP5 = new TreePropertyRelationship(p1, p1_1, true);
+			TreePropertyRelationship relationshipP6 = new TreePropertyRelationship(p1, p1_2, true);
+			TreePropertyRelationship relationshipP7 = new TreePropertyRelationship(p2, p2_1, true);
+			TreePropertyRelationship relationshipP8 = new TreePropertyRelationship(p2, p2_2, true);
+			TreePropertyRelationship relationshipP9 = new TreePropertyRelationship(p2, p2_3, true);
+			TreePropertyRelationship relationshipP10 = new TreePropertyRelationship(p2, p2_4, true);
+			TreePropertyRelationship relationshipP11 = new TreePropertyRelationship(p3, p3_1, true);
+			TreePropertyRelationship relationshipP12 = new TreePropertyRelationship(p4, p4_1, true);
+			TreePropertyRelationship relationshipP13 = new TreePropertyRelationship(p4, p4_2, true);
+			TreePropertyRelationship relationshipP14 = new TreePropertyRelationship(p4, p4_3, true);
+
+			this.setEntries(Stream
+					.concat(this.getEntries().stream(), List
+							.of(p, p1, p2, p3, p4, p1_1, p1_2, p2_1, p2_2, p2_3, p2_4, p3_1, p4_1, p4_2, p4_3).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(),
+							List.of(relationshipP1, relationshipP2, relationshipP3, relationshipP4, relationshipP5,
+									relationshipP6, relationshipP7, relationshipP8, relationshipP9, relationshipP10,
+									relationshipP11, relationshipP12, relationshipP13, relationshipP14).stream())
+					.collect(Collectors.toList()));
+
+			// Tätigkeit
+			TreePropertyEntry t = new TreePropertyEntry("Tätigkeit", false, 0, true);
+			TreePropertyEntry t1 = new TreePropertyEntry("Musikheim", false, 1, true);
+			TreePropertyEntry t1_1 = new TreePropertyEntry("Musikheim", true, 2, true);
+			TreePropertyRelationship relationshipT1 = new TreePropertyRelationship(t, t1, true);
+			TreePropertyRelationship relationshipT2 = new TreePropertyRelationship(t1, t1_1, true);
+
+			this.setEntries(Stream.concat(this.getEntries().stream(), List.of(t, t1, t1_1).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(
+					Stream.concat(this.getRelationships().stream(), List.of(relationshipT1, relationshipT2).stream())
+							.collect(Collectors.toList()));
+
+			// Veranstaltung
+			TreePropertyEntry v = new TreePropertyEntry("Veranstaltung", false, 0, true);
+			TreePropertyEntry v1 = new TreePropertyEntry("Vorstand", false, 1, true);
+			TreePropertyEntry v2 = new TreePropertyEntry("Allgemein", false, 1, true);
+			TreePropertyEntry v1_1 = new TreePropertyEntry("Vorstandssitzung", true, 2, true);
+			TreePropertyEntry v1_2 = new TreePropertyEntry("Erweiterte Bezirkssitzung", true, 2, true);
+			TreePropertyEntry v2_1 = new TreePropertyEntry("Diskussion Konzertprogramm", true, 2, true);
+			TreePropertyEntry v2_2 = new TreePropertyEntry("Jause und Noten sortieren", true, 2, true);
+			TreePropertyEntry v2_3 = new TreePropertyEntry("Spatenstich Rückhaltebecken (Quartett)", true, 2, true);
+			TreePropertyEntry v2_4 = new TreePropertyEntry("Jahreshauptversammlung", true, 2, true);
+
+			TreePropertyRelationship relationshipV1 = new TreePropertyRelationship(v, v1, true);
+			TreePropertyRelationship relationshipV2 = new TreePropertyRelationship(v, v2, true);
+			TreePropertyRelationship relationshipV3 = new TreePropertyRelationship(v1, v1_1, true);
+			TreePropertyRelationship relationshipV4 = new TreePropertyRelationship(v1, v1_2, true);
+			TreePropertyRelationship relationshipV5 = new TreePropertyRelationship(v2, v2_1, true);
+			TreePropertyRelationship relationshipV6 = new TreePropertyRelationship(v2, v2_2, true);
+			TreePropertyRelationship relationshipV7 = new TreePropertyRelationship(v2, v2_3, true);
+			TreePropertyRelationship relationshipV8 = new TreePropertyRelationship(v2, v2_4, true);
+
+			this.setEntries(Stream
+					.concat(this.getEntries().stream(), List.of(v, v1, v2, v1_1, v1_2, v2_1, v2_2, v2_3, v2_4).stream())
+					.collect(Collectors.toList()));
+			this.setRelationships(Stream
+					.concat(this.getRelationships().stream(),
+							List.of(relationshipV1, relationshipV2, relationshipV3, relationshipV4, relationshipV5,
+									relationshipV6, relationshipV7, relationshipV8).stream())
+					.collect(Collectors.toList()));
+
+			TreePropertyRelationship rel1 = new TreePropertyRelationship(this.getId(), a.getId(), true);
+			TreePropertyRelationship rel2 = new TreePropertyRelationship(this.getId(), p.getId(), true);
+			TreePropertyRelationship rel3 = new TreePropertyRelationship(this.getId(), t.getId(), true);
+			TreePropertyRelationship rel4 = new TreePropertyRelationship(this.getId(), v.getId(), true);
+			this.setRelationships(
+					Stream.concat(this.getRelationships().stream(), List.of(rel1, rel2, rel3, rel4).stream())
+							.collect(Collectors.toList()));
+		}
+	}
+
+	public static class TaskTypePropertyFF extends TreePropertyDefinition {
+
+		TaskTypePropertyFF(String tenantId) {
 			inst(tenantId);
 		}
 
@@ -555,7 +712,6 @@ public class StandardPropertyDefinitions {
 			this.setRelationships(Stream
 					.concat(this.getRelationships().stream(), List.of(rel1, rel2, rel3, rel4, rel5, rel6).stream())
 					.collect(Collectors.toList()));
-
 		}
 	}
 
