@@ -29,13 +29,10 @@ public class XChartDataService {
     @Scheduled(fixedDelay = 1_800_000, initialDelay = 60_000) // 30min, 1min
     private void queryChartDataSetsFromMArketplaces() {
         // TODO
-        // currently each 30min all datasets are just added
-        // method above returns onle latest datasets
-        // -> remove older ones automatically
+        // currently each 30min all datasets are added to db
+        // method above returns only latest datasets
+        // -> remove older ones automatically from db
 
-        // TODO
-        // call from core to mp without authentication
-        // excepted in mp WebSecurityConfig
         List<XChartDataSet> datasets = chartDataRestClient.getChartDataFromMarketplaces();
         chartDataSetRepository.save(datasets);
     }

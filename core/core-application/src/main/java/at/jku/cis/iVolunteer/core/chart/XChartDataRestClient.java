@@ -30,6 +30,8 @@ public class XChartDataRestClient {
     @Autowired
     private MarketplaceService marketplaceService;
 
+    // TODO
+    // call to marketplace without authentication (excepted in mp WebSecurityConfig)
     public List<XChartDataSet> getChartDataFromMarketplaces() {
         List<Marketplace> marketplaces = marketplaceService.findAll();
         marketplaces = marketplaces.stream().distinct().collect(Collectors.toList());
@@ -50,30 +52,6 @@ public class XChartDataRestClient {
 
         return datasets;
     }
-
-    // public List<XChartDataSet> getChartDataFromMarketplacesByUser(String
-    // authorization, CoreUser user) {
-    // List<Marketplace> marketplaces = new ArrayList<>();
-    // user.getRegisteredMarketplaceIds().stream().map(id ->
-    // marketplaceService.findById(id))
-    // .forEach(marketplaces::add);
-
-    // marketplaces = marketplaces.stream().distinct().collect(Collectors.toList());
-
-    // List<XChartDataSet> datasets = new ArrayList<>();
-    // marketplaces.forEach(mp -> {
-    // String preUrl = "{0}/chartdata/user/{1}";
-    // String url = format(preUrl, mp.getUrl(), user.getId());
-    // ResponseEntity<XChartDataSet[]> resp = restTemplate.exchange(url,
-    // HttpMethod.GET,
-    // buildEntity(null, authorization), XChartDataSet[].class);
-    // List<XChartDataSet> ret = Arrays.asList(resp.getBody());
-
-    // datasets.addAll(ret);
-    // });
-
-    // return datasets;
-    // }
 
     private HttpEntity<?> buildEntity(Object body, String authorization) {
         return new HttpEntity<>(body, buildAuthorizationHeader(authorization));

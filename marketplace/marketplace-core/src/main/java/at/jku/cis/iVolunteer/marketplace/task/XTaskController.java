@@ -39,14 +39,22 @@ import at.jku.cis.iVolunteer.model.user.XUser;
 @RequestMapping("/task")
 public class XTaskController {
 
-	@Autowired private ClassInstanceController classInstanceController;
-	@Autowired private LoginService loginService;
-	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
-	@Autowired private XTaskInstanceService xTaskInstanceService;
-	@Autowired private UserService userService;
-	@Autowired private UserController userController;
-	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
-	@Autowired private CoreStorageRestClient coreStorageRestClient;
+	@Autowired
+	private ClassInstanceController classInstanceController;
+	@Autowired
+	private LoginService loginService;
+	@Autowired
+	private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
+	@Autowired
+	private XTaskInstanceService xTaskInstanceService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private UserController userController;
+	@Autowired
+	private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
+	@Autowired
+	private CoreStorageRestClient coreStorageRestClient;
 
 	@PostMapping("/new")
 	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
@@ -149,23 +157,23 @@ public class XTaskController {
 	@GetMapping("/tenant/{tenantId}")
 	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
-//		TODO fix multiple db accesses...
+		// TODO fix multiple db accesses...
 		return tasks.stream().map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
 			return xTaskInstanceToTaskMapper.toTarget(t, users);
 		}).collect(Collectors.toList());
 	}
-	
+
 	@GetMapping("/tenant/{tenantId}/{year}")
 	public List<XTask> getTaskInstancesByTenantIdByYear(@PathVariable String tenantId, @PathVariable int year) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantIdByYear(tenantId, year);
-//		TODO fix multiple db accesses...
+		// TODO fix multiple db accesses...
 		return tasks.stream().map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
 			return xTaskInstanceToTaskMapper.toTarget(t, users);
 		}).collect(Collectors.toList());
 	}
-	
+
 	public ResponseEntity<Object> getTask(@PathVariable String taskId) {
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
 
@@ -177,9 +185,6 @@ public class XTaskController {
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
 		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
 	}
-	
-	
-
 
 	@PostMapping("/update/{taskId}")
 	public ResponseEntity<Object> updateTask(@PathVariable String taskId, @RequestBody XTask changes) {
@@ -196,6 +201,7 @@ public class XTaskController {
 
 		return ResponseEntity.ok().build();
 	}
+
 	@PostMapping("{taskId}/subscribe")
 	public ResponseEntity<Object> subscribeUserToTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
@@ -225,7 +231,6 @@ public class XTaskController {
 	@PostMapping("{taskId}/unsubscribe")
 	public ResponseEntity<Object> unsubscribeUserFromTask(@PathVariable String taskId) {
 		User user = loginService.getLoggedInUser();
-
 
 		User finalUser = user;
 

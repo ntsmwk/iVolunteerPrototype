@@ -20,16 +20,4 @@ public class XChartDataController<T extends Serializable> {
     public List<XChartDataSet> getAllChartData() {
         return chartDataService.generateChartDataSets();
     }
-
-    // @GetMapping("/id/{chartDataId}")
-    // public XChartDataSet getChartDataById(@PathVariable("chartDataId") String
-    // chartDataId) {
-    // return chartDataService.getChartDataById(chartDataId);
-    // }
-
-    // @GetMapping("/user/{userId}")
-    // public List<XChartDataSet> getChartDataByUserId(@PathVariable("userId")
-    // String userId) {
-    // return chartDataService.getLatestChartDataByUserId(userId);
-    // }
 }

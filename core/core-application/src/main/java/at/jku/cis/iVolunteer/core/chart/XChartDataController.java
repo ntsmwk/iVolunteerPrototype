@@ -27,7 +27,6 @@ public class XChartDataController {
         CoreUser loggedInUser = loginService.getLoggedInUser();
 
         return chartDataService.getLatestChartData(loggedInUser);
-        // return chartDataRestClient.getChartDataByUser(authorization, loggedInUser);
     }
 
 }

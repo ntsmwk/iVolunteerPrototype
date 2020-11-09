@@ -31,37 +31,6 @@ public class XChartDataService {
     @Autowired
     private DateTimeService dateTimeService;
 
-    // public List<XChartDataSet> getChartData() {
-    // return chartDataRepository.findAll();
-    // }
-
-    // public XChartDataSet getChartDataById(String id) {
-    // return chartDataRepository.findById(id);
-    // }
-
-    // public List<XChartDataSet> getLatestChartData() {
-    // List<User> users = userService.getUsersByRole(UserRole.VOLUNTEER);
-
-    // List<XChartDataSet> datasets = new ArrayList<>();
-    // users.forEach(user -> {
-    // datasets.addAll(getLatestChartDataByUserId(user.getId()));
-    // });
-
-    // return datasets;
-    // }
-
-    // public List<XChartDataSet> getLatestChartDataByUserId(String userId) {
-    // // return only latest data sets per user
-    // // maybe remove old data sets from database too
-
-    // List<XChartDataSet> datasets = chartDataRepository.findByUserId(userId);
-    // datasets.sort(Comparator.comparing(XChartDataSet::getTimestamp).reversed());
-    // datasets = datasets.stream().distinct().collect(Collectors.toList());
-
-    // return datasets;
-    // }
-
-    // @Scheduled(fixedDelay = 180_0000) // 30min
     public List<XChartDataSet> generateChartDataSets() {
         List<XChartDataSet> datasets = new ArrayList<>();
 
@@ -122,6 +91,5 @@ public class XChartDataService {
         chartData.setTenantId(tenantId);
 
         return chartData;
-        // chartDataRepository.insert(chartData);
     }
 }
