@@ -11,7 +11,7 @@ import at.jku.cis.iVolunteer.model.user.XUser;
 public class XTask {
 	String id;
 	String title;
-	String tenant;
+	private String tenantId;
 	String description;
 	Date startDate;
 	Date endDate;
@@ -35,12 +35,7 @@ public class XTask {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getTenant() {
-		return tenant;
-	}
-	public void setTenant(String tenant) {
-		this.tenant = tenant;
-	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -94,6 +89,12 @@ public class XTask {
 	}
 	public void setDynamicBlocks(List<XDynamicFieldBlock> dynamicBlocks) {
 		this.dynamicBlocks = dynamicBlocks;
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 }
