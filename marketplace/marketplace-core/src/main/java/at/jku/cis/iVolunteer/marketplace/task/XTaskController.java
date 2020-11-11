@@ -39,22 +39,14 @@ import at.jku.cis.iVolunteer.model.user.XUser;
 @RequestMapping("/task")
 public class XTaskController {
 
-	@Autowired
-	private ClassInstanceController classInstanceController;
-	@Autowired
-	private LoginService loginService;
-	@Autowired
-	private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
-	@Autowired
-	private XTaskInstanceService xTaskInstanceService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private UserController userController;
-	@Autowired
-	private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
-	@Autowired
-	private CoreStorageRestClient coreStorageRestClient;
+	@Autowired private ClassInstanceController classInstanceController;
+	@Autowired private LoginService loginService;
+	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
+	@Autowired private XTaskInstanceService xTaskInstanceService;
+	@Autowired private UserService userService;
+	@Autowired private UserController userController;
+	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
+	@Autowired private CoreStorageRestClient coreStorageRestClient;
 
 	@PostMapping("/new")
 	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
@@ -157,13 +149,14 @@ public class XTaskController {
 	@GetMapping("/{taskId}")
 	public ResponseEntity<Object> getTaskInstancesById(@PathVariable String taskId) {
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
-		if(task == null) {
+		if (task == null) {
 			return ResponseEntity.badRequest().body(HttpErrorMessages.NOT_FOUND_TASK);
 		}
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
 		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
 	}
-	
+
+//	TODO change to post + postbody
 	@GetMapping("/tenant/{tenantId}")
 	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
@@ -174,6 +167,7 @@ public class XTaskController {
 		}).collect(Collectors.toList());
 	}
 
+//	TODO change to post + postbody
 	@GetMapping("/tenant/{tenantId}/{year}")
 	public List<XTask> getTaskInstancesByTenantIdByYear(@PathVariable String tenantId, @PathVariable int year) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantIdByYear(tenantId, year);
