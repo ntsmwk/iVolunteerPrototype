@@ -17,11 +17,16 @@ public class CoreTenantInitializationService {
 	private static final String FF_EIDENBERG = "FF Eidenberg";
 	private static final String MV_SCHWERTBERG = "MV Schwertberg";
 	private static final String RK_WILHERING = "RK Wilhering";
+	private static final String FLEXPROD = "FlexProd";
 
-	@Autowired protected TenantRepository coreTenantRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private StorageService storageService;
-	@Value("${spring.data.server.uri}") private String serverUrl;
+	@Autowired
+	protected TenantRepository coreTenantRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private StorageService storageService;
+	@Value("${spring.data.server.uri}")
+	private String serverUrl;
 
 	public void initTenants() {
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
@@ -29,10 +34,18 @@ public class CoreTenantInitializationService {
 			createTenant(FF_EIDENBERG, "www.ff-eidenberg.at", "/img/FF_Altenberg.jpg", "/img/FF_Eidenberg.png",
 					"#b20000", "#b2b2b2", "Freiwillige Feuerwehr Eidenberg", marketplace.getId());
 			createTenant(MV_SCHWERTBERG, "www.musikverein-schwertberg.at", "/img/musikvereinschwertberg.jpeg",
-					"/img/musicverein.jpg",  "#005900", "#b2b2b2","Musikverein Schwertberg", marketplace.getId());
+					"/img/musicverein.jpg", "#005900", "#b2b2b2", "Musikverein Schwertberg", marketplace.getId());
 			createTenant(RK_WILHERING,
 					"www.roteskreuz.at/ooe/dienststellen/eferding/die-bezirksstelle/die-ortsstellen/wilhering",
-					"/img/OERK_Sonderlogo_rgb_cropped.jpg", "", "#b2b2b2", "#b2b2b2", "Rotes Kreuz", marketplace.getId());
+					"/img/OERK_Sonderlogo_rgb_cropped.jpg", "", "#b2b2b2", "#b2b2b2", "Rotes Kreuz",
+					marketplace.getId());
+		}
+	}
+
+	public void initFlexprodTenant() {
+		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
+		if (marketplace != null) {
+			createTenant(FLEXPROD, "www.flexprod.at", "", "", "#b2b2b2", "#b2b2b2", "FlexProd", marketplace.getId());
 		}
 	}
 

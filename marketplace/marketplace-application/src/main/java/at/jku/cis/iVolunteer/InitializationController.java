@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
+import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.task.XTaskInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
@@ -33,6 +34,8 @@ public class InitializationController {
 	private InitializationService initializationService;
 	@Autowired
 	private APIInitializationService apiInitializationService;
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
 
 	@PutMapping("/init/add-test-data")
 	public void addTestData() {
@@ -47,6 +50,14 @@ public class InitializationController {
 	public void addRuleTestData() {
 		addRuleTestConfiguration();
 		addRuleUserData();
+	}
+
+	@PutMapping("/init/flexprod")
+	public void addFlexProdData() {
+		addFlexProdProperties();
+
+		String tenantId = coreTenantRestClient.getTenantIdByName("FlexProd");
+		initializationService.addFlexProdClassDefinitionsAndConfigurations(tenantId);
 	}
 
 	/**
@@ -95,17 +106,13 @@ public class InitializationController {
 	/**
 	 * Class-Definitions and Configurations
 	 */
-	@PutMapping("/init/flexprod")
-	public void addFlexProdClassDefinitions() {
-		apiInitializationService.addFlexProdClassDefinitions();
-	}
-	
+
 	@PutMapping("/init/add-api-classdefinitions")
 	public void addAPIClassDefinitions() {
 		apiInitializationService.addiVolunteerAPIClassDefinition();
 	}
 
-	@PutMapping("/init/add-configurator-test-configurations") 
+	@PutMapping("/init/add-configurator-test-configurations")
 	public void addClassConfigurations() {
 		initializationService.addClassConfigurations(1);
 	}
@@ -208,7 +215,5 @@ public class InitializationController {
 		deleteUserMappings();
 		deleteMatchingConfigurations();
 		deleteTaskInstances();
-
 	}
-
 }

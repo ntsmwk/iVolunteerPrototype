@@ -15,11 +15,11 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	// @Id
 	// private String id;
 	private String name;
-	
+
 	private List<T> allowedValues = new ArrayList<>();
 
 	private String unit;
-	
+
 	private boolean custom;
 	private boolean multiple;
 
@@ -28,7 +28,7 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	private boolean required;
 	private String requiredMessage;
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
-	
+
 	private boolean computed;
 
 	public FlatPropertyDefinition() {
@@ -63,10 +63,11 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	public void setAllowedValues(List<T> allowedValues) {
 		this.allowedValues = allowedValues;
 	}
-	
+
 	public String getUnit() {
 		return unit;
 	}
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
@@ -126,7 +127,5 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	public void setComputed(boolean computed) {
 		this.computed = computed;
 	}
-	
-	
 
 }

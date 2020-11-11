@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.TreePropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
@@ -25,12 +26,14 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurationDTO;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingEntityMappingConfiguration;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.matching.MatchingEntityMappings;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
@@ -55,6 +58,8 @@ public class ClassConfigurationController {
 	private PropertyDefinitionToClassPropertyMapper flatPropertyDefinitionToClassPropertyMapper;
 	@Autowired
 	private TreePropertyDefinitionToClassPropertyMapper treePropertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
 
 	@GetMapping("class-configuration/all")
 	List<ClassConfiguration> getAllClassConfigurations() {
@@ -113,6 +118,7 @@ public class ClassConfigurationController {
 		ClassConfiguration newClassConfiguration = createAndSaveNewClassConfiguration(params[0], params[1], params[2],
 				null);
 		return newClassConfiguration;
+
 	}
 
 	@PutMapping("class-configuration/save")
@@ -396,7 +402,8 @@ public class ClassConfigurationController {
 		r6.setSource(myTask.getId());
 
 		relationships.add(r6);
-		//
+
+		// ------------------------------ //
 
 		ClassConfiguration configurator = new ClassConfiguration();
 		configurator.setTimestamp(new Date());
@@ -422,4 +429,341 @@ public class ClassConfigurationController {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void createAndSaveFlexProdClassConfigurations(String tenantId) {
+
+		List<FlatPropertyDefinition<Object>> flatProperties = this.flatPropertyDefinitionRepository
+				.findByTenantId(tenantId);
+
+		List<ClassDefinition> classDefinitionsOfen = new ArrayList<>();
+		List<Relationship> relationshipsOfen = new ArrayList<>();
+
+		// Maschine
+		ClassDefinition machine = new ClassDefinition();
+		machine.setId(new ObjectId().toHexString());
+		machine.setTenantId(tenantId);
+		machine.setName("Machine");
+		machine.setClassArchetype(ClassArchetype.ROOT);
+		machine.setProperties(new ArrayList<>());
+		machine.setLevel(0);
+		classDefinitionsOfen.add(machine);
+
+		//
+		// Haubenofen
+		ClassDefinition haubenofen = new ClassDefinition();
+		haubenofen.setId(new ObjectId().toHexString());
+		haubenofen.setTenantId(tenantId);
+		haubenofen.setName("Haubenofen");
+		haubenofen.setClassArchetype(ClassArchetype.ROOT);
+		haubenofen.setProperties(new ArrayList<>());
+		haubenofen.setLevel(0); // TODO
+
+		FlatPropertyDefinition produkttypeProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Produkttyp")).findFirst().get();
+		haubenofen.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(produkttypeProperty));
+		FlatPropertyDefinition ofenhoeheProperty = flatProperties.stream().filter(p -> p.getName().equals("Ofenhöhe"))
+				.findFirst().get();
+		haubenofen.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(ofenhoeheProperty));
+		FlatPropertyDefinition kapazitaetProperty = flatProperties.stream().filter(p -> p.getName().equals("Kapazität"))
+				.findFirst().get();
+		haubenofen.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(kapazitaetProperty));
+		classDefinitionsOfen.add(haubenofen);
+
+		Inheritance assoz1 = new Inheritance();
+		assoz1.setRelationshipType(RelationshipType.INHERITANCE);
+		assoz1.setTarget(haubenofen.getId());
+		assoz1.setSource(machine.getId());
+		relationshipsOfen.add(assoz1);
+
+		ClassDefinition band = new ClassDefinition();
+		band.setId(new ObjectId().toHexString());
+		band.setTenantId(tenantId);
+		band.setName("Band");
+		band.setClassArchetype(ClassArchetype.FLEXPROD);
+		band.setProperties(new ArrayList<>());
+		band.setLevel(0); // TODO
+
+		FlatPropertyDefinition durchmesserDornProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Durchmesser Dorn")).findFirst().get();
+		band.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(durchmesserDornProperty));
+		FlatPropertyDefinition innendurchmesserOfenProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Innendurchmesser Ofen")).findFirst().get();
+		band.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(innendurchmesserOfenProperty));
+		classDefinitionsOfen.add(band);
+
+		Association assoz2 = new Association();
+		assoz2.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz2.setTarget(band.getId());
+		assoz2.setSource(haubenofen.getId());
+		relationshipsOfen.add(assoz2);
+
+		ClassDefinition draht = new ClassDefinition();
+		draht.setId(new ObjectId().toHexString());
+		draht.setTenantId(tenantId);
+		draht.setName("Draht");
+		draht.setClassArchetype(ClassArchetype.FLEXPROD);
+		draht.setProperties(new ArrayList<>());
+		draht.setLevel(0); // TODO
+
+		FlatPropertyDefinition durchmesserKronenstockProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Durchmesser Kronenstock")).findFirst().get();
+		draht.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(durchmesserKronenstockProperty));
+		FlatPropertyDefinition maxDurchmesserBundProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Maximaldurchmesser Bund")).findFirst().get();
+		draht.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(maxDurchmesserBundProperty));
+		classDefinitionsOfen.add(draht);
+
+		Association assoz3 = new Association();
+		assoz3.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz3.setTarget(draht.getId());
+		assoz3.setSource(haubenofen.getId());
+		relationshipsOfen.add(assoz3);
+
+		ClassDefinition gluehreise = new ClassDefinition();
+		gluehreise.setId(new ObjectId().toHexString());
+		gluehreise.setTenantId(tenantId);
+		gluehreise.setName("Glühreise");
+		gluehreise.setClassArchetype(ClassArchetype.FLEXPROD);
+		gluehreise.setProperties(new ArrayList<>());
+		gluehreise.setLevel(0); // TODO
+
+		FlatPropertyDefinition maxGluehtempProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Max. Glühtemperatur")).findFirst().get();
+		gluehreise.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(maxGluehtempProperty));
+		FlatPropertyDefinition tempHomogenitaetProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Temperaturhomogenität")).findFirst().get();
+		gluehreise.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(tempHomogenitaetProperty));
+		FlatPropertyDefinition aufheizrateProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Aufheizrate")).findFirst().get();
+		gluehreise.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(aufheizrateProperty));
+		FlatPropertyDefinition abkuehlrateProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Abkühlrate")).findFirst().get();
+		gluehreise.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(abkuehlrateProperty));
+		FlatPropertyDefinition gluehprogrammProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Glühprogramm /-reise verfügbar?")).findFirst().get();
+		gluehreise.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(gluehprogrammProperty));
+		classDefinitionsOfen.add(gluehreise);
+
+		Association assoz4 = new Association();
+		assoz4.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz4.setTarget(gluehreise.getId());
+		assoz4.setSource(haubenofen.getId());
+		relationshipsOfen.add(assoz4);
+
+		ClassDefinition schutzgas = new ClassDefinition();
+		schutzgas.setId(new ObjectId().toHexString());
+		schutzgas.setTenantId(tenantId);
+		schutzgas.setName("Schutzgas");
+		schutzgas.setClassArchetype(ClassArchetype.FLEXPROD);
+		schutzgas.setProperties(new ArrayList<>());
+		schutzgas.setLevel(0); // TODO
+
+		FlatPropertyDefinition maxAnteilH2Property = flatProperties.stream()
+				.filter(p -> p.getName().equals("Maximaler Anteil H2")).findFirst().get();
+		schutzgas.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(maxAnteilH2Property));
+		classDefinitionsOfen.add(schutzgas);
+
+		Association assoz5 = new Association();
+		assoz5.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz5.setTarget(schutzgas.getId());
+		assoz5.setSource(haubenofen.getId());
+		relationshipsOfen.add(assoz5);
+
+		ClassConfiguration configuratorOfen = new ClassConfiguration();
+		configuratorOfen.setTimestamp(new Date());
+		configuratorOfen.setTenantId(tenantId);
+		configuratorOfen.setId(null);
+		configuratorOfen.setName("Haubenofen");
+		configuratorOfen.setDescription("");
+		configuratorOfen.setClassDefinitionIds(new ArrayList<>());
+		configuratorOfen.setRelationshipIds(new ArrayList<>());
+
+		for (ClassDefinition cd : classDefinitionsOfen) {
+			cd.setConfigurationId(configuratorOfen.getId());
+			this.classDefinitionRepository.save(cd);
+			configuratorOfen.getClassDefinitionIds().add(cd.getId());
+		}
+
+		for (Relationship r : relationshipsOfen) {
+			this.relationshipRepository.save(r);
+			configuratorOfen.getRelationshipIds().add(r.getId());
+		}
+		saveClassConfiguration(configuratorOfen);
+
+		// ------------
+
+		List<ClassDefinition> classDefinitionsRfq = new ArrayList<>();
+		List<Relationship> relationshipsRfq = new ArrayList<>();
+
+		// -----------------------------------
+		// Draht-Auftrag
+		ClassDefinition rfq = new ClassDefinition();
+		rfq.setId(new ObjectId().toHexString());
+		rfq.setTenantId(tenantId);
+		rfq.setName("RFQ");
+		rfq.setClassArchetype(ClassArchetype.ROOT);
+		rfq.setProperties(new ArrayList<>());
+		rfq.setLevel(0);
+		classDefinitionsRfq.add(rfq);
+
+		ClassDefinition drahtAuftrag = new ClassDefinition();
+		drahtAuftrag.setId(new ObjectId().toHexString());
+		drahtAuftrag.setTenantId(tenantId);
+		drahtAuftrag.setName("Draht-Auftrag");
+		drahtAuftrag.setClassArchetype(ClassArchetype.ROOT);
+		drahtAuftrag.setProperties(new ArrayList<>());
+		drahtAuftrag.setLevel(0); // TODO
+		classDefinitionsRfq.add(drahtAuftrag);
+
+		Inheritance assoz6 = new Inheritance();
+		assoz6.setRelationshipType(RelationshipType.INHERITANCE);
+		assoz6.setTarget(drahtAuftrag.getId());
+		assoz6.setSource(rfq.getId());
+		relationshipsRfq.add(assoz6);
+
+		ClassDefinition auftragsdaten = new ClassDefinition();
+		auftragsdaten.setId(new ObjectId().toHexString());
+		auftragsdaten.setTenantId(tenantId);
+		auftragsdaten.setName("Auftragsdaten");
+		auftragsdaten.setClassArchetype(ClassArchetype.FLEXPROD);
+		auftragsdaten.setProperties(new ArrayList<>());
+		auftragsdaten.setLevel(0); // TODO
+
+		FlatPropertyDefinition titelProperty = flatProperties.stream().filter(p -> p.getName().equals("Titel"))
+				.findFirst().get();
+		auftragsdaten.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(titelProperty));
+		FlatPropertyDefinition produkttypProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Produkttyp")).findFirst().get();
+		auftragsdaten.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(produkttypProperty));
+		FlatPropertyDefinition mengeProperty = flatProperties.stream().filter(p -> p.getName().equals("Menge"))
+				.findFirst().get();
+		auftragsdaten.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(mengeProperty));
+		FlatPropertyDefinition minimaleMengeProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("minimale Menge")).findFirst().get();
+		auftragsdaten.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(minimaleMengeProperty));
+		FlatPropertyDefinition lieferdatumProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Lieferdatum (spätestens)")).findFirst().get();
+		auftragsdaten.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(lieferdatumProperty));
+		FlatPropertyDefinition werkstoffProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Werkstoff bereitgestellt")).findFirst().get();
+		auftragsdaten.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(werkstoffProperty));
+		FlatPropertyDefinition allgBeschreibungProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("allgemeine Beschreibung / Zusatzinformationen")).findFirst().get();
+		auftragsdaten.getProperties()
+				.add(flatPropertyDefinitionToClassPropertyMapper.toTarget(allgBeschreibungProperty));
+		classDefinitionsRfq.add(auftragsdaten);
+
+		Association assoz7 = new Association();
+		assoz7.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz7.setTarget(auftragsdaten.getId());
+		assoz7.setSource(drahtAuftrag.getId());
+		relationshipsRfq.add(assoz7);
+
+		ClassDefinition produktdaten = new ClassDefinition();
+		produktdaten.setId(new ObjectId().toHexString());
+		produktdaten.setTenantId(tenantId);
+		produktdaten.setName("Produktdaten");
+		produktdaten.setClassArchetype(ClassArchetype.FLEXPROD);
+		produktdaten.setProperties(new ArrayList<>());
+		produktdaten.setLevel(0); // TODO
+
+		FlatPropertyDefinition oberflaechenQalitaetProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Oberflächenqualität")).findFirst().get();
+		produktdaten.getProperties()
+				.add(flatPropertyDefinitionToClassPropertyMapper.toTarget(oberflaechenQalitaetProperty));
+		FlatPropertyDefinition zusaetzlicheProduktinfosProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Zusätzliche Produkt- und Bearbeitungsinformationen")).findFirst()
+				.get();
+		produktdaten.getProperties()
+				.add(flatPropertyDefinitionToClassPropertyMapper.toTarget(zusaetzlicheProduktinfosProperty));
+		classDefinitionsRfq.add(produktdaten);
+
+		Association assoz8 = new Association();
+		assoz8.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz8.setTarget(produktdaten.getId());
+		assoz8.setSource(drahtAuftrag.getId());
+		relationshipsRfq.add(assoz8);
+
+		ClassDefinition logistik = new ClassDefinition();
+		logistik.setId(new ObjectId().toHexString());
+		logistik.setTenantId(tenantId);
+		logistik.setName("Logistik");
+		logistik.setClassArchetype(ClassArchetype.FLEXPROD);
+		logistik.setProperties(new ArrayList<>());
+		logistik.setLevel(0); // TODO
+
+		FlatPropertyDefinition incotermsProperty = flatProperties.stream().filter(p -> p.getName().equals("Incoterms"))
+				.findFirst().get();
+		logistik.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(incotermsProperty));
+		FlatPropertyDefinition lieferortProperty = flatProperties.stream().filter(p -> p.getName().equals("Lieferort"))
+				.findFirst().get();
+		logistik.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(lieferortProperty));
+		FlatPropertyDefinition abholortProperty = flatProperties.stream().filter(p -> p.getName().equals("Abholort"))
+				.findFirst().get();
+		logistik.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(abholortProperty));
+		FlatPropertyDefinition verpackungsvorgabenProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Verpackungsvorgaben")).findFirst().get();
+		logistik.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(verpackungsvorgabenProperty));
+		classDefinitionsRfq.add(logistik);
+
+		Association assoz9 = new Association();
+		assoz9.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz9.setTarget(logistik.getId());
+		assoz9.setSource(drahtAuftrag.getId());
+		relationshipsRfq.add(assoz9);
+
+		ClassDefinition bund = new ClassDefinition();
+		bund.setId(new ObjectId().toHexString());
+		bund.setTenantId(tenantId);
+		bund.setName("Bund");
+		bund.setClassArchetype(ClassArchetype.FLEXPROD);
+		bund.setProperties(new ArrayList<>());
+		bund.setLevel(0); // TODO
+
+		FlatPropertyDefinition durchmesserInnenProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Durchmesser (innen)")).findFirst().get();
+		bund.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(durchmesserInnenProperty));
+		FlatPropertyDefinition durchmesserAussenProperty = flatProperties.stream()
+				.filter(p -> p.getName().equals("Durchmesser (außen)")).findFirst().get();
+		bund.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(durchmesserAussenProperty));
+		FlatPropertyDefinition hoeheProperty = flatProperties.stream().filter(p -> p.getName().equals("Höhe"))
+				.findFirst().get();
+		bund.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(hoeheProperty));
+		classDefinitionsRfq.add(bund);
+
+		Association assoz10 = new Association();
+		assoz10.setRelationshipType(RelationshipType.ASSOCIATION);
+		assoz10.setTarget(bund.getId());
+		assoz10.setSource(produktdaten.getId());
+		relationshipsRfq.add(assoz10);
+
+		ClassConfiguration configuratorRfq = new ClassConfiguration();
+		configuratorRfq.setTimestamp(new Date());
+		configuratorRfq.setTenantId(tenantId);
+		configuratorRfq.setId(null);
+		configuratorRfq.setName("RFQ");
+		configuratorRfq.setDescription("");
+		configuratorRfq.setClassDefinitionIds(new ArrayList<>());
+		configuratorRfq.setRelationshipIds(new ArrayList<>());
+
+		for (ClassDefinition cd : classDefinitionsRfq) {
+			cd.setConfigurationId(configuratorRfq.getId());
+			this.classDefinitionRepository.save(cd);
+			configuratorRfq.getClassDefinitionIds().add(cd.getId());
+		}
+
+		for (Relationship r : relationshipsRfq) {
+			this.relationshipRepository.save(r);
+			configuratorRfq.getRelationshipIds().add(r.getId());
+		}
+		saveClassConfiguration(configuratorRfq);
+
+	}
+
+	private Tenant getFlexProdTenant() {
+		List<Tenant> tenants = new ArrayList<>();
+		tenants = coreTenantRestClient.getAllTenants();
+
+		return tenants.stream().filter(t -> t.getName().equals("FlexProd")).findFirst().orElse(null);
+	}
 }
