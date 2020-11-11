@@ -36,6 +36,7 @@ public class XCoreTaskController {
 	@Autowired TenantService tenantService;
 	@Autowired LoginService loginService;
 
+//	TODO change to post + postbody
 	@GetMapping("/task")
 	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization) {
 
@@ -59,6 +60,7 @@ public class XCoreTaskController {
 		return ResponseEntity.ok(tasks);
 	}
 
+//	TODO change to post + postbody
 	@GetMapping("/task/{year}")
 	private ResponseEntity<Object> getTasksByYear(@PathVariable("year") int year,
 			@RequestHeader("Authorization") String authorization) {
@@ -83,6 +85,7 @@ public class XCoreTaskController {
 		return ResponseEntity.ok(tasks);
 	}
 
+//	TODO change to post + postbody
 	@GetMapping("/task/tenant/subscribed")
 	private ResponseEntity<Object> getTasksOfSubscribedTenants(@RequestHeader("Authorization") String authorization) {
 		List<Marketplace> marketplaces = marketplaceService.findAll();
@@ -115,6 +118,7 @@ public class XCoreTaskController {
 		return ResponseEntity.ok(tasks);
 	}
 
+//	TODO change to post + postbody
 	@GetMapping("/task/tenant/subscribed/{year}")
 	private ResponseEntity<Object> getTasksOfSubscribedTenantsByYear(@PathVariable("year") int year,
 			@RequestHeader("Authorization") String authorization) {
@@ -151,6 +155,7 @@ public class XCoreTaskController {
 		return ResponseEntity.ok(tasks);
 	}
 
+//	TODO change to post + postbody
 	@GetMapping("/task/tenant/unsubscribed")
 	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization) {
 
@@ -182,6 +187,7 @@ public class XCoreTaskController {
 		return ResponseEntity.ok(tasks);
 	}
 
+//	TODO change to post + postbody
 	@GetMapping("/task/tenant/unsubscribed/{year}")
 	private ResponseEntity<Object> getTasksOfUnsubscribedTenantsByYear(@PathVariable int year,
 			@RequestHeader("Authorization") String authorization) {
