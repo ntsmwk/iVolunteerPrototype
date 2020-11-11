@@ -34,8 +34,10 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.Tr
 @Component
 public class StandardPropertyDefinitions {
 
-	@Autowired public FlatPropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired public CoreTenantRestClient coreTenantRestClient;
+	@Autowired
+	public FlatPropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	public CoreTenantRestClient coreTenantRestClient;
 
 	private List<Tenant> getTenants() {
 		return coreTenantRestClient.getAllTenants();
@@ -60,6 +62,7 @@ public class StandardPropertyDefinitions {
 		properties.add(new FlatPropertyDefinition<Object>("BadgeID", PropertyType.TEXT, tenantId));
 		properties.add(new FlatPropertyDefinition<Object>("CertificateID", PropertyType.TEXT, tenantId));
 		properties.add(new FlatPropertyDefinition<Object>("TaskID", PropertyType.TEXT, tenantId));
+		properties.add(new FlatPropertyDefinition<Object>("Bereich", PropertyType.TEXT, tenantId));
 
 		return properties;
 	}
@@ -139,6 +142,7 @@ public class StandardPropertyDefinitions {
 		props.add(new LatitudeProperty(tenantId));
 		props.add(new LongitudeProperty(tenantId));
 		props.add(new VolunteerAgeProperty(tenantId));
+		props.add(new BereichProperty(tenantId));
 
 		return new ArrayList(props);
 
@@ -344,6 +348,19 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
+	public static class BereichProperty extends TextPropertyDefinition {
+
+		BereichProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("Bereich");
+			this.setTenantId(tenantId);
+		}
+	}
+
 	public static class TaskTypePropertyMV extends TreePropertyDefinition {
 
 		TaskTypePropertyMV(String tenantId) {
@@ -392,12 +409,16 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipA15 = new TreePropertyRelationship(a5, a5_1, true);
 			TreePropertyRelationship relationshipA16 = new TreePropertyRelationship(a6, a6_1, true);
 
-			this.setEntries(Stream.concat(this.getEntries().stream(), Arrays.asList(a, a1, a2, a3, a4, a5, a6, a1_1, a2_1, a2_2, a2_3, a2_4, a2_5, a3_1, a3_2, a5_1, a6_1).stream())
+			this.setEntries(Stream.concat(this.getEntries().stream(),
+					Arrays.asList(a, a1, a2, a3, a4, a5, a6, a1_1, a2_1, a2_2, a2_3, a2_4, a2_5, a3_1, a3_2, a5_1, a6_1)
+							.stream())
 					.collect(Collectors.toList()));
-			this.setRelationships(Stream.concat(this.getRelationships().stream(), Arrays.asList(relationshipA1, relationshipA2, relationshipA3, relationshipA4, relationshipA5, relationshipA6,
-							relationshipA7, relationshipA8, relationshipA9, relationshipA10, relationshipA11,
-							relationshipA12, relationshipA13, relationshipA14, relationshipA15, relationshipA16)
-					.stream()).collect(Collectors.toList()));
+			this.setRelationships(Stream.concat(this.getRelationships().stream(),
+					Arrays.asList(relationshipA1, relationshipA2, relationshipA3, relationshipA4, relationshipA5,
+							relationshipA6, relationshipA7, relationshipA8, relationshipA9, relationshipA10,
+							relationshipA11, relationshipA12, relationshipA13, relationshipA14, relationshipA15,
+							relationshipA16).stream())
+					.collect(Collectors.toList()));
 
 			// Probe
 			TreePropertyEntry p = new TreePropertyEntry("Probe", false, 0, true);
@@ -431,8 +452,8 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipP13 = new TreePropertyRelationship(p4, p4_2, true);
 			TreePropertyRelationship relationshipP14 = new TreePropertyRelationship(p4, p4_3, true);
 
-			this.setEntries(Stream
-					.concat(this.getEntries().stream(), Arrays.asList(p, p1, p2, p3, p4, p1_1, p1_2, p2_1, p2_2, p2_3, p2_4, p3_1, p4_1, p4_2, p4_3).stream())
+			this.setEntries(Stream.concat(this.getEntries().stream(), Arrays
+					.asList(p, p1, p2, p3, p4, p1_1, p1_2, p2_1, p2_2, p2_3, p2_4, p3_1, p4_1, p4_2, p4_3).stream())
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream.concat(this.getRelationships().stream(),
 					Arrays.asList(relationshipP1, relationshipP2, relationshipP3, relationshipP4, relationshipP5,
@@ -580,7 +601,9 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship relationshipAusbildung9 = new TreePropertyRelationship(uebung, te2, true);
 			TreePropertyRelationship relationshipAusbildung10 = new TreePropertyRelationship(uebung, so2, true);
 			TreePropertyRelationship relationshipAusbildung11 = new TreePropertyRelationship(uebung, allgemein2, true);
-			this.setEntries(Stream.concat(this.getEntries().stream(), Arrays.asList(ausbildung, schulung, uebung, bd, te, so, gk, allgemein, bd2, te2, so2, allgemein2).stream())
+			this.setEntries(Stream.concat(this.getEntries().stream(),
+					Arrays.asList(ausbildung, schulung, uebung, bd, te, so, gk, allgemein, bd2, te2, so2, allgemein2)
+							.stream())
 					.collect(Collectors.toList()));
 			this.setRelationships(Stream
 					.concat(this.getRelationships().stream(),
@@ -697,12 +720,15 @@ public class StandardPropertyDefinitions {
 			TreePropertyRelationship rsVer30 = new TreePropertyRelationship(sveNachbetreuung, sonstiges8, true);
 			TreePropertyRelationship rsVer31 = new TreePropertyRelationship(sport, sonstiges9, true);
 
-			this.setEntries(Stream.concat(this.getEntries().stream(), Arrays.asList(veranstaltung, organisation, sonstigeV, atemschutzLt, dienstbespraechung, ausflug, ferienpass,
-							fuehrung, sveNachbetreuung, sport, dienstbespraechung2, ausflug2, kirchenausruekung,
-							feuerwehrfest, ArbeitstagV, wahlveranstaltung, sonstigeV2, vollversammlung, inspektion,
-							bezirkstag, mitgliederversammlung, versammlung, sonstigeV3, ausrueckung, sonstiges2,
-							sonstiges3, sonstiges4, sonstiges5, sonstiges6, sonstiges7, sonstiges8, sonstiges9)
-					.stream()).collect(Collectors.toList()));
+			this.setEntries(Stream
+					.concat(this.getEntries().stream(),
+							Arrays.asList(veranstaltung, organisation, sonstigeV, atemschutzLt, dienstbespraechung,
+									ausflug, ferienpass, fuehrung, sveNachbetreuung, sport, dienstbespraechung2,
+									ausflug2, kirchenausruekung, feuerwehrfest, ArbeitstagV, wahlveranstaltung,
+									sonstigeV2, vollversammlung, inspektion, bezirkstag, mitgliederversammlung,
+									versammlung, sonstigeV3, ausrueckung, sonstiges2, sonstiges3, sonstiges4,
+									sonstiges5, sonstiges6, sonstiges7, sonstiges8, sonstiges9).stream())
+					.collect(Collectors.toList()));
 			this.setRelationships(Stream.concat(this.getRelationships().stream(), Arrays
 					.asList(rsVer1, rsVer2, rsVer3, rsVer4, rsVer5, rsVer6, rsVer7, rsVer8, rsVer9, rsVer10, rsVer11,
 							rsVer12, rsVer13, rsVer14, rsVer15, rsVer16, rsVer17, rsVer18, rsVer19, rsVer20, rsVer21,
