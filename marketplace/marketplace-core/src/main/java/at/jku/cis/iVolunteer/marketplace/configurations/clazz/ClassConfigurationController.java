@@ -120,7 +120,7 @@ public class ClassConfigurationController {
 		return newClassConfiguration;
 
 	}
-	
+
 	@PutMapping("class-configuration/save")
 	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
 
@@ -265,6 +265,10 @@ public class ClassConfigurationController {
 		FlatPropertyDefinition locationProperty = flatProperties.stream().filter(p -> p.getName().equals("Location"))
 				.findFirst().get();
 		task.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(locationProperty));
+
+		FlatPropertyDefinition bereichProperty = flatProperties.stream().filter(p -> p.getName().equals("Bereich"))
+				.findFirst().get();
+		task.getProperties().add(flatPropertyDefinitionToClassPropertyMapper.toTarget(bereichProperty));
 
 		classDefinitions.add(task);
 
