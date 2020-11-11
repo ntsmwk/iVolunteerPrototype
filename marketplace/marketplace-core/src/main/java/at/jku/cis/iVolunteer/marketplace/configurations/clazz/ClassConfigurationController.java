@@ -120,7 +120,7 @@ public class ClassConfigurationController {
 		return newClassConfiguration;
 
 	}
-
+	
 	@PutMapping("class-configuration/save")
 	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
 

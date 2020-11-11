@@ -25,6 +25,7 @@ import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
+import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.XTenantSubscribedResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
@@ -94,7 +95,7 @@ public class TenantController {
 		XTenantSubscribedResponse tenant = xTenantMapper
 				.toTenantSubscribedResponse(tenantService.getTenantById(tenantId), subscribedUsers);
 		CoreUser loggedInUser = loginService.getLoggedInUser();
-	
+
 		boolean alreadySubscribed = subscribedUsers.stream().anyMatch(u -> u.getId().equals(loggedInUser.getId()));
 		tenant.setSubscribed(alreadySubscribed);
 		return tenant;
@@ -120,39 +121,56 @@ public class TenantController {
 	}
 
 	@PostMapping("/{tenantId}/subscribe")
-	public ResponseEntity<Void> subscribeToTenant(@PathVariable String tenantId,
+	public ResponseEntity<Object> subscribeToTenant(@PathVariable String tenantId,
 			@RequestHeader("Authorization") String authorization) {
 		CoreUser user = loginService.getLoggedInUser();
 		Tenant tenant = getTenantById(tenantId);
 
 		if (tenant == null) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.notFound().build();
 		}
+		boolean alreadySubscribed = user.getSubscribedTenants().stream()
+				.anyMatch(ts -> ts.getTenantId().equals(tenantId) && ts.getRole() == UserRole.VOLUNTEER);
+
+		if (alreadySubscribed) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new StringResponse("User is already subscribed to tenant " + tenantId));
+		}
+
 		user = coreUserService.subscribeUserToTenant(user.getId(), tenant.getMarketplaceId(), tenantId,
 				UserRole.VOLUNTEER, authorization, true);
 
 		if (user == null) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new StringResponse("Could not subscribed to tenant " + tenantId));
 		}
-
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/{tenantId}/unsubscribe")
-	public ResponseEntity<Void> unsubscribeFromTenant(@PathVariable String tenantId,
+	public ResponseEntity<Object> unsubscribeFromTenant(@PathVariable String tenantId,
 			@RequestHeader("Authorization") String authorization) {
 		CoreUser user = loginService.getLoggedInUser();
 		Tenant tenant = getTenantById(tenantId);
 
 		if (tenant == null) {
-			ResponseEntity.badRequest().build();
+			return ResponseEntity.notFound().build();
+		}
+
+		boolean alreadySubscribed = user.getSubscribedTenants().stream()
+				.anyMatch(ts -> ts.getTenantId().equals(tenantId) && ts.getRole() == UserRole.VOLUNTEER);
+
+		if (!alreadySubscribed) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new StringResponse("User is not subscribed to tenant " + tenantId));
 		}
 
 		user = coreUserService.unsubscribeUserFromTenant(user.getId(), tenant.getMarketplaceId(), tenantId,
 				UserRole.VOLUNTEER, authorization, true);
 
 		if (user == null) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new StringResponse("Could not subscribed to tenant " + tenantId));
 		}
 		return ResponseEntity.ok().build();
 	}

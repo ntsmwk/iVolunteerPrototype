@@ -38,12 +38,11 @@ public class XTaskInstanceToTaskMapper {
 		if (source == null) {
 			return null;
 		}
-		// (null / false) === TODO
 		XTask task = new XTask();
 		task.setId(source.getId());
 		task.setTitle(source.getName());
 		task.setDescription(source.getDescription());
-		task.setTenant(source.getTenantId());
+		task.setTenantId(source.getTenantId());
 		task.setDescription(source.getDescription());
 		task.setImagePath(source.getImagePath());
 		task.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
@@ -107,7 +106,7 @@ public class XTaskInstanceToTaskMapper {
 		instance.setName(target.getTitle());
 		instance.setDescription(target.getDescription());
 		instance.setUserId(null);
-		instance.setIssuerId(target.getTenant());
+		instance.setIssuerId(target.getTenantId());
 		instance.setImagePath(target.getImagePath());
 		instance.setClassArchetype(ClassArchetype.TASK);
 		instance.setVisible(true);
@@ -123,7 +122,7 @@ public class XTaskInstanceToTaskMapper {
 		if (target.isClosed() != null) {
 			instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
 		}
-		instance.setTenantId(target.getTenant());
+		instance.setTenantId(target.getTenantId());
 
 		PropertyInstance<Object> startDate = new PropertyInstance<Object>();
 

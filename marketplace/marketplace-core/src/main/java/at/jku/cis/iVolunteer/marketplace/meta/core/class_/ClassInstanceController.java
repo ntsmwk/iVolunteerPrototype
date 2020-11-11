@@ -168,6 +168,7 @@ public class ClassInstanceController {
 	// authorization);
 	// return classInstanceRepository.save(classInstances);
 	// }
+	
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {

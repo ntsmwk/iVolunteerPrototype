@@ -154,6 +154,16 @@ public class XTaskController {
 
 	}
 
+	@GetMapping("/{taskId}")
+	public ResponseEntity<Object> getTaskInstancesById(@PathVariable String taskId) {
+		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
+		if(task == null) {
+			return ResponseEntity.badRequest().body(HttpErrorMessages.NOT_FOUND_TASK);
+		}
+		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
+		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
+	}
+	
 	@GetMapping("/tenant/{tenantId}")
 	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
 		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
