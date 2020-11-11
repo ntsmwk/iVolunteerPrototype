@@ -62,7 +62,6 @@ public class StandardPropertyDefinitions {
 		properties.add(new FlatPropertyDefinition<Object>("BadgeID", PropertyType.TEXT, tenantId));
 		properties.add(new FlatPropertyDefinition<Object>("CertificateID", PropertyType.TEXT, tenantId));
 		properties.add(new FlatPropertyDefinition<Object>("TaskID", PropertyType.TEXT, tenantId));
-		properties.add(new FlatPropertyDefinition<Object>("Bereich", PropertyType.TEXT, tenantId));
 
 		return properties;
 	}
@@ -358,6 +357,11 @@ public class StandardPropertyDefinitions {
 		public void inst(String tenantId) {
 			this.setName("Bereich");
 			this.setTenantId(tenantId);
+			this.setAllowedValues(Arrays.asList("Katastrophenhilfs- & Rettungsdienste", "Ältere Menschen", "Soziales",
+					"Entwicklungshilfe, Frieden, Menschrechte", "Gesundheit & Pflege", "Kirche & Religion",
+					"Bürgerschaftliche Aktivitäten & Gemeinwesen", "Sport & Bewegung", "Kinder & Jugendliche",
+					"Bildung & Coaching", "Natur, Umwelt, Tierschutz", "Kultur, Kunst, Unterhaltung, Freizeit",
+					"Menschen mit Beeinträchtigung", "Migrantinnen und Migranten"));
 		}
 	}
 
