@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CoreInitializationController {
 
-	@Autowired private CoreInitializationService coreInitializationService;
-	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
-	
+	@Autowired
+	private CoreInitializationService coreInitializationService;
+	@Autowired
+	private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired
+	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
+	@Autowired
+	private CoreTenantInitializationService coreTenantInitializationService;
 
 	@PutMapping("/init/stage-one")
 	public void createMarketplaceTenantsAndUsers() {
@@ -58,7 +61,6 @@ public class CoreInitializationController {
 		createAdmins();
 		createRecruiters();
 		addTenantTags();
-		// createFlexProdUsers();
 	}
 
 	@DeleteMapping("/init/delete-users")
@@ -152,10 +154,20 @@ public class CoreInitializationController {
 	public void unsubscribeVolunteersFromTenant() {
 		// TODO init
 	}
-	
+
 	@PutMapping("/init/tenant/add-tags")
 	public void addTenantTags() {
 		coreInitializationService.addTenantTags();
+	}
+
+	/**
+	 * FlexProd
+	 */
+
+	@PutMapping("/init/flexprod")
+	public void addFlexProdTenantAndTenantAdmin() {
+		coreTenantInitializationService.initFlexprodTenant();
+		coreHelpSeekerInitializationService.initFlexProdTenantAdmin();
 	}
 
 	/**
@@ -210,8 +222,6 @@ public class CoreInitializationController {
 	public void unregistereVolunteersFromMarketplace() {
 		// TODO init
 	}
-	
-
 
 	@PutMapping("init/wipe-core")
 	public void wipeCore() {

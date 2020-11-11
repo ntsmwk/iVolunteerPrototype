@@ -38,6 +38,9 @@ public class CoreHelpSeekerInitializationService {
 	private static final String TENANT_ADMIN_MV = "MVS_ADMIN";
 	private static final String TENANT_ADMIN_RK = "OERK_ADMIN";
 
+	private static final String TENANT_FLEXPROD = "FlexProd";
+	private static final String TENANT_ADMIN_FLEXPROD = "FLEXPROD_ADMIN";
+
 	@Autowired
 	private CoreUserRepository coreUserRepository;
 	@Autowired
@@ -109,12 +112,21 @@ public class CoreHelpSeekerInitializationService {
 		coreUserService.registerToMarketplace(helpseekerId, mp.getId(), "");
 	}
 
-
 	public void initTenantAdmins() {
 		createTenantAdmin(TENANT_ADMIN_FF, RAW_PASSWORD, "Peter", "Wagner");
 		createTenantAdmin(TENANT_ADMIN_MV, RAW_PASSWORD, "Paul", "Gruber");
 		createTenantAdmin(TENANT_ADMIN_RK, RAW_PASSWORD, "Pepe", "Weber");
+	}
 
+	public void initFlexProdTenantAdmin() {
+		Marketplace mp = marketplaceRepository.findByName("Marketplace 1");
+		CoreUser tenantAdminFlexprod = createTenantAdmin(TENANT_ADMIN_FLEXPROD, RAW_PASSWORD, "Jane", "Doe");
+		Tenant tenant = tenantService.getTenantByName(TENANT_FLEXPROD);
+
+		coreUserService.subscribeUserToTenant(tenantAdminFlexprod.getId(), mp.getId(), tenant.getId(),
+				UserRole.TENANT_ADMIN, "", false);
+
+		registerDefaultTenantAdmin(TENANT_ADMIN_FLEXPROD, TENANT_FLEXPROD);
 	}
 
 	private CoreUser createTenantAdmin(String username, String password, String firstName, String lastName) {
@@ -142,9 +154,12 @@ public class CoreHelpSeekerInitializationService {
 		// since there is only one marketplace
 		Marketplace mp = this.marketplaceRepository.findByName("Marketplace 1");
 
-		coreUserService.subscribeUserToTenant(TENANT_ADMIN_FF, mp.getId(), tenantIdFF, UserRole.TENANT_ADMIN, "", false);
-		coreUserService.subscribeUserToTenant(TENANT_ADMIN_RK, mp.getId(), tenantIdRK, UserRole.TENANT_ADMIN, "", false);
-		coreUserService.subscribeUserToTenant(TENANT_ADMIN_MV, mp.getId(), tenantIdMV, UserRole.TENANT_ADMIN, "", false);
+		coreUserService.subscribeUserToTenant(TENANT_ADMIN_FF, mp.getId(), tenantIdFF, UserRole.TENANT_ADMIN, "",
+				false);
+		coreUserService.subscribeUserToTenant(TENANT_ADMIN_RK, mp.getId(), tenantIdRK, UserRole.TENANT_ADMIN, "",
+				false);
+		coreUserService.subscribeUserToTenant(TENANT_ADMIN_MV, mp.getId(), tenantIdMV, UserRole.TENANT_ADMIN, "",
+				false);
 	}
 
 	public void registerDefaultTenantAdmins() {

@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -65,6 +66,13 @@ public class InitializationService {
 		return tenants;
 	}
 
+	private Tenant getFlexProdTenant() {
+		List<Tenant> tenants = new ArrayList<>();
+		tenants = coreTenantRestClient.getAllTenants();
+
+		return tenants.stream().filter(t -> t.getName().equals("FlexProd")).findFirst().orElse(null);
+	}
+
 	public void addiVolunteerPropertyDefinitions() {
 		List<Tenant> tenants = getTenants();
 		tenants.forEach(tenant -> {
@@ -96,15 +104,13 @@ public class InitializationService {
 	}
 
 	public void addFlexProdPropertyDefinitions() {
-		List<Tenant> tenants = getTenants();
-		tenants.forEach(tenant -> {
-			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions
-					.getAllFlexProdProperties(tenant.getId())) {
-				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
-					flatPropertyDefinitionRepository.save(pd);
-				}
+		Tenant tenant = getFlexProdTenant();
+		for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllFlexProdProperties(tenant.getId())) {
+			if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+				flatPropertyDefinitionRepository.save(pd);
 			}
-		});
+		}
+
 	}
 
 	public void addGenericPropertyDefintions() {
@@ -138,6 +144,10 @@ public class InitializationService {
 						.createNewClassConfiguration(new String[] { t.getId(), "Standardkonfiguration" + i, "" });
 			}
 		}
+	}
+
+	public void addFlexProdClassDefinitionsAndConfigurations(String tenantId) {
+		this.classConfigurationController.createAndSaveFlexProdClassConfigurations(tenantId);
 	}
 
 	public void addRuleTestConfiguration() {

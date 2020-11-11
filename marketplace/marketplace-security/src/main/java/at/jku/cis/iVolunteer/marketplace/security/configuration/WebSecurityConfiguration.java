@@ -60,6 +60,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //				.antMatchers("/meta/core/task-instance/**").permitAll()
 //				.antMatchers("/aggregate/**").permitAll()
 //				END DEBUG
+				.antMatchers("/response/**").permitAll()
 				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()

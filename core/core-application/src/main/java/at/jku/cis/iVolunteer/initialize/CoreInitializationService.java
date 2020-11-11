@@ -24,7 +24,7 @@ import at.jku.cis.iVolunteer.model.user.UserRole;
 @Service
 public class CoreInitializationService {
 	private static final String RECRUITER = "recruiter";
-	private static final String FLEXPROD = "flexprod";
+	private static final String FLEXPROD = "FlexProd";
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
@@ -60,8 +60,7 @@ public class CoreInitializationService {
 			if (environment.acceptsProfiles("prodx")) {
 				marketplace.setId("0eaf3a6281df11e8adc0fa7ae01bbebc");
 				marketplace.setUrl("http://172.24.200.172:8080");
-			}
-			else if(environment.acceptsProfiles("prod")) {
+			} else if (environment.acceptsProfiles("prod")) {
 				marketplace.setId("5bc08399ae03711c3810e3cc");
 				marketplace.setUrl("http://140.78.92.58:8080");
 			}
