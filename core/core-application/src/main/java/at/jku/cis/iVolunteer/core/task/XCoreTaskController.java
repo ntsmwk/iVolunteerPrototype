@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
@@ -36,10 +37,14 @@ public class XCoreTaskController {
 	@Autowired TenantService tenantService;
 	@Autowired LoginService loginService;
 
-//	TODO change to post + postbody
+//	taskType: SUBSCRIBED, UNSUBSCRIBED, ALL
 	@GetMapping("/task")
-	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization) {
+	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization,
+			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
+			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
+			@RequestParam(value = "onlyOpened", defaultValue = "true") boolean onlyOpened) {
 
+//		TODO
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 
 		if (marketplaces == null) {
@@ -50,32 +55,8 @@ public class XCoreTaskController {
 		List<TaskInstance> taskInstances = new ArrayList<>();
 
 		for (Marketplace mp : marketplaces) {
-			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstances(mp.getUrl(), authorization);
-			if (ret != null) {
-				taskInstances.addAll(ret);
-			}
-		}
-
-		List<XTask> tasks = mapToXTasks(taskInstances);
-		return ResponseEntity.ok(tasks);
-	}
-
-//	TODO change to post + postbody
-	@GetMapping("/task/{year}")
-	private ResponseEntity<Object> getTasksByYear(@PathVariable("year") int year,
-			@RequestHeader("Authorization") String authorization) {
-
-		List<Marketplace> marketplaces = marketplaceService.findAll();
-
-		if (marketplaces == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
-					HttpStatus.BAD_REQUEST);
-		}
-
-		List<TaskInstance> taskInstances = new ArrayList<>();
-
-		for (Marketplace mp : marketplaces) {
-			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByYear(mp.getUrl(), year, authorization);
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByYear(mp.getUrl(), startYear,
+					authorization);
 			if (ret != null) {
 				taskInstances.addAll(ret);
 			}
@@ -87,49 +68,18 @@ public class XCoreTaskController {
 
 //	TODO change to post + postbody
 	@GetMapping("/task/tenant/subscribed")
-	private ResponseEntity<Object> getTasksOfSubscribedTenants(@RequestHeader("Authorization") String authorization) {
+	private ResponseEntity<Object> getTasksOfSubscribedTenants(@RequestHeader("Authorization") String authorization,
+			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
+			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
+			@RequestParam(value = "onlyOpened", defaultValue = "true") boolean onlyOpened) {
+//		TODO
+		
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
 					HttpStatus.BAD_REQUEST);
 		}
 		CoreUser user = loginService.getLoggedInUser();
-		if (user == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
-					HttpStatus.UNAUTHORIZED);
-		}
-
-		List<Tenant> tenants = tenantService.getSubscribedTenants(user);
-
-		if (tenants == null) {
-			return ResponseEntity.ok().build();
-		}
-
-		List<TaskInstance> taskInstances = new LinkedList<>();
-
-		for (Marketplace mp : marketplaces) {
-			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenant(mp.getUrl(),
-					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), authorization);
-			if (ret != null) {
-				taskInstances.addAll(ret);
-			}
-		}
-		List<XTask> tasks = mapToXTasks(taskInstances);
-		return ResponseEntity.ok(tasks);
-	}
-
-//	TODO change to post + postbody
-	@GetMapping("/task/tenant/subscribed/{year}")
-	private ResponseEntity<Object> getTasksOfSubscribedTenantsByYear(@PathVariable("year") int year,
-			@RequestHeader("Authorization") String authorization) {
-		List<Marketplace> marketplaces = marketplaceService.findAll();
-		if (marketplaces == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
-					HttpStatus.BAD_REQUEST);
-		}
-
-		CoreUser user = loginService.getLoggedInUser();
-
 		if (user == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
 					HttpStatus.UNAUTHORIZED);
@@ -145,53 +95,23 @@ public class XCoreTaskController {
 
 		for (Marketplace mp : marketplaces) {
 			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenantByYear(mp.getUrl(),
-					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), year, authorization);
+					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), startYear, authorization);
 			if (ret != null) {
 				taskInstances.addAll(ret);
 			}
 		}
-
 		List<XTask> tasks = mapToXTasks(taskInstances);
 		return ResponseEntity.ok(tasks);
 	}
 
 //	TODO change to post + postbody
 	@GetMapping("/task/tenant/unsubscribed")
-	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization) {
-
-		List<Marketplace> marketplaces = marketplaceService.findAll();
-		if (marketplaces == null) {
-			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
-					HttpStatus.BAD_REQUEST);
-		}
-
-		CoreUser user = loginService.getLoggedInUser();
-
-		List<Tenant> tenants = tenantService.getUnsubscribedTenants(user);
-
-		if (tenants == null) {
-			return ResponseEntity.ok(new LinkedList<>());
-		}
-
-		List<TaskInstance> taskInstances = new LinkedList<>();
-
-		for (Marketplace mp : marketplaces) {
-			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenant(mp.getUrl(),
-					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), authorization);
-			if (ret != null) {
-				taskInstances.addAll(ret);
-			}
-		}
-
-		List<XTask> tasks = mapToXTasks(taskInstances);
-		return ResponseEntity.ok(tasks);
-	}
-
-//	TODO change to post + postbody
-	@GetMapping("/task/tenant/unsubscribed/{year}")
-	private ResponseEntity<Object> getTasksOfUnsubscribedTenantsByYear(@PathVariable int year,
-			@RequestHeader("Authorization") String authorization) {
-
+	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization,
+			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
+			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
+			@RequestParam(value = "onlyOpened", defaultValue = "true") boolean onlyOpened) {
+// TODO
+		
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
@@ -210,7 +130,7 @@ public class XCoreTaskController {
 
 		for (Marketplace mp : marketplaces) {
 			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenantByYear(mp.getUrl(),
-					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), year, authorization);
+					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), startYear, authorization);
 			if (ret != null) {
 				taskInstances.addAll(ret);
 			}
