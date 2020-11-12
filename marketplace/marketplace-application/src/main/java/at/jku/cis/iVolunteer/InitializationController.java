@@ -44,6 +44,8 @@ public class InitializationController {
 		addAllTestProperties();
 		addClassConfigurations();
 		addAPIClassDefinitions();
+		
+		initializationService.initConfigurator();
 	}
 
 	@PutMapping("/init/add-rule-test-data")
@@ -216,4 +218,6 @@ public class InitializationController {
 		deleteMatchingConfigurations();
 		deleteTaskInstances();
 	}
+	
+	
 }

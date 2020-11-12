@@ -13,6 +13,7 @@ import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfiguration
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurator.api.ConfiguratorRestClient;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
@@ -54,7 +55,9 @@ public class InitializationService {
 	protected TestDataClasses testDataClasses;
 	@Autowired
 	protected TestDataInstances testDataInstances;
-
+	
+	@Autowired ConfiguratorRestClient configuratorRestClient;
+	
 	@PostConstruct
 	public void init() {
 	}
@@ -172,6 +175,14 @@ public class InitializationService {
 
 	public void deleteMatchingConfigurations() {
 		matchingConfigurationRepository.deleteAll();
+	}
+	
+	public void initConfigurator() {
+		List<Tenant> tenants = getTenants();
+		
+		List<String> tenantIds = tenants.stream().map(t -> t.getId()).collect(Collectors.toList());
+		
+		configuratorRestClient.initConfigurator(tenantIds);
 	}
 
 }

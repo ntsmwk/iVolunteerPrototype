@@ -1,23 +1,7 @@
-import { mxgraph } from 'mxgraph';
-import { Component, OnInit, AfterContentInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DialogFactoryDirective } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.component';
-import { MatchingEntityDataService } from 'app/main/content/_service/configuration/matching-collector-configuration.service';
 import { LoginService } from 'app/main/content/_service/login.service';
-import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
-import { MatchingOperatorRelationshipService } from 'app/main/content/_service/configuration/matching-operator-relationship.service';
-import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { MatchingConfiguration, MatchingEntityMappingConfiguration } from 'app/main/content/_model/meta/configurations';
-import { CConstants } from '../class-configurator/utils-and-constants';
-import { MatchingOperatorRelationship, MatchingEntityType, MatchingEntityMappings, MatchingEntity, MatchingDataRequestDTO } from 'app/main/content/_model/matching';
-import { Tenant } from 'app/main/content/_model/tenant';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
-import { MyMxCell, MyMxCellType } from '../myMxCell';
-import { MatchingConfiguratorPopupMenu } from './popup-menu';
-import { PropertyType } from 'app/main/content/_model/meta/property/property';
-import { isNullOrUndefined } from 'util';
-import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
-import { NewMatchingDialogData } from './_dialogs/new-dialog/new-dialog.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
