@@ -173,6 +173,9 @@ public class ClassInstanceService {
 	}
 	
 	public List<ClassInstance> filterTaskInstancesByYear(int year, List<ClassInstance> classInstances) {
+		if(year == 0) {
+			return classInstances;
+		}
 		return classInstances.stream().filter(tI -> {
 			PropertyInstance<Object> startDateProperty = tI.findProperty("Starting Date");
 			if (startDateProperty != null && startDateProperty.getValues().size() == 1) {

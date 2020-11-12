@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
@@ -32,28 +33,11 @@ public class XTaskCertificateController {
 
 	@GetMapping("taskCertificate/tenant/{tenantId}")
 	public List<XTaskCertificate> getTaskCertificatesByTenantId(@PathVariable String tenantId,
+			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestHeader("Authorization") String authorization) {
 		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK,
 				tenantId);
-
-		Tenant tenant = coreTenantRestClient.getTenantById(tenantId, authorization);
-
-		List<XTaskCertificate> certs = new ArrayList<>();
-		for (ClassInstance classInstance : classInstances) {
-			User user = userController.findUserById(classInstance.getId());
-			TaskInstance ti = xTaskInstanceService.getTaskInstance(classInstance.getId());
-			certs.add(classInstanceToTaskCertificateMapper.toTarget(classInstance, ti, tenant, user));
-		}
-		return certs;
-	}
-
-	@GetMapping("taskCertificate/tenant/{tenantId}/{year}")
-	public List<XTaskCertificate> getTaskCertificatesByTenantIdByYear(@PathVariable String tenantId,
-			@PathVariable int year, @RequestHeader("Authorization") String authorization) {
-		List<ClassInstance> classInstances = classInstanceService.getClassInstanceByArchetype(ClassArchetype.TASK,
-				tenantId);
-
-		classInstances = classInstanceService.filterTaskInstancesByYear(year, classInstances);
+		classInstances = classInstanceService.filterTaskInstancesByYear(startYear, classInstances);
 
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId, authorization);
 
