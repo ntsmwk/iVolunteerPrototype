@@ -45,7 +45,7 @@ public class XDiagramDataService {
         dataset.getDatapoints();
 
         display.getDiagramType(); // DOMAIN_CATEGORY / CATEGORY_ONLY
-        display.getValueType() // number / duration
+        display.getValueType(); // number / duration
 
         // calc diagram data
         // 

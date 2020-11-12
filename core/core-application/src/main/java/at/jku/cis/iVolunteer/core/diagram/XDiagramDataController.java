@@ -44,7 +44,12 @@ public class XDiagramDataController {
 
         CoreUser loggedInUser = loginService.getLoggedInUser();
 
-        List<XDiagramRawDataSet> a = diagramDataService.getLatestDiagramData(loggedInUser);
+        XDiagramRawDataSet dataset = diagramDataService.getLatestDiagramData(loggedInUser);
+        // filter 
+
+        diagramDataService.filter(dataset, filter);
+               // display
+        // order
 
         return null;
     }
