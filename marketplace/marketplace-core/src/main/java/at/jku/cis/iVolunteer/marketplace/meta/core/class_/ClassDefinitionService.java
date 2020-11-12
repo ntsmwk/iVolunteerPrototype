@@ -58,6 +58,12 @@ public class ClassDefinitionService {
 
 		return classDefinitions;
 	}
+	
+	public List<ClassDefinition> getClassDefinitionsByConfigurationId(String configuratorId) {
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByConfigurationId(configuratorId);
+		
+		return classDefinitions;
+	}
 
 	public ClassDefinition newClassDefinition(ClassDefinition classDefinitionDTO) {
 		return classDefinitionRepository.save(classDefinitionDTO);

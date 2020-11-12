@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -9,16 +8,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,20 +31,13 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceMapper classInstanceMapper;
-	@Autowired
-	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
-	@Autowired
-	private DateTimeService dateTimeService;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private ContractorPublishingRestClient contractorPublishingRestClient;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceMapper classInstanceMapper;
+	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired private DateTimeService dateTimeService;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private ContractorPublishingRestClient contractorPublishingRestClient;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -144,31 +131,6 @@ public class ClassInstanceController {
 
 		return null;
 	}
-	//
-	// @GetMapping("/meta/core/class/instance/in-issuer-inbox")
-	// private List<ClassInstanceDTO> getClassInstanceInIssuerInbox(
-	// @RequestParam(value = "tId", required = true) String tenantId) {
-	// List<ClassInstance> instances =
-	// classInstanceRepository.getByIssuedAndTenantId(false, tenantId);
-	// return classInstanceMapper.mapToDTO(instances);
-	// }
-	//
-	// @PutMapping("/meta/core/class/instance/issue")
-	// private List<ClassInstance> issueClassInstance(
-	// @RequestBody List<String> classInstanceIds, @RequestHeader("Authorization")
-	// String authorization) {
-	// List<ClassInstance> classInstances = new ArrayList<>();
-	// classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
-	//
-	// for (ClassInstance classInstance : classInstances) {
-	// classInstance.setIssued(true);
-	// }
-	//
-	// contractorPublishingRestClient.publishClassInstances(classInstances,
-	// authorization);
-	// return classInstanceRepository.save(classInstances);
-	// }
-	
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {

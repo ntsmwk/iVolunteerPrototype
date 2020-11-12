@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 
 @Service
@@ -15,6 +14,10 @@ public class MatchingConfigurationService {
 
 	@Autowired private ClassConfigurationRepository configuratorRepository;
 	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
+	
+	public MatchingConfiguration getMatchingConfigurationById(String id) {
+		return matchingConfigurationRepository.findOne(id);
+	}
 
 	public MatchingConfiguration getMatchingConfiguratorByClassConfigurationIds(String leftSideId,
 			String rightSideId) {
@@ -36,30 +39,16 @@ public class MatchingConfigurationService {
 		return null;
 	}
 	
-	
-	
-//	public List<MatchingConfiguration> getByTenantId(String tenantId){
-//		
-//		
-//		return null;
-//	}
-
 	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
+		if (matchingConfiguration == null) {
+			return null;
+		}
 		if (matchingConfiguration.getId() == null) {
 			String leftClassConfigurationId = matchingConfiguration.getLeftSideId();
 			String rightClassConfigurationId = matchingConfiguration.getRightSideId();
 			String hash = createHashFromClassConfigurationIds(leftClassConfigurationId, rightClassConfigurationId);
 			matchingConfiguration.setHash(hash);
-			
-//			ClassConfiguration leftConfiguration = configuratorRepository.findOne(leftClassConfigurationId);
-//			ClassConfiguration rightConfiguration = configuratorRepository.findOne(rightClassConfigurationId);
-//
-//			matchingConfiguration.setLeftSideName(leftConfiguration.getName());
-//			matchingConfiguration.setRightSideName(rightConfiguration.getName());
-//
-//			if (matchingConfiguration.getName() == null) {
-//				matchingConfiguration.setName(leftConfiguration.getName() + " --> " + rightConfiguration.getName());
-//			}
+
 		}
 
 		matchingConfiguration.setTimestamp(new Date());

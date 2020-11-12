@@ -45,7 +45,7 @@ public class RelationshipController {
 	}
 
 	@PutMapping("/meta/core/relationship/add-or-update")
-	List<RelationshipDTO> addOrUpdateRelationships(@RequestBody List<RelationshipDTO> relationships) {
+	public List<RelationshipDTO> addOrUpdateRelationships(@RequestBody List<RelationshipDTO> relationships) {
 		return relationshipMapper.toTargets(relationshipRepository.save(relationshipMapper.toSources(relationships)));
 	}
 
@@ -65,7 +65,7 @@ public class RelationshipController {
 	}
 
 	@PutMapping("/meta/core/relationship/delete")
-	private List<RelationshipDTO> deleteRelationship(@RequestBody List<String> idsToRemove) {
+	public List<RelationshipDTO> deleteRelationship(@RequestBody List<String> idsToRemove) {
 		for (String id : idsToRemove) {
 			relationshipRepository.delete(id);
 		}

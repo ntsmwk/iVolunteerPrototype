@@ -14,10 +14,14 @@ public interface ClassDefinitionRepository extends HasTenantRepository<ClassDefi
 	List<ClassDefinition> getByClassArchetypeAndTenantId(ClassArchetype classArchetype, String tenantId);
 	
 	List<ClassDefinition> getByTenantId(String tenantId);
+	
+	List<ClassDefinition> getByConfigurationId(String configurationId);
 
 	ClassDefinition getByIdAndTenantId(String id, String tenantId);
 	
 	ClassDefinition findByNameAndTenantId(String name, String tenantId);
+	
+	
 
 
 

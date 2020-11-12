@@ -11,51 +11,45 @@ import { isNullOrUndefined } from "util";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { User, UserRole } from "app/main/content/_model/user";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   templateUrl: "./task-select.component.html",
   styleUrls: ["./task-select.component.scss"]
 })
 export class FuseTaskSelectComponent implements OnInit {
-  marketplace: Marketplace;
-  dataSource = new MatTableDataSource<ClassDefinition>();
-  displayedColumns = ["name", "configuration"];
-  user: User;
-  tenant: Tenant;
-  userRole: UserRole;
+  globalInfo: GlobalInfo;
+  loaded = false;
+  sanitizedUrl: SafeResourceUrl;
+
 
   constructor(
-    formBuilder: FormBuilder,
-    private router: Router,
     private loginService: LoginService,
-    private classDefinitionService: ClassDefinitionService
-  ) {}
+    private classDefService: ClassDefinitionService,
+    private sanitizer: DomSanitizer
+  ) { }
 
   async ngOnInit() {
-    let globalInfo = <GlobalInfo>(
+    this.loaded = false;
+    this.sanitizedUrl = undefined;
+    this.globalInfo = <GlobalInfo>(
       await this.loginService.getGlobalInfo().toPromise()
     );
-    this.user = globalInfo.user;
-    this.tenant = globalInfo.tenants[0];
-    this.marketplace = globalInfo.marketplace;
-    this.userRole = globalInfo.userRole;
+    this.createSanatizedUrl();
 
-    if (!isNullOrUndefined(this.marketplace)) {
-      let tasks = <ClassDefinition[]>(
-        await this.classDefinitionService
-          .getByArchetype(this.marketplace, ClassArchetype.TASK, this.tenant.id)
-          .toPromise()
-      );
 
-      this.dataSource.data = tasks
-        .filter(t => t.configurationId != null)
-        .sort((c1, c2) => c1.configurationId.localeCompare(c2.configurationId));
-    }
+    this.loaded = true;
   }
 
-  onRowSelect(row) {
-    this.router.navigate([`main/instance-editor/${this.marketplace.id}`], {
-      queryParams: [row.id]
-    });
+  createSanatizedUrl() {
+    this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`
+    http://localhost:4201/main/task-select?tenantId=${this.globalInfo.tenants[0].id}&redirect=http:%2F%2Flocalhost:8080%2Fresponse%2Fclass-instance-configurator
+    `);
+
+
+  }
+
+  navigateBack() {
+    window.history.back();
   }
 }
