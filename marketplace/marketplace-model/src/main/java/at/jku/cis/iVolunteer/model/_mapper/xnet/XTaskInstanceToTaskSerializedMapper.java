@@ -35,7 +35,7 @@ public class XTaskInstanceToTaskSerializedMapper implements OneWayMapper<TaskIns
 		ts.setTitle(source.getName());
 		ts.setDescription(source.getDescription());
 		ts.setImagePath(source.getImagePath());
-		ts.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
+		ts.setStatus(source.getStatus());
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
 		ts.setDynamicBlocks(new ArrayList<>());

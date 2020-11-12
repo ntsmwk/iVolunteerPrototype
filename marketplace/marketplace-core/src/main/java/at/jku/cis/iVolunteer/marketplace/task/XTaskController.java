@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreStorageRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
-import at.jku.cis.iVolunteer.marketplace.user.UserController;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model._httprequests.PostTaskRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
@@ -33,7 +32,6 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.task.XTask;
 import at.jku.cis.iVolunteer.model.user.User;
-import at.jku.cis.iVolunteer.model.user.XUser;
 
 @RestController
 @RequestMapping("/task")
@@ -44,7 +42,6 @@ public class XTaskController {
 	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
 	@Autowired private XTaskInstanceService xTaskInstanceService;
 	@Autowired private UserService userService;
-	@Autowired private UserController userController;
 	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
 	@Autowired private CoreStorageRestClient coreStorageRestClient;
 
@@ -156,21 +153,14 @@ public class XTaskController {
 		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
 	}
 
-//	TODO change to post + postbody
 	@GetMapping("/tenant/{tenantId}")
-	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
-		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
-		// TODO fix multiple db accesses...
-		return tasks.stream().map(t -> {
-			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
-			return xTaskInstanceToTaskMapper.toTarget(t, users);
-		}).collect(Collectors.toList());
-	}
-
-//	TODO change to post + postbody
-	@GetMapping("/tenant/{tenantId}/{year}")
-	public List<XTask> getTaskInstancesByTenantIdByYear(@PathVariable String tenantId, @PathVariable int year) {
-		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantIdByYear(tenantId, year);
+	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId,
+			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
+			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
+			@RequestParam(value = "status", defaultValue = "ALL") String status) {
+		String loggedInUserId = this.loginService.getLoggedInUser().getId();
+		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId, taskType, startYear, status,
+				loggedInUserId);
 		// TODO fix multiple db accesses...
 		return tasks.stream().map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
