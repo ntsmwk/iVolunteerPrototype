@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.chart;
+package at.jku.cis.iVolunteer.model.diagram;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,7 +9,7 @@ public class StoredChart {
 	private String title;
 	private String type;
 	private String data;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -17,7 +17,7 @@ public class StoredChart {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public String getUserId() {
 		return id;
 	}
