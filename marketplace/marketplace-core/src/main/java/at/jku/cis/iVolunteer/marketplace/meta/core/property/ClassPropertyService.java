@@ -63,13 +63,13 @@ public class ClassPropertyService {
 		return null;
 	}
 	
-	public ClassProperty<Object> getClassPropertyByName(String classDefinitionId, String classPropertyName, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
-		if (classDefinition != null) {
-			return findClassPropertyByName(classDefinition, classPropertyName);
-		}
-		return null;
-	}
+//	public ClassProperty<Object> getClassPropertyByName(String classDefinitionId, String classPropertyName, String tenantId) {
+//		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
+//		if (classDefinition != null) {
+//			return findClassPropertyByName(classDefinition, classPropertyName);
+//		}
+//		return null;
+//	}
 
 	public ClassProperty<Object> updateClassProperty(String classDefinitionId, String classPropertyId,
 			ClassProperty<Object> updatedClassProperty) {

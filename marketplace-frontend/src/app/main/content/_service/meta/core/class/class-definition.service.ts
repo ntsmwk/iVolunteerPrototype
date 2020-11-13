@@ -70,16 +70,16 @@ export class ClassDefinitionService {
   //   );
   // }
 
-  getFormConfigurationChunk(
-    marketplace: Marketplace,
-    currentClassDefinitionId: string,
-    choiceId: string
-  ) {
-    const params = [currentClassDefinitionId, choiceId];
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/definition/form-configuration-chunk`,
-      params
-    );
-  }
+  // getFormConfigurationChunk(
+  //   marketplace: Marketplace,
+  //   currentClassDefinitionId: string,
+  //   choiceId: string
+  // ) {
+  //   const params = [currentClassDefinitionId, choiceId];
+  //   return this.http.put(
+  //     `${marketplace.url}/meta/core/class/definition/form-configuration-chunk`,
+  //     params
+  //   );
+  // }
 
 }

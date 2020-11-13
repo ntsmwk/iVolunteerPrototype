@@ -12,10 +12,6 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
@@ -32,29 +28,11 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		if (source == null) {
 			return null;
 		}
-		ClassInstance classInstance = null;
-
-		switch (source.getClassArchetype()) {
-			case ACHIEVEMENT:
-				classInstance = new AchievementClassInstance();
-				break;
-			case COMPETENCE:
-				classInstance = new CompetenceClassInstance();
-				break;
-			case FUNCTION:
-				classInstance = new FunctionClassInstance();
-				break;
-			case TASK:
-				classInstance = new TaskClassInstance();
-				break;
-			default:
-				break;
-
-		}
+		ClassInstance classInstance = new ClassInstance();
 
 		classInstance.setId(null);
 		classInstance.setClassDefinitionId(source.getId());
-
+		classInstance.setClassArchetype(source.getClassArchetype());
 		classInstance.setName(source.getName());
 
 		if (source.getConfigurationId() != null) {

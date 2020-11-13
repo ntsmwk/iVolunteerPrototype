@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.xnet.FormEntryToTaskDefinitionMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.xnet.XFormEntryToTaskTemplateMapper;
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipController;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipService;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -34,14 +34,14 @@ public class XTaskTemplateController {
 	@Autowired
 	private ClassDefinitionService classDefinitionService;
 	@Autowired
-	private ClassConfigurationController classConfigurationController;
+	private ClassConfigurationService classConfigurationController;
 //	@Autowired
 //	private FormEntryToTaskDefinitionMapper formEntryToTaskDefinitionMapper;
 	@Autowired private XFormEntryToTaskTemplateMapper formEntryToTaskTemplateMapper;
 	@Autowired
 	private CollectionService collectionService;
 	@Autowired
-	private RelationshipController relationshipController;
+	private RelationshipService relationshipController;
 	
 //	GET ALL TASKTEMPLATES OF TENANT BY ID
 //	GET {marketplaceUrl}/taskTemplate/tenant/{tenantId}/

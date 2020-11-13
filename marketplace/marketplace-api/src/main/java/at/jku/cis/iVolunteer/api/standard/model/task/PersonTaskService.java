@@ -23,7 +23,6 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyEntry;
@@ -77,10 +76,10 @@ public class PersonTaskService {
 		}
 	}
 
-	private TaskClassInstance createPersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
+	private ClassInstance createPersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
 			String tenantId) {
 		// @formatter:off
-		TaskClassInstance personTaskClassInstance = (TaskClassInstance) classDefinition2InstanceMapper
+		ClassInstance personTaskClassInstance = classDefinition2InstanceMapper
 				.toTarget(personTaskClassDefinition);
 
 		// @formatter:on

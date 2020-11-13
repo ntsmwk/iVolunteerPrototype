@@ -17,7 +17,7 @@ public class ClassConfiguration extends IVolunteerObject {
 
 	private String userId;
 
-	private ClassConfigurationArcheType configuratorArcheType;
+//	private ClassConfigurationArcheType configuratorArcheType;
 
 	public ClassConfiguration() {
 	}
@@ -67,13 +67,13 @@ public class ClassConfiguration extends IVolunteerObject {
 		return ((ClassConfiguration) obj).id.equals(id);
 	}
 
-	public ClassConfigurationArcheType getConfiguratorArcheType() {
-		return configuratorArcheType;
-	}
-
-	public void setConfiguratorArcheType(ClassConfigurationArcheType configuratorArcheType) {
-		this.configuratorArcheType = configuratorArcheType;
-	}
+//	public ClassConfigurationArcheType getConfiguratorArcheType() {
+//		return configuratorArcheType;
+//	}
+//
+//	public void setConfiguratorArcheType(ClassConfigurationArcheType configuratorArcheType) {
+//		this.configuratorArcheType = configuratorArcheType;
+//	}
 
 	public String getUserId() {
 		return userId;

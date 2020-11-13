@@ -40,19 +40,19 @@ public class InitializationController {
 	@PutMapping("/init/add-test-data")
 	public void addTestData() {
 		addFireBrigadeUserMapping();
-		addAllProperties();
-		addAllTestProperties();
-		addClassConfigurations();
+//		addAllProperties();
+//		addAllTestProperties();
+//		addClassConfigurations();
 		addAPIClassDefinitions();
 		
 		initializationService.initConfigurator();
 	}
-
-	@PutMapping("/init/add-rule-test-data")
-	public void addRuleTestData() {
-		addRuleTestConfiguration();
-		addRuleUserData();
-	}
+//
+//	@PutMapping("/init/add-rule-test-data")
+//	public void addRuleTestData() {
+//		addRuleTestConfiguration();
+//		addRuleUserData();
+//	}
 
 	@PutMapping("/init/flexprod")
 	public void addFlexProdData() {
@@ -143,15 +143,15 @@ public class InitializationController {
 	 * Rules
 	 */
 
-	@PutMapping("/init/add-rule-test-configuration")
-	public void addRuleTestConfiguration() {
-		initializationService.testDataClasses.createClassConfigurations();
-	}
-
-	@PutMapping("/init/add-rule-user-data")
-	public void addRuleUserData() {
-		initializationService.testDataInstances.createUserData();
-	}
+//	@PutMapping("/init/add-rule-test-configuration")
+//	public void addRuleTestConfiguration() {
+//		initializationService.testDataClasses.createClassConfigurations();
+//	}
+//
+//	@PutMapping("/init/add-rule-user-data")
+//	public void addRuleUserData() {
+//		initializationService.testDataInstances.createUserData();
+//	}
 
 	/**
 	 * Matching

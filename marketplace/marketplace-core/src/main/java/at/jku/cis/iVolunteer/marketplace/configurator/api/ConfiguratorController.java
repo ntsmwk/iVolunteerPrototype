@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationService;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationService;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
-import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipController;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipService;
 import at.jku.cis.iVolunteer.model._httprequests.configurator.ClassConfiguratorResponseRequestBody;
 import at.jku.cis.iVolunteer.model._httprequests.configurator.ClassInstanceConfiguratorResponseRequestBody;
 import at.jku.cis.iVolunteer.model._httprequests.configurator.MatchingConfiguratorResponseRequestBody;
@@ -27,8 +27,8 @@ public class ConfiguratorController {
 
 	@Autowired private ClassInstanceController classInstanceController;
 	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private ClassConfigurationController classConfigurationController;
-	@Autowired private RelationshipController relationshipController;
+	@Autowired private ClassConfigurationService classConfigurationController;
+	@Autowired private RelationshipService relationshipController;
 	@Autowired private MatchingConfigurationService matchingConfigurationService;
 	@Autowired private MatchingOperatorRelationshipController matchingOperatorRelationshipController;
 	@Autowired private MatchingConfigurationController matchingConfigurationController;

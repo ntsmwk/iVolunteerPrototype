@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bson.types.ObjectId;
+
 public class TreePropertyEntry {
 	String id;
 	String value;
@@ -32,7 +34,7 @@ public class TreePropertyEntry {
 		this.value = value;
 		this.selectable = selectable;
 		this.level = level;
-		this.id = UUID.randomUUID().toString();
+		this.id = new ObjectId().toHexString();
 
 		this.parents = new ArrayList<>();
 	}

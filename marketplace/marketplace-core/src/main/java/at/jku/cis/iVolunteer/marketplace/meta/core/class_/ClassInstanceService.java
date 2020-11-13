@@ -21,10 +21,6 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
@@ -120,24 +116,9 @@ public class ClassInstanceService {
 
 	public ClassInstance newClassInstance(User volunteer, String classDefinitionId, String tenantId) {
 		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId);
-		ClassInstance ci;
-		switch (classDefinition.getClassArchetype()) {
-		case ACHIEVEMENT:
-			ci = new AchievementClassInstance();
-			break;
-		case COMPETENCE:
-			ci = new CompetenceClassInstance();
-			break;
-		case TASK:
-			ci = new TaskClassInstance();
-			break;
-		case FUNCTION:
-			ci = new FunctionClassInstance();
-			break;
-			
-		default:
-			ci = null;
-		}
+		ClassInstance ci = new ClassInstance();
+		ci.setClassArchetype(ci.getClassArchetype());
+		
 		ci.setName(classDefinition.getName());
 		ci.setClassDefinitionId(classDefinition.getId());
 		ci.setUserId(volunteer.getId());

@@ -25,7 +25,6 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstanceDTO;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @RestController
@@ -142,7 +141,8 @@ public class ClassInstanceController {
 			@RequestBody String classInstanceId) {
 		ClassInstance ci = classInstanceRepository.findOne(classInstanceId);
 
-		TaskClassInstance ciNew = new TaskClassInstance();
+		ClassInstance ciNew = new ClassInstance();
+		ciNew.setClassArchetype(ci.getClassArchetype());
 		ciNew.setName(ci.getName());
 		ciNew.setProperties(ci.getProperties());
 		ciNew.setUserId(ci.getUserId());
