@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.model._mapper.xnet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,11 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
-import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
@@ -45,7 +41,7 @@ public class XTaskInstanceToTaskMapper {
 		task.setTenantId(source.getTenantId());
 		task.setDescription(source.getDescription());
 		task.setImagePath(source.getImagePath());
-		task.setClosed(source.getStatus().equals(TaskInstanceStatus.CLOSED));
+		task.setStatus(source.getStatus());
 
 		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
 		task.setDynamicBlocks(new ArrayList<>());
@@ -58,12 +54,12 @@ public class XTaskInstanceToTaskMapper {
 				: new Date((Long) endDateField.getValues().get(0)));
 
 		PropertyInstance<Object> locationField = source.findProperty("Location");
-		
+
 		Location location = null;
-		if (locationField != null && locationField.getValues().size() > 0) {		
-			 location = objectMapper.convertValue(locationField.getValues().get(0), Location.class);
+		if (locationField != null && locationField.getValues().size() > 0) {
+			location = objectMapper.convertValue(locationField.getValues().get(0), Location.class);
 		}
-		
+
 		task.setGeoInfo(new XGeoInfo(location));
 
 		for (int i = 2; i < sortedFields.size(); i++) {
@@ -118,8 +114,8 @@ public class XTaskInstanceToTaskMapper {
 			instance.setSubscribedVolunteerIds(
 					target.getSubscribedUsers().stream().map(u -> u.getId()).collect(Collectors.toList()));
 		}
-		if (target.isClosed() != null) {
-			instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
+		if (target.getStatus() != null) {
+			instance.setStatus(target.getStatus());
 		}
 		instance.setTenantId(target.getTenantId());
 

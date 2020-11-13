@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,14 +36,11 @@ public class XCoreTaskController {
 	@Autowired TenantService tenantService;
 	@Autowired LoginService loginService;
 
-//	taskType: SUBSCRIBED, UNSUBSCRIBED, ALL
 	@GetMapping("/task")
 	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
-			@RequestParam(value = "onlyOpened", defaultValue = "true") boolean onlyOpened) {
-
-//		TODO
+			@RequestParam(value = "status", defaultValue = "ALL") String status) {
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 
 		if (marketplaces == null) {
@@ -55,25 +51,24 @@ public class XCoreTaskController {
 		List<TaskInstance> taskInstances = new ArrayList<>();
 
 		for (Marketplace mp : marketplaces) {
-			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByYear(mp.getUrl(), startYear,
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstances(mp.getUrl(), taskType, startYear, status,
 					authorization);
 			if (ret != null) {
 				taskInstances.addAll(ret);
 			}
 		}
-
+		
 		List<XTask> tasks = mapToXTasks(taskInstances);
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
 		return ResponseEntity.ok(tasks);
 	}
 
-//	TODO change to post + postbody
 	@GetMapping("/task/tenant/subscribed")
 	private ResponseEntity<Object> getTasksOfSubscribedTenants(@RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
-			@RequestParam(value = "onlyOpened", defaultValue = "true") boolean onlyOpened) {
-//		TODO
-		
+			@RequestParam(value = "status", defaultValue = "ALL") String status) {
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
@@ -94,23 +89,25 @@ public class XCoreTaskController {
 		List<TaskInstance> taskInstances = new LinkedList<>();
 
 		for (Marketplace mp : marketplaces) {
-			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenantByYear(mp.getUrl(),
-					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), startYear, authorization);
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenant(mp.getUrl(),
+					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), taskType, startYear, status,
+					authorization);
 			if (ret != null) {
 				taskInstances.addAll(ret);
 			}
 		}
 		List<XTask> tasks = mapToXTasks(taskInstances);
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
+
 		return ResponseEntity.ok(tasks);
 	}
 
-//	TODO change to post + postbody
 	@GetMapping("/task/tenant/unsubscribed")
 	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
-			@RequestParam(value = "onlyOpened", defaultValue = "true") boolean onlyOpened) {
-// TODO
+			@RequestParam(value = "status", defaultValue = "ALL") String status) {
 		
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
@@ -129,14 +126,17 @@ public class XCoreTaskController {
 		List<TaskInstance> taskInstances = new LinkedList<>();
 
 		for (Marketplace mp : marketplaces) {
-			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenantByYear(mp.getUrl(),
-					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), startYear, authorization);
+			List<TaskInstance> ret = taskInstanceRestClient.getTaskInstancesByTenant(mp.getUrl(),
+					tenants.stream().map(t -> t.getId()).collect(Collectors.toList()), taskType, startYear, status,
+					authorization);
 			if (ret != null) {
 				taskInstances.addAll(ret);
 			}
 		}
 
 		List<XTask> tasks = mapToXTasks(taskInstances);
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
 		return ResponseEntity.ok(tasks);
 	}
 

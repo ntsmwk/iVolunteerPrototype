@@ -111,8 +111,8 @@ public class XTaskInstanceToPostTaskRequestMapper {
 		} else {
 			instance.setSubscribedVolunteerIds(target.getSubscribedUsers());
 		}
-		if (target.isClosed() != null) {
-			instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
+		if (target.getStatus() != null) {
+			instance.setStatus(target.getStatus());
 		}
 		instance.setTenantId(target.getTenantId());
 
