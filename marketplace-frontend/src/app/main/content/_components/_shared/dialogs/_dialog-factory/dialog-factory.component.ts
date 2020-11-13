@@ -3,15 +3,6 @@ import { Directive } from "@angular/core";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { Relationship } from "app/main/content/_model/meta/relationship";
-import {
-  ClassInstanceFormPreviewDialogComponent,
-  ClassInstanceFormPreviewDialogData
-} from "../../../help-seeker/configuration/class-instance-configurator/form-preview-dialog/form-preview-dialog.component";
-import {
-  ClassInstanceFormPreviewExportDialogComponent,
-  ClassInstanceFormPreviewExportDialogData
-} from "../../../help-seeker/configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.component";
-import { isNullOrUndefined } from "util";
 import { User } from "app/main/content/_model/user";
 import {
   AddHelpseekerDialogComponent,
@@ -60,74 +51,6 @@ export class DialogFactoryDirective {
   /**
    * ******INSTANTIATION******
    */
-
-  openInstanceFormPreviewDialog(
-    classDefinitions: ClassDefinition[],
-    relationships: Relationship[],
-    rootClassDefinition: ClassDefinition
-  ) {
-    const dialogRef = this.dialog.open(
-      ClassInstanceFormPreviewDialogComponent,
-      {
-        width: "90vw",
-        minWidth: "90vw",
-        height: "90vh",
-        minHeight: "90vh",
-        data: {
-          classDefinitions: classDefinitions,
-          relationships: relationships,
-          rootClassDefinition: rootClassDefinition
-        },
-        disableClose: true
-      }
-    );
-
-    let returnData: ClassInstanceFormPreviewDialogData;
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: ClassInstanceFormPreviewDialogData) => {
-        returnData = result;
-      });
-
-    return dialogRef
-      .afterClosed()
-      .toPromise()
-      .then(() => {
-        return returnData;
-      });
-  }
-
-  openPreviewExportDialog(classConfigurationIds: string[]) {
-    const dialogRef = this.dialog.open(
-      ClassInstanceFormPreviewExportDialogComponent,
-      {
-        width: "90vw",
-        minWidth: "90vw",
-        height: "90vh",
-        minHeight: "90vh",
-        data: {
-          classConfigurationIds: classConfigurationIds
-        },
-        disableClose: true
-      }
-    );
-
-    let returnValue: ClassInstanceFormPreviewExportDialogData;
-    dialogRef
-      .beforeClose()
-      .toPromise()
-      .then((result: ClassInstanceFormPreviewExportDialogData) => {
-        returnValue = result;
-      });
-
-    return dialogRef
-      .afterClosed()
-      .toPromise()
-      .then(() => {
-        return returnValue;
-      });
-  }
 
   /*
    *  Matching-Configurator Dialogs

@@ -1,58 +1,57 @@
-@import "src/@fuse/scss/fuse";
+// @import "src/@fuse/scss/fuse";
 
-  mat-expansion-panel {
-    box-shadow: none;
-    border: 2px black solid;
-  }
+//   mat-expansion-panel {
+//     box-shadow: none;
+//     border: 2px black solid;
+//   }
 
-  .class-mat-expansion-panel-header:hover, .class-mat-expansion-panel-header.mat-expanded {
-    background-color: rgb(4, 123, 202) !important;
-    border-radius: 0;
+//   .class-mat-expansion-panel-header:hover, .class-mat-expansion-panel-header.mat-expanded {
+//     background-color: rgb(4, 123, 202) !important;
+//     border-radius: 0;
 
-    mat-panel-title {
-      color: white;
-    }
-    
-    mat-panel-description {
-      color: white;
-    }
-  }
+//     mat-panel-title {
+//       color: white;
+//     }
 
-  .class-mat-expansion-panel-header {
-    background-color: rgb(4, 123, 202) !important;
-    border-radius: 0;
-    mat-panel-title {
-      color: white;
-    }
-    
-    mat-panel-description {
-      color: white;
-    }
-  }
+//     mat-panel-description {
+//       color: white;
+//     }
+//   }
 
-  .property-mat-expansion-panel-header:hover, .property-mat-expansion-panel-header.mat-expanded {
-    background-color: rgb(54, 115, 41) !important;
-    border-radius: 0;
+//   .class-mat-expansion-panel-header {
+//     background-color: rgb(4, 123, 202) !important;
+//     border-radius: 0;
+//     mat-panel-title {
+//       color: white;
+//     }
 
-    mat-panel-title {
-      color: white;
-    }
-    
-    mat-panel-description {
-      color: white;
-    }
-  }
+//     mat-panel-description {
+//       color: white;
+//     }
+//   }
 
-  .property-mat-expansion-panel-header {
-    background-color: rgb(54, 115, 41) !important;
-    border-radius: 0;
+//   .property-mat-expansion-panel-header:hover, .property-mat-expansion-panel-header.mat-expanded {
+//     background-color: rgb(54, 115, 41) !important;
+//     border-radius: 0;
 
-    mat-panel-title {
-      color: white;
-    }
-    
-    mat-panel-description {
-      color: white;
-    }
-  }
+//     mat-panel-title {
+//       color: white;
+//     }
 
+//     mat-panel-description {
+//       color: white;
+//     }
+//   }
+
+//   .property-mat-expansion-panel-header {
+//     background-color: rgb(54, 115, 41) !important;
+//     border-radius: 0;
+
+//     mat-panel-title {
+//       color: white;
+//     }
+
+//     mat-panel-description {
+//       color: white;
+//     }
+//   }

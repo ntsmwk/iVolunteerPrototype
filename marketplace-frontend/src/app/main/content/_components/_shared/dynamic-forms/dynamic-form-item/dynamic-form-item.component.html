@@ -1,4 +1,4 @@
-<div class="page-layout" [formGroup]="form">
+<!-- <div class="page-layout" [formGroup]="form">
 
   <ng-template *ngTemplateOutlet="formItemTemplate"></ng-template>
 
@@ -51,7 +51,6 @@
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'radiobutton'" floatPlaceholder="always">
-        <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
         <input matInput placeholder="{{formItem.label}} {{requiredMarker}}" style="display: none">
         <br>
         <br>
@@ -86,9 +85,7 @@
 
 
       <div *ngSwitchCase="'multiple'" class="nested-border" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
-        <!--Display formItem label (name of property)-->
         <h2>{{ formItem.label }}</h2>
-        <!--Iterate though sub-items, for every formItem call <app-form-item> -->
         <div *ngFor="let q of formItem.subItems">
           <app-form-item [formItem]="q" [form]="getNestedFormGroups()" [submitPressed]="submitPressed"></app-form-item>
         </div>
@@ -131,4 +128,4 @@
   </ng-template>
 
 
-</div>
+</div> -->

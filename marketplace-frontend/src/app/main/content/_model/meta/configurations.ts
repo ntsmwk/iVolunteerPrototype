@@ -1,4 +1,4 @@
-import { MatchingEntityMappings } from "../matching";
+// import { MatchingEntityMappings } from "../matching";
 import { Relationship } from './relationship';
 import { ClassDefinition } from './class';
 
@@ -42,9 +42,9 @@ export class MatchingConfiguration {
   }
 }
 
-export class MatchingEntityMappingConfiguration {
-  id: string;
-  classConfigurationId: string;
+// export class MatchingEntityMappingConfiguration {
+//   id: string;
+//   classConfigurationId: string;
 
-  mappings: MatchingEntityMappings;
-}
+//   mappings: MatchingEntityMappings;
+// }

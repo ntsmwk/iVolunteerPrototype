@@ -147,31 +147,6 @@ const routes: Route[] = [
       ).then((m) => m.ConfiguratorModule),
     canActivate: [TokenGuard, FlexProdOrTenantAdminGuard],
   },
-
-  {
-    path: 'main/instance-editor',
-    loadChildren: () =>
-      import(
-        './_components/help-seeker/configuration/class-instance-configurator/form-editor/class-instance-form-editor.module'
-      ).then((m) => m.ClassInstanceFormEditorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
-  },
-  {
-    path: 'main/rules/all',
-    loadChildren: () =>
-      import(
-        './_components/help-seeker/configuration/rule-view/rule-overview.module'
-      ).then((m) => m.FuseRuleOverviewModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
-  },
-  {
-    path: 'main/rule',
-    loadChildren: () =>
-      import(
-        './_components/help-seeker/configuration/rule-configurator/rule-configurator.module'
-      ).then((m) => m.FuseRuleConfiguratorModule),
-    canActivate: [TokenGuard, TenantAdminGuard],
-  },
   {
     path: 'main/recruitment',
     loadChildren: () =>
