@@ -159,13 +159,19 @@ public class XTaskController {
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestParam(value = "status", defaultValue = "ALL") String status) {
 		String loggedInUserId = this.loginService.getLoggedInUser().getId();
-		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId, taskType, startYear, status,
+		List<TaskInstance> taskInstances = xTaskInstanceService.getTaskInstanceByTenantId(tenantId, taskType, startYear, status,
 				loggedInUserId);
 		// TODO fix multiple db accesses...
-		return tasks.stream().map(t -> {
+		List<XTask> tasks = taskInstances.stream().map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
 			return xTaskInstanceToTaskMapper.toTarget(t, users);
 		}).collect(Collectors.toList());
+
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
+
+		return tasks;
+
 	}
 
 	public ResponseEntity<Object> getTask(@PathVariable String taskId) {

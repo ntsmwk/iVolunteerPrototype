@@ -41,8 +41,6 @@ public class XCoreTaskController {
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestParam(value = "status", defaultValue = "ALL") String status) {
-
-//		TODO
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 
 		if (marketplaces == null) {
@@ -59,19 +57,18 @@ public class XCoreTaskController {
 				taskInstances.addAll(ret);
 			}
 		}
-
+		
 		List<XTask> tasks = mapToXTasks(taskInstances);
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
 		return ResponseEntity.ok(tasks);
 	}
 
-//	TODO change to post + postbody
 	@GetMapping("/task/tenant/subscribed")
 	private ResponseEntity<Object> getTasksOfSubscribedTenants(@RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestParam(value = "status", defaultValue = "ALL") String status) {
-//		TODO
-
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
@@ -100,17 +97,18 @@ public class XCoreTaskController {
 			}
 		}
 		List<XTask> tasks = mapToXTasks(taskInstances);
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
+
 		return ResponseEntity.ok(tasks);
 	}
 
-//	TODO change to post + postbody
 	@GetMapping("/task/tenant/unsubscribed")
 	private ResponseEntity<Object> getTasksOfUnsubscribedTenants(@RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestParam(value = "status", defaultValue = "ALL") String status) {
-// TODO
-
+		
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
@@ -137,6 +135,8 @@ public class XCoreTaskController {
 		}
 
 		List<XTask> tasks = mapToXTasks(taskInstances);
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
 		return ResponseEntity.ok(tasks);
 	}
 
