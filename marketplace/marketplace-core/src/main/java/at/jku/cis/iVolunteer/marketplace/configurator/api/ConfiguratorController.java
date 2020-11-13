@@ -14,6 +14,8 @@ import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.M
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty.TreePropertyDefinitionController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipService;
 import at.jku.cis.iVolunteer.model._httprequests.configurator.ClassConfiguratorResponseRequestBody;
 import at.jku.cis.iVolunteer.model._httprequests.configurator.ClassInstanceConfiguratorResponseRequestBody;
@@ -32,6 +34,8 @@ public class ConfiguratorController {
 	@Autowired private MatchingConfigurationService matchingConfigurationService;
 	@Autowired private MatchingOperatorRelationshipController matchingOperatorRelationshipController;
 	@Autowired private MatchingConfigurationController matchingConfigurationController;
+	@Autowired private FlatPropertyDefinitionService flatPropertyDefinitionService;
+	@Autowired private TreePropertyDefinitionController treePropertyDefintionService;
 
 	@PostMapping("/response/class-instance-configurator")
 	private ClassInstance classInstanceConfiguratorResponse(
@@ -74,6 +78,9 @@ public class ConfiguratorController {
 		classDefinitionService.addOrUpdateClassDefinitions(req.getClassDefinitions());
 		relationshipController.addOrUpdateRelationships(req.getRelationships());
 		classConfigurationController.saveClassConfiguration(req.getClassConfiguration());
+		
+		flatPropertyDefinitionService.addPropertyDefinition(req.getFlatPropertyDefinitions());
+		treePropertyDefintionService.addTreePropertyDefinition(req.getTreePropertyDefinitions());
 
 		return true;
 	}
