@@ -74,18 +74,25 @@ public class TenantController {
 	}
 
 	@PostMapping("/new")
-	public ResponseEntity<Void> createTenantX(@RequestBody CreateTenantPayload payload) {
-		if (payload.getTenant() == null) {
+	public ResponseEntity<Object> createTenantX(@RequestBody CreateTenantPayload payload) {
+		XTenant xTenant = payload.getTenant();
+		if (xTenant == null) {
 			return ResponseEntity.badRequest().build();
 		}
+		if(xTenant.getName() == null || xTenant.getAbbreviation() == null) {
+			return ResponseEntity.badRequest().body(new StringResponse("Tenant does not contain name or abbreviation."));
+		}
+		if(tenantService.getTenantByName(xTenant.getName()) != null) {
+			return ResponseEntity.badRequest().body(new StringResponse("Tenant with same name already exists."));
+		}
 
-		Tenant tenant = xTenantMapper.toSource(payload.getTenant());
+		Tenant tenant = xTenantMapper.toSource(xTenant);
 		if (payload.getMarketplaceId() == null) {
 			tenant.setMarketplaceId(marketplaceService.findFirst().getId());
 		} else {
 			tenant.setMarketplaceId(payload.getMarketplaceId());
 		}
-		tenantService.createTenant(xTenantMapper.toSource(payload.getTenant()));
+		tenantService.createTenant(xTenantMapper.toSource(xTenant));
 		return ResponseEntity.ok().build();
 	}
 
