@@ -10,7 +10,7 @@ import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 public class XBadgeTemplate {
 
 	@Id private String id;
-	private XTenant tenant;
+	private String tenantId;
 	private String name;
 	private String description;
 	private String imagePath;
@@ -24,14 +24,6 @@ public class XBadgeTemplate {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public XTenant getTenant() {
-		return tenant;
-	}
-
-	public void setTenant(XTenant tenant) {
-		this.tenant = tenant;
 	}
 
 	public String getName() {
@@ -56,6 +48,14 @@ public class XBadgeTemplate {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 }
