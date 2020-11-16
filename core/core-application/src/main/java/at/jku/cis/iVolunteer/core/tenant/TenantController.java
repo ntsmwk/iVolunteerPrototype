@@ -73,7 +73,7 @@ public class TenantController {
 		return tenantService.toXTenantTargets(tenants);
 	}
 
-	@PostMapping
+	@PostMapping("/new")
 	public ResponseEntity<Void> createTenantX(@RequestBody CreateTenantPayload payload) {
 		if (payload.getTenant() == null) {
 			return ResponseEntity.badRequest().build();
