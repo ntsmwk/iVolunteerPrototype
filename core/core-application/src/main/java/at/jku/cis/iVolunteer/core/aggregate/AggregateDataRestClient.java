@@ -27,8 +27,8 @@ public class AggregateDataRestClient {
 	
 
 	public List<XTaskCertificate> getClassAndTaskInstances(String marketplaceURL, String authorization, int year, GetClassAndTaskInstancesRequest body) {
-		String preUrl = "{0}/aggregate/class-and-task-instance?startYear= {1}";
-		String url = format(preUrl, marketplaceURL, year);
+		String preUrl = "{0}/aggregate/class-and-task-instance?startYear={1}";
+		String url = format(preUrl, marketplaceURL, "" + year);
 		ResponseEntity<XTaskCertificate[]> resp = restTemplate.exchange(url, HttpMethod.PUT, buildEntity(body, authorization), XTaskCertificate[].class);
 		List<XTaskCertificate> ret = Arrays.asList(resp.getBody());
 		return ret;
