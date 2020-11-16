@@ -256,7 +256,7 @@ public class TenantController {
 		return tenantService.getTenantsByMarketplaceIds(marketplaceId);
 	}
 
-	@PostMapping("/new")
+	@PostMapping("/new/not-x")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));
