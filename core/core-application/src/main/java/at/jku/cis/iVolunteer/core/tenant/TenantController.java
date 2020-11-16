@@ -79,20 +79,23 @@ public class TenantController {
 		if (xTenant == null) {
 			return ResponseEntity.badRequest().build();
 		}
-		if(xTenant.getName() == null || xTenant.getAbbreviation() == null) {
-			return ResponseEntity.badRequest().body(new StringResponse("Tenant does not contain name or abbreviation."));
+		if (xTenant.getName() == null || xTenant.getAbbreviation() == null) {
+			return ResponseEntity.badRequest()
+					.body(new StringResponse("Tenant does not contain name or abbreviation."));
 		}
-		if(tenantService.getTenantByName(xTenant.getName()) != null) {
+		if (tenantService.getTenantByName(xTenant.getName()) != null) {
 			return ResponseEntity.badRequest().body(new StringResponse("Tenant with same name already exists."));
 		}
 
 		Tenant tenant = xTenantMapper.toSource(xTenant);
-		if (payload.getMarketplaceId() == null) {
-			tenant.setMarketplaceId(marketplaceService.findFirst().getId());
-		} else {
-			tenant.setMarketplaceId(payload.getMarketplaceId());
+		if (tenant.getMarketplaceId() == null) {
+			if (payload.getMarketplaceId() == null) {
+				tenant.setMarketplaceId(marketplaceService.findFirst().getId());
+			} else {
+				tenant.setMarketplaceId(payload.getMarketplaceId());
+			}
 		}
-		tenantService.createTenant(xTenantMapper.toSource(xTenant));
+		tenantService.createTenant(tenant);
 		return ResponseEntity.ok().build();
 	}
 
