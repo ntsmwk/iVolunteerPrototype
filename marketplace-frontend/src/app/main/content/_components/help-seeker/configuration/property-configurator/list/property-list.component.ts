@@ -3,6 +3,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { GlobalInfo } from 'app/main/content/_model/global-info';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HttpUrlEncodingCodec } from '@angular/common/http';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: "app-property-list",
@@ -20,12 +22,16 @@ export class PropertyListComponent implements OnInit {
   loaded: boolean;
   sanitizedUrl: SafeResourceUrl;
   globalInfo: GlobalInfo;
+  encodedMPUrl: string;
 
 
   async ngOnInit() {
     this.loaded = false;
+    const codec = new HttpUrlEncodingCodec();
 
     this.globalInfo = <GlobalInfo>await this.loginService.getGlobalInfo().toPromise();
+    this.encodedMPUrl = codec.encodeValue(this.globalInfo.marketplace.url + '/');
+
     this.createSanitizedUrl();
     this.loaded = true;
 
@@ -33,7 +39,7 @@ export class PropertyListComponent implements OnInit {
 
   createSanitizedUrl() {
     this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`
-    http://localhost:4201/main/properties/all?tenantId=${this.globalInfo.tenants[0].id}
+    ${environment.CONFIGURATOR_URL}/main/properties/all?tenantId=${this.globalInfo.tenants[0].id}&redirect=${this.encodedMPUrl}Fresponse%2Fproperty-configurator
     `);
 
 

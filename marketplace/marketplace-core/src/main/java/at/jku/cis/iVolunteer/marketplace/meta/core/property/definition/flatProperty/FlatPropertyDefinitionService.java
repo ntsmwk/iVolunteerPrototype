@@ -29,11 +29,17 @@ public class FlatPropertyDefinitionService {
 	}
 
 	public List<FlatPropertyDefinition<Object>> addPropertyDefinition(List<FlatPropertyDefinition<Object>> propertyDefinitions) {
+		if (propertyDefinitions == null) {
+			return null;
+		}
 		return propertyDefinitionRepository.save(propertyDefinitions);
 	}
 
-	public void deletePropertyDefinition(String id) {
-		propertyDefinitionRepository.delete(id);
+	public void deletePropertyDefinition(String id, boolean ignoreDeleteProtect) {
+		FlatPropertyDefinition<Object> pd = propertyDefinitionRepository.findOne(id);
+		if (!pd.isDeleteProtected() || ignoreDeleteProtect) {
+			propertyDefinitionRepository.delete(id);
+		}
 	}
 
 }

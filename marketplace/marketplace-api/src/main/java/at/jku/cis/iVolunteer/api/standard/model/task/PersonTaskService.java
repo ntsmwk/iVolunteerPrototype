@@ -58,7 +58,8 @@ public class PersonTaskService {
 	public void savePersonTasks(List<PersonTask> personTasks, String tenantId) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
-
+		
+	
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
 				ClassInstance classInstance = createPersonTask(personTaskClassDefinition, personTask, tenantId);

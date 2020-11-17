@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyRelationship;
 
@@ -38,11 +39,17 @@ public class TreePropertyDefinitionController {
 	}
 
 	public List<TreePropertyDefinition> addTreePropertyDefinition(List<TreePropertyDefinition> treePropertyDefinition) {
+		if (treePropertyDefinition == null) {
+			return null;
+		}
 		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 
-	public void deleteTreePropertyDefinition(String id) {
-		treePropertyDefinitionRepository.delete(id);
+	public void deleteTreePropertyDefinition(String id, boolean ignoreDeleteProtect) {
+		TreePropertyDefinition pd = treePropertyDefinitionRepository.findOne(id);
+		if (!pd.isDeleteProtected() || ignoreDeleteProtect) {
+			treePropertyDefinitionRepository.delete(id);
+		}
 	}
 
 }

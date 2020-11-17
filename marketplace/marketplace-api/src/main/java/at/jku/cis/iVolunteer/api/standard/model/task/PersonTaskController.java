@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 
-@RestController
 @RequestMapping("/api/standard/PersonTasks")
+@RestController
 public class PersonTaskController {
 	
 	private static final String FFEIDENBERG = "FF Eidenberg";
@@ -19,7 +19,8 @@ public class PersonTaskController {
 	
 	@Autowired private PersonTaskService personTaskService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
-
+		
+	
 	@PutMapping("/1")
 	public void savePersonTask(@RequestBody List<PersonTask> tasks) {
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);

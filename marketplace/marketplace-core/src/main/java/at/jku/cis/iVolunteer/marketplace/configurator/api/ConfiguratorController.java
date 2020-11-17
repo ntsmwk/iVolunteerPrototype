@@ -20,9 +20,12 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipServ
 import at.jku.cis.iVolunteer.model._httprequests.configurator.ClassConfiguratorResponseRequestBody;
 import at.jku.cis.iVolunteer.model._httprequests.configurator.ClassInstanceConfiguratorResponseRequestBody;
 import at.jku.cis.iVolunteer.model._httprequests.configurator.MatchingConfiguratorResponseRequestBody;
+import at.jku.cis.iVolunteer.model._httprequests.configurator.PropertyConfiguratorRequestBody;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
 @RestController
 public class ConfiguratorController {
@@ -78,9 +81,9 @@ public class ConfiguratorController {
 		classDefinitionService.addOrUpdateClassDefinitions(req.getClassDefinitions());
 		relationshipController.addOrUpdateRelationships(req.getRelationships());
 		classConfigurationController.saveClassConfiguration(req.getClassConfiguration());
-		
-		flatPropertyDefinitionService.addPropertyDefinition(req.getFlatPropertyDefinitions());
-		treePropertyDefintionService.addTreePropertyDefinition(req.getTreePropertyDefinitions());
+//		
+//		flatPropertyDefinitionService.addPropertyDefinition(req.getFlatPropertyDefinitions());
+//		treePropertyDefintionService.addTreePropertyDefinition(req.getTreePropertyDefinitions());
 
 		return true;
 	}
@@ -134,4 +137,38 @@ public class ConfiguratorController {
 		return true;
 	}
 
+	
+	@PostMapping("/response/property-configurator")
+	private ResponseEntity<Void> matchingConfiguratorResponse(@RequestBody PropertyConfiguratorRequestBody req) {
+		if (req == null) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		boolean retValue = false;
+		if (req.getAction().equals("save")) {
+			retValue = saveProperties(req);
+		} else if (req.getAction().equals("delete")) {
+			retValue = deleteProperties(req);
+		}
+
+		return retValue ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();	
+	}
+	
+	private boolean saveProperties(PropertyConfiguratorRequestBody req) {
+		
+		flatPropertyDefinitionService.addPropertyDefinition(req.getFlatPropertyDefinitions());
+		treePropertyDefintionService.addTreePropertyDefinition(req.getTreePropertyDefinitions());
+
+		return true;
+	}
+	
+	private boolean deleteProperties(PropertyConfiguratorRequestBody req) {
+		for(FlatPropertyDefinition<Object> propertyDefinition: req.getFlatPropertyDefinitions()) {
+			flatPropertyDefinitionService.deletePropertyDefinition(propertyDefinition.getId(), false);
+		}
+		for(TreePropertyDefinition propertyDefinition: req.getTreePropertyDefinitions()) {
+			treePropertyDefintionService.deleteTreePropertyDefinition(propertyDefinition.getId(), false);
+		}
+		return true;
+	}
 }

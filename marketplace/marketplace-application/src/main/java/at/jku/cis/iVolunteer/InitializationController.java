@@ -43,9 +43,10 @@ public class InitializationController {
 //		addAllProperties();
 //		addAllTestProperties();
 //		addClassConfigurations();
+		initializationService.initConfigurator();
+
 		addAPIClassDefinitions();
 		
-		initializationService.initConfigurator();
 	}
 //
 //	@PutMapping("/init/add-rule-test-data")
