@@ -54,19 +54,10 @@ public class InitializationService {
 	@Autowired
 	public StandardPropertyDefinitions standardPropertyDefinitions;
 
-	@Autowired
-	private ClassConfigurationService classConfigurationController;
-
-//	@Autowired
-//	protected TestDataClasses testDataClasses;
-//	@Autowired
-//	protected TestDataInstances testDataInstances;
-//	
 	@Autowired ConfiguratorRestClient configuratorRestClient;
 	
 	@Value("${marketplace.uri}") private String mpUrl;
 
-	
 	@PostConstruct
 	public void init() {
 	}
@@ -146,31 +137,6 @@ public class InitializationService {
 			}
 		});
 	}
-
-	//TODO ak move to configurator
-	public void addClassConfigurations(int noOfConfigurations) {
-		List<Tenant> tenants = getTenants();
-
-		for (Tenant t : tenants) {
-			for (int i = 1; i <= noOfConfigurations; i++) {
-//				this.classConfigurationController
-//						.createNewClassConfiguration(new String[] { t.getId(), "Standardkonfiguration" + i, "" });
-			}
-		}
-	}
-
-	// TODO alex move to configurator
-	public void addFlexProdClassDefinitionsAndConfigurations(String tenantId) {
-//		this.classConfigurationController.createAndSaveFlexProdClassConfigurations(tenantId);
-	}
-
-//	public void addRuleTestConfiguration() {
-//		testDataClasses.createClassConfigurations();
-//	}
-//
-//	public void addRuleTestUserData() {
-//		testDataInstances.createUserData();
-//	}
 
 	public void deleteClassDefinitions() {
 		classDefinitionRepository.deleteAll();

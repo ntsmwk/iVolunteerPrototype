@@ -79,7 +79,6 @@ public class StandardPropertyDefinitions {
 		props.add(new DurationProperty(tenantId));
 
 		return new ArrayList(props);
-
 	}
 
 	public List<FlatPropertyDefinition<Object>> getAllTest(String tenantId) {
@@ -93,7 +92,6 @@ public class StandardPropertyDefinitions {
 		props.add(new TestDateProperty(tenantId));
 
 		return new ArrayList(props);
-
 	}
 
 	public List<TreePropertyDefinition> getAllTreeProperties(String tenantId) {
@@ -144,7 +142,6 @@ public class StandardPropertyDefinitions {
 		props.add(new BereichProperty(tenantId));
 
 		return new ArrayList(props);
-
 	}
 
 	public List<FlatPropertyDefinition<Object>> getAllFlexProdProperties(String tenantId) {

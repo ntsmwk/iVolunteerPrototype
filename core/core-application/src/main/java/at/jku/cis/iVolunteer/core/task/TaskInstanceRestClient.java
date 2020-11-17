@@ -12,14 +12,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
-import at.jku.cis.iVolunteer.model.user.User;
-import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
 public class TaskInstanceRestClient {

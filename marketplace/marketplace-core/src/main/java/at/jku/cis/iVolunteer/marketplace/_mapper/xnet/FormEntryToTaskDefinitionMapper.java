@@ -13,7 +13,6 @@ import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 import at.jku.cis.iVolunteer.model.task.DynamicTaskBlock;
 import at.jku.cis.iVolunteer.model.task.RequiredTaskBlock;
 import at.jku.cis.iVolunteer.model.task.TaskDefinition;
-import at.jku.cis.iVolunteer.model.task.TaskField;;
 
 @Component
 public class FormEntryToTaskDefinitionMapper implements AbstractMapper<FormEntry, TaskDefinition> {

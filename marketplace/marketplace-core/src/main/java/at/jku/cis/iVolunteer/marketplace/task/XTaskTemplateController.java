@@ -1,19 +1,15 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace._mapper.xnet.FormEntryToTaskDefinitionMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.xnet.XFormEntryToTaskTemplateMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
@@ -24,7 +20,6 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
-import at.jku.cis.iVolunteer.model.task.TaskDefinition;
 import at.jku.cis.iVolunteer.model.task.XTaskTemplate;
 
 @RestController

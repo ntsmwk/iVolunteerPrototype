@@ -55,13 +55,13 @@ public class InitializationController {
 //		addRuleUserData();
 //	}
 
-	@PutMapping("/init/flexprod")
-	public void addFlexProdData() {
-		addFlexProdProperties();
-
-		String tenantId = coreTenantRestClient.getTenantIdByName("FlexProd");
-		initializationService.addFlexProdClassDefinitionsAndConfigurations(tenantId);
-	}
+//	@PutMapping("/init/flexprod")
+//	public void addFlexProdData() {
+//		addFlexProdProperties();
+//
+//		String tenantId = coreTenantRestClient.getTenantIdByName("FlexProd");
+//		initializationService.addFlexProdClassDefinitionsAndConfigurations(tenantId);
+//	}
 
 	/**
 	 * Properties
@@ -115,10 +115,10 @@ public class InitializationController {
 		apiInitializationService.addiVolunteerAPIClassDefinition();
 	}
 
-	@PutMapping("/init/add-configurator-test-configurations")
-	public void addClassConfigurations() {
-		initializationService.addClassConfigurations(1);
-	}
+//	@PutMapping("/init/add-configurator-test-configurations")
+//	public void addClassConfigurations() {
+//		initializationService.addClassConfigurations(1);
+//	}
 
 	@PutMapping("/init/delete-class-definitions")
 	public void deleteClassDefinitions() {

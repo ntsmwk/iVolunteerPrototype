@@ -12,7 +12,6 @@ import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration
 @Service
 public class MatchingConfigurationService {
 
-	@Autowired private ClassConfigurationRepository configuratorRepository;
 	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
 	
 	public MatchingConfiguration getMatchingConfigurationById(String id) {

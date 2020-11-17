@@ -36,7 +36,6 @@ public class ClassInstanceController {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
 	@Autowired private DateTimeService dateTimeService;
 	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private ContractorPublishingRestClient contractorPublishingRestClient;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
