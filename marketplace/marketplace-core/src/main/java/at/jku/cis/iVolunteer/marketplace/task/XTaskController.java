@@ -25,6 +25,7 @@ import at.jku.cis.iVolunteer.model._httprequests.PostTaskRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.XTaskSubscribedResponse;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToPostTaskRequestMapper;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToTaskMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -37,13 +38,20 @@ import at.jku.cis.iVolunteer.model.user.User;
 @RequestMapping("/task")
 public class XTaskController {
 
-	@Autowired private ClassInstanceController classInstanceController;
-	@Autowired private LoginService loginService;
-	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
-	@Autowired private XTaskInstanceService xTaskInstanceService;
-	@Autowired private UserService userService;
-	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
-	@Autowired private CoreStorageRestClient coreStorageRestClient;
+	@Autowired
+	private ClassInstanceController classInstanceController;
+	@Autowired
+	private LoginService loginService;
+	@Autowired
+	private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
+	@Autowired
+	private XTaskInstanceService xTaskInstanceService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
+	@Autowired
+	private CoreStorageRestClient coreStorageRestClient;
 
 	@PostMapping("/new")
 	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
@@ -145,26 +153,41 @@ public class XTaskController {
 
 	@GetMapping("/{taskId}")
 	public ResponseEntity<Object> getTaskInstancesById(@PathVariable String taskId) {
+
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
 		if (task == null) {
 			return ResponseEntity.badRequest().body(HttpErrorMessages.NOT_FOUND_TASK);
 		}
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
-		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
+
+		XTaskSubscribedResponse xt = xTaskInstanceToTaskMapper.toTaskSubscribedResponse(task, users);
+
+		User loggedInUser = loginService.getLoggedInUser();
+		boolean alreadySubscribed = task.getSubscribedVolunteerIds().stream()
+				.anyMatch(id -> id.equals(loggedInUser.getId()));
+		xt.setSubscribed(alreadySubscribed);
+
+		return ResponseEntity.ok(xt);
 	}
 
 	@GetMapping("/tenant/{tenantId}")
-	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId,
+	public List<XTaskSubscribedResponse> getTaskInstancesByTenantId(@PathVariable String tenantId,
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestParam(value = "status", defaultValue = "ALL") String status) {
+
 		String loggedInUserId = this.loginService.getLoggedInUser().getId();
-		List<TaskInstance> taskInstances = xTaskInstanceService.getTaskInstanceByTenantId(tenantId, taskType, startYear, status,
-				loggedInUserId);
+		List<TaskInstance> taskInstances = xTaskInstanceService.getTaskInstanceByTenantId(tenantId, taskType, startYear,
+				status, loggedInUserId);
 		// TODO fix multiple db accesses...
-		List<XTask> tasks = taskInstances.stream().map(t -> {
+		List<XTaskSubscribedResponse> tasks = taskInstances.stream().map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
-			return xTaskInstanceToTaskMapper.toTarget(t, users);
+			XTaskSubscribedResponse xt = xTaskInstanceToTaskMapper.toTaskSubscribedResponse(t, users);
+
+			boolean alreadySubscribed = t.getSubscribedVolunteerIds().stream()
+					.anyMatch(id -> id.equals(loggedInUserId));
+			xt.setSubscribed(alreadySubscribed);
+			return xt;
 		}).collect(Collectors.toList());
 
 		tasks.forEach(t -> t.setBadges(null));
@@ -183,7 +206,15 @@ public class XTaskController {
 		}
 
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
-		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
+
+		XTaskSubscribedResponse xt = xTaskInstanceToTaskMapper.toTaskSubscribedResponse(task, users);
+
+		User loggedInUser = loginService.getLoggedInUser();
+		boolean alreadySubscribed = task.getSubscribedVolunteerIds().stream()
+				.anyMatch(id -> id.equals(loggedInUser.getId()));
+		xt.setSubscribed(alreadySubscribed);
+
+		return ResponseEntity.ok(xt);
 	}
 
 	@PostMapping("/update/{taskId}")
