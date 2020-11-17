@@ -37,7 +37,7 @@ public class TreePropertyDefinitionController {
 
 	public void deleteTreePropertyDefinition(String id, boolean ignoreDeleteProtect) {
 		TreePropertyDefinition pd = treePropertyDefinitionRepository.findOne(id);
-		if (!pd.isDeleteProtected() || ignoreDeleteProtect) {
+		if (pd.isCustom() || ignoreDeleteProtect) {
 			treePropertyDefinitionRepository.delete(id);
 		}
 	}

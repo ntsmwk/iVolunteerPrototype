@@ -30,7 +30,7 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 
 	private boolean computed;
 	
-	private boolean deleteProtected;
+	private boolean custom;
 
 
 	public FlatPropertyDefinition() {
@@ -121,12 +121,12 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 		this.computed = computed;
 	}
 
-	public boolean isDeleteProtected() {
-		return deleteProtected;
+	public boolean isCustom() {
+		return custom;
 	}
 
-	public void setDeleteProtected(boolean deleteProtected) {
-		this.deleteProtected = deleteProtected;
+	public void setCustom(boolean custom) {
+		this.custom = custom;
 	}
 
 

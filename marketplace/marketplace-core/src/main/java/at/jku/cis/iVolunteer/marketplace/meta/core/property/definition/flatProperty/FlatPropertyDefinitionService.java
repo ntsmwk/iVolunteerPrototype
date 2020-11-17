@@ -29,7 +29,7 @@ public class FlatPropertyDefinitionService {
 
 	public void deletePropertyDefinition(String id, boolean ignoreDeleteProtect) {
 		FlatPropertyDefinition<Object> pd = propertyDefinitionRepository.findOne(id);
-		if (!pd.isDeleteProtected() || ignoreDeleteProtect) {
+		if (pd.isCustom() || ignoreDeleteProtect) {
 			propertyDefinitionRepository.delete(id);
 		}
 	}

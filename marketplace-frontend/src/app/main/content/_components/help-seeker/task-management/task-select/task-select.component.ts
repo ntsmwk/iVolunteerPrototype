@@ -38,8 +38,6 @@ export class FuseTaskSelectComponent implements OnInit {
     this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`
     ${environment.CONFIGURATOR_URL}/main/task-select?tenantId=${this.globalInfo.tenants[0].id}&redirect=${this.encodedMPUrl}response%2Fclass-instance-configurator
     `);
-
-
   }
 
   navigateBack() {

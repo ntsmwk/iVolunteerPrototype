@@ -39,7 +39,7 @@ export class PropertyListComponent implements OnInit {
 
   createSanitizedUrl() {
     this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`
-    ${environment.CONFIGURATOR_URL}/main/properties/all?tenantId=${this.globalInfo.tenants[0].id}&redirect=${this.encodedMPUrl}Fresponse%2Fproperty-configurator
+    ${environment.CONFIGURATOR_URL}/main/properties/all?tenantId=${this.globalInfo.tenants[0].id}&redirect=${this.encodedMPUrl}response%2Fproperty-configurator
     `);
 
 

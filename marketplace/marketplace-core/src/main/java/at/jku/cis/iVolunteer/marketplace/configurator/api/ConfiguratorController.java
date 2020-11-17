@@ -163,11 +163,15 @@ public class ConfiguratorController {
 	}
 	
 	private boolean deleteProperties(PropertyConfiguratorRequestBody req) {
-		for(FlatPropertyDefinition<Object> propertyDefinition: req.getFlatPropertyDefinitions()) {
-			flatPropertyDefinitionService.deletePropertyDefinition(propertyDefinition.getId(), false);
+		if (req.getFlatPropertyDefinitions() != null) {
+			for(FlatPropertyDefinition<Object> propertyDefinition: req.getFlatPropertyDefinitions()) {
+				flatPropertyDefinitionService.deletePropertyDefinition(propertyDefinition.getId(), false);
+			}
 		}
-		for(TreePropertyDefinition propertyDefinition: req.getTreePropertyDefinitions()) {
-			treePropertyDefintionService.deleteTreePropertyDefinition(propertyDefinition.getId(), false);
+		if (req.getTreePropertyDefinitions() != null) {
+			for(TreePropertyDefinition propertyDefinition: req.getTreePropertyDefinitions()) {
+				treePropertyDefintionService.deleteTreePropertyDefinition(propertyDefinition.getId(), false);
+			}
 		}
 		return true;
 	}

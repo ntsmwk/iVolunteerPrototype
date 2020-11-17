@@ -20,7 +20,7 @@ public class TreePropertyDefinition extends IVolunteerObject {
 	private boolean required;
 	private String requiredMessage;
 	
-	private boolean deleteProtected;
+	private boolean custom;
 
 	public TreePropertyDefinition() {
 		this.entries = new ArrayList<TreePropertyEntry>();
@@ -102,14 +102,13 @@ public class TreePropertyDefinition extends IVolunteerObject {
 	public void setRequired(boolean required) {
 		this.required = required;
 	}
-	
 
-	public boolean isDeleteProtected() {
-		return deleteProtected;
+	public boolean isCustom() {
+		return custom;
 	}
 
-	public void setDeleteProtected(boolean deleteProtected) {
-		this.deleteProtected = deleteProtected;
+	public void setCustom(boolean custom) {
+		this.custom = custom;
 	}
 
 	@Override
