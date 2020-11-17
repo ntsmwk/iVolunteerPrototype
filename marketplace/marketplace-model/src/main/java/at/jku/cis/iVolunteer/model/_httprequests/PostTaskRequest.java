@@ -21,7 +21,7 @@ public class PostTaskRequest {
 	private XGeoInfo geoInfo;
 	private List<XDynamicFieldBlock> dynamicBlocks = new ArrayList<>();
 	private List<String> subscribedUsers = new ArrayList<>();
-	private List<String> badges = new ArrayList<>();
+	private List<String> badgeTemplateIds = new ArrayList<>();
 
 	public String getTenantId() {
 		return tenantId;
@@ -87,13 +87,6 @@ public class PostTaskRequest {
 		this.subscribedUsers = subscribedUsers;
 	}
 
-	public List<String> getBadges() {
-		return badges;
-	}
-
-	public void setBadges(List<String> badges) {
-		this.badges = badges;
-	}
 
 	public String getImagePath() {
 		return imagePath;
@@ -117,6 +110,14 @@ public class PostTaskRequest {
 
 	public void setStatus(TaskInstanceStatus status) {
 		this.status = status;
+	}
+
+	public List<String> getBadgeTemplateIds() {
+		return badgeTemplateIds;
+	}
+
+	public void setBadgeTemplateIds(List<String> badgeTemplateIds) {
+		this.badgeTemplateIds = badgeTemplateIds;
 	}
 
 }

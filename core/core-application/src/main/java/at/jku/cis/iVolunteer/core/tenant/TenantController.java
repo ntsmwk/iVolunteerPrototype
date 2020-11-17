@@ -73,19 +73,29 @@ public class TenantController {
 		return tenantService.toXTenantTargets(tenants);
 	}
 
-	@PostMapping
-	public ResponseEntity<Void> createTenantX(@RequestBody CreateTenantPayload payload) {
-		if (payload.getTenant() == null) {
+	@PostMapping("/new")
+	public ResponseEntity<Object> createTenantX(@RequestBody CreateTenantPayload payload) {
+		XTenant xTenant = payload.getTenant();
+		if (xTenant == null) {
 			return ResponseEntity.badRequest().build();
 		}
-
-		Tenant tenant = xTenantMapper.toSource(payload.getTenant());
-		if (payload.getMarketplaceId() == null) {
-			tenant.setMarketplaceId(marketplaceService.findFirst().getId());
-		} else {
-			tenant.setMarketplaceId(payload.getMarketplaceId());
+		if (xTenant.getName() == null || xTenant.getAbbreviation() == null) {
+			return ResponseEntity.badRequest()
+					.body(new StringResponse("Tenant does not contain name or abbreviation."));
 		}
-		tenantService.createTenant(xTenantMapper.toSource(payload.getTenant()));
+		if (tenantService.getTenantByName(xTenant.getName()) != null) {
+			return ResponseEntity.badRequest().body(new StringResponse("Tenant with same name already exists."));
+		}
+
+		Tenant tenant = xTenantMapper.toSource(xTenant);
+		if (tenant.getMarketplaceId() == null) {
+			if (payload.getMarketplaceId() == null) {
+				tenant.setMarketplaceId(marketplaceService.findFirst().getId());
+			} else {
+				tenant.setMarketplaceId(payload.getMarketplaceId());
+			}
+		}
+		tenantService.createTenant(tenant);
 		return ResponseEntity.ok().build();
 	}
 
@@ -256,7 +266,7 @@ public class TenantController {
 		return tenantService.getTenantsByMarketplaceIds(marketplaceId);
 	}
 
-	@PostMapping("/new")
+	@PostMapping("/new/not-x")
 	public ResponseEntity<?> createTenant(@RequestBody Tenant tenant) {
 		if (tenant == null) {
 			return ResponseEntity.badRequest().body(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL));

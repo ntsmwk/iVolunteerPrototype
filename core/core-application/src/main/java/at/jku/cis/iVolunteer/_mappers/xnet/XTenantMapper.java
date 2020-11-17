@@ -111,7 +111,8 @@ public class XTenantMapper {
 		tenant.setPrimaryColor(target.getPrimaryColor());
 		tenant.setSecondaryColor(target.getSecondaryColor());
 
-		Marketplace mp = marketplaceService.findById(target.getMarketplaceUrl());
+		
+		Marketplace mp = marketplaceService.findByUrl(target.getMarketplaceUrl());
 		if (mp != null) {
 			tenant.setMarketplaceId(mp.getId());
 		}

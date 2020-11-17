@@ -1,9 +1,9 @@
-package at.jku.cis.iVolunteer.core.aggregate;
+package at.jku.cis.iVolunteer.core.badge;
 
 import static java.text.MessageFormat.format;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -14,26 +14,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model._httprequests.GetClassAndTaskInstancesRequest;
-import at.jku.cis.iVolunteer.model.task.XTaskCertificate;
+import at.jku.cis.iVolunteer.model.badge.XBadgeTemplate;
 
 @Service
-public class AggregateDataRestClient {
+public class XBadgeTemplateRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
 
-	@Autowired
-	private RestTemplate restTemplate;
-	
+	@Autowired private RestTemplate restTemplate;
 
-	public List<XTaskCertificate> getClassAndTaskInstances(String marketplaceURL, String authorization, int year, GetClassAndTaskInstancesRequest body) {
-		String preUrl = "{0}/aggregate/class-and-task-instance?startYear={1}";
-		String url = format(preUrl, marketplaceURL, "" + year);
-		ResponseEntity<XTaskCertificate[]> resp = restTemplate.exchange(url, HttpMethod.PUT, buildEntity(body, authorization), XTaskCertificate[].class);
-		List<XTaskCertificate> ret = Arrays.asList(resp.getBody());
-		return ret;
+	public Map<String, List<XBadgeTemplate>> getXBadgeTemplates(String marketplaceURL, List<String> tenantIds,
+			String authorization) {
+		String preUrl = "{0}/badgeTemplates";
+		String url = format(preUrl, marketplaceURL);
+
+		ResponseEntity<Map> resp = restTemplate.exchange(url, HttpMethod.POST,
+				buildEntity(tenantIds, authorization), Map.class);
+		if (resp == null || resp.getBody() == null) {
+			return null;
+		}
+		return resp.getBody();
 	}
-	
 
 	private HttpEntity<?> buildEntity(Object body, String authorization) {
 		HttpEntity<?> entity = new HttpEntity<>(body, buildHeaders(authorization));
@@ -46,4 +47,5 @@ public class AggregateDataRestClient {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		return headers;
 	}
+
 }

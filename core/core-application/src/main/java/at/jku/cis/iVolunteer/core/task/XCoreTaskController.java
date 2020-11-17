@@ -79,7 +79,6 @@ public class XCoreTaskController {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_LOGGED_IN),
 					HttpStatus.UNAUTHORIZED);
 		}
-
 		List<Tenant> tenants = tenantService.getSubscribedTenants(user);
 
 		if (tenants == null) {
