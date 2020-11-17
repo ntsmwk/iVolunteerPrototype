@@ -59,7 +59,11 @@ export class ProfileComponent implements OnInit {
 
 // TODO: just for testing /diagramdata endpoint
   async getChartData() {
-    let chartDataSets = await (this.http.get(`${environment.CORE_URL}/diagramdata`)).toPromise() ;
+    let valueType = "DURATION";
+    let diagramType = "CATEGORY_ONLY";
+    let diagramDisplay = {valueType, diagramType }
+
+    let chartDataSets = await (this.http.post(`${environment.CORE_URL}/diagram/task`, "")).toPromise() ;
     console.error(chartDataSets);
 
   }
