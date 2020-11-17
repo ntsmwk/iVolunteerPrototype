@@ -3,7 +3,9 @@ package at.jku.cis.iVolunteer.core.diagram;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -50,6 +52,7 @@ public class XDiagramDataService {
         List<XDiagramRawDataPoint> datapoints = dataset.getDatapoints();
 
         HashMap<List<String>, Float> occurrences = new HashMap<>();
+        HashMap<Integer, Set<String>> uniqueValuesPerLevel = new HashMap<>();
 
         datapoints.forEach(dp -> {
             TreePropertyEntry treeProperty = dp.getTreeProperty();
@@ -63,10 +66,15 @@ public class XDiagramDataService {
             }
 
             // add other levels
-            parents.forEach(p -> data.add(p.getValue()));
+            parents.forEach(p -> {
+                data.add(p.getValue());
+                uniqueValuesPerLevel.computeIfAbsent(p.getLevel(), k -> new HashSet<>()).add(p.getValue());
+            });
 
             // add level 0
             data.add(treeProperty.getValue());
+            uniqueValuesPerLevel.computeIfAbsent(treeProperty.getLevel(), k -> new HashSet<>())
+                    .add(treeProperty.getValue());
 
             if (display.getValueType().equals(ValueType.COUNT)) {
                 occurrences.merge(data, (float) 1, Float::sum);
