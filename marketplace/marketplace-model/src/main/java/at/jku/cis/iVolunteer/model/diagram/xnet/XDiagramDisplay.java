@@ -7,12 +7,21 @@ public class XDiagramDisplay {
     public XDiagramDisplay() {
     }
 
+    public XDiagramDisplay(ValueType valueType, DiagramType diagramType) {
+        this.valueType = valueType;
+        this.diagramType = diagramType;
+    }
+
     public ValueType getValueType() {
         return this.valueType;
     }
 
     public void setValueType(ValueType valueType) {
         this.valueType = valueType;
+    }
+
+    public void setValueType(String valueType) {
+        this.valueType = ValueType.valueOf(valueType);
     }
 
     public DiagramType getDiagramType() {
@@ -23,34 +32,44 @@ public class XDiagramDisplay {
         this.diagramType = diagramType;
     }
 
-    private enum ValueType {
-        DURATION("duration"), COUNT("count");
+    public void setDiagramType(String diagramType) {
+        this.diagramType = DiagramType.valueOf(diagramType);
+    }
 
-        private final String valueType;
+    public enum ValueType {
+        DURATION("DURATION"), COUNT("COUNT");
+
+        private String valueType;
 
         private ValueType(String valueType) {
             this.valueType = valueType;
         }
 
-        @Override
-        public String toString() {
-            return valueType;
+        public void setValueType(String valueType) {
+            this.valueType = valueType;
+        }
+
+        public String getValueType() {
+            return this.valueType;
         }
 
     }
 
-    private enum DiagramType {
+    public enum DiagramType {
         DOMAIN_CATEGORY("DOMAIN_CATEGORY"), CATEGORY_ONLY("CATEGORY_ONLY");
 
-        private final String diagramType;
+        private String diagramType;
 
         private DiagramType(String diagramType) {
             this.diagramType = diagramType;
         }
 
-        @Override
-        public String toString() {
-            return diagramType;
+        public void setDiagramType(String diagramType) {
+            this.diagramType = diagramType;
+        }
+
+        public String getDiagramType() {
+            return this.diagramType;
         }
 
     }

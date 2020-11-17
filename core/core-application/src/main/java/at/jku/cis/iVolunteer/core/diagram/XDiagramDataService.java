@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.core.diagram;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -12,8 +14,11 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay;
 import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramFilter;
+import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay.DiagramType;
+import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay.ValueType;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataPoint;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataSet;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyEntry;
 
 @Service
 public class XDiagramDataService {
@@ -42,17 +47,38 @@ public class XDiagramDataService {
     }
 
     public void calcDiagramData(XDiagramRawDataSet dataset, XDiagramDisplay display) {
-        dataset.getDatapoints();
+        List<XDiagramRawDataPoint> datapoints = dataset.getDatapoints();
 
-        display.getDiagramType(); // DOMAIN_CATEGORY / CATEGORY_ONLY
-        display.getValueType(); // number / duration
+        HashMap<List<String>, Float> occurrences = new HashMap<>();
 
-        // calc diagram data
-        // 
+        datapoints.forEach(dp -> {
+            TreePropertyEntry treeProperty = dp.getTreeProperty();
+            List<TreePropertyEntry> parents = treeProperty.getParents();
+
+            parents.sort(Comparator.comparing(TreePropertyEntry::getLevel));
+
+            List<String> data = new ArrayList<>();
+            if (display.getDiagramType().equals(DiagramType.DOMAIN_CATEGORY)) {
+                data.add(dp.getBereich());
+            }
+
+            // add other levels
+            parents.forEach(p -> data.add(p.getValue()));
+
+            // add level 0
+            data.add(treeProperty.getValue());
+
+            if (display.getValueType().equals(ValueType.COUNT)) {
+                occurrences.merge(data, (float) 1, Float::sum);
+            } else {
+                // valueType == DURATION
+                occurrences.merge(data, dp.getDuration(), Float::sum);
+            }
+        });
+
+        System.out.println(occurrences);
 
     }
-
-    // ---------
 
     @Scheduled(fixedDelay = 1_800_000, initialDelay = 60_000) // 30min, 1min
     private void queryDiagramDataSetsFromMArketplaces() {

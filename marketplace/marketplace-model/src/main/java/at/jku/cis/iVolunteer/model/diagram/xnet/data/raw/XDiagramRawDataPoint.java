@@ -20,7 +20,7 @@ public class XDiagramRawDataPoint {
     private Date endDate;
     private float duration;
     private String bereich;
-    private TreePropertyEntry taskType;
+    private TreePropertyEntry treeProperty;
 
     public XDiagramRawDataPoint() {
     }
@@ -65,11 +65,12 @@ public class XDiagramRawDataPoint {
         this.bereich = Bereich;
     }
 
-    public TreePropertyEntry getTaskType() {
-        return this.taskType;
+    public TreePropertyEntry getTreeProperty() {
+        return this.treeProperty;
     }
 
-    public void setTaskType(TreePropertyEntry TaskType) {
-        this.taskType = TaskType;
+    public void setTreeProperty(TreePropertyEntry treeProperty) {
+        this.treeProperty = treeProperty;
     }
+
 }

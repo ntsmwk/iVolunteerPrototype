@@ -135,7 +135,7 @@ public class XDiagramDataService {
         if (taskTypeField != null) {
             if (taskTypeField.getValues().size() > 0) {
                 try {
-                    datapoint.setTaskType(
+                    datapoint.setTreeProperty(
                             objectMapper.convertValue(taskTypeField.getValues().get(0), TreePropertyEntry.class));
                 } catch (Exception e) {
 

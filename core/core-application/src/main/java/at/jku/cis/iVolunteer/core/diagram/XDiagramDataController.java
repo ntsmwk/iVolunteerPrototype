@@ -17,6 +17,8 @@ import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay;
 import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramFilter;
 import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramOrder;
+import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay.DiagramType;
+import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay.ValueType;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramReturnEntity;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataSet;
 
@@ -39,17 +41,24 @@ public class XDiagramDataController {
     }
 
     @PostMapping("/task")
-    public XDiagramReturnEntity getTaskDiagramData(@RequestBody(required = false) XDiagramFilter filter,
-            @RequestBody(required = false) XDiagramOrder order, @RequestBody XDiagramDisplay display) {
+    public XDiagramReturnEntity getTaskDiagramData() {
+        // public XDiagramReturnEntity getTaskDiagramData(@RequestBody(required = false)
+        // XDiagramFilter filter,
+        // @RequestBody(required = false) XDiagramOrder order, @RequestBody
+        // XDiagramDisplay display) {
 
         CoreUser loggedInUser = loginService.getLoggedInUser();
 
         XDiagramRawDataSet dataset = diagramDataService.getLatestDiagramData(loggedInUser);
-        // filter 
+        // filter
+        // dataset = diagramDataService.filter(dataset, filter);
 
-        diagramDataService.filter(dataset, filter);
-               // display
-        // order
+        // TODO just for testing
+        XDiagramDisplay display = new XDiagramDisplay();
+        display.setDiagramType(DiagramType.CATEGORY_ONLY);
+        display.setValueType(ValueType.DURATION);
+
+        diagramDataService.calcDiagramData(dataset, display);
 
         return null;
     }
