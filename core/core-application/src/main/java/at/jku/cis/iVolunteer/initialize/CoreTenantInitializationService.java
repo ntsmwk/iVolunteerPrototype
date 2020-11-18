@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.file.StorageService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
+import at.jku.cis.iVolunteer.model.badge.XBadgeTemplate;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
@@ -66,7 +67,12 @@ public class CoreTenantInitializationService {
 			tenant.setLandingpageMessage("Herzlich Willkommen bei iVolunteer!");
 			tenant.setLandingpageTitle(landingpageTitle);
 			tenant = coreTenantRepository.insert(tenant);
+//			TODO create BadgeTemplate
+//			XBadgeTemplate badgeTemplate = new XBadgeTemplate();
+//			badgeTemplate.setName(landingPageImageFilename);
 		}
+		
+		
 		return tenant;
 	}
 
