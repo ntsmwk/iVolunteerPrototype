@@ -200,19 +200,11 @@ public class InitializationService {
 				ccStub.setTenantId(tenant.getId());
 				ccStub.setName("Standardkonfiguration " + i);
 				req.setClassConfiguration(ccStub);
-				
 				req.setTenantId(tenant.getId());
-				
-
 				body.setSaveRequest(req);
-				
-				
-
 				body.setUrl(marketplaceUrl + "/response/class-configurator");
 				
-
 				sendResponseRestClient.sendClassConfiguratorResponse(body);
-
 			}
 		}
 	}

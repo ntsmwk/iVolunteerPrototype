@@ -113,13 +113,13 @@ public class SendResponseController {
 			@RequestBody FrontendMatchingConfiguratorRequestBody body) {
 
 		MatchingConfiguratorResponseRequestBody responseRequestBody = new MatchingConfiguratorResponseRequestBody();
-
-		if (body.getSaveRequest().getMatchingConfiguration().getId() == null) {
-			body.getSaveRequest().setMatchingConfiguration(matchingConfigurationService
-					.createMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration()));
-		}
-
 		if (body.getSaveRequest() != null) {
+	
+			if (body.getSaveRequest().getMatchingConfiguration().getId() == null) {
+				body.getSaveRequest().setMatchingConfiguration(matchingConfigurationService
+						.createMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration()));
+			}
+
 			responseRequestBody.setMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration());
 			responseRequestBody.setMatchingRelationships(body.getSaveRequest().getMatchingOperatorRelationships());
 		}
@@ -142,8 +142,7 @@ public class SendResponseController {
 						body.getSaveRequest().getMatchingOperatorRelationships());
 				return ResponseEntity.ok(ret);
 			} else if (body.getAction().equals("delete")) {
-				matchingConfigurationService
-						.deleteMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration().getId());
+				body.getIdsToDelete().forEach(matchingConfigurationService::deleteMatchingConfiguration);
 				return ResponseEntity.ok().build();
 			}
 			return ResponseEntity.badRequest().build();
