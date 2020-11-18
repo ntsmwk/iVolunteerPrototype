@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import at.jku.cis.iVolunteer.model._httpresponses.XTaskSubscribedResponse;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
@@ -26,9 +27,12 @@ import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 @Component
 public class XTaskInstanceToTaskMapper {
 
-	@Autowired XPropertyInstanceDynamicFieldMapper xPropertyInstanceToDynamicFieldMapper;
-	@Autowired XUserMapper xUserMapper;
-	@Autowired ObjectMapper objectMapper;
+	@Autowired
+	XPropertyInstanceDynamicFieldMapper xPropertyInstanceToDynamicFieldMapper;
+	@Autowired
+	XUserMapper xUserMapper;
+	@Autowired
+	ObjectMapper objectMapper;
 
 	public XTask toTarget(TaskInstance source, List<? extends User> subscribedUsers) {
 		if (source == null) {
@@ -78,18 +82,67 @@ public class XTaskInstanceToTaskMapper {
 		return task;
 	}
 
-//	public List<XTask> toTargets(List<TaskInstance> sources) {
-//		if (sources == null) {
-//			return null;
-//		}
-//
-//		List<XTask> targets = new ArrayList<>();
-//		for (TaskInstance source : sources) {
-//			targets.add(toTarget(source));
-//		}
-//
-//		return targets;
-//	}
+	public XTaskSubscribedResponse toTaskSubscribedResponse(TaskInstance source, List<? extends User> subscribedUsers) {
+
+		if (source == null) {
+			return null;
+		}
+		XTaskSubscribedResponse xt = new XTaskSubscribedResponse();
+		xt.setId(source.getId());
+		xt.setTitle(source.getName());
+		xt.setDescription(source.getDescription());
+		xt.setTenantId(source.getTenantId());
+		xt.setDescription(source.getDescription());
+		xt.setImagePath(source.getImagePath());
+		xt.setStatus(source.getStatus());
+
+		ArrayList<ArrayList<PropertyInstance<Object>>> sortedFields = sortPropertiesByLevel(source.getProperties());
+		xt.setDynamicBlocks(new ArrayList<>());
+
+		PropertyInstance<Object> startDateField = source.findProperty("Starting Date");
+		xt.setStartDate(startDateField == null || startDateField.getValues().size() == 0 ? null
+				: new Date((Long) startDateField.getValues().get(0)));
+		PropertyInstance<Object> endDateField = source.findProperty("End Date");
+		xt.setEndDate(endDateField == null || endDateField.getValues().size() == 0 ? null
+				: new Date((Long) endDateField.getValues().get(0)));
+
+		PropertyInstance<Object> locationField = source.findProperty("Location");
+
+		Location location = null;
+		if (locationField != null && locationField.getValues().size() > 0) {
+			location = objectMapper.convertValue(locationField.getValues().get(0), Location.class);
+		}
+
+		xt.setGeoInfo(new XGeoInfo(location));
+
+		for (int i = 2; i < sortedFields.size(); i++) {
+			XDynamicFieldBlock dynamicBlock = new XDynamicFieldBlock();
+			dynamicBlock.setFields(xPropertyInstanceToDynamicFieldMapper.toTargets(sortedFields.get(i)));
+			xt.getDynamicBlocks().add(dynamicBlock);
+		}
+
+		if (subscribedUsers == null || subscribedUsers.size() <= 0) {
+			xt.setSubscribedUsers(new ArrayList<>());
+		} else {
+			xt.setSubscribedUsers(xUserMapper.toTargets(subscribedUsers));
+		}
+		xt.setBadges(null);
+
+		return xt;
+	}
+
+	// public List<XTask> toTargets(List<TaskInstance> sources) {
+	// if (sources == null) {
+	// return null;
+	// }
+	//
+	// List<XTask> targets = new ArrayList<>();
+	// for (TaskInstance source : sources) {
+	// targets.add(toTarget(source));
+	// }
+	//
+	// return targets;
+	// }
 
 	public TaskInstance toSource(XTask target) {
 		if (target == null) {
@@ -174,17 +227,17 @@ public class XTaskInstanceToTaskMapper {
 		return sources;
 	}
 
-// private class MaxLevelReturn {
-// int maxLevel;
-// boolean hasLevel0;
-// boolean hasLevel1;
-//
-// public MaxLevelReturn(int maxLevel, boolean hasLevel0, boolean hasLevel1) {
-// this.maxLevel = maxLevel;
-// this.hasLevel0 = hasLevel0;
-// this.hasLevel1 = hasLevel1;
-// }
-// }
+	// private class MaxLevelReturn {
+	// int maxLevel;
+	// boolean hasLevel0;
+	// boolean hasLevel1;
+	//
+	// public MaxLevelReturn(int maxLevel, boolean hasLevel0, boolean hasLevel1) {
+	// this.maxLevel = maxLevel;
+	// this.hasLevel0 = hasLevel0;
+	// this.hasLevel1 = hasLevel1;
+	// }
+	// }
 
 	private int findMaxLevel(List<PropertyInstance<Object>> propertyInstances) {
 		int maxLevel = 0;
