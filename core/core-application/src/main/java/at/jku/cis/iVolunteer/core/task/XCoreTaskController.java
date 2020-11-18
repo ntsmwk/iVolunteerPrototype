@@ -19,6 +19,7 @@ import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
+import at.jku.cis.iVolunteer.model._httpresponses.XTaskSubscribedResponse;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToTaskMapper;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -29,18 +30,27 @@ import at.jku.cis.iVolunteer.model.task.XTask;
 @RestController
 public class XCoreTaskController {
 
-	@Autowired TaskInstanceRestClient taskInstanceRestClient;
-	@Autowired MarketplaceService marketplaceService;
-	@Autowired XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
-	@Autowired CoreUserService coreUserService;
-	@Autowired TenantService tenantService;
-	@Autowired LoginService loginService;
+	@Autowired
+	TaskInstanceRestClient taskInstanceRestClient;
+	@Autowired
+	MarketplaceService marketplaceService;
+	@Autowired
+	XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
+	@Autowired
+	CoreUserService coreUserService;
+	@Autowired
+	TenantService tenantService;
+	@Autowired
+	LoginService loginService;
 
 	@GetMapping("/task")
 	private ResponseEntity<Object> getTasks(@RequestHeader("Authorization") String authorization,
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestParam(value = "status", defaultValue = "ALL") String status) {
+
+		CoreUser user = loginService.getLoggedInUser();
+
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 
 		if (marketplaces == null) {
@@ -57,8 +67,15 @@ public class XCoreTaskController {
 				taskInstances.addAll(ret);
 			}
 		}
-		
-		List<XTask> tasks = mapToXTasks(taskInstances);
+
+		List<XTaskSubscribedResponse> tasks = mapToXTasksSubscribed(taskInstances);
+
+		tasks.forEach(t -> {
+			boolean alreadySubscribed = t.getSubscribedUsers().stream().map(u -> u.getId())
+					.anyMatch(id -> id.equals(user.getId()));
+			t.setSubscribed(alreadySubscribed);
+		});
+
 		tasks.forEach(t -> t.setBadges(null));
 		tasks.forEach(t -> t.setDynamicBlocks(null));
 		return ResponseEntity.ok(tasks);
@@ -95,7 +112,14 @@ public class XCoreTaskController {
 				taskInstances.addAll(ret);
 			}
 		}
-		List<XTask> tasks = mapToXTasks(taskInstances);
+
+		List<XTaskSubscribedResponse> tasks = mapToXTasksSubscribed(taskInstances);
+		tasks.forEach(t -> {
+			boolean alreadySubscribed = t.getSubscribedUsers().stream().map(u -> u.getId())
+					.anyMatch(id -> id.equals(user.getId()));
+			t.setSubscribed(alreadySubscribed);
+		});
+
 		tasks.forEach(t -> t.setBadges(null));
 		tasks.forEach(t -> t.setDynamicBlocks(null));
 
@@ -107,7 +131,7 @@ public class XCoreTaskController {
 			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
 			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
 			@RequestParam(value = "status", defaultValue = "ALL") String status) {
-		
+
 		List<Marketplace> marketplaces = marketplaceService.findAll();
 		if (marketplaces == null) {
 			return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NOT_FOUND_MARKETPLACE),
@@ -133,17 +157,23 @@ public class XCoreTaskController {
 			}
 		}
 
-		List<XTask> tasks = mapToXTasks(taskInstances);
+		List<XTaskSubscribedResponse> tasks = mapToXTasksSubscribed(taskInstances);
+		tasks.forEach(t -> {
+			boolean alreadySubscribed = t.getSubscribedUsers().stream().map(u -> u.getId())
+					.anyMatch(id -> id.equals(user.getId()));
+			t.setSubscribed(alreadySubscribed);
+		});
+
 		tasks.forEach(t -> t.setBadges(null));
 		tasks.forEach(t -> t.setDynamicBlocks(null));
 		return ResponseEntity.ok(tasks);
 	}
 
-	private List<XTask> mapToXTasks(List<TaskInstance> taskInstances) {
-		List<XTask> tasks = new LinkedList<>();
+	private List<XTaskSubscribedResponse> mapToXTasksSubscribed(List<TaskInstance> taskInstances) {
+		List<XTaskSubscribedResponse> tasks = new LinkedList<>();
 		for (TaskInstance ti : taskInstances) {
 			List<CoreUser> users = coreUserService.findByIds(ti.getSubscribedVolunteerIds());
-			tasks.add(xTaskInstanceToTaskMapper.toTarget(ti, users));
+			tasks.add(xTaskInstanceToTaskMapper.toTaskSubscribedResponse(ti, users));
 		}
 		return tasks;
 	}
