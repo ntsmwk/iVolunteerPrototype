@@ -51,6 +51,7 @@ public class ConfiguratorController {
 	@PostMapping("/response/class-configurator")
 	private ResponseEntity<Void> classConfiguratorResponseSave(@RequestBody ClassConfiguratorResponseRequestBody req) {
 		if (req == null) {
+			System.out.println("null");
 			return ResponseEntity.badRequest().build();
 		}
 

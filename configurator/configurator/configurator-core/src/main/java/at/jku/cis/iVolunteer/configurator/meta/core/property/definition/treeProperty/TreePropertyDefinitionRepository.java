@@ -15,6 +15,6 @@ public interface TreePropertyDefinitionRepository extends MongoRepository<TreePr
 	
 	public List<TreePropertyDefinition> getByTenantId(String tenantId);
 	
-	public List<FlatPropertyDefinition<Object>> getByNameAndTenantId(String name, String tenantId);
+	public List<TreePropertyDefinition> getByNameAndTenantId(String name, String tenantId);
 
 }

@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.configurator.response;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.configurator._mapper.relationship.RelationshipMapper;
 import at.jku.cis.iVolunteer.configurator.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.configurator.configurations.matching.configuration.MatchingConfigurationService;
 import at.jku.cis.iVolunteer.configurator.configurations.matching.relationships.MatchingOperatorRelationshipController;
 import at.jku.cis.iVolunteer.configurator.meta.core.class_.ClassDefinitionController;
 import at.jku.cis.iVolunteer.configurator.meta.core.class_.ClassDefinitionService;
+import at.jku.cis.iVolunteer.configurator.meta.core.property.definition.flatProperty.FlatPropertyDefinitionController;
 import at.jku.cis.iVolunteer.configurator.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.configurator.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.configurator.meta.core.relationship.RelationshipController;
@@ -27,6 +30,7 @@ import at.jku.cis.iVolunteer.configurator.model._httprequests.FrontendMatchingCo
 import at.jku.cis.iVolunteer.configurator.model._httprequests.FrontendPropertyConfiguratorRequestBody;
 import at.jku.cis.iVolunteer.configurator.model._httprequests.FrontendClassConfiguratorRequestBody;
 import at.jku.cis.iVolunteer.configurator.model.configurations.clazz.ClassConfiguration;
+import at.jku.cis.iVolunteer.configurator.model.configurations.clazz.ClassConfigurationBundle;
 import at.jku.cis.iVolunteer.configurator.model.configurations.matching.MatchingConfiguration;
 import at.jku.cis.iVolunteer.configurator.model.configurations.matching.MatchingOperatorRelationship;
 import at.jku.cis.iVolunteer.configurator.model.meta.core.clazz.ClassDefinition;
@@ -45,108 +49,168 @@ public class SendResponseController {
 	@Autowired private MatchingOperatorRelationshipController matchingOperatorRelationshipController;
 	@Autowired private FlatPropertyDefinitionRepository flatPropertyDefinitionRepository;
 	@Autowired private TreePropertyDefinitionRepository treePropertyDefinitionRepository;
-
+	@Autowired private RelationshipMapper relationshipMapper;
 
 	@PostMapping("/send-response/class-configurator")
-	public ResponseEntity<Object> sendClassConfiguratorResponse(@RequestBody FrontendClassConfiguratorRequestBody body) {
+	public ResponseEntity<Object> sendClassConfiguratorResponse(
+			@RequestBody FrontendClassConfiguratorRequestBody body) {
 		ClassConfiguratorResponseRequestBody responseRequestBody = new ClassConfiguratorResponseRequestBody();
 
-		ClassConfiguration classConfiguration = classConfigurationController
-				.getClassConfigurationById(body.getIdToSave());
-		responseRequestBody.setClassConfiguration(classConfiguration);
+		if (body.getAction().equals("new")) {
+			ClassConfigurationBundle bundle = classConfigurationController.createNewClassConfiguration(
+					body.getSaveRequest().getTenantId(), body.getSaveRequest().getClassConfiguration().getName(),
+					body.getSaveRequest().getClassConfiguration().getDescription(), null);
 
-		if (classConfiguration != null) {
-			List<ClassDefinition> classDefinitions = classDefinitionService
-					.getClassDefinitonsById(classConfiguration.getClassDefinitionIds());
-			responseRequestBody.setClassDefinitions(classDefinitions);
-
-			List<RelationshipDTO> relationships = relationshipController
-					.getRelationshipsByIdAsDTO(classConfiguration.getRelationshipIds());
-			responseRequestBody.setRelationships(relationships);
+			body.getSaveRequest().setClassConfiguration(bundle.getClassConfiguration());
+			body.getSaveRequest().setClassDefinitions(bundle.getClassDefinitions());
+			body.getSaveRequest().setRelationships(relationshipMapper.toTargets(bundle.getRelationships()));
+			body.setAction("save");
 		}
-		
-		
+
+		if (body.getSaveRequest() != null) {
+			responseRequestBody.setClassConfiguration(body.getSaveRequest().getClassConfiguration());
+			responseRequestBody.setClassDefinitions(body.getSaveRequest().getClassDefinitions());
+			responseRequestBody.setRelationships(body.getSaveRequest().getRelationships());
+		}
+
 		responseRequestBody.setIdsToDelete(body.getIdsToDelete());
 		responseRequestBody.setAction(body.getAction());
 
-		ResponseEntity<Object> resp = responseRestClient.sendClassConfiguratorResponse(body.getUrl(), responseRequestBody);
-		 if (resp.getStatusCode().is4xxClientError() && body.getAction().equals("save")) {
-			 System.out.println("error - rollback");
-			 classConfigurationController.deleteClassConfiguration(body.getIdToSave());
-		 }
-		
-		return resp;
+		ResponseEntity<Object> resp = responseRestClient.sendClassConfiguratorResponse(body.getUrl(),
+				responseRequestBody);
+		if (resp.getStatusCode().is4xxClientError()) {
+			System.out.println("error - dont save / delete");
+			return resp;
+		} else {
+			if (body.getAction().equals("save")) {
+				ClassConfiguration ret = classConfigurationController.saveEverything(body.getSaveRequest());
+				return ResponseEntity.ok(ret);
+			}
+			else if (body.getAction().equals("delete")) {
+				List<ClassConfiguration> configs = classConfigurationController
+						.deleteMultipleClassConfigurations(body.getIdsToDelete());
+				return ResponseEntity.ok().build();
+			}
+
+			return ResponseEntity.badRequest().build();
+		}
+
 	}
 
 	@PostMapping("/send-response/class-instance-configurator")
-	public ResponseEntity<Object> sendClassInstanceConfiguratorResponse(@RequestBody FrontendClassInstanceConfiguratorRequestBody body) {
+	public ResponseEntity<Object> sendClassInstanceConfiguratorResponse(
+			@RequestBody FrontendClassInstanceConfiguratorRequestBody body) {
 		ClassInstanceConfiguratorResponseRequestBody responseRequestBody = new ClassInstanceConfiguratorResponseRequestBody();
 		responseRequestBody.setClassInstance(body.getClassInstance());
-		
-		ResponseEntity<Object> resp =  responseRestClient.sendClassInstanceConfiguratorResponse(body.getUrl(), responseRequestBody);
+
+		ResponseEntity<Object> resp = responseRestClient.sendClassInstanceConfiguratorResponse(body.getUrl(),
+				responseRequestBody);
 		return resp;
 	}
 
 	@PostMapping("/send-response/matching-configurator")
-	public ResponseEntity<Object> sendMatchingConfiguratorResponse(@RequestBody FrontendMatchingConfiguratorRequestBody body) {
+	public ResponseEntity<Object> sendMatchingConfiguratorResponse(
+			@RequestBody FrontendMatchingConfiguratorRequestBody body) {
+
 		MatchingConfiguratorResponseRequestBody responseRequestBody = new MatchingConfiguratorResponseRequestBody();
-		MatchingConfiguration matchingConfiguration = matchingConfigurationService.getMatchingConfigurationById(body.getIdToSave());
-		responseRequestBody.setMatchingConfiguration(matchingConfiguration);
-		
-		if (matchingConfiguration != null) {
-			List<MatchingOperatorRelationship> relationships = matchingOperatorRelationshipController.getMatchingOperatorRelationshipByMatchingConfiguration(matchingConfiguration.getId());
-			responseRequestBody.setMatchingRelationships(relationships);
+
+		if (body.getSaveRequest().getMatchingConfiguration().getId() == null) {
+			body.getSaveRequest().setMatchingConfiguration(matchingConfigurationService
+					.createMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration()));
 		}
-		
+
+		if (body.getSaveRequest() != null) {
+			responseRequestBody.setMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration());
+			responseRequestBody.setMatchingRelationships(body.getSaveRequest().getMatchingOperatorRelationships());
+		}
+
 		responseRequestBody.setIdsToDelete(body.getIdsToDelete());
 		responseRequestBody.setAction(body.getAction());
 
-		ResponseEntity<Object> resp =  responseRestClient.sendMatchingConfiguratorResponse(body.getUrl(), responseRequestBody);
-		
-		 if (resp.getStatusCode().is4xxClientError() && body.getAction().equals("save")) {
-			 System.out.println("error - rollback");
-			 for (String id : body.getIdsToDelete()) {
-				 matchingConfigurationService.deleteMatchingConfiguration(id);
-			 }
-		 }
-		
+		ResponseEntity<Object> resp = responseRestClient.sendMatchingConfiguratorResponse(body.getUrl(),
+				responseRequestBody);
+
+		if (resp.getStatusCode().is4xxClientError()) {
+			System.out.println("error - dont saved / deleted");
+
+		} else {
+			if (body.getAction().equals("save")) {
+				MatchingConfiguration ret = matchingConfigurationService
+						.saveMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration());
+				matchingOperatorRelationshipController.saveMatchingOperatorRelationshipByMatchingConfiguration(
+						body.getSaveRequest().getMatchingConfiguration().getId(),
+						body.getSaveRequest().getMatchingOperatorRelationships());
+				return ResponseEntity.ok(ret);
+			} else if (body.getAction().equals("delete")) {
+				matchingConfigurationService
+						.deleteMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration().getId());
+				return ResponseEntity.ok().build();
+			}
+			return ResponseEntity.badRequest().build();
+		}
+
 		return resp;
 	}
-	
+
 	@PostMapping("/send-response/property-configurator")
 	public ResponseEntity<Object> sendPropertyConfiguratorResponse(@RequestBody FrontendPropertyConfiguratorRequestBody body) {
 		PropertyConfiguratorResponseRequestBody responseRequestBody = new PropertyConfiguratorResponseRequestBody();
-		
+
 		responseRequestBody.setAction(body.getAction());
 		
-		if (body.getFlatPropertyDefinitionIds() != null) {
-			List<FlatPropertyDefinition<Object>> flatPropertyDefinitions = new LinkedList<>();
-			flatPropertyDefinitionRepository.findAll(body.getFlatPropertyDefinitionIds()).forEach(flatPropertyDefinitions::add);;
-			responseRequestBody.setFlatPropertyDefinitions(flatPropertyDefinitions);
+		if (body.getFlatPropertyDefinitions() != null) {
+			for (FlatPropertyDefinition<Object> pd : body.getFlatPropertyDefinitions()) {
+				if (pd.getId() == null) {
+					pd.setId(new ObjectId().toHexString());
+					List<FlatPropertyDefinition<Object>> existing = flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId());
+					if (existing != null && existing.size() > 0) {
+						return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+					}
+				}
+			}
+			responseRequestBody.setFlatPropertyDefinitions(body.getFlatPropertyDefinitions());
+		}
 
+		if (body.getTreePropertyDefinitions() != null) {
+			for(TreePropertyDefinition pd : body.getTreePropertyDefinitions()) {
+				if (pd.getId() == null) {
+					pd.setId(new ObjectId().toHexString());
+					List<TreePropertyDefinition> existing = treePropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId());
+					if (existing != null && existing.size() > 0) {
+						return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+					}
+				}
+			}
+			responseRequestBody.setTreePropertyDefinitions(body.getTreePropertyDefinitions());
 		}
 		
-		if (body.getTreePropertyDefinitionIds() != null) {
-			List<TreePropertyDefinition> treePropertyDefinitions = new LinkedList<>();
-			treePropertyDefinitionRepository.findAll(body.getTreePropertyDefinitionIds()).forEach(treePropertyDefinitions::add);;
-			responseRequestBody.setTreePropertyDefinitions(treePropertyDefinitions);
-
+		ResponseEntity<Object> resp = responseRestClient.sendPropertyConfiguratorResponse(body.getUrl(),
+				responseRequestBody);
+		if (resp.getStatusCode().is4xxClientError()) {
+			System.out.println("error - not saved / deleted");
+		} else {			
+			if (body.getAction().equals("save")) {
+				if (body.getFlatPropertyDefinitions() != null) {
+					flatPropertyDefinitionRepository.save(body.getFlatPropertyDefinitions());
+					return ResponseEntity.ok(body.getFlatPropertyDefinitions());
+				}
+				else if (body.getTreePropertyDefinitions() != null) {
+					treePropertyDefinitionRepository.save(body.getTreePropertyDefinitions());
+					return ResponseEntity.ok(body.getTreePropertyDefinitions());
+				}
+			} 
+			else if (body.getAction().equals("delete")) {
+				if (body.getFlatPropertyDefinitions() != null) {
+					flatPropertyDefinitionRepository.delete(body.getFlatPropertyDefinitions());
+				}
+				else if (body.getTreePropertyDefinitions() != null) {
+					treePropertyDefinitionRepository.delete(body.getTreePropertyDefinitions());
+				}
+				return ResponseEntity.ok().build();
+			} 
+			return ResponseEntity.badRequest().build();
 		}
-				
-		ResponseEntity<Object> resp =  responseRestClient.sendPropertyConfiguratorResponse(body.getUrl(), responseRequestBody);
-		 if (resp.getStatusCode().is4xxClientError() && body.getAction().equals("save")) {
-			 System.out.println("error - rollback");
 
-			 if (body.getFlatPropertyDefinitionIds() != null) {
-				 flatPropertyDefinitionRepository.delete(responseRequestBody.getFlatPropertyDefinitions());
-			 }
-			 
-			 if (body.getTreePropertyDefinitionIds() != null) {
-				 treePropertyDefinitionRepository.delete(responseRequestBody.getTreePropertyDefinitions());
-			 }
-		 }
-		
 		return resp;
 	}
-	
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.configurator._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.configurator._mapper.property.TreePropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.configurator._mapper.relationship.RelationshipMapper;
 import at.jku.cis.iVolunteer.configurator.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
 import at.jku.cis.iVolunteer.configurator.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.configurator.meta.core.class_.CollectionService;
@@ -25,6 +26,7 @@ import at.jku.cis.iVolunteer.configurator.meta.core.relationship.RelationshipCon
 import at.jku.cis.iVolunteer.configurator.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.configurator.model._httprequests.SaveClassConfigurationRequest;
 import at.jku.cis.iVolunteer.configurator.model.configurations.clazz.ClassConfiguration;
+import at.jku.cis.iVolunteer.configurator.model.configurations.clazz.ClassConfigurationBundle;
 import at.jku.cis.iVolunteer.configurator.model.configurations.clazz.ClassConfigurationDTO;
 import at.jku.cis.iVolunteer.configurator.model.configurations.matching.collector.MatchingEntityMappingConfiguration;
 import at.jku.cis.iVolunteer.configurator.model.matching.MatchingEntityMappings;
@@ -36,6 +38,7 @@ import at.jku.cis.iVolunteer.configurator.model.meta.core.property.definition.tr
 import at.jku.cis.iVolunteer.configurator.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.configurator.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.configurator.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.configurator.model.meta.core.relationship.RelationshipDTO;
 import at.jku.cis.iVolunteer.configurator.model.meta.core.relationship.RelationshipType;
 
 @RestController
@@ -52,6 +55,7 @@ public class ClassConfigurationController {
 	@Autowired private PropertyDefinitionToClassPropertyMapper flatPropertyDefinitionToClassPropertyMapper;
 	@Autowired private TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 	@Autowired private TreePropertyDefinitionToClassPropertyMapper treePropertyDefinitionToClassPropertyMapper;
+	@Autowired private RelationshipMapper relationshipMapper;
 
 	@GetMapping("class-configuration/all")
 	List<ClassConfiguration> getAllClassConfigurations() {
@@ -208,10 +212,28 @@ public class ClassConfigurationController {
 		ids.forEach(this::deleteClassConfiguration);
 		return this.classConfigurationRepository.findAll();
 	}
+	
+	public ClassConfiguration createAndSaveNewClassConfiguration(String tenantId, String configuratorName, String description, String configuratorId) {
+		ClassConfigurationBundle bundle = createNewClassConfiguration(tenantId, configuratorName, description, configuratorId);
+		
+		for (ClassDefinition cd : bundle.getClassDefinitions()) {
+			this.classDefinitionRepository.save(cd);
+		}
+
+		for (Relationship r : bundle.getRelationships()) {
+			this.relationshipRepository.save(r);
+		}
+		
+		return saveClassConfiguration(bundle.getClassConfiguration());
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private ClassConfiguration createAndSaveNewClassConfiguration(String tenantId, String configuratorName,
+	public ClassConfigurationBundle createNewClassConfiguration(String tenantId, String configuratorName,
 			String description, String configuratorId) {
+		
+		if (configuratorId == null) {
+			configuratorId = new ObjectId().toHexString();
+		}
 
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();
@@ -433,18 +455,25 @@ public class ClassConfigurationController {
 
 		for (ClassDefinition cd : classDefinitions) {
 			cd.setConfigurationId(configurator.getId());
-			this.classDefinitionRepository.save(cd);
+//			this.classDefinitionRepository.save(cd);
 			configurator.getClassDefinitionIds().add(cd.getId());
 		}
 
 		for (Relationship r : relationships) {
-			this.relationshipRepository.save(r);
+//			this.relationshipRepository.save(r);
+			r.setId(new ObjectId().toHexString());
 			configurator.getRelationshipIds().add(r.getId());
 		}
+		
+		ClassConfigurationBundle ret = new ClassConfigurationBundle();
+		ret.setClassConfiguration(configurator);
+		ret.setClassDefinitions(classDefinitions);
+		ret.setRelationships(relationships);
 
-		return saveClassConfiguration(configurator);
-
+		return ret;
 	}
+	
+	
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ClassConfiguration createAndSaveHaubenofen(String tenantId) {
@@ -589,7 +618,7 @@ public class ClassConfigurationController {
 		ClassConfiguration configuratorOfen = new ClassConfiguration();
 		configuratorOfen.setTimestamp(new Date());
 		configuratorOfen.setTenantId(tenantId);
-		configuratorOfen.setId(null);
+		configuratorOfen.setId(new ObjectId().toHexString());
 		configuratorOfen.setName("Haubenofen");
 		configuratorOfen.setDescription("");
 		configuratorOfen.setClassDefinitionIds(new ArrayList<>());

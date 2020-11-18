@@ -62,9 +62,9 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
 
   onSubmit() {
     this.responseService.sendClassConfiguratorResponse(this.data.redirectUrl, null, this.data.idsToDelete, "delete").toPromise().then(() => {
-      this.classConfigurationService.deleteClassConfigurations(this.data.idsToDelete).toPromise().then((ret) => {
-        this.dialogRef.close(this.data);
-      });
+      // this.classConfigurationService.deleteClassConfigurations(this.data.idsToDelete).toPromise().then((ret) => {
+      this.dialogRef.close(this.data);
+      // });
     }).catch(error => {
       console.log("error - rollback");
       console.log(error);

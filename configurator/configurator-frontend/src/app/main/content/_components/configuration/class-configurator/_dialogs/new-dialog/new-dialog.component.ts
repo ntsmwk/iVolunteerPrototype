@@ -90,29 +90,36 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     }
     const formValues = this.getFormValues();
 
-    this.classConfigurationService
-      .createNewClassConfiguration(this.data.tenantId, formValues.name, formValues.description)
-      .toPromise().then((cc: ClassConfiguration) => {
-        this.data.classConfiguration = cc;
-        this.responseService.sendClassConfiguratorResponse(this.data.redirectUrl, cc.id, null, 'save').toPromise()
-          .then(() => {
-            Promise.all([
-              this.relationshipsService
-                .getRelationshipsById(this.data.classConfiguration.relationshipIds).toPromise()
-                .then((ret: Relationship[]) => {
-                  this.data.relationships = ret;
-                }),
-              this.classDefintionService
-                .getClassDefinitionsById(this.data.classConfiguration.classDefinitionIds).toPromise()
-                .then((ret: ClassDefinition[]) => {
-                  this.data.classDefinitions = ret;
-                })
-            ]).then(() => {
-              this.dialogRef.close(this.data);
-            });
-          });
+    // this.classConfigurationService
+    //   .createNewClassConfiguration(this.data.tenantId, formValues.name, formValues.description)
+    //   .toPromise().then((cc: ClassConfiguration) => {
+    //     this.data.classConfiguration = cc;
 
+    const classConfiguration = new ClassConfiguration();
+    classConfiguration.tenantId = this.data.tenantId;
+    classConfiguration.name = formValues.name;
+    classConfiguration.description = formValues.description;
+
+    this.responseService.sendClassConfiguratorResponse(this.data.redirectUrl, { classConfiguration, tenantId: this.data.tenantId }, null, 'new').toPromise()
+      .then((cc: ClassConfiguration) => {
+        this.data.classConfiguration = cc;
+        Promise.all([
+          this.relationshipsService
+            .getRelationshipsById(this.data.classConfiguration.relationshipIds).toPromise()
+            .then((ret: Relationship[]) => {
+              this.data.relationships = ret;
+            }),
+          this.classDefintionService
+            .getClassDefinitionsById(this.data.classConfiguration.classDefinitionIds).toPromise()
+            .then((ret: ClassDefinition[]) => {
+              this.data.classDefinitions = ret;
+            })
+        ]).then(() => {
+          this.dialogRef.close(this.data);
+        });
       });
+
+    // });
   }
 
   onSaveClick() {

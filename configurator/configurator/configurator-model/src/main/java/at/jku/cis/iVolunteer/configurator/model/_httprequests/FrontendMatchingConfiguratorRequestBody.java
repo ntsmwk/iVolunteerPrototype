@@ -3,10 +3,10 @@ package at.jku.cis.iVolunteer.configurator.model._httprequests;
 import java.util.List;
 
 public class FrontendMatchingConfiguratorRequestBody {
-	String action;
-	List<String> idsToDelete;
-	String idToSave;
-	String url;
+	private String action;
+	private List<String> idsToDelete;
+	private SaveMatchingConfigurationRequest saveRequest;
+	private String url;
 	
 	public String getAction() {
 		return action;
@@ -20,11 +20,11 @@ public class FrontendMatchingConfiguratorRequestBody {
 	public void setIdsToDelete(List<String> idsToDelete) {
 		this.idsToDelete = idsToDelete;
 	}
-	public String getIdToSave() {
-		return idToSave;
+	public SaveMatchingConfigurationRequest getSaveRequest() {
+		return saveRequest;
 	}
-	public void setIdToSave(String idToSave) {
-		this.idToSave = idToSave;
+	public void setSaveRequest(SaveMatchingConfigurationRequest saveRequest) {
+		this.saveRequest = saveRequest;
 	}
 	public String getUrl() {
 		return url;
@@ -32,4 +32,5 @@ public class FrontendMatchingConfiguratorRequestBody {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
 }

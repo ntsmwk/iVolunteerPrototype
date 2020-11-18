@@ -424,10 +424,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private async performSave() {
     this.updateModel();
-    const ret = <MatchingConfiguration>await this.matchingConfigurationService.saveMatchingConfiguration(this.data.matchingConfiguration).toPromise();
-    this.data.matchingConfiguration = ret;
-    await this.matchingOperatorRelationshipService.saveMatchingOperatorRelationships(this.data.relationships, this.data.matchingConfiguration.id).toPromise();
-    await this.responseService.sendMatchingConfiguratorResponse(this.redirectUrl, ret.id, null, 'save').toPromise();
+    // const ret = <MatchingConfiguration>await this.matchingConfigurationService.saveMatchingConfiguration(this.data.matchingConfiguration).toPromise();
+    // this.data.matchingConfiguration = ret;
+    // await this.matchingOperatorRelationshipService.saveMatchingOperatorRelationships(this.data.relationships, this.data.matchingConfiguration.id).toPromise();
+    this.responseService.sendMatchingConfiguratorResponse(this.redirectUrl,
+      { matchingConfiguration: this.data.matchingConfiguration, matchingOperatorRelationships: this.data.relationships, tenantId: this.tenantId },
+      null, 'save').toPromise().then((ret: MatchingConfiguration) => {
+        this.data.matchingConfiguration = ret;
+      });
     this.redrawContent();
   }
 

@@ -330,14 +330,15 @@ export class FlatPropertyBuilderComponent implements OnInit {
       const property = this.createPropertyFromForm();
       property.tenantId = this.tenantId;
 
-      this.propertyDefinitionService.createNewPropertyDefinition(property).toPromise().then((ret: FlatPropertyDefinition<any>) => {
-        if (!isNullOrUndefined(ret)) {
-          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, [ret.id], undefined, 'save').toPromise().then(() => {
-            this.result.emit({ builderType: 'property', value: ret });
-          });
+      // this.propertyDefinitionService.createNewPropertyDefinition(property).toPromise().then((ret: FlatPropertyDefinition<any>) => {
+      this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, [property], undefined, 'save').toPromise().then((ret: FlatPropertyDefinition<any>[]) => {
+        if (!isNullOrUndefined(ret) && ret.length === 1) {
+          this.result.emit({ builderType: 'property', value: ret[0] });
         } else {
           this.result.emit(undefined);
         }
+        // });
+
       }).catch(error => {
         this.form.enable();
         const str = '' + this.form.value.name;

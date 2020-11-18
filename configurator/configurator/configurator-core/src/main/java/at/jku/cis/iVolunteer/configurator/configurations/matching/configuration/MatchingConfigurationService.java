@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.configurator.configurations.matching.configuration
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,15 +46,20 @@ public class MatchingConfigurationService {
 		return null;
 	}
 	
-	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
-		if (matchingConfiguration.getId() == null) {
-			String leftClassConfigurationId = matchingConfiguration.getLeftSideId();
-			String rightClassConfigurationId = matchingConfiguration.getRightSideId();
-			String hash = createHashFromClassConfigurationIds(leftClassConfigurationId, rightClassConfigurationId);
-			matchingConfiguration.setHash(hash);
-		}
-
+	
+	
+	public MatchingConfiguration createMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
+		matchingConfiguration.setId(new ObjectId().toHexString());
+		String leftClassConfigurationId = matchingConfiguration.getLeftSideId();
+		String rightClassConfigurationId = matchingConfiguration.getRightSideId();
+		String hash = createHashFromClassConfigurationIds(leftClassConfigurationId, rightClassConfigurationId);
+		matchingConfiguration.setHash(hash);
 		matchingConfiguration.setTimestamp(new Date());
+		
+		return matchingConfiguration;
+	}
+		
+	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
 		return matchingConfigurationRepository.save(matchingConfiguration);
 	}
 

@@ -1,3 +1,5 @@
+import { PropertyType } from './property';
+
 export class TreePropertyEntry {
     id: string;
     value: string;
@@ -39,11 +41,7 @@ export class TreePropertyDefinition {
 
     custom: boolean;
 
-    constructor(name: string, description: string, multiple: boolean, required: boolean, requiredMessage: string) {
-        this.name = name;
-        this.description = description;
-        this.multiple = multiple;
-        this.required = required;
-        this.requiredMessage = requiredMessage;
+    constructor(init?: Partial<TreePropertyDefinition>) {
+        Object.assign(this, init);
     }
 }

@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material';
 import { ResponseService } from 'app/main/content/_service/response.service';
 import { propertyNameUniqueValidator } from 'app/main/content/_validator/property-name-unique.validator';
 import { stringsUnique } from 'app/main/content/_validator/strings-unique.validator';
+import { FlatPropertyDefinition } from 'app/main/content/_model/configurator/property/property';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: "app-tree-property-builder",
@@ -80,11 +82,13 @@ export class TreePropertyBuilderComponent implements OnInit {
 
       this.form.disable();
       const newTreePropertyDefinition = new TreePropertyDefinition(
-        this.form.controls['name'].value,
-        this.form.controls['description'].value,
-        this.form.controls['multiple'].value,
-        this.form.controls['required'].value,
-        this.form.controls['requiredMessage'].value
+        {
+          name: this.form.controls['name'].value,
+          description: this.form.controls['description'].value,
+          multiple: this.form.controls['multiple'].value,
+          required: this.form.controls['required'].value,
+          requiredMessage: this.form.controls['requiredMessage'].value
+        }
       );
 
       if (!newTreePropertyDefinition.required) {
@@ -95,19 +99,23 @@ export class TreePropertyBuilderComponent implements OnInit {
 
       newTreePropertyDefinition.tenantId = this.tenantId;
 
-      this.treePropertyDefinitionService.newPropertyDefinition(newTreePropertyDefinition).toPromise().then((treePropertyDefinition: TreePropertyDefinition) => {
-        if (!isNullOrUndefined(treePropertyDefinition)) {
-          this.treePropertyDefinition = treePropertyDefinition;
-          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined, [treePropertyDefinition.id], 'save').toPromise().then(() => {
-
-            this.showEditor = true;
-          });
+      // this.treePropertyDefinitionService.newPropertyDefinition(newTreePropertyDefinition).toPromise().then((treePropertyDefinition: TreePropertyDefinition) => {
+      //   if (!isNullOrUndefined(treePropertyDefinition)) {
+      //     this.treePropertyDefinition = treePropertyDefinition;
+      this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined, [newTreePropertyDefinition], 'save').toPromise().then((ret: TreePropertyDefinition[]) => {
+        this.treePropertyDefinition = ret[0];
+        this.showEditor = true;
+        // });
+        // }
+      }).catch((error: HttpErrorResponse) => {
+        if (error.status === 406) {
+          this.form.enable();
+          const str = '' + this.form.value.name;
+          this.form.controls['name'].setValidators([Validators.required, stringsUnique(str, this.form.value.name)]);
+          this.form.controls['name'].updateValueAndValidity();
+        } else {
+          console.error(error)
         }
-      }).catch(error => {
-        this.form.enable();
-        const str = '' + this.form.value.name;
-        this.form.controls['name'].setValidators([Validators.required, stringsUnique(str, this.form.value.name)]);
-        this.form.controls['name'].updateValueAndValidity();
       });
     }
   }
@@ -130,13 +138,13 @@ export class TreePropertyBuilderComponent implements OnInit {
     if (event.type === 'save') {
       event.payload.description = this.form.controls['description'].value;
       event.payload.multiple = this.multipleToggled;
-      this.treePropertyDefinitionService
-        .savePropertyDefinition(event.payload)
-        .toPromise().then((ret: TreePropertyDefinition) => {
-          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined, [ret.id], 'save').toPromise().then(() => {
-            return; // don't emit result
-          });
-        });
+      // this.treePropertyDefinitionService
+      //   .savePropertyDefinition(event.payload)
+      //   .toPromise().then((ret: TreePropertyDefinition) => {
+      this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined, [event.payload], 'save').toPromise().then((ret: TreePropertyDefinition[]) => {
+        return; // don't emit result
+      });
+      // });
 
     } else if (event.type === 'back') {
       this.result.emit({ builderType: 'tree', value: event.payload });
@@ -145,13 +153,13 @@ export class TreePropertyBuilderComponent implements OnInit {
       event.payload.description = this.form.controls['description'].value;
       event.payload.multiple = this.multipleToggled;
 
-      this.treePropertyDefinitionService
-        .savePropertyDefinition(event.payload)
-        .toPromise().then((ret: TreePropertyDefinition) => {
-          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined, [ret.id], 'save').toPromise().then(() => {
-            this.result.emit({ builderType: 'tree', value: ret });
-          });
-        });
+      // this.treePropertyDefinitionService
+      //   .savePropertyDefinition(event.payload)
+      //   .toPromise().then((ret: TreePropertyDefinition) => {
+      this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined, [event.payload], 'save').toPromise().then((ret: TreePropertyDefinition[]) => {
+        this.result.emit({ builderType: 'tree', value: ret[0] });
+      });
+      // });
     }
   }
 

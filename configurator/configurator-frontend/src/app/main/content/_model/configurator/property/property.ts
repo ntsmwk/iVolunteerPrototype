@@ -2,6 +2,14 @@ import { isNullOrUndefined } from 'util';
 import { PropertyConstraint } from '../constraint';
 import { TreePropertyEntry } from './tree-property';
 
+export interface PropertyEntry {
+    id: string;
+    name: string;
+    type: PropertyType;
+    timestamp: Date;
+    custom: boolean;
+}
+
 export class FlatPropertyDefinition<T> {
     id: string;
     name: string;
@@ -27,6 +35,10 @@ export class FlatPropertyDefinition<T> {
     tabId: number;
 
     computed: boolean;
+
+    constructor(init?: Partial<FlatPropertyDefinition<T>>) {
+        Object.assign(this, init);
+    }
 
 }
 

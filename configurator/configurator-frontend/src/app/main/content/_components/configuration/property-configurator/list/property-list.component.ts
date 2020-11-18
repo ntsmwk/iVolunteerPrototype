@@ -7,16 +7,9 @@ import { FlatPropertyDefinitionService } from 'app/main/content/_service/meta/co
 import { TreePropertyDefinitionService } from 'app/main/content/_service/meta/core/property/tree-property-definition.service';
 import { isNullOrUndefined } from 'util';
 import { TreePropertyDefinition } from 'app/main/content/_model/configurator/property/tree-property';
-import { PropertyType, FlatPropertyDefinition } from 'app/main/content/_model/configurator/property/property';
+import { PropertyType, FlatPropertyDefinition, PropertyEntry } from 'app/main/content/_model/configurator/property/property';
 import { ResponseService } from 'app/main/content/_service/response.service';
 
-export interface PropertyEntry {
-  id: string;
-  name: string;
-  type: PropertyType;
-  timestamp: Date;
-  custom: boolean;
-}
 
 @Component({
   selector: "app-property-list",
@@ -227,25 +220,27 @@ export class PropertyListComponent implements OnInit {
       )
       .then((ret) => {
         if (ret && entry.type !== PropertyType.TREE) {
-          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, [entry.id], undefined, "delete").toPromise().then(() => {
-            this.flatPropertyDefinitionService.deletePropertyDefinition(entry.id).toPromise().then(() => {
-              this.deleteFromLists('flat', entry.id);
-            });
+          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, [new FlatPropertyDefinition(entry)], undefined, "delete").toPromise().then(() => {
+            // this.flatPropertyDefinitionService.deletePropertyDefinition(entry.id).toPromise().then(() => {
+            this.deleteFromLists('flat', entry.id);
+            // });
           }).catch(error => {
             console.error("error - rollback");
             console.log(error);
           });
         } else if (ret && entry.type === PropertyType.TREE) {
 
-
-          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined, [entry.id], "delete").toPromise().then(() => {
-            this.treePropertyDefinitionService.deletePropertyDefinition(entry.id).toPromise().then(() => {
+          const { id, name, timestamp, custom } = entry;
+          this.responseService.sendPropertyConfiguratorResponse(this.redirectUrl, undefined,
+            [new TreePropertyDefinition({ id, name, timestamp, custom })]
+            , "delete").toPromise().then(() => {
+              // this.treePropertyDefinitionService.deletePropertyDefinition(entry.id).toPromise().then(() => {
               this.deleteFromLists('tree', entry.id);
+              // });
+            }).catch(error => {
+              console.error("error - rollback");
+              console.log(error);
             });
-          }).catch(error => {
-            console.error("error - rollback");
-            console.log(error);
-          });
         }
       });
   }

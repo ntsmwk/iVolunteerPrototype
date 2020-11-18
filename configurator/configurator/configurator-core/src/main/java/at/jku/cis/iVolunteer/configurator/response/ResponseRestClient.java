@@ -59,6 +59,7 @@ public class ResponseRestClient {
 	}
 	
 	private ResponseEntity<Object> handleException(Exception e) {
+		System.out.println(e);
 		return ResponseEntity.badRequest().build();
 	}
 
