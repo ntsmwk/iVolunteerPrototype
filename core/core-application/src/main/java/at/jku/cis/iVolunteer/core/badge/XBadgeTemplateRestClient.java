@@ -25,15 +25,22 @@ public class XBadgeTemplateRestClient {
 
 	public Map<String, List<XBadgeTemplate>> getXBadgeTemplates(String marketplaceURL, List<String> tenantIds,
 			String authorization) {
-		String preUrl = "{0}/badgeTemplates";
+		String preUrl = "{0}/badgeTemplate";
 		String url = format(preUrl, marketplaceURL);
 
-		ResponseEntity<Map> resp = restTemplate.exchange(url, HttpMethod.POST,
-				buildEntity(tenantIds, authorization), Map.class);
+		ResponseEntity<Map> resp = restTemplate.exchange(url, HttpMethod.POST, buildEntity(tenantIds, authorization),
+				Map.class);
 		if (resp == null || resp.getBody() == null) {
 			return null;
 		}
 		return resp.getBody();
+	}
+
+	public void createBadgeTemplate(String marketplaceURL, XBadgeTemplate badgeTemplate) {
+		String preUrl = "{0}/badgeTemplate/init";
+		String url = format(preUrl, marketplaceURL);
+
+		restTemplate.exchange(url, HttpMethod.POST, buildEntity(badgeTemplate, ""), ResponseEntity.class);
 	}
 
 	private HttpEntity<?> buildEntity(Object body, String authorization) {

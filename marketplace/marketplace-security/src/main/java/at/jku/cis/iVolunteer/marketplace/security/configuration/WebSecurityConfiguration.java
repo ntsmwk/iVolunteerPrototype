@@ -40,17 +40,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
-        // TODO
-			.antMatchers("/chartdata").permitAll() 
-			.antMatchers("/v2/api-docs").permitAll() 
-			.antMatchers("/swagger-resources").permitAll() 
-			.antMatchers("/swagger-ui.html").permitAll() 
-			.antMatchers("/api/**").permitAll()
-			.antMatchers("/init/**").permitAll()
-			.antMatchers("/user/register").permitAll()
-			.antMatchers("/rule/engine/**").permitAll()
-			.antMatchers("/response/**").permitAll()
-			.anyRequest().authenticated();
+				.antMatchers("/chartdata").permitAll() 
+				.antMatchers("/v2/api-docs").permitAll() 
+				.antMatchers("/swagger-resources").permitAll() 
+				.antMatchers("/swagger-ui.html").permitAll() 
+				.antMatchers("/api/**").permitAll()
+				.antMatchers("/init/**").permitAll()
+				.antMatchers("/user/register").permitAll()
+				.antMatchers("/rule/engine/**").permitAll()
+				.antMatchers("/badgeTemplate/init").permitAll()
+				.antMatchers("/response/**").permitAll()
+				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

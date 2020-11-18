@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XUserRoleMapper;
+import at.jku.cis.iVolunteer.core.badge.XCoreBadgeTemplateService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
@@ -30,6 +31,7 @@ import at.jku.cis.iVolunteer.model._httpresponses.XTenantSubscribedResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
 import at.jku.cis.iVolunteer.model.user.XUserRole;
@@ -45,6 +47,7 @@ public class TenantController {
 	@Autowired private XTenantMapper xTenantMapper;
 	@Autowired private XCoreUserMapper xUserMapper;
 	@Autowired private XUserRoleMapper xUserRoleMapper;
+	@Autowired private XCoreBadgeTemplateService coreBadgeTemplateService;
 
 	@GetMapping
 	public List<Tenant> getAllTenants() {
@@ -95,7 +98,11 @@ public class TenantController {
 				tenant.setMarketplaceId(payload.getMarketplaceId());
 			}
 		}
-		tenantService.createTenant(tenant);
+		tenant = tenantService.createTenant(tenant);
+		
+		Marketplace marketplace = marketplaceService.findById(tenant.getMarketplaceId());
+		coreBadgeTemplateService.createBadgeTemplates(marketplace, tenant);
+
 		return ResponseEntity.ok().build();
 	}
 

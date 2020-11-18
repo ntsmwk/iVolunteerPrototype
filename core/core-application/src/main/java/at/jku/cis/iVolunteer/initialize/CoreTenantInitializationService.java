@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.core.badge.XBadgeTemplateRestClient;
+import at.jku.cis.iVolunteer.core.badge.XCoreBadgeTemplateService;
 import at.jku.cis.iVolunteer.core.file.StorageService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
+import at.jku.cis.iVolunteer.model.badge.XBadgeTemplate;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
@@ -19,39 +22,36 @@ public class CoreTenantInitializationService {
 	private static final String RK_WILHERING = "RK Wilhering";
 	private static final String FLEXPROD = "FlexProd";
 
-	@Autowired
-	protected TenantRepository coreTenantRepository;
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-	@Autowired
-	private StorageService storageService;
-	@Value("${spring.data.server.uri}")
-	private String serverUrl;
+	@Autowired protected TenantRepository coreTenantRepository;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+
+	@Autowired private XCoreBadgeTemplateService coreBadgeTemplateService;
+	@Autowired private StorageService storageService;
+	@Value("${spring.data.server.uri}") private String serverUrl;
 
 	public void initTenants() {
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace != null) {
 			createTenant(FF_EIDENBERG, "www.ff-eidenberg.at", "/img/FF_Altenberg.jpg", "/img/FF_Eidenberg.png",
-					"#b20000", "#b2b2b2", "Freiwillige Feuerwehr Eidenberg", marketplace.getId());
+					"#b20000", "#b2b2b2", "Freiwillige Feuerwehr Eidenberg", marketplace);
 			createTenant(MV_SCHWERTBERG, "www.musikverein-schwertberg.at", "/img/musikvereinschwertberg.jpeg",
-					"/img/musicverein.jpg", "#005900", "#b2b2b2", "Musikverein Schwertberg", marketplace.getId());
+					"/img/musicverein.jpg", "#005900", "#b2b2b2", "Musikverein Schwertberg", marketplace);
 			createTenant(RK_WILHERING,
 					"www.roteskreuz.at/ooe/dienststellen/eferding/die-bezirksstelle/die-ortsstellen/wilhering",
-					"/img/OERK_Sonderlogo_rgb_cropped.jpg", "", "#b2b2b2", "#b2b2b2", "Rotes Kreuz",
-					marketplace.getId());
+					"/img/OERK_Sonderlogo_rgb_cropped.jpg", "", "#b2b2b2", "#b2b2b2", "Rotes Kreuz", marketplace);
 		}
 	}
 
 	public void initFlexprodTenant() {
 		Marketplace marketplace = marketplaceRepository.findByName("Marketplace 1");
 		if (marketplace != null) {
-			createTenant(FLEXPROD, "www.flexprod.at", "", "", "#b2b2b2", "#b2b2b2", "FlexProd", marketplace.getId());
+			createTenant(FLEXPROD, "www.flexprod.at", "", "", "#b2b2b2", "#b2b2b2", "FlexProd", marketplace);
 		}
 	}
 
 	private Tenant createTenant(String name, String homepage, String profileImageFilename,
 			String landingPageImageFilename, String primaryColor, String secondaryColor, String landingpageTitle,
-			String marketplaceId) {
+			Marketplace marketplace) {
 		Tenant tenant = coreTenantRepository.findByName(name);
 
 		if (tenant == null) {
@@ -62,13 +62,17 @@ public class CoreTenantInitializationService {
 			setTenantLandingPageImage(landingPageImageFilename, tenant);
 			tenant.setPrimaryColor(primaryColor);
 			tenant.setSecondaryColor(secondaryColor);
-			tenant.setMarketplaceId(marketplaceId);
+			tenant.setMarketplaceId(marketplace.getId());
 			tenant.setLandingpageMessage("Herzlich Willkommen bei iVolunteer!");
 			tenant.setLandingpageTitle(landingpageTitle);
 			tenant = coreTenantRepository.insert(tenant);
+			coreBadgeTemplateService.createBadgeTemplates(marketplace, tenant);
 		}
+
 		return tenant;
 	}
+
+	
 
 	private void setTenantProfileImage(String fileName, Tenant tenant) {
 		if (fileName != null && !fileName.equals("")) {

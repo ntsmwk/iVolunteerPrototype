@@ -102,6 +102,7 @@ public class XTaskInstanceToPostTaskRequestMapper {
 		} else {
 			instance.setSubscribedVolunteerIds(target.getSubscribedUsers());
 		}
+		instance.setBadgeTemplateIds(target.getBadgeTemplateIds());
 		if (target.getStatus() != null) {
 			instance.setStatus(target.getStatus());
 		}
