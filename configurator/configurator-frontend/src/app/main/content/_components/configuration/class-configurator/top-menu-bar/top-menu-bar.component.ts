@@ -330,6 +330,10 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
             id: 'editor_delete',
             payload: ret
           });
+
+          if (ret.idsToDelete.findIndex(e => e === this.currentClassConfiguration.id) >= 0) {
+            this.currentClassConfiguration = undefined;
+          }
         } else {
           this.menuOptionClickedEvent.emit({ id: 'cancelled' });
         }

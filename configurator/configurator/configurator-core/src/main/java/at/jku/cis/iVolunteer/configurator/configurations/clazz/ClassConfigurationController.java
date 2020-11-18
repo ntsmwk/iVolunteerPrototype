@@ -187,7 +187,15 @@ public class ClassConfigurationController {
 
 	@DeleteMapping("class-configuration/{id}/delete")
 	public void deleteClassConfiguration(@PathVariable("id") String id) {
+		if (id == null) {
+			return;
+		}
+		
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
+		
+		if (classConfiguration == null) {
+			return;
+		}
 
 		classConfiguration.getClassDefinitionIds().forEach(classDefinitionRepository::delete);
 		classConfiguration.getRelationshipIds().forEach(relationshipRepository::delete);
