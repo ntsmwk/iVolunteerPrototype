@@ -1,0 +1,110 @@
+@import "src/@fuse/scss/fuse";
+
+// div#leftSidebarContainer, div#rightSidebarContainer {
+
+//   z-index: 200;
+
+//   h2 {
+//     padding: 0px;
+//     margin: 0px;
+//   }
+
+//   h3 {
+//     padding: 0px;
+//     margin: 0px;
+//   }
+
+//   .center-image {
+//     display: block;
+//     margin-left: auto;
+//     margin-right: auto;
+//     width: 70%;
+//     height: 70%;
+//   }
+
+//   table {
+//     width: 100%;
+//     border-spacing:0;
+//     border-collapse: collapse;
+//     tr, td {
+//       margin: 0;
+//       padding: 0;
+//     }
+
+//   }
+
+// }
+
+// .preview-button {
+//   border-radius: 4px;
+//   border-style: solid;
+//   border-width: 1px;
+//   border-color: currentColor;
+//   background-color: white;
+//   padding: 0 10px;
+//   line-height: 20px;
+// }
+
+// .subheader{
+//   margin: 5px 0px 5px 0px
+// }
+
+// .sidebar-content {
+//   padding: 5px 5px 10px 10px;
+//   overflow: hidden;
+// }
+
+// div#menubarContainer {
+//   div.menuitem:hover {
+//     background-color: rgb(62, 125, 219);
+//     color: white;
+//   }
+
+//   div.menuitem {
+//     cursor: pointer;
+//     padding-top: 2px;
+//     padding-top: 2px;
+//     padding-right: 5px;
+//     padding-left: 5px;
+//   }
+
+// }
+
+// div#fileMenuItemContainer {
+//   z-index: 240;
+//   div.menuitem:hover {
+//     background-color: rgb(62, 125, 219);
+//     color: white;
+//   }
+
+//   div.menuitem {
+//     cursor: pointer;
+//     padding-top: 5px;
+//     padding-bottom: 5px;
+//     padding-left: 5px;
+//   }
+// }
+
+div#graphContainer {
+  z-index: 240;
+  position: absolute;
+  overflow: scroll;
+  left: 0;
+  top: 65px;
+  right: 0;
+  bottom: 0;
+  background: white;
+  width: 100%;
+}
+
+div#paletteContainer {
+  position: absolute;
+  overflow: hidden;
+  padding: 2px;
+  right: 0;
+  left: 0;
+  height: 30px;
+  top: 35px;
+  background: white;
+  font: "Arial, Helvetica, sans-serif";
+}

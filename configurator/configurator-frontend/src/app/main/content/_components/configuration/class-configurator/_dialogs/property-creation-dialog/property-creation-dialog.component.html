@@ -1,0 +1,18 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>add</mat-icon>
+      </td>
+      <td>
+        <h1>Neues Property erstellen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<mat-dialog-content *ngIf="loaded">
+  <app-builder-container class="m-4" [redirectUrl]="redirectUrl" [tenantId]="data.tenantId"
+    [builderType]="data.builderType" sourceString="dialog" (result)="handleResultEvent($event)">
+  </app-builder-container>
+</mat-dialog-content>

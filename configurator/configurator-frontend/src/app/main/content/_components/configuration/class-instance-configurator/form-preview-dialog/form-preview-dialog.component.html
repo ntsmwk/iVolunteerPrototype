@@ -1,0 +1,30 @@
+<div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
+
+    <div *ngIf="currentFormConfiguration">
+        <div class="m-24">
+
+            <mat-accordion multi=true displayMode="flat">
+                <app-form-container [formEntry]="currentFormConfiguration.formEntry"
+                    [formConfiguration]="currentFormConfiguration" [finishClicked]="false"
+                    (result)=handleResultEvent($event)>
+                </app-form-container>
+            </mat-accordion>
+
+        </div>
+    </div>
+
+    <div *ngIf="!currentFormConfiguration">
+        Save first...
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 10px">
+        <div></div>
+        <button class="secondary-button-dark" mat-stroked-button type="button" mat-raised-button color="primary"
+            (click)="handleCloseClick()">
+            Schließen
+        </button>
+        <div></div>
+    </div>
+
+
+</div>

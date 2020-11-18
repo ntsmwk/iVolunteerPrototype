@@ -1,0 +1,26 @@
+@import "src/@fuse/scss/fuse";
+@import "common";
+.page-layout {
+  .no-padding-margin {
+    margin: 0;
+    padding: 0;
+  }
+
+  mat-expansion-panel-header:hover,
+  mat-expansion-panel-header.mat-expanded {
+    background-color: rgb(4, 123, 202) !important;
+
+    mat-panel-title {
+      color: white;
+    }
+
+    mat-panel-description {
+      color: white;
+    }
+  }
+
+  // .div.mat-expansion-panel {
+  //   padding: 0 !important;
+
+  // }
+}

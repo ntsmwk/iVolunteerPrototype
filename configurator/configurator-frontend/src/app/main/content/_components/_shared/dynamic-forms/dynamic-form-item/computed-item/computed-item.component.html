@@ -1,0 +1,7 @@
+<fieldset *ngIf="loaded">
+  <h2>Computed Item - {{formItem.label}}</h2>
+  <mat-form-field class="form-field" [formGroup]="form">
+    <textarea matInput placeholder="Code" [value]="formItem.value" [formControlName]="formItem.key" [id]="formItem.key" matTextareaAutosize
+      matAutosizeMinRows=10></textarea>
+  </mat-form-field>
+</fieldset>

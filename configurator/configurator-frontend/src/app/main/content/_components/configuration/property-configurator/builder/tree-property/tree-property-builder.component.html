@@ -1,0 +1,48 @@
+<div *ngIf="loaded">
+  <!-- <div> -->
+  <form [formGroup]="form">
+    <mat-form-field *ngIf="!showEditor" style="width: 500px;">
+      <input matInput formControlName="name" placeholder="Tree-Property-Bezeichnung *" (keyup)="handleNameKeyUp()" />
+
+      <mat-error *ngIf="form.controls['name'].hasError('stringsUnique')">
+        Name existiert Bereits
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mt-8" style="width: 100%;" appearance="outline">
+      <mat-label>Beschreibung</mat-label>
+      <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
+        matAutosizeMaxRows="3"></textarea>
+    </mat-form-field>
+
+    <div class="required-constraint-container">
+      <mat-slide-toggle formControlName="required" labelPosition="after">
+        Pflicht-Property
+      </mat-slide-toggle>
+
+      <mat-form-field *ngIf="form.get('required').value" class="constraint-entry-field">
+        <textarea matInput placeholder="Benutzerdefinierte Fehlermeldung" formControlName="requiredMessage" [value]=""
+          [value]="form.get('requiredMessage').value" matTextareaAutosize matAutosizeMinRows="1"
+          matAutosizeMaxRows="3"></textarea>
+      </mat-form-field>
+    </div>
+    <!-- <mat-slide-toggle [(ngModel)]="multipleToggled" [ngModelOptions]="{standalone: true}" labelPosition="after">
+      Mehrfachauswahl möglich
+    </mat-slide-toggle> -->
+
+    <div class="mt-8">
+      <button *ngIf="!showEditor" class="primary-button-dark" mat-stroked-button type="button"
+        (click)="handleCreateClick()">
+        Erstellen
+      </button>
+      <button *ngIf="!showEditor" class="secondary-button-dark ml-8" mat-stroked-button type="button"
+        (click)="handleCancelClick()">
+        Abbrechen
+      </button>
+    </div>
+  </form>
+
+  <app-tree-property-graph-editor *ngIf="showEditor" [treePropertyDefinition]="treePropertyDefinition"
+    (result)="handleResult($event)" (management)="handleManagementEvent($event)">
+  </app-tree-property-graph-editor>
+</div>

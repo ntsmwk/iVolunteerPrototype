@@ -1,0 +1,33 @@
+@import "src/@fuse/scss/fuse";
+
+.divider {
+  border-bottom: 1px solid black;
+  margin-left: 20vw;
+  margin-right: 20vw;
+}
+
+.volunteer-selection {
+  padding-left: 20px;
+  padding-top: 12px;
+  width: calc(600px + 20vw);
+  margin: 0 auto;
+}
+
+mat-expansion-panel {
+  box-shadow: none;
+  border: 2px black solid;
+}
+
+mat-expansion-panel-header:hover,
+mat-expansion-panel-header.mat-expanded {
+  background-color: rgb(4, 123, 202) !important;
+  border-radius: 0;
+
+  mat-panel-title {
+    color: white;
+  }
+
+  mat-panel-description {
+    color: white;
+  }
+}

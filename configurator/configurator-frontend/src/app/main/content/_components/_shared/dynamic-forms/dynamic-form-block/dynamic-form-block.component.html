@@ -1,0 +1,22 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+  <div *ngFor="let item of formItems" class="form-row" [@simpleFadeAnimation]="'in'">
+    <app-form-item [formItem]="item" [form]="form" [submitPressed]="submitPressed"
+      (tupleSelected)="handleTupleSelection($event)"></app-form-item>
+  </div>
+
+  <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center" class="pt-8">
+
+    <button type="button" mat-raised-button color="secondary" (click)="handleCancel()">
+      Abbrechen</button>
+
+    <div></div>
+
+    <button *ngIf="!lastEntry" type="submit" mat-raised-button color="primary">
+      Weiter</button>
+    <button *ngIf="lastEntry" type="submit" mat-raised-button color="primary">
+      Speichern</button>
+
+  </div>
+
+</form>

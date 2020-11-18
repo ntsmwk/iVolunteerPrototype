@@ -1,0 +1,83 @@
+<div style="width: 100%;" class="pb-4 pr-4">
+  <div *ngIf="formEntry.formItems.length <= 0">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon>subdirectory_arrow_right</mat-icon>
+      <h1 class="no-padding-margin pl-4">
+        {{ formEntry.classDefinitions[0].name }}
+      </h1>
+    </div>
+    <div *ngFor="let entry of formEntry.subEntries">
+      <app-form-preview-entry [formEntry]="entry" [formConfiguration]="formConfiguration"
+        [exportClicked]="exportClicked" expanded="true" (result)="handleResultEvent($event)"
+        (tupleSelected)="emitTupleSelectionEvent($event)">
+      </app-form-preview-entry>
+    </div>
+  </div>
+
+  <div *ngIf="formEntry.formItems.length > 0" fxLayout="row" fxLayoutAlign="center center" class="m-12">
+    <mat-expansion-panel [expanded]="expanded" style="width: 100%;">
+      <mat-expansion-panel-header class="class-mat-expansion-panel-header" expandedHeight="40px" collapsedHeight="40px">
+        <mat-panel-title>
+          {{ formEntry.classDefinitions[0].name }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="m-12 mt-0">
+        Beeinhaltet die folgenden Properties:
+        <div class="pl-24 pr-24">
+          <mat-expansion-panel [expanded]="formEntry.formItems.length <= 5" style="width: 100%;">
+            <mat-expansion-panel-header class="property-mat-expansion-panel-header" expandedHeight="20px"
+              collapsedHeight="20px">
+              <mat-panel-title>
+
+                <div *ngIf="!hasUnableToContinueProperty" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="pr-4">{{ formEntry.formItems.length }}</div>
+                  <div *ngIf="formEntry.formItems.length == 1">Property</div>
+                  <div *ngIf="formEntry.formItems.length != 1">Properties</div>
+                </div>
+
+                <div *ngIf="hasUnableToContinueProperty" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="pr-4">{{ formEntry.formItems.length - 1 }}</div>
+                  <div *ngIf="formEntry.formItems.length - 1 == 1">Property</div>
+                  <div *ngIf="formEntry.formItems.length - 1 != 1">Properties</div>
+                </div>
+
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div *ngFor="let item of formEntry.formItems" class="ml-8">
+              {{ addFormItemEntry(item) }}
+            </div>
+          </mat-expansion-panel>
+
+          <div [formGroup]="formEntry.formGroup">
+
+            <div *ngFor="let item of formEntry.formItems">
+              <mat-form-field style="width: 300px" *ngIf="item.controlType == 'tuple'">
+
+                <mat-select placeholder="{{item.label}} *" [formControlName]="item.key" [id]="item.key"
+                  [value]="item.value">
+                  <mat-option *ngFor="let opt of item.options" [value]="opt" (click)="handleTupleSelection(opt)">
+                    {{opt.label}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="formEntry.subEntries.length > 0">
+          Beeinhaltet die folgenden Unter-Einträge:
+        </div>
+        <div *ngFor="let entry of formEntry.subEntries">
+          <app-form-preview-entry [formEntry]="entry" [formConfiguration]="formConfiguration"
+            [exportClicked]="exportClicked" expanded="true" (result)="handleResultEvent($event)"
+            (tupleSelected)="emitTupleSelectionEvent($event)">
+          </app-form-preview-entry>
+
+        </div>
+
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

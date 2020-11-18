@@ -1,0 +1,54 @@
+<div #treePropertyFormItemContainer class="form-item-container-closed">
+
+  <mat-form-field class="form-field" [formGroup]="form" *ngIf="!showList">
+    <input matInput placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+      [id]="formItem.key" [value]="getFormItemValue()" (click)="onShowList()" style="cursor: pointer" readonly />
+  </mat-form-field>
+
+  <mat-form-field class="search-field" *ngIf="showList">
+    <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
+  </mat-form-field>
+
+  <div #treePropertyListContainer class="list-container">
+    <mat-action-list #treePropertyList>
+
+      <div *ngFor="let opt of datasource.filteredData">
+        <mat-list-item (click)=" onSelectOption(opt)" *ngIf="opt.selectable">
+          <div class="list-item-container" fxLayout="row">
+            <div class="list-item-row-padding" [ngStyle]="{'width': calculateSpaces(opt.level)}"></div>
+            <div class="list-item-row" [ngStyle]="{'margin-left': calculateIndent(opt.level)}" fxLayout="row"
+              fxLayoutAlign="start center">
+              <mat-icon class="list-item-icon" *ngIf="opt.level == 0" style="font-size: 20px;">chevron_right
+              </mat-icon>
+              <mat-icon class="list-item-icon" *ngIf="opt.level > 0" style="font-size: 18px;">
+                subdirectory_arrow_right</mat-icon>
+              <div class="list-item-value">{{opt.value}}</div>
+            </div>
+          </div>
+        </mat-list-item>
+
+        <div *ngIf="!opt.selectable" class="subheader-item" mat-subheader
+          [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">
+          {{opt.value}}
+        </div>
+
+      </div>
+
+    </mat-action-list>
+
+
+    <div style="margin: 12px 0;">
+      <div style="display: block; margin: 0 auto; width: max-content">
+        <button class="secondary-button-light-small" mat-stroked-button type="button" color="accent"
+          (click)="onSelectClear()">Wert
+          entfernen</button>
+        <button class="secondary-button-light-small" mat-stroked-button type="button" color="accent"
+          (click)="onHideList()" style="margin-left: 4px;">Zurück</button>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>

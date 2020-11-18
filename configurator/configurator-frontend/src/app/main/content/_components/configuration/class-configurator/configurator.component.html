@@ -1,0 +1,9 @@
+<div>
+  <div class="center-div" *ngIf="!loaded">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="loaded">
+    <app-class-configurator [redirectUrl]="redirectUrl" [tenantId]="tenantId"></app-class-configurator>
+  </div>
+</div>

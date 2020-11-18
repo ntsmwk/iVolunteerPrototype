@@ -1,0 +1,120 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+        <h1>Properties</h1>
+    </div>
+
+    <div class="center-div" *ngIf="!isLoaded">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="isLoaded">
+        <div class="m-8" fxLayout="row" fxLayoutAlign="space-between center">
+            <div></div>
+            <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 90%">
+
+                <div>
+                    <mat-form-field style="width: 200px">
+                        <input matInput (keyup)="handleTextFilterEvent($event)" placeholder="Suchen..."
+                            [(ngModel)]="textSearchValue" />
+                        <button *ngIf="textSearchValue" mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="textSearchValue=undefined; handleTextFilterEvent($event);">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+
+                    <mat-form-field class="ml-8">
+                        <mat-select placeholder="Filter" style="width: 200px" [(ngModel)]="dropdownFilterValue"
+                            (selectionChange)="applyTypeFilter()">
+                            <mat-option value="all">Alle</mat-option>
+                            <mat-option value="flat">Nur Flat-Properties</mat-option>
+                            <mat-option value="tree">Nur Tree-Properties</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-slide-toggle class="pr-8" [(ngModel)]="customOnly" (change)="handleCustomOnlyToggle()"
+                        labelPosition="after">
+                        Nur Benutzerdefiniert
+                    </mat-slide-toggle>
+                </div>
+
+                <div></div>
+
+                <div>
+                    <button class="secondary-button-dark-small ml-24" mat-stroked-button type="button"
+                        (click)="newAction('flat')">Neues
+                        Flat-Property</button>
+                    <button class="secondary-button-dark-small ml-8" mat-stroked-button type="button"
+                        (click)="newAction('tree')">Neues
+                        Tree-Property</button>
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+
+
+        <div class="table" fxLayout="row" fxLayoutAlign="space-between center">
+            <div></div>
+            <mat-table #table [dataSource]="dataSource" style="width: 80%" *ngIf="dataSource.data.length != 0">
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let property">{{property.name}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="type">
+                    <mat-header-cell *matHeaderCellDef>Typ</mat-header-cell>
+                    <mat-cell *matCellDef="let property">&lt;{{getPropertyTypeLabel(property.type)}}&gt;</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="filler">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let property"></mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef>Aktionen</mat-header-cell>
+                    <mat-cell *matCellDef="let property">
+
+                        <!-- <mat-icon class="iconButton" (click)="viewPropertyAction(property)" style="cursor: pointer"
+                            matTooltip="View Property {{property.name}}" matTooltipPosition="above"
+                            aria-label="View Property">remove_red_eye</mat-icon>
+
+                        <div>&nbsp;</div> -->
+                        <mat-icon *ngIf="property.custom" class="iconButton" (click)="editAction(property)"
+                            style="cursor: pointer" matTooltip="{{property.name}} bearbeiten" matTooltipPosition="above"
+                            aria-label="bearbeiten">edit</mat-icon>
+
+                        <div>&nbsp;</div>
+
+                        <mat-icon *ngIf="property.custom" class="iconButton" (click)="deleteAction(property)"
+                            style="cursor: pointer" matTooltip="Delete Property {{property.name}}"
+                            matTooltipPosition="above" aria-label="Delete Property">delete</mat-icon>
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <!-- <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editPropertyAction(row)"></mat-row> -->
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+
+            <div *ngIf="dataSource.data.length == 0">
+                keine Einträge vorhanden
+            </div>
+
+            <div></div>
+
+        </div>
+
+    </div>
+
+    <!-- <div *ngIf="isLoaded" class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+        <button mat-fab class="mat-warn" (click)="newPropertyAction()" aria-label="New Property" *fuseIfOnDom
+            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}" matTooltip="New Property"
+            matTooltipPosition="above">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div> -->
+
+</div>

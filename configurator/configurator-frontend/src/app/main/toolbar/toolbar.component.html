@@ -1,0 +1,35 @@
+<mat-toolbar class="p-0 mat-elevation-z1 headingTopConfigurator">
+  <mat-progress-bar *ngIf="showLoadingBar" class="loading-bar" color="accent" mode="indeterminate"></mat-progress-bar>
+
+  <div fxFlex fxFill fxLayout="row" fxLayoutAlign="start center">
+    <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+      <button mat-icon-button class="toggle-button-navbar" *ngIf="!noNav" (click)="toggleSidebarOpened('navbar')"
+        fxHide.gt-md>
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="toolbar-separator" fxHide.gt-md></div>
+
+      <div fxLayout="row" fxLayoutAlign="start center" *ngIf="horizontalNav">
+        <div class="logo ml-16">
+          <img class="logo-icon" src="assets/logo.png" />
+        </div>
+      </div>
+
+      <div class="px-8 px-mat-16" fxHide>
+        <fuse-shortcuts *ngIf="navigation" [navigation]="navigation"></fuse-shortcuts>
+      </div>
+
+      <div class="px-8 px-mat-16">
+        <!-- <fuse-marketplace-selection></fuse-marketplace-selection> -->
+        <div class="logo ml-16">
+          <!-- <img class="logo-icon" src="assets/ebnerLogo.jpg">
+          <div class="pl-12"></div> -->
+          <h1 class="headingText">{{ headingText }}</h1>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</mat-toolbar>

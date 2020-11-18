@@ -1,0 +1,134 @@
+<div class="page-layout" [formGroup]="form">
+
+  <ng-template *ngTemplateOutlet="formItemTemplate"></ng-template>
+
+  <ng-template #formItemTemplate>
+    <div [ngSwitch]="formItem.controlType">
+
+      <mat-form-field class="form-field" *ngSwitchCase="'textbox'">
+        <input matInput placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+          [id]="formItem.key" [type]="formItem.type" [value]="formItem.value" />
+
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'textarea'">
+        <textarea matInput placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+          [id]="formItem.key" [type]="formItem.type" [value]="formItem.value" matTextareaAutosize matAutosizeMinRows=5
+          matAutosizeMaxRows=10></textarea>
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'numberbox'">
+        <input matInput placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+          [id]="formItem.key" type="number" [value]="formItem.value" />
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'dropdown'">
+        <mat-select placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+          [id]="formItem.key" [value]="formItem.value">
+          <mat-option *ngFor="let opt of formItem.options" [value]="opt">{{opt}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'dropdown-multiple'">
+        <mat-select placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+          [id]="formItem.key" multiple [(ngModel)]="formItem.values">
+          <mat-option *ngFor="let opt of formItem.options" [value]="opt.key">{{opt.value}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'numberdropdown'">
+        <mat-select placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+          [id]="formItem.key" [value]="formItem.value">
+          <mat-option *ngFor="let opt of formItem.options" [value]="opt">{{opt}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'radiobutton'" floatPlaceholder="always">
+        <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
+        <input matInput placeholder="{{formItem.label}} {{requiredMarker}}" style="display: none">
+        <br>
+        <br>
+        <mat-radio-group name="{{formItem.label}}" [formControlName]="formItem.key" [id]="formItem.key">
+          <mat-radio-button *ngFor="let opt of formItem.options" [value]="opt">{{opt}} &nbsp;&nbsp;&nbsp;
+          </mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+
+
+      <ng-container *ngSwitchCase="'datepicker'">
+        <mat-form-field class="form-field">
+
+          <input matInput [matDatepicker]="picker" placeholder="{{formItem.label}} {{requiredMarker}}"
+            formControlName="{{formItem.key}}" [value]="formItem.value">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+
+        </mat-form-field>
+      </ng-container>
+
+      <mat-card *ngSwitchCase="'slidetoggle'">
+        <mat-slide-toggle class="slide-toggle-field" [id]="formItem.key" [formControlName]="formItem.key"
+          [checked]="formItem.value">
+          {{formItem.label}}
+        </mat-slide-toggle>
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-card>
+
+
+      <div *ngSwitchCase="'multiple'" class="nested-border" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <!--Display formItem label (name of property)-->
+        <h2>{{ formItem.label }}</h2>
+        <!--Iterate though sub-items, for every formItem call <app-form-item> -->
+        <div *ngFor="let q of formItem.subItems">
+          <app-form-item [formItem]="q" [form]="getNestedFormGroups()" [submitPressed]="submitPressed"></app-form-item>
+        </div>
+        <mat-error *ngIf="submitPressed && form.controls[formItem.key].invalid ">{{ displayErrorMessage() }}</mat-error>
+
+      </div>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'tuple'">
+        <mat-select placeholder="{{formItem.label}} {{requiredMarker}}" [formControlName]="formItem.key"
+          [id]="formItem.key" [value]="formItem.value">
+          <mat-option *ngFor="let opt of formItem.options" [value]="opt" (click)="handleTupleSelection(opt)">
+            {{opt.label}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[formItem.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <app-location-item *ngSwitchCase="'location'" [formItem]="formItem" [form]="form">
+
+      </app-location-item>
+
+      <app-computed-item *ngSwitchCase="'computed'" [formItem]="formItem" [form]="form">
+
+      </app-computed-item>
+
+      <div *ngSwitchCase="'generic'">
+        generic - formItem controlType not yet implemented: {{ formItem.label }}
+      </div>
+
+      <div *ngSwitchCase="'tree-single-select'">
+        <app-single-select-tree-item [formItem]="formItem" [form]="form"></app-single-select-tree-item>
+      </div>
+
+      <div *ngSwitchCase="'tree-multiple-select'">
+        <app-multiple-select-tree-item [formItem]="formItem"></app-multiple-select-tree-item>
+      </div>
+
+
+    </div>
+  </ng-template>
+
+
+</div>
