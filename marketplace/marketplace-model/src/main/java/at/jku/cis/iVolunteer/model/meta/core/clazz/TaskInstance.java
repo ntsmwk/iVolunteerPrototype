@@ -12,19 +12,31 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 public class TaskInstance extends ClassInstance {
 
 	private List<String> subscribedVolunteerIds = new ArrayList<>();
+	private List<String> badgeTemplateIds = new ArrayList<>();
 	private TaskInstanceStatus status;
 
 	public List<String> getSubscribedVolunteerIds() {
 		return subscribedVolunteerIds;
 	}
+
 	public void setSubscribedVolunteerIds(List<String> subscribedVolunteerIds) {
 		this.subscribedVolunteerIds = subscribedVolunteerIds;
 	}
+
 	public TaskInstanceStatus getStatus() {
 		return status;
 	}
+
 	public void setStatus(TaskInstanceStatus status) {
 		this.status = status;
+	}
+
+	public List<String> getBadgeTemplateIds() {
+		return badgeTemplateIds;
+	}
+
+	public void setBadgeTemplateIds(List<String> badgeTemplateIds) {
+		this.badgeTemplateIds = badgeTemplateIds;
 	}
 
 	@Override
@@ -40,17 +52,25 @@ public class TaskInstance extends ClassInstance {
 	}
 
 	public TaskInstance updateTaskInstance(TaskInstance newTaskInstance) {
-		this.setClassDefinitionId(newTaskInstance.getClassDefinitionId() != null ? newTaskInstance.getClassDefinitionId() : this.getClassDefinitionId());
+		this.setClassDefinitionId(
+				newTaskInstance.getClassDefinitionId() != null ? newTaskInstance.getClassDefinitionId()
+						: this.getClassDefinitionId());
 		this.setName(newTaskInstance.getName() != null ? newTaskInstance.getName() : this.getName());
-		this.setDescription(newTaskInstance.getDescription() != null ? newTaskInstance.getDescription() : this.getDescription());
+		this.setDescription(
+				newTaskInstance.getDescription() != null ? newTaskInstance.getDescription() : this.getDescription());
 		this.setUserId(newTaskInstance.getUserId() != null ? newTaskInstance.getUserId() : this.getUserId());
 		this.setIssuerId(newTaskInstance.getIssuerId() != null ? newTaskInstance.getIssuerId() : this.getIssuerId());
-		this.setImagePath(newTaskInstance.getImagePath() != null ? newTaskInstance.getImagePath() : this.getImagePath());
-		this.setClassArchetype(newTaskInstance.getClassArchetype() != null ? newTaskInstance.getClassArchetype() : this.getClassArchetype());
-		this.setChildClassInstances(newTaskInstance.getChildClassInstances() != null ? newTaskInstance.getChildClassInstances() : this.getChildClassInstances());
+		this.setImagePath(
+				newTaskInstance.getImagePath() != null ? newTaskInstance.getImagePath() : this.getImagePath());
+		this.setClassArchetype(newTaskInstance.getClassArchetype() != null ? newTaskInstance.getClassArchetype()
+				: this.getClassArchetype());
+		this.setChildClassInstances(
+				newTaskInstance.getChildClassInstances() != null ? newTaskInstance.getChildClassInstances()
+						: this.getChildClassInstances());
 		this.setVisible(newTaskInstance.isVisible() != null ? newTaskInstance.isVisible() : this.isVisible());
 		this.setTabId(newTaskInstance.getTabId() != null ? newTaskInstance.getTabId() : this.getTabId());
-		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate() : this.getBlockchainDate());
+		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate()
+				: this.getBlockchainDate());
 		this.setLevel(newTaskInstance.getLevel() != null ? newTaskInstance.getLevel() : this.getLevel());
 
 		if (newTaskInstance.getProperties() != null) {
@@ -62,26 +82,38 @@ public class TaskInstance extends ClassInstance {
 					this.getProperties().add(pi);
 				}
 			}
-		}		
-		
-		this.setSubscribedVolunteerIds(newTaskInstance.getSubscribedVolunteerIds() != null ? newTaskInstance.getSubscribedVolunteerIds() : this.getSubscribedVolunteerIds());
+		}
+		this.setBadgeTemplateIds(newTaskInstance.getBadgeTemplateIds() != null ? newTaskInstance.getBadgeTemplateIds()
+				: this.getBadgeTemplateIds());
+		this.setSubscribedVolunteerIds(
+				newTaskInstance.getSubscribedVolunteerIds() != null ? newTaskInstance.getSubscribedVolunteerIds()
+						: this.getSubscribedVolunteerIds());
 		this.setStatus(newTaskInstance.getStatus() != null ? newTaskInstance.getStatus() : this.getStatus());
 		return this;
 	}
-	
+
 	public TaskInstance updateTaskInstance(ClassInstance newTaskInstance) {
-		this.setClassDefinitionId(newTaskInstance.getClassDefinitionId() != null ? newTaskInstance.getClassDefinitionId() : this.getClassDefinitionId());
+		this.setClassDefinitionId(
+				newTaskInstance.getClassDefinitionId() != null ? newTaskInstance.getClassDefinitionId()
+						: this.getClassDefinitionId());
 		this.setName(newTaskInstance.getName() != null ? newTaskInstance.getName() : this.getName());
-		this.setDescription(newTaskInstance.getDescription() != null ? newTaskInstance.getDescription() : this.getDescription());
-		this.setProperties(newTaskInstance.getProperties() != null ? newTaskInstance.getProperties() : this.getProperties());
+		this.setDescription(
+				newTaskInstance.getDescription() != null ? newTaskInstance.getDescription() : this.getDescription());
+		this.setProperties(
+				newTaskInstance.getProperties() != null ? newTaskInstance.getProperties() : this.getProperties());
 		this.setUserId(newTaskInstance.getUserId() != null ? newTaskInstance.getUserId() : this.getUserId());
 		this.setIssuerId(newTaskInstance.getIssuerId() != null ? newTaskInstance.getIssuerId() : this.getIssuerId());
-		this.setImagePath(newTaskInstance.getImagePath() != null ? newTaskInstance.getImagePath() : this.getImagePath());
-		this.setClassArchetype(newTaskInstance.getClassArchetype() != null ? newTaskInstance.getClassArchetype() : this.getClassArchetype());
-		this.setChildClassInstances(newTaskInstance.getChildClassInstances() != null ? newTaskInstance.getChildClassInstances() : this.getChildClassInstances());
+		this.setImagePath(
+				newTaskInstance.getImagePath() != null ? newTaskInstance.getImagePath() : this.getImagePath());
+		this.setClassArchetype(newTaskInstance.getClassArchetype() != null ? newTaskInstance.getClassArchetype()
+				: this.getClassArchetype());
+		this.setChildClassInstances(
+				newTaskInstance.getChildClassInstances() != null ? newTaskInstance.getChildClassInstances()
+						: this.getChildClassInstances());
 		this.setVisible(newTaskInstance.isVisible() != null ? newTaskInstance.isVisible() : this.isVisible());
 		this.setTabId(newTaskInstance.getTabId() != null ? newTaskInstance.getTabId() : this.getTabId());
-		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate() : this.getBlockchainDate());
+		this.setBlockchainDate(newTaskInstance.getBlockchainDate() != null ? newTaskInstance.getBlockchainDate()
+				: this.getBlockchainDate());
 		this.setLevel(newTaskInstance.getLevel() != null ? newTaskInstance.getLevel() : this.getLevel());
 		this.setProperties(newTaskInstance.getProperties());
 		this.setTenantId(newTaskInstance.getTenantId() != null ? newTaskInstance.getTenantId() : this.getTenantId());

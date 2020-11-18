@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.badge.XBadgeCertificateService;
 import at.jku.cis.iVolunteer.marketplace.core.CoreStorageRestClient;
+import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
@@ -28,6 +30,9 @@ import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.XTaskSubscribedResponse;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToPostTaskRequestMapper;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToTaskMapper;
+import at.jku.cis.iVolunteer.model._mapper.xnet.XTenantToTenantSerializedMapper;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.core.tenant.XTenantSerialized;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
@@ -38,20 +43,17 @@ import at.jku.cis.iVolunteer.model.user.User;
 @RequestMapping("/task")
 public class XTaskController {
 
-	@Autowired
-	private ClassInstanceController classInstanceController;
-	@Autowired
-	private LoginService loginService;
-	@Autowired
-	private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
-	@Autowired
-	private XTaskInstanceService xTaskInstanceService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
-	@Autowired
-	private CoreStorageRestClient coreStorageRestClient;
+	@Autowired private ClassInstanceController classInstanceController;
+	@Autowired private LoginService loginService;
+	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
+	@Autowired private XTaskInstanceService xTaskInstanceService;
+	@Autowired private UserService userService;
+	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
+	@Autowired private CoreStorageRestClient coreStorageRestClient;
+	@Autowired private XBadgeCertificateService badgeCertificateService;
+	@Autowired private CoreTenantRestClient tenantRestClient;
+	@Autowired private XTenantToTenantSerializedMapper xTenantToTenantSerializedMapper;
+
 
 	@PostMapping("/new")
 	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
@@ -110,7 +112,7 @@ public class XTaskController {
 				classInstance.setIssuerId(task.getTenantId());
 				classInstance.setId(null);
 				addedClassInstances.add(classInstance);
-				// TODO BadgeCertificates ausstellen
+				createBadgeCertificates(task.getBadgeTemplateIds(), userId, task.getTenantId());
 			}
 
 			addedClassInstances = classInstanceController.createNewClassInstances(addedClassInstances);
@@ -132,13 +134,13 @@ public class XTaskController {
 
 		if (taskInstance.getSubscribedVolunteerIds() != null) {
 			List<ClassInstance> addedClassInstances = new ArrayList<>();
-			for (String id : taskInstance.getSubscribedVolunteerIds()) {
+			for (String userId : taskInstance.getSubscribedVolunteerIds()) {
 				ClassInstance classInstance = new ClassInstance(taskInstance);
 
-				classInstance.setUserId(id);
+				classInstance.setUserId(userId);
 				classInstance.setId(null);
 				addedClassInstances.add(classInstance);
-				// TODO BadgeCertificates ausstellen
+				createBadgeCertificates(taskInstance.getBadgeTemplateIds(), userId, taskInstance.getTenantId());
 			}
 
 			addedClassInstances = classInstanceController.createNewClassInstances(addedClassInstances);
@@ -149,6 +151,13 @@ public class XTaskController {
 			return ResponseEntity.ok().build();
 		}
 
+	}
+
+	private void createBadgeCertificates(List<String> badgeTemplateIds, String userId, String tenantId) {
+		Tenant tenant = tenantRestClient.getTenantById(tenantId, "");
+		XTenantSerialized tenantSerialized = xTenantToTenantSerializedMapper.toTarget(tenant);
+		badgeTemplateIds
+				.forEach(bt -> this.badgeCertificateService.createBadgeCertificate(userId, bt, tenantSerialized));
 	}
 
 	@GetMapping("/{taskId}")

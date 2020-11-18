@@ -52,4 +52,11 @@ public class XBadgeTemplateController {
 
 		return ResponseEntity.ok().build();
 	}
+	
+	@PostMapping("/init")
+	public ResponseEntity<Object> createBadgeTemplate(@RequestBody XBadgeTemplate badgeTemplate) {
+		badgeTemplateRepository.save(badgeTemplate);
+		return ResponseEntity.ok().build();
+	}
+
 }
