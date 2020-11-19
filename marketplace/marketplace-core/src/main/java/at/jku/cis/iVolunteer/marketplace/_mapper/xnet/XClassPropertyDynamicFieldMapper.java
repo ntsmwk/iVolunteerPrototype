@@ -26,6 +26,7 @@ public class XClassPropertyDynamicFieldMapper implements AbstractMapper<ClassPro
 		field.setMultiple(source.isMultiple());
 		field.setType(source.getType());
 		field.setAllowedValues(source.getAllowedValues());
+		
 		field.setUnit(source.getUnit());
 		field.setRequired(source.isRequired());
 		field.setRequiredMessage(null);
