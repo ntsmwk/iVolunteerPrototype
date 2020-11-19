@@ -60,6 +60,7 @@ public class MatchingConfigurationService {
 	}
 		
 	public MatchingConfiguration saveMatchingConfiguration(MatchingConfiguration matchingConfiguration) {
+		matchingConfiguration.setTimestamp(new Date());
 		return matchingConfigurationRepository.save(matchingConfiguration);
 	}
 

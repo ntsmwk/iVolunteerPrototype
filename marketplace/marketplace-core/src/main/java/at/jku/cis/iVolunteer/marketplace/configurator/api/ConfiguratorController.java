@@ -133,7 +133,7 @@ public class ConfiguratorController {
 			return false;
 		}
 		
-		matchingConfigurationController.deleteMultipleMatchingConfigurations(req.getIdsToDelete());
+		req.getIdsToDelete().forEach(matchingConfigurationController::deleteMatchingConfiguration);
 		
 		return true;
 	}

@@ -134,6 +134,8 @@ export class TreePropertyBuilderComponent implements OnInit {
   handleResult(event: { type: string; payload: TreePropertyDefinition }) {
 
     event.payload.tenantId = this.tenantId;
+    event.payload.required = this.form.value.required;
+    event.payload.requiredMessage = event.payload.required ? this.form.value.requiredMessage : undefined;
 
     if (event.type === 'save') {
       event.payload.description = this.form.controls['description'].value;

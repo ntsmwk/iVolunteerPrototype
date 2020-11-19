@@ -765,7 +765,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       try {
         this.graph.getModel().beginUpdate();
 
-        let cell = this.graph.getModel().getCell(event.id) as MyMxCell;
+        let cell = this.graph.getModel().getChildVertices(this.graph.getDefaultParent()).find(c => c.id === event.id) as MyMxCell;
+
         cell.matchingOperatorType = event.matchingOperatorType;
         this.graph.setCellStyle(
           `shape=image;image=${this.getPathForMatchingOperatorType(cell.matchingOperatorType)};` +

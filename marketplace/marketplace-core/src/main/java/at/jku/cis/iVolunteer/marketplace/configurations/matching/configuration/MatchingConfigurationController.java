@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
+import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelationship;
 
 @RestController
 public class MatchingConfigurationController {
 
 	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
 	@Autowired private MatchingConfigurationService matchingConfigurationService;
+	@Autowired private MatchingOperatorRelationshipRepository matchingOperatorRelationshipRepository;
 
 	@GetMapping("matching-configuration/all")
 	public List<MatchingConfiguration> getAllMatchingConfigurations() {
@@ -25,7 +28,7 @@ public class MatchingConfigurationController {
 	}
 	
 	@GetMapping("matching-configuration/{id}")
-	public MatchingConfiguration getAllMatchingConfigurationsById(@PathVariable("id") String id) {
+	public MatchingConfiguration getMatchingConfigurationById(@PathVariable("id") String id) {
 		return matchingConfigurationRepository.findOne(id);
 	}
 
@@ -52,14 +55,19 @@ public class MatchingConfigurationController {
 	}
 
 	@DeleteMapping("matching-configuration/{id}/delete")
-	public void deleteMatchingConfiguration(@PathVariable("id") String id) {
+	public boolean deleteMatchingConfiguration(String id) {
+		if (id == null) {
+			return false;
+		}
+		
+		MatchingConfiguration config = getMatchingConfigurationById(id);
+		
+		List<MatchingOperatorRelationship> relationships = matchingOperatorRelationshipRepository.findByMatchingConfigurationId(id);
+		relationships.forEach(matchingOperatorRelationshipRepository::delete);
+		
 		matchingConfigurationRepository.delete(id);
-	}
+		return true;
 
-	@PutMapping("matching-configuration/delete-multiple")
-	public List<MatchingConfiguration> deleteMultipleMatchingConfigurations(@RequestBody() List<String> ids) {
-		ids.forEach(this.matchingConfigurationRepository::delete);
-		return this.matchingConfigurationRepository.findAll();
 	}
 
 }
