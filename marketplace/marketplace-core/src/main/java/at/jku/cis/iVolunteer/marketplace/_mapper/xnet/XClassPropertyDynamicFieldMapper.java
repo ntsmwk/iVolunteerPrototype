@@ -3,19 +3,26 @@ package at.jku.cis.iVolunteer.marketplace._mapper.xnet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyEntry;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XDynamicField;;
 
 @Component
 public class XClassPropertyDynamicFieldMapper implements AbstractMapper<ClassProperty<Object>, XDynamicField> {
 
+	@Autowired ObjectMapper objectMapper;
+	
 	@Override
 	public XDynamicField toTarget(ClassProperty<Object> source) {
 		if (source == null) {
@@ -30,7 +37,36 @@ public class XClassPropertyDynamicFieldMapper implements AbstractMapper<ClassPro
 		field.setCustom(false); // TODO
 		field.setMultiple(source.isMultiple());
 		field.setType(source.getType());
-		field.setAllowedValues(source.getAllowedValues());
+		
+		if (source.getType().equals(PropertyType.TREE)) {
+			for (Object v : source.getAllowedValues()) {
+//				TreePropertyEntry allowedValue = (TreePropertyEntry) v;
+				
+				TreePropertyEntry allowedValue = objectMapper.convertValue(v, TreePropertyEntry.class);
+				
+				if (allowedValue.isSelectable()) {
+					allowedValue.setParents(new ArrayList<TreePropertyEntry>());
+					int index = source.getAllowedValues().indexOf(v);
+		            int currentLevel = allowedValue.getLevel();
+	
+		            for (int i = index; i >= 0; i--) {
+		                TreePropertyEntry currentAllowedValue = objectMapper.convertValue(source.getAllowedValues().get(i), TreePropertyEntry.class);
+		                if (currentAllowedValue.getLevel() < currentLevel) {
+		                    // this.values.push(classProperty.allowedValues[i]);
+		                    allowedValue.getParents().add(currentAllowedValue);
+		                    currentLevel--;
+		                }
+		            }
+					field.getAllowedValues().add(allowedValue);
+
+				}
+			}
+			
+		} else {
+			field.setAllowedValues(source.getAllowedValues());
+		}
+		
+		
 		field.setUnit(source.getUnit());
 		field.setRequired(source.isRequired());
 		field.setRequiredMessage(null);
