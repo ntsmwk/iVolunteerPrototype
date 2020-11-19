@@ -375,6 +375,7 @@ public class StandardPropertyDefinitions {
 		public void inst(String tenantId) {
 			this.setName("TaskType");
 			this.setTenantId(tenantId);
+			this.setRequired(true);
 			this.setId(UUID.randomUUID().toString());
 
 			// Ausrückung
@@ -527,6 +528,7 @@ public class StandardPropertyDefinitions {
 		@PostConstruct
 		public void inst(String tenantId) {
 			this.setName("TaskType");
+			this.setRequired(true);
 			this.setTenantId(tenantId);
 			this.setId(UUID.randomUUID().toString());
 
@@ -773,6 +775,7 @@ public class StandardPropertyDefinitions {
 		@PostConstruct
 		public void inst(String tenantId) {
 			this.setName("Duration");
+			this.setRequired(true);
 			this.setTenantId(tenantId);
 		}
 	}
