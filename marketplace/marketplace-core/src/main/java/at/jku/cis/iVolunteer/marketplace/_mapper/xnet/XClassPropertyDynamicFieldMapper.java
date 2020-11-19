@@ -38,10 +38,8 @@ public class XClassPropertyDynamicFieldMapper implements AbstractMapper<ClassPro
 		field.setMultiple(source.isMultiple());
 		field.setType(source.getType());
 		
-		if (source.getType().equals(PropertyType.TREE)) {
-			for (Object v : source.getAllowedValues()) {
-//				TreePropertyEntry allowedValue = (TreePropertyEntry) v;
-				
+		if (source.getType().equals(PropertyType.TREE) && source.getAllowedValues() != null) {
+			for (Object v : source.getAllowedValues()) {				
 				TreePropertyEntry allowedValue = objectMapper.convertValue(v, TreePropertyEntry.class);
 				
 				if (allowedValue.isSelectable()) {
@@ -52,13 +50,11 @@ public class XClassPropertyDynamicFieldMapper implements AbstractMapper<ClassPro
 		            for (int i = index; i >= 0; i--) {
 		                TreePropertyEntry currentAllowedValue = objectMapper.convertValue(source.getAllowedValues().get(i), TreePropertyEntry.class);
 		                if (currentAllowedValue.getLevel() < currentLevel) {
-		                    // this.values.push(classProperty.allowedValues[i]);
 		                    allowedValue.getParents().add(currentAllowedValue);
 		                    currentLevel--;
 		                }
 		            }
 					field.getAllowedValues().add(allowedValue);
-
 				}
 			}
 			
