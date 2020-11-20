@@ -11,10 +11,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { BrowseClassSubDialogModule } from '../browse-sub-dialog/browse-sub-dialog.module';
 import { FuseSharedModule } from '@fuse/shared.module';
+import { MatToolbarModule, MatTooltipModule } from '@angular/material';
 
 @NgModule({
   imports: [
-    CommonModule,
+    FuseSharedModule,
     MatCommonModule,
     MatTableModule,
     MatDialogModule,
@@ -23,8 +24,9 @@ import { FuseSharedModule } from '@fuse/shared.module';
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-
+    MatToolbarModule,
     BrowseClassSubDialogModule,
+    MatTooltipModule,
 
   ],
   declarations: [OpenClassConfigurationDialogComponent],

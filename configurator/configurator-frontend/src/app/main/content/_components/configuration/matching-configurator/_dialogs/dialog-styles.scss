@@ -45,15 +45,18 @@
       padding-bottom: 4px;
       cursor: pointer;
 
-      .name-cell {
+      .class-configurator-name-cell {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 205px;
+        max-width: 100px;
       }
 
-      .date-cell {
-        font-size: 12px;
+      .matching-configurator-name-cell {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 250px;
       }
     }
 

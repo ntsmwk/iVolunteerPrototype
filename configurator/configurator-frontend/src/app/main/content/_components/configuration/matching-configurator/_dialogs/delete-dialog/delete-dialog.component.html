@@ -35,9 +35,9 @@
             (click)="$event.stopPropagation();">
           </mat-checkbox>
         </td>
-        <td style="overflow: hidden">{{entry.name}}</td>
-        <td style="overflow: hidden">{{entry.leftSideName}}</td>
-        <td style="overflow: hidden">{{entry.rightSideName}}</td>
+        <td class="class-configurator-name-cell" [matTooltip]="entry.name">{{entry.name}}</td>
+        <td class="matching-configurator-name-cell" [matTooltip]="entry.leftSideName">{{entry.leftSideName}}</td>
+        <td class="matching-configurator-name-cell" [matTooltip]="entry.rightSideName">{{entry.rightSideName}}</td>
       </tr>
     </table>
 

@@ -17,7 +17,7 @@ import { MatButtonModule, MatTooltipModule, MatIconModule, MatCheckboxModule, Ma
     MatTooltipModule,
     MatIconModule,
     MatCheckboxModule,
-
+    MatTooltipModule,
 
     FuseSharedModule,
   ],

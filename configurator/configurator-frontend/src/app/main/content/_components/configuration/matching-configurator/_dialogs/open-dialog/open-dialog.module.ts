@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { BrowseMatchingSubDialogModule } from 'app/main/content/_components/configuration/matching-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.module';
+import { MatTooltipModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -22,7 +23,7 @@ import { BrowseMatchingSubDialogModule } from 'app/main/content/_components/conf
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-
+    MatTooltipModule,
     BrowseMatchingSubDialogModule,
 
 
