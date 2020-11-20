@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/configurator/configurations';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Relationship } from 'app/main/content/_model/configurator/relationship';
 import { ClassDefinition } from 'app/main/content/_model/configurator/class';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
@@ -48,11 +48,12 @@ export class NewClassConfigurationDialogComponent implements OnInit {
         this.allClassConfigurations = classConfigurations;
         this.dialogForm = new FormGroup({
           label: new FormControl('', isNullOrUndefined(this.data.classConfiguration) ?
-            stringUniqueValidator(this.allClassConfigurations.map(c => c.name))
-            : stringUniqueValidator(this.allClassConfigurations.map(c => c.name), [this.data.classConfiguration.name])
+            [Validators.required, stringUniqueValidator(this.allClassConfigurations.map(c => c.name))]
+            : [Validators.required, stringUniqueValidator(this.allClassConfigurations.map(c => c.name), [this.data.classConfiguration.name])]
           ),
-          description: new FormControl('')
-          // rootLabel: new FormControl('')
+          description: new FormControl(''),
+          // rootLabel: new FormControl(''),
+
         });
 
         if (!isNullOrUndefined(this.data.classConfiguration)) {
@@ -63,6 +64,11 @@ export class NewClassConfigurationDialogComponent implements OnInit {
           this.dialogForm
             .get('description')
             .setValue(this.data.classConfiguration.description);
+        }
+
+        if (!this.showEditDialog) {
+          this.dialogForm.addControl("type", new FormControl('', Validators.required));
+          this.dialogForm.get('type').setValue('ivolunteer');
         }
         // ----DEBUG
         // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
@@ -75,6 +81,10 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   }
 
   displayErrorMessage(key: string) {
+
+    if (key === 'required') {
+      return 'Pflichtfeld';
+    }
     if (key === 'label') {
       return 'Name bereits vorhanden';
     }
@@ -100,7 +110,9 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     classConfiguration.name = formValues.name;
     classConfiguration.description = formValues.description;
 
-    this.responseService.sendClassConfiguratorResponse(this.data.redirectUrl, { classConfiguration, tenantId: this.data.tenantId }, null, 'new').toPromise()
+    this.responseService.sendClassConfiguratorResponse(
+      this.data.redirectUrl, { classConfiguration, tenantId: this.data.tenantId }, null, 'new', this.dialogForm.value.type
+    ).toPromise()
       .then((cc: ClassConfiguration) => {
         this.data.classConfiguration = cc;
         Promise.all([

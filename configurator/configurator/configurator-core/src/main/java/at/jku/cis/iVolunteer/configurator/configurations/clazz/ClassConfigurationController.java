@@ -116,7 +116,7 @@ public class ClassConfigurationController {
 		}
 
 		ClassConfiguration newClassConfiguration = createAndSaveNewClassConfiguration(params[0], params[1], params[2],
-				null);
+				null, null);
 		return newClassConfiguration;
 	}
 
@@ -194,9 +194,9 @@ public class ClassConfigurationController {
 		if (id == null) {
 			return;
 		}
-		
+
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(id);
-		
+
 		if (classConfiguration == null) {
 			return;
 		}
@@ -212,10 +212,12 @@ public class ClassConfigurationController {
 		ids.forEach(this::deleteClassConfiguration);
 		return this.classConfigurationRepository.findAll();
 	}
-	
-	public ClassConfiguration createAndSaveNewClassConfiguration(String tenantId, String configuratorName, String description, String configuratorId) {
-		ClassConfigurationBundle bundle = createNewClassConfiguration(tenantId, configuratorName, description, configuratorId);
-		
+
+	public ClassConfiguration createAndSaveNewClassConfiguration(String tenantId, String configuratorName,
+			String description, String configuratorId, String key) {
+
+		ClassConfigurationBundle bundle = createNewClassConfiguration(tenantId, configuratorName, description, configuratorId, key);
+
 		for (ClassDefinition cd : bundle.getClassDefinitions()) {
 			this.classDefinitionRepository.save(cd);
 		}
@@ -223,14 +225,39 @@ public class ClassConfigurationController {
 		for (Relationship r : bundle.getRelationships()) {
 			this.relationshipRepository.save(r);
 		}
-		
+
 		return saveClassConfiguration(bundle.getClassConfiguration());
+	}
+	
+	public ClassConfigurationBundle createNewClassConfiguration(String tenantId, String configuratorName, String description, String configuratorId, String key) {
+		if (key == null) {
+			key = "iVolunteer";
+		}
+
+		ClassConfigurationBundle bundle = null;
+		switch (key) {
+			case "iVolunteer":
+				bundle = createNewiVolunteerClassConfiguration(tenantId, configuratorName, description, configuratorId);
+				break;
+			case "flexprodHaubenofen":
+				bundle = createHaubenofenClassConfiguration(tenantId, configuratorName, description, configuratorId);
+				break;
+			case "flexprodRFQ":
+				bundle = createRFQClassConfiguration(tenantId, configuratorName, description, configuratorId);
+				break;
+			case "empty":
+			default:
+				bundle = createEmptyClassConfiguration(tenantId, configuratorName, description, configuratorId);
+				break;
+		}
+		
+		return bundle;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ClassConfigurationBundle createNewClassConfiguration(String tenantId, String configuratorName,
+	public ClassConfigurationBundle createNewiVolunteerClassConfiguration(String tenantId, String configuratorName,
 			String description, String configuratorId) {
-		
+
 		if (configuratorId == null) {
 			configuratorId = new ObjectId().toHexString();
 		}
@@ -455,16 +482,14 @@ public class ClassConfigurationController {
 
 		for (ClassDefinition cd : classDefinitions) {
 			cd.setConfigurationId(configurator.getId());
-//			this.classDefinitionRepository.save(cd);
 			configurator.getClassDefinitionIds().add(cd.getId());
 		}
 
 		for (Relationship r : relationships) {
-//			this.relationshipRepository.save(r);
 			r.setId(new ObjectId().toHexString());
 			configurator.getRelationshipIds().add(r.getId());
 		}
-		
+
 		ClassConfigurationBundle ret = new ClassConfigurationBundle();
 		ret.setClassConfiguration(configurator);
 		ret.setClassDefinitions(classDefinitions);
@@ -472,11 +497,14 @@ public class ClassConfigurationController {
 
 		return ret;
 	}
-	
-	
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ClassConfiguration createAndSaveHaubenofen(String tenantId) {
+	public ClassConfigurationBundle createHaubenofenClassConfiguration(String tenantId, String configuratorName,
+			String configuratorDescription, String configuratorId) {
+		
+		if (configuratorId == null) {
+			configuratorId = new ObjectId().toHexString();
+		}
 
 		List<FlatPropertyDefinition<Object>> flatProperties = this.flatPropertyDefinitionRepository
 				.getByTenantId(tenantId);
@@ -492,6 +520,8 @@ public class ClassConfigurationController {
 		machine.setClassArchetype(ClassArchetype.ROOT);
 		machine.setProperties(new ArrayList<>());
 		machine.setLevel(0);
+		machine.setWriteProtected(true);
+		machine.setRoot(true);
 		classDefinitionsOfen.add(machine);
 
 		//
@@ -618,30 +648,39 @@ public class ClassConfigurationController {
 		ClassConfiguration configuratorOfen = new ClassConfiguration();
 		configuratorOfen.setTimestamp(new Date());
 		configuratorOfen.setTenantId(tenantId);
-		configuratorOfen.setId(new ObjectId().toHexString());
-		configuratorOfen.setName("Haubenofen");
-		configuratorOfen.setDescription("");
+		configuratorOfen.setId(configuratorId);
+		configuratorOfen.setName(configuratorName);
+		configuratorOfen.setDescription(configuratorDescription);
 		configuratorOfen.setClassDefinitionIds(new ArrayList<>());
 		configuratorOfen.setRelationshipIds(new ArrayList<>());
 
 		for (ClassDefinition cd : classDefinitionsOfen) {
 			cd.setConfigurationId(configuratorOfen.getId());
-			this.classDefinitionRepository.save(cd);
 			configuratorOfen.getClassDefinitionIds().add(cd.getId());
 		}
 
 		for (Relationship r : relationshipsOfen) {
-			this.relationshipRepository.save(r);
+			r.setId(new ObjectId().toHexString());
 			configuratorOfen.getRelationshipIds().add(r.getId());
 		}
-		ClassConfiguration cc = saveClassConfiguration(configuratorOfen);
-		return cc;
+
+		ClassConfigurationBundle ret = new ClassConfigurationBundle();
+		ret.setClassConfiguration(configuratorOfen);
+		ret.setClassDefinitions(classDefinitionsOfen);
+		ret.setRelationships(relationshipsOfen);
+		return ret;
 	}
 
 	// ------------
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ClassConfiguration createAndSaveRFQ(String tenantId) {
+	public ClassConfigurationBundle createRFQClassConfiguration(String tenantId, String configuratorName,
+			String configuratorDescription, String configuratorId) {
+		
+		if (configuratorId == null) {
+			configuratorId = new ObjectId().toHexString();
+		}
+		
 		List<FlatPropertyDefinition<Object>> flatProperties = this.flatPropertyDefinitionRepository
 				.getByTenantId(tenantId);
 
@@ -657,6 +696,9 @@ public class ClassConfigurationController {
 		rfq.setClassArchetype(ClassArchetype.ROOT);
 		rfq.setProperties(new ArrayList<>());
 		rfq.setLevel(0);
+		rfq.setWriteProtected(true);
+		rfq.setRoot(true);
+
 		classDefinitionsRfq.add(rfq);
 
 		ClassDefinition drahtAuftrag = new ClassDefinition();
@@ -793,25 +835,79 @@ public class ClassConfigurationController {
 		ClassConfiguration configuratorRfq = new ClassConfiguration();
 		configuratorRfq.setTimestamp(new Date());
 		configuratorRfq.setTenantId(tenantId);
-		configuratorRfq.setId(null);
-		configuratorRfq.setName("RFQ");
-		configuratorRfq.setDescription("");
+		configuratorRfq.setId(configuratorId);
+		configuratorRfq.setName(configuratorName);
+		configuratorRfq.setDescription(configuratorDescription);
 		configuratorRfq.setClassDefinitionIds(new ArrayList<>());
 		configuratorRfq.setRelationshipIds(new ArrayList<>());
 
 		for (ClassDefinition cd : classDefinitionsRfq) {
 			cd.setConfigurationId(configuratorRfq.getId());
-			this.classDefinitionRepository.save(cd);
+//			this.classDefinitionRepository.save(cd);
 			configuratorRfq.getClassDefinitionIds().add(cd.getId());
 		}
 
 		for (Relationship r : relationshipsRfq) {
-			this.relationshipRepository.save(r);
+//			this.relationshipRepository.save(r);
+			r.setId(new ObjectId().toHexString());
 			configuratorRfq.getRelationshipIds().add(r.getId());
 		}
-		ClassConfiguration cc = saveClassConfiguration(configuratorRfq);
-		return cc;
 
+		ClassConfigurationBundle ret = new ClassConfigurationBundle();
+		ret.setClassConfiguration(configuratorRfq);
+		ret.setClassDefinitions(classDefinitionsRfq);
+		ret.setRelationships(relationshipsRfq);
+		return ret;
+
+	}
+
+	public ClassConfigurationBundle createEmptyClassConfiguration(String tenantId, String configuratorName,
+			String configuratorDescription, String configuratorId) {
+		
+		if (configuratorId == null) {
+			configuratorId = new ObjectId().toHexString();
+		}
+		
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
+
+		// Maschine
+		ClassDefinition def = new ClassDefinition();
+		def.setId(new ObjectId().toHexString());
+		def.setTenantId(tenantId);
+		def.setName(configuratorName);
+		def.setClassArchetype(ClassArchetype.TASK);
+		def.setProperties(new ArrayList<>());
+		def.setLevel(0);
+		def.setWriteProtected(true);
+		def.setRoot(true);
+
+		classDefinitions.add(def);
+
+		ClassConfiguration configurator = new ClassConfiguration();
+		configurator.setTimestamp(new Date());
+		configurator.setTenantId(tenantId);
+		configurator.setId(configuratorId);
+		configurator.setName(configuratorName);
+		configurator.setDescription(configuratorDescription);
+		configurator.setClassDefinitionIds(new ArrayList<>());
+		configurator.setRelationshipIds(new ArrayList<>());
+
+		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(configurator.getId());
+			configurator.getClassDefinitionIds().add(cd.getId());
+		}
+
+		for (Relationship r : relationships) {
+			r.setId(new ObjectId().toHexString());
+			configurator.getRelationshipIds().add(r.getId());
+		}
+
+		ClassConfigurationBundle ret = new ClassConfigurationBundle();
+		ret.setClassConfiguration(configurator);
+		ret.setClassDefinitions(classDefinitions);
+		ret.setRelationships(relationships);
+		return ret;
 	}
 
 //	private Tenant getFlexProdTenant() {

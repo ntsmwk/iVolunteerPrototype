@@ -32,8 +32,8 @@ export class ResponseService {
     private http: HttpClient
   ) { }
 
-  public sendClassConfiguratorResponse(url: string, saveRequest: SaveClassConfigurationRequest, idsToDelete: string[], action: string) {
-    return this.http.post(`${environment.CONFIGURATOR_URL}/send-response/class-configurator`, { url, saveRequest, idsToDelete, action });
+  public sendClassConfiguratorResponse(url: string, saveRequest: SaveClassConfigurationRequest, idsToDelete: string[], action: string, actionContext?: string) {
+    return this.http.post(`${environment.CONFIGURATOR_URL}/send-response/class-configurator`, { url, saveRequest, idsToDelete, action, actionContext });
   }
 
   public sendClassInstanceConfiguratorResponse(url: string, classInstance: ClassInstance) {

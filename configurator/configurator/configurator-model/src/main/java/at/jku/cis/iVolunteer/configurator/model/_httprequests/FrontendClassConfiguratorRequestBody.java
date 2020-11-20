@@ -4,8 +4,8 @@ import java.util.List;
 
 public class FrontendClassConfiguratorRequestBody {
 	private String action;
+	private String actionContext;
 	private List<String> idsToDelete;
-//	private String idToSave;
 	private SaveClassConfigurationRequest saveRequest;
 	private String url;
 	
@@ -15,18 +15,18 @@ public class FrontendClassConfiguratorRequestBody {
 	public void setAction(String action) {
 		this.action = action;
 	}
+	public String getActionContext() {
+		return actionContext;
+	}
+	public void setActionContext(String actionContext) {
+		this.actionContext = actionContext;
+	}
 	public List<String> getIdsToDelete() {
 		return idsToDelete;
 	}
 	public void setIdsToDelete(List<String> idsToDelete) {
 		this.idsToDelete = idsToDelete;
 	}
-//	public String getIdToSave() {
-//		return idToSave;
-//	}
-//	public void setIdToSave(String idToSave) {
-//		this.idToSave = idToSave;
-//	}
 	public String getUrl() {
 		return url;
 	}

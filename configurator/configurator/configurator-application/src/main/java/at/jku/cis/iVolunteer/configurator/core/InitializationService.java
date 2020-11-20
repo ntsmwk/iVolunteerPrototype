@@ -60,7 +60,7 @@ public class InitializationService {
 			flatDefs.addAll(prepareGenericPropertyDefintions());
 			flatDefs.addAll(prepareHeaderPropertyDefintions());
 			flatDefs.addAll(prepareMichaTestProperties());
-//			flatDefs.addAll(prepareFlexProdPropertyDefinitions());
+			flatDefs.addAll(prepareFlexProdPropertyDefinitions());
 			
 			treeDefs.addAll(prepareiVolunteerTreePropertyDefinitions());
 
@@ -187,12 +187,6 @@ public class InitializationService {
 
 		for (Tuple<String, String> tenant : tenantIds) {
 			for (int i = 1; i <= noOfConfigurations; i++) {
-//				ClassConfiguration cc = this.classConfigurationController
-//						.createNewClassConfiguration(new String[] { tenant.getId(), "Standardkonfiguration" + i, "" });
-//				
-//				ClassConfigurationBundle bundle = this.classConfigurationController.createNewClassConfiguration(tenant.getId(), "Standardkonfiguration " + i, "", null);
-
-				// TODO send new stuff to mp
 				FrontendClassConfiguratorRequestBody body = new FrontendClassConfiguratorRequestBody();
 				body.setAction("new");
 				SaveClassConfigurationRequest req = new SaveClassConfigurationRequest();
@@ -203,30 +197,44 @@ public class InitializationService {
 				req.setTenantId(tenant.getId());
 				body.setSaveRequest(req);
 				body.setUrl(marketplaceUrl + "/response/class-configurator");
+				body.setActionContext("iVolunteer");
 				
 				sendResponseRestClient.sendClassConfiguratorResponse(body);
 			}
 		}
 	}
 
-//	public void addFlexProdClassDefinitionsAndConfigurations() {
-//		for (Tuple<String, String> tenant : tenantIds) {
-//			ClassConfiguration cc1 = this.classConfigurationController.createAndSaveHaubenofen(tenant.getId());
-//			ClassConfiguration cc2 = this.classConfigurationController.createAndSaveRFQ(tenant.getId());
-//
-//			FrontendClassConfiguratorRequestBody body = new FrontendClassConfiguratorRequestBody();
-//			body.setAction("save");
-//			body.setIdToSave(cc1.getId());
-//			body.setUrl(marketplaceUrl + "/response/class-configurator");
-//			sendResponseRestClient.sendClassConfiguratorResponse(body);
-//			
-//			body = new FrontendClassConfiguratorRequestBody();
-//			body.setAction("save");
-//			body.setIdToSave(cc2.getId());
-//			body.setUrl(marketplaceUrl + "/response/class-configurator");
-//			sendResponseRestClient.sendClassConfiguratorResponse(body);
-//		}
-//	}
+	public void addFlexProdClassDefinitionsAndConfigurations() {
+		for (Tuple<String, String> tenant : tenantIds) {
+			
+			FrontendClassConfiguratorRequestBody body = new FrontendClassConfiguratorRequestBody();
+			body.setAction("new");
+			SaveClassConfigurationRequest req = new SaveClassConfigurationRequest();
+			ClassConfiguration ccStub = new ClassConfiguration();
+			ccStub.setTenantId(tenant.getId());
+			ccStub.setName("Haubenofen");
+			req.setClassConfiguration(ccStub);
+			req.setTenantId(tenant.getId());
+			body.setSaveRequest(req);
+			body.setUrl(marketplaceUrl + "/response/class-configurator");
+			body.setActionContext("flexprodHaubenofen");
+			
+			sendResponseRestClient.sendClassConfiguratorResponse(body);
+			
+			body = new FrontendClassConfiguratorRequestBody();
+			body.setAction("new");
+			req = new SaveClassConfigurationRequest();
+			ccStub = new ClassConfiguration();
+			ccStub.setTenantId(tenant.getId());
+			ccStub.setName("RFQ");
+			req.setClassConfiguration(ccStub);
+			req.setTenantId(tenant.getId());
+			body.setSaveRequest(req);
+			body.setUrl(marketplaceUrl + "/response/class-configurator");
+			body.setActionContext("flexprodRFQ");
+			sendResponseRestClient.sendClassConfiguratorResponse(body);
+		}
+	}
 
 	public void deleteClassDefinitions() {
 		classDefinitionRepository.deleteAll();

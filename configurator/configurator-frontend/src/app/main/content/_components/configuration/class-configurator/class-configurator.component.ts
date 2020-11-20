@@ -516,7 +516,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private executeLayout() {
-    this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
+    try {
+      this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
+    } catch (error) {
+      if (!(error instanceof TypeError) && this.relationships.length >= 0) {
+        console.error(error);
+      }
+    }
   }
 
   /**

@@ -57,9 +57,10 @@ public class SendResponseController {
 		ClassConfiguratorResponseRequestBody responseRequestBody = new ClassConfiguratorResponseRequestBody();
 
 		if (body.getAction().equals("new")) {
+			
 			ClassConfigurationBundle bundle = classConfigurationController.createNewClassConfiguration(
 					body.getSaveRequest().getTenantId(), body.getSaveRequest().getClassConfiguration().getName(),
-					body.getSaveRequest().getClassConfiguration().getDescription(), null);
+					body.getSaveRequest().getClassConfiguration().getDescription(), null, body.getActionContext());
 
 			body.getSaveRequest().setClassConfiguration(bundle.getClassConfiguration());
 			body.getSaveRequest().setClassDefinitions(bundle.getClassDefinitions());

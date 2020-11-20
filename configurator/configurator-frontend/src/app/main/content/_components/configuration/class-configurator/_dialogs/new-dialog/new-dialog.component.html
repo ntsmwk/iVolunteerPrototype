@@ -32,6 +32,16 @@
         matAutosizeMaxRows="3"></textarea>
     </mat-form-field>
 
+    <mat-form-field style="width: 100%" appearance="outline" *ngIf="!showEditDialog">
+      <mat-select placeholder="Konfigurationstyp" formControlName="type">
+        <mat-option value="iVolunteer">iVolunteer</mat-option>
+        <mat-option value="flexprodHaubenofen">Flexprod Haubenofen</mat-option>
+        <mat-option value="flexprodRFQ">Flexprod RFQ</mat-option>
+        <mat-option value="empty">Leer</mat-option>
+        <!-- <mat-option value="COMPOSITION ">Komposition</mat-option> -->
+      </mat-select>
+    </mat-form-field>
+
     <!-- <div class="pt-20 pb-16">
         <mat-divider></mat-divider>
       </div>
