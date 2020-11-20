@@ -205,7 +205,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   deleteClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openDeleteMatchingDialog(this.tenantId, this.redirectUrl).then((ret: any) => {
+    this.dialogFactory.openDeleteMatchingDialog(this.tenantId, this.redirectUrl).then((ret: string[]) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
       } else {

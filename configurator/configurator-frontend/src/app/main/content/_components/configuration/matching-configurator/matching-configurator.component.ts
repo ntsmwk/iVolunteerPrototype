@@ -419,6 +419,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       case 'editor_new':
         this.performNew(event.payload);
         break;
+      case 'editor_delete':
+        if (
+          !isNullOrUndefined(event.payload) &&
+          !isNullOrUndefined(this.data.matchingConfiguration) &&
+          event.payload.find(
+            (id: string) => id === this.data.matchingConfiguration.id
+          )
+        ) {
+          this.data = undefined;
+          this.clearEditor();
+          this.redrawContent();
+        }
+        break;
+
+
     }
   }
 
