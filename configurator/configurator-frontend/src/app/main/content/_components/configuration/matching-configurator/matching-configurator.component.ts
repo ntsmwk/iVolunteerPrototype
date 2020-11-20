@@ -432,6 +432,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           this.redrawContent();
         }
         break;
+      case 'editor_meta_edit':
+        this.data.matchingConfiguration.name = event.payload.name;
+        break;
 
 
     }
@@ -813,6 +816,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       } else {
         this.handleDeleteRelationship(cells);
       }
+    }
+  }
+
+  getMatchingConfiguration() {
+    if (!isNullOrUndefined(this.data)) {
+      return this.data.matchingConfiguration;
+    } else {
+      return undefined;
     }
   }
 }

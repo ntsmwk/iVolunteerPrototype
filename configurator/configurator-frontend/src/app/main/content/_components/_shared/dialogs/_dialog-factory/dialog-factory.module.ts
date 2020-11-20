@@ -8,7 +8,6 @@ import { SaveClassConfigurationAsDialogModule } from '../../../configuration/cla
 import { DeleteClassConfigurationDialogModule } from '../../../configuration/class-configurator/_dialogs/delete-dialog/delete-dialog.module';
 import { ClassInstanceFormPreviewDialogModule } from '../../../configuration/class-instance-configurator/form-preview-dialog/form-preview-dialog.module';
 import { ChangeIconDialogModule } from '../../../configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.module';
-import { ClassInstanceFormPreviewExportDialogModule } from '../../../configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.module';
 import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dialog.module';
 import { RemovePropertyDialogModule } from '../remove-dialog/remove-dialog.module';
 import { PropertyCreationDialogModule } from '../../../configuration/class-configurator/_dialogs/property-creation-dialog/property-creation-dialog.module';
@@ -33,6 +32,9 @@ import { OpenMatchingDialogComponent } from '../../../configuration/matching-con
 import { DeleteMatchingDialogComponent } from '../../../configuration/matching-configurator/_dialogs/delete-dialog/delete-dialog.component';
 import { AddClassDefinitionDialogModule } from '../../../configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.module';
 import { AddClassDefinitionDialogComponent } from '../../../configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
+import { EditMetaMatchingConfigurationDialogComponent } from '../../../configuration/matching-configurator/_dialogs/edit-meta-dialog/edit-meta-dialog.component';
+import { EditMetaMatchingConfigurationDialogModule } from '../../../configuration/matching-configurator/_dialogs/edit-meta-dialog/edit-meta-dialog.module';
+import { ClassInstanceFormPreviewExportDialogModule } from '../../../configuration/class-instance-configurator/form-preview-export-dialog/form-preview-export-dialog.module';
 
 @NgModule({
   imports: [
@@ -60,6 +62,7 @@ import { AddClassDefinitionDialogComponent } from '../../../configuration/matchi
     OpenMatchingDialogModule,
     DeleteMatchingDialogModule,
     AddClassDefinitionDialogModule,
+    EditMetaMatchingConfigurationDialogModule
 
     // Tree Property Configurator
 
@@ -89,6 +92,7 @@ import { AddClassDefinitionDialogComponent } from '../../../configuration/matchi
     OpenMatchingDialogComponent,
     DeleteMatchingDialogComponent,
     AddClassDefinitionDialogComponent,
+    EditMetaMatchingConfigurationDialogComponent,
 
     // Tree Property Configurator
 

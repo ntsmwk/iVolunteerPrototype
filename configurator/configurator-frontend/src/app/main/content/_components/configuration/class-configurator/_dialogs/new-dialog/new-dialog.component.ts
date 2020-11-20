@@ -81,12 +81,10 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   }
 
   displayErrorMessage(key: string) {
-
-    if (key === 'required') {
-      return 'Pflichtfeld';
-    }
-    if (key === 'label') {
-      return 'Name bereits vorhanden';
+    if (this.dialogForm.get(key).hasError('required')) {
+      return "Pflichtfeld";
+    } else if (this.dialogForm.get(key).hasError('stringunique')) {
+      return "Name bereits vorhanden";
     }
   }
 

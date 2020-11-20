@@ -6,6 +6,7 @@ import { ClassConfigurationService } from 'app/main/content/_service/configurati
 import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurator/configurations';
 import { ClassBrowseSubDialogData } from '../../../class-configurator/_dialogs/browse-sub-dialog/browse-sub-dialog.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
 
 export interface NewMatchingDialogData {
   leftClassConfiguration: ClassConfiguration;
@@ -41,24 +42,30 @@ export class NewMatchingDialogComponent implements OnInit {
   dialogForm: FormGroup;
 
   async ngOnInit() {
-    this.dialogForm = new FormGroup({
-      label: new FormControl('', Validators.required)
+
+    Promise.all([
+      this.matchingConfigurationService.getAllMatchingConfigurationsByTenantId(this.data.tenantId).toPromise().then((matchingConfigurations: MatchingConfiguration[]) => {
+        this.dialogForm = new FormGroup({
+          label: new FormControl('', [Validators.required, stringUniqueValidator(matchingConfigurations.map(c => c.name))]),
+        });
+      }),
+      this.classConfigurationService.getAllClassConfigurationsByTenantId(this.data.tenantId)
+        .toPromise().then((classConfigurations: ClassConfiguration[]) => {
+          this.recentClassConfigurations = classConfigurations;
+          this.allClassConfigurations = classConfigurations;
+
+          this.recentClassConfigurations = this.recentClassConfigurations.sort(
+            (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
+          );
+
+          if (this.recentClassConfigurations.length > 4) {
+            this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 4);
+          }
+        })
+
+    ]).then(() => {
+      this.loaded = true;
     });
-
-    this.classConfigurationService.getAllClassConfigurationsByTenantId(this.data.tenantId)
-      .toPromise().then((classConfigurations: ClassConfiguration[]) => {
-        this.recentClassConfigurations = classConfigurations;
-        this.allClassConfigurations = classConfigurations;
-
-        this.recentClassConfigurations = this.recentClassConfigurations.sort(
-          (a, b) => b.timestamp.valueOf() - a.timestamp.valueOf()
-        );
-
-        if (this.recentClassConfigurations.length > 4) {
-          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 4);
-        }
-        this.loaded = true;
-      });
   }
 
   leftItemSelected(c: ClassConfiguration) {
@@ -156,4 +163,14 @@ export class NewMatchingDialogComponent implements OnInit {
 
     this.browseMode = false;
   }
+
+  displayErrorMessage(key: string) {
+    if (this.dialogForm.get(key).hasError('required')) {
+      return "Pflichtfeld";
+    } else if (this.dialogForm.get(key).hasError('stringunique')) {
+      return "Name bereits vorhanden";
+    }
+  }
+
 }
+

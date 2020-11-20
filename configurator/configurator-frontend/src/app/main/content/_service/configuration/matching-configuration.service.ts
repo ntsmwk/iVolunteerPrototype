@@ -40,6 +40,13 @@ export class MatchingConfigurationService {
     );
   }
 
+  saveMatchingConfigurationMeta(id: string, name: string) {
+    return this.http.put(
+      `${environment.CONFIGURATOR_URL}/matching-configuration/save-meta`, [id, name]
+    );
+  }
+
+
   deleteMatchingConfiguration(id: string) {
     return this.http.delete(
       `${environment.CONFIGURATOR_URL}/matching-configuration/${id}/delete`

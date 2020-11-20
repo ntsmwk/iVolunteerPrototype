@@ -63,6 +63,17 @@ public class MatchingConfigurationService {
 		matchingConfiguration.setTimestamp(new Date());
 		return matchingConfigurationRepository.save(matchingConfiguration);
 	}
+	
+	public MatchingConfiguration saveMetaMatchingConfiguration(String id, String name) {
+		MatchingConfiguration matchingConfiguration = matchingConfigurationRepository.findOne(id);
+		
+		if (matchingConfiguration == null) {
+			return null;
+		}
+		
+		matchingConfiguration.setName(name);
+		return matchingConfigurationRepository.save(matchingConfiguration);
+	}
 
 	public String createHashFromClassConfigurationIds(String id1, String id2) {
 		String hash = String.valueOf(id1.hashCode() ^ id2.hashCode());

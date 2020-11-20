@@ -55,6 +55,15 @@ public class MatchingConfigurationController {
 	MatchingConfiguration saveMatchingConfiguration(@RequestBody MatchingConfiguration matchingConfiguration) {
 		return matchingConfigurationService.saveMatchingConfiguration(matchingConfiguration);
 	}
+	
+	@PutMapping("matching-configuration/save-meta") 
+	MatchingConfiguration saveMetaMatchingConfiguration(@RequestBody String[] params) {
+		if (params.length != 2) {
+			return null;
+		}
+		
+		return matchingConfigurationService.saveMetaMatchingConfiguration(params[0], params[1]);
+	}
 
 	@DeleteMapping("matching-configuration/{id}/delete")
 	public void deleteMatchingConfiguration(@PathVariable("id") String id) {

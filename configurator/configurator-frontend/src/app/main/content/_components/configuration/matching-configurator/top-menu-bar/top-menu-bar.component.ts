@@ -1,6 +1,11 @@
 import { Component, ElementRef, ViewChild, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
+import { MatchingConfiguration } from 'app/main/content/_model/configurator/configurations';
+import { OpenMatchingDialogComponent, OpenMatchingDialogData } from '../_dialogs/open-dialog/open-dialog.component';
+import { NewMatchingDialogData } from '../_dialogs/new-dialog/new-dialog.component';
+import { NewClassConfigurationDialogData } from '../../class-configurator/_dialogs/new-dialog/new-dialog.component';
+import { EditMetaMatchingConfigurationDialogData } from '../_dialogs/edit-meta-dialog/edit-meta-dialog.component';
 
 export interface RootMenuItem {
   id: number;
@@ -95,6 +100,9 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   @Input() redirectUrl: string;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
 
+  @Input() currentMatchingConfiguration: MatchingConfiguration;
+
+
   constructor(
     private dialogFactory: DialogFactoryDirective
   ) { }
@@ -170,14 +178,33 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   }
 
   newClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openNewMatchingDialog(this.tenantId).then((ret: any) => {
+    this.dialogFactory.openNewMatchingDialog(this.tenantId).then((ret: NewMatchingDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       }
     });
   }
 
-  editClicked() { }
+  editClicked() {
+    this.performEdit();
+  }
+
+  private performEdit() {
+    this.dialogFactory
+      .openEditMetaMatchingDialog(this.tenantId, this.currentMatchingConfiguration)
+      .then((ret: EditMetaMatchingConfigurationDialogData) => {
+        if (!isNullOrUndefined(ret)) {
+          this.menuOptionClickedEvent.emit({
+            id: 'editor_meta_edit',
+            payload: {
+              name: ret.matchingConfiguration.name,
+            }
+          });
+        } else {
+          this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+        }
+      });
+  }
 
   openClicked(event: any, item: SubMenuItem) {
     this.dialogFactory.openOpenMatchingDialog(this.tenantId).then((ret: any) => {

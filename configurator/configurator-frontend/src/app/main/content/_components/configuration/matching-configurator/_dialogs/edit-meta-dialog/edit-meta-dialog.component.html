@@ -1,0 +1,39 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>edit</mat-icon>
+      </td>
+      <td>
+        <h1>Matching-Konfiguration ändern</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<mat-dialog-content *ngIf="loaded">
+  <form [formGroup]="dialogForm">
+    <mat-label>Name Konfiguration</mat-label>
+    <mat-form-field style="width: 100%;" appearance="outline" #label>
+      <input matInput name="label" class="form-control" formControlName="label" required />
+    </mat-form-field>
+    <div class="mat-error" *ngIf="
+        dialogForm.controls['label'].invalid &&
+        dialogForm.controls['label'].touched
+      ">
+      {{ displayErrorMessage("label") }}
+    </div>
+
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSaveClick()">
+    Speichern
+  </button>
+  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">
+    Abbrechen
+  </button>
+</mat-dialog-actions>

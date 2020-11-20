@@ -10,8 +10,14 @@
   <div *ngIf="!browseMode">
     <form [formGroup]="dialogForm">
       <mat-form-field style="width: 100%;" appearance="outline">
-        <input matInput placeholder=" Bezeichnung" formControlName="label" required />
+        <input matInput placeholder="Bezeichnung" formControlName="label" required />
       </mat-form-field>
+      <div class="mat-error" *ngIf="
+        dialogForm.controls['label'].invalid &&
+        dialogForm.controls['label'].touched
+      ">
+        {{ displayErrorMessage("label") }}
+      </div>
     </form>
     <div fxLayout="row" fxLayoutAlign="start start" class="pt-12">
 
