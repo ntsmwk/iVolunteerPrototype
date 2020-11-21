@@ -172,7 +172,7 @@ public class APIInitializationService {
 				|| p.getName().equals("Starting Date") || p.getName().equals("End Date")
 				|| p.getName().equals("Duration") || p.getName().equals("Location")
 				|| p.getName().equals("GeoInformation") || p.getName().equals("IVolunteerUUID")
-				|| p.getName().equals("IVolunteerSource")).collect(Collectors.toList());
+				|| p.getName().equals("IVolunteerSource") || p.getName().equals("Bereich")).collect(Collectors.toList());
 		// @formatter:on
 	}
 

@@ -1,8 +1,8 @@
 package at.jku.cis.iVolunteer.model.diagram.xnet;
 
 public class XDiagramOrder {
-    private String fieldname; // default startDate
-    private boolean asc; // default true
+    private String fieldname;
+    private boolean asc = true; // default true
 
     public XDiagramOrder() {
 

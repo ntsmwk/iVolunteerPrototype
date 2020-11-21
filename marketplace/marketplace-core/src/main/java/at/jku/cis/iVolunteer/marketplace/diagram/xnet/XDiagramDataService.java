@@ -120,7 +120,7 @@ public class XDiagramDataService {
                 .findFirst().orElse(null);
         if (bereich != null) {
             if (bereich.getValues().size() > 0) {
-                datapoint.setBereich((String) duration.getValues().get(0));
+                datapoint.setBereich((String) bereich.getValues().get(0));
             }
         }
 

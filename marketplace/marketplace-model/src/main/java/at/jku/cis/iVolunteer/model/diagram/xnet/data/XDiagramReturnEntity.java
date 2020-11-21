@@ -1,12 +1,17 @@
 package at.jku.cis.iVolunteer.model.diagram.xnet.data;
 
 import java.util.Date;
+import java.util.List;
 
 public class XDiagramReturnEntity {
     private Date refreshTimestamp;
-    private XDiagramData data;
+    private List<XDiagramData> data;
 
-    public XDiagramReturnEntity(Date refreshTimestamp, XDiagramData data) {
+    public XDiagramReturnEntity() {
+
+    }
+
+    public XDiagramReturnEntity(Date refreshTimestamp, List<XDiagramData> data) {
         this.refreshTimestamp = refreshTimestamp;
         this.data = data;
     }
@@ -19,12 +24,16 @@ public class XDiagramReturnEntity {
         this.refreshTimestamp = refreshTimestamp;
     }
 
-    public XDiagramData getData() {
+    public List<XDiagramData> getData() {
         return this.data;
     }
 
-    public void setData(XDiagramData data) {
+    public void setData(List<XDiagramData> data) {
         this.data = data;
+    }
+
+    public void addData(XDiagramData datapoint) {
+        this.data.add(datapoint);
     }
 
 }

@@ -30,9 +30,7 @@ public class XDiagramDataRestClient {
     @Autowired
     private MarketplaceService marketplaceService;
 
-    // TODO
-    // call to marketplace without authentication (excepted in mp WebSecurityConfig)
-    public List<XDiagramRawDataSet> getDiagramData() {
+    public List<XDiagramRawDataSet> getDiagramRawData() {
         List<Marketplace> marketplaces = marketplaceService.findAll();
         marketplaces = marketplaces.stream().distinct().collect(Collectors.toList());
 
@@ -53,7 +51,7 @@ public class XDiagramDataRestClient {
         return datasets;
     }
 
-    public List<XDiagramRawDataSet> getDiagramDataByUser(String userId) {
+    public List<XDiagramRawDataSet> getDiagramRawDataByUser(String userId) {
         List<Marketplace> marketplaces = marketplaceService.findAll();
         marketplaces = marketplaces.stream().distinct().collect(Collectors.toList());
 

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.DateUtils;
@@ -139,7 +140,18 @@ public class PersonTaskService {
 			}
 		});
 		// @formatter:off
-		
+
+		// TODO: for now, add random SozMin Bereich to imported data
+		List<String> bereiche = Arrays.asList("Katastrophenhilfs- & Rettungsdienste", "Ältere Menschen", "Soziales",
+		"Entwicklungshilfe, Frieden, Menschrechte", "Gesundheit & Pflege", "Kirche & Religion",
+		"Bürgerschaftliche Aktivitäten & Gemeinwesen", "Sport & Bewegung", "Kinder & Jugendliche",
+		"Bildung & Coaching", "Natur, Umwelt, Tierschutz", "Kultur, Kunst, Unterhaltung, Freizeit",
+		"Menschen mit Beeinträchtigung", "Migrantinnen und Migranten");
+		Random rand = new Random();
+		String randomElement = bereiche.get(rand.nextInt(bereiche.size()));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Bereich"))
+		.forEach(p -> p.setValues(Collections.singletonList(randomElement)));
+
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("TaskId"))
 				.forEach(p -> p.setValues(Collections.singletonList(personTask.getTaskId())));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name"))

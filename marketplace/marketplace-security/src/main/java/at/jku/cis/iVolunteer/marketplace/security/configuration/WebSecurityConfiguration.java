@@ -42,6 +42,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
         // TODO
 		.antMatchers("/diagramdata").permitAll() 
+		.antMatchers("/diagramdata/user/*").permitAll() 
+
 
 				.antMatchers("/v2/api-docs").permitAll() 
 				.antMatchers("/swagger-resources").permitAll() 

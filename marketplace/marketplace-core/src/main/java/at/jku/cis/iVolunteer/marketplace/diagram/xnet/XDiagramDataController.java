@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.diagram.xnet;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class XDiagramDataController {
     }
 
     @GetMapping("/user/{userId}")
-    public XDiagramRawDataSet getAllDiagramDataPerUser(@PathVariable("userId") String userId) {
-        return diagramDataService.calcRawDataSetPerUser(userId);
+    public List<XDiagramRawDataSet> getAllDiagramDataPerUser(@PathVariable("userId") String userId) {
+        return Collections.singletonList(diagramDataService.calcRawDataSetPerUser(userId));
     }
 }
