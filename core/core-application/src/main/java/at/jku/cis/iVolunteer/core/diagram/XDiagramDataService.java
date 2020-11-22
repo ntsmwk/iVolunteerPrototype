@@ -3,8 +3,10 @@ package at.jku.cis.iVolunteer.core.diagram;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,16 +16,19 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay;
-import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramFilter;
-import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay.DiagramType;
-import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay.ValueType;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramData;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataArray;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataPoint;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataPointBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramReturnEntity;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramFilterBadge;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.BadgeCertificate;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataPoint;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataSet;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramDisplayTask;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramFilterTask;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramDisplayTask.DiagramTypeTask;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramDisplayTask.ValueTypeTask;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyEntry;
 
 @Service
@@ -44,7 +49,7 @@ public class XDiagramDataService {
         return datasets.get(0);
     }
 
-    public XDiagramRawDataSet filter(XDiagramRawDataSet dataset, XDiagramFilter filter) {
+    public XDiagramRawDataSet filter(XDiagramRawDataSet dataset, XDiagramFilterTask filter) {
         if (filter.getStart() == null) {
             LocalDateTime d = LocalDateTime.of(1900, 1, 1, 0, 0);
             Date date = Date.from(d.atZone(ZoneId.systemDefault()).toInstant());
@@ -73,7 +78,28 @@ public class XDiagramDataService {
         return dataset;
     }
 
-    public XDiagramReturnEntity generateSunburstData(XDiagramRawDataSet dataset, XDiagramDisplay display) {
+    public XDiagramRawDataSet filter(XDiagramRawDataSet dataset, XDiagramFilterBadge filter) {
+        List<String> tenantIds = filter.getTenantIds();
+        List<Integer> years = filter.getYears();
+
+        if (years != null && years.size() > 0) {
+            Calendar calendar = new GregorianCalendar();
+            dataset.getBadges().stream().filter(b -> {
+                calendar.setTime(b.getIssueDate());
+                return years.contains(calendar.get(Calendar.YEAR));
+            }).collect(Collectors.toList());
+        }
+
+        if (tenantIds != null && tenantIds.size() > 0) {
+            // TODO Philipp
+            // dataset.getBadges().stream().filter(b ->
+            // tenantIds.contain(b.getTenantId())).collect(Collectors.toList());
+        }
+
+        return dataset;
+    }
+
+    public XDiagramReturnEntity generateSunburstData(XDiagramRawDataSet dataset, XDiagramDisplayTask display) {
         List<XDiagramRawDataPoint> datapoints = dataset.getDatapoints();
 
         HashMap<List<String>, Float> occurrences = new HashMap<>();
@@ -86,7 +112,7 @@ public class XDiagramDataService {
             parents.sort(Comparator.comparing(TreePropertyEntry::getLevel));
 
             List<String> data = new ArrayList<>();
-            if (display.getDiagramType().equals(DiagramType.DOMAIN_CATEGORY)) {
+            if (display.getDiagramType().equals(DiagramTypeTask.DOMAIN_CATEGORY)) {
                 data.add(dp.getBereich());
             }
 
@@ -98,7 +124,7 @@ public class XDiagramDataService {
             // add level 0
             data.add(treeProperty.getValue());
 
-            if (display.getValueType().equals(ValueType.COUNT)) {
+            if (display.getValueType().equals(ValueTypeTask.COUNT)) {
                 occurrences.merge(data, (float) 1, Float::sum);
             } else {
                 // valueType == DURATION
@@ -132,6 +158,54 @@ public class XDiagramDataService {
         }
         return data;
     }
+
+    // TODO Philipp test
+    public XDiagramReturnEntity generateBadgeSchmuckkaestchenData(List<BadgeCertificate> badges) {
+        // map<year, anzahl>
+        HashMap<Integer, Integer> map = new HashMap<>();
+        Calendar calendar = new GregorianCalendar();
+
+        badges.forEach(b -> {
+            calendar.setTime(b.getIssueDate());
+            int year = calendar.get(Calendar.YEAR);
+
+            map.merge(year, 1, Integer::sum);
+        });
+
+        List<XDiagramData> entries = new ArrayList<>();
+        map.forEach((year, number) -> {
+            entries.add(new XDiagramDataPoint(Integer.toString(year), number));
+        });
+
+        return new XDiagramReturnEntity(new Date(), entries);
+
+    }
+
+    public XDiagramReturnEntity generateBadgeTimelineData(List<BadgeCertificate> badges) {
+        // map<year, badgeCertificates>
+        HashMap<Integer, List<BadgeCertificate>> map = new HashMap<>();
+        Calendar calendar = new GregorianCalendar();
+
+        badges.forEach(b -> {
+            calendar.setTime(b.getIssueDate());
+            int year = calendar.get(Calendar.YEAR);
+
+            map.putIfAbsent(year, new ArrayList<BadgeCertificate>());
+            map.get(year).add(b);
+
+        });
+
+        List<XDiagramData> entries = new ArrayList<>();
+        map.forEach((year, badgeList) -> {
+            entries.add(new XDiagramDataPointBadge(Integer.toString(year), badgeList));
+        });
+
+        return new XDiagramReturnEntity(new Date(), entries);
+    }
+
+    //
+    // ---------------------------------------
+    //
 
     @Scheduled(fixedDelay = 1_800_000, initialDelay = 60_000) // 30min, 1min
     private void queryDiagramRawDataSetsFromMarketplaces() {

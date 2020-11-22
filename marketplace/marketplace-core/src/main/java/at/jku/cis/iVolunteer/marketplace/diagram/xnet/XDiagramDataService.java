@@ -32,6 +32,9 @@ public class XDiagramDataService {
     private UserService userService;
     @Autowired
     private ClassInstanceRepository classInstanceRepository;
+    // TODO Philipp
+    // @Autowired
+    // private XBadgeCertificateRepository badgeCertificateRepository;
 
     public XDiagramRawDataSet calcRawDataSetPerUser(String userId) {
         List<XDiagramRawDataPoint> datapoints = new ArrayList<>();
@@ -44,6 +47,8 @@ public class XDiagramDataService {
             dataset.setDatapoints(datapoints);
             dataset.setUserId(userId);
             dataset.setRefreshTimestamp(new Date());
+            // TODO Philipp
+            // dataset.setBadges(badgeCertificateRepository.findAllByUserId(userId));
 
             return dataset;
         }
@@ -65,63 +70,51 @@ public class XDiagramDataService {
     }
 
     private XDiagramRawDataPoint toRawDataPoint(ClassInstance ci) {
+        // TODO: potentially add more properties to rawData
         XDiagramRawDataPoint datapoint = new XDiagramRawDataPoint();
-
         datapoint.setTenantId(ci.getTenantId());
 
-        PropertyInstance<Object> startingDate = ci.getProperties().stream()
-                .filter(p -> "Starting Date".equals(p.getName())).findFirst().orElse(null);
-        if (startingDate != null) {
-            if (startingDate.getValues().size() > 0) {
+        PropertyInstance<Object> startingDate = ci.findProperty("Starting Date");
+        if (startingDate != null && startingDate.getValues().size() > 0) {
+            try {
+                datapoint.setStartDate(((Date) startingDate.getValues().get(0)));
+            } catch (ClassCastException e) {
                 try {
-                    datapoint.setStartDate(((Date) startingDate.getValues().get(0)));
-                } catch (ClassCastException e) {
-                    try {
-                        Date parsedDate = dateTimeService
-                                .parseMultipleDateFormats((String) startingDate.getValues().get(0));
-                        datapoint.setStartDate(parsedDate);
-                    } catch (Exception f) {
-                        Instant instant = Instant.ofEpochMilli((Long) startingDate.getValues().get(0));
-                        Date d = Date.from(instant);
-                        datapoint.setStartDate(d);
-                    }
+                    Date parsedDate = dateTimeService
+                            .parseMultipleDateFormats((String) startingDate.getValues().get(0));
+                    datapoint.setStartDate(parsedDate);
+                } catch (Exception f) {
+                    Instant instant = Instant.ofEpochMilli((Long) startingDate.getValues().get(0));
+                    Date d = Date.from(instant);
+                    datapoint.setStartDate(d);
                 }
             }
         }
 
-        PropertyInstance<Object> endDate = ci.getProperties().stream().filter(p -> "End Date".equals(p.getName()))
-                .findFirst().orElse(null);
-        if (endDate != null) {
-            if (endDate.getValues().size() > 0) {
+        PropertyInstance<Object> endDate = ci.findProperty("End Date");
+        if (endDate != null && endDate.getValues().size() > 0) {
+            try {
+                datapoint.setEndDate(((Date) endDate.getValues().get(0)));
+            } catch (ClassCastException e) {
                 try {
-                    datapoint.setEndDate(((Date) endDate.getValues().get(0)));
-                } catch (ClassCastException e) {
-                    try {
-                        Date parsedDate = dateTimeService.parseMultipleDateFormats((String) endDate.getValues().get(0));
-                        datapoint.setEndDate(parsedDate);
-                    } catch (Exception f) {
-                        Instant instant = Instant.ofEpochMilli((Long) endDate.getValues().get(0));
-                        Date d = Date.from(instant);
-                        datapoint.setEndDate(d);
-                    }
+                    Date parsedDate = dateTimeService.parseMultipleDateFormats((String) endDate.getValues().get(0));
+                    datapoint.setEndDate(parsedDate);
+                } catch (Exception f) {
+                    Instant instant = Instant.ofEpochMilli((Long) endDate.getValues().get(0));
+                    Date d = Date.from(instant);
+                    datapoint.setEndDate(d);
                 }
             }
         }
 
-        PropertyInstance<Object> duration = ci.getProperties().stream().filter(p -> "Duration".equals(p.getName()))
-                .findFirst().orElse(null);
-        if (duration != null) {
-            if (duration.getValues().size() > 0) {
-                datapoint.setDuration(objectMapper.convertValue(duration.getValues().get(0), Float.class));
-            }
+        PropertyInstance<Object> duration = ci.findProperty("Duration");
+        if (duration != null && duration.getValues().size() > 0) {
+            datapoint.setDuration(objectMapper.convertValue(duration.getValues().get(0), Float.class));
         }
 
-        PropertyInstance<Object> bereich = ci.getProperties().stream().filter(p -> "Bereich".equals(p.getName()))
-                .findFirst().orElse(null);
-        if (bereich != null) {
-            if (bereich.getValues().size() > 0) {
-                datapoint.setBereich((String) bereich.getValues().get(0));
-            }
+        PropertyInstance<Object> bereich = ci.findProperty("Bereich");
+        if (bereich != null && bereich.getValues().size() > 0) {
+            datapoint.setBereich((String) bereich.getValues().get(0));
         }
 
         PropertyInstance<Object> taskTypeField = ci.getProperties().stream()

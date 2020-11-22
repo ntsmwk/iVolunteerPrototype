@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +17,15 @@ import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramDisplay;
-import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramFilter;
-import at.jku.cis.iVolunteer.model.diagram.xnet.XDiagramOrder;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramData;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramReturnEntity;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramDisplayBadge;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramFilterBadge;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramDisplayBadge.DiagramTypeBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataSet;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramDisplayTask;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramFilterTask;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramOrder;
 
 @RestController
 @RequestMapping("/diagram")
@@ -34,7 +36,7 @@ public class XDiagramDataController {
     XDiagramDataService diagramDataService;
 
     @PostMapping("/refresh")
-    public ResponseEntity<StringResponse> refresh(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<StringResponse> refresh() {
         CoreUser loggedInUser = loginService.getLoggedInUser();
 
         diagramDataService.queryDiagramRawDataSetsFromMarketplacesByUser(loggedInUser.getId());
@@ -42,13 +44,19 @@ public class XDiagramDataController {
     }
 
     @PostMapping("/task")
-    public ResponseEntity<Object> getTaskDiagramData(@RequestBody XDiagramPayload payload) {
-        XDiagramFilter filter = payload.getFilter();
+    public ResponseEntity<Object> getTaskDiagramData(@RequestBody XDiagramPayloadTask payload) {
+        if (payload == null) {
+            return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        XDiagramFilterTask filter = payload.getFilter();
         XDiagramOrder order = payload.getOrder();
-        XDiagramDisplay display = payload.getDisplay();
+        XDiagramDisplayTask display = payload.getDisplay();
 
         if (display == null) {
-            return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.NO_DISPLAY), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL),
+                    HttpStatus.BAD_REQUEST);
         }
 
         CoreUser loggedInUser = loginService.getLoggedInUser();
@@ -77,16 +85,59 @@ public class XDiagramDataController {
         }
 
         return ResponseEntity.ok(diagramData);
-
     }
 
+    // TOOD Philipp test
     @PostMapping("/badge")
-    public XDiagramReturnEntity getBadgeDiagramData() {
+    public ResponseEntity<Object> getBadgeDiagramData(@RequestBody XDiagramPayloadBadge payload) {
+        if (payload == null) {
+            return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL),
+                    HttpStatus.BAD_REQUEST);
+        }
 
-        return null;
+        XDiagramOrder order = payload.getOrder();
+        XDiagramFilterBadge filter = payload.getFilter();
+        XDiagramDisplayBadge display = payload.getDisplay();
+
+        if (display == null) {
+            return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        CoreUser loggedInUser = loginService.getLoggedInUser();
+        XDiagramRawDataSet dataset = diagramDataService.getLatestDiagramData(loggedInUser);
+
+        if (dataset.getDatapoints() == null) {
+            diagramDataService.queryDiagramRawDataSetsFromMarketplacesByUser(loggedInUser.getId());
+            dataset = diagramDataService.getLatestDiagramData(loggedInUser);
+        }
+
+        if (filter != null) {
+            dataset = diagramDataService.filter(dataset, filter);
+        }
+
+        XDiagramReturnEntity diagramData;
+        if (display.getDiagramType().equals(DiagramTypeBadge.TIMELINE)) {
+            diagramData = diagramDataService.generateBadgeTimelineData(dataset.getBadges());
+        } else {
+            diagramData = diagramDataService.generateBadgeSchmuckkaestchenData(dataset.getBadges());
+        }
+
+        if (order != null) {
+            if (order.isAsc()) {
+                diagramData.getData()
+                        .sort(Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)));
+            } else {
+                diagramData.getData().sort(
+                        Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)).reversed());
+            }
+
+        }
+
+        return ResponseEntity.ok(diagramData);
     }
 
-    @PostMapping("/compoetence")
+    @PostMapping("/competence")
     public XDiagramReturnEntity getCompetenceDiagramData() {
 
         return null;

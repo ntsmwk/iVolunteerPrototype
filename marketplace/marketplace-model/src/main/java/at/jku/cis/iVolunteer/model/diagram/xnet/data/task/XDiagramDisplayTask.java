@@ -1,47 +1,47 @@
-package at.jku.cis.iVolunteer.model.diagram.xnet;
+package at.jku.cis.iVolunteer.model.diagram.xnet.data.task;
 
-public class XDiagramDisplay {
-    private ValueType valueType;
-    private DiagramType diagramType;
+public class XDiagramDisplayTask {
+    private ValueTypeTask valueType;
+    private DiagramTypeTask diagramType;
 
-    public XDiagramDisplay() {
+    public XDiagramDisplayTask() {
     }
 
-    public XDiagramDisplay(ValueType valueType, DiagramType diagramType) {
+    public XDiagramDisplayTask(ValueTypeTask valueType, DiagramTypeTask diagramType) {
         this.valueType = valueType;
         this.diagramType = diagramType;
     }
 
-    public ValueType getValueType() {
+    public ValueTypeTask getValueType() {
         return this.valueType;
     }
 
-    public void setValueType(ValueType valueType) {
+    public void setValueType(ValueTypeTask valueType) {
         this.valueType = valueType;
     }
 
     public void setValueType(String valueType) {
-        this.valueType = ValueType.valueOf(valueType);
+        this.valueType = ValueTypeTask.valueOf(valueType);
     }
 
-    public DiagramType getDiagramType() {
+    public DiagramTypeTask getDiagramType() {
         return this.diagramType;
     }
 
-    public void setDiagramType(DiagramType diagramType) {
+    public void setDiagramType(DiagramTypeTask diagramType) {
         this.diagramType = diagramType;
     }
 
     public void setDiagramType(String diagramType) {
-        this.diagramType = DiagramType.valueOf(diagramType);
+        this.diagramType = DiagramTypeTask.valueOf(diagramType);
     }
 
-    public enum ValueType {
+    public enum ValueTypeTask {
         DURATION("DURATION"), COUNT("COUNT");
 
         private String valueType;
 
-        private ValueType(String valueType) {
+        private ValueTypeTask(String valueType) {
             this.valueType = valueType;
         }
 
@@ -55,12 +55,12 @@ public class XDiagramDisplay {
 
     }
 
-    public enum DiagramType {
+    public enum DiagramTypeTask {
         DOMAIN_CATEGORY("DOMAIN_CATEGORY"), CATEGORY_ONLY("CATEGORY_ONLY");
 
         private String diagramType;
 
-        private DiagramType(String diagramType) {
+        private DiagramTypeTask(String diagramType) {
             this.diagramType = diagramType;
         }
 

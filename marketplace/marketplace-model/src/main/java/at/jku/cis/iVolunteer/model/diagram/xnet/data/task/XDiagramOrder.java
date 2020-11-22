@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.diagram.xnet;
+package at.jku.cis.iVolunteer.model.diagram.xnet.data.task;
 
 public class XDiagramOrder {
     private String fieldname;

@@ -9,7 +9,6 @@ public class HttpErrorMessages {
 	public static final String ALREADY_CLOSED = "Already closed";
 	public static final String BODY_NOT_NULL = "Body must not be null";
 	public static final String NOT_FOUND_MARKETPLACE = "No marketplaces found";
-	public static final String NO_DISPLAY = "No display parameter";
 	public static final String NO_DATASET = "No dataset found";
 
 }

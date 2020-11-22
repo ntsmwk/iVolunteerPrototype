@@ -1,14 +1,14 @@
-package at.jku.cis.iVolunteer.model.diagram.xnet;
+package at.jku.cis.iVolunteer.model.diagram.xnet.data.task;
 
 import java.util.Date;
 import java.util.List;
 
-public class XDiagramFilter {
+public class XDiagramFilterTask {
     private Date start;
     private Date end;
     private List<String> tenantIds;
 
-    public XDiagramFilter() {
+    public XDiagramFilterTask() {
     }
 
     public Date getStart() {

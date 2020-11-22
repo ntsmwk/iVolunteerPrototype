@@ -14,9 +14,9 @@ public class XDiagramRawDataSet {
    private String userId;
    private Date refreshTimestamp;
    private List<XDiagramRawDataPoint> datapoints;
+   private List<BadgeCertificate> badges; // TODO Philipp: change to XBadgeCertificate
 
    public XDiagramRawDataSet() {
-
    }
 
    public String getUserId() {
@@ -43,7 +43,13 @@ public class XDiagramRawDataSet {
       this.datapoints = datapoints;
    }
 
-   // TODO Philipp needs testing
+   public List<BadgeCertificate> getBadges() {
+      return this.badges;
+   }
+
+   public void setBadges(List<BadgeCertificate> badges) {
+      this.badges = badges;
+   }
 
    @Override
    public boolean equals(Object o) {

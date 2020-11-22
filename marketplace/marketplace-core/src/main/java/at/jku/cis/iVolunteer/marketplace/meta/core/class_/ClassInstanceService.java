@@ -19,8 +19,6 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassInstance;
@@ -33,12 +31,17 @@ import at.jku.cis.iVolunteer.model.user.User;
 @Service
 public class ClassInstanceService {
 
-	@Autowired private ClassPropertyService classPropertyService;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
-	
+	@Autowired
+	private ClassPropertyService classPropertyService;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private MarketplaceService marketplaceService;
+	@Autowired
+	private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+
 	public List<ClassInstance> getAllClassInstances() {
 		return classInstanceRepository.findAll();
 	}
@@ -48,6 +51,7 @@ public class ClassInstanceService {
 				.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), classDefinitionId, tenantId).stream()
 				.findFirst().orElse(null);
 	}
+
 	public ClassInstance getClassInstanceById(String taskId) {
 		return classInstanceRepository.findOne(taskId);
 	}
@@ -66,33 +70,40 @@ public class ClassInstanceService {
 		return getClassInstances(volunteer, classDefinitionService.getByName(classDefinitionName, tenantId).getId(),
 				tenantId);
 	}
-	
-	public List<ClassInstance> getClassInstancesCreatedByRule(User volunteer, String derivationRuleId){
+
+	public List<ClassInstance> getClassInstancesCreatedByRule(User volunteer, String derivationRuleId) {
 		return classInstanceRepository.getByUserIdAndDerivationRuleId(volunteer.getId(), derivationRuleId);
 	}
 
-	public List<ClassInstance> getClassInstanceByArchetype(ClassArchetype classArchetype, String tenantId){
+	public List<ClassInstance> getClassInstanceByArchetype(ClassArchetype classArchetype, String tenantId) {
 		return classInstanceRepository.getByClassArchetypeAndTenantId(classArchetype, tenantId);
 	}
-	
-	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId, String tenantId){
+
+	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId,
+			String tenantId) {
 		return classInstanceRepository.getByClassArchetypeAndUserIdAndTenantId(classArchetype, userId, tenantId);
 	}
-	
-	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId){
+
+	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId) {
 		return classInstanceRepository.getByClassArchetypeAndUserId(classArchetype, userId);
 	}
-	
-//	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed) {
-//		return classInstanceRepository.getByClassArchetypeAndUserIdAndSubscribed(classArchetype, userId, subscribed);
-//	}
-//	
-//	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype classArchetype, String userId, String tenantId, boolean subscribed) {
-//		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(classArchetype, tenantId, userId, subscribed);
-//
-//	}
-	
-	
+
+	// public List<ClassInstance>
+	// getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype
+	// classArchetype, String userId, boolean subscribed) {
+	// return
+	// classInstanceRepository.getByClassArchetypeAndUserIdAndSubscribed(classArchetype,
+	// userId, subscribed);
+	// }
+	//
+	// public List<ClassInstance>
+	// getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype
+	// classArchetype, String userId, String tenantId, boolean subscribed) {
+	// return
+	// classInstanceRepository.getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(classArchetype,
+	// tenantId, userId, subscribed);
+	//
+	// }
 
 	public List<ClassInstance> filterInstancesByPropertyCriteria(User volunteer, String classDefinitionId,
 			String tenantId, Criteria criteria) {
@@ -122,21 +133,21 @@ public class ClassInstanceService {
 		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId);
 		ClassInstance ci;
 		switch (classDefinition.getClassArchetype()) {
-		case ACHIEVEMENT:
-			ci = new AchievementClassInstance();
-			break;
-		case COMPETENCE:
-			ci = new CompetenceClassInstance();
-			break;
-		case TASK:
-			ci = new TaskClassInstance();
-			break;
-		case FUNCTION:
-			ci = new FunctionClassInstance();
-			break;
-			
-		default:
-			ci = null;
+			case ACHIEVEMENT:
+				ci = new AchievementClassInstance();
+				break;
+			case COMPETENCE:
+				ci = new CompetenceClassInstance();
+				break;
+			case TASK:
+				ci = new TaskClassInstance();
+				break;
+			case FUNCTION:
+				ci = new FunctionClassInstance();
+				break;
+
+			default:
+				ci = null;
 		}
 		ci.setName(classDefinition.getName());
 		ci.setClassDefinitionId(classDefinition.getId());
@@ -145,8 +156,8 @@ public class ClassInstanceService {
 		ci.setTenantId(tenantId);
 		// copy properties from target class
 		List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
-		List<ClassProperty<Object>> propLicenseList =  classPropertyService.
-					getAllClassPropertiesFromClass(classDefinition.getId());
+		List<ClassProperty<Object>> propLicenseList = classPropertyService
+				.getAllClassPropertiesFromClass(classDefinition.getId());
 		propLicenseList.forEach(cp -> propInstList.add(classPropertyToPropertyInstanceMapper.toTarget(cp)));
 		ci.setProperties(propInstList);
 		return ci;
@@ -171,7 +182,7 @@ public class ClassInstanceService {
 	public List<ClassInstance> addOrUpdateClassDefinitions(List<ClassInstance> classInstances) {
 		return classInstanceRepository.save(classInstances);
 	}
-	
+
 	public List<ClassInstance> filterTaskInstancesByYear(int year, List<ClassInstance> classInstances) {
 		return classInstances.stream().filter(tI -> {
 			PropertyInstance<Object> startDateProperty = tI.findProperty("Starting Date");

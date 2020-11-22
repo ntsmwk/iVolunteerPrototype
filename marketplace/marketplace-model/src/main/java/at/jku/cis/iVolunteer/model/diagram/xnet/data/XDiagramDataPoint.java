@@ -11,7 +11,7 @@ public class XDiagramDataPoint extends XDiagramData {
         this.value = value;
     }
 
-    public double getValue() {
+    public float getValue() {
         return this.value;
     }
 
