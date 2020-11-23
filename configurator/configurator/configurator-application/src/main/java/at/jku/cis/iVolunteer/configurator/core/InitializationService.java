@@ -56,7 +56,7 @@ public class InitializationService {
 			List<FlatPropertyDefinition<Object>> flatDefs = new LinkedList<>();
 			List<TreePropertyDefinition> treeDefs = new ArrayList<>();
 
-			flatDefs.addAll(prepareiVolunteerFlatPropertyDefinitions());			
+			flatDefs.addAll(prepareAPIFlatPropertyDefinitions());			
 			flatDefs.addAll(prepareGenericPropertyDefintions());
 			flatDefs.addAll(prepareHeaderPropertyDefintions());
 			flatDefs.addAll(prepareMichaTestProperties());
@@ -66,15 +66,22 @@ public class InitializationService {
 			treeDefs = treePropertyDefinitionRepository.save(treeDefs);
 
 			FrontendPropertyConfiguratorRequestBody body = new FrontendPropertyConfiguratorRequestBody();
+			
+			
 			body.setAction("save");
+			body.setUrl(marketplaceUrl+"/response/property-configurator");
+
+			
 			if (flatDefs != null) {
 				body.setFlatPropertyDefinitions(flatDefs);
+				sendResponseRestClient.sendPropertyConfiguratorResponse(body);
 			}
 			if (treeDefs != null) {
+				body.setFlatPropertyDefinitions(null);
 				body.setTreePropertyDefinitions(treeDefs);
+				sendResponseRestClient.sendPropertyConfiguratorResponse(body);
+
 			}
-			body.setUrl(marketplaceUrl+"/response/property-configurator");
-			sendResponseRestClient.sendPropertyConfiguratorResponse(body);
 
 			addClassConfigurations(1);
 		}
@@ -106,12 +113,12 @@ public class InitializationService {
 		}
 	}
 
-	public List<FlatPropertyDefinition<Object>> prepareiVolunteerFlatPropertyDefinitions() {
+	public List<FlatPropertyDefinition<Object>> prepareAPIFlatPropertyDefinitions() {
 
 		List<FlatPropertyDefinition<Object>> flatDefs = new LinkedList<>();
 
 		for (int i = 0; i < tenantIds.size(); i++) {
-			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer()) {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllAPI()) {
 				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), tenantIds.get(i).getId())
 						.size() == 0) {
 					pd.setTenantId(tenantIds.get(i).getId());

@@ -38,9 +38,8 @@ public class StandardPropertyDefinitions {
 	public StandardPropertyDefinitions() {
 
 	}
-	public List<FlatPropertyDefinition<Object>> getAlliVolunteer() {
-		List<FlatPropertyDefinition<Object>> properties = getAllHeader();
-		properties.addAll(getAllGeneric());
+	public List<FlatPropertyDefinition<Object>> getAllAPI() {
+		List<FlatPropertyDefinition<Object>> properties = new ArrayList<>();
 		properties.add(new FlatPropertyDefinition<Object>("IVolunteerUUID", PropertyType.TEXT));
 		properties.add(new FlatPropertyDefinition<Object>("IVolunteerSource", PropertyType.TEXT));
 		properties.add(new FlatPropertyDefinition<Object>("IssuedOn", PropertyType.DATE));
@@ -101,7 +100,7 @@ public class StandardPropertyDefinitions {
 		if (key == "FF") {
 			props.add(new TaskTypePropertyFF());
 		}
-		if (key == "MV") {
+		else if (key == "MV") {
 			props.add(new TaskTypePropertyMV());
 		}
 
@@ -127,8 +126,6 @@ public class StandardPropertyDefinitions {
 		props.add(new PostcodeProperty());
 		props.add(new NumberOfVolunteersProperty());
 		props.add(new TaskPeriodValueProperty());
-		props.add(new StartDateProperty());
-		props.add(new EndDateProperty());
 		props.add(new UrgentProperty());
 		props.add(new HighlightedProperty());
 		props.add(new PromotedProperty());
