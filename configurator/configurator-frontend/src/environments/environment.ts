@@ -9,7 +9,7 @@ export const environment = {
   JSON_SERVER_URL: "http://localhost:3000/repository",
   CORE_URL: "http://localhost:8090",
   CONFIGURATOR_URL: "http://localhost:8095",
-  MODE: 'flexprod' // 'iVolunteer' || 'flexprod' || 'all'
+  MODE: 'iVolunteer' // 'iVolunteer' || 'flexprod' || 'all'
 };
 
 /*

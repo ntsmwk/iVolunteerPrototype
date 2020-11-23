@@ -129,7 +129,7 @@ public class SendResponseController {
 
 		if (resp != null && resp.getStatusCode().is4xxClientError()) {
 			System.out.println("error - dont saved / deleted");
-
+			return resp;
 		} else if ((resp == null) || (resp != null && resp.getStatusCode().is2xxSuccessful())) {
 			if (body.getAction().equals("save")) {
 				MatchingConfiguration ret = matchingConfigurationService
@@ -186,6 +186,7 @@ public class SendResponseController {
 		}
 		if (resp != null && resp.getStatusCode().is4xxClientError()) {
 			System.out.println("error - not saved / deleted");
+			return resp;
 		} else if ((resp == null) || (resp != null && resp.getStatusCode().is2xxSuccessful())) {
 			if (body.getAction().equals("save")) {
 				if (body.getFlatPropertyDefinitions() != null) {

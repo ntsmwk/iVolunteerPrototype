@@ -16,6 +16,7 @@ import { AddClassDefinitionDialogData } from './_dialogs/add-class-definition-di
 import { NewMatchingDialogData } from './_dialogs/new-dialog/new-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResponseService } from 'app/main/content/_service/response.service';
+import { environment } from 'environments/environment';
 
 const HEADER_WIDTH = 400;
 const HEADER_HEIGHT = 50;
@@ -84,7 +85,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      if (isNullOrUndefined(params['tenantId'])) {
+      if (
+        ((environment.MODE === 'iVolunteer' || environment.MODE === 'all') && (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])))
+        ||
+        (environment.MODE === 'flexprod' && isNullOrUndefined(params['tenantId']))
+
+      ) {
         this.router.navigate(['main/invalid-parameters']);
       } else {
         this.tenantId = params['tenantId'];

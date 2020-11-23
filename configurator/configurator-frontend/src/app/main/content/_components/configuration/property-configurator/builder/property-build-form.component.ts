@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FlatPropertyDefinition } from 'app/main/content/_model/configurator/property/property';
 import { isNullOrUndefined } from 'util';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: "app-property-build-form",
@@ -25,8 +26,12 @@ export class PropertyBuildFormComponent implements OnInit {
     this.displayBuilder = true;
 
     this.route.queryParams.subscribe(params => {
-      if (isNullOrUndefined(params['tenantId'])) {
-        this.router.navigate(['main/invalid-parameters']);
+      if (
+        ((environment.MODE === 'iVolunteer' || environment.MODE === 'all') && (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])))
+        ||
+        (environment.MODE === 'flexprod' && isNullOrUndefined(params['tenantId']))
+
+      ) {        this.router.navigate(['main/invalid-parameters']);
       } else {
         this.tenantId = params['tenantId'];
         this.redirectUrl = params['redirect'];
