@@ -2,11 +2,13 @@ package at.jku.cis.iVolunteer.core.diagram;
 
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramData;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataArray;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramReturnEntity;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramDisplayBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramFilterBadge;
@@ -35,7 +38,7 @@ public class XDiagramDataController {
     @Autowired
     XDiagramDataService diagramDataService;
 
-    @PostMapping("/refresh")
+    @GetMapping("/refresh")
     public ResponseEntity<StringResponse> refresh() {
         CoreUser loggedInUser = loginService.getLoggedInUser();
 
@@ -60,11 +63,11 @@ public class XDiagramDataController {
         }
 
         CoreUser loggedInUser = loginService.getLoggedInUser();
-        XDiagramRawDataSet dataset = diagramDataService.getLatestDiagramData(loggedInUser);
+        XDiagramRawDataSet dataset = diagramDataService.getLatestDiagramRawData(loggedInUser);
 
         if (dataset.getDatapoints() == null) {
             diagramDataService.queryDiagramRawDataSetsFromMarketplacesByUser(loggedInUser.getId());
-            dataset = diagramDataService.getLatestDiagramData(loggedInUser);
+            dataset = diagramDataService.getLatestDiagramRawData(loggedInUser);
         }
 
         if (filter != null) {
@@ -73,6 +76,7 @@ public class XDiagramDataController {
 
         XDiagramReturnEntity diagramData = diagramDataService.generateSunburstData(dataset, display);
 
+        // TODO Philipp: order all levels downwards
         if (order != null) {
             if (order.isAsc()) {
                 diagramData.getData()
@@ -81,7 +85,6 @@ public class XDiagramDataController {
                 diagramData.getData().sort(
                         Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)).reversed());
             }
-
         }
 
         return ResponseEntity.ok(diagramData);
@@ -105,11 +108,11 @@ public class XDiagramDataController {
         }
 
         CoreUser loggedInUser = loginService.getLoggedInUser();
-        XDiagramRawDataSet dataset = diagramDataService.getLatestDiagramData(loggedInUser);
+        XDiagramRawDataSet dataset = diagramDataService.getLatestDiagramRawData(loggedInUser);
 
         if (dataset.getDatapoints() == null) {
             diagramDataService.queryDiagramRawDataSetsFromMarketplacesByUser(loggedInUser.getId());
-            dataset = diagramDataService.getLatestDiagramData(loggedInUser);
+            dataset = diagramDataService.getLatestDiagramRawData(loggedInUser);
         }
 
         if (filter != null) {
@@ -139,7 +142,6 @@ public class XDiagramDataController {
 
     @PostMapping("/competence")
     public XDiagramReturnEntity getCompetenceDiagramData() {
-
         return null;
     }
 

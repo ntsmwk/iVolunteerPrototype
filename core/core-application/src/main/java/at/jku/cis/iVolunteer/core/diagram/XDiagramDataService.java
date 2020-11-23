@@ -38,7 +38,7 @@ public class XDiagramDataService {
     @Autowired
     XDiagramDataRestClient diagramDataRestClient;
 
-    public XDiagramRawDataSet getLatestDiagramData(CoreUser user) {
+    public XDiagramRawDataSet getLatestDiagramRawData(CoreUser user) {
         List<XDiagramRawDataSet> datasets = diagramRawDataSetRepository.findByUserId(user.getId());
         datasets.sort(Comparator.comparing(XDiagramRawDataSet::getRefreshTimestamp).reversed());
 
@@ -143,7 +143,6 @@ public class XDiagramDataService {
 
     private List<XDiagramData> insertValues(List<XDiagramData> data, int depth, int maxDepth, List<String> values,
             float duration) {
-
         if (depth == maxDepth) {
             data.add(new XDiagramDataPoint(values.get(depth), duration));
         } else {
@@ -181,6 +180,7 @@ public class XDiagramDataService {
 
     }
 
+    // TODO Philipp test
     public XDiagramReturnEntity generateBadgeTimelineData(List<BadgeCertificate> badges) {
         // map<year, badgeCertificates>
         HashMap<Integer, List<BadgeCertificate>> map = new HashMap<>();
@@ -209,11 +209,6 @@ public class XDiagramDataService {
 
     @Scheduled(fixedDelay = 1_800_000, initialDelay = 60_000) // 30min, 1min
     private void queryDiagramRawDataSetsFromMarketplaces() {
-        // TODO
-        // currently each 30min all datasets are added to db
-        // method above returns only latest datasets
-        // -> remove older ones automatically from db
-
         List<XDiagramRawDataSet> datasets = diagramDataRestClient.getDiagramRawData();
         diagramRawDataSetRepository.save(datasets);
     }
@@ -221,7 +216,5 @@ public class XDiagramDataService {
     public void queryDiagramRawDataSetsFromMarketplacesByUser(String userId) {
         List<XDiagramRawDataSet> datasets = diagramDataRestClient.getDiagramRawDataByUser(userId);
         diagramRawDataSetRepository.save(datasets);
-
     }
-
 }
