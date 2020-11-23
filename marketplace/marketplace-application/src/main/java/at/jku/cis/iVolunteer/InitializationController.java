@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,16 +35,11 @@ public class InitializationController {
 	private InitializationService initializationService;
 	@Autowired
 	private APIInitializationService apiInitializationService;
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
 
-	@PutMapping("/init/add-test-data")
-	public void addTestData() {
+	@PutMapping("/init/add-test-data/{key}")
+	public void addTestData(@PathVariable("key") String key) {
 		addFireBrigadeUserMapping();
-//		addAllProperties();
-//		addAllTestProperties();
-//		addClassConfigurations();
-		initializationService.initConfigurator();
+		initializationService.initConfigurator(key);
 
 		addAPIClassDefinitions();
 		

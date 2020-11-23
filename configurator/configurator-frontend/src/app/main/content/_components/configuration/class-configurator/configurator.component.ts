@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isNullOrUndefined } from 'util';
+import { environment } from "environments/environment";
 
 /**
  * DEBUG: 
@@ -26,8 +27,12 @@ export class ConfiguratorComponent implements OnInit {
   async ngOnInit() {
 
     this.route.queryParams.subscribe(params => {
-      if (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])) {
-        console.error('tenantId not set');
+      if (
+        ((environment.MODE === 'iVolunteer' || environment.MODE === 'all') && (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])))
+        ||
+        (environment.MODE === 'flexprod' && isNullOrUndefined(params['tenantId']))
+
+      ) {
         this.router.navigate(['main/invalid-parameters']);
       } else {
         this.tenantId = params['tenantId'];

@@ -9,6 +9,7 @@ import { isNullOrUndefined } from 'util';
 import { TreePropertyDefinition } from 'app/main/content/_model/configurator/property/tree-property';
 import { PropertyType, FlatPropertyDefinition, PropertyEntry } from 'app/main/content/_model/configurator/property/property';
 import { ResponseService } from 'app/main/content/_service/response.service';
+import { environment } from 'environments/environment';
 
 
 @Component({
@@ -55,8 +56,12 @@ export class PropertyListComponent implements OnInit {
     };
 
     this.route.queryParams.subscribe(params => {
-      if (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])) {
-        this.router.navigate(['main/invalid-parameters']);
+      if (
+        ((environment.MODE === 'iVolunteer' || environment.MODE === 'all') && (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])))
+        ||
+        (environment.MODE === 'flexprod' && isNullOrUndefined(params['tenantId']))
+
+      ) {        this.router.navigate(['main/invalid-parameters']);
       } else {
         this.tenantId = params['tenantId'];
         this.redirectUrl = params['redirect'];

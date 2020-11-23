@@ -34,9 +34,10 @@
 
     <mat-form-field style="width: 100%" appearance="outline" *ngIf="!showEditDialog">
       <mat-select placeholder="Konfigurationstyp" formControlName="type">
-        <mat-option value="iVolunteer">iVolunteer</mat-option>
-        <mat-option value="flexprodHaubenofen">Flexprod Haubenofen</mat-option>
-        <mat-option value="flexprodRFQ">Flexprod RFQ</mat-option>
+        <mat-option *ngIf="configuratorMode !== 'flexprod'" value="iVolunteer">iVolunteer</mat-option>
+        <mat-option *ngIf="configuratorMode !== 'iVolunteer'" value="flexprodHaubenofen">Flexprod Haubenofen
+        </mat-option>
+        <mat-option *ngIf="configuratorMode !== 'iVolunteer'" value="flexprodRFQ">Flexprod RFQ</mat-option>
         <mat-option value="empty">Leer</mat-option>
         <!-- <mat-option value="COMPOSITION ">Komposition</mat-option> -->
       </mat-select>

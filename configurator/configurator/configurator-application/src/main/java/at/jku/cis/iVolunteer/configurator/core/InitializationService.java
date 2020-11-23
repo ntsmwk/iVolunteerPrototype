@@ -48,7 +48,7 @@ public class InitializationService {
 	private List<Tuple<String, String>> tenantIds;
 	private String marketplaceUrl;
 
-	public void init(InitConfiguratorRequest initRequestBody) {
+	public void initIVolunteer(InitConfiguratorRequest initRequestBody) {
 		this.tenantIds = initRequestBody.getTenantIds();
 		this.marketplaceUrl = initRequestBody.getMpUrl();
 
@@ -56,40 +56,69 @@ public class InitializationService {
 			List<FlatPropertyDefinition<Object>> flatDefs = new LinkedList<>();
 			List<TreePropertyDefinition> treeDefs = new ArrayList<>();
 
-			flatDefs.addAll(prepareiVolunteerFlatPropertyDefinitions());			
+			flatDefs.addAll(prepareAPIFlatPropertyDefinitions());			
 			flatDefs.addAll(prepareGenericPropertyDefintions());
 			flatDefs.addAll(prepareHeaderPropertyDefintions());
 			flatDefs.addAll(prepareMichaTestProperties());
-			flatDefs.addAll(prepareFlexProdPropertyDefinitions());
-			
 			treeDefs.addAll(prepareiVolunteerTreePropertyDefinitions());
 
 			flatDefs = flatPropertyDefinitionRepository.save(flatDefs);
 			treeDefs = treePropertyDefinitionRepository.save(treeDefs);
 
 			FrontendPropertyConfiguratorRequestBody body = new FrontendPropertyConfiguratorRequestBody();
+			
+			
+			body.setAction("save");
+			body.setUrl(marketplaceUrl+"/response/property-configurator");
+
+			
+			if (flatDefs != null) {
+				body.setFlatPropertyDefinitions(flatDefs);
+				sendResponseRestClient.sendPropertyConfiguratorResponse(body);
+			}
+			if (treeDefs != null) {
+				body.setFlatPropertyDefinitions(null);
+				body.setTreePropertyDefinitions(treeDefs);
+				sendResponseRestClient.sendPropertyConfiguratorResponse(body);
+
+			}
+
+			addClassConfigurations(1);
+		}
+
+	}
+	
+	public void initFlexProd(InitConfiguratorRequest initRequestBody) {
+		this.tenantIds = initRequestBody.getTenantIds();
+		this.marketplaceUrl = initRequestBody.getMpUrl();
+
+		if (tenantIds != null) {
+			List<FlatPropertyDefinition<Object>> flatDefs = new ArrayList<>();
+			flatDefs.addAll(prepareFlexProdPropertyDefinitions());
+			flatDefs = flatPropertyDefinitionRepository.save(flatDefs);
+	
+			FrontendPropertyConfiguratorRequestBody body = new FrontendPropertyConfiguratorRequestBody();
 			body.setAction("save");
 			if (flatDefs != null) {
 				body.setFlatPropertyDefinitions(flatDefs);
 			}
-			if (treeDefs != null) {
-				body.setTreePropertyDefinitions(treeDefs);
+	
+			if (this.marketplaceUrl != null) {
+				body.setUrl(marketplaceUrl+"/response/property-configurator");
+				sendResponseRestClient.sendPropertyConfiguratorResponse(body);
 			}
-			body.setUrl(marketplaceUrl+"/response/property-configurator");
-			sendResponseRestClient.sendPropertyConfiguratorResponse(body);
-
-			addClassConfigurations(1);
-//			addFlexProdClassDefinitionsAndConfigurations();
+			
+			addFlexProdClassDefinitionsAndConfigurations();
+		
 		}
-
 	}
 
-	public List<FlatPropertyDefinition<Object>> prepareiVolunteerFlatPropertyDefinitions() {
+	public List<FlatPropertyDefinition<Object>> prepareAPIFlatPropertyDefinitions() {
 
 		List<FlatPropertyDefinition<Object>> flatDefs = new LinkedList<>();
 
 		for (int i = 0; i < tenantIds.size(); i++) {
-			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAlliVolunteer()) {
+			for (FlatPropertyDefinition<Object> pd : standardPropertyDefinitions.getAllAPI()) {
 				if (flatPropertyDefinitionRepository.getByNameAndTenantId(pd.getName(), tenantIds.get(i).getId())
 						.size() == 0) {
 					pd.setTenantId(tenantIds.get(i).getId());
@@ -105,10 +134,9 @@ public class InitializationService {
 	public List<TreePropertyDefinition> prepareiVolunteerTreePropertyDefinitions() {
 		List<TreePropertyDefinition> treeDefs = new LinkedList<>();
 
-//		String key = (tenantIds.get(i).getLabel().equals("FF Eidenberg")) ? "FF" : "MV";
 		for (int i = 0; i < tenantIds.size(); i++) {
+			String key = (tenantIds.get(i).getLabel().equals("MV Schwertberg")) ? "MV" : "FF";
 
-			String key = "FF";
 			for (TreePropertyDefinition tpd : standardPropertyDefinitions.getAllTreeProperties(key)) {
 				if (flatPropertyDefinitionRepository.getByNameAndTenantId(tpd.getName(), tenantIds.get(i).getId())
 						.size() == 0) {
@@ -205,7 +233,7 @@ public class InitializationService {
 	}
 
 	public void addFlexProdClassDefinitionsAndConfigurations() {
-		for (Tuple<String, String> tenant : tenantIds) {
+		for (Tuple<String, String> tenant : this.tenantIds) {
 			
 			FrontendClassConfiguratorRequestBody body = new FrontendClassConfiguratorRequestBody();
 			body.setAction("new");
@@ -216,7 +244,9 @@ public class InitializationService {
 			req.setClassConfiguration(ccStub);
 			req.setTenantId(tenant.getId());
 			body.setSaveRequest(req);
-			body.setUrl(marketplaceUrl + "/response/class-configurator");
+			if (marketplaceUrl != null) {
+				body.setUrl(marketplaceUrl + "/response/class-configurator");
+			}
 			body.setActionContext("flexprodHaubenofen");
 			
 			sendResponseRestClient.sendClassConfiguratorResponse(body);
@@ -230,7 +260,9 @@ public class InitializationService {
 			req.setClassConfiguration(ccStub);
 			req.setTenantId(tenant.getId());
 			body.setSaveRequest(req);
-			body.setUrl(marketplaceUrl + "/response/class-configurator");
+			if (marketplaceUrl != null) {
+				body.setUrl(marketplaceUrl + "/response/class-configurator");
+			}
 			body.setActionContext("flexprodRFQ");
 			sendResponseRestClient.sendClassConfiguratorResponse(body);
 		}
