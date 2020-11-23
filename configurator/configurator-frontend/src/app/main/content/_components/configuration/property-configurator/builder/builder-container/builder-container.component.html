@@ -1,0 +1,23 @@
+<div>
+  <mat-radio-group aria-label="Auswählen" [(ngModel)]="builderType" (change)="onSelectionChange()"
+    [disabled]="isRadioGroupDisabled()">
+    <mat-radio-button value="flat">Flat Property</mat-radio-button>
+    <mat-radio-button value="tree">Tree Property</mat-radio-button>
+  </mat-radio-group>
+
+  <div class="m-8">
+    <mat-divider></mat-divider>
+  </div>
+
+  <div *ngIf="builderType == 'flat'">
+    <app-flat-property-builder [redirectUrl]="redirectUrl" [tenantId]="tenantId" [entryId]="entryId"
+      [sourceString]="sourceString" (result)="handleResultEvent($event)">
+    </app-flat-property-builder>
+  </div>
+
+  <div *ngIf="builderType == 'tree'">
+    <app-tree-property-builder [redirectUrl]="redirectUrl" [tenantId]="tenantId" [entryId]="entryId"
+      [sourceString]="sourceString" (result)="handleResultEvent($event)" (management)="handleManagementEvent($event)">
+    </app-tree-property-builder>
+  </div>
+</div>

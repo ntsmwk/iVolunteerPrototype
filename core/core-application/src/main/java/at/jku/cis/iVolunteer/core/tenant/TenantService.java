@@ -6,15 +6,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
-import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
-import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 import at.jku.cis.iVolunteer.model.user.TenantSubscription;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 

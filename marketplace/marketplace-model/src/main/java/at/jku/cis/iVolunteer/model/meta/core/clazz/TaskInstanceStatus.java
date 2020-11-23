@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum TaskInstanceStatus {
 
-	OPEN("OPEN"), CLOSED("CLOSED")
-	;
+	OPEN("OPEN"), CLOSED("CLOSED");
 
 	private final String status;
 

@@ -32,7 +32,6 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
-import at.jku.cis.iVolunteer.model.user.User;
 
 @Service
 public class CollectionService {

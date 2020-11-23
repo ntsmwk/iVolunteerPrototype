@@ -1,0 +1,27 @@
+<div class="browse-dialog-content">
+
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <h2>Durchsuchen</h2>
+
+  </div>
+
+  <table class="browse-table" cellspacing=0 cellpadding=3 fusePerfectScrollbar>
+    <col width="250px" />
+    <col width="100px" />
+    <col width="100px" />
+
+    <tr style="background-color: rgb(62, 125, 219); color: white;">
+
+      <th style="text-align: start" class="table-header-cell">Name</th>
+      <th style="text-align: start" class="table-header-cell">Linke Seite</th>
+      <th style="text-align: start" class="table-header-cell">Rechte Seite</th>
+
+    </tr>
+    <tr *ngFor="let entry of data.entries" class="table-row" (click)="handleRowClick(entry)">
+      <td class="matching-configurator-name-cell" [matTooltip]="entry.name">{{entry.name}}</td>
+      <td class="class-configurator-name-cell" [matTooltip]="entry.leftMatchingEntity">{{entry.leftMatchingEntity}}</td>
+      <td class="class-configurator-name-cell" [matTooltip]="entry.rightMatchingEntity">{{entry.rightMatchingEntity}}
+      </td>
+    </tr>
+  </table>
+</div>

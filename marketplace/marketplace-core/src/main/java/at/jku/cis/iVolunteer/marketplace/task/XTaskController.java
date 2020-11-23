@@ -14,26 +14,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.badge.XBadgeCertificateService;
 import at.jku.cis.iVolunteer.marketplace.core.CoreStorageRestClient;
+import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
-import at.jku.cis.iVolunteer.marketplace.user.UserController;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
 import at.jku.cis.iVolunteer.model._httprequests.PostTaskRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
+import at.jku.cis.iVolunteer.model._httpresponses.XTaskSubscribedResponse;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToPostTaskRequestMapper;
 import at.jku.cis.iVolunteer.model._mapper.xnet.XTaskInstanceToTaskMapper;
+import at.jku.cis.iVolunteer.model._mapper.xnet.XTenantToTenantSerializedMapper;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.core.tenant.XTenantSerialized;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.task.XTask;
 import at.jku.cis.iVolunteer.model.user.User;
-import at.jku.cis.iVolunteer.model.user.XUser;
 
 @RestController
 @RequestMapping("/task")
@@ -44,9 +48,12 @@ public class XTaskController {
 	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
 	@Autowired private XTaskInstanceService xTaskInstanceService;
 	@Autowired private UserService userService;
-	@Autowired private UserController userController;
 	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
 	@Autowired private CoreStorageRestClient coreStorageRestClient;
+	@Autowired private XBadgeCertificateService badgeCertificateService;
+	@Autowired private CoreTenantRestClient tenantRestClient;
+	@Autowired private XTenantToTenantSerializedMapper xTenantToTenantSerializedMapper;
+
 
 	@PostMapping("/new")
 	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
@@ -105,7 +112,7 @@ public class XTaskController {
 				classInstance.setIssuerId(task.getTenantId());
 				classInstance.setId(null);
 				addedClassInstances.add(classInstance);
-				// TODO BadgeCertificates ausstellen
+				createBadgeCertificates(task.getBadgeTemplateIds(), userId, task.getTenantId());
 			}
 
 			addedClassInstances = classInstanceController.createNewClassInstances(addedClassInstances);
@@ -127,13 +134,13 @@ public class XTaskController {
 
 		if (taskInstance.getSubscribedVolunteerIds() != null) {
 			List<ClassInstance> addedClassInstances = new ArrayList<>();
-			for (String id : taskInstance.getSubscribedVolunteerIds()) {
+			for (String userId : taskInstance.getSubscribedVolunteerIds()) {
 				ClassInstance classInstance = new ClassInstance(taskInstance);
 
-				classInstance.setUserId(id);
+				classInstance.setUserId(userId);
 				classInstance.setId(null);
 				addedClassInstances.add(classInstance);
-				// TODO BadgeCertificates ausstellen
+				createBadgeCertificates(taskInstance.getBadgeTemplateIds(), userId, taskInstance.getTenantId());
 			}
 
 			addedClassInstances = classInstanceController.createNewClassInstances(addedClassInstances);
@@ -146,36 +153,57 @@ public class XTaskController {
 
 	}
 
+	private void createBadgeCertificates(List<String> badgeTemplateIds, String userId, String tenantId) {
+		Tenant tenant = tenantRestClient.getTenantById(tenantId, "");
+		XTenantSerialized tenantSerialized = xTenantToTenantSerializedMapper.toTarget(tenant);
+		badgeTemplateIds
+				.forEach(bt -> this.badgeCertificateService.createBadgeCertificate(userId, bt, tenantSerialized));
+	}
+
 	@GetMapping("/{taskId}")
 	public ResponseEntity<Object> getTaskInstancesById(@PathVariable String taskId) {
+
 		TaskInstance task = xTaskInstanceService.getTaskInstance(taskId);
 		if (task == null) {
 			return ResponseEntity.badRequest().body(HttpErrorMessages.NOT_FOUND_TASK);
 		}
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
-		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
+
+		XTaskSubscribedResponse xt = xTaskInstanceToTaskMapper.toTaskSubscribedResponse(task, users);
+
+		User loggedInUser = loginService.getLoggedInUser();
+		boolean alreadySubscribed = task.getSubscribedVolunteerIds().stream()
+				.anyMatch(id -> id.equals(loggedInUser.getId()));
+		xt.setSubscribed(alreadySubscribed);
+
+		return ResponseEntity.ok(xt);
 	}
 
-//	TODO change to post + postbody
 	@GetMapping("/tenant/{tenantId}")
-	public List<XTask> getTaskInstancesByTenantId(@PathVariable String tenantId) {
-		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantId(tenantId);
-		// TODO fix multiple db accesses...
-		return tasks.stream().map(t -> {
-			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
-			return xTaskInstanceToTaskMapper.toTarget(t, users);
-		}).collect(Collectors.toList());
-	}
+	public List<XTaskSubscribedResponse> getTaskInstancesByTenantId(@PathVariable String tenantId,
+			@RequestParam(value = "taskType", defaultValue = "ALL") String taskType,
+			@RequestParam(value = "startYear", defaultValue = "0") int startYear,
+			@RequestParam(value = "status", defaultValue = "ALL") String status) {
 
-//	TODO change to post + postbody
-	@GetMapping("/tenant/{tenantId}/{year}")
-	public List<XTask> getTaskInstancesByTenantIdByYear(@PathVariable String tenantId, @PathVariable int year) {
-		List<TaskInstance> tasks = xTaskInstanceService.getTaskInstanceByTenantIdByYear(tenantId, year);
+		String loggedInUserId = this.loginService.getLoggedInUser().getId();
+		List<TaskInstance> taskInstances = xTaskInstanceService.getTaskInstanceByTenantId(tenantId, taskType, startYear,
+				status, loggedInUserId);
 		// TODO fix multiple db accesses...
-		return tasks.stream().map(t -> {
+		List<XTaskSubscribedResponse> tasks = taskInstances.stream().map(t -> {
 			List<User> users = userService.getUsers(t.getSubscribedVolunteerIds());
-			return xTaskInstanceToTaskMapper.toTarget(t, users);
+			XTaskSubscribedResponse xt = xTaskInstanceToTaskMapper.toTaskSubscribedResponse(t, users);
+
+			boolean alreadySubscribed = t.getSubscribedVolunteerIds().stream()
+					.anyMatch(id -> id.equals(loggedInUserId));
+			xt.setSubscribed(alreadySubscribed);
+			return xt;
 		}).collect(Collectors.toList());
+
+		tasks.forEach(t -> t.setBadges(null));
+		tasks.forEach(t -> t.setDynamicBlocks(null));
+
+		return tasks;
+
 	}
 
 	public ResponseEntity<Object> getTask(@PathVariable String taskId) {
@@ -187,7 +215,15 @@ public class XTaskController {
 		}
 
 		List<User> users = userService.getUsers(task.getSubscribedVolunteerIds());
-		return ResponseEntity.ok(xTaskInstanceToTaskMapper.toTarget(task, users));
+
+		XTaskSubscribedResponse xt = xTaskInstanceToTaskMapper.toTaskSubscribedResponse(task, users);
+
+		User loggedInUser = loginService.getLoggedInUser();
+		boolean alreadySubscribed = task.getSubscribedVolunteerIds().stream()
+				.anyMatch(id -> id.equals(loggedInUser.getId()));
+		xt.setSubscribed(alreadySubscribed);
+
+		return ResponseEntity.ok(xt);
 	}
 
 	@PostMapping("/update/{taskId}")

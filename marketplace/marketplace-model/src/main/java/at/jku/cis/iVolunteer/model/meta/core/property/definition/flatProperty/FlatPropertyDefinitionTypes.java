@@ -5,7 +5,6 @@ import java.util.Date;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
-//import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 
 public class FlatPropertyDefinitionTypes {
 

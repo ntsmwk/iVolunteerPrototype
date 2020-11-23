@@ -18,14 +18,15 @@ public class ClassPropertyController {
 
 	@Autowired private ClassPropertyService classPropertyService;
 
-
 	@GetMapping("/meta/core/property/class/{classDefinitionId}/all")
-	List<ClassProperty<Object>> getAllClassPropertiesFromClass(@PathVariable("classDefinitionId") String classDefinitionId) {
+	List<ClassProperty<Object>> getAllClassPropertiesFromClass(
+			@PathVariable("classDefinitionId") String classDefinitionId) {
 		return classPropertyService.getAllClassPropertiesFromClass(classDefinitionId);
 	}
 
 	@GetMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}")
-	ClassProperty<Object> getClassPropertyById(@PathVariable("classDefinitionId") String classDefinitionId, @PathVariable("classPropertyId") String classPropertyId) {
+	ClassProperty<Object> getClassPropertyById(@PathVariable("classDefinitionId") String classDefinitionId,
+			@PathVariable("classPropertyId") String classPropertyId) {
 		return classPropertyService.getClassPropertyById(classDefinitionId, classPropertyId);
 	}
 
@@ -36,16 +37,17 @@ public class ClassPropertyController {
 
 		return classPropertyService.updateClassProperty(classDefinitionId, classPropertyId, updatedClassProperty);
 	}
-	
 
 	@PutMapping("meta/core/property/class/get-classproperty-from-definition-by-id")
 	private List<ClassProperty<Object>> getClassPropertyFromPropertyDefinitionById(
 			@RequestBody ClassPropertyRequestObject requestObject) {
-		return classPropertyService.getClassPropertyFromDefinitionById(requestObject.getFlatPropertyDefinitionIds(), requestObject.getTreePropertyDefinitionIds());
+		return classPropertyService.getClassPropertyFromDefinitionById(requestObject.getFlatPropertyDefinitionIds(),
+				requestObject.getTreePropertyDefinitionIds());
 	}
 
 	@PutMapping("meta/core/property/class/{id}/add-properties-by-id")
-	private List<ClassProperty<Object>> addPropertiesToClassDefinitionById(@PathVariable("id") String id, @RequestBody List<String> propertyIds) {
+	private List<ClassProperty<Object>> addPropertiesToClassDefinitionById(@PathVariable("id") String id,
+			@RequestBody List<String> propertyIds) {
 		return classPropertyService.addPropertiesToClassDefinitionById(id, propertyIds);
 	}
 

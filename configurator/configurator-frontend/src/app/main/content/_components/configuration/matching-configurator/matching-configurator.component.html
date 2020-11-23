@@ -1,0 +1,58 @@
+<div>
+
+  <div>
+    <matching-editor-top-menu-bar [currentMatchingConfiguration]="getMatchingConfiguration()"
+      [redirectUrl]="redirectUrl" [tenantId]="tenantId"
+      (menuOptionClickedEvent)="consumeMenuOptionClickedEvent($event)">
+    </matching-editor-top-menu-bar>
+  </div>
+
+  <div #paletteContainer id="paletteContainer" style="border-bottom: solid 1px rgb(160, 160, 160)">
+
+    <div *ngIf="data" fxLayout="row" fxLayoutAlign="start center">
+      <div class="pr-4 pl-4">Matching-Operatoren</div>
+
+      <div *ngFor="let item of matchingOperatorPalettes">
+        <img [src]="item.imgPath" width="30" height="30" style="cursor: pointer" [matTooltip]="item.label"
+          (mousedown)="handleMousedownEvent($event, item, graph)">
+        <div class="pr-4"></div>
+      </div>
+
+      <mat-checkbox labelPosition="after" [(ngModel)]="includeConnectors" class="pl-4"
+        matTooltip="Operator mit bereits angedockten Verbindungen hinzufügen">
+        <div fxLayout="row">
+          <div style="font-size: 14px" class="pr-4">-</div>
+          <div style="font-size: 14px">Operator mit Verbindungen</div>
+        </div>
+      </mat-checkbox>
+
+      <div class="pr-8 pl-8">|</div>
+
+      <div *ngFor="let item of matchingConnectorPalettes">
+        <img [src]="item.imgPath" width="30" height="30" style="cursor: pointer" [matTooltip]="item.label"
+          (mousedown)="handleMousedownEvent($event, item, graph)">
+        <div class="pr-4"></div>
+      </div>
+
+      <div class="pr-8 pl-8">|</div>
+
+      <mat-checkbox labelPosition="after" [(ngModel)]="confirmDelete" class="pl-4"
+        matTooltip="Bestätigungsdialog bei jedem Löschvorgang anzeigen">
+        <div fxLayout="row">
+          <div style="font-size: 14px" class="pr-4">-</div>
+          <div style="font-size: 14px">Löschen bestätigen</div>
+        </div>
+      </mat-checkbox>
+
+      <div class="pr-8 pl-8">|</div>
+    </div>
+  </div>
+
+
+  <div #graphContainer id="graphContainer"></div>
+
+  <matching-options-overlay-control [displayOverlay]="displayOverlay" [overlayRelationship]="overlayRelationship"
+    [overlayEvent]="overlayEvent" (overlayClosed)="handleOverlayClosedEvent($event)">
+  </matching-options-overlay-control>
+
+</div>

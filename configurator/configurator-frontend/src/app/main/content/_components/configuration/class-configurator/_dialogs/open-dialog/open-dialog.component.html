@@ -1,0 +1,50 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>open_in_new</mat-icon>
+      </td>
+      <td>
+        <h1>Klassen-Konfiguration öffnen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+<mat-dialog-content *ngIf="loaded">
+  <div *ngIf="!browseMode" class="browse-dialog-content">
+    <h2 style="padding-bottom: 8px">Zuletzt geändert</h2>
+
+    <table class="browse-table" cellspacing="0" cellpadding="3">
+      <col width="325px" />
+      <col width="125px" />
+
+      <tr style="background-color: rgb(62, 125, 219); color: white;">
+        <th style="text-align: start;" class="table-header-cell">Name</th>
+        <th style="text-align: start;" class="table-header-cell">Geändert</th>
+      </tr>
+      <tr *ngFor="let entry of recentClassConfigurations" class="table-row" (click)="handleRowClick(entry)">
+        <td class="name-cell" [matTooltip]="entry.name">{{ entry.name }}</td>
+        <td class="date-cell">
+          {{ entry.timestamp | date: "dd.MM.yyyy - HH:mm:ss" }}
+        </td>
+      </tr>
+    </table>
+
+
+  </div>
+
+  <div *ngIf="browseMode">
+    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)">
+    </browse-class-sub-dialog>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="secondary-button-light" mat-stroked-button type="button" (click)="handleBrowseClick()"
+    *ngIf="!browseMode">Durchsuchen</button>
+  <button class="secondary-button-light" mat-stroked-button type="button" (click)="handleBrowseBackClick()"
+    *ngIf="browseMode">Zurück</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+</mat-dialog-actions>

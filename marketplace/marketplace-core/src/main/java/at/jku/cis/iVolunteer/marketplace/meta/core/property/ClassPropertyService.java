@@ -63,13 +63,13 @@ public class ClassPropertyService {
 		return null;
 	}
 	
-	public ClassProperty<Object> getClassPropertyByName(String classDefinitionId, String classPropertyName, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
-		if (classDefinition != null) {
-			return findClassPropertyByName(classDefinition, classPropertyName);
-		}
-		return null;
-	}
+//	public ClassProperty<Object> getClassPropertyByName(String classDefinitionId, String classPropertyName, String tenantId) {
+//		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
+//		if (classDefinition != null) {
+//			return findClassPropertyByName(classDefinition, classPropertyName);
+//		}
+//		return null;
+//	}
 
 	public ClassProperty<Object> updateClassProperty(String classDefinitionId, String classPropertyId,
 			ClassProperty<Object> updatedClassProperty) {
@@ -85,7 +85,7 @@ public class ClassPropertyService {
 		return null;
 	}
 
-	private ClassProperty<Object> findClassProperty(ClassDefinition classDefinition, String classPropertyId) {
+	public ClassProperty<Object> findClassProperty(ClassDefinition classDefinition, String classPropertyId) {
 		// @formatter:off
 		return classDefinition
 				.getProperties()
@@ -95,7 +95,7 @@ public class ClassPropertyService {
 		// @formatter:on
 	}
 	
-	private ClassProperty<Object> findClassPropertyByName(ClassDefinition classDefinition, String classPropertyName) {
+	public ClassProperty<Object> findClassPropertyByName(ClassDefinition classDefinition, String classPropertyName) {
 		// @formatter:off
 		return classDefinition
 				.getProperties()
@@ -105,7 +105,7 @@ public class ClassPropertyService {
 		// @formatter:on
 	}
 
-	private int findIndexOfClassProperty(ClassDefinition classDefinition, String classPropertyId) {
+	public int findIndexOfClassProperty(ClassDefinition classDefinition, String classPropertyId) {
 		// @formatter:off
 		return IntStream.range(0, classDefinition.getProperties().size())
 			     .filter(i -> classPropertyId.equals(classDefinition.getProperties().get(i).getId()))
@@ -173,7 +173,7 @@ public class ClassPropertyService {
 		return classDefinitionRepository.save(clazz);
 	}
 
-	private ClassDefinition storeClassProperties(String id, List<ClassProperty<Object>> classProperties) {
+	public ClassDefinition storeClassProperties(String id, List<ClassProperty<Object>> classProperties) {
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
 		if (clazz.getProperties() == null) {
 			clazz.setProperties(new ArrayList<>());
@@ -183,7 +183,7 @@ public class ClassPropertyService {
 		return clazz;
 	}
 
-	private List<ClassProperty<Object>> createClassPropertiesFromDefinitions(List<FlatPropertyDefinition<Object>> propertyDefinitions) {
+	public List<ClassProperty<Object>> createClassPropertiesFromDefinitions(List<FlatPropertyDefinition<Object>> propertyDefinitions) {
 		List<ClassProperty<Object>> cProps = new ArrayList<>();
 		for (FlatPropertyDefinition<Object> pd : propertyDefinitions) {
 			cProps.add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
@@ -191,7 +191,7 @@ public class ClassPropertyService {
 		return cProps;
 	}
 	
-	private List<ClassProperty<Object>> createClassPropertiesFromEnumDefinitions(List<TreePropertyDefinition> enums) {
+	public List<ClassProperty<Object>> createClassPropertiesFromEnumDefinitions(List<TreePropertyDefinition> enums) {
 		List<ClassProperty<Object>> cProps = new ArrayList<>();
 		for (TreePropertyDefinition ed : enums) {
 			cProps.add(enumDefinitionToClassPropertyMapper.toTarget(ed));

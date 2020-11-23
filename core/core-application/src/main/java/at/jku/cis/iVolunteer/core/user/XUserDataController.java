@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
+import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
@@ -29,6 +31,7 @@ public class XUserDataController {
 	@Autowired private XUserDataService userDataService;
 	@Autowired private CoreUserService coreUserService;
 	@Autowired private XCoreUserMapper xUserMapper;
+	@Autowired private XTenantMapper xTenantMapper;
 
 	@GetMapping("/userInfo")
 	public ResponseEntity<Object> getUserInfo() {
@@ -80,8 +83,13 @@ public class XUserDataController {
 		List<Tenant> tenants = new ArrayList<>();
 		tenants = user.getSubscribedTenants().stream().filter(s -> s.getRole().equals(UserRole.VOLUNTEER))
 				.map(s -> s.getTenantId()).map(id -> tenantService.getTenantById(id)).collect(Collectors.toList());
-
-		return ResponseEntity.ok(tenants);
+		
+		List<XTenant> xTenants = tenants.stream().map(t -> {
+			List<CoreUser> users = tenantService.getSubscribedUsers(t.getId());
+            return xTenantMapper.toTarget(t, users);
+		}).collect(Collectors.toList());
+		
+		return ResponseEntity.ok(xTenants);
 	}
 
 	// @GetMapping("/userInfo/badges")

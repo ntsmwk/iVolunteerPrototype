@@ -2,33 +2,33 @@ import { isNullOrUndefined } from 'util';
 import { PropertyConstraint } from '../constraint';
 import { TreePropertyEntry } from './tree-property';
 
-export class FlatPropertyDefinition<T> {
-    id: string;
-    name: string;
-    description: string;
+// export class FlatPropertyDefinition<T> {
+//     id: string;
+//     name: string;
+//     description: string;
 
-    tenantId: string;
+//     tenantId: string;
 
-    custom: boolean;
-    multiple: boolean;
+//     custom: boolean;
+//     multiple: boolean;
 
-    type: PropertyType;
+//     type: PropertyType;
 
-    allowedValues: T[];
+//     allowedValues: T[];
 
-    unit: string;
+//     unit: string;
 
-    required: boolean;
-    requiredMessage: string;
-    propertyConstraints: PropertyConstraint<T>[];
+//     required: boolean;
+//     requiredMessage: string;
+//     propertyConstraints: PropertyConstraint<T>[];
 
-    timestamp: Date;
-    visible: boolean;
-    tabId: number;
+//     timestamp: Date;
+//     visible: boolean;
+//     tabId: number;
 
-    computed: boolean;
+//     computed: boolean;
 
-}
+// }
 
 export class ClassProperty<T> {
     id: string;
@@ -96,40 +96,40 @@ export class PropertyInstance<T> {
         }
     }
 
-    constructor(classProperty: ClassProperty<T>, values?: T[]) {
-        this.id = classProperty.id;
-        this.name = classProperty.name;
-        this.values = values;
-        this.allowedValues = classProperty.allowedValues;
-        this.type = classProperty.type;
-        this.required = classProperty.required;
-        this.position = classProperty.position;
-        this.propertyConstraints = classProperty.propertyConstraints;
-        this.visible = classProperty.visible;
-        this.tabId = classProperty.tabId;
+    // constructor(classProperty: ClassProperty<T>, values?: T[]) {
+    //     this.id = classProperty.id;
+    //     this.name = classProperty.name;
+    //     this.values = values;
+    //     this.allowedValues = classProperty.allowedValues;
+    //     this.type = classProperty.type;
+    //     this.required = classProperty.required;
+    //     this.position = classProperty.position;
+    //     this.propertyConstraints = classProperty.propertyConstraints;
+    //     this.visible = classProperty.visible;
+    //     this.tabId = classProperty.tabId;
 
-        if (classProperty.type === PropertyType.TREE) {
+    //     if (classProperty.type === PropertyType.TREE) {
 
-            const rootValue = this.values[0] as unknown as TreePropertyEntry;
+    //         const rootValue = this.values[0] as unknown as TreePropertyEntry;
 
-            if (isNullOrUndefined(rootValue)) {
-                return;
-            }
+    //         if (isNullOrUndefined(rootValue)) {
+    //             return;
+    //         }
 
-            let i = (classProperty as ClassProperty<unknown> as ClassProperty<TreePropertyEntry>)
-                .allowedValues.findIndex(a => a.id === rootValue.id);
-            let currentLevel = rootValue.level;
+    //         let i = (classProperty as ClassProperty<unknown> as ClassProperty<TreePropertyEntry>)
+    //             .allowedValues.findIndex(a => a.id === rootValue.id);
+    //         let currentLevel = rootValue.level;
 
-            for (i; i >= 0; i--) {
-                const currentAllowedValue = this.allowedValues[i] as unknown as TreePropertyEntry;
-                if (currentAllowedValue.level < currentLevel) {
-                    // this.values.push(classProperty.allowedValues[i]);
-                    rootValue.parents.push(currentAllowedValue);
-                    currentLevel--;
-                }
-            }
-        }
-    }
+    //         for (i; i >= 0; i--) {
+    //             const currentAllowedValue = this.allowedValues[i] as unknown as TreePropertyEntry;
+    //             if (currentAllowedValue.level < currentLevel) {
+    //                 // this.values.push(classProperty.allowedValues[i]);
+    //                 rootValue.parents.push(currentAllowedValue);
+    //                 currentLevel--;
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 
@@ -173,23 +173,23 @@ export class PropertyItem {
 }
 
 
-export class PropertyParentSubTemplate { id: string; name: string; }
-export class PropertyParentTemplate { id: string; name: string; }
+// export class PropertyParentSubTemplate { id: string; name: string; }
+// export class PropertyParentTemplate { id: string; name: string; }
 
-export class Rule {
-    id: string;
-    kind: RuleKind;
-    value?: number;
-    data?: string;
+// export class Rule {
+//     id: string;
+//     kind: RuleKind;
+//     value?: number;
+//     data?: string;
 
-    key?: string;
-    keyOther?: string;
-    message: string;
-}
+//     key?: string;
+//     keyOther?: string;
+//     message: string;
+// }
 
 
-export enum RuleKind {
-    REQUIRED = 'REQUIRED', REQUIRED_TRUE = 'REQUIRED_TRUE', REGEX_PATTERN = 'REGEX_PATTERN', MAX_LENGTH = 'MAX_LENGTH',
-    MIN_LENGTH = 'MIN_LENGTH', MAX = 'MAX', MIN = 'MIN', REQUIRED_OTHER = 'REQUIRED_OTHER', MIN_OTHER = 'MIN_OTHER',
-    MAX_OTHER = 'MAX_OTHER'
-}
+// export enum RuleKind {
+//     REQUIRED = 'REQUIRED', REQUIRED_TRUE = 'REQUIRED_TRUE', REGEX_PATTERN = 'REGEX_PATTERN', MAX_LENGTH = 'MAX_LENGTH',
+//     MIN_LENGTH = 'MIN_LENGTH', MAX = 'MAX', MIN = 'MIN', REQUIRED_OTHER = 'REQUIRED_OTHER', MIN_OTHER = 'MIN_OTHER',
+//     MAX_OTHER = 'MAX_OTHER'
+// }

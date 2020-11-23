@@ -122,13 +122,6 @@ export class ClassInstanceService {
     );
   }
 
-  // updateClassInstance(marketplace: Marketplace, classInstance: ClassInstance) {
-  //   return this.http.put(
-  //     `${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`,
-  //     classInstance
-  //   );
-  // }
-
   deleteClassInstance(marketplace: Marketplace, classInstanceId: string) {
     return this.http.delete(
       `${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`

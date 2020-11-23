@@ -3,67 +3,43 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProp
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyRelationship;
 
-@RestController
+@Service
 public class TreePropertyDefinitionController {
 
 	@Autowired
 	TreePropertyDefinitionRepository treePropertyDefinitionRepository;
 
-	@GetMapping("/meta/core/property-definition/tree/all")
-	private List<TreePropertyDefinition> getAllTreePropertyDefinitions() {
-
+	public List<TreePropertyDefinition> getAllTreePropertyDefinitions() {
 		return treePropertyDefinitionRepository.findAll();
 	}
 
-	@GetMapping("/meta/core/property-definition/tree/all/{tenantId}")
-	private List<TreePropertyDefinition> getAllTreePropertyDefinitionssForTenant(
-			@PathVariable("tenantId") String tenantId) {
+	public List<TreePropertyDefinition> getAllTreePropertyDefinitionssForTenant(String tenantId) {
 		return treePropertyDefinitionRepository.findByTenantId(tenantId);
 	}
 
-	@GetMapping("/meta/core/property-definition/tree/{id}")
-	private TreePropertyDefinition getTreePropertyDefinitionById(@PathVariable("id") String id) {
+	public TreePropertyDefinition getTreePropertyDefinitionById(String id) {
 		return treePropertyDefinitionRepository.findOne(id);
 	}
 
-	@GetMapping("/meta/core/property-definition/tree/by-name/{name}")
-	private TreePropertyDefinition getTreePropertyDefinitionByName(@PathVariable("name") String name) {
+	public TreePropertyDefinition getTreePropertyDefinitionByName(String name) {
 		return treePropertyDefinitionRepository.getByName(name);
 	}
 
-	@PostMapping("/meta/core/property-definition/tree/new")
-	private TreePropertyDefinition newTreePropertyDefinition(
-			@RequestBody TreePropertyDefinition treePropertyDefinition) {
+	public List<TreePropertyDefinition> addTreePropertyDefinition(List<TreePropertyDefinition> treePropertyDefinition) {
+		if (treePropertyDefinition == null) {
+			return null;
+		}
 		return treePropertyDefinitionRepository.save(treePropertyDefinition);
 	}
 
-	@PutMapping("/meta/core/property-definition/tree/save")
-	private TreePropertyDefinition replaceTreePropertyDefinition(
-			@RequestBody TreePropertyDefinition treePropertyDefinition) {
-
-		return treePropertyDefinitionRepository.save(treePropertyDefinition);
-	}
-
-	@DeleteMapping("/meta/core/property-definition/tree/{id}/delete")
-	private void deleteTreePropertyDefinition(@PathVariable("id") String id) {
-		treePropertyDefinitionRepository.delete(id);
-	}
-
-	@PutMapping("/meta/core/enum-definition/tree/delete-multiple")
-	private List<TreePropertyDefinition> deleteMultipleMatchingConfigurations(@RequestBody List<String> ids) {
-		ids.forEach(this.treePropertyDefinitionRepository::delete);
-		return this.treePropertyDefinitionRepository.findAll();
+	public void deleteTreePropertyDefinition(String id, boolean ignoreDeleteProtect) {
+		TreePropertyDefinition pd = treePropertyDefinitionRepository.findOne(id);
+		if (pd.isCustom() || ignoreDeleteProtect) {
+			treePropertyDefinitionRepository.delete(id);
+		}
 	}
 
 }

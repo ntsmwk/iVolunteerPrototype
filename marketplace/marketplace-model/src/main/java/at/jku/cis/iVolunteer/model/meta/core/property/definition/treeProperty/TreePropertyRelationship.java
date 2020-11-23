@@ -2,6 +2,8 @@ package at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty;
 
 import java.util.UUID;
 
+import org.bson.types.ObjectId;
+
 public class TreePropertyRelationship {
 
 	String id;
@@ -29,7 +31,7 @@ public class TreePropertyRelationship {
 	}
 
 	public TreePropertyRelationship(TreePropertyEntry sourceEntry, TreePropertyEntry targetEntry, boolean generateId) {
-		this.id = UUID.randomUUID().toString();
+		this.id = new ObjectId().toHexString();
 		this.sourceId = sourceEntry.getId();
 		this.targetId = targetEntry.getId();
 	}

@@ -1,26 +1,33 @@
 package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationService;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingEntityMappingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurator.api.ConfiguratorRestClient;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataClasses;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances;
+import at.jku.cis.iVolunteer.model._httprequests.InitConfiguratorRequest;
+//import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataClasses;
+//import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 
@@ -47,13 +54,9 @@ public class InitializationService {
 	@Autowired
 	public StandardPropertyDefinitions standardPropertyDefinitions;
 
-	@Autowired
-	private ClassConfigurationController classConfigurationController;
-
-	@Autowired
-	protected TestDataClasses testDataClasses;
-	@Autowired
-	protected TestDataInstances testDataInstances;
+	@Autowired ConfiguratorRestClient configuratorRestClient;
+	
+	@Value("${marketplace.uri}") private String mpUrl;
 
 	@PostConstruct
 	public void init() {
@@ -135,29 +138,6 @@ public class InitializationService {
 		});
 	}
 
-	public void addClassConfigurations(int noOfConfigurations) {
-		List<Tenant> tenants = getTenants();
-
-		for (Tenant t : tenants) {
-			for (int i = 1; i <= noOfConfigurations; i++) {
-				this.classConfigurationController
-						.createNewClassConfiguration(new String[] { t.getId(), "Standardkonfiguration" + i, "" });
-			}
-		}
-	}
-
-	public void addFlexProdClassDefinitionsAndConfigurations(String tenantId) {
-		this.classConfigurationController.createAndSaveFlexProdClassConfigurations(tenantId);
-	}
-
-	public void addRuleTestConfiguration() {
-		testDataClasses.createClassConfigurations();
-	}
-
-	public void addRuleTestUserData() {
-		testDataInstances.createUserData();
-	}
-
 	public void deleteClassDefinitions() {
 		classDefinitionRepository.deleteAll();
 	}
@@ -172,6 +152,21 @@ public class InitializationService {
 
 	public void deleteMatchingConfigurations() {
 		matchingConfigurationRepository.deleteAll();
+	}
+	
+	public void initConfigurator() {
+		List<Tenant> tenants = getTenants();
+				
+		List<Tuple<String, String>> list = new LinkedList<Tuple<String, String>>();
+		for (Tenant t : tenants) {
+			list.add(new Tuple<>(t.getId(), t.getName()));
+		}
+		
+		InitConfiguratorRequest body = new InitConfiguratorRequest();
+		body.setTenantIds(list);
+		body.setMpUrl(this.mpUrl);
+		
+		configuratorRestClient.initConfigurator(body);
 	}
 
 }

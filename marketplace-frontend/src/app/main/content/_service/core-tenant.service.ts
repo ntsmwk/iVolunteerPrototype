@@ -35,7 +35,7 @@ export class TenantService {
   }
 
   createTenant(tenant: Tenant) {
-    return this.http.post(`${environment.CORE_URL}/tenant/new`, tenant);
+    return this.http.post(`${environment.CORE_URL}/tenant/new/not-x`, tenant);
   }
 
   updateTenant(tenant: Tenant) {

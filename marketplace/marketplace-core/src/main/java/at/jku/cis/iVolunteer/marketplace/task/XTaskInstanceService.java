@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Service
@@ -24,16 +26,14 @@ public class XTaskInstanceService {
 		return xTaskInstanceRepository.findOne(id);
 	}
 
-	public List<TaskInstance> getAll() {
-		return xTaskInstanceRepository.findAll();
-	}
-
-	public List<TaskInstance> getAllByYear(int year) {
+	public List<TaskInstance> getAll(String taskType, int startYear, String status, String loggedInUserId) {
 		List<TaskInstance> taskInstances = xTaskInstanceRepository.findAll();
-		return filterTaskInstancesByYear(year, taskInstances);
+		taskInstances = filterTaskInstancesByTaskType(taskType, taskInstances, loggedInUserId);
+		taskInstances = filterTaskInstancesByStartYear(startYear, taskInstances);
+		taskInstances = filterTaskInstancesByStatus(status, taskInstances);
+
+		return taskInstances;
 	}
-
-
 
 	public List<TaskInstance> getTaskInstance(List<String> ids) {
 		if (ids == null) {
@@ -44,20 +44,16 @@ public class XTaskInstanceService {
 		return instances;
 	}
 
-	public List<TaskInstance> getTaskInstanceByTenantId(String tenantId) {
+	public List<TaskInstance> getTaskInstanceByTenantId(String tenantId, String taskType, int startYear,
+			String status, String loggedInUserId) {
 		if (tenantId == null) {
 			return null;
 		}
-		List<TaskInstance> instances = xTaskInstanceRepository.findByTenantId(tenantId);
-		return instances;
-	}
-	
-	public List<TaskInstance> getTaskInstanceByTenantIdByYear(String tenantId, int year) {
-		if (tenantId == null) {
-			return null;
-		}
-		List<TaskInstance> instances = xTaskInstanceRepository.findByTenantId(tenantId);
-		return this.filterTaskInstancesByYear(year, instances);
+		List<TaskInstance> taskInstances = xTaskInstanceRepository.findByTenantId(tenantId);
+		taskInstances = filterTaskInstancesByTaskType(taskType, taskInstances, loggedInUserId);
+		taskInstances = filterTaskInstancesByStartYear(startYear, taskInstances);
+		taskInstances = filterTaskInstancesByStatus(status, taskInstances);
+		return taskInstances;
 	}
 
 	public TaskInstance addOrOverwriteTaskInstance(TaskInstance taskInstance) {
@@ -84,8 +80,21 @@ public class XTaskInstanceService {
 	public void deleteTaskInstance(String id) {
 		xTaskInstanceRepository.delete(id);
 	}
-	
-	private List<TaskInstance> filterTaskInstancesByYear(int year, List<TaskInstance> taskInstances) {
+
+	private List<TaskInstance> filterTaskInstancesByTaskType(String taskType, List<TaskInstance> taskInstances, String loggedInUserId) {
+		if(taskType.equals("SUBSCRIBED")) {
+			return taskInstances.stream().filter(ti -> ti.getSubscribedVolunteerIds().contains(loggedInUserId)).collect(Collectors.toList());
+		}else if(taskType.equals("UNSUBSCRIBED")) {
+			return taskInstances.stream().filter(ti -> !ti.getSubscribedVolunteerIds().contains(loggedInUserId)).collect(Collectors.toList());
+		}
+		
+		return taskInstances;
+	}
+
+	private List<TaskInstance> filterTaskInstancesByStartYear(int year, List<TaskInstance> taskInstances) {
+		if(year == 0) {
+			return taskInstances;
+		}
 		List<TaskInstance> filteredList = taskInstances.stream().filter(tI -> {
 			PropertyInstance<Object> startDateProperty = tI.findProperty("Starting Date");
 			if (startDateProperty != null && startDateProperty.getValues().size() == 1) {
@@ -97,5 +106,14 @@ public class XTaskInstanceService {
 			return false;
 		}).collect(Collectors.toList());
 		return filteredList;
+	}
+
+	private List<TaskInstance> filterTaskInstancesByStatus(String status, List<TaskInstance> taskInstances) {
+		if(status.equals("OPEN")) {
+			return taskInstances.stream().filter(ti -> ti.getStatus() == TaskInstanceStatus.OPEN).collect(Collectors.toList());
+		}else if (status.equals("CLOSED")){
+			return taskInstances.stream().filter(ti -> ti.getStatus() == TaskInstanceStatus.CLOSED).collect(Collectors.toList());
+		}
+		return taskInstances;
 	}
 }

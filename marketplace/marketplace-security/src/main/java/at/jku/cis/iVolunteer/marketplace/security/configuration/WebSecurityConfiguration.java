@@ -51,17 +51,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/**").permitAll()
 				.antMatchers("/init/**").permitAll()
 				.antMatchers("/user/register").permitAll()
-//				.antMatchers("/user/subscribe").permitAll()
-//				.antMatchers("/user/unsubscribe").permitAll()
 				.antMatchers("/rule/engine/**").permitAll()
-				//TODO DEBUG
-//				.antMatchers("/task/**").permitAll()
-//				.antMatchers("/tasktemplate/**").permitAll()
-//				.antMatchers("/taskCertificate/**").permitAll()
-//				.antMatchers("/meta/core/class/instance/**").permitAll()
-//				.antMatchers("/meta/core/task-instance/**").permitAll()
-//				.antMatchers("/aggregate/**").permitAll()
-//				END DEBUG
+				.antMatchers("/badgeTemplate/init").permitAll()
 				.antMatchers("/response/**").permitAll()
 				.anyRequest().authenticated();
 

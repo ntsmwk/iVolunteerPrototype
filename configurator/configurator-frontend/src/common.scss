@@ -1,0 +1,174 @@
+@import "src/@fuse/scss/fuse";
+.error {
+  color: #f44336;
+}
+
+.bg-error {
+  background-color: #f44336;
+}
+
+.alert-danger {
+  background-color: #f44336;
+}
+
+.alert-warn {
+  color: black !important;
+  background-color: #f0ad4e;
+}
+
+.alert-info {
+  background-color: #5bc0de;
+  color: black !important;
+}
+
+.alert-success {
+  background-color: #4bad5b;
+  color: black !important;
+}
+
+.alert {
+  margin: 10px auto 15px;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+  color: white;
+  text-align: center;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+$dark: #3e7ddb;
+.primary-button-dark {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px $dark !important;
+  color: white !important;
+  background-color: $dark !important;
+  padding: 0 10px;
+}
+
+.primary-button-dark-small {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px $dark !important;
+  background-color: $dark !important;
+  color: white !important;
+  padding: 0 10px;
+  line-height: 20px !important;
+}
+
+.secondary-button-dark {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px $dark !important;
+  background-color: white !important;
+  color: $dark !important;
+  padding: 0 10px;
+}
+
+.secondary-button-dark-small {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px $dark !important;
+  background-color: white !important;
+  color: $dark !important;
+  padding: 0 10px;
+  line-height: 20px !important;
+}
+
+.primary-button-light {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px mat-color($accent) !important;
+  background-color: mat-color($accent) !important;
+  color: white !important;
+  padding: 0 10px;
+}
+
+.primary-button-light-small {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px mat-color($accent) !important;
+  background-color: mat-color($accent) !important;
+  color: white !important;
+  padding: 0 10px;
+  line-height: 20px !important;
+}
+
+.secondary-button-light {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px mat-color($accent) !important;
+  background-color: white !important;
+  color: mat-color($accent) !important;
+  padding: 0 10px;
+}
+
+.secondary-button-light-small {
+  min-width: 120px !important;
+  border-radius: 4px !important;
+  border: solid 1px mat-color($accent) !important;
+  background-color: white !important;
+  color: mat-color($accent) !important;
+  padding: 0 10px;
+  line-height: 20px !important;
+}
+
+.primary-button-dark-small:hover,
+.primary-button-dark:hover,
+.primary-button-light:hover,
+.primary-button-light-small:hover {
+  border-color: white !important;
+}
+
+.secondary-button-light:hover,
+.secondary-button-light-small:hover {
+  background-color: mat-color($accent) !important;
+  color: white !important;
+}
+
+.secondary-button-dark:hover,
+.secondary-button-dark-small:hover {
+  background-color: $dark !important;
+  color: white !important;
+}
+
+.primary-button-dark:disabled,
+.primary-button-dark-small:disabled,
+.primary-button-light:disabled,
+.primary-button-light-small:disabled {
+  background-color: grey !important;
+  border-color: grey !important;
+}
+
+.secondary-button-dark:disabled,
+.secondary-button-dark-small:disabled,
+.secondary-button-light:disabled,
+.secondary-button-light-small:disabled {
+  color: grey !important;
+  border-color: grey !important;
+}
+
+.shrinkable {
+  min-width: max-content !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.center-vh {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-border {
+  color: black;
+  border: solid grey 1px;
+  border-radius: 4px;
+}

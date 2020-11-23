@@ -4,17 +4,29 @@ import java.util.List;
 
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipDTO;
 
 public class ClassConfiguratorResponseRequestBody {
 //	--body: class-configuraton + classDefinitions + relationships
 
+	private String action;
 	private ClassConfiguration classConfiguration;
 	private List<ClassDefinition> classDefinitions;
 	private List<RelationshipDTO> relationships;
+	private List<String> idsToDelete;
+	
+	private List<FlatPropertyDefinition<Object>> flatPropertyDefinitions;
+	private List<TreePropertyDefinition> treePropertyDefinitions;
 	
 	
+	public String getAction() {
+		return action;
+	}
+	public void setAction(String action) {
+		this.action = action;
+	}
 	public ClassConfiguration getClassConfiguration() {
 		return classConfiguration;
 	}
@@ -33,6 +45,26 @@ public class ClassConfiguratorResponseRequestBody {
 	public void setRelationships(List<RelationshipDTO> relationships) {
 		this.relationships = relationships;
 	}
+	public List<String> getIdsToDelete() {
+		return idsToDelete;
+	}
+	public void setIdsToDelete(List<String> idsToDelete) {
+		this.idsToDelete = idsToDelete;
+	}
+	public List<FlatPropertyDefinition<Object>> getFlatPropertyDefinitions() {
+		return flatPropertyDefinitions;
+	}
+	public void setFlatPropertyDefinitions(List<FlatPropertyDefinition<Object>> flatPropertyDefinitions) {
+		this.flatPropertyDefinitions = flatPropertyDefinitions;
+	}
+	public List<TreePropertyDefinition> getTreePropertyDefinitions() {
+		return treePropertyDefinitions;
+	}
+	public void setTreePropertyDefinitions(List<TreePropertyDefinition> treePropertyDefinitions) {
+		this.treePropertyDefinitions = treePropertyDefinitions;
+	}
+	
+	
 	
 	
 	

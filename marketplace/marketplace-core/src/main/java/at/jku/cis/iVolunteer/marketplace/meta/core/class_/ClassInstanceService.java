@@ -19,10 +19,6 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
@@ -131,24 +127,9 @@ public class ClassInstanceService {
 
 	public ClassInstance newClassInstance(User volunteer, String classDefinitionId, String tenantId) {
 		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId);
-		ClassInstance ci;
-		switch (classDefinition.getClassArchetype()) {
-			case ACHIEVEMENT:
-				ci = new AchievementClassInstance();
-				break;
-			case COMPETENCE:
-				ci = new CompetenceClassInstance();
-				break;
-			case TASK:
-				ci = new TaskClassInstance();
-				break;
-			case FUNCTION:
-				ci = new FunctionClassInstance();
-				break;
+		ClassInstance ci = new ClassInstance();
+		ci.setClassArchetype(ci.getClassArchetype());
 
-			default:
-				ci = null;
-		}
 		ci.setName(classDefinition.getName());
 		ci.setClassDefinitionId(classDefinition.getId());
 		ci.setUserId(volunteer.getId());
@@ -184,6 +165,9 @@ public class ClassInstanceService {
 	}
 
 	public List<ClassInstance> filterTaskInstancesByYear(int year, List<ClassInstance> classInstances) {
+		if (year == 0) {
+			return classInstances;
+		}
 		return classInstances.stream().filter(tI -> {
 			PropertyInstance<Object> startDateProperty = tI.findProperty("Starting Date");
 			if (startDateProperty != null && startDateProperty.getValues().size() == 1) {

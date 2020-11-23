@@ -20,7 +20,6 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 
 	private String unit;
 
-	private boolean custom;
 	private boolean multiple;
 
 	protected PropertyType type;
@@ -30,6 +29,9 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
 	private boolean computed;
+	
+	private boolean custom;
+
 
 	public FlatPropertyDefinition() {
 	}
@@ -71,15 +73,6 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-
-	public boolean isCustom() {
-		return custom;
-	}
-
-	public void setCustom(boolean custom) {
-		this.custom = custom;
-	}
-
 	public boolean isMultiple() {
 		return multiple;
 	}
@@ -128,4 +121,16 @@ public class FlatPropertyDefinition<T> extends IVolunteerObject {
 		this.computed = computed;
 	}
 
+	public boolean isCustom() {
+		return custom;
+	}
+
+	public void setCustom(boolean custom) {
+		this.custom = custom;
+	}
+
+
+
+
+	
 }

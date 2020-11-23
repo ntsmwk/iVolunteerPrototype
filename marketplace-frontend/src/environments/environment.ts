@@ -7,7 +7,8 @@ export const environment = {
   hmr: false,
   REDIRECT_URI: "http://localhost:4200/main/profile",
   JSON_SERVER_URL: "http://localhost:3000/repository",
-  CORE_URL: "http://localhost:8090"
+  CORE_URL: "http://localhost:8090",
+  CONFIGURATOR_URL: "http://localhost:4201"
 };
 
 /*

@@ -1,0 +1,148 @@
+<div>
+  <div>
+    <editor-top-menu-bar [redirectUrl]="redirectUrl" [tenantId]="tenantId" [eventResponse]="eventResponse"
+      (menuOptionClickedEvent)="consumeMenuOptionClickedEvent($event)"></editor-top-menu-bar>
+  </div>
+
+  <div #graphContainer id="graphContainer"></div>
+
+  <div #rightSidebarContainer id="rightSidebarContainer">
+    <div class="sidebar-content">
+
+      <div *ngIf="rightSidebarVisible">
+
+
+
+        <div (click)="hideSidebar()" class="sidebar-minimize-button" matTooltip="Sidebar minimieren">
+          <mat-icon>minimize</mat-icon>
+        </div>
+
+        <div class="pt-36"></div>
+
+        <div class="sidebar-title-card" (click)="ansicht=!ansicht">
+          <h2>Ansicht & Werkzeuge</h2>
+        </div>
+
+        <div *ngIf="!ansicht">
+          <div class="sidebar-content-card">
+
+            <div class="sidebar-content-card-container">
+
+              <div class="sidebar-content-card-outline-label">Ansicht</div>
+
+              <div class="sidebar-content-card-outline">
+                <div fxLayout="row" fxLayoutAlign="start start">
+                  <div
+                    style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+                    <img src="/assets/mxgraph_resources/images/zoomin.gif" width="25" height="25"
+                      (click)="zoomInEvent()" style="cursor: pointer" matTooltip="zoom in">
+                  </div>
+
+                  <div style="padding-right: 3px"></div>
+
+                  <div
+                    style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+                    <img src="/assets/mxgraph_resources/images/zoomout.gif" width="25" height="25"
+                      (click)="zoomOutEvent()" style="cursor: pointer" matTooltip="zoom out">
+                  </div>
+
+                  <div style="padding-right: 3px"></div>
+
+                  <div
+                    style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+                    <img src="/assets/mxgraph_resources/images/zoomactual.gif" width="25" height="25"
+                      (click)="zoomResetEvent()" style="cursor: pointer" matTooltip="reset view">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="sidebar-content-card-container">
+              <div class="sidebar-content-card-outline-label">Automatisches Layout</div>
+
+              <div class="sidebar-content-card-outline">
+                <div fxLayout="row" fxLayoutAlign="start center">
+
+                  <mat-checkbox labelPosition="after" [(ngModel)]="quickEditMode">
+                    <div style="font-size: 14px">Quick-Edit Modus</div>
+                  </mat-checkbox>
+
+                  <div class="pl-8 pr-8">|</div>
+
+                  <button mat-stroked-button type="button" color="accent" (click)="setLayout()" class="sidebar-button">
+                    Manuelles Layout
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-content-card-container">
+
+              <div class="sidebar-content-card-outline-label">Löschen</div>
+
+              <div class="sidebar-content-card-outline">
+
+                <div fxLayout="row" fxLayoutAlign="start center">
+                  <mat-checkbox labelPosition="after" [(ngModel)]="clickToDeleteMode"
+                    (ngModelChange)="clickToDeleteModeToggled()">
+                    <div style="font-size: 14px">Click-To-Delete</div>
+                  </mat-checkbox>
+
+                  <div class="pl-8 pr-8">|</div>
+
+                  <mat-checkbox labelPosition="after" [(ngModel)]="confirmDelete">
+                    <div style="font-size: 14px">Bestätigen</div>
+                  </mat-checkbox>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center">
+                  <mat-checkbox labelPosition="after" [(ngModel)]="deleteRelationships">
+                    <div style="font-size: 14px">Beziehungen löschen</div>
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-content-card-container">
+
+              <div class="sidebar-content-card-outline-label">Gewählter Beziehungstyp</div>
+
+              <div class="sidebar-content-card-outline">
+
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select placeholder="Relationship Type" [(ngModel)]="relationshipType">
+                    <mat-option value="INHERITANCE">Vererbung</mat-option>
+                    <!-- <mat-option value="association" (click)="">Assoziation</mat-option> -->
+
+                    <!-- TODO This is only a quick fix. Refactor the available options. -->
+                    <mat-option value="ASSOCIATION">Assoziation</mat-option>
+                    <!-- <mat-option value="COMPOSITION ">Komposition</mat-option> -->
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-title-card" (click)="treeView=!treeView">
+          <h2>Baumansicht</h2>
+        </div>
+
+        <div *ngIf="treeView">
+          <editor-tree-view [editorInstance]="this"></editor-tree-view>
+        </div>
+      </div>
+
+      <div *ngIf="!rightSidebarVisible" (click)="showSidebar()" class="sidebar-minimize-button"
+        matTooltip="Sidebar zeigen">
+        <mat-icon>menu_open</mat-icon>
+      </div>
+    </div>
+  </div>
+
+
+  <class-options-overlay-control [displayOverlay]="displayOverlay" [overlayContent]="overlayContent"
+    [overlayEvent]="overlayEvent" [overlayType]="overlayType" (overlayClosed)="handleOverlayClosedEvent($event)">
+  </class-options-overlay-control>

@@ -1,0 +1,48 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>open_in_new</mat-icon>
+      </td>
+      <td>
+        <h1>Matching-Konfiguration öffnen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+<mat-dialog-content *ngIf="loaded">
+  <div *ngIf="!browseMode" class="browse-dialog-content">
+    <h2>Zuletzt verwendet</h2>
+
+    <table class="browse-table" cellspacing="0" cellpadding="3" fusePerfectScrollbar>
+      <col width="250px" />
+      <col width="100px" />
+      <col width="100px" />
+
+      <tr style="background-color: rgb(62, 125, 219); color: white;">
+        <th style="text-align: start">Name</th>
+        <th style="text-align: start">Linke Seite</th>
+        <th style="text-align: start">Rechte Seite</th>
+      </tr>
+      <tr *ngFor="let entry of recentMatchingConfigurations" class="table-row" (click)="handleRowClick(entry)">
+        <td class="matching-configurator-name-cell" [matTooltip]="entry.name">{{entry.name}}</td>
+        <td class="class-configurator-name-cell" [matTooltip]="entry.leftSideName">{{entry.leftSideName}}</td>
+        <td class="class-configurator-name-cell" [matTooltip]="entry.rightSideName">{{entry.rightSideName}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="browseMode">
+    <browse-matching-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)">
+    </browse-matching-sub-dialog>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="secondary-button-light" mat-stroked-button type="button" (click)="handleBrowseClick()"
+    *ngIf="!browseMode">Durchsuchen</button>
+  <button class="secondary-button-light" mat-stroked-button type="button" (click)="handleBrowseBackClick()"
+    *ngIf="browseMode">Zurück</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
+</mat-dialog-actions>

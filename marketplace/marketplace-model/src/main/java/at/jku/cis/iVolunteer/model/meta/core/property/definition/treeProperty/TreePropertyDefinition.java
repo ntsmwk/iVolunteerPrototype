@@ -19,6 +19,8 @@ public class TreePropertyDefinition extends IVolunteerObject {
 	private boolean multiple;
 	private boolean required;
 	private String requiredMessage;
+	
+	private boolean custom;
 
 	public TreePropertyDefinition() {
 		this.entries = new ArrayList<TreePropertyEntry>();
@@ -99,6 +101,14 @@ public class TreePropertyDefinition extends IVolunteerObject {
 
 	public void setRequired(boolean required) {
 		this.required = required;
+	}
+
+	public boolean isCustom() {
+		return custom;
+	}
+
+	public void setCustom(boolean custom) {
+		this.custom = custom;
 	}
 
 	@Override

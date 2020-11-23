@@ -48,7 +48,7 @@ public class ClassInstanceMapper {
 					dto.setName((String) name.getValues().get(0));
 				}
 			}
-
+			
 			PropertyInstance<Object> purpose = ci.getProperties().stream().filter(p -> "Purpose".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (purpose != null) {

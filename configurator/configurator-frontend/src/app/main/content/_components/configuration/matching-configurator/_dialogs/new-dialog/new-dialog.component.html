@@ -1,0 +1,172 @@
+<div mat-dialog-title>
+
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <mat-icon>create</mat-icon>
+    <h1 class="pl-8">Konfigurationen wählen</h1>
+  </div>
+</div>
+
+<mat-dialog-content *ngIf="loaded">
+  <div *ngIf="!browseMode">
+    <form [formGroup]="dialogForm">
+      <mat-form-field style="width: 100%;" appearance="outline">
+        <input matInput placeholder="Bezeichnung" formControlName="label" required />
+      </mat-form-field>
+      <div class="mat-error" *ngIf="
+        dialogForm.controls['label'].invalid &&
+        dialogForm.controls['label'].touched
+      ">
+        {{ displayErrorMessage("label") }}
+      </div>
+    </form>
+    <div fxLayout="row" fxLayoutAlign="start start" class="pt-12">
+
+      <div>
+        <div class="selection-container-title"
+          [ngClass]="{'selection-container-title-error': showErrors && !data.leftClassConfiguration}">
+          Linke Seite
+        </div>
+
+        <div class="selection-container"
+          [ngClass]="{'selection-container-error': showErrors && !data.leftClassConfiguration}" fxLayout="column"
+          fxLayoutAlign="start start">
+
+          <div class="selection-container-subtitle">
+            Auswahl
+          </div>
+
+          <div class="configuration-no-selection" *ngIf="!data.leftClassConfiguration && !data.leftIsUser">
+            keine Auswahl
+          </div>
+
+          <div class="configuration-selection" *ngIf="!data.leftClassConfiguration && data.leftIsUser">
+            User
+          </div>
+
+          <div class="configuration-selection" *ngIf="data.leftClassConfiguration">
+            {{ data.leftClassConfiguration.name }}
+          </div>
+
+          <div class="selection-container-subtitle">
+            <div>Zuletzt Geändert</div>
+          </div>
+
+          <div class="recent-selection" *ngFor="let classConfiguration of recentClassConfigurations"
+            (click)="leftItemSelected(classConfiguration)">
+            <div class="recent-selection-item">
+              {{classConfiguration.name}}
+            </div>
+          </div>
+
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleBrowseClick('LEFT')">
+              Durchsuchen
+            </button>
+          </div>
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleUseUserClick('LEFT')">
+              User verwenden
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <div fxFlex></div>
+
+      <div>
+        <div class="selection-container-title"
+          [ngClass]="{'selection-container-title-error': showErrors && !data.rightClassConfiguration}">
+          Rechte Seite
+        </div>
+
+        <div class="selection-container"
+          [ngClass]="{'selection-container-error': showErrors && !data.rightClassConfiguration}" fxLayout="column"
+          fxLayoutAlign="start start">
+
+          <div class="selection-container-subtitle">
+            Auswahl
+          </div>
+
+          <div class="configuration-no-selection" *ngIf="!data.rightClassConfiguration && !data.rightIsUser">
+            keine Auswahl
+          </div>
+
+          <div class="configuration-selection" *ngIf="!data.rightClassConfiguration && data.rightIsUser">
+            User
+          </div>
+
+          <div class="configuration-selection" *ngIf="data.rightClassConfiguration">
+            {{ data.rightClassConfiguration.name }}
+          </div>
+
+          <div class="selection-container-subtitle">
+            <div>Zuletzt Geändert</div>
+          </div>
+
+          <div class="recent-selection" *ngFor="let classConfiguration of recentClassConfigurations"
+            (click)="rightItemSelected(classConfiguration)">
+            <div class="recent-selection-item">
+              {{classConfiguration.name}}
+            </div>
+          </div>
+
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleBrowseClick('RIGHT')">
+              Durchsuchen
+            </button>
+          </div>
+
+          <div class="button-container">
+            <button class="secondary-button-light-small" mat-stroked-button type="button"
+              (click)="handleUseUserClick('RIGHT')">
+              User verwenden
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+    <div *ngIf="showErrors" style="color: red;">
+      <div *ngIf="!data.leftClassConfiguration && data.rightClassConfiguration">
+        Klassen-Konfiguration für die linke Seite wählen
+      </div>
+      <div *ngIf="!data.rightClassConfiguration && data.leftClassConfiguration">
+        Klassen-Konfiguration für die rechte Seite wählen
+      </div>
+      <div *ngIf="!data.leftClassConfiguration && !data.rightClassConfiguration">
+        Klassen-Konfigurationen für beide Seiten wählen
+      </div>
+      <div *ngIf="dialogForm.controls['label'].hasError('required')">
+        Bezeichnung für die neue Matching-Konfiguration wählen
+      </div>
+      <div *ngIf="showDuplicateError">
+        Matching existiert bereits für gewählte Konfigurationen
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="browseMode">
+    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)">
+    </browse-class-sub-dialog>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="primary-button-dark" mat-stroked-button type="button" [disabled]="browseMode" (click)="onOKClick()">
+    OK
+  </button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
+
+  <button *ngIf="browseMode" class="secondary-button-light" mat-stroked-button type="button"
+    (click)="handleBrowseBackClick()">
+    Zurück
+  </button>
+</mat-dialog-actions>

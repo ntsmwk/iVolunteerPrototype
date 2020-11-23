@@ -1,8 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.core;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.model._httprequests.Base64ImageUploadRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 
 @Service
 public class CoreStorageRestClient {

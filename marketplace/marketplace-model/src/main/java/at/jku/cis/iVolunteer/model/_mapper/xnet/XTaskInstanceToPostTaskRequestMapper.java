@@ -3,31 +3,22 @@ package at.jku.cis.iVolunteer.model._mapper.xnet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoProperties.Storage;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.model._httprequests.PostTaskRequest;
-import at.jku.cis.iVolunteer.model._mapper.AbstractMapper;
-import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstance;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.TaskInstanceStatus;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.XDynamicField;
 import at.jku.cis.iVolunteer.model.task.XDynamicFieldBlock;
-import at.jku.cis.iVolunteer.model.task.XTask;
-import at.jku.cis.iVolunteer.model.user.User;
-import at.jku.cis.iVolunteer.model.user.XGeoInfo;
 
 @Component
 public class XTaskInstanceToPostTaskRequestMapper {
@@ -111,8 +102,9 @@ public class XTaskInstanceToPostTaskRequestMapper {
 		} else {
 			instance.setSubscribedVolunteerIds(target.getSubscribedUsers());
 		}
-		if (target.isClosed() != null) {
-			instance.setStatus(target.isClosed() ? TaskInstanceStatus.CLOSED : TaskInstanceStatus.OPEN);
+		instance.setBadgeTemplateIds(target.getBadgeTemplateIds());
+		if (target.getStatus() != null) {
+			instance.setStatus(target.getStatus());
 		}
 		instance.setTenantId(target.getTenantId());
 
@@ -171,11 +163,11 @@ public class XTaskInstanceToPostTaskRequestMapper {
 		return sources;
 	}
 
-	private PropertyInstance<Object> findProperty(String name, List<PropertyInstance<Object>> properties) {
-		PropertyInstance<Object> property = properties.stream().filter(p -> p.getName().equals(name)).findAny()
-				.orElse(null);
-		return property;
-	}
+//	private PropertyInstance<Object> findProperty(String name, List<PropertyInstance<Object>> properties) {
+//		PropertyInstance<Object> property = properties.stream().filter(p -> p.getName().equals(name)).findAny()
+//				.orElse(null);
+//		return property;
+//	}
 
 // private class MaxLevelReturn {
 // int maxLevel;
@@ -189,40 +181,40 @@ public class XTaskInstanceToPostTaskRequestMapper {
 // }
 // }
 
-	private int findMaxLevel(List<PropertyInstance<Object>> propertyInstances) {
-		int maxLevel = 0;
-		boolean hasLevel0 = false;
-		boolean hasLevel1 = false;
+//	private int findMaxLevel(List<PropertyInstance<Object>> propertyInstances) {
+//		int maxLevel = 0;
+//		boolean hasLevel0 = false;
+//		boolean hasLevel1 = false;
+//
+//		for (PropertyInstance<Object> instance : propertyInstances) {
+//			maxLevel = Math.max(maxLevel, instance.getLevel());
+//			hasLevel0 = hasLevel0 || instance.getLevel() == 0;
+//			hasLevel1 = hasLevel1 || instance.getLevel() == 1;
+//		}
+//
+//		if (!hasLevel0 && !hasLevel1) {
+//			maxLevel = maxLevel + 2;
+//		} else if (!hasLevel0 || !hasLevel1) {
+//			maxLevel++;
+//		}
+//		return maxLevel;
+//	}
 
-		for (PropertyInstance<Object> instance : propertyInstances) {
-			maxLevel = Math.max(maxLevel, instance.getLevel());
-			hasLevel0 = hasLevel0 || instance.getLevel() == 0;
-			hasLevel1 = hasLevel1 || instance.getLevel() == 1;
-		}
-
-		if (!hasLevel0 && !hasLevel1) {
-			maxLevel = maxLevel + 2;
-		} else if (!hasLevel0 || !hasLevel1) {
-			maxLevel++;
-		}
-		return maxLevel;
-	}
-
-	private ArrayList<ArrayList<PropertyInstance<Object>>> sortPropertiesByLevel(
-			List<PropertyInstance<Object>> propertyInstances) {
-		ArrayList<ArrayList<PropertyInstance<Object>>> sorted = new ArrayList<ArrayList<PropertyInstance<Object>>>();
-
-		int maxLevel = findMaxLevel(propertyInstances);
-
-		for (int i = 0; i < maxLevel + 1; i++) {
-			sorted.add(new ArrayList<PropertyInstance<Object>>());
-		}
-
-		for (PropertyInstance<Object> pi : propertyInstances) {
-			sorted.get(pi.getLevel()).add(pi);
-		}
-
-		return sorted;
-	}
+//	private ArrayList<ArrayList<PropertyInstance<Object>>> sortPropertiesByLevel(
+//			List<PropertyInstance<Object>> propertyInstances) {
+//		ArrayList<ArrayList<PropertyInstance<Object>>> sorted = new ArrayList<ArrayList<PropertyInstance<Object>>>();
+//
+//		int maxLevel = findMaxLevel(propertyInstances);
+//
+//		for (int i = 0; i < maxLevel + 1; i++) {
+//			sorted.add(new ArrayList<PropertyInstance<Object>>());
+//		}
+//
+//		for (PropertyInstance<Object> pi : propertyInstances) {
+//			sorted.get(pi.getLevel()).add(pi);
+//		}
+//
+//		return sorted;
+//	}
 
 }

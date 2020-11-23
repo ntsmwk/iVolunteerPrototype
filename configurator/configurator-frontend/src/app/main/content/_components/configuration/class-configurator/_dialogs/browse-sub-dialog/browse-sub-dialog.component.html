@@ -1,0 +1,41 @@
+<div class="browse-dialog-content pt-8">
+
+  <div fxLayout="row" fxLayoutAlign="space-between center pb-4">
+    <h2 *ngIf="data.sourceReference === 'LEFT'">Konfiguration für Werkunternehmen wählen</h2>
+    <h2 *ngIf="data.sourceReference === 'RIGHT'">Konfiguration für Werkbesteller wählen</h2>
+    <h2 *ngIf="data.sourceReference === undefined">{{data.title}}</h2>
+  </div>
+
+  <table class="browse-table" cellspacing=0 cellpadding=3 fusePerfectScrollbar>
+    <col width="325px" />
+    <col width="125px" />
+
+    <tr style="background-color: rgb(62, 125, 219); color: white;">
+      <th class="table-header-cell">
+        <div class="table-header-label" (click)="sortClicked('name')" fxLayout="row" fxLayoutAlign="start center">
+          <div *ngIf="currentSortKey=='name' && currentSortType=='za'">&#9652;</div>
+          <div *ngIf="currentSortKey=='name' && currentSortType=='az'">&#9662;</div>
+          <div>&nbsp;Name</div>
+        </div>
+      </th>
+      <th class="table-header-cell">
+        <div class="table-header-label" (click)="sortClicked('date')" fxLayout="row" fxLayoutAlign="start center">
+          <div *ngIf="currentSortKey=='date' && currentSortType=='za'">&#9652;</div>
+          <div *ngIf="currentSortKey=='date' && currentSortType=='az'">&#9662;</div>
+          <div>&nbsp;Geändert</div>
+        </div>
+      </th>
+
+    </tr>
+    <tr *ngFor="let entry of datasource.filteredData" class="table-row" (click)="handleRowClick(entry)">
+      <td class="name-cell" [matTooltip]="entry.name">{{entry.name}}</td>
+      <td class="date-cell">{{entry.date | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
+    </tr>
+  </table>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
+  </mat-form-field>
+
+
+</div>

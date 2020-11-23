@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.meta.core.property.Location;
 import at.jku.cis.iVolunteer.model.user.Address;
 

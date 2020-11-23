@@ -1,0 +1,63 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>delete</mat-icon>
+      </td>
+      <td>
+        <h1>Klassen-Konfiguration löschen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+<mat-dialog-content *ngIf="loaded">
+
+  <div class="browse-dialog-content pt-8">
+    <h2>Löschen</h2>
+    <table class="browse-table" cellspacing=0 cellpadding=3 fusePerfectScrollbar>
+      <col width="20px" />
+      <col width="305px" />
+      <col width="125px" />
+
+      <tr style="background-color: rgb(62, 125, 219); color: white;">
+        <th class="table-header-cell"></th>
+        <th class="table-header-cell">
+          <div class="table-header-label" (click)="sortClicked('name')" fxLayout="row" fxLayoutAlign="start center">
+            <div *ngIf="currentSortKey=='name' && currentSortType=='za'">&#9652;</div>
+            <div *ngIf="currentSortKey=='name' && currentSortType=='az'">&#9662;</div>
+            <div>&nbsp;Name</div>
+          </div>
+        </th>
+        <th class="table-header-cell">
+          <div class="table-header-label" (click)="sortClicked('date')" fxLayout="row" fxLayoutAlign="start center">
+            <div *ngIf="currentSortKey=='date' && currentSortType=='za'">&#9652;</div>
+            <div *ngIf="currentSortKey=='date' && currentSortType=='az'">&#9662;</div>
+            <div>&nbsp;Geändert</div>
+          </div>
+        </th>
+      </tr>
+      <tr *ngFor="let entry of datasource.filteredData" class="table-row" (click)="handleCheckboxRowClicked(entry)">
+        <td class="checkbox-cell">
+          <mat-checkbox (click)="$event.stopPropagation()" (changed)="handleCheckboxRowClicked(entry)"
+            [checked]="isSelected(entry)">
+          </mat-checkbox>
+        </td>
+        <td class="name-cell" [matTooltip]="entry.name">{{entry.name}}</td>
+        <td class="date-cell">{{entry.timestamp | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
+      </tr>
+    </table>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
+    </mat-form-field>
+
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()"
+    [disabled]="data.idsToDelete == null || data.idsToDelete.length <= 0">Löschen</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
+</mat-dialog-actions>
