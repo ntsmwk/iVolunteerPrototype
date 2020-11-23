@@ -144,5 +144,8 @@
       }
     }
   },
-  "defaultProject": "configurator-frontend"
+  "defaultProject": "configurator-frontend",
+  "cli": {
+    "analytics": false
+  }
 }

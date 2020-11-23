@@ -1,11 +1,11 @@
-package at.jku.cis.iVolunteer.marketplace.chart;
+package at.jku.cis.iVolunteer.marketplace.diagram;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.model.chart.StoredChart;
+import at.jku.cis.iVolunteer.model.diagram.StoredChart;
 
 @Service
 public class StoredChartService {

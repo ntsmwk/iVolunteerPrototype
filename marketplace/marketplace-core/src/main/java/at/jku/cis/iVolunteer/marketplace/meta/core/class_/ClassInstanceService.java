@@ -27,12 +27,17 @@ import at.jku.cis.iVolunteer.model.user.User;
 @Service
 public class ClassInstanceService {
 
-	@Autowired private ClassPropertyService classPropertyService;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
-	
+	@Autowired
+	private ClassPropertyService classPropertyService;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private MarketplaceService marketplaceService;
+	@Autowired
+	private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+
 	public List<ClassInstance> getAllClassInstances() {
 		return classInstanceRepository.findAll();
 	}
@@ -42,6 +47,7 @@ public class ClassInstanceService {
 				.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), classDefinitionId, tenantId).stream()
 				.findFirst().orElse(null);
 	}
+
 	public ClassInstance getClassInstanceById(String taskId) {
 		return classInstanceRepository.findOne(taskId);
 	}
@@ -60,33 +66,40 @@ public class ClassInstanceService {
 		return getClassInstances(volunteer, classDefinitionService.getByName(classDefinitionName, tenantId).getId(),
 				tenantId);
 	}
-	
-	public List<ClassInstance> getClassInstancesCreatedByRule(User volunteer, String derivationRuleId){
+
+	public List<ClassInstance> getClassInstancesCreatedByRule(User volunteer, String derivationRuleId) {
 		return classInstanceRepository.getByUserIdAndDerivationRuleId(volunteer.getId(), derivationRuleId);
 	}
 
-	public List<ClassInstance> getClassInstanceByArchetype(ClassArchetype classArchetype, String tenantId){
+	public List<ClassInstance> getClassInstanceByArchetype(ClassArchetype classArchetype, String tenantId) {
 		return classInstanceRepository.getByClassArchetypeAndTenantId(classArchetype, tenantId);
 	}
-	
-	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId, String tenantId){
+
+	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId,
+			String tenantId) {
 		return classInstanceRepository.getByClassArchetypeAndUserIdAndTenantId(classArchetype, userId, tenantId);
 	}
-	
-	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId){
+
+	public List<ClassInstance> getClassInstanceByArchetypeAndUserId(ClassArchetype classArchetype, String userId) {
 		return classInstanceRepository.getByClassArchetypeAndUserId(classArchetype, userId);
 	}
-	
-//	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype classArchetype, String userId, boolean subscribed) {
-//		return classInstanceRepository.getByClassArchetypeAndUserIdAndSubscribed(classArchetype, userId, subscribed);
-//	}
-//	
-//	public List<ClassInstance> getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype classArchetype, String userId, String tenantId, boolean subscribed) {
-//		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(classArchetype, tenantId, userId, subscribed);
-//
-//	}
-	
-	
+
+	// public List<ClassInstance>
+	// getClassInstanceByArcheTypeAndUserIdAndSubscribed(ClassArchetype
+	// classArchetype, String userId, boolean subscribed) {
+	// return
+	// classInstanceRepository.getByClassArchetypeAndUserIdAndSubscribed(classArchetype,
+	// userId, subscribed);
+	// }
+	//
+	// public List<ClassInstance>
+	// getClassInstanceByArcheTypeAndUserIdAndTenantIdAndSubscribed(ClassArchetype
+	// classArchetype, String userId, String tenantId, boolean subscribed) {
+	// return
+	// classInstanceRepository.getByClassArchetypeAndTenantIdAndUserIdAndSubscribed(classArchetype,
+	// tenantId, userId, subscribed);
+	//
+	// }
 
 	public List<ClassInstance> filterInstancesByPropertyCriteria(User volunteer, String classDefinitionId,
 			String tenantId, Criteria criteria) {
@@ -116,7 +129,7 @@ public class ClassInstanceService {
 		ClassDefinition classDefinition = classDefinitionService.getClassDefinitionById(classDefinitionId);
 		ClassInstance ci = new ClassInstance();
 		ci.setClassArchetype(ci.getClassArchetype());
-		
+
 		ci.setName(classDefinition.getName());
 		ci.setClassDefinitionId(classDefinition.getId());
 		ci.setUserId(volunteer.getId());
@@ -124,8 +137,8 @@ public class ClassInstanceService {
 		ci.setTenantId(tenantId);
 		// copy properties from target class
 		List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
-		List<ClassProperty<Object>> propLicenseList =  classPropertyService.
-					getAllClassPropertiesFromClass(classDefinition.getId());
+		List<ClassProperty<Object>> propLicenseList = classPropertyService
+				.getAllClassPropertiesFromClass(classDefinition.getId());
 		propLicenseList.forEach(cp -> propInstList.add(classPropertyToPropertyInstanceMapper.toTarget(cp)));
 		ci.setProperties(propInstList);
 		return ci;
@@ -150,9 +163,9 @@ public class ClassInstanceService {
 	public List<ClassInstance> addOrUpdateClassDefinitions(List<ClassInstance> classInstances) {
 		return classInstanceRepository.save(classInstances);
 	}
-	
+
 	public List<ClassInstance> filterTaskInstancesByYear(int year, List<ClassInstance> classInstances) {
-		if(year == 0) {
+		if (year == 0) {
 			return classInstances;
 		}
 		return classInstances.stream().filter(tI -> {

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassInstanceMapper;
-import at.jku.cis.iVolunteer.marketplace.blockchainify.ContractorPublishingRestClient;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -30,12 +29,18 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private ClassInstanceMapper classInstanceMapper;
-	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
-	@Autowired private DateTimeService dateTimeService;
-	@Autowired private MarketplaceService marketplaceService;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private ClassInstanceMapper classInstanceMapper;
+	@Autowired
+	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired
+	private DateTimeService dateTimeService;
+	@Autowired
+	private MarketplaceService marketplaceService;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -87,7 +92,8 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/all/tenant/{tenantId}/archetype/{archetype}/user/{userId}")
-	private List<ClassInstance> getClassInstanceByTenantIdAndArchetype(@PathVariable("tenantId") String tenantId,@PathVariable("archetype") ClassArchetype classArchetype,@PathVariable("userId")  String userId) {
+	private List<ClassInstance> getClassInstanceByTenantIdAndArchetype(@PathVariable("tenantId") String tenantId,
+			@PathVariable("archetype") ClassArchetype classArchetype, @PathVariable("userId") String userId) {
 		return classInstanceRepository.getByClassArchetypeAndTenantIdAndUserId(classArchetype, tenantId, userId);
 	}
 

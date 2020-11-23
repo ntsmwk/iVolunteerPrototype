@@ -24,6 +24,8 @@ public class ClassInstanceMapper {
 	private Hasher hasher;
 	@Autowired
 	private DateTimeService dateTimeService;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	public List<ClassInstanceDTO> mapToDTO(List<ClassInstance> classInstances) {
 		List<ClassInstanceDTO> classInstanceDTOs = classInstances.stream().map(ci -> {
@@ -137,13 +139,9 @@ public class ClassInstanceMapper {
 			PropertyInstance<Object> taskType = ci.getProperties().stream().filter(p -> p.getName().equals("TaskType"))
 					.findFirst().orElse(null);
 			if (taskType != null) {
-				if (ci.getId().equals("5fa15bf3430116da3e8a4945")) {
-					System.out.println();
-				}
 				if (taskType.getValues().size() > 0) {
 					try {
-						ObjectMapper mapper = new ObjectMapper();
-						TreePropertyEntry entry = mapper.convertValue(taskType.getValues().get(0),
+						TreePropertyEntry entry = objectMapper.convertValue(taskType.getValues().get(0),
 								TreePropertyEntry.class);
 
 						List<TreePropertyEntry> parents = entry.getParents();
