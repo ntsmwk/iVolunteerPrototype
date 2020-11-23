@@ -134,10 +134,9 @@ public class InitializationService {
 	public List<TreePropertyDefinition> prepareiVolunteerTreePropertyDefinitions() {
 		List<TreePropertyDefinition> treeDefs = new LinkedList<>();
 
-//		String key = (tenantIds.get(i).getLabel().equals("FF Eidenberg")) ? "FF" : "MV";
 		for (int i = 0; i < tenantIds.size(); i++) {
+			String key = (tenantIds.get(i).getLabel().equals("MV Schwertberg")) ? "MV" : "FF";
 
-			String key = "FF";
 			for (TreePropertyDefinition tpd : standardPropertyDefinitions.getAllTreeProperties(key)) {
 				if (flatPropertyDefinitionRepository.getByNameAndTenantId(tpd.getName(), tenantIds.get(i).getId())
 						.size() == 0) {

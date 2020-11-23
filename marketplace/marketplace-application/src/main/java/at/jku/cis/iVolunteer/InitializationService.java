@@ -160,6 +160,7 @@ public class InitializationService {
 		List<Tuple<String, String>> list = new LinkedList<Tuple<String, String>>();
 		for (Tenant t : tenants) {
 			list.add(new Tuple<>(t.getId(), t.getName()));
+
 		}
 		
 		InitConfiguratorRequest body = new InitConfiguratorRequest();

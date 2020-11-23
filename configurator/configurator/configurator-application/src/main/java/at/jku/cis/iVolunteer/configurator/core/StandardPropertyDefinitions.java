@@ -440,6 +440,8 @@ public class StandardPropertyDefinitions {
 		@PostConstruct
 		public void inst() {
 			this.setName("TaskType");
+			this.setTenantId(tenantId);
+			this.setId(new ObjectId().toHexString());
 
 			// Ausrückung
 			TreePropertyEntry a = new TreePropertyEntry("Ausrückung", false, 0, true);
