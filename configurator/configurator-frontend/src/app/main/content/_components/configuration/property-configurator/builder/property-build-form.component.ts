@@ -25,7 +25,7 @@ export class PropertyBuildFormComponent implements OnInit {
     this.displayBuilder = true;
 
     this.route.queryParams.subscribe(params => {
-      if (isNullOrUndefined(params['tenantId'] || params['redirect'])) {
+      if (isNullOrUndefined(params['tenantId'])) {
         this.router.navigate(['main/invalid-parameters']);
       } else {
         this.tenantId = params['tenantId'];

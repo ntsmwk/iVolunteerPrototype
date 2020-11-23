@@ -55,7 +55,7 @@ export class PropertyListComponent implements OnInit {
     };
 
     this.route.queryParams.subscribe(params => {
-      if (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])) {
+      if (isNullOrUndefined(params['tenantId'])) {
         this.router.navigate(['main/invalid-parameters']);
       } else {
         this.tenantId = params['tenantId'];

@@ -26,7 +26,7 @@ export class ConfiguratorComponent implements OnInit {
   async ngOnInit() {
 
     this.route.queryParams.subscribe(params => {
-      if (isNullOrUndefined(params['tenantId']) || isNullOrUndefined(params['redirect'])) {
+      if (isNullOrUndefined(params['tenantId'])) {
         console.error('tenantId not set');
         this.router.navigate(['main/invalid-parameters']);
       } else {

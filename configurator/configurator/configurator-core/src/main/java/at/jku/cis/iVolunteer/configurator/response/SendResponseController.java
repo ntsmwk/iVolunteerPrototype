@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.configurator.response;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -15,12 +14,8 @@ import at.jku.cis.iVolunteer.configurator._mapper.relationship.RelationshipMappe
 import at.jku.cis.iVolunteer.configurator.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.configurator.configurations.matching.configuration.MatchingConfigurationService;
 import at.jku.cis.iVolunteer.configurator.configurations.matching.relationships.MatchingOperatorRelationshipController;
-import at.jku.cis.iVolunteer.configurator.meta.core.class_.ClassDefinitionController;
-import at.jku.cis.iVolunteer.configurator.meta.core.class_.ClassDefinitionService;
-import at.jku.cis.iVolunteer.configurator.meta.core.property.definition.flatProperty.FlatPropertyDefinitionController;
 import at.jku.cis.iVolunteer.configurator.meta.core.property.definition.flatProperty.FlatPropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.configurator.meta.core.property.definition.treeProperty.TreePropertyDefinitionRepository;
-import at.jku.cis.iVolunteer.configurator.meta.core.relationship.RelationshipController;
 import at.jku.cis.iVolunteer.configurator.model._httprequests.ClassConfiguratorResponseRequestBody;
 import at.jku.cis.iVolunteer.configurator.model._httprequests.ClassInstanceConfiguratorResponseRequestBody;
 import at.jku.cis.iVolunteer.configurator.model._httprequests.MatchingConfiguratorResponseRequestBody;
@@ -32,17 +27,12 @@ import at.jku.cis.iVolunteer.configurator.model._httprequests.FrontendClassConfi
 import at.jku.cis.iVolunteer.configurator.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.configurator.model.configurations.clazz.ClassConfigurationBundle;
 import at.jku.cis.iVolunteer.configurator.model.configurations.matching.MatchingConfiguration;
-import at.jku.cis.iVolunteer.configurator.model.configurations.matching.MatchingOperatorRelationship;
-import at.jku.cis.iVolunteer.configurator.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.configurator.model.meta.core.property.definition.flatProperty.FlatPropertyDefinition;
 import at.jku.cis.iVolunteer.configurator.model.meta.core.property.definition.treeProperty.TreePropertyDefinition;
-import at.jku.cis.iVolunteer.configurator.model.meta.core.relationship.RelationshipDTO;
 
 @RestController
 public class SendResponseController {
 
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private RelationshipController relationshipController;
 	@Autowired private ClassConfigurationController classConfigurationController;
 	@Autowired private MatchingConfigurationService matchingConfigurationService;
 	@Autowired private ResponseRestClient responseRestClient;
@@ -77,24 +67,28 @@ public class SendResponseController {
 		responseRequestBody.setIdsToDelete(body.getIdsToDelete());
 		responseRequestBody.setAction(body.getAction());
 
-		ResponseEntity<Object> resp = responseRestClient.sendClassConfiguratorResponse(body.getUrl(),
-				responseRequestBody);
-		if (resp.getStatusCode().is4xxClientError()) {
+		ResponseEntity<Object> resp = null;
+		if (body.getUrl() != null) {
+			resp = responseRestClient.sendClassConfiguratorResponse(body.getUrl(), responseRequestBody);
+		} else {
+			System.out.println("no response sent");
+		}
+		
+		if (resp != null && resp.getStatusCode().is4xxClientError()) {
 			System.out.println("error - dont save / delete");
 			return resp;
-		} else {
+		} else if ((resp == null) || (resp != null && resp.getStatusCode().is2xxSuccessful())) {
 			if (body.getAction().equals("save")) {
 				ClassConfiguration ret = classConfigurationController.saveEverything(body.getSaveRequest());
 				return ResponseEntity.ok(ret);
-			}
-			else if (body.getAction().equals("delete")) {
-				List<ClassConfiguration> configs = classConfigurationController
-						.deleteMultipleClassConfigurations(body.getIdsToDelete());
+			} else if (body.getAction().equals("delete")) {
+				List<ClassConfiguration> configs = classConfigurationController.deleteMultipleClassConfigurations(body.getIdsToDelete());
 				return ResponseEntity.ok().build();
 			}
-
-			return ResponseEntity.badRequest().build();
 		}
+		
+		return ResponseEntity.badRequest().build();
+
 
 	}
 
@@ -128,13 +122,15 @@ public class SendResponseController {
 		responseRequestBody.setIdsToDelete(body.getIdsToDelete());
 		responseRequestBody.setAction(body.getAction());
 
-		ResponseEntity<Object> resp = responseRestClient.sendMatchingConfiguratorResponse(body.getUrl(),
-				responseRequestBody);
+		ResponseEntity<Object> resp = null;
+		if (body.getUrl() != null) {
+		 resp = responseRestClient.sendMatchingConfiguratorResponse(body.getUrl(), responseRequestBody);
+		}
 
-		if (resp.getStatusCode().is4xxClientError()) {
+		if (resp != null && resp.getStatusCode().is4xxClientError()) {
 			System.out.println("error - dont saved / deleted");
 
-		} else {
+		} else if ((resp == null) || (resp != null && resp.getStatusCode().is2xxSuccessful())) {
 			if (body.getAction().equals("save")) {
 				MatchingConfiguration ret = matchingConfigurationService
 						.saveMatchingConfiguration(body.getSaveRequest().getMatchingConfiguration());
@@ -184,11 +180,13 @@ public class SendResponseController {
 			responseRequestBody.setTreePropertyDefinitions(body.getTreePropertyDefinitions());
 		}
 		
-		ResponseEntity<Object> resp = responseRestClient.sendPropertyConfiguratorResponse(body.getUrl(),
-				responseRequestBody);
-		if (resp.getStatusCode().is4xxClientError()) {
+		ResponseEntity<Object> resp = null;
+		if (body.getUrl() != null) {
+			resp = responseRestClient.sendPropertyConfiguratorResponse(body.getUrl(), responseRequestBody);
+		}
+		if (resp != null && resp.getStatusCode().is4xxClientError()) {
 			System.out.println("error - not saved / deleted");
-		} else {			
+		} else if ((resp == null) || (resp != null && resp.getStatusCode().is2xxSuccessful())) {
 			if (body.getAction().equals("save")) {
 				if (body.getFlatPropertyDefinitions() != null) {
 					flatPropertyDefinitionRepository.save(body.getFlatPropertyDefinitions());
