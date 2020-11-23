@@ -39,7 +39,6 @@ export class ConfiguratorComponent implements OnInit {
     this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       `${environment.CONFIGURATOR_URL}/main/class-configurator?tenantId=${this.globalInfo.tenants[0].id}&redirect=${this.encodedMPUrl}response%2Fclass-configurator`
       // `${environment.CONFIGURATOR_URL}/main/class-configurator?tenantId=${this.globalInfo.tenants[0].id}`
-
     );
 
 
