@@ -24,7 +24,6 @@ public class InitializationController {
 //		addAllProperties();
 		initializationService.init(body);
 	}
-	
 
 	@GetMapping("/init/test-url-encoding")
 	public void initTest() {
@@ -90,12 +89,12 @@ public class InitializationController {
 	public void deleteMatchingConfigurations() {
 		initializationService.deleteMatchingConfigurations();
 	}
-	
+
 	@PutMapping("/init/delete-matching-collector-configurations")
 	public void deleteMatchingCollectorConfigurations() {
 		initializationService.matchingCollectorConfigurationRepository.deleteAll();
 	}
-	
+
 	@PutMapping("/init/delete-matching-operator-relationships")
 	public void deleteMatchingOperatorRelationships() {
 		initializationService.matchingOperatorRelationshipRepository.deleteAll();
