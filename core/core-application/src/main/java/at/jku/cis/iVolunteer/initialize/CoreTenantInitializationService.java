@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.initialize;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -66,7 +68,6 @@ public class CoreTenantInitializationService {
 			tenant.setLandingpageMessage("Herzlich Willkommen bei iVolunteer!");
 			tenant.setLandingpageTitle(landingpageTitle);
 			tenant = coreTenantRepository.insert(tenant);
-			coreBadgeTemplateService.createBadgeTemplates(marketplace, tenant);
 		}
 
 		return tenant;
@@ -88,5 +89,14 @@ public class CoreTenantInitializationService {
 			String fileUrl = storageService.store(classPathResource);
 			tenant.setLandingpageImagePath(fileUrl);
 		}
+	}
+
+	public void createBadgeTemplates() {
+		List<Tenant> tenants = coreTenantRepository.findAll();
+		for(Tenant tenant : tenants) {
+			Marketplace marketplace = marketplaceRepository.findOne(tenant.getMarketplaceId());
+			coreBadgeTemplateService.createBadgeTemplates(marketplace, tenant);
+		}
+	
 	}
 }

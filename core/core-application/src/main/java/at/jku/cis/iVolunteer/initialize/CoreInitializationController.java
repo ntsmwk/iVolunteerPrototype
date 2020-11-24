@@ -62,6 +62,12 @@ public class CoreInitializationController {
 		createRecruiters();
 		addTenantTags();
 	}
+	
+	@PutMapping("/init/badges")
+	public void createBadgeTemplates() {
+		coreTenantInitializationService.createBadgeTemplates();
+
+	}
 
 	@DeleteMapping("/init/delete-users")
 	public void deleteUsers() {
