@@ -213,12 +213,12 @@ public class XDiagramDataService {
         List<XDiagramRawDataSet> datasets = diagramDataRestClient.getDiagramRawData();
         diagramRawDataSetRepository.save(datasets);
 
-        // TODO Philipp: remove old entries
-        // diagramRawDataSetRepository.delete(id);
-        // List<XDiagramRawDataSet> datasets =
-        // diagramRawDataSetRepository.findByUserId(user.getId());
-        // datasets.sort(Comparator.comparing(XDiagramRawDataSet::getRefreshTimestamp).reversed());
-
+        // remove old entries, except 5 latest
+        List<XDiagramRawDataSet> entries = diagramRawDataSetRepository.findAll();
+        entries.sort(Comparator.comparing(XDiagramRawDataSet::getRefreshTimestamp).reversed());
+        for (int i = 5; i < entries.size(); ++i) {
+            diagramRawDataSetRepository.delete(entries.get(i));
+        }
     }
 
     public void queryDiagramRawDataSetsFromMarketplacesByUser(String userId) {
