@@ -71,7 +71,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
 
         if (!this.showEditDialog) {
           this.dialogForm.addControl("type", new FormControl('', Validators.required));
-          this.dialogForm.get('type').setValue('ivolunteer');
+          this.dialogForm.get('type').setValue('iVolunteer');
           this.dialogForm.updateValueAndValidity();
         }
         // ----DEBUG
