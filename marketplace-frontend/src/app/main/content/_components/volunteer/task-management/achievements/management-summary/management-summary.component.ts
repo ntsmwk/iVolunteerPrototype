@@ -101,7 +101,7 @@ export class ManagementSummaryComponent implements OnInit {
           .toPromise()
       );
 
-      // TODO Philipp
+      // TODO
       // get unique marketplaceIds of CIs
       // perform once per marketplaceId
       this.classInstanceDTOs = <ClassInstanceDTO[]>(

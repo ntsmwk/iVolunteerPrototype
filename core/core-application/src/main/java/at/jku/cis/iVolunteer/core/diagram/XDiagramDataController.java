@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.core.diagram;
 
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramData;
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataArray;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramReturnEntity;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramDisplayBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramFilterBadge;
@@ -90,7 +88,6 @@ public class XDiagramDataController {
         return ResponseEntity.ok(diagramData);
     }
 
-    // TOOD Philipp test
     @PostMapping("/badge")
     public ResponseEntity<Object> getBadgeDiagramData(@RequestBody XDiagramPayloadBadge payload) {
         if (payload == null) {
@@ -126,6 +123,7 @@ public class XDiagramDataController {
             diagramData = diagramDataService.generateBadgeSchmuckkaestchenData(dataset.getBadges());
         }
 
+        // TODO Philipp
         if (order != null) {
             if (order.isAsc()) {
                 diagramData.getData()

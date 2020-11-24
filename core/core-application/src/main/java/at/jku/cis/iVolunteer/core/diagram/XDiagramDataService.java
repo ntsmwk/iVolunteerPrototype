@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.model.badge.XBadgeCertificate;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramData;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataArray;
@@ -22,7 +23,6 @@ import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataPoint;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataPointBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramReturnEntity;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramFilterBadge;
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.BadgeCertificate;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataPoint;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataSet;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramDisplayTask;
@@ -66,13 +66,17 @@ public class XDiagramDataService {
         }
 
         if (filter.getTenantIds() == null || filter.getTenantIds().size() == 0) {
-            dataset.getDatapoints().stream()
-                    .filter(d -> d.getStartDate().after(filter.getStart()) && d.getEndDate().before(filter.getEnd()))
-                    .collect(Collectors.toList());
+            dataset.setDatapoints(
+                    dataset.getDatapoints().stream().filter(d -> d.getStartDate() != null && d.getEndDate() != null
+                            && d.getStartDate().after(filter.getStart()) && d.getEndDate().before(filter.getEnd())
+
+                    ).collect(Collectors.toList()));
         } else {
-            dataset.getDatapoints().stream().filter(d -> d.getStartDate().after(filter.getStart())
-                    && d.getEndDate().before(filter.getEnd()) && filter.getTenantIds().contains(d.getTenantId()))
-                    .collect(Collectors.toList());
+            dataset.setDatapoints(dataset.getDatapoints().stream()
+                    .filter(d -> d.getStartDate() != null && d.getEndDate() != null
+                            && d.getStartDate().after(filter.getStart()) && d.getEndDate().before(filter.getEnd())
+                            && filter.getTenantIds().contains(d.getTenantId()))
+                    .collect(Collectors.toList()));
         }
 
         return dataset;
@@ -84,16 +88,15 @@ public class XDiagramDataService {
 
         if (years != null && years.size() > 0) {
             Calendar calendar = new GregorianCalendar();
-            dataset.getBadges().stream().filter(b -> {
+            dataset.setBadges(dataset.getBadges().stream().filter(b -> {
                 calendar.setTime(b.getIssueDate());
                 return years.contains(calendar.get(Calendar.YEAR));
-            }).collect(Collectors.toList());
+            }).collect(Collectors.toList()));
         }
 
         if (tenantIds != null && tenantIds.size() > 0) {
-            // TODO Philipp
-            // dataset.getBadges().stream().filter(b ->
-            // tenantIds.contain(b.getTenantId())).collect(Collectors.toList());
+            dataset.setBadges(dataset.getBadges().stream()
+                    .filter(b -> tenantIds.contains(b.getTenantSerialized().getId())).collect(Collectors.toList()));
         }
 
         return dataset;
@@ -158,8 +161,7 @@ public class XDiagramDataService {
         return data;
     }
 
-    // TODO Philipp test
-    public XDiagramReturnEntity generateBadgeSchmuckkaestchenData(List<BadgeCertificate> badges) {
+    public XDiagramReturnEntity generateBadgeSchmuckkaestchenData(List<XBadgeCertificate> badges) {
         // map<year, anzahl>
         HashMap<Integer, Integer> map = new HashMap<>();
         Calendar calendar = new GregorianCalendar();
@@ -180,17 +182,16 @@ public class XDiagramDataService {
 
     }
 
-    // TODO Philipp test
-    public XDiagramReturnEntity generateBadgeTimelineData(List<BadgeCertificate> badges) {
+    public XDiagramReturnEntity generateBadgeTimelineData(List<XBadgeCertificate> badges) {
         // map<year, badgeCertificates>
-        HashMap<Integer, List<BadgeCertificate>> map = new HashMap<>();
+        HashMap<Integer, List<XBadgeCertificate>> map = new HashMap<>();
         Calendar calendar = new GregorianCalendar();
 
         badges.forEach(b -> {
             calendar.setTime(b.getIssueDate());
             int year = calendar.get(Calendar.YEAR);
 
-            map.putIfAbsent(year, new ArrayList<BadgeCertificate>());
+            map.putIfAbsent(year, new ArrayList<XBadgeCertificate>());
             map.get(year).add(b);
 
         });
@@ -211,6 +212,13 @@ public class XDiagramDataService {
     private void queryDiagramRawDataSetsFromMarketplaces() {
         List<XDiagramRawDataSet> datasets = diagramDataRestClient.getDiagramRawData();
         diagramRawDataSetRepository.save(datasets);
+
+        // TODO Philipp: remove old entries
+        // diagramRawDataSetRepository.delete(id);
+        // List<XDiagramRawDataSet> datasets =
+        // diagramRawDataSetRepository.findByUserId(user.getId());
+        // datasets.sort(Comparator.comparing(XDiagramRawDataSet::getRefreshTimestamp).reversed());
+
     }
 
     public void queryDiagramRawDataSetsFromMarketplacesByUser(String userId) {

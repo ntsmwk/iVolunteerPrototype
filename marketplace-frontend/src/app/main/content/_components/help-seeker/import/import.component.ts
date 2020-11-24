@@ -55,7 +55,7 @@ export class ImportComponent implements OnInit {
     );
     this.marketplace = globalInfo.marketplace;
     this.user = globalInfo.user;
-    this.tenant = globalInfo.tenants[0]; // TODO Philipp: not that nice...
+    this.tenant = globalInfo.tenants[0];
 
     this.classDefinitions = <ClassDefinition[]>(
       await this.classDefinitionService

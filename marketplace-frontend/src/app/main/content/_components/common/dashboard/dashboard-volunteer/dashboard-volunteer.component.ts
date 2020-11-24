@@ -166,7 +166,7 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
-      // TODO Philipp
+      // TODO
       // get unique marketplaceIds of CIs
       // perform once per marketplaceId
       this.localClassInstanceDTOs = <ClassInstanceDTO[]>(
@@ -304,7 +304,7 @@ export class DashboardVolunteerComponent implements OnInit {
     );
 
     // remove allowedValues, since too large for localRepository... 
-    ci.properties.forEach(p => p.allowedValues = [])
+    ci.properties.forEach(p => p.allowedValues = []);
 
     this.localRepositoryService
       .synchronizeSingleClassInstance(this.volunteer, ci)
@@ -371,7 +371,7 @@ export class DashboardVolunteerComponent implements OnInit {
       }
     });
 
-    // TODO Philipp
+    // TODO
     // sort missingClassInstances by marketplaceId
     // for each marketplaceId call classInstanceService to get CI from correct marketplace...
     const missingCis = <ClassInstance[]>await this.classInstanceService
