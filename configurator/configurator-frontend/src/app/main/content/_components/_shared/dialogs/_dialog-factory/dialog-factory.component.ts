@@ -65,7 +65,10 @@ import {
   AddClassDefinitionDialogComponent,
   AddClassDefinitionDialogData
 } from '../../../configuration/matching-configurator/_dialogs/add-class-definition-dialog/add-class-definition-dialog.component';
-import { EditMetaMatchingConfigurationDialogData, EditMetaMatchingConfigurationDialogComponent } from '../../../configuration/matching-configurator/_dialogs/edit-meta-dialog/edit-meta-dialog.component';
+import {
+  EditMetaMatchingConfigurationDialogData,
+  EditMetaMatchingConfigurationDialogComponent
+} from '../../../configuration/matching-configurator/_dialogs/edit-meta-dialog/edit-meta-dialog.component';
 
 @Directive({
   selector: "app-dialog-factory"

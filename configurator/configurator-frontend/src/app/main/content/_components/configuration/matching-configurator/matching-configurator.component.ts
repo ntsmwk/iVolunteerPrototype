@@ -342,7 +342,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         }
         propertyEntry.setConnectable(true);
 
-        // propertyEntry.propertyId = p.id;
         lastPropertyGeometry = propertyEntry.geometry;
         startX = lastPropertyGeometry.x;
         startY = lastPropertyGeometry.y;
@@ -447,9 +446,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private async performSave() {
     this.updateModel();
-    // const ret = <MatchingConfiguration>await this.matchingConfigurationService.saveMatchingConfiguration(this.data.matchingConfiguration).toPromise();
-    // this.data.matchingConfiguration = ret;
-    // await this.matchingOperatorRelationshipService.saveMatchingOperatorRelationships(this.data.relationships, this.data.matchingConfiguration.id).toPromise();
     this.responseService.sendMatchingConfiguratorResponse(this.redirectUrl,
       { matchingConfiguration: this.data.matchingConfiguration, matchingOperatorRelationships: this.data.relationships, tenantId: this.tenantId },
       null, 'save').toPromise().then((ret: MatchingConfiguration) => {
@@ -702,7 +698,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private deleteOperators(cells: MyMxCell[]) {
-    // const cellsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_OPERATOR);
     const cellsToRemove = cells;
 
     try {
@@ -723,8 +718,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     try {
       this.graph.getModel().beginUpdate();
       const removeCells = this.graph.removeCells(cellsToRemove, false);
-      // this.data.relationships = this.data.relationships.
-
     } finally {
       this.graph.getModel().endUpdate();
     }

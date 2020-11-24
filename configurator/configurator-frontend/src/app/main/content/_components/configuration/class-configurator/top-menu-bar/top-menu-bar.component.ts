@@ -120,10 +120,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    // this.route.queryParams.subscribe(params => {
-    //   this.tenantId = params['tenantId'];
-    //   this.redirectUrl = params['redirect'];
-    // });
+
   }
 
   ngAfterViewInit() {
