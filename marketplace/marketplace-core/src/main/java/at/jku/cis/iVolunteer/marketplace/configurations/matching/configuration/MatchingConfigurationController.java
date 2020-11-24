@@ -62,9 +62,11 @@ public class MatchingConfigurationController {
 		
 		MatchingConfiguration config = getMatchingConfigurationById(id);
 		
-		List<MatchingOperatorRelationship> relationships = matchingOperatorRelationshipRepository.findByMatchingConfigurationId(id);
-		relationships.forEach(matchingOperatorRelationshipRepository::delete);
-		
+		if (config != null) {
+			List<MatchingOperatorRelationship> relationships = matchingOperatorRelationshipRepository.findByMatchingConfigurationId(id);
+			relationships.forEach(matchingOperatorRelationshipRepository::delete);
+		}
+			
 		matchingConfigurationRepository.delete(id);
 		return true;
 

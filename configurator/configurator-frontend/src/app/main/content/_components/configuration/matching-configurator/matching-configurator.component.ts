@@ -435,7 +435,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         ) {
           this.data = undefined;
           this.clearEditor();
-          this.redrawContent();
         }
         break;
       case 'editor_meta_edit':
