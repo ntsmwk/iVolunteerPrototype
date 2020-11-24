@@ -705,7 +705,7 @@ public class ClassConfigurationController {
 		drahtAuftrag.setId(new ObjectId().toHexString());
 		drahtAuftrag.setTenantId(tenantId);
 		drahtAuftrag.setName("Draht-Auftrag");
-		drahtAuftrag.setClassArchetype(ClassArchetype.ROOT);
+		drahtAuftrag.setClassArchetype(ClassArchetype.FLEXPROD);
 		drahtAuftrag.setProperties(new ArrayList<>());
 		drahtAuftrag.setLevel(0); // TODO
 		classDefinitionsRfq.add(drahtAuftrag);
