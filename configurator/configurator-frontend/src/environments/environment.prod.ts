@@ -5,5 +5,6 @@ export const environment = {
   JSON_SERVER_URL: "http://140.78.92.57:3000/repository",
   CORE_URL: "http://140.78.92.57:8090",
   CONFIGURATOR_URL: "http://140.78.92.57:8095",
+  MODE: 'iVolunteer' // 'iVolunteer' || 'flexprod' || 'all'
 
 };

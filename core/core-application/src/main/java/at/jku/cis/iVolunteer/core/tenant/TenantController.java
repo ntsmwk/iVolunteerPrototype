@@ -77,7 +77,7 @@ public class TenantController {
 	}
 
 	@PostMapping("/new")
-	public ResponseEntity<Object> createTenantX(@RequestBody CreateTenantPayload payload) {
+	public ResponseEntity<Object> createTenantX(@RequestBody CreateTenantPayload payload, @RequestHeader("Authorization") String authorization) {
 		XTenant xTenant = payload.getTenant();
 		if (xTenant == null) {
 			return ResponseEntity.badRequest().build();
@@ -100,7 +100,10 @@ public class TenantController {
 		}
 		tenant = tenantService.createTenant(tenant);
 		
+		CoreUser user = loginService.getLoggedInUser();
 		Marketplace marketplace = marketplaceService.findById(tenant.getMarketplaceId());
+
+		this.coreUserService.subscribeUserToTenant(user.getId(), marketplace.getId(), tenant.getId(), UserRole.TENANT_ADMIN, authorization, true);
 		coreBadgeTemplateService.createBadgeTemplates(marketplace, tenant);
 
 		return ResponseEntity.ok().build();

@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.configurator.core;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,18 +14,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.configurator.model._httprequests.InitConfiguratorRequest;
+import at.jku.cis.iVolunteer.configurator.model.meta.core.property.Tuple;
 
 @RestController
 public class InitializationController {
 
 	@Autowired private InitializationService initializationService;
 
-	@PutMapping("/init/configurator/all")
-	public void addTestData(@RequestBody InitConfiguratorRequest body) {
-//		addAllProperties();
-		initializationService.init(body);
+	@PutMapping("/init/configurator/iVolunteer")
+	public void initVolunteer(@RequestBody InitConfiguratorRequest body) {
+		initializationService.initIVolunteer(body);
 	}
 	
+	@PutMapping("/init/configurator/flexprod")
+	public void initFlexProd() {
+		InitConfiguratorRequest body = new InitConfiguratorRequest();
+		body.setTenantIds(Collections.singletonList(new Tuple<>("flexprod", "flexprod")));
+		initializationService.initFlexProd(body);
+	}
+	
+	@PutMapping("/init/configurator/all")
+	public void initAll(@RequestBody InitConfiguratorRequest body) {
+		initializationService.initIVolunteer(body);
+		initializationService.initFlexProd(body);
+	}
 
 	@GetMapping("/init/test-url-encoding")
 	public void initTest() {
@@ -90,12 +103,12 @@ public class InitializationController {
 	public void deleteMatchingConfigurations() {
 		initializationService.deleteMatchingConfigurations();
 	}
-	
+
 	@PutMapping("/init/delete-matching-collector-configurations")
 	public void deleteMatchingCollectorConfigurations() {
 		initializationService.matchingCollectorConfigurationRepository.deleteAll();
 	}
-	
+
 	@PutMapping("/init/delete-matching-operator-relationships")
 	public void deleteMatchingOperatorRelationships() {
 		initializationService.matchingOperatorRelationshipRepository.deleteAll();

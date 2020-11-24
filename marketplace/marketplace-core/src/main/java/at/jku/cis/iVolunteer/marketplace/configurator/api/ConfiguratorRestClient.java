@@ -19,9 +19,9 @@ public class ConfiguratorRestClient {
 	@Autowired private RestTemplate restTemplate;
 	@Value("${configurator.uri}") private String url;
 
-	public HttpStatus initConfigurator(InitConfiguratorRequest body) {
+	public HttpStatus initConfigurator(InitConfiguratorRequest body, String key) {
 		ResponseEntity<Object> resp = restTemplate.exchange(
-				url + "/init/configurator/all" , HttpMethod.PUT, buildEntity(body), Object.class);
+				url + "/init/configurator/" + key, HttpMethod.PUT, buildEntity(body), Object.class);
 		return resp.getStatusCode();
 	}
 

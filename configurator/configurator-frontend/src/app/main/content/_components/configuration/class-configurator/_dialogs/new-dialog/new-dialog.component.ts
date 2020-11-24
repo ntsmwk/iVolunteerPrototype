@@ -10,6 +10,7 @@ import { ClassDefinitionService } from 'app/main/content/_service/meta/core/clas
 import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
 import { isNullOrUndefined } from 'util';
 import { ResponseService } from 'app/main/content/_service/response.service';
+import { environment } from "environments/environment";
 
 export interface NewClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
@@ -38,8 +39,10 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   allClassConfigurations: ClassConfiguration[];
   showEditDialog: boolean;
   loaded = false;
+  configuratorMode: string;
 
   async ngOnInit() {
+    this.configuratorMode = environment.MODE;
 
     this.classConfigurationService
       .getAllClassConfigurations()
@@ -69,6 +72,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
         if (!this.showEditDialog) {
           this.dialogForm.addControl("type", new FormControl('', Validators.required));
           this.dialogForm.get('type').setValue('ivolunteer');
+          this.dialogForm.updateValueAndValidity();
         }
         // ----DEBUG
         // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);

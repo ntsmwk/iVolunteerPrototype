@@ -154,19 +154,20 @@ public class InitializationService {
 		matchingConfigurationRepository.deleteAll();
 	}
 	
-	public void initConfigurator() {
+	public void initConfigurator(String key) {
 		List<Tenant> tenants = getTenants();
 				
 		List<Tuple<String, String>> list = new LinkedList<Tuple<String, String>>();
 		for (Tenant t : tenants) {
 			list.add(new Tuple<>(t.getId(), t.getName()));
+
 		}
 		
 		InitConfiguratorRequest body = new InitConfiguratorRequest();
 		body.setTenantIds(list);
 		body.setMpUrl(this.mpUrl);
 		
-		configuratorRestClient.initConfigurator(body);
+		configuratorRestClient.initConfigurator(body, key);
 	}
 
 }

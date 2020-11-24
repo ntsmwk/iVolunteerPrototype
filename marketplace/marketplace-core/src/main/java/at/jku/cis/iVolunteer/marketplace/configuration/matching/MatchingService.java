@@ -88,7 +88,7 @@ public class MatchingService {
 		return sum;
 	}
 
-	private float matchListAndList(List<ClassInstance> leftClassInstances, ClassProperty<Object> leftClassProperty,
+	public float matchListAndList(List<ClassInstance> leftClassInstances, ClassProperty<Object> leftClassProperty,
 			List<ClassInstance> rightClassInstances, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
 		float sum = 0;

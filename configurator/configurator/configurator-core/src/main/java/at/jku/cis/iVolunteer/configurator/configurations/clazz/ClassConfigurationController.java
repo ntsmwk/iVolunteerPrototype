@@ -530,7 +530,7 @@ public class ClassConfigurationController {
 		haubenofen.setId(new ObjectId().toHexString());
 		haubenofen.setTenantId(tenantId);
 		haubenofen.setName("Haubenofen");
-		haubenofen.setClassArchetype(ClassArchetype.ROOT);
+		haubenofen.setClassArchetype(ClassArchetype.FLEXPROD);
 		haubenofen.setProperties(new ArrayList<>());
 		haubenofen.setLevel(0); // TODO
 
@@ -693,7 +693,7 @@ public class ClassConfigurationController {
 		rfq.setId(new ObjectId().toHexString());
 		rfq.setTenantId(tenantId);
 		rfq.setName("RFQ");
-		rfq.setClassArchetype(ClassArchetype.ROOT);
+		rfq.setClassArchetype(ClassArchetype.FLEXPROD);
 		rfq.setProperties(new ArrayList<>());
 		rfq.setLevel(0);
 		rfq.setWriteProtected(true);

@@ -38,9 +38,11 @@ export class MatchingConfiguratorComponent implements OnInit {
   }
 
   createSanitizedUrl() {
-    this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`
-    ${environment.CONFIGURATOR_URL}/main/matching-configurator?tenantId=${this.globalInfo.tenants[0].id}&redirect=${this.encodedMPUrl}response%2Fmatching-configurator     
-    `);
+    this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `${environment.CONFIGURATOR_URL}/main/matching-configurator?tenantId=${this.globalInfo.tenants[0].id}&redirect=${this.encodedMPUrl}response%2Fmatching-configurator`
+      // `${environment.CONFIGURATOR_URL}/main/matching-configurator?tenantId=${this.globalInfo.tenants[0].id}`
+
+    );
   }
 
 }
