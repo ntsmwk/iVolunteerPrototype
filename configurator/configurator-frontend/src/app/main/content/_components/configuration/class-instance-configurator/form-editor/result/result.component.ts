@@ -20,10 +20,8 @@ export class InstanceCreationResultComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-
   ) {
-    // console.log('extras');
-    // console.log(this.router.getCurrentNavigation().extras.state);
+
   }
 
   ngOnInit() {

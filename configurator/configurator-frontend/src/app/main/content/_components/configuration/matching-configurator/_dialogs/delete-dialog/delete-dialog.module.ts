@@ -8,25 +8,17 @@ import { MatButtonModule, MatTooltipModule, MatIconModule, MatCheckboxModule, Ma
 @NgModule({
   imports: [
     CommonModule,
-
     MatCommonModule,
-
     MatDialogModule,
-
     MatButtonModule,
-
     MatTooltipModule,
     MatIconModule,
     MatCheckboxModule,
-
-
     FuseSharedModule,
   ],
 
   declarations: [DeleteMatchingDialogComponent],
   exports: [DeleteMatchingDialogComponent],
-
-
 })
 
 

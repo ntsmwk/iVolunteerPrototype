@@ -24,7 +24,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private classDefinitionService: ClassDefinitionService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {

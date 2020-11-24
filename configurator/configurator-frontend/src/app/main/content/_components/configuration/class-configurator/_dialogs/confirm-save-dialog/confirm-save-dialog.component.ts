@@ -43,16 +43,11 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
   onOKClick() {
     const { classConfiguration, classDefinitions, relationships, deletedClassDefinitionIds, deletedRelationshipIds, tenantId } = this.data;
 
-    // this.classConfigurationService.saveFullClassConfiguration(
-    //   { classConfiguration, classDefinitions, relationships, deletedClassDefinitionIds, deletedRelationshipIds, tenantId }
-    // ).toPromise().then((ret: ClassConfiguration) => {
     this.responseService.sendClassConfiguratorResponse(this.data.redirectUrl,
       { classConfiguration, classDefinitions, relationships, deletedClassDefinitionIds, deletedRelationshipIds, tenantId }
       , null, 'save').toPromise().then(() => {
         this.dialogRef.close();
       });
-    // });
-
   }
 
   onNoClick(): void {

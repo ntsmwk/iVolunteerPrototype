@@ -17,9 +17,7 @@
       <fuse-sidebar [name]="'navbar'" [folded]="fuseSettings.layout.navigationFolded" [lockedOpen]="'gt-md'"
         class="left-navbar" [ngClass]="fuseSettings.colorClasses.navbar" *ngIf="
           (fuseSettings.layout.navigation === 'left' ||
-            fuseSettings.layout.navigation === 'top') &&
-          role !== 'NONE'
-        ">
+            fuseSettings.layout.navigation === 'top')">
         <fuse-navbar layout="vertical"></fuse-navbar>
       </fuse-sidebar>
       <!-- / NAVBAR: Left -->

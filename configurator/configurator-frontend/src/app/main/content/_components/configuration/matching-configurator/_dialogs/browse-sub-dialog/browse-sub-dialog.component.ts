@@ -27,9 +27,6 @@ export class BrowseMatchingSubDialogComponent implements OnInit {
 
   ngOnInit() {
     // DEBUG
-    // this.data.entries.push(...this.data.entries);
-    // this.data.entries.push(...this.data.entries);
-    // this.data.entries.push(...this.data.entries);
   }
 
   handleRowClick(entry: any) {

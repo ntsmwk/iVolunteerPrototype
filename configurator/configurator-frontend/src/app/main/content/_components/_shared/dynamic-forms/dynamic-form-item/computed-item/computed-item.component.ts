@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ComputedFormItem } from 'app/main/content/_model/dynamic-forms/item';
-import { isNullOrUndefined } from 'util';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 
 declare var $: JQueryStatic;
