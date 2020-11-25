@@ -1,12 +1,4 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-  <!-- <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-    <h1 class="l-heading">Einträge erfassen</h1>
-    <img
-      *ngIf="tenant"
-      class="header-logo"
-      [src]="tenantService.getTenantProfileImage(tenant)"
-    />
-  </div> -->
 
   <customizable-header headerText="Einträge erfassen"></customizable-header>
 
@@ -33,12 +25,4 @@
       </mat-table>
     </div>
   </div>
-  <p *ngIf="dataSource.data.length == 0 && userRole=='TENANT_ADMIN'" class="alert alert-warn">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren Konfigurationen - Erstellen Sie zunächst eine
-    <a href="/main/class-configurator">Konfiguration</a> .
-  </p>
-  <p *ngIf="dataSource.data.length == 0 && userRole=='HELP_SEEKER'" class="alert alert-warn">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine verfügbaren Konfigurationen - Wenden Sie sich an ihren
-    Administrator.
-  </p>
 </div>

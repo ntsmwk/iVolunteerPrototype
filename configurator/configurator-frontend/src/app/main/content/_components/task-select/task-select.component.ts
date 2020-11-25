@@ -24,7 +24,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private classDefinitionService: ClassDefinitionService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -40,7 +40,7 @@ export class FuseTaskSelectComponent implements OnInit {
     });
     const tasks = <ClassDefinition[]>(
       await this.classDefinitionService
-        .getByArchetype(ClassArchetype.FLEXPROD, this.tenantId)
+        .getByArchetype(ClassArchetype.TASK, this.tenantId)
         .toPromise()
     );
 

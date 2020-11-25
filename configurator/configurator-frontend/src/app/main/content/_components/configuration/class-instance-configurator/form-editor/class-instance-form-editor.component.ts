@@ -62,15 +62,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       }
     });
 
-    // Promise.all([
-    //   this.route.queryParams.subscribe(queryParams => {
-    //     let i = 0;
-    //     while (!isNullOrUndefined(queryParams[i])) {
-    //       childClassIds.push(queryParams[i]);
-    //       i++;
-    //     }
-    //   })
-    // ]).then(() => {
     this.classDefinitionService
       .getFormConfigurations(childClassIds)
       .toPromise().then((formConfigurations: FormConfiguration[]) => {
@@ -83,7 +74,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         this.currentFormConfiguration = this.formConfigurations.pop();
         this.loaded = true;
       });
-    // });
   }
 
   private addFormItemsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
@@ -183,11 +173,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   private createInstanceFromResults(result: FormEntryReturnEventData) {
     const classInstances: ClassInstance[] = [];
-    // const tenantId = this.tenantAdmin.subscribedTenants.find(
-    //   t => t.role === UserRole.TENANT_ADMIN
-    // ).tenantId;
 
-    // if (isNullOrUndefined(this.selectedVolunteers)) {
     const classInstance = this.createClassInstance(
       this.currentFormConfiguration.formEntry,
       result.value[this.currentFormConfiguration.formEntry.id]
@@ -195,19 +181,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     classInstance.tenantId = this.tenantId;
     classInstance.issuerId = this.tenantId;
     classInstances.push(classInstance);
-    // } else {
-    //   for (const volunteer of this.selectedVolunteers) {
-    //     const classInstance = this.createClassInstance(
-    //       this.currentFormConfiguration.formEntry,
-    //       result.value[this.currentFormConfiguration.formEntry.id]
-    //     );
-    //     classInstance.tenantId = this.tenantId;
-    //     classInstance.issuerId = this.tenantId;
-    //     classInstance.userId = volunteer.id;
-
-    //     classInstances.push(classInstance);
-    //   }
-    // }
 
     this.classInstanceService.createNewClassInstances(classInstances, this.redirectUrl).then((ret: ClassInstance) => {
       this.resultClassInstance = ret;

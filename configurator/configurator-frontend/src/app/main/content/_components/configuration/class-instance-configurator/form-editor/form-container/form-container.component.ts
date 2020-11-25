@@ -33,8 +33,7 @@ export class FormContainerComponent implements OnInit {
 
   ngOnInit() {
     this.localExpanded = this.expanded;
-    // console.log(this.formEntry.formGroup.controls['entries']);
-    // console.log(this.formEntry.formGroup.controls['entries'].get(this.arrayIndex + ''));
+
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
@@ -58,7 +57,6 @@ export class FormContainerComponent implements OnInit {
   }
 
   handleErrorEvent(evt: boolean) {
-    // console.log(event);
     this.expanded = true;
     this.localExpanded = true;
     this.errorEvent.emit(evt);

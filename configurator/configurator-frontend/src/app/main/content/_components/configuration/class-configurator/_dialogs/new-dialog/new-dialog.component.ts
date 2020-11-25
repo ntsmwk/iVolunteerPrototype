@@ -101,12 +101,6 @@ export class NewClassConfigurationDialogComponent implements OnInit {
       return;
     }
     const formValues = this.getFormValues();
-
-    // this.classConfigurationService
-    //   .createNewClassConfiguration(this.data.tenantId, formValues.name, formValues.description)
-    //   .toPromise().then((cc: ClassConfiguration) => {
-    //     this.data.classConfiguration = cc;
-
     const classConfiguration = new ClassConfiguration();
     classConfiguration.tenantId = this.data.tenantId;
     classConfiguration.name = formValues.name;
@@ -132,8 +126,6 @@ export class NewClassConfigurationDialogComponent implements OnInit {
           this.dialogRef.close(this.data);
         });
       });
-
-    // });
   }
 
   onSaveClick() {
@@ -144,10 +136,8 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     this.classConfigurationService
       .saveClassConfigurationMeta(this.data.classConfiguration.id, formValues.name, formValues.description)
       .toPromise().then((ret: ClassConfiguration) => {
-        // this.responseService.sendClassConfiguratorResponse(this.data.redirectUrl, ret.id, null, "save").toPromise().then(() => {
         this.data.classConfiguration = ret;
         this.dialogRef.close(this.data);
-        // });
       });
   }
 

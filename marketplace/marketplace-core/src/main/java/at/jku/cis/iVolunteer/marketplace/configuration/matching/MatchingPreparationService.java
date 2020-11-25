@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelationship;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 @Service
@@ -17,7 +18,7 @@ public class MatchingPreparationService {
 //	TODO MWE need to handle inherited properties for which matching is defined....
 //	retrieve all CDs (list<CD>) from the left/right Path and handle all of their instances
 // 	id of ClassProperty and their PropertyInstances are equal!!!
-
+	
 	List<ClassDefinition> retriveLeftClassDefinition(List<ClassDefinition> classDefinitions,
 			MatchingOperatorRelationship relationship) {
 		List<ClassDefinition> leftClassDefinitions = new ArrayList<>();

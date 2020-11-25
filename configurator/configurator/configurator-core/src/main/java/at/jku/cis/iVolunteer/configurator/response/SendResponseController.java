@@ -83,7 +83,7 @@ public class SendResponseController {
 				return ResponseEntity.ok(ret);
 			} else if (body.getAction().equals("delete")) {
 				List<ClassConfiguration> configs = classConfigurationController.deleteMultipleClassConfigurations(body.getIdsToDelete());
-				return ResponseEntity.ok().build();
+				return ResponseEntity.ok(configs);
 			}
 		}
 		
