@@ -161,6 +161,7 @@ public class XDiagramDataService {
         return data;
     }
 
+    // currently not used
     public XDiagramReturnEntity generateBadgeSchmuckkaestchenData(List<XBadgeCertificate> badges) {
         // map<year, anzahl>
         HashMap<Integer, Integer> map = new HashMap<>();

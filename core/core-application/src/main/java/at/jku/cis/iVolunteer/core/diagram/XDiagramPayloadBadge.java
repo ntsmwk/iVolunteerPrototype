@@ -2,21 +2,21 @@ package at.jku.cis.iVolunteer.core.diagram;
 
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramDisplayBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramFilterBadge;
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramOrder;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramOrderBadge;
 
 public class XDiagramPayloadBadge {
-    private XDiagramOrder order;
+    private XDiagramOrderBadge order;
     private XDiagramFilterBadge filter;
     private XDiagramDisplayBadge display;
 
     public XDiagramPayloadBadge() {
     }
 
-    public XDiagramOrder getOrder() {
+    public XDiagramOrderBadge getOrder() {
         return this.order;
     }
 
-    public void setOrder(XDiagramOrder order) {
+    public void setOrder(XDiagramOrderBadge order) {
         this.order = order;
     }
 
