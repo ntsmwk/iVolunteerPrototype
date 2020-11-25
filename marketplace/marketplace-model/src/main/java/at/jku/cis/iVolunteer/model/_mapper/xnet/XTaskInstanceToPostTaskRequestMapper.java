@@ -138,14 +138,16 @@ public class XTaskInstanceToPostTaskRequestMapper {
 			location.setLevel(1);
 			instance.getProperties().add(location);
 		}
-
-		for (int i = 0; i < target.getDynamicBlocks().size(); i++) {
-			XDynamicFieldBlock block = target.getDynamicBlocks().get(i);
-			for (XDynamicField field : block.getFields()) {
-
-				PropertyInstance<Object> pi = xPropertyInstanceToDynamicFieldMapper.toSource(field);
-				pi.setLevel(i + 2);
-				instance.getProperties().add(pi);
+		if (target.getDynamicBlocks() != null) {
+	
+			for (int i = 0; i < target.getDynamicBlocks().size(); i++) {
+				XDynamicFieldBlock block = target.getDynamicBlocks().get(i);
+				for (XDynamicField field : block.getFields()) {
+	
+					PropertyInstance<Object> pi = xPropertyInstanceToDynamicFieldMapper.toSource(field);
+					pi.setLevel(i + 2);
+					instance.getProperties().add(pi);
+				}
 			}
 		}
 
