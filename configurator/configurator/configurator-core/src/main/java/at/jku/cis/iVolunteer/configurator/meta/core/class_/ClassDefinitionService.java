@@ -91,6 +91,17 @@ public class ClassDefinitionService {
 		}
 		return classDefinitions;
 	}
+	
+	public List<ClassDefinition> getClassDefinitionsByArchetypes(List<ClassArchetype> archetypes, String tenantId) {
+		
+		List<ClassDefinition> classDefinitions;
+		if (tenantId == null) {
+			classDefinitions = classDefinitionRepository.findByClassArchetypeIn(archetypes);
+		} else {
+			classDefinitions = classDefinitionRepository.findByTenantIdAndClassArchetypeIn(tenantId, archetypes);
+		}
+		return classDefinitions;
+	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(String tenantId) {
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()

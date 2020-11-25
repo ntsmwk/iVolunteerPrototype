@@ -69,6 +69,12 @@ export class ClassDefinitionService {
     );
   }
 
+  getByArchetypes(archetypes: ClassArchetype[], tenantId: string) {
+    return this.http.put(
+      `${environment.CONFIGURATOR_URL}/meta/core/class/definition/archetypes/tenant/${tenantId}`, archetypes
+    );
+  }
+
   getFormConfigurations(ids: string[]) {
     return this.http.put(
       `${environment.CONFIGURATOR_URL}/meta/core/class/definition/form-configuration`,

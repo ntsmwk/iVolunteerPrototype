@@ -40,7 +40,7 @@ export class FuseTaskSelectComponent implements OnInit {
     });
     const tasks = <ClassDefinition[]>(
       await this.classDefinitionService
-        .getByArchetype(ClassArchetype.TASK, this.tenantId)
+        .getByArchetypes([ClassArchetype.TASK, ClassArchetype.FLEXPROD], this.tenantId)
         .toPromise()
     );
 

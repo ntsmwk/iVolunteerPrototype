@@ -24,7 +24,10 @@ public interface ClassDefinitionRepository extends MongoRepository<ClassDefiniti
 	ClassDefinition findByNameAndTenantId(String name, String tenantId);
 	
 	void deleteByIdIn(List<String> ids);
+	
+	List<ClassDefinition> findByTenantIdAndClassArchetypeIn(String tenantId, List<ClassArchetype> classArchetypes);
 
+	List<ClassDefinition> findByClassArchetypeIn(List<ClassArchetype> classArchetypes);
 
 
 }
