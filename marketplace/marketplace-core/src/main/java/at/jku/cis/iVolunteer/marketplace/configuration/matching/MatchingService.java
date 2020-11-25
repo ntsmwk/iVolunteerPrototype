@@ -31,7 +31,7 @@ public class MatchingService {
 //	TODO need to return list with <CI, score>
 //	here only overall similarity is calculated
 
-	public float matchClassInstanceAndClassInstance(String leftClassInstanceId, String rightClassInstanceId,
+	public double matchClassInstanceAndClassInstance(String leftClassInstanceId, String rightClassInstanceId,
 			List<MatchingOperatorRelationship> relationships) {
 		ClassInstance leftClassInstance = classInstanceRepository.findOne(leftClassInstanceId);
 		ClassInstance rightClassInstance = classInstanceRepository.findOne(rightClassInstanceId);
@@ -41,115 +41,98 @@ public class MatchingService {
 				relationships);
 	}
 
-	public float matchClassInstanceAndClassInstance(ClassInstance leftClassInstance, ClassInstance rightClassInstance,
+	public double matchClassInstanceAndClassInstance(ClassInstance leftClassInstance, ClassInstance rightClassInstance,
 			List<ClassDefinition> classDefinitions, List<MatchingOperatorRelationship> relationships) {
 
-		float sum = 0;
+		double sum = 0;
 
-		// @formatter:off
 		for (MatchingOperatorRelationship relationship : relationships) {
-			List<ClassDefinition> leftClassDefinitions = 
-					matchingPreparationService
-						.retriveLeftClassDefinition(classDefinitions, relationship);
-			
-			ClassProperty<Object> leftClassProperty = 
-					matchingPreparationService
-						.retrieveLeftClassProperty(leftClassDefinitions, relationship);
-			
-			List<ClassDefinition> rightClassDefinitions = 
-					matchingPreparationService
-						.retrieveRightClassDefinitionEntity(classDefinitions, relationship);
-			
-			ClassProperty<Object> rightClassProperty = 
-					matchingPreparationService
-						.retrieveRightClassProperty(rightClassDefinitions, relationship);
+			List<ClassDefinition> leftClassDefinitions = matchingPreparationService
+					.retriveLeftClassDefinition(classDefinitions, relationship);
 
-			boolean leftInstanceMatch = leftClassDefinitions
-								.stream()
-								.anyMatch(lcd -> lcd.getId().equals(leftClassInstance.getClassDefinitionId()));
-			
-			boolean rightInstanceMatch = rightClassDefinitions
-			.stream()
-			.anyMatch(rcd -> rcd.getId().equals(rightClassInstance.getClassDefinitionId()));
-			
-			
-			if(leftInstanceMatch && rightInstanceMatch) {
-				sum += this.matchSingleAndSingle(leftClassInstance, leftClassProperty, rightClassInstance, rightClassProperty, relationship);
+			ClassProperty<Object> leftClassProperty = matchingPreparationService
+					.retrieveLeftClassProperty(leftClassDefinitions, relationship);
+
+			List<ClassDefinition> rightClassDefinitions = matchingPreparationService
+					.retrieveRightClassDefinitionEntity(classDefinitions, relationship);
+
+			ClassProperty<Object> rightClassProperty = matchingPreparationService
+					.retrieveRightClassProperty(rightClassDefinitions, relationship);
+
+			boolean leftInstanceMatch = leftClassDefinitions.stream()
+					.anyMatch(lcd -> lcd.getId().equals(leftClassInstance.getClassDefinitionId()));
+
+			boolean rightInstanceMatch = rightClassDefinitions.stream()
+					.anyMatch(rcd -> rcd.getId().equals(rightClassInstance.getClassDefinitionId()));
+
+			if (leftInstanceMatch && rightInstanceMatch) {
+				sum += this.matchSingleAndSingle(leftClassInstance, leftClassProperty, rightClassInstance,
+						rightClassProperty, relationship);
 			}
-			
-//			TODO sum division
-			
-			System.out.println("Fuzzyness" + relationship.getFuzzyness());
-			System.out.println("Weight" + relationship.getWeighting());
-			System.out.println("Necessary" + relationship.isNecessary());
+
 		}
-		 
-		// @formatter:on
-		System.out.println("Matching Score: " + sum);
-		return sum;
+		double totalWeighting = relationships.stream().mapToDouble(r -> r.getWeighting()).sum();
+		return (sum / totalWeighting);
 	}
 
-	public float match(String volunteerId, String tenantId) {
-		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
-				.findByTenantId(tenantId);
-		List<ClassInstance> classInstances = classInstanceRepository.getByUserIdAndTenantId(volunteerId, tenantId);
-		List<ClassDefinition> classDefinitions = classDefinitionRepository.findByTenantId(tenantId);
+//	public float match(String volunteerId, String tenantId) {
+//		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
+//				.findByTenantId(tenantId);
+//		List<ClassInstance> classInstances = classInstanceRepository.getByUserIdAndTenantId(volunteerId, tenantId);
+//		List<ClassDefinition> classDefinitions = classDefinitionRepository.findByTenantId(tenantId);
+//
+//		float sum = 0;
+//
+//		// @formatter:off
+//		for (MatchingOperatorRelationship relationship : relationships) {
+//			List<ClassDefinition> leftClassDefinitions = 
+//					matchingPreparationService
+//						.retriveLeftClassDefinition(classDefinitions, relationship);
+//			
+//			ClassProperty<Object> leftClassProperty = 
+//					matchingPreparationService
+//						.retrieveLeftClassProperty(leftClassDefinitions, relationship);
+//			
+//			List<ClassDefinition> rightClassDefinitions = 
+//					matchingPreparationService
+//						.retrieveRightClassDefinitionEntity(classDefinitions, relationship);
+//			
+//			ClassProperty<Object> rightClassProperty = 
+//					matchingPreparationService
+//						.retrieveRightClassProperty(rightClassDefinitions, relationship);
+//
+//			List<ClassInstance> leftClassInstances = 
+//					classInstances
+//					.stream()
+//					.filter(
+//							ci -> leftClassDefinitions
+//								.stream()
+//								.anyMatch(lcd -> lcd.getId().equals(ci.getClassDefinitionId())))
+//					.collect(Collectors.toList());
+//			
+//			List<ClassInstance> rightClassInstances = 
+//					classInstances
+//					.stream()
+//					.filter(
+//							ci -> rightClassDefinitions
+//								.stream()
+//								.anyMatch(rcd -> rcd.getId().equals(ci.getClassDefinitionId())))
+//					.collect(Collectors.toList());
+//
+//			sum += this.matchListAndList(leftClassInstances, leftClassProperty, rightClassInstances, rightClassProperty,
+//					relationship);
+//			
+//		}
+//		 
+//		// @formatter:on
+//		System.out.println("Matching Score: " + sum / relationships.size());
+//		return sum / relationships.size();
+//	}
 
-		float sum = 0;
-
-		// @formatter:off
-		for (MatchingOperatorRelationship relationship : relationships) {
-			List<ClassDefinition> leftClassDefinitions = 
-					matchingPreparationService
-						.retriveLeftClassDefinition(classDefinitions, relationship);
-			
-			ClassProperty<Object> leftClassProperty = 
-					matchingPreparationService
-						.retrieveLeftClassProperty(leftClassDefinitions, relationship);
-			
-			List<ClassDefinition> rightClassDefinitions = 
-					matchingPreparationService
-						.retrieveRightClassDefinitionEntity(classDefinitions, relationship);
-			
-			ClassProperty<Object> rightClassProperty = 
-					matchingPreparationService
-						.retrieveRightClassProperty(rightClassDefinitions, relationship);
-
-			List<ClassInstance> leftClassInstances = 
-					classInstances
-					.stream()
-					.filter(
-							ci -> leftClassDefinitions
-								.stream()
-								.anyMatch(lcd -> lcd.getId().equals(ci.getClassDefinitionId())))
-					.collect(Collectors.toList());
-			
-			List<ClassInstance> rightClassInstances = 
-					classInstances
-					.stream()
-					.filter(
-							ci -> rightClassDefinitions
-								.stream()
-								.anyMatch(rcd -> rcd.getId().equals(ci.getClassDefinitionId())))
-					.collect(Collectors.toList());
-
-			sum += this.matchListAndList(leftClassInstances, leftClassProperty, rightClassInstances, rightClassProperty,
-					relationship);
-			
-			System.out.println("Fuzzyness" + relationship.getFuzzyness());
-			System.out.println("Weight" + relationship.getWeighting());
-			System.out.println("Necessary" + relationship.isNecessary());
-		}
-		 
-		// @formatter:on
-		System.out.println("Matching Score: " + sum);
-		return sum;
-	}
-
-	public float matchListAndList(List<ClassInstance> leftClassInstances, ClassProperty<Object> leftClassProperty,
+	public double matchListAndList(List<ClassInstance> leftClassInstances, ClassProperty<Object> leftClassProperty,
 			List<ClassInstance> rightClassInstances, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
-		float sum = 0;
+		double sum = 0;
 		for (ClassInstance ci : leftClassInstances) {
 			sum += this.matchListAndSingle(ci, leftClassProperty, rightClassInstances, rightClassProperty,
 					relationship);
@@ -157,11 +140,11 @@ public class MatchingService {
 		return sum;
 	}
 
-	public float matchListAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
+	public double matchListAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
 			List<ClassInstance> classInstances, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
 
-		float sum = 0;
+		double sum = 0;
 		for (ClassInstance rightClassInstance : classInstances) {
 			sum += matchSingleAndSingle(leftClassInstance, leftClassProperty, rightClassInstance, rightClassProperty,
 					relationship);
@@ -170,7 +153,7 @@ public class MatchingService {
 		return sum;
 	}
 
-	public float matchSingleAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
+	public double matchSingleAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
 			ClassInstance rightClassInstance, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
 
@@ -178,35 +161,12 @@ public class MatchingService {
 			logger.warn("cannot compare two properties with different types");
 		}
 
-		// @formatter:off
-//		filter also sub-classInstances...
-		PropertyInstance<Object> leftPropertyInstance = null;
-		PropertyInstance<Object> rightPropertyInstance = null;
+		PropertyInstance<Object> leftPropertyInstance = findPropertyInstance(leftClassInstance,
+				leftClassProperty.getId());
+		PropertyInstance<Object> rightPropertyInstance = findPropertyInstance(rightClassInstance,
+				rightClassProperty.getId());
 
-		
-		if(leftClassInstance.getProperties().stream().anyMatch(p -> p.getId().equals(leftClassProperty.getId()))) {
-			leftPropertyInstance = leftClassInstance
-			.getProperties()
-			.stream()
-			.filter(p -> p.getId().equals(leftClassProperty.getId()))
-			.findFirst()
-			.orElse(null);
-		} else {
-			leftPropertyInstance = findPropertyInstance(leftClassInstance, leftClassProperty.getId());
-		}
-		
-		if(rightClassInstance.getProperties().stream().anyMatch(p -> p.getId().equals(rightClassProperty.getId()))) {
-			rightPropertyInstance = rightClassInstance
-			.getProperties()
-			.stream()
-			.filter(p -> p.getId().equals(rightClassProperty.getId()))
-			.findFirst()
-			.orElse(null);
-		} else {
-			rightPropertyInstance = findPropertyInstance(rightClassInstance, rightClassProperty.getId());
-		}
-		// @formatter:on
-		if (leftPropertyInstance != null && leftPropertyInstance != null) {
+		if (leftPropertyInstance != null && rightPropertyInstance != null) {
 
 			if (leftPropertyInstance.getValues().size() != 1 || rightPropertyInstance.getValues().size() != 1) {
 				logger.warn("property value is either not set or multiple are set.");
@@ -224,7 +184,7 @@ public class MatchingService {
 				return compareFloat(leftPropertyInstance, rightPropertyInstance, relationship);
 			case LONG_TEXT:
 			case TEXT:
-				return CompareText(leftPropertyInstance, rightPropertyInstance, relationship);
+				return compareText(leftPropertyInstance, rightPropertyInstance, relationship);
 			case TUPLE:
 //			TODO
 				return 0;
@@ -239,23 +199,27 @@ public class MatchingService {
 		return 0;
 	}
 
-//	TODO test....
 	private PropertyInstance<Object> findPropertyInstance(ClassInstance leftClassInstance, String propertyId) {
-		List<ClassInstance> childClassInstances = leftClassInstance.getChildClassInstances();
 		PropertyInstance<Object> property = null;
+
+		// @formatter:off
+		property =  leftClassInstance
+						.getProperties()
+						.stream()
+						.filter(p -> p.getId().equals(propertyId))
+						.findFirst()
+						.orElse(null);
+			 
+		// @formatter:on
+		if (property != null) {
+			return property;
+		}
+
+		List<ClassInstance> childClassInstances = leftClassInstance.getChildClassInstances();
 		for (ClassInstance classInstance : childClassInstances) {
-			property = classInstance.getProperties().stream().filter(p -> p.getId().equals(propertyId)).findAny()
-					.orElse(null);
+			property = findPropertyInstance(classInstance, propertyId);
 			if (property != null) {
 				return property;
-			}
-		}
-		if (property == null) {
-			for (ClassInstance classInstance : childClassInstances) {
-				PropertyInstance<Object> propertyInstance = findPropertyInstance(classInstance, propertyId);
-				if (property != null) {
-					return propertyInstance;
-				}
 			}
 		}
 
@@ -264,8 +228,8 @@ public class MatchingService {
 
 	private float compareBoolean(PropertyInstance<Object> leftPropertyInstance,
 			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
-		boolean leftBoolean = Boolean.parseBoolean((String) leftPropertyInstance.getValues().get(0));
-		boolean rightBoolean = Boolean.parseBoolean((String) rightPropertyInstance.getValues().get(0));
+		boolean leftBoolean = Boolean.parseBoolean(leftPropertyInstance.getValues().get(0).toString());
+		boolean rightBoolean = Boolean.parseBoolean(rightPropertyInstance.getValues().get(0).toString());
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
@@ -280,12 +244,13 @@ public class MatchingService {
 		return 0;
 	}
 
-	private float compareDate(PropertyInstance<Object> leftPropertyInstance,
+	private double compareDate(PropertyInstance<Object> leftPropertyInstance,
 			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
 //		TODO calculate fuzzyness???
-		Date leftDate = this.dateTimeService.parseMultipleDateFormats((String) leftPropertyInstance.getValues().get(0));
+		Date leftDate = this.dateTimeService
+				.parseMultipleDateFormats(leftPropertyInstance.getValues().get(0).toString());
 		Date rightDate = this.dateTimeService
-				.parseMultipleDateFormats((String) rightPropertyInstance.getValues().get(0));
+				.parseMultipleDateFormats(rightPropertyInstance.getValues().get(0).toString());
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
@@ -304,10 +269,10 @@ public class MatchingService {
 		return 0;
 	}
 
-	private float compareFloat(PropertyInstance<Object> leftPropertyInstance,
+	private double compareFloat(PropertyInstance<Object> leftPropertyInstance,
 			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
-		double leftDouble = Double.parseDouble((String) leftPropertyInstance.getValues().get(0));
-		double rightDouble = Double.parseDouble((String) rightPropertyInstance.getValues().get(0));
+		double leftDouble = Double.parseDouble(leftPropertyInstance.getValues().get(0).toString());
+		double rightDouble = Double.parseDouble(rightPropertyInstance.getValues().get(0).toString());
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
@@ -327,11 +292,11 @@ public class MatchingService {
 		return 0;
 	}
 
-	private float CompareText(PropertyInstance<Object> leftPropertyInstance,
+	private double compareText(PropertyInstance<Object> leftPropertyInstance,
 			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
 //		TODO implement fuzzyness??
-		String leftString = (String) leftPropertyInstance.getValues().get(0);
-		String rightString = (String) rightPropertyInstance.getValues().get(0);
+		String leftString = leftPropertyInstance.getValues().get(0).toString();
+		String rightString = rightPropertyInstance.getValues().get(0).toString();
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
@@ -347,10 +312,10 @@ public class MatchingService {
 
 	}
 
-	private float compareWholeNumber(PropertyInstance<Object> leftPropertyInstance,
+	private double compareWholeNumber(PropertyInstance<Object> leftPropertyInstance,
 			PropertyInstance<Object> rightPropertyInstance, MatchingOperatorRelationship relationship) {
-		long leftLong = Long.parseLong((String) leftPropertyInstance.getValues().get(0));
-		long rightLong = Long.parseLong((String) rightPropertyInstance.getValues().get(0));
+		long leftLong = Long.parseLong(leftPropertyInstance.getValues().get(0).toString());
+		long rightLong = Long.parseLong(rightPropertyInstance.getValues().get(0).toString());
 		switch (relationship.getMatchingOperatorType()) {
 		case ALL:
 		case EXISTS:
