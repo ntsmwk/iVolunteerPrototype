@@ -1,8 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.configuration.matching;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,22 @@ public class MatchingService {
 		return this.matchClassInstanceAndClassInstance(leftClassInstance, rightClassInstance, classDefinitions,
 				relationships);
 	}
+
+	public Map<ClassInstanceComparison, Double> matchClassInstancesAndClassInstances(List<ClassInstance> leftClassInstances, List<ClassInstance> rightClassInstances,
+			List<ClassDefinition> classDefinitions, List<MatchingOperatorRelationship> relationships) {
+		
+		Map<ClassInstanceComparison, Double> rankedMap = new HashMap<ClassInstanceComparison, Double>();
+		
+		for (ClassInstance leftClassInstance : leftClassInstances) {
+			for (ClassInstance rightClassInstance : rightClassInstances) {
+				double score = matchClassInstanceAndClassInstance(leftClassInstance, rightClassInstance, classDefinitions, relationships);
+				rankedMap.put(new ClassInstanceComparison(leftClassInstance.getId(), rightClassInstance.getId()), score);
+			}
+		}
+		return rankedMap;
+	}
+	
+	
 
 	public double matchClassInstanceAndClassInstance(ClassInstance leftClassInstance, ClassInstance rightClassInstance,
 			List<ClassDefinition> classDefinitions, List<MatchingOperatorRelationship> relationships) {
