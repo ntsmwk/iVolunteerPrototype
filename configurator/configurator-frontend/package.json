@@ -13,6 +13,7 @@
     "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev",
     "build-stats": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev --stats-json",
     "build-prod": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod",
+    "build-prodx": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prodx",
     "build-prod-stats": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod --stats-json",
     "test": "ng test",
     "json-server": "json-server --watch db.json",
