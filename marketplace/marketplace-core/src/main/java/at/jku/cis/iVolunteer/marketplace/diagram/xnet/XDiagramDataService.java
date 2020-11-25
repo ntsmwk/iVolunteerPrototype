@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace.badge.XBadgeCertificateRepository;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserService;
@@ -32,28 +33,8 @@ public class XDiagramDataService {
     private UserService userService;
     @Autowired
     private ClassInstanceRepository classInstanceRepository;
-    // TODO Philipp
-    // @Autowired
-    // private XBadgeCertificateRepository badgeCertificateRepository;
-
-    public XDiagramRawDataSet calcRawDataSetPerUser(String userId) {
-        List<XDiagramRawDataPoint> datapoints = new ArrayList<>();
-
-        List<ClassInstance> classInstances = classInstanceRepository.getByUserId(userId);
-        if (classInstances.size() > 0) {
-            classInstances.stream().map(ci -> toRawDataPoint(ci)).forEach(datapoints::add);
-
-            XDiagramRawDataSet dataset = new XDiagramRawDataSet();
-            dataset.setDatapoints(datapoints);
-            dataset.setUserId(userId);
-            dataset.setRefreshTimestamp(new Date());
-            // TODO Philipp
-            // dataset.setBadges(badgeCertificateRepository.findAllByUserId(userId));
-
-            return dataset;
-        }
-        return null;
-    }
+    @Autowired
+    private XBadgeCertificateRepository badgeCertificateRepository;
 
     public List<XDiagramRawDataSet> calcRawDataSets() {
         List<XDiagramRawDataSet> datasets = new ArrayList<>();
@@ -69,8 +50,27 @@ public class XDiagramDataService {
         return datasets;
     }
 
+    public XDiagramRawDataSet calcRawDataSetPerUser(String userId) {
+        List<XDiagramRawDataPoint> datapoints = new ArrayList<>();
+
+        List<ClassInstance> classInstances = classInstanceRepository.getByUserId(userId);
+        if (classInstances.size() > 0) {
+            classInstances.stream().map(ci -> toRawDataPoint(ci)).forEach(datapoints::add);
+
+            XDiagramRawDataSet dataset = new XDiagramRawDataSet();
+            dataset.setDatapoints(datapoints);
+            dataset.setUserId(userId);
+            dataset.setRefreshTimestamp(new Date());
+            dataset.setBadges(badgeCertificateRepository.findAllByUserId(userId));
+
+            return dataset;
+        }
+        return null;
+    }
+
     private XDiagramRawDataPoint toRawDataPoint(ClassInstance ci) {
-        // TODO: potentially add more properties to rawData
+        // TODO Philipp: if necessary, add more properties to rawData
+
         XDiagramRawDataPoint datapoint = new XDiagramRawDataPoint();
         datapoint.setTenantId(ci.getTenantId());
 

@@ -31,6 +31,64 @@ public class MatchingService {
 //	TODO need to return list with <CI, score>
 //	here only overall similarity is calculated
 
+	public float matchClassInstanceAndClassInstance(String leftClassInstanceId, String rightClassInstanceId,
+			List<MatchingOperatorRelationship> relationships) {
+		ClassInstance leftClassInstance = classInstanceRepository.findOne(leftClassInstanceId);
+		ClassInstance rightClassInstance = classInstanceRepository.findOne(rightClassInstanceId);
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.findAll();
+
+		return this.matchClassInstanceAndClassInstance(leftClassInstance, rightClassInstance, classDefinitions,
+				relationships);
+	}
+
+	public float matchClassInstanceAndClassInstance(ClassInstance leftClassInstance, ClassInstance rightClassInstance,
+			List<ClassDefinition> classDefinitions, List<MatchingOperatorRelationship> relationships) {
+
+		float sum = 0;
+
+		// @formatter:off
+		for (MatchingOperatorRelationship relationship : relationships) {
+			List<ClassDefinition> leftClassDefinitions = 
+					matchingPreparationService
+						.retriveLeftClassDefinition(classDefinitions, relationship);
+			
+			ClassProperty<Object> leftClassProperty = 
+					matchingPreparationService
+						.retrieveLeftClassProperty(leftClassDefinitions, relationship);
+			
+			List<ClassDefinition> rightClassDefinitions = 
+					matchingPreparationService
+						.retrieveRightClassDefinitionEntity(classDefinitions, relationship);
+			
+			ClassProperty<Object> rightClassProperty = 
+					matchingPreparationService
+						.retrieveRightClassProperty(rightClassDefinitions, relationship);
+
+			boolean leftInstanceMatch = leftClassDefinitions
+								.stream()
+								.anyMatch(lcd -> lcd.getId().equals(leftClassInstance.getClassDefinitionId()));
+			
+			boolean rightInstanceMatch = rightClassDefinitions
+			.stream()
+			.anyMatch(rcd -> rcd.getId().equals(rightClassInstance.getClassDefinitionId()));
+			
+			
+			if(leftInstanceMatch && rightInstanceMatch) {
+				sum += this.matchSingleAndSingle(leftClassInstance, leftClassProperty, rightClassInstance, rightClassProperty, relationship);
+			}
+			
+//			TODO sum division
+			
+			System.out.println("Fuzzyness" + relationship.getFuzzyness());
+			System.out.println("Weight" + relationship.getWeighting());
+			System.out.println("Necessary" + relationship.isNecessary());
+		}
+		 
+		// @formatter:on
+		System.out.println("Matching Score: " + sum);
+		return sum;
+	}
+
 	public float match(String volunteerId, String tenantId) {
 		List<MatchingOperatorRelationship> relationships = this.matchingOperatorRelationshipRepository
 				.findByTenantId(tenantId);
@@ -112,7 +170,7 @@ public class MatchingService {
 		return sum;
 	}
 
-	private float matchSingleAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
+	public float matchSingleAndSingle(ClassInstance leftClassInstance, ClassProperty<Object> leftClassProperty,
 			ClassInstance rightClassInstance, ClassProperty<Object> rightClassProperty,
 			MatchingOperatorRelationship relationship) {
 
@@ -121,48 +179,87 @@ public class MatchingService {
 		}
 
 		// @formatter:off
-		PropertyInstance<Object> leftPropertyInstance = 
-				leftClassInstance
-					.getProperties()
-					.stream()
-					.filter(p -> p.getId().equals(leftClassProperty.getId()))
-					.findFirst()
-					.orElse(null);
+//		filter also sub-classInstances...
+		PropertyInstance<Object> leftPropertyInstance = null;
+		PropertyInstance<Object> rightPropertyInstance = null;
+
 		
-		PropertyInstance<Object> rightPropertyInstance = 
-				rightClassInstance
-					.getProperties()
-					.stream()
-					.filter(p -> p.getId().equals(rightClassProperty.getId()))
-					.findFirst()
-					.orElse(null);
+		if(leftClassInstance.getProperties().stream().anyMatch(p -> p.getId().equals(leftClassProperty.getId()))) {
+			leftPropertyInstance = leftClassInstance
+			.getProperties()
+			.stream()
+			.filter(p -> p.getId().equals(leftClassProperty.getId()))
+			.findFirst()
+			.orElse(null);
+		} else {
+			leftPropertyInstance = findPropertyInstance(leftClassInstance, leftClassProperty.getId());
+		}
+		
+		if(rightClassInstance.getProperties().stream().anyMatch(p -> p.getId().equals(rightClassProperty.getId()))) {
+			rightPropertyInstance = rightClassInstance
+			.getProperties()
+			.stream()
+			.filter(p -> p.getId().equals(rightClassProperty.getId()))
+			.findFirst()
+			.orElse(null);
+		} else {
+			rightPropertyInstance = findPropertyInstance(rightClassInstance, rightClassProperty.getId());
+		}
 		// @formatter:on
+		if (leftPropertyInstance != null && leftPropertyInstance != null) {
 
-		if (leftPropertyInstance.getValues().size() != 1 || rightPropertyInstance.getValues().size() != 1) {
-			logger.warn("property value is either not set or multiple are set.");
+			if (leftPropertyInstance.getValues().size() != 1 || rightPropertyInstance.getValues().size() != 1) {
+				logger.warn("property value is either not set or multiple are set.");
+			}
+
+			switch (leftClassProperty.getType()) {
+			case BOOL:
+				return compareBoolean(leftPropertyInstance, rightPropertyInstance, relationship);
+			case DATE:
+				return compareDate(leftPropertyInstance, rightPropertyInstance, relationship);
+			case ENUM:
+//			TODO
+				return 0;
+			case FLOAT_NUMBER:
+				return compareFloat(leftPropertyInstance, rightPropertyInstance, relationship);
+			case LONG_TEXT:
+			case TEXT:
+				return CompareText(leftPropertyInstance, rightPropertyInstance, relationship);
+			case TUPLE:
+//			TODO
+				return 0;
+			case WHOLE_NUMBER:
+				return compareWholeNumber(leftPropertyInstance, rightPropertyInstance, relationship);
+			default:
+				return 0;
+			}
+		} else {
+			logger.error("Could not find left and right property instance!!");
+		}
+		return 0;
+	}
+
+//	TODO test....
+	private PropertyInstance<Object> findPropertyInstance(ClassInstance leftClassInstance, String propertyId) {
+		List<ClassInstance> childClassInstances = leftClassInstance.getChildClassInstances();
+		PropertyInstance<Object> property = null;
+		for (ClassInstance classInstance : childClassInstances) {
+			property = classInstance.getProperties().stream().filter(p -> p.getId().equals(propertyId)).findAny()
+					.orElse(null);
+			if (property != null) {
+				return property;
+			}
+		}
+		if (property == null) {
+			for (ClassInstance classInstance : childClassInstances) {
+				PropertyInstance<Object> propertyInstance = findPropertyInstance(classInstance, propertyId);
+				if (property != null) {
+					return propertyInstance;
+				}
+			}
 		}
 
-		switch (leftClassProperty.getType()) {
-		case BOOL:
-			return compareBoolean(leftPropertyInstance, rightPropertyInstance, relationship);
-		case DATE:
-			return compareDate(leftPropertyInstance, rightPropertyInstance, relationship);
-		case ENUM:
-//			TODO
-			return 0;
-		case FLOAT_NUMBER:
-			return compareFloat(leftPropertyInstance, rightPropertyInstance, relationship);
-		case LONG_TEXT:
-		case TEXT:
-			return CompareText(leftPropertyInstance, rightPropertyInstance, relationship);
-		case TUPLE:
-//			TODO
-			return 0;
-		case WHOLE_NUMBER:
-			return compareWholeNumber(leftPropertyInstance, rightPropertyInstance, relationship);
-		default:
-			return 0;
-		}
+		return null;
 	}
 
 	private float compareBoolean(PropertyInstance<Object> leftPropertyInstance,
@@ -221,7 +318,7 @@ public class MatchingService {
 		case GREATER:
 			return calculateFuzzynessUpper(leftDouble, relationship.getFuzzyness()) > rightDouble ? 1 : 0;
 		case GREATER_EQUAL:
-			return calculateFuzzynessUpper(leftDouble, relationship.getFuzzyness())  >= rightDouble ? 1 : 0;
+			return calculateFuzzynessUpper(leftDouble, relationship.getFuzzyness()) >= rightDouble ? 1 : 0;
 		case LESS:
 			return calculateFuzzynessLower(leftDouble, relationship.getFuzzyness()) < rightDouble ? 1 : 0;
 		case LESS_EQUAL:
@@ -264,7 +361,7 @@ public class MatchingService {
 		case GREATER:
 			return calculateFuzzynessUpper(leftLong, relationship.getFuzzyness()) > rightLong ? 1 : 0;
 		case GREATER_EQUAL:
-			return calculateFuzzynessUpper(leftLong, relationship.getFuzzyness())  >= rightLong ? 1 : 0;
+			return calculateFuzzynessUpper(leftLong, relationship.getFuzzyness()) >= rightLong ? 1 : 0;
 		case LESS:
 			return calculateFuzzynessLower(leftLong, relationship.getFuzzyness()) < rightLong ? 1 : 0;
 		case LESS_EQUAL:
@@ -280,5 +377,5 @@ public class MatchingService {
 	private double calculateFuzzynessUpper(double value, float weighting) {
 		return value + value * weighting / 100;
 	}
-	
+
 }

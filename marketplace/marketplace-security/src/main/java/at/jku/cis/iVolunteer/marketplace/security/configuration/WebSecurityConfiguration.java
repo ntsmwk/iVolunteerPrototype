@@ -54,6 +54,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/rule/engine/**").permitAll()
 				.antMatchers("/badgeTemplate/init").permitAll()
 				.antMatchers("/response/**").permitAll()
+				.antMatchers("/matching/**").permitAll()
 				.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()

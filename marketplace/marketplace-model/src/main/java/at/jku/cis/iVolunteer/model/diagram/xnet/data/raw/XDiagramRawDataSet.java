@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.badge.XBadgeCertificate;
+
 @Document
 public class XDiagramRawDataSet {
    @Id
@@ -14,7 +16,7 @@ public class XDiagramRawDataSet {
    private String userId;
    private Date refreshTimestamp;
    private List<XDiagramRawDataPoint> datapoints;
-   private List<BadgeCertificate> badges; // TODO Philipp: change to XBadgeCertificate
+   private List<XBadgeCertificate> badges;
 
    public XDiagramRawDataSet() {
    }
@@ -43,11 +45,11 @@ public class XDiagramRawDataSet {
       this.datapoints = datapoints;
    }
 
-   public List<BadgeCertificate> getBadges() {
+   public List<XBadgeCertificate> getBadges() {
       return this.badges;
    }
 
-   public void setBadges(List<BadgeCertificate> badges) {
+   public void setBadges(List<XBadgeCertificate> badges) {
       this.badges = badges;
    }
 

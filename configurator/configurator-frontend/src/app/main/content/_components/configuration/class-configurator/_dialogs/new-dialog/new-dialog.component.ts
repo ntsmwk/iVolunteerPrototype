@@ -10,7 +10,7 @@ import { ClassDefinitionService } from 'app/main/content/_service/meta/core/clas
 import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
 import { isNullOrUndefined } from 'util';
 import { ResponseService } from 'app/main/content/_service/response.service';
-import { environment } from "environments/environment";
+import { environment } from 'environments/environment';
 
 export interface NewClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
@@ -70,7 +70,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
         }
 
         if (!this.showEditDialog) {
-          this.dialogForm.addControl("type", new FormControl('', Validators.required));
+          this.dialogForm.addControl('type', new FormControl('', Validators.required));
           this.dialogForm.get('type').setValue('iVolunteer');
           this.dialogForm.updateValueAndValidity();
         }
@@ -86,9 +86,9 @@ export class NewClassConfigurationDialogComponent implements OnInit {
 
   displayErrorMessage(key: string) {
     if (this.dialogForm.get(key).hasError('required')) {
-      return "Pflichtfeld";
+      return 'Pflichtfeld';
     } else if (this.dialogForm.get(key).hasError('stringunique')) {
-      return "Name bereits vorhanden";
+      return 'Name bereits vorhanden';
     }
   }
 

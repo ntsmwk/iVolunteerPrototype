@@ -2,12 +2,11 @@ package at.jku.cis.iVolunteer.core.diagram;
 
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramDisplayTask;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramFilterTask;
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramOrder;
 
 public class XDiagramPayloadTask {
     private XDiagramFilterTask filter;
-    private XDiagramOrder order;
     private XDiagramDisplayTask display;
+    private boolean orderAsc = true;
 
     public XDiagramPayloadTask() {
     }
@@ -20,20 +19,24 @@ public class XDiagramPayloadTask {
         this.filter = filter;
     }
 
-    public XDiagramOrder getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(XDiagramOrder order) {
-        this.order = order;
-    }
-
     public XDiagramDisplayTask getDisplay() {
         return this.display;
     }
 
     public void setDisplay(XDiagramDisplayTask display) {
         this.display = display;
+    }
+
+    public boolean isOrderAsc() {
+        return this.orderAsc;
+    }
+
+    public boolean getOrderAsc() {
+        return this.orderAsc;
+    }
+
+    public void setOrderAsc(boolean orderAsc) {
+        this.orderAsc = orderAsc;
     }
 
 }

@@ -2,24 +2,24 @@ package at.jku.cis.iVolunteer.model.diagram.xnet.data;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.BadgeCertificate;
+import at.jku.cis.iVolunteer.model.badge.XBadgeCertificate;
 
 public class XDiagramDataPointBadge extends XDiagramData {
-    private List<BadgeCertificate> badges;
+    private List<XBadgeCertificate> badges;
 
     public XDiagramDataPointBadge() {
     }
 
-    public XDiagramDataPointBadge(String name, List<BadgeCertificate> badges) {
+    public XDiagramDataPointBadge(String name, List<XBadgeCertificate> badges) {
         super(name);
         this.badges = badges;
     }
 
-    public List<BadgeCertificate> getBadges() {
+    public List<XBadgeCertificate> getBadges() {
         return this.badges;
     }
 
-    public void setBadges(List<BadgeCertificate> badges) {
+    public void setBadges(List<XBadgeCertificate> badges) {
         this.badges = badges;
     }
 

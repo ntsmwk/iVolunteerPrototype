@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.core.diagram;
 
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +17,18 @@ import at.jku.cis.iVolunteer.core.user.LoginService;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
+import at.jku.cis.iVolunteer.model.badge.XBadgeCertificate;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramData;
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataArray;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramDataPointBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.XDiagramReturnEntity;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramDisplayBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramFilterBadge;
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramDisplayBadge.DiagramTypeBadge;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramOrderBadge;
+import at.jku.cis.iVolunteer.model.diagram.xnet.data.badge.XDiagramOrderBadge.OrderTypeBadge;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.raw.XDiagramRawDataSet;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramDisplayTask;
 import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramFilterTask;
-import at.jku.cis.iVolunteer.model.diagram.xnet.data.task.XDiagramOrder;
 
 @RestController
 @RequestMapping("/diagram")
@@ -54,8 +54,8 @@ public class XDiagramDataController {
         }
 
         XDiagramFilterTask filter = payload.getFilter();
-        XDiagramOrder order = payload.getOrder();
         XDiagramDisplayTask display = payload.getDisplay();
+        boolean order = payload.getOrderAsc();
 
         if (display == null) {
             return new ResponseEntity<Object>(new ErrorResponse(HttpErrorMessages.BODY_NOT_NULL),
@@ -77,20 +77,17 @@ public class XDiagramDataController {
         XDiagramReturnEntity diagramData = diagramDataService.generateSunburstData(dataset, display);
 
         // TODO Philipp: order all levels downwards
-        if (order != null) {
-            if (order.isAsc()) {
-                diagramData.getData()
-                        .sort(Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)));
-            } else {
-                diagramData.getData().sort(
-                        Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)).reversed());
-            }
+        if (order) {
+            diagramData.getData()
+                    .sort(Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)));
+        } else {
+            diagramData.getData()
+                    .sort(Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)).reversed());
         }
 
         return ResponseEntity.ok(diagramData);
     }
 
-    // TOOD Philipp test
     @PostMapping("/badge")
     public ResponseEntity<Object> getBadgeDiagramData(@RequestBody XDiagramPayloadBadge payload) {
         if (payload == null) {
@@ -98,7 +95,7 @@ public class XDiagramDataController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        XDiagramOrder order = payload.getOrder();
+        XDiagramOrderBadge order = payload.getOrder();
         XDiagramFilterBadge filter = payload.getFilter();
         XDiagramDisplayBadge display = payload.getDisplay();
 
@@ -119,23 +116,58 @@ public class XDiagramDataController {
             dataset = diagramDataService.filter(dataset, filter);
         }
 
-        XDiagramReturnEntity diagramData;
-        if (display.getDiagramType().equals(DiagramTypeBadge.TIMELINE)) {
-            diagramData = diagramDataService.generateBadgeTimelineData(dataset.getBadges());
-        } else {
-            diagramData = diagramDataService.generateBadgeSchmuckkaestchenData(dataset.getBadges());
+        XDiagramReturnEntity diagramData = diagramDataService.generateBadgeTimelineData(dataset.getBadges());
+
+        if (order == null) {
+            // set default value
+            order = new XDiagramOrderBadge();
+            order.setOrderAsc(true);
+            order.setOrderType(OrderTypeBadge.ORDER_CREATIONDATE);
         }
 
-        if (order != null) {
-            if (order.isAsc()) {
-                diagramData.getData()
-                        .sort(Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)));
-            } else {
-                diagramData.getData().sort(
-                        Comparator.comparing(XDiagramData::getName, Collator.getInstance(Locale.GERMAN)).reversed());
+        final XDiagramOrderBadge a = order;
+        diagramData.getData().forEach(d -> {
+            XDiagramDataPointBadge e = (XDiagramDataPointBadge) d;
+            switch (a.getOrderType()) {
+                case ORDER_CREATIONDATE:
+                    if (a.isOrderAsc()) {
+                        e.getBadges().sort(Comparator.comparing(x -> x.getIssueDate()));
+                    } else {
+                        e.getBadges()
+                                .sort(Comparator.comparing(x -> ((XBadgeCertificate) x).getIssueDate()).reversed());
+                    }
+                    break;
+                case ORDER_TENANT_ID:
+                    if (a.isOrderAsc()) {
+                        e.getBadges().sort(Comparator.comparing(x -> x.getTenantSerialized().getId()));
+                    } else {
+                        e.getBadges().sort(Comparator
+                                .comparing(x -> ((XBadgeCertificate) x).getTenantSerialized().getId()).reversed());
+                    }
+                    break;
+                case ORDER_TENANT_NAME:
+                    if (a.isOrderAsc()) {
+                        e.getBadges().sort(Comparator.comparing(x -> x.getTenantSerialized().getName(),
+                                Collator.getInstance(Locale.GERMAN)));
+                    } else {
+                        e.getBadges()
+                                .sort(Comparator.comparing(x -> ((XBadgeCertificate) x).getTenantSerialized().getName(),
+                                        Collator.getInstance(Locale.GERMAN)).reversed());
+                    }
+                    break;
+                case ORDER_BADGE_NAME:
+                    if (a.isOrderAsc()) {
+                        e.getBadges().sort(Comparator.comparing(x -> x.getBadgeSerialized().getName(),
+                                Collator.getInstance(Locale.GERMAN)));
+                    } else {
+                        e.getBadges()
+                                .sort(Comparator.comparing(x -> ((XBadgeCertificate) x).getBadgeSerialized().getName(),
+                                        Collator.getInstance(Locale.GERMAN)).reversed());
+                    }
+                    break;
             }
 
-        }
+        });
 
         return ResponseEntity.ok(diagramData);
     }
