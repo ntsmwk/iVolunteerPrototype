@@ -24,7 +24,7 @@ public class XBadgeCertificateRestClient {
 	@Autowired private RestTemplate restTemplate;
 
 	public List<XBadgeCertificate> getXBadgeCertificates(String marketplaceURL, String authorization) {
-		String preUrl = "{0}/badgeCertificates";
+		String preUrl = "{0}/badgeCertificate";
 		String url = format(preUrl, marketplaceURL);
 
 		ResponseEntity<XBadgeCertificate[]> resp = restTemplate.exchange(url, HttpMethod.GET,
@@ -36,7 +36,7 @@ public class XBadgeCertificateRestClient {
 	}
 
 	public List<XBadgeCertificate> getUnnotifiedXBadgeCertificates(String marketplaceURL, String authorization) {
-		String preUrl = "{0}/badgeCertificates/unnotified";
+		String preUrl = "{0}/badgeCertificate/unnotified";
 		String url = format(preUrl, marketplaceURL);
 
 		ResponseEntity<XBadgeCertificate[]> resp = restTemplate.exchange(url, HttpMethod.GET,
@@ -48,7 +48,7 @@ public class XBadgeCertificateRestClient {
 	}
 	
 	public List<XBadgeCertificate> getXBadgeCertificatesByUserId(String marketplaceURL, String userId, String authorization) {
-		String preUrl = "{0}/badgeCertificates/unnotified/{1}";
+		String preUrl = "{0}/badgeCertificate/unnotified/{1}";
 		String url = format(preUrl, marketplaceURL, userId);
 
 		ResponseEntity<XBadgeCertificate[]> resp = restTemplate.exchange(url, HttpMethod.GET,
