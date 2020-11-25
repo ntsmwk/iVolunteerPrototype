@@ -54,6 +54,11 @@ public class ClassDefinitionController {
 
 			return classDefinitionMapper.mapToDTO(classDefinitionService.getClassDefinitionsByArchetype(archetype, tenantId));
 	}
+	
+	@PutMapping("/meta/core/class/definition/archetypes/tenant/{tenantId}")
+	public List<ClassDefinitionDTO> getClassDefinitionsByArchetype(@PathVariable("tenantId") String tenantId, @RequestBody List<ClassArchetype> archetypes) {
+		return classDefinitionMapper.mapToDTO(classDefinitionService.getClassDefinitionsByArchetypes(archetypes, tenantId));
+	}
 
 	@PutMapping("/meta/core/class/definition/multiple")
 	private List<ClassDefinition> getClassDefinitonsById(@RequestBody List<String> ids) {
