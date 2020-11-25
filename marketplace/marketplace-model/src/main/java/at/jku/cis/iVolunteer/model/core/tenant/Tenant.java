@@ -53,6 +53,7 @@ public class Tenant {
 		this.abbreviation = update.getAbbreviation() != null ? update.getAbbreviation() : this.abbreviation;
 		this.address = update.getAddress() != null ? update.getAddress() : this.address;
 		this.location = update.getLocation() != null ? update.getLocation() : this.location;
+		this.tags = update.getTags() != null ? update.getTags() : this.tags;
 		return this;
 	}
 	

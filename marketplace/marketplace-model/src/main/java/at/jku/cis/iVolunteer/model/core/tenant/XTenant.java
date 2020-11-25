@@ -18,13 +18,16 @@ public class XTenant {
 	private String primaryColor;
 	private String secondaryColor;
 	private String marketplaceUrl;
-	private List<String> tags;
+	private List<String> tags = new ArrayList<>();
 	private String landingpageMessage;
 	private String landingpageTitle;
 	private String landingpageText;
 	private String landingpageImagePath;
 	private XGeoInfo geoInfo;
 	private List<XUser> subscribedVolunteers;
+	
+	public XTenant() {
+	}
 
 	public String getId() {
 		return id;

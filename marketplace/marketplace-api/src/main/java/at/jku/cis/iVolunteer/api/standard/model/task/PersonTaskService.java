@@ -59,8 +59,7 @@ public class PersonTaskService {
 	public void savePersonTasks(List<PersonTask> personTasks, String tenantId) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
-		
-	
+
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
 				ClassInstance classInstance = createPersonTask(personTaskClassDefinition, personTask, tenantId);
@@ -141,7 +140,7 @@ public class PersonTaskService {
 		});
 		// @formatter:off
 
-		// TODO: for now, add random SozMin Bereich to imported data
+		// TODO Philipp: for now, add random SozMin Bereich to imported data
 		List<String> bereiche = Arrays.asList("Katastrophenhilfs- & Rettungsdienste", "Ältere Menschen", "Soziales",
 		"Entwicklungshilfe, Frieden, Menschrechte", "Gesundheit & Pflege", "Kirche & Religion",
 		"Bürgerschaftliche Aktivitäten & Gemeinwesen", "Sport & Bewegung", "Kinder & Jugendliche",

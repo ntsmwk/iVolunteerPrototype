@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.badge.XBadgeCertificateNotificationRepository;
+import at.jku.cis.iVolunteer.marketplace.badge.XBadgeCertificateRepository;
+import at.jku.cis.iVolunteer.marketplace.badge.XBadgeTemplateRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.configuration.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.relationships.MatchingOperatorRelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
@@ -12,6 +15,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.task.XTaskInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
+import at.jku.cis.iVolunteer.model.badge.XBadgeCertificate;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
 
@@ -30,11 +34,16 @@ public class InitializationController {
 	private MatchingOperatorRelationshipRepository matchingOperatorRelationshipRepository;
 	@Autowired
 	private XTaskInstanceRepository xTaskInstanceRepository;
-
 	@Autowired
 	private InitializationService initializationService;
 	@Autowired
 	private APIInitializationService apiInitializationService;
+	@Autowired
+	private XBadgeTemplateRepository badgeTemplateRepository;
+	@Autowired
+	private XBadgeCertificateRepository badgeCertificateRepository;
+	@Autowired
+	private XBadgeCertificateNotificationRepository badgeCertificateNotificationRepository;
 
 	@PutMapping("/init/add-test-data/{key}")
 	public void addTestData(@PathVariable("key") String key) {
@@ -42,22 +51,22 @@ public class InitializationController {
 		initializationService.initConfigurator(key);
 
 		addAPIClassDefinitions();
-		
-	}
-//
-//	@PutMapping("/init/add-rule-test-data")
-//	public void addRuleTestData() {
-//		addRuleTestConfiguration();
-//		addRuleUserData();
-//	}
 
-//	@PutMapping("/init/flexprod")
-//	public void addFlexProdData() {
-//		addFlexProdProperties();
-//
-//		String tenantId = coreTenantRestClient.getTenantIdByName("FlexProd");
-//		initializationService.addFlexProdClassDefinitionsAndConfigurations(tenantId);
-//	}
+	}
+	//
+	// @PutMapping("/init/add-rule-test-data")
+	// public void addRuleTestData() {
+	// addRuleTestConfiguration();
+	// addRuleUserData();
+	// }
+
+	// @PutMapping("/init/flexprod")
+	// public void addFlexProdData() {
+	// addFlexProdProperties();
+	//
+	// String tenantId = coreTenantRestClient.getTenantIdByName("FlexProd");
+	// initializationService.addFlexProdClassDefinitionsAndConfigurations(tenantId);
+	// }
 
 	/**
 	 * Properties
@@ -111,10 +120,10 @@ public class InitializationController {
 		apiInitializationService.addiVolunteerAPIClassDefinition();
 	}
 
-//	@PutMapping("/init/add-configurator-test-configurations")
-//	public void addClassConfigurations() {
-//		initializationService.addClassConfigurations(1);
-//	}
+	// @PutMapping("/init/add-configurator-test-configurations")
+	// public void addClassConfigurations() {
+	// initializationService.addClassConfigurations(1);
+	// }
 
 	@PutMapping("/init/delete-class-definitions")
 	public void deleteClassDefinitions() {
@@ -140,15 +149,15 @@ public class InitializationController {
 	 * Rules
 	 */
 
-//	@PutMapping("/init/add-rule-test-configuration")
-//	public void addRuleTestConfiguration() {
-//		initializationService.testDataClasses.createClassConfigurations();
-//	}
-//
-//	@PutMapping("/init/add-rule-user-data")
-//	public void addRuleUserData() {
-//		initializationService.testDataInstances.createUserData();
-//	}
+	// @PutMapping("/init/add-rule-test-configuration")
+	// public void addRuleTestConfiguration() {
+	// initializationService.testDataClasses.createClassConfigurations();
+	// }
+	//
+	// @PutMapping("/init/add-rule-user-data")
+	// public void addRuleUserData() {
+	// initializationService.testDataInstances.createUserData();
+	// }
 
 	/**
 	 * Matching
@@ -201,6 +210,21 @@ public class InitializationController {
 		xTaskInstanceRepository.deleteAll();
 	}
 
+	@PutMapping("/init/badgetemplates/delete")
+	public void deleteBadgeTemplates() {
+		badgeTemplateRepository.deleteAll();
+	}
+
+	@PutMapping("/init/badgecertificates/delete")
+	public void deleteBadgeCertificates() {
+		badgeCertificateRepository.deleteAll();
+	}
+
+	@PutMapping("/init/badgecertificatenotifications/delete")
+	public void deleteBadgeCertificatenotifications() {
+		badgeCertificateNotificationRepository.deleteAll();
+	}
+
 	@PutMapping("/init/wipe-marketplace")
 	public void wipeMarketplace() {
 		deleteClassConfigurations();
@@ -214,7 +238,9 @@ public class InitializationController {
 		deleteUserMappings();
 		deleteMatchingConfigurations();
 		deleteTaskInstances();
+		deleteBadgeTemplates();
+		deleteBadgeCertificates();
+		deleteBadgeCertificatenotifications();
 	}
-	
-	
+
 }
