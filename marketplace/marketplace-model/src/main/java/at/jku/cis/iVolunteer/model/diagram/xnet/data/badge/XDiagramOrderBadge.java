@@ -1,8 +1,8 @@
 package at.jku.cis.iVolunteer.model.diagram.xnet.data.badge;
 
 public class XDiagramOrderBadge {
-    private OrderTypeBadge orderType = OrderTypeBadge.ORDER_CREATIONDATE;
-    private boolean orderAsc = true;
+    private OrderTypeBadge orderType;
+    private boolean orderAsc;
 
     public XDiagramOrderBadge() {
     }
