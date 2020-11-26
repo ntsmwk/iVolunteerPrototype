@@ -21,9 +21,11 @@ import at.jku.cis.iVolunteer._mappers.xnet.XCoreUserMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XTenantMapper;
 import at.jku.cis.iVolunteer._mappers.xnet.XUserRoleMapper;
 import at.jku.cis.iVolunteer.core.badge.XCoreBadgeTemplateService;
+import at.jku.cis.iVolunteer.core.configurator.ConfiguratorRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.user.LoginService;
+import at.jku.cis.iVolunteer.model._httprequests.InitConfiguratorRequest;
 import at.jku.cis.iVolunteer.model._httpresponses.ErrorResponse;
 import at.jku.cis.iVolunteer.model._httpresponses.HttpErrorMessages;
 import at.jku.cis.iVolunteer.model._httpresponses.StringResponse;
@@ -32,6 +34,7 @@ import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.tenant.XTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.XUser;
 import at.jku.cis.iVolunteer.model.user.XUserRole;
@@ -40,14 +43,24 @@ import at.jku.cis.iVolunteer.model.user.XUserRole;
 @RequestMapping("/tenant")
 public class TenantController {
 
-	@Autowired private TenantService tenantService;
-	@Autowired private LoginService loginService;
-	@Autowired private CoreUserService coreUserService;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private XTenantMapper xTenantMapper;
-	@Autowired private XCoreUserMapper xUserMapper;
-	@Autowired private XUserRoleMapper xUserRoleMapper;
-	@Autowired private XCoreBadgeTemplateService coreBadgeTemplateService;
+	@Autowired
+	private TenantService tenantService;
+	@Autowired
+	private LoginService loginService;
+	@Autowired
+	private CoreUserService coreUserService;
+	@Autowired
+	private MarketplaceService marketplaceService;
+	@Autowired
+	private XTenantMapper xTenantMapper;
+	@Autowired
+	private XCoreUserMapper xUserMapper;
+	@Autowired
+	private XUserRoleMapper xUserRoleMapper;
+	@Autowired
+	private XCoreBadgeTemplateService coreBadgeTemplateService;
+	@Autowired
+	private ConfiguratorRestClient configuratorRestClient;
 
 	@GetMapping
 	public List<Tenant> getAllTenants() {
@@ -77,7 +90,8 @@ public class TenantController {
 	}
 
 	@PostMapping("/new")
-	public ResponseEntity<Object> createTenantX(@RequestBody CreateTenantPayload payload, @RequestHeader("Authorization") String authorization) {
+	public ResponseEntity<Object> createTenantX(@RequestBody CreateTenantPayload payload,
+			@RequestHeader("Authorization") String authorization) {
 		XTenant xTenant = payload.getTenant();
 		if (xTenant == null) {
 			return ResponseEntity.badRequest().build();
@@ -99,12 +113,18 @@ public class TenantController {
 			}
 		}
 		tenant = tenantService.createTenant(tenant);
-		
+
 		CoreUser user = loginService.getLoggedInUser();
 		Marketplace marketplace = marketplaceService.findById(tenant.getMarketplaceId());
 
-		this.coreUserService.subscribeUserToTenant(user.getId(), marketplace.getId(), tenant.getId(), UserRole.TENANT_ADMIN, authorization, true);
+		this.coreUserService.subscribeUserToTenant(user.getId(), marketplace.getId(), tenant.getId(),
+				UserRole.TENANT_ADMIN, authorization, true);
 		coreBadgeTemplateService.createBadgeTemplates(marketplace, tenant);
+
+		InitConfiguratorRequest body = new InitConfiguratorRequest();
+		body.setTenantIds(Collections.singletonList(new Tuple<>(tenant.getId(), tenant.getName())));
+		body.setMpUrl(marketplace.getUrl());
+		configuratorRestClient.initConfigurator(body, "iVolunteer");
 
 		return ResponseEntity.ok().build();
 	}
@@ -254,7 +274,7 @@ public class TenantController {
 		return xUserMapper.toTargets(ret);
 	}
 
-//	END X-net Endpoints
+	// END X-net Endpoints
 
 	@GetMapping("/name/{tenantName}")
 	public String getTenantByName(@PathVariable String tenantName) {
@@ -283,7 +303,14 @@ public class TenantController {
 		}
 		Tenant ret = tenantService.createTenant(tenant);
 
+		Marketplace mp = marketplaceService.findById(tenant.getMarketplaceId());
+
+		InitConfiguratorRequest body = new InitConfiguratorRequest();
+		body.setTenantIds(Collections.singletonList(new Tuple<>(tenant.getId(), tenant.getName())));
+		body.setMpUrl(mp.getUrl());
+		configuratorRestClient.initConfigurator(body, "iVolunteer");
 		Map<String, Object> returnMap = Collections.singletonMap("id", ret.getId());
+
 		return ResponseEntity.ok(returnMap);
 	}
 
