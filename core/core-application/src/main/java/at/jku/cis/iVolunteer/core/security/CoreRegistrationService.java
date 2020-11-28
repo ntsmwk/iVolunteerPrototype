@@ -24,12 +24,17 @@ public class CoreRegistrationService {
 	// @Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	// @Autowired private CoreVolunteerRepository coreVolunteerRepository;
 
-	@Autowired private CoreUserRepository coreUserRepository;
-	@Autowired CoreActivationService coreActivationService;
-	@Autowired CoreUserService coreUserService;
-	@Autowired MarketplaceService marketplaceService;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	CoreActivationService coreActivationService;
+	@Autowired
+	CoreUserService coreUserService;
+	@Autowired
+	MarketplaceService marketplaceService;
 
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public RegisterResponseMessage registerUser(CoreUser user, AccountType type) {
 
@@ -49,7 +54,13 @@ public class CoreRegistrationService {
 		Marketplace marketplace = marketplaceService.findFirst();
 		user.setRegisteredMarketplaceIds(Collections.singletonList(marketplace.getId()));
 		this.coreUserService.addNewUser(user, "", true);
-		boolean sendSuccessful = this.coreActivationService.createActivationAndSendLink(user, type);
+
+		// TODO Philipp
+		// TODO sp
+		// deactivated for now
+		// boolean sendSuccessful =
+		// this.coreActivationService.createActivationAndSendLink(user, type);
+		boolean sendSuccessful = true;
 
 		if (!sendSuccessful) {
 			return new RegisterResponseMessage(RegisterResponse.ACTIVATION,

@@ -7,6 +7,18 @@
       Wähle eine vorgegebene Definition einer Tätigkeit aus.
     </p>
 
+    <mat-form-field>
+      <mat-select placeholder="Filter" style="width: 200px" [(ngModel)]="dropdownFilterValue"
+        (selectionChange)="applyArchetypeFilter()">
+        <mat-option value="ALL">Alle</mat-option>
+        <mat-option *ngIf="environmentMode !== 'flexprod'" value="TASK">Tätigkeiten</mat-option>
+        <mat-option *ngIf="environmentMode !== 'flexprod'" value="FLEXPROD">Verdienst</mat-option>
+        <mat-option *ngIf="environmentMode !== 'flexprod'" value="COMPETENCE">Kompetenz</mat-option>
+        <mat-option *ngIf="environmentMode !== 'flexprod'" value="FUNCTION">Funktion</mat-option>
+        <mat-option *ngIf="environmentMode !== 'iVolunteer'" value="FLEXPROD">FlexProd</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div class="table">
       <mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="name">

@@ -7,8 +7,8 @@ public class Location {
 
 	private String label;
 	private boolean longLatEnabled;
-	private double latitude;
-	private double longitude;
+	private Double latitude;
+	private Double longitude;
 
 	public Location(String label, boolean longLatEnabled, double latitude, double longitude) {
 		this.label = label;
@@ -17,7 +17,8 @@ public class Location {
 		this.longitude = longitude;
 	}
 
-	public Location() {}
+	public Location() {
+	}
 
 	public String getLabel() {
 		return label;
@@ -51,5 +52,5 @@ public class Location {
 		this.longitude = longitude;
 	}
 
-
+	
 }
