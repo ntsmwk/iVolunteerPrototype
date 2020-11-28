@@ -14,8 +14,10 @@ import at.jku.cis.iVolunteer.model.registration.ActivationLinkClickedResponse;
 
 @RestController
 public class CoreActivationController {
-	@Autowired private CoreActivationService activationService;
-	@Autowired private CoreUserRepository userRepository;
+	@Autowired
+	private CoreActivationService activationService;
+	@Autowired
+	private CoreUserRepository userRepository;
 
 	@PostMapping("auth/activation/generate-link/{username}/user")
 	private boolean generateActivationLink(@PathVariable("username") String username,
@@ -24,7 +26,11 @@ public class CoreActivationController {
 		if (user == null || user.isActivated()) {
 			return false;
 		}
-		return activationService.createActivationAndSendLink(user, type);
+		// TODO Philipp
+		// TODO sp
+		// deactivated for now
+		// return activationService.createActivationAndSendLink(user, type);
+		return true;
 	}
 
 	@PostMapping("auth/activation/generate-link/email")
@@ -34,7 +40,11 @@ public class CoreActivationController {
 			return false;
 		}
 
-		return activationService.createActivationAndSendLink(user, type);
+		// TODO Philipp
+		// TODO sp
+		// deactivated for now
+		// return activationService.createActivationAndSendLink(user, type);
+		return true;
 	}
 
 	@PostMapping("auth/activation/{activationId}")

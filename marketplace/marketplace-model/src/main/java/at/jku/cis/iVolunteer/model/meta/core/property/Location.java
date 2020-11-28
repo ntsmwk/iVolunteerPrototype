@@ -19,7 +19,7 @@ public class Location {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
-	
+
 	public Location(String taskLocation, GeoInformation taskGeoInformation) {
 		this.label = taskLocation;
 		if (taskGeoInformation != null) {
@@ -28,7 +28,14 @@ public class Location {
 			this.longitude = taskGeoInformation.getLongitude();
 		}
 	}
-	
+
+	public Location(String taskLocation) {
+		this.label = taskLocation;
+		this.longLatEnabled = false;
+		this.latitude = 0.0;
+		this.longitude = 0.0;
+	}
+
 	public Location(XGeoInfo geoInfo) {
 		if (geoInfo != null) {
 			this.label = geoInfo.getName();
@@ -38,7 +45,8 @@ public class Location {
 		}
 	}
 
-	public Location() {}
+	public Location() {
+	}
 
 	public String getLabel() {
 		return label;
@@ -71,6 +79,5 @@ public class Location {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-
 
 }

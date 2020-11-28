@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.core;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,8 +23,10 @@ import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 @Service
 public class CoreTenantRestClient {
 
-	@Autowired private RestTemplate restTemplate;
-	@Value("${core.uri}") private String url;
+	@Autowired
+	private RestTemplate restTemplate;
+	@Value("${core.uri}")
+	private String url;
 	private static String AUTHORIZATION = "authorization";
 
 	private static Logger logger = LoggerFactory.getLogger(CoreTenantRestClient.class);
@@ -57,7 +60,8 @@ public class CoreTenantRestClient {
 		String requestUrl = MessageFormat.format("{0}/tenant/{1}/not-x", url, tenantId);
 		Tenant tenant = null;
 		try {
-			ResponseEntity<Tenant> response = restTemplate.exchange(requestUrl, HttpMethod.GET, buildEntity("", authorization), Tenant.class);
+			ResponseEntity<Tenant> response = restTemplate.exchange(requestUrl, HttpMethod.GET,
+					buildEntity("", authorization), Tenant.class);
 			tenant = response.getBody();
 		} catch (Exception e) {
 			this.handleException(e);
@@ -74,7 +78,7 @@ public class CoreTenantRestClient {
 
 		}
 	}
-	
+
 	private HttpEntity<?> buildEntity(Object body, String authorization) {
 		return new HttpEntity<>(body, buildAuthorizationHeader(authorization));
 	}

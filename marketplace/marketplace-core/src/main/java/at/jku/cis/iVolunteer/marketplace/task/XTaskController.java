@@ -43,17 +43,26 @@ import at.jku.cis.iVolunteer.model.user.User;
 @RequestMapping("/task")
 public class XTaskController {
 
-	@Autowired private ClassInstanceController classInstanceController;
-	@Autowired private LoginService loginService;
-	@Autowired private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
-	@Autowired private XTaskInstanceService xTaskInstanceService;
-	@Autowired private UserService userService;
-	@Autowired private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
-	@Autowired private CoreStorageRestClient coreStorageRestClient;
-	@Autowired private XBadgeCertificateService badgeCertificateService;
-	@Autowired private CoreTenantRestClient tenantRestClient;
-	@Autowired private XTenantToTenantSerializedMapper xTenantToTenantSerializedMapper;
-
+	@Autowired
+	private ClassInstanceController classInstanceController;
+	@Autowired
+	private LoginService loginService;
+	@Autowired
+	private XTaskInstanceToTaskMapper xTaskInstanceToTaskMapper;
+	@Autowired
+	private XTaskInstanceService xTaskInstanceService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private XTaskInstanceToPostTaskRequestMapper xTaskInstanceToPostTaskRequestMapper;
+	@Autowired
+	private CoreStorageRestClient coreStorageRestClient;
+	@Autowired
+	private XBadgeCertificateService badgeCertificateService;
+	@Autowired
+	private CoreTenantRestClient tenantRestClient;
+	@Autowired
+	private XTenantToTenantSerializedMapper xTenantToTenantSerializedMapper;
 
 	@PostMapping("/new")
 	private ResponseEntity<Object> createOpenedTask(@RequestBody PostTaskRequest task,
@@ -141,6 +150,8 @@ public class XTaskController {
 				classInstance.setId(null);
 				addedClassInstances.add(classInstance);
 				createBadgeCertificates(taskInstance.getBadgeTemplateIds(), userId, taskInstance.getTenantId());
+				// TODO Philipp
+				// send to bc
 			}
 
 			addedClassInstances = classInstanceController.createNewClassInstances(addedClassInstances);

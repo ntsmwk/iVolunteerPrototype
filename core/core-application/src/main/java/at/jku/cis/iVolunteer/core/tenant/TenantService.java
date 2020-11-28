@@ -20,8 +20,10 @@ public class TenantService {
 
 	@Autowired
 	private TenantRepository tenantRepository;
-	@Autowired CoreUserService coreUserService;
-	@Autowired XTenantMapper xTenantMapper;
+	@Autowired
+	CoreUserService coreUserService;
+	@Autowired
+	XTenantMapper xTenantMapper;
 
 	public List<Tenant> getTenantsByUser(String userId) {
 		CoreUser user = coreUserService.findById(userId);
@@ -39,7 +41,7 @@ public class TenantService {
 	public String getTenantIdByName(String tenantName) {
 		return tenantRepository.findByName(tenantName).getId();
 	}
-	
+
 	public Tenant getTenantByName(String tenantName) {
 		return tenantRepository.findByName(tenantName);
 	}
@@ -59,7 +61,7 @@ public class TenantService {
 	public Tenant updateTenant(Tenant tenant) {
 		return tenantRepository.save(tenant);
 	}
-	
+
 	public List<Tenant> getSubscribedTenants(CoreUser user) {
 		List<String> tenantIds = user.getSubscribedTenants().stream()
 				.filter(t -> t.getRole().equals(UserRole.VOLUNTEER)).map(t -> t.getTenantId())
@@ -69,7 +71,7 @@ public class TenantService {
 		tenantRepository.findAll(tenantIds).forEach(ret::add);
 		return ret;
 	}
-	
+
 	public List<Tenant> getUnsubscribedTenants(CoreUser user) {
 		List<String> subscribedTenantIds = user.getSubscribedTenants().stream()
 				.filter(t -> t.getRole().equals(UserRole.VOLUNTEER)).map(t -> t.getTenantId())
@@ -80,7 +82,7 @@ public class TenantService {
 				.collect(Collectors.toList());
 		return ret;
 	}
-	
+
 	public List<CoreUser> getSubscribedUsers(String tenantId) {
 		List<CoreUser> users = coreUserService.findAll();
 		List<CoreUser> ret = users.stream().filter(u -> {
@@ -89,19 +91,18 @@ public class TenantService {
 					.orElse(null);
 			return tenantSubscription != null;
 		}).collect(Collectors.toList());
-		
+
 		return ret;
 	}
-	
+
 	public List<XTenant> toXTenantTargets(List<Tenant> tenants) {
 		List<XTenant> ret = new ArrayList<>();
 		for (Tenant t : tenants) {
-			
+
 			List<CoreUser> users = getSubscribedUsers(t.getId());
 			ret.add(xTenantMapper.toTarget(t, users));
 		}
 		return ret;
 	}
-	
 
 }
