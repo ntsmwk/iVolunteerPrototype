@@ -62,7 +62,7 @@
     "ngx-material-file-input": "2.1.0",
     "ngx-spinner": "9.0.1",
     "perfect-scrollbar": "1.4.0",
-    "prismjs": "1.17.1",
+    "prismjs": "1.25.0",
     "rxjs": "6.5.4",
     "tslib": "1.11.1",
     "vis": "4.21.0",
